@@ -1,0 +1,223 @@
+package com.curio.app.features.splash
+
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.curio.app.data.TopicJsonLoader
+import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
+import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.CurioTheme
+import kotlinx.coroutines.delay
+
+/**
+ * Splash screen — see CURIO_SPEC.md §13.1.
+ *
+ * The first thing the user sees on app launch. Covers the gap between
+ * process start and MainActivity being ready.
+ *
+ * Upgraded with:
+ *  - Morph entrance: logo scales from 0 → 1 with elastic spring
+ *  - Shimmer effect: subtle gradient sweep across the logo icon
+ *  - Breathing dots: 3-dot loader with ambient pulse + individual wave
+ *  - Animated background gradient: subtle tone shift during loading
+ *
+ * Phase 3+ will replace the LaunchedEffect body with:
+ *   - init Room DB
+ *   - read `onboardingComplete` flag from DataStore
+ *   - if false → `CurioRoutes.ONBOARDING`
+ *   - else    → `CurioRoutes.HOME`
+ *
+ * No back button. No interaction. Max 800ms before auto-dismiss.
+ */
+@Composable
+fun SplashScreen(navController: NavHostController) {
+    var pulseIndex by remember { mutableStateOf(0) }
+    var entranceReady by remember { mutableStateOf(false) }
+
+    // ── Logo morph entrance trigger ───────────────────────────────────────
+    LaunchedEffect(Unit) {
+        entranceReady = true
+    }
+
+    // ── Breathing background gradient ─────────────────────────────────────
+    val bgTransition = rememberInfiniteTransition(label = "splashBg")
+    val bgShift by bgTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(4000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bgShift"
+    )
+
+    // ── Shimmer for the logo icon ─────────────────────────────────────────
+    val shimmerTransition = rememberInfiniteTransition(label = "splashShimmer")
+    val shimmerOffset by shimmerTransition.animateFloat(
+        initialValue = -1f,
+        targetValue = 2f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = CurioMotion.Durations.Shimmer,
+                easing = FastOutSlowInEasing
+            )
+        ),
+        label = "shimmerOffset"
+    )
+
+    // ── Dot loader pulse wave ─────────────────────────────────────────────
+    LaunchedEffect(Unit) {
+        while (true) {
+            pulseIndex = (pulseIndex + 1) % 3
+            delay(200)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        TopicJsonLoader.preloadAll()
+        delay(800)
+        navController.navigate(CurioRoutes.HOME) {
+            popUpTo(CurioRoutes.SPLASH) { inclusive = true }
+        }
+    }
+
+    CurioTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                // ── Animated background halo ─────────────────────────────────
+                Box(
+                    modifier = Modifier
+                        .size(280.dp)
+                        .offset(x = ((bgShift - 0.5f) * 40).dp)
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(
+                                    CurioColors.CoralBlush.copy(alpha = 0.08f),
+                                    Color.Transparent
+                                )
+                            ),
+                            shape = RoundedCornerShape(50)
+                        )
+                )
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    // ── Logomark with morph entrance + shimmer ────────────────
+                    Box(
+                        modifier = Modifier.size(144.dp)
+                            .scale(
+                                if (entranceReady) 1f else 0f
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // Shimmer overlay
+                        Box(
+                            modifier = Modifier
+                                .size(96.dp)
+                                .background(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            CurioColors.CreamWhite.copy(alpha = 0.25f),
+                                            Color.Transparent
+                                        ),
+                                        startX = shimmerOffset * 200f,
+                                        endX = (shimmerOffset + 0.3f) * 200f
+                                    ),
+                                    shape = RoundedCornerShape(50)
+                                )
+                        )
+                        CurioIcon(
+                            name = CurioIcons.AutoAwesome,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            size = 96.dp
+                        )
+                    }
+
+                    // ── App name ──────────────────────────────────────────────
+                    Text(
+                        text = "Curio",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+
+                    Spacer(Modifier.height(8.dp))
+
+                    // ── 3-dot loader — breathing pulse + sequence wave ──────
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        repeat(3) { index ->
+                            val isPulsing = index == pulseIndex
+                            val dotScale by animateFloatAsState(
+                                targetValue = if (isPulsing) 1.35f else 1f,
+                                animationSpec = CurioMotion.Springs.Snappy,
+                                label = "dotScale"
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .scale(dotScale)
+                                    .clip(RoundedCornerShape(50))
+                                    .background(
+                                        if (isPulsing)
+                                            MaterialTheme.colorScheme.primary
+                                        else
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
+                                    )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

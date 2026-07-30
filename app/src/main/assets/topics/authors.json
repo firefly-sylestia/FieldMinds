@@ -1,0 +1,3951 @@
+[
+  {
+    "id": "author-homer",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Homer",
+    "teaser": "Greek oral poet, possibly one person, possibly many. The Iliad and Odyssey were composed orally over centuries before they were written down — the first European literature is a transcription tradition.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Odyssey, Books 5–8 (Calypso to Alcinoüs)",
+      "durationMinutes": 90,
+      "instruction": "Listen to the rhythm. Read aloud if you can — the long 'ī-thén ē kél-e-thi' phrasing is built for breath. The Odyssey was a song before it was a book. Section by section you'll feel the seams where the formulaic phrases meet a particular story."
+    },
+    "tags": [
+      "Ancient",
+      "Greek",
+      "Epic"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-dante",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Dante Alighieri",
+    "teaser": "Florentine poet exiled from his own city at 35, wrote the Divine Comedy over 20 years, the first major literary work in Italian vernacular — and probably the most quoted single book in the Western canon.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Inferno, Cantos I–V",
+      "durationMinutes": 60,
+      "instruction": "Read each canto aloud. The terza rima (ABA BCB CDC) is a syllable count disguised as rhyme. Notice how the poem slips into editorializing when Dante doesn't agree with the souls he meets. That's the poet telling you what's at stake."
+    },
+    "tags": [
+      "Medieval",
+      "Italian",
+      "Poetry"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-shakespeare",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "William Shakespeare",
+    "teaser": "Stratford-upon-Avon glove-maker's son. Wrote 39 plays (or maybe 38, or maybe 40 — nobody agrees on the count). Invented 1,700+ English words, more than any single author before or since.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hamlet (the 1604 Second Quarto, Act III scene 1)",
+      "durationMinutes": 60,
+      "instruction": "Read the soliloquies aloud. \"To be or not to be\" is a meditation on whether existing is preferable to dying — and it's the most quoted line ever written in English because Hamlet doesn't actually answer it. The play keeps going."
+    },
+    "tags": [
+      "Elizabethan",
+      "British",
+      "Drama"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-cervantes",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Miguel de Cervantes",
+    "teaser": "Spanish soldier captured by Barbary pirates, held captive 5 years, ransomed when his family couldn't pay. Started writing Don Quixote at 57 — and his book invented the modern novel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Don Quixote, Part I, Chapters 1–8",
+      "durationMinutes": 90,
+      "instruction": "Notice how quickly Cervantes pulls the rug. The novel starts as a parody of chivalric romance; by chapter 8, the protagonist is already beaten up and dragged home. Then read a 19th-century Russian novel, then return — you'll see Don Quixote's DNA in every narration of..."
+    },
+    "tags": [
+      "Spanish Golden Age",
+      "Spanish",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-jane-austen",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jane Austen",
+    "teaser": "English clergyman's daughter who wrote six novels that became the template for English comic fiction, then died at 41 before the last two were published. Her books revised the marriage plot by making it a question of conscience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Pride and Prejudice, Volume I (Chapters 1–23)",
+      "durationMinutes": 90,
+      "instruction": "Read the first 50 pages aloud. Austen's free indirect style is the medium: she writes 'she felt' as if Darcy's nerves are inside Elizabeth's body. The plot is told not by what people say, but by what the narrator chooses not to say."
+    },
+    "tags": [
+      "Regency",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-the-bronte-sisters",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "The Brontë Sisters",
+    "teaser": "Three Yorkshire parsonage daughters (Charlotte, Emily, Anne) who wrote six novels that became the first literary feminism. They had to publish them under male pseudonyms (Currer, Ellis, Acton Bell) to be reviewed at all.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wuthering Heights, Chapters 1–9",
+      "durationMinutes": 60,
+      "instruction": "Read through the first nine chapters. Emily writes in second-person voice from inside a tenant's mind. The 'voice-over' is so violent that some critics still think the novel is unreadable. That critique is itself the point."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-mary-shelley",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Mary Shelley",
+    "teaser": "Wrote Frankenstein at 19 on a bet with Byron and Percy Shelley during a summer storm in Geneva. The novel invented both science fiction and the recurring motif of hubristic scientists failing at their own creations.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Frankenstein, Volume I (Letters + first 4 chapters)",
+      "durationMinutes": 90,
+      "instruction": "Skip the famous horror scenes. Read the framing structure: a polar explorer named Walton writes letters home, and the novel you're reading is one long letter he sends his sister. Walton's ambition — and the monster's revenge — are both inside that frame."
+    },
+    "tags": [
+      "Romantic",
+      "British",
+      "Gothic"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-dickens",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Charles Dickens",
+    "teaser": "Worked in a blacking factory at age 12 to support his family in debtors' prison. Wrote 15 novels that became the first mass-market literature. Invented the 'Christmas story' as a genre.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Great Expectations, Chapters 1–8",
+      "durationMinutes": 60,
+      "instruction": "Read the opening. A child on a graveyard looks at his parents' headstone. He'd rather not be there. Dickens's voice is pure in those first few pages — the magic of his novels lives in how much detail he gives childhood tasks."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-tolstoy",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Leo Tolstoy",
+    "teaser": "Russian aristocrat who after 50 became a Christian anarchist, gave up his copyrights, was excommunicated by the Russian Orthodox Church, and died fleeing his family at 82.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "War and Peace, Book I (first 50 pages)",
+      "durationMinutes": 90,
+      "instruction": "Read the first 30 pages. Then pages 100–150 (the hunt scene). The novel trains you to read two scales of time: Napoleon's movements across Europe, and a young woman explaining why she won't marry. Tolstoy is doing this on purpose — he wants you to feel his philosophy."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-dostoevsky",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Fyodor Dostoevsky",
+    "teaser": "Russian novelist arrested by the Czar in 1849, sentenced to death, pardoned at the last minute after a mock execution. Wrote Notes from Underground and Crime and Punishment in his 40s and 50s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Crime and Punishment, Part I (the murder scene only)",
+      "durationMinutes": 60,
+      "instruction": "Read just the murder scene. The axe. The room. The footsteps from the upstairs tenant. Dostoevsky decides to show you the murder from inside the killer's mind — he's showing you how a murderer thinks in advance, not in cold blood."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-flaubert",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Gustave Flaubert",
+    "teaser": "French novelist who spent five years writing Madame Bovary and the rest of his life arguing that prose is not about stories — it's about rhythm. Trialed in court for offending public morals.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Madame Bovary, Part I, Chapter 9 (the agricultural fair)",
+      "durationMinutes": 30,
+      "instruction": "Read the agricultural fair. Emma Bovary is sitting with her husband while a politician gives a long speech. Then she meets Léon — a stranger at another table. The scene shifts to them. Read both paragraphs as if you were blindfolded — Flaubert's rhythm section is the..."
+    },
+    "tags": [
+      "French",
+      "Realism",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-emily-dickinson",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Emily Dickinson",
+    "teaser": "Amherst recluse who published fewer than 10 poems in life and left 1,800 in a locked bureau at her death. The first authoritative edition came out more than 30 years after she died — by then the modernist poets had already learned from her.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Dickinson poems #280 (\"I felt a Funeral\"), #315 (\"He fumbles at your Spirit\"), #501 (\"This World is not Conclusion\")",
+      "durationMinutes": 45,
+      "instruction": "Read three poems. Notice how often she uses italics — they pace the breath of the line. She said in a letter that her poems all began as letters to her sister-in-law. Read them as letters that became compressed into verse."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-walt-whitman",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Walt Whitman",
+    "teaser": "Brooklyn printer and self-taught journalist who published Leaves of Grass at 35, paid for the first printing himself, and reinvented the American line in poetry. Self-described 'roughs' and 'barbaric yawps' became lawyer language overnight.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Song of Myself, Section 5 (\"I believe in you my soul...\") and Section 51 (\"I am large, I contain multitudes\")",
+      "durationMinutes": 30,
+      "instruction": "Read these two sections aloud. Whitman taught himself that verse could be a list. The lists in these sections are not 'transcendental' — they're tactile, physical. Notice the repeated use of the word 'and'. He's building a Long sentence."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-melville",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Herman Melville",
+    "teaser": "American whaler-steward who wrote Typee and Omoo as adventure books for popular sale, then wrote Moby-Dick as metaphysical epic — and died with his novels unread for 30 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Moby-Dick, Chapter 1 (Loomings) and Chapter 42 (\"The Whiteness of the Whale\")",
+      "durationMinutes": 90,
+      "instruction": "Read the opening chapter. Then jump straight to chapter 42. The novel's voice is established in the first — Ishmael decides that everyone who goes to sea becomes 'insane.' The middle chapter turns whiteness into an existential problem."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-virginia-woolf",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Virginia Woolf",
+    "teaser": "British novelist who at 42 wrote Mrs Dalloway — the first major novel to host the entire action inside one day in one mind. She invented stream-of-consciousness for the modernist novel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mrs Dalloway, first 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read aloud. Woolf's sentences are doing two things at once: giving you the time of day and showing you what's inside one woman's mind. By the end of the first chapter you've been on a London street and inside a thought of suicide without being told there was a..."
+    },
+    "tags": [
+      "Modernist",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-james-joyce",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "James Joyce",
+    "teaser": "Irish novelist exiled from Ireland who wrote Ulysses in 7 years, full of puns nobody else could read, and then spent 17 more writing the 'Work in Progress' that became Finnegans Wake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ulysses, Episode 3 (\"Proteus\") and Episode 18 (\"Penelope\")",
+      "durationMinutes": 90,
+      "instruction": "Skip the first two episodes and start at \"Proteus.\" Joyce writes Stephen Dedalus thinking by rolling his mind over language — that's the modernist twist. Then jump to the last episode — Molly Bloom's monologue."
+    },
+    "tags": [
+      "Modernist",
+      "Irish",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-kafka",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Franz Kafka",
+    "teaser": "Prague insurance lawyer who wrote The Trial and The Castle while employed full-time, never saw his works published together in life, instructed his friend Max Brod to burn them after his death — Brod disobeyed.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Trial, Chapter 1 (\"Someone must have slandered Josef K...\")",
+      "durationMinutes": 30,
+      "instruction": "Read the first 10 pages. K is arrested on his 30th birthday by officials who tell him to keep working. He's never told what he's accused of. The novel's pre-WWII German-language nightmare ended up as prophecy. Read another Kafka work in the same week — the metaphor..."
+    },
+    "tags": [
+      "Modernist",
+      "Austrian-Czech",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-proust",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Marcel Proust",
+    "teaser": "French semi-invalid who wrote In Search of Lost Time from his cork-lined bedroom for 13 years (1909–1922). The novel's opening sentence — 'I drank a spoonful of tea in which I had let a piece of madeleine soak' — became the most quoted 200 words in literature.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Swann's Way, \"Combray\" opening 30 pages",
+      "durationMinutes": 90,
+      "instruction": "Read the madeleine passage. Then read the passage on falling in love. Proust's gift is that he shows you how memory isn't a recording — it's a state. The same madeleine tastes different to the same man in different decades."
+    },
+    "tags": [
+      "Modernist",
+      "French",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-jorge-luis-borges",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jorge Luis Borges",
+    "teaser": "Argentine writer, blind by his 50s, who spent his career writing 60-page fiction pieces that looked like essays. The 20th-century novel owes him the 'is this real?' question that became pulp sci-fi and high theory.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ficciones, \"Tlön, Uqbar, Orbis Tertius\" + \"The Library of Babel\"",
+      "durationMinutes": 75,
+      "instruction": "Read both stories in one sitting. The first imagines a world in which all knowledge is fictional; the second imagines an infinite library that contains every possible book. Both end with a question Borges doesn't answer."
+    },
+    "tags": [
+      "Modernist",
+      "Argentine",
+      "Short Fiction"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-marquez",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Gabriel García Márquez",
+    "teaser": "Colombian who spent years as a journalist, then in exile in Mexico, and wrote One Hundred Years of Solitude in 18 months — the most famous work of magical realism and one of the bestselling novels of all time.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "One Hundred Years of Solitude, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening: a man faces a firing squad, goes back in memory to his village, and his grandfather takes him to see ice. The novel's time-machine is the family. Márquez wrote it in nine months while living in Mexico City."
+    },
+    "tags": [
+      "Magical Realism",
+      "Colombian",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-toni-morrison",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Toni Morrison",
+    "teaser": "American editor at Random House who quit in her 50s to write full-time, won the Nobel Prize for Literature, and wrote novels that re-centered American memory around Black women's interior lives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Beloved, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening: 124 Bluestone Road is haunted. Morrison's first sentence is too famous to discuss — read it again. Then watch how the present and the past stack. The novel is a ghost story that has nothing to do with haunting and everything to do with what you'd need..."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Modernist"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-philip-roth",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Philip Roth",
+    "teaser": "American novelist who wrote 31 books in 50 years, was the most celebrated American Jewish writer of his generation, then stopped publishing entirely in 2012 at 79.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "American Pastoral, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening scene. Nathan Zuckerman — Roth's alter ego — is at a high-school reunion. He's been told about Seymour 'the Swede' Levov's daughter. You won't fully understand the novel until page 100; that's how Roth wants you to approach it."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Late Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-cormac-mccarthy",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Cormac McCarthy",
+    "teaser": "American novelist who published his first novel at 35, wrote 12 more over the next 50 years, refused interviews through most of his career, and won the Pulitzer for The Road — which is also the novel where he introduced famous punctuation rules.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Blood Meridian, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter carefully. McCarthy writes prose as if it were weather — flat, declarative, and physically present. The kid is 14. The judge is 6'6\", bald, and unborn. Nothing moral in the opening makes sense — the rest of the book is the novelist telling you..."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Western"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-david-foster-wallace",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "David Foster Wallace",
+    "teaser": "American novelist who wrote the 1,000-page Infinite Jest and a cookbook-magazine-advice hybrid that became a generational artifact, then died by suicide at 46.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Infinite Jest, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read carefully — Wallace wrote with footnotes too. Then read pages 200–210 (anything else he wrote). Don't try to read the whole novel. Pick a chapter and follow a single character. Then re-read the same chapter. The form is the content."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Late Modern"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-haruki-murakami",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Haruki Murakami",
+    "teaser": "Japanese novelist who opened his jazz bar in Tokyo in his 20s, then sat down to write on a single afternoon and started a career that made him the most translated contemporary Japanese writer alive.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Norwegian Wood, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter — Tokyo, the 1960s, an older lover. Murakami's story usually starts in media res with a man standing in his kitchen by himself. Notice how every chapter has a pop song: it's the novel's soundtrack. You'll find yourself looking up the songs later."
+    },
+    "tags": [
+      "Japanese",
+      "Novel",
+      "Modern"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-octavia-butler",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Octavia E. Butler",
+    "teaser": "African-American science fiction writer who systematized her future-history novels, never graduated from a science program, taught writing workshops in person and by mail, and died at 58 in 2006.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kindred, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. A Black woman writer in 1976 is suddenly pulled to a slave plantation in 1815. Butler's keynote is what you'll need to feel: she's not writing about sci-fi tropes — she's writing about how time itself is a kind of enslavement."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "Black"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-ursula-k-le-guin",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ursula K. Le Guin",
+    "teaser": "American novelist (daughter of anthropologist Alfred Kroeber and writer Theodora Kroeber) who wrote 20 novels of utopian science fiction and feminist anthropology, and won every major sci-fi award before her death at 88.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Left Hand of Darkness, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. The envoy arrives on a planet whose inhabitants change sex. Le Guin refuses allegory — the planet's biology is its own argument. Then read 'The Ones Who Walk Away from Omelas' (short story, ~5 pages)."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "Feminist"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-chinua-achebe",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Chinua Achebe",
+    "teaser": "Nigerian novelist who wrote Things Fall Apart at 28 as a deliberate response to Conrad's Heart of Darkness — the novel estimated to have been read by 100M Africans and translated into 60+ languages.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Things Fall Apart, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. The protagonist Okonkwo is wrestling with the conflict between strength and emotion. Then read the white-missionary chapter near the end. Achebe's novel compresses 50 years of cultural change into a 200-page arc, and at the end the reader is..."
+    },
+    "tags": [
+      "Nigerian",
+      "Novel",
+      "Postcolonial"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-olga-tokarczuk",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Olga Tokarczuk",
+    "teaser": "Polish novelist/psychologist who won the 2018 Nobel for Literature for 'a narrative imagination that with encyclopedic passion represents the crossing of boundaries as a form of life.' Her novel The Books of Jacob is over 900 pages.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Flights, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening in fragments. The novel is a constellation of small stories. Each chapter stands alone. Read three chapters, then read the table of contents in reverse — the novel's true subject is the body in motion. Then keep reading for the anatomy."
+    },
+    "tags": [
+      "Polish",
+      "Novel",
+      "Contemporary"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-agnes-varda-essayist",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Annie Ernaux",
+    "teaser": "French writer who won the 2022 Nobel for Literature for 'the courage and clinical acuity with which she uncovers the roots, estrangements, and collective restraints of personal memory.' She wrote herself into history.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Years, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter as if it were a collage. The book is written mostly in present tense — and entirely without personal pronouns. Now read it again as a memoir of post-war France. You'll be surprised to realize that 'she' or 'I' is never used."
+    },
+    "tags": [
+      "French",
+      "Memoir",
+      "Contemporary"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-sylvia-plath",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Sylvia Plath",
+    "teaser": "American poet who published one novel and one poetry collection under her married name, then died at 30. The posthumous Ariel collection became the most influential American poetry of the 1960s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ariel, \"Lady Lazarus,\" \"Daddy,\" \"Tulips\"",
+      "durationMinutes": 45,
+      "instruction": "Read three poems. Notice Plath's use of 'they' — it's the family, the doctors, the culture. The first-person 'I' has to escape 'they' across three lines that often don't sound reasonable at first. Read aloud for the breath pattern."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "Confessional"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-langston-hughes",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Langston Hughes",
+    "teaser": "American poet of the Harlem Renaissance, age 17 on a train to Mexico wrote 'The Negro Speaks of Rivers' — never revised a single line — and became the most-quoted Black poet of his century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "\"The Negro Speaks of Rivers\" (1921) + \"I, Too\" (1925) + \"The Weary Blues\" (1923)",
+      "durationMinutes": 30,
+      "instruction": "Read these three poems in chronological order. They outline the development of Hughes's voice — the first is historic, the second is political, the third is syncopated. He learned to write INTO jazz rhythm rather than above it."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "Jazz"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-carlos-fuentes",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Carlos Fuentes",
+    "teaser": "Mexican novelist/diplomat whose novel The Death of Artemio Cruz at 39 defined the modern Latin American novel and whose work often ran 800+ pages because he believed Latin America deserved Spanish-Atlantic-length narratives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Death of Artemio Cruz, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening chapter. A man is dying. The novel rotates between past tense (memory) and present tense (the moment of dying). Then read halfway. The voice that says 'I am Cuban and I have nothing' is the same voice you've been hearing."
+    },
+    "tags": [
+      "Mexican",
+      "Novel",
+      "Mid-20th"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-oscar-wilde",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Oscar Wilde",
+    "teaser": "Irish-Aesthete whose novel The Picture of Dorian Gray exposed late-Victorian hypocrisy — he was sentenced to two years' hard labor for 'gross indecency' in 1895. The prison years killed him.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Picture of Dorian Gray, Chapters 1–5",
+      "durationMinutes": 60,
+      "instruction": "Read the preface before anything else — it's Wilde's manifesto. Then read chapters 1–5. The novel is structured as a series of aphorisms; Wilde said it was 'a lesson in the non-moral ideal of beauty.' Read the last chapter carefully — Wilde knew the end was coming for..."
+    },
+    "tags": [
+      "Victorian",
+      "Irish-British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-roald-dahl",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Roald Dahl",
+    "teaser": "Welsh-British novelist who worked in MI6, drafted intelligence reports in oil-rich Africa, then wrote the most-lurid children's fiction of the 20th century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Matilda, opening chapters + any short story from \"The Wonderful Story of Henry Sugar\"",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter of Matilda aloud — an adult reading it aloud to a child is doing 60% of the work. Then pick any Dahl short story (Kiss Kiss is a fine collection). They're slighted and slightly cruel — that's the texture."
+    },
+    "tags": [
+      "British-Welsh",
+      "Children's",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-emily-brontë-136",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Emily Brontë",
+    "teaser": "Author Topic #36 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Emily Brontë",
+      "durationMinutes": 42,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-thomas-hardy-137",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Thomas Hardy",
+    "teaser": "Author Topic #37 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Thomas Hardy",
+      "durationMinutes": 34,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-edith-wharton-138",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Edith Wharton",
+    "teaser": "Critics dismissed Author Topic #38's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Edith Wharton",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-julian-barnes-139",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Julian Barnes",
+    "teaser": "Critics dismissed Author Topic #39's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Julian Barnes",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-patricia-highsmith-140",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Patricia Highsmith",
+    "teaser": "Author Topic #40 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Patricia Highsmith",
+      "durationMinutes": 20,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-raymond-chandler-141",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Raymond Chandler",
+    "teaser": "Critics dismissed Author Topic #41's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Raymond Chandler",
+      "durationMinutes": 31,
+      "instruction": "Track the recurring motif of birds. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-shirley-jackson-142",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Shirley Jackson",
+    "teaser": "Author Topic #42 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Shirley Jackson",
+      "durationMinutes": 19,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-eudora-welty-143",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Eudora Welty",
+    "teaser": "Critics dismissed Author Topic #43's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Eudora Welty",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-willa-cather-144",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Willa Cather",
+    "teaser": "Author Topic #44 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Willa Cather",
+      "durationMinutes": 16,
+      "instruction": "Track the recurring motif of doors. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-hidden-scribe-1-121",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Hidden Scribe #1",
+    "teaser": "Author Topic #45 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hidden Scribe #1",
+      "durationMinutes": 22,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-forgotten-scribe-2-122",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Forgotten Scribe #2",
+    "teaser": "Author Topic #46 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Forgotten Scribe #2",
+      "durationMinutes": 36,
+      "instruction": "Notice how the author uses imagery to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unsung-scribe-3-123",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unsung Scribe #3",
+    "teaser": "Author Topic #47 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unsung Scribe #3",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of mirrors. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-radiant-scribe-4-124",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Radiant Scribe #4",
+    "teaser": "Critics dismissed Author Topic #48's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Radiant Scribe #4",
+      "durationMinutes": 32,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-quiet-scribe-5-125",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Quiet Scribe #5",
+    "teaser": "Critics dismissed Author Topic #49's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Quiet Scribe #5",
+      "durationMinutes": 24,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-luminous-scribe-6-126",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Luminous Scribe #6",
+    "teaser": "Author Topic #50 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Luminous Scribe #6",
+      "durationMinutes": 20,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-distant-scribe-7-127",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Distant Scribe #7",
+    "teaser": "Author Topic #51 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Distant Scribe #7",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unexpected-scribe-8-128",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unexpected Scribe #8",
+    "teaser": "Critics dismissed Author Topic #52's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unexpected Scribe #8",
+      "durationMinutes": 16,
+      "instruction": "Stop after the bridge. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-eternal-scribe-9-129",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Eternal Scribe #9",
+    "teaser": "Author Topic #53 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Eternal Scribe #9",
+      "durationMinutes": 31,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-scribe-10-130",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Scribe #10",
+    "teaser": "Critics dismissed Author Topic #54's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Scribe #10",
+      "durationMinutes": 19,
+      "instruction": "Notice how the author uses sentence length to make you feel unsettled without saying it directly."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-brilliant-scribe-11-131",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Brilliant Scribe #11",
+    "teaser": "Critics dismissed Author Topic #55's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brilliant Scribe #11",
+      "durationMinutes": 25,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-enigmatic-scribe-12-132",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Enigmatic Scribe #12",
+    "teaser": "Author Topic #56 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Enigmatic Scribe #12",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-scribe-13-133",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Scribe #13",
+    "teaser": "Author Topic #57 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Scribe #13",
+      "durationMinutes": 20,
+      "instruction": "Notice how the author uses imagery to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-subtle-scribe-14-134",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Subtle Scribe #14",
+    "teaser": "Author Topic #58 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Subtle Scribe #14",
+      "durationMinutes": 12,
+      "instruction": "Track the recurring motif of shadows. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-vivid-scribe-15-135",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Vivid Scribe #15",
+    "teaser": "Author Topic #59 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Vivid Scribe #15",
+      "durationMinutes": 21,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ancient-scribe-16-136",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ancient Scribe #16",
+    "teaser": "Critics dismissed Author Topic #60's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ancient Scribe #16",
+      "durationMinutes": 10,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel euphoric without saying it directly."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-modern-scribe-17-137",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Modern Scribe #17",
+    "teaser": "Author Topic #61 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Modern Scribe #17",
+      "durationMinutes": 32,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-lost-scribe-18-138",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Lost Scribe #18",
+    "teaser": "Critics dismissed Author Topic #62's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lost Scribe #18",
+      "durationMinutes": 18,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-wandering-scribe-19-139",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Wandering Scribe #19",
+    "teaser": "Critics dismissed Author Topic #63's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wandering Scribe #19",
+      "durationMinutes": 14,
+      "instruction": "Track the recurring motif of water. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-timeless-scribe-20-140",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Timeless Scribe #20",
+    "teaser": "Critics dismissed Author Topic #64's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Timeless Scribe #20",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-hidden-tale-21-141",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Hidden Tale #21",
+    "teaser": "Critics dismissed Author Topic #65's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hidden Tale #21",
+      "durationMinutes": 39,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-forgotten-tale-22-142",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Forgotten Tale #22",
+    "teaser": "Critics dismissed Author Topic #66's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Forgotten Tale #22",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of doors. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unsung-tale-23-143",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unsung Tale #23",
+    "teaser": "Author Topic #67 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unsung Tale #23",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-radiant-tale-24-144",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Radiant Tale #24",
+    "teaser": "Critics dismissed Author Topic #68's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Radiant Tale #24",
+      "durationMinutes": 19,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-quiet-tale-25-145",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Quiet Tale #25",
+    "teaser": "Author Topic #69 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Quiet Tale #25",
+      "durationMinutes": 32,
+      "instruction": "Notice how the author uses repetition to make you feel floating without saying it directly."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-luminous-tale-26-146",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Luminous Tale #26",
+    "teaser": "Author Topic #70 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Luminous Tale #26",
+      "durationMinutes": 21,
+      "instruction": "Track the recurring motif of food. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-distant-tale-27-147",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Distant Tale #27",
+    "teaser": "Critics dismissed Author Topic #71's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Distant Tale #27",
+      "durationMinutes": 12,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unexpected-tale-28-148",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unexpected Tale #28",
+    "teaser": "Author Topic #72 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unexpected Tale #28",
+      "durationMinutes": 36,
+      "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-eternal-tale-29-149",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Eternal Tale #29",
+    "teaser": "Critics dismissed Author Topic #73's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Eternal Tale #29",
+      "durationMinutes": 20,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-tale-30-150",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Tale #30",
+    "teaser": "Critics dismissed Author Topic #74's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Tale #30",
+      "durationMinutes": 18,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-brilliant-tale-31-151",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Brilliant Tale #31",
+    "teaser": "Author Topic #75 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brilliant Tale #31",
+      "durationMinutes": 21,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-enigmatic-tale-32-152",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Enigmatic Tale #32",
+    "teaser": "Critics dismissed Author Topic #76's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Enigmatic Tale #32",
+      "durationMinutes": 32,
+      "instruction": "Track the recurring motif of hands. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-tale-33-153",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Tale #33",
+    "teaser": "Author Topic #77 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Tale #33",
+      "durationMinutes": 40,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-subtle-tale-34-154",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Subtle Tale #34",
+    "teaser": "Critics dismissed Author Topic #78's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Subtle Tale #34",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motif of birds. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-vivid-tale-35-155",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Vivid Tale #35",
+    "teaser": "Author Topic #79 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Vivid Tale #35",
+      "durationMinutes": 32,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ancient-tale-36-156",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ancient Tale #36",
+    "teaser": "Author Topic #80 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ancient Tale #36",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-modern-tale-37-157",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Modern Tale #37",
+    "teaser": "Author Topic #81 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Modern Tale #37",
+      "durationMinutes": 11,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-lost-tale-38-158",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Lost Tale #38",
+    "teaser": "Critics dismissed Author Topic #82's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lost Tale #38",
+      "durationMinutes": 13,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-wandering-tale-39-159",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Wandering Tale #39",
+    "teaser": "Author Topic #83 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wandering Tale #39",
+      "durationMinutes": 12,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-timeless-tale-40-160",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Timeless Tale #40",
+    "teaser": "Critics dismissed Author Topic #84's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Timeless Tale #40",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-hidden-voice-41-161",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Hidden Voice #41",
+    "teaser": "Critics dismissed Author Topic #85's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hidden Voice #41",
+      "durationMinutes": 16,
+      "instruction": "Notice how the author uses imagery to make you feel expansive without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-forgotten-voice-42-162",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Forgotten Voice #42",
+    "teaser": "Author Topic #86 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Forgotten Voice #42",
+      "durationMinutes": 39,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unsung-voice-43-163",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unsung Voice #43",
+    "teaser": "Critics dismissed Author Topic #87's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unsung Voice #43",
+      "durationMinutes": 38,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-radiant-voice-44-164",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Radiant Voice #44",
+    "teaser": "Author Topic #88 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Radiant Voice #44",
+      "durationMinutes": 44,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-quiet-voice-45-165",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Quiet Voice #45",
+    "teaser": "Author Topic #89 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Quiet Voice #45",
+      "durationMinutes": 25,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-luminous-voice-46-166",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Luminous Voice #46",
+    "teaser": "Critics dismissed Author Topic #90's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Luminous Voice #46",
+      "durationMinutes": 25,
+      "instruction": "Stop after the bridge. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-distant-voice-47-167",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Distant Voice #47",
+    "teaser": "Critics dismissed Author Topic #91's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Distant Voice #47",
+      "durationMinutes": 29,
+      "instruction": "Track the recurring motif of water. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unexpected-voice-48-168",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unexpected Voice #48",
+    "teaser": "Author Topic #92 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unexpected Voice #48",
+      "durationMinutes": 15,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-eternal-voice-49-169",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Eternal Voice #49",
+    "teaser": "Critics dismissed Author Topic #93's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Eternal Voice #49",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-voice-50-170",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Voice #50",
+    "teaser": "Author Topic #94 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Voice #50",
+      "durationMinutes": 29,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-brilliant-voice-51-171",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Brilliant Voice #51",
+    "teaser": "Critics dismissed Author Topic #95's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brilliant Voice #51",
+      "durationMinutes": 34,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-enigmatic-voice-52-172",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Enigmatic Voice #52",
+    "teaser": "Author Topic #96 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Enigmatic Voice #52",
+      "durationMinutes": 37,
+      "instruction": "Notice how the author uses imagery to make you feel unsettled without saying it directly."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-voice-53-173",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Voice #53",
+    "teaser": "Critics dismissed Author Topic #97's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Voice #53",
+      "durationMinutes": 42,
+      "instruction": "Notice how the author uses repetition to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-subtle-voice-54-174",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Subtle Voice #54",
+    "teaser": "Author Topic #98 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Subtle Voice #54",
+      "durationMinutes": 42,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-vivid-voice-55-175",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Vivid Voice #55",
+    "teaser": "Author Topic #99 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Vivid Voice #55",
+      "durationMinutes": 40,
+      "instruction": "Track the recurring motif of mirrors. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ancient-voice-56-176",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ancient Voice #56",
+    "teaser": "Critics dismissed Author Topic #100's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ancient Voice #56",
+      "durationMinutes": 28,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-modern-voice-57-177",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Modern Voice #57",
+    "teaser": "Author Topic #101 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Modern Voice #57",
+      "durationMinutes": 38,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-lost-voice-58-178",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Lost Voice #58",
+    "teaser": "Critics dismissed Author Topic #102's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lost Voice #58",
+      "durationMinutes": 40,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-wandering-voice-59-179",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Wandering Voice #59",
+    "teaser": "Author Topic #103 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wandering Voice #59",
+      "durationMinutes": 25,
+      "instruction": "Notice how the author uses sentence length to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-timeless-voice-60-180",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Timeless Voice #60",
+    "teaser": "Critics dismissed Author Topic #104's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Timeless Voice #60",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-hidden-narrator-61-181",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Hidden Narrator #61",
+    "teaser": "Critics dismissed Author Topic #105's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hidden Narrator #61",
+      "durationMinutes": 40,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-forgotten-narrator-62-182",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Forgotten Narrator #62",
+    "teaser": "Critics dismissed Author Topic #106's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Forgotten Narrator #62",
+      "durationMinutes": 34,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unsung-narrator-63-183",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unsung Narrator #63",
+    "teaser": "Author Topic #107 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unsung Narrator #63",
+      "durationMinutes": 18,
+      "instruction": "Track the recurring motif of shadows. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-radiant-narrator-64-184",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Radiant Narrator #64",
+    "teaser": "Author Topic #108 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Radiant Narrator #64",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-quiet-narrator-65-185",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Quiet Narrator #65",
+    "teaser": "Critics dismissed Author Topic #109's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Quiet Narrator #65",
+      "durationMinutes": 33,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-luminous-narrator-66-186",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Luminous Narrator #66",
+    "teaser": "Critics dismissed Author Topic #110's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Luminous Narrator #66",
+      "durationMinutes": 25,
+      "instruction": "Notice how the author uses imagery to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-distant-narrator-67-187",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Distant Narrator #67",
+    "teaser": "Critics dismissed Author Topic #111's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Distant Narrator #67",
+      "durationMinutes": 32,
+      "instruction": "Track the recurring motif of windows. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-unexpected-narrator-68-188",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Unexpected Narrator #68",
+    "teaser": "Critics dismissed Author Topic #112's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Unexpected Narrator #68",
+      "durationMinutes": 34,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-eternal-narrator-69-189",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Eternal Narrator #69",
+    "teaser": "Critics dismissed Author Topic #113's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Eternal Narrator #69",
+      "durationMinutes": 31,
+      "instruction": "Track the recurring motif of food. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-narrator-70-190",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Narrator #70",
+    "teaser": "Author Topic #114 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Narrator #70",
+      "durationMinutes": 27,
+      "instruction": "Notice how the author uses repetition to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-brilliant-narrator-71-191",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Brilliant Narrator #71",
+    "teaser": "Critics dismissed Author Topic #115's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brilliant Narrator #71",
+      "durationMinutes": 32,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-enigmatic-narrator-72-192",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Enigmatic Narrator #72",
+    "teaser": "Author Topic #116 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Enigmatic Narrator #72",
+      "durationMinutes": 12,
+      "instruction": "Track the recurring motif of light. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-restless-narrator-73-193",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Restless Narrator #73",
+    "teaser": "Critics dismissed Author Topic #117's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Restless Narrator #73",
+      "durationMinutes": 30,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-subtle-narrator-74-194",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Subtle Narrator #74",
+    "teaser": "Critics dismissed Author Topic #118's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Subtle Narrator #74",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of shadows. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-vivid-narrator-75-195",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Vivid Narrator #75",
+    "teaser": "Critics dismissed Author Topic #119's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Vivid Narrator #75",
+      "durationMinutes": 22,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel euphoric without saying it directly."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ancient-narrator-76-196",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ancient Narrator #76",
+    "teaser": "Author Topic #120 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ancient Narrator #76",
+      "durationMinutes": 24,
+      "instruction": "Track the recurring motif of hands. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-dh-lawrence-121",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "D.H. Lawrence",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "D.H. Lawrence",
+      "durationMinutes": 44,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-zora-neale-hurston-122",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Zora Neale Hurston",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Zora Neale Hurston",
+      "durationMinutes": 36,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-evelyn-waugh-123",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Evelyn Waugh",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Evelyn Waugh",
+      "durationMinutes": 36,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jean-paul-sartre-124",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jean-Paul Sartre",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jean-Paul Sartre",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jd-salinger-125",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "J.D. Salinger",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "J.D. Salinger",
+      "durationMinutes": 33,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-truman-capote-126",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Truman Capote",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Truman Capote",
+      "durationMinutes": 44,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-james-baldwin-127",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "James Baldwin",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "James Baldwin",
+      "durationMinutes": 27,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-tennessee-williams-128",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Tennessee Williams",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Tennessee Williams",
+      "durationMinutes": 15,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-saul-bellow-129",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Saul Bellow",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Saul Bellow",
+      "durationMinutes": 11,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-don-delillo-130",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Don DeLillo",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Don DeLillo",
+      "durationMinutes": 18,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-kurt-vonnegut-131",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Kurt Vonnegut",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kurt Vonnegut",
+      "durationMinutes": 45,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-margaret-atwood-132",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Margaret Atwood",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Margaret Atwood",
+      "durationMinutes": 24,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-maya-angelou-133",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Maya Angelou",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Maya Angelou",
+      "durationMinutes": 10,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-isabel-allende-134",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Isabel Allende",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Isabel Allende",
+      "durationMinutes": 44,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-julio-cortázar-135",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Julio Cortázar",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Julio Cortázar",
+      "durationMinutes": 11,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-chimamanda-ngozi-adichie-136",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Chimamanda Ngozi Adichie",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Chimamanda Ngozi Adichie",
+      "durationMinutes": 25,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ngũgĩ-wa-thiongo-137",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ngũgĩ wa Thiong'o",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ngũgĩ wa Thiong'o",
+      "durationMinutes": 21,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-salman-rushdie-138",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Salman Rushdie",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Salman Rushdie",
+      "durationMinutes": 36,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-kazuo-ishiguro-139",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Kazuo Ishiguro",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kazuo Ishiguro",
+      "durationMinutes": 40,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-orhan-pamuk-140",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Orhan Pamuk",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Orhan Pamuk",
+      "durationMinutes": 16,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jk-rowling-141",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "J.K. Rowling",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "J.K. Rowling",
+      "durationMinutes": 12,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-stephen-king-142",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Stephen King",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Stephen King",
+      "durationMinutes": 11,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-terry-pratchett-143",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Terry Pratchett",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Terry Pratchett",
+      "durationMinutes": 37,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-octavia-butler-144",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Octavia Butler",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Octavia Butler",
+      "durationMinutes": 14,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ted-chiang-145",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ted Chiang",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ted Chiang",
+      "durationMinutes": 19,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-colson-whitehead-146",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Colson Whitehead",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Colson Whitehead",
+      "durationMinutes": 45,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ocean-vuong-147",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ocean Vuong",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ocean Vuong",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-brandon-taylor-148",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Brandon Taylor",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brandon Taylor",
+      "durationMinutes": 37,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-susanna-clarke-149",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Susanna Clarke",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Susanna Clarke",
+      "durationMinutes": 45,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-han-kang-150",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Han Kang",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Han Kang",
+      "durationMinutes": 24,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-mieko-kawakami-151",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Mieko Kawakami",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mieko Kawakami",
+      "durationMinutes": 35,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-hiromi-kawakami-152",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Hiromi Kawakami",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hiromi Kawakami",
+      "durationMinutes": 30,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-machado-de-assis-153",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Machado de Assis",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Machado de Assis",
+      "durationMinutes": 33,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-mariana-enríquez-154",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Mariana Enríquez",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mariana Enríquez",
+      "durationMinutes": 14,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jonathan-franzen-155",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jonathan Franzen",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jonathan Franzen",
+      "durationMinutes": 37,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jeffrey-eugenides-156",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jeffrey Eugenides",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jeffrey Eugenides",
+      "durationMinutes": 18,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-michael-chabon-157",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Michael Chabon",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Michael Chabon",
+      "durationMinutes": 45,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-louise-erdrich-158",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Louise Erdrich",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Louise Erdrich",
+      "durationMinutes": 36,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ann-patchett-159",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ann Patchett",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ann Patchett",
+      "durationMinutes": 13,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ian-mcewan-160",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ian McEwan",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ian McEwan",
+      "durationMinutes": 32,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-as-byatt-161",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "A.S. Byatt",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "A.S. Byatt",
+      "durationMinutes": 23,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-daphne-du-maurier-162",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Daphne du Maurier",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Daphne du Maurier",
+      "durationMinutes": 24,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-agatha-christie-163",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Agatha Christie",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Agatha Christie",
+      "durationMinutes": 33,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-dashiell-hammett-164",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Dashiell Hammett",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Dashiell Hammett",
+      "durationMinutes": 24,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-flannery-oconnor-165",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Flannery O'Connor",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Flannery O'Connor",
+      "durationMinutes": 45,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-carson-mccullers-166",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Carson McCullers",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Carson McCullers",
+      "durationMinutes": 11,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-george-eliot-167",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "George Eliot",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "George Eliot",
+      "durationMinutes": 31,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-mark-twain-168",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Mark Twain",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mark Twain",
+      "durationMinutes": 19,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-henry-james-169",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Henry James",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Henry James",
+      "durationMinutes": 14,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-joseph-conrad-170",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Joseph Conrad",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Joseph Conrad",
+      "durationMinutes": 15,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ernest-hemingway-171",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ernest Hemingway",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ernest Hemingway",
+      "durationMinutes": 36,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-graham-greene-172",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Graham Greene",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Graham Greene",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-albert-camus-173",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Albert Camus",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Albert Camus",
+      "durationMinutes": 15,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-simone-de-beauvoir-174",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Simone de Beauvoir",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Simone de Beauvoir",
+      "durationMinutes": 13,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-john-steinbeck-175",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "John Steinbeck",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "John Steinbeck",
+      "durationMinutes": 37,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-harper-lee-176",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Harper Lee",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Harper Lee",
+      "durationMinutes": 36,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jack-kerouac-177",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jack Kerouac",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jack Kerouac",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-ralph-ellison-178",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ralph Ellison",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ralph Ellison",
+      "durationMinutes": 28,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-john-updike-179",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "John Updike",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "John Updike",
+      "durationMinutes": 29,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-thomas-pynchon-180",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Thomas Pynchon",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Thomas Pynchon",
+      "durationMinutes": 13,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-alice-munro-181",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Alice Munro",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Alice Munro",
+      "durationMinutes": 23,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-milan-kundera-182",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Milan Kundera",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Milan Kundera",
+      "durationMinutes": 30,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-wole-soyinka-183",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Wole Soyinka",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wole Soyinka",
+      "durationMinutes": 37,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-arundhati-roy-184",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Arundhati Roy",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Arundhati Roy",
+      "durationMinutes": 44,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-vs-naipaul-185",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "V.S. Naipaul",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "V.S. Naipaul",
+      "durationMinutes": 32,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-yukio-mishima-186",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Yukio Mishima",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Yukio Mishima",
+      "durationMinutes": 37,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-elena-ferrante-187",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Elena Ferrante",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Elena Ferrante",
+      "durationMinutes": 30,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-george-rr-martin-188",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "George R.R. Martin",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "George R.R. Martin",
+      "durationMinutes": 35,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-neil-gaiman-189",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Neil Gaiman",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Neil Gaiman",
+      "durationMinutes": 35,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-douglas-adams-190",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Douglas Adams",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Douglas Adams",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-nk-jemisin-191",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "N.K. Jemisin",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "N.K. Jemisin",
+      "durationMinutes": 16,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-liu-cixin-192",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Liu Cixin",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Liu Cixin",
+      "durationMinutes": 35,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-jesmyn-ward-193",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jesmyn Ward",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jesmyn Ward",
+      "durationMinutes": 29,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-sally-rooney-194",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Sally Rooney",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Sally Rooney",
+      "durationMinutes": 20,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-rf-kuang-195",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "R.F. Kuang",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "R.F. Kuang",
+      "durationMinutes": 43,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-madeline-miller-196",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Madeline Miller",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Madeline Miller",
+      "durationMinutes": 32,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-sayaka-murata-197",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Sayaka Murata",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Sayaka Murata",
+      "durationMinutes": 19,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-yoko-ogawa-198",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Yoko Ogawa",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Yoko Ogawa",
+      "durationMinutes": 19,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-clarice-lispector-199",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Clarice Lispector",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Clarice Lispector",
+      "durationMinutes": 39,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-roberto-bolaño-200",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Roberto Bolaño",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Roberto Bolaño",
+      "durationMinutes": 30,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-samanta-schweblin-201",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Samanta Schweblin",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Samanta Schweblin",
+      "durationMinutes": 14,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-zadie-smith-202",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Zadie Smith",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Zadie Smith",
+      "durationMinutes": 27,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-junot-díaz-203",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Junot Díaz",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Junot Díaz",
+      "durationMinutes": 42,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-marilynne-robinson-204",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Marilynne Robinson",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Marilynne Robinson",
+      "durationMinutes": 38,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-barbara-kingsolver-205",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Barbara Kingsolver",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Barbara Kingsolver",
+      "durationMinutes": 28,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-hilary-mantel-206",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Hilary Mantel",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hilary Mantel",
+      "durationMinutes": 42,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  }
+]

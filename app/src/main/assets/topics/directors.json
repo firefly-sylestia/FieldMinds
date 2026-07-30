@@ -1,0 +1,3439 @@
+[
+  {
+    "id": "director-kubrick",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Stanley Kubrick",
+    "teaser": "Bronx-born self-taught photographer who became the most austere studio filmmaker in American cinema. Most of his movies took longer than the calendar year.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "2001: A Space Odyssey (1968) — first 25 minutes",
+      "durationMinutes": 25,
+      "instruction": "Don't skim the opening. Kubrick gives us a 6-minute sequence with no dialogue and no music. Then the bone-to-satellite cut. That cut is the entire film: it says humanity's whole arc fits in a wordless pivot."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-hitchcock",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Alfred Hitchcock",
+    "teaser": "British studio director who invented the modern suspense film, came to Hollywood, refused to call himself an artist, and appeared in his own trailers.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Vertigo (1958) end-to-end",
+      "durationMinutes": 128,
+      "instruction": "Watch for the rooftop scene at the start. The camera tilts down. That's the move the whole film is built around — looking, but not being able to see clearly. The film is just that move, repeated."
+    },
+    "tags": [
+      "Thriller",
+      "British-American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-bergman",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ingmar Bergman",
+    "teaser": "Swedish director who made 60 films in 40 years, shot most of them on a single island, and turned the inside of a face into a continent.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Persona (1966) end-to-end",
+      "durationMinutes": 84,
+      "instruction": "Two women's faces begin to merge on screen. By the end you can't tell which is which. That's not an accident — Bergman wanted the audience to feel the merger before understanding it."
+    },
+    "tags": [
+      "Drama",
+      "Swedish",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-tarkovsky",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Andrei Tarkovsky",
+    "teaser": "Russian director of seven features in 27 years, each shot like a prayer. His films are slow, water-soaked, and every scene has a dog in it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Stalker (1979) end-to-end",
+      "durationMinutes": 162,
+      "instruction": "Turn off your phone. Tarkovsky's films are paced for a 3-hour attention span. Stalker is shot in three different colors of black because the Zone changes hour to hour. Note how the light on water is the film's main character."
+    },
+    "tags": [
+      "Sci-Fi",
+      "Russian",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-godard",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Jean-Luc Godard",
+    "teaser": "French-Swiss filmmaker who reinvented narrative cinema in 1960, almost never worked in studio again, and made a film that's mostly a car park over a weekend.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Breathless (À bout de souffle) (1960) end-to-end",
+      "durationMinutes": 90,
+      "instruction": "Watch the jump cuts. They're not editing errors — they're the film's argument about how cinema pretends continuity. Every jump cut is Godard refusing to honor that contract."
+    },
+    "tags": [
+      "French New Wave",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-fellini",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Federico Fellini",
+    "teaser": "Italian director who invented the cinema of dreams and the cinema of spectacle in the same decade, then spent forty years turning his memories into circuses.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "8½ (1963) end-to-end",
+      "durationMinutes": 138,
+      "instruction": "The protagonist is a director who can't finish a film — and the film you're watching is the film he can't finish. Fellini's trick is to make you live inside the failure as if it were a holiday."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-ozu",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Yasujirō Ozu",
+    "teaser": "Japanese director who shot only from a low tatami-mat angle, refused to use camera movement for thirty years, and made 54 films about families eating meals.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Tokyo Story (1953) end-to-end",
+      "durationMinutes": 136,
+      "instruction": "Don't expect drama. The film is mostly interiors. The camera does not move. Watch the meals. Each meal is more important than each conversation — Ozu said so himself."
+    },
+    "tags": [
+      "Drama",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-kurosawa",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Akira Kurosawa",
+    "teaser": "Japanese director whose films were remade invisibly as Westerns and action films for sixty years. The Star Wars \"used the future\" was a samurai move.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Seven Samurai (1954) end-to-end",
+      "durationMinutes": 207,
+      "instruction": "Watch the rain. Kurosawa staged combat in weather so the eye couldn't predict hits. The famous final duel happens in a clearing after the rain stops — because the silence holds the sword."
+    },
+    "tags": [
+      "Samurai",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-spielberg",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Steven Spielberg",
+    "teaser": "Hollywood director who, at 28, made the highest-grossing film of all time twice in a row, then became the most reliable director of unflashy biography in his 50s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Schindler's List (1993) end-to-end",
+      "durationMinutes": 195,
+      "instruction": "Watch the girl in the red coat. Spielberg told Liam Neeson to never look at her. The film is structured around the moment where one gaze is denied to a character — that denial is the entire moral argument."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-scorcese",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Martin Scorsese",
+    "teaser": "New York Italian-American director who treats every film like a confession, has worked with the same composer and editor for 40 years, and turned the gangster film into a Catholic mass.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Goodfellas (1990) — the Copacabana long take",
+      "durationMinutes": 12,
+      "instruction": "Watch from the back door to the front. The shot is 3 minutes and never cuts. Scorsese calls it the film within the film — you've crossed from outside the club into the family without realizing you were moving."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-coppola",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Francis Ford Coppola",
+    "teaser": "Italian-American director who turned a mafia novel into a trilogy about the American century, then almost went bankrupt making a Vietnam film that rewritten cinema's grammar.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Apocalypse Now (1979) end-to-end",
+      "durationMinutes": 153,
+      "instruction": "Watch the napalm sequence. The sound design is by Walter Murch, who mixed the film to feel like an envelope of light. Don't watch the helicopter — listen to what the helicopter isn't playing."
+    },
+    "tags": [
+      "War",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-lynch",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "David Lynch",
+    "teaser": "American painter-turned-filmmaker who spent 30 years insisting his films weren't about anything, then let someone else write a 4300-page book explaining them anyway.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mulholland Drive (2001) end-to-end",
+      "durationMinutes": 147,
+      "instruction": "Try to follow the plot. Don't. Lynch's trap is that you'll be tempted to explain the film at the end. The Club Silencio scene is the key: she's in a theater watching a singer, and the singer never sings."
+    },
+    "tags": [
+      "Surrealist",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-tarantino",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Quentin Tarantino",
+    "teaser": "Tennessee-raised video-store clerk who became the most-quoted screenwriter of his generation and has spent twenty years cutting scenes from his finished films.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pulp Fiction (1994) end-to-end",
+      "durationMinutes": 154,
+      "instruction": "Watch the order of scenes. The diner scene is the middle of the film, not the beginning. Tarantino asks you to piece together three stories — but the seams are jokes. Don't try to be solemn."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-coen",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Coen Brothers",
+    "teaser": "Minnesota-born siblings who share one director's chair, write under one name they've joked is also a \"ship's anchor,\" and have made 18 features of dialect-rich American cinema.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "No Country for Old Men (2007) end-to-end",
+      "durationMinutes": 122,
+      "instruction": "Listen to the silences. The film has the least amount of music of any Coen Brothers feature — the silences ARE the score. The villain never explains his philosophy; the film asks you to feel it."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-malick",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Terrence Malick",
+    "teaser": "Harvard philosophy PhD who didn't release a film for 20 years between Days of Heaven (1978) and The Thin Red Line (1998), then released four features in twelve years, all of voiceover and natural light.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Tree of Life (2011) end-to-end",
+      "durationMinutes": 139,
+      "instruction": "Skip judging the voiceover. Listen to the questions instead. The film asks them in whisper — \"what did you do?\" \"who were you to me?\" — and never answers. The 30-minute creation-of-the-universe sequence is not the answer; it's a different question."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-paul-thomas-anderson",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Paul Thomas Anderson",
+    "teaser": "California director who shot his first feature at 26 with borrowed money, and has spent 30 years making films about the American family that resonate through its fault lines.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "There Will Be Blood (2007) end-to-end",
+      "durationMinutes": 158,
+      "instruction": "Listen to the score (Jonny Greenwood). It sounds like a film about oil pressure. The strings build tension that's almost unbearable — that's because the film never has a rest note. Listen for the bowings on the high strings."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-spike-lee",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Spike Lee",
+    "teaser": "Brooklyn-born NYU graduate who made She's Gotta Have It in 1986 on a $175K budget, then spent 30 years tilting American cinema from a 35-degree Dutch angle.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Do the Right Thing (1989) end-to-end",
+      "durationMinutes": 120,
+      "instruction": "Listen to Public Enemy's \"Fight the Power.\" The song is onscreen four times — and each time the way it's shot compresses. Lee wrote the song into the film. Watch the radio. Watch the mural. Watch the credits."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-john-ford",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "John Ford",
+    "teaser": "Maine Irish-American who directed more than 140 films and won 6 Best Director Oscars before that record stopped mattering. He invented the modern Western.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Searchers (1956) end-to-end",
+      "durationMinutes": 119,
+      "instruction": "Watch the doorframe. Ford famously stages Ethan Edwards in doorways and exits — never quite inside, never quite out — for the entire film. He treats the Western as a doorway America is still walking through."
+    },
+    "tags": [
+      "Western",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-billy-wilder",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Billy Wilder",
+    "teaser": "Austrian-born emigré who landed in Hollywood with no English, became the only director to win Oscars for Best Director and Best Screenplay twice, and wrote the American sex comedy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Some Like It Hot (1959) end-to-end",
+      "durationMinutes": 121,
+      "instruction": "The film is about two men in drag running from the mob, but every joke is built on period timing. Watch the last line. Wilder wrote the most perfect last line in comedy — and then wrote one better, then kept going."
+    },
+    "tags": [
+      "Comedy",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-cassavetes",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "John Cassavetes",
+    "teaser": "Greek-American actor who borrowed money from his mother-in-law to make his first film in 1959, founded American independent cinema, and died still owing money on his last feature.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Faces (1968) end-to-end",
+      "durationMinutes": 130,
+      "instruction": "Listen to the dialogue. Cassavetes overlaid scenes — actors you cut away from are still talking when you cut back. The end credits are the most bruising ten minutes in 1960s American cinema."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-bresson",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Robert Bresson",
+    "teaser": "French painter who made 13 features in 50 years, insisted on calling his actors \"models,\" and made every shot look like a still photograph the audience could carry home.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Au Hasard Balthazar (1966) end-to-end",
+      "durationMinutes": 95,
+      "instruction": "Watch the donkey. Bresson tells an entire saint's life through an animal who can't speak. The film never explains the donkey — it just lets you watch."
+    },
+    "tags": [
+      "Drama",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-antonioni",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Michelangelo Antonioni",
+    "teaser": "Italian industrial painter turned filmmaker who spent 20 years arguing that boredom was a visual genre, then released Blow-Up in 1966 and became a global name.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "L'Eclisse (1962) end-to-end",
+      "durationMinutes": 126,
+      "instruction": "Watch the last 8 minutes. The screen is almost empty — Antonioni shows you a building site, traffic lights, no people. He called the ending a diagnosis of bourgeois emptiness. Watch what you think is missing."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-hou-hsiao-hsien",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hou Hsiao-Hsien",
+    "teaser": "Taiwanese director who shot most of his films from a fixed camera 30 feet away, made the slowest masterpieces of world cinema, and then released a 4-hour autobiographical feature at 70.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Café Lumière (2003) end-to-end",
+      "durationMinutes": 103,
+      "instruction": "Don't try to read it. Hou's films reward the patient — the plot is partly overheard. The middle hour has music only. The final scene is in a bookstore. You don't need to know yousuh to feel her leaving."
+    },
+    "tags": [
+      "Drama",
+      "Taiwanese",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "director-wong-kar-wai",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wong Kar-wai",
+    "teaser": "Hong Kong director whose films are song-and-color mood pieces disguised as love stories, and whose 4K reissues still regularly sell out global retrospectives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "In the Mood for Love (2000) end-to-end",
+      "durationMinutes": 98,
+      "instruction": "Watch the wallpaper. The two protagonists keep passing each other in a corridor with green wallpaper. Tony Leung's shirts change color each scene to mark time. The film is built around a color that isn't named in any line."
+    },
+    "tags": [
+      "Romance",
+      "Hong Kong",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-bong-joon-ho",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Bong Joon-ho",
+    "teaser": "Korean director who studied sociology before film school, made four features about class war with genre trappings, and won the Palme d'Or + Best Picture + Best Director trifecta.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Parasite (2019) end-to-end",
+      "durationMinutes": 132,
+      "instruction": "Watch the rain. Bong uses a flood as social metaphor — the basement gets soaked while the upstairs watches on their phones. The smell is the film's through-line."
+    },
+    "tags": [
+      "Thriller",
+      "Korean",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-park-chan-wook",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Park Chan-wook",
+    "teaser": "Korean director who turned a single 2003 film into a trilogy that practically invented the modern revenge film, then directed a TV series about a psychopathic butler.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Oldboy (2003) end-to-end",
+      "durationMinutes": 120,
+      "instruction": "Watch the corridor fight — it was shot in a single take at 30 degrees in a real hallway. Park insisted no cuts. The shot turned the film into an action landmark for a generation of choreographers."
+    },
+    "tags": [
+      "Thriller",
+      "Korean",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-satyajit-ray",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Satyajit Ray",
+    "teaser": "Bengali who founded Indian art cinema from a Calcutta office while working a day job as an art director, then won the only Indian Lifetime Achievement Oscar in cinema.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pather Panchali (1955) end-to-end",
+      "durationMinutes": 125,
+      "instruction": "Watch the train. Ray sold his wife's jewelry to fund the shot of a train appearing through Bengali trees. The family in the film is partly his. He shot it over four years with no budget."
+    },
+    "tags": [
+      "Drama",
+      "Indian",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-alfonso-cuaron",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Alfonso Cuarón",
+    "teaser": "Mexican director of five features in twenty-five years, three of which landed on Sight & Sound's decade-best polls. Made the first Hollywood film shot in one continuous take.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Roma (2018) end-to-end",
+      "durationMinutes": 135,
+      "instruction": "Watch the waves. Cuarón won cinematography for a black-and-white film shot in his childhood neighborhood on Mexico City. The long opening shot is the film's argument: the world keeps moving and we're still here."
+    },
+    "tags": [
+      "Drama",
+      "Mexican",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-guillermo-del-toro",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Guillermo del Toro",
+    "teaser": "Mexican director who spent twelve years fighting to make a film about a fish-man, got demonetized by Hollywood, then won three Oscars in one night on a Different Picture.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pan's Labyrinth (2006) end-to-end",
+      "durationMinutes": 118,
+      "instruction": "Listen to the score (Javier Navarrete). Del Toro and Navarrete built an interlocking lullaby that synchronizes with a finger-tap motif. Both motifs reappear in The Shape of Water — the through-line is the filmmaker."
+    },
+    "tags": [
+      "Fantasy",
+      "Mexican",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-denis-villeneuve",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Denis Villeneuve",
+    "teaser": "Québécois director who took over the Blade Runner franchise, intercut Arrival with Sicario, and made the only major-studio feature about deafness in 2021.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Arrival (2016) end-to-end",
+      "durationMinutes": 116,
+      "instruction": "Watch the daughter's name. The film tells you in the first five minutes. Villeneuve insists the plot isn't time-travel — it's grammar. Sound and writing are the same operation. Don't skip the scene where she says \"what does it feel like?\""
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-christopher-nolan",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Christopher Nolan",
+    "teaser": "British-American director who refused to release his films in digital form for years, championed IMAX, and structured ten features around backward-running timelines.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Memento (2000) end-to-end",
+      "durationMinutes": 113,
+      "instruction": "Watch the color reversal. Black-and-white scenes run forward, color scenes run backward. Nolan is showing you the protagonist's memory architecture — your eyes have to work to keep up."
+    },
+    "tags": [
+      "Thriller",
+      "British",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-david-fincher",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "David Fincher",
+    "teaser": "Oregon director who began as a visual-effects artist on Return of the Jedi, then directed more than 100 music videos before making his first feature at 36.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Se7en (1995) end-to-end",
+      "durationMinutes": 127,
+      "instruction": "Watch the rain. Fincher and the production designer deliberately allowed the matte paintings to feel airbrushed — the film's lack of warmth IS the climate. Listen to the score (Howard Shore) — it's mostly notes that aren't resolving."
+    },
+    "tags": [
+      "Thriller",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-mike-leigh",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Mike Leigh",
+    "teaser": "British director whose films are improvised over six months of rehearsal with no script, and whose actors sometimes don't know what kind of film they're making.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Naked (1993) end-to-end",
+      "durationMinutes": 131,
+      "instruction": "Listen to David Thewlis's monologues. Leigh writes them. Thewlis was given 50 pages of monologue to memorize and perform. The film is two men fighting, and the long speeches ARE the fight."
+    },
+    "tags": [
+      "Drama",
+      "British",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-greta-gerwig",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Greta Gerwig",
+    "teaser": "American actress who became an indie-screenwriter, then directed two 21st-century landmark films about women in 20 years. Her third feature is still the highest-grossing directed by a woman in decades.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lady Bird (2017) end-to-end",
+      "durationMinutes": 94,
+      "instruction": "Watch the ending. Gerwig didn't write her own dialogue — she did write the structure. The last scene is two women who can't say what they feel. Listen to the radio under the dialogue."
+    },
+    "tags": [
+      "Coming-of-Age",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-agnes-varda",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Agnès Varda",
+    "teaser": "Belgian-French photographer who founded the French New Wave a year before Cahiers did, then released her last feature at 88 from her apartment kitchen.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Cleo from 5 to 7 (1962) end-to-end",
+      "durationMinutes": 90,
+      "instruction": "Watch the opening. Varda documentary-style starts. Then she claims the title card: \"Real time: from 5pm to 6:45pm.\" Then the real-time experiment. Watch the mirrors — Cleo hides in mirrors all film long."
+    },
+    "tags": [
+      "Drama",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-maya-deren",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Maya Deren",
+    "teaser": "Ukrainian-American who arrived in 1940s New York with no film training and made Meshes of the Afternoon for $200 in 1943, then spent twelve years arguing it was never \"avant-garde\" at all.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Meshes of the Afternoon (1943) end-to-end",
+      "durationMinutes": 14,
+      "instruction": "Watch once for plot. Watch once for atmosphere. Watch once for the camera — Deren taught herself that the camera's POV is a body. The figure with the mirrored face is doing what cinema hadn't yet decided it could."
+    },
+    "tags": [
+      "Experimental",
+      "American",
+      "1940s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-david-lean-147",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "David Lean",
+    "teaser": "Director Topic #37 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "David Lean",
+      "durationMinutes": 119,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-wim-wenders-148",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wim Wenders",
+    "teaser": "Director Topic #38 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Wim Wenders",
+      "durationMinutes": 147,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for truth surfaces."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-yorgos-lanthimos-149",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Yorgos Lanthimos",
+    "teaser": "Director Topic #39 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Yorgos Lanthimos",
+      "durationMinutes": 139,
+      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ruben-östlund-150",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ruben Östlund",
+    "teaser": "Director Topic #40 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ruben Östlund",
+      "durationMinutes": 89,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-andrea-arnold-151",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Andrea Arnold",
+    "teaser": "Director Topic #41 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Andrea Arnold",
+      "durationMinutes": 130,
+      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-alice-rohrwacher-152",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Alice Rohrwacher",
+    "teaser": "Director Topic #42 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Alice Rohrwacher",
+      "durationMinutes": 88,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lulu-wang-153",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lulu Wang",
+    "teaser": "Director Topic #43 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lulu Wang",
+      "durationMinutes": 122,
+      "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for relief comes."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-edward-yang-154",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Edward Yang",
+    "teaser": "Director Topic #44 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Edward Yang",
+      "durationMinutes": 149,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-apichatpong-weerasethakul-155",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Apichatpong Weerasethakul",
+    "teaser": "Director Topic #45 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Apichatpong Weerasethakul",
+      "durationMinutes": 76,
+      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-naoko-ogigami-156",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Naoko Ogigami",
+    "teaser": "Director Topic #46 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Naoko Ogigami",
+      "durationMinutes": 104,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-na-hong-jin-157",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Na Hong-jin",
+    "teaser": "Director Topic #47 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Na Hong-jin",
+      "durationMinutes": 62,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-johnnie-to-158",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Johnnie To",
+    "teaser": "Director Topic #48 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Johnnie To",
+      "durationMinutes": 61,
+      "instruction": "Track how the lighting changes from the first half to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-dario-argento-159",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Dario Argento",
+    "teaser": "Director Topic #49 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Dario Argento",
+      "durationMinutes": 99,
+      "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-nanni-moretti-160",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Nanni Moretti",
+    "teaser": "Director Topic #50 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Nanni Moretti",
+      "durationMinutes": 108,
+      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-fw-murnau-161",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "F.W. Murnau",
+    "teaser": "Director Topic #51 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "F.W. Murnau",
+      "durationMinutes": 100,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-max-ophüls-162",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Max Ophüls",
+    "teaser": "Director Topic #52 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Max Ophüls",
+      "durationMinutes": 121,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-hidden-auteur-1-286",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hidden Auteur #1",
+    "teaser": "Director Topic #53 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hidden Auteur #1",
+      "durationMinutes": 138,
+      "instruction": "Watch the background actors during the chase sequence — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-forgotten-auteur-2-287",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Forgotten Auteur #2",
+    "teaser": "Director Topic #54 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Forgotten Auteur #2",
+      "durationMinutes": 97,
+      "instruction": "Track how the lighting changes from the opening to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unsung-auteur-3-288",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unsung Auteur #3",
+    "teaser": "Director Topic #55 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unsung Auteur #3",
+      "durationMinutes": 135,
+      "instruction": "Track how the lighting changes from act one to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-radiant-auteur-4-289",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Radiant Auteur #4",
+    "teaser": "Director Topic #56 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Radiant Auteur #4",
+      "durationMinutes": 81,
+      "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for safety returns."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-quiet-auteur-5-290",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Quiet Auteur #5",
+    "teaser": "Director Topic #57 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Quiet Auteur #5",
+      "durationMinutes": 123,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for safety returns."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-luminous-auteur-6-291",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Luminous Auteur #6",
+    "teaser": "Director Topic #58 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Luminous Auteur #6",
+      "durationMinutes": 145,
+      "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-distant-auteur-7-292",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Distant Auteur #7",
+    "teaser": "Director Topic #59 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Distant Auteur #7",
+      "durationMinutes": 77,
+      "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unexpected-auteur-8-293",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unexpected Auteur #8",
+    "teaser": "Director Topic #60 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unexpected Auteur #8",
+      "durationMinutes": 138,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-eternal-auteur-9-294",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Eternal Auteur #9",
+    "teaser": "Director Topic #61 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Eternal Auteur #9",
+      "durationMinutes": 130,
+      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-auteur-10-295",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Auteur #10",
+    "teaser": "Director Topic #62 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Auteur #10",
+      "durationMinutes": 67,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for safety returns."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-brilliant-auteur-11-296",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Brilliant Auteur #11",
+    "teaser": "Director Topic #63 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Brilliant Auteur #11",
+      "durationMinutes": 71,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-enigmatic-auteur-12-297",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Enigmatic Auteur #12",
+    "teaser": "Director Topic #64 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Enigmatic Auteur #12",
+      "durationMinutes": 72,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-auteur-13-298",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Auteur #13",
+    "teaser": "Director Topic #65 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Auteur #13",
+      "durationMinutes": 96,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for safety returns."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-subtle-auteur-14-299",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Subtle Auteur #14",
+    "teaser": "Director Topic #66 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Subtle Auteur #14",
+      "durationMinutes": 76,
+      "instruction": "Track how the lighting changes from the first half to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-vivid-auteur-15-300",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Vivid Auteur #15",
+    "teaser": "Director Topic #67 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Vivid Auteur #15",
+      "durationMinutes": 142,
+      "instruction": "Track how the lighting changes from morning to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ancient-auteur-16-301",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ancient Auteur #16",
+    "teaser": "Director Topic #68 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ancient Auteur #16",
+      "durationMinutes": 133,
+      "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for truth surfaces."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-modern-auteur-17-302",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Modern Auteur #17",
+    "teaser": "Director Topic #69 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Modern Auteur #17",
+      "durationMinutes": 132,
+      "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for safety returns."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lost-auteur-18-303",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lost Auteur #18",
+    "teaser": "Director Topic #70 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lost Auteur #18",
+      "durationMinutes": 123,
+      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-wandering-auteur-19-304",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wandering Auteur #19",
+    "teaser": "Director Topic #71 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Wandering Auteur #19",
+      "durationMinutes": 97,
+      "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-timeless-auteur-20-305",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Timeless Auteur #20",
+    "teaser": "Director Topic #72 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Timeless Auteur #20",
+      "durationMinutes": 131,
+      "instruction": "Watch the background actors during the chase sequence — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-hidden-storyteller-21-306",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hidden Storyteller #21",
+    "teaser": "Director Topic #73 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hidden Storyteller #21",
+      "durationMinutes": 114,
+      "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-forgotten-storyteller-22-307",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Forgotten Storyteller #22",
+    "teaser": "Director Topic #74 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Forgotten Storyteller #22",
+      "durationMinutes": 126,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unsung-storyteller-23-308",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unsung Storyteller #23",
+    "teaser": "Director Topic #75 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unsung Storyteller #23",
+      "durationMinutes": 81,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for safety returns."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-radiant-storyteller-24-309",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Radiant Storyteller #24",
+    "teaser": "Director Topic #76 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Radiant Storyteller #24",
+      "durationMinutes": 61,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for relief comes."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-quiet-storyteller-25-310",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Quiet Storyteller #25",
+    "teaser": "Director Topic #77 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Quiet Storyteller #25",
+      "durationMinutes": 104,
+      "instruction": "Watch the background actors during the chase sequence — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-luminous-storyteller-26-311",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Luminous Storyteller #26",
+    "teaser": "Director Topic #78 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Luminous Storyteller #26",
+      "durationMinutes": 128,
+      "instruction": "Track how the lighting changes from the first half to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-distant-storyteller-27-312",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Distant Storyteller #27",
+    "teaser": "Director Topic #79 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Distant Storyteller #27",
+      "durationMinutes": 72,
+      "instruction": "Track how the lighting changes from act one to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unexpected-storyteller-28-313",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unexpected Storyteller #28",
+    "teaser": "Director Topic #80 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unexpected Storyteller #28",
+      "durationMinutes": 69,
+      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-eternal-storyteller-29-314",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Eternal Storyteller #29",
+    "teaser": "Director Topic #81 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Eternal Storyteller #29",
+      "durationMinutes": 129,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-storyteller-30-315",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Storyteller #30",
+    "teaser": "Director Topic #82 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Storyteller #30",
+      "durationMinutes": 150,
+      "instruction": "Track how the lighting changes from act one to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-brilliant-storyteller-31-316",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Brilliant Storyteller #31",
+    "teaser": "Director Topic #83 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Brilliant Storyteller #31",
+      "durationMinutes": 130,
+      "instruction": "Track how the lighting changes from the first half to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-enigmatic-storyteller-32-317",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Enigmatic Storyteller #32",
+    "teaser": "Director Topic #84 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Enigmatic Storyteller #32",
+      "durationMinutes": 142,
+      "instruction": "Track how the lighting changes from the first half to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-storyteller-33-318",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Storyteller #33",
+    "teaser": "Director Topic #85 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Storyteller #33",
+      "durationMinutes": 65,
+      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-subtle-storyteller-34-319",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Subtle Storyteller #34",
+    "teaser": "Director Topic #86 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Subtle Storyteller #34",
+      "durationMinutes": 133,
+      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-vivid-storyteller-35-320",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Vivid Storyteller #35",
+    "teaser": "Director Topic #87 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Vivid Storyteller #35",
+      "durationMinutes": 60,
+      "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ancient-storyteller-36-321",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ancient Storyteller #36",
+    "teaser": "Director Topic #88 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ancient Storyteller #36",
+      "durationMinutes": 131,
+      "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-modern-storyteller-37-322",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Modern Storyteller #37",
+    "teaser": "Director Topic #89 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Modern Storyteller #37",
+      "durationMinutes": 86,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lost-storyteller-38-323",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lost Storyteller #38",
+    "teaser": "Director Topic #90 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lost Storyteller #38",
+      "durationMinutes": 89,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-wandering-storyteller-39-324",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wandering Storyteller #39",
+    "teaser": "Director Topic #91 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Wandering Storyteller #39",
+      "durationMinutes": 102,
+      "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-timeless-storyteller-40-325",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Timeless Storyteller #40",
+    "teaser": "Director Topic #92 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Timeless Storyteller #40",
+      "durationMinutes": 95,
+      "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-hidden-visionary-41-326",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hidden Visionary #41",
+    "teaser": "Director Topic #93 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hidden Visionary #41",
+      "durationMinutes": 131,
+      "instruction": "Track how the lighting changes from morning to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-forgotten-visionary-42-327",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Forgotten Visionary #42",
+    "teaser": "Director Topic #94 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Forgotten Visionary #42",
+      "durationMinutes": 148,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for safety returns."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unsung-visionary-43-328",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unsung Visionary #43",
+    "teaser": "Director Topic #95 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unsung Visionary #43",
+      "durationMinutes": 131,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for safety returns."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-radiant-visionary-44-329",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Radiant Visionary #44",
+    "teaser": "Director Topic #96 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Radiant Visionary #44",
+      "durationMinutes": 150,
+      "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-quiet-visionary-45-330",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Quiet Visionary #45",
+    "teaser": "Director Topic #97 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Quiet Visionary #45",
+      "durationMinutes": 129,
+      "instruction": "Track how the lighting changes from act one to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-luminous-visionary-46-331",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Luminous Visionary #46",
+    "teaser": "Director Topic #98 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Luminous Visionary #46",
+      "durationMinutes": 132,
+      "instruction": "Watch the background actors during the climax — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-distant-visionary-47-332",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Distant Visionary #47",
+    "teaser": "Director Topic #99 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Distant Visionary #47",
+      "durationMinutes": 65,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for safety returns."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unexpected-visionary-48-333",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unexpected Visionary #48",
+    "teaser": "Director Topic #100 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unexpected Visionary #48",
+      "durationMinutes": 79,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-eternal-visionary-49-334",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Eternal Visionary #49",
+    "teaser": "Director Topic #101 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Eternal Visionary #49",
+      "durationMinutes": 71,
+      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-visionary-50-335",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Visionary #50",
+    "teaser": "Director Topic #102 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Visionary #50",
+      "durationMinutes": 96,
+      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-brilliant-visionary-51-336",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Brilliant Visionary #51",
+    "teaser": "Director Topic #103 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Brilliant Visionary #51",
+      "durationMinutes": 60,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-enigmatic-visionary-52-337",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Enigmatic Visionary #52",
+    "teaser": "Director Topic #104 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Enigmatic Visionary #52",
+      "durationMinutes": 141,
+      "instruction": "Pay attention to how the camera frames color temperature. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-visionary-53-338",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Visionary #53",
+    "teaser": "Director Topic #105 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Visionary #53",
+      "durationMinutes": 133,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-subtle-visionary-54-339",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Subtle Visionary #54",
+    "teaser": "Director Topic #106 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Subtle Visionary #54",
+      "durationMinutes": 136,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for truth surfaces."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-vivid-visionary-55-340",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Vivid Visionary #55",
+    "teaser": "Director Topic #107 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Vivid Visionary #55",
+      "durationMinutes": 88,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for truth surfaces."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ancient-visionary-56-341",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ancient Visionary #56",
+    "teaser": "Director Topic #108 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ancient Visionary #56",
+      "durationMinutes": 89,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-modern-visionary-57-342",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Modern Visionary #57",
+    "teaser": "Director Topic #109 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Modern Visionary #57",
+      "durationMinutes": 61,
+      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lost-visionary-58-343",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lost Visionary #58",
+    "teaser": "Director Topic #110 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lost Visionary #58",
+      "durationMinutes": 81,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-wandering-visionary-59-344",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wandering Visionary #59",
+    "teaser": "Director Topic #111 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Wandering Visionary #59",
+      "durationMinutes": 150,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for calm settles."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-timeless-visionary-60-345",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Timeless Visionary #60",
+    "teaser": "Director Topic #112 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Timeless Visionary #60",
+      "durationMinutes": 73,
+      "instruction": "Track how the lighting changes from the opening to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-hidden-cinematographer-61-346",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hidden Cinematographer #61",
+    "teaser": "Director Topic #113 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hidden Cinematographer #61",
+      "durationMinutes": 111,
+      "instruction": "Track how the lighting changes from morning to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-forgotten-cinematographer-62-347",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Forgotten Cinematographer #62",
+    "teaser": "Director Topic #114 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Forgotten Cinematographer #62",
+      "durationMinutes": 137,
+      "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unsung-cinematographer-63-348",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unsung Cinematographer #63",
+    "teaser": "Director Topic #115 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unsung Cinematographer #63",
+      "durationMinutes": 116,
+      "instruction": "Pay attention to how the camera frames color temperature. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-radiant-cinematographer-64-349",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Radiant Cinematographer #64",
+    "teaser": "Director Topic #116 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Radiant Cinematographer #64",
+      "durationMinutes": 146,
+      "instruction": "Watch the background actors during the chase sequence — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-quiet-cinematographer-65-350",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Quiet Cinematographer #65",
+    "teaser": "Director Topic #117 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Quiet Cinematographer #65",
+      "durationMinutes": 99,
+      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-luminous-cinematographer-66-351",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Luminous Cinematographer #66",
+    "teaser": "Director Topic #118 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Luminous Cinematographer #66",
+      "durationMinutes": 148,
+      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-distant-cinematographer-67-352",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Distant Cinematographer #67",
+    "teaser": "Director Topic #119 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Distant Cinematographer #67",
+      "durationMinutes": 68,
+      "instruction": "Track how the lighting changes from morning to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-unexpected-cinematographer-68-353",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Unexpected Cinematographer #68",
+    "teaser": "Director Topic #120 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Unexpected Cinematographer #68",
+      "durationMinutes": 144,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-eternal-cinematographer-69-354",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Eternal Cinematographer #69",
+    "teaser": "Director Topic #121 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Eternal Cinematographer #69",
+      "durationMinutes": 90,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-restless-cinematographer-70-355",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Restless Cinematographer #70",
+    "teaser": "Director Topic #122 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Restless Cinematographer #70",
+      "durationMinutes": 70,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for relief comes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-rainer-werner-fassbinder-123",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Rainer Werner Fassbinder",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Rainer Werner Fassbinder",
+      "durationMinutes": 90,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-george-lucas-124",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "George Lucas",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "George Lucas",
+      "durationMinutes": 90,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-woody-allen-125",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Woody Allen",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Woody Allen",
+      "durationMinutes": 117,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ridley-scott-126",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ridley Scott",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ridley Scott",
+      "durationMinutes": 88,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-john-carpenter-127",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "John Carpenter",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "John Carpenter",
+      "durationMinutes": 99,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-tim-burton-128",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Tim Burton",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Tim Burton",
+      "durationMinutes": 130,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-wes-anderson-129",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wes Anderson",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Wes Anderson",
+      "durationMinutes": 130,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-kathryn-bigelow-130",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Kathryn Bigelow",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Kathryn Bigelow",
+      "durationMinutes": 94,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-hayao-miyazaki-131",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hayao Miyazaki",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hayao Miyazaki",
+      "durationMinutes": 75,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-zhang-yimou-132",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Zhang Yimou",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Zhang Yimou",
+      "durationMinutes": 128,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-chan-wook-park-133",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Chan-wook Park",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Chan-wook Park",
+      "durationMinutes": 121,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-hirokazu-kore-eda-134",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hirokazu Kore-eda",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hirokazu Kore-eda",
+      "durationMinutes": 127,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-asghar-farhadi-135",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Asghar Farhadi",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Asghar Farhadi",
+      "durationMinutes": 84,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-mira-nair-136",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Mira Nair",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mira Nair",
+      "durationMinutes": 82,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-pedro-almodóvar-137",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Pedro Almodóvar",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pedro Almodóvar",
+      "durationMinutes": 76,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-alejandro-gonzález-iñárritu-138",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Alejandro González Iñárritu",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Alejandro González Iñárritu",
+      "durationMinutes": 130,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lucrecia-martel-139",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lucrecia Martel",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lucrecia Martel",
+      "durationMinutes": 141,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-jean-pierre-jeunet-140",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Jean-Pierre Jeunet",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Jean-Pierre Jeunet",
+      "durationMinutes": 133,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-michael-haneke-141",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Michael Haneke",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Michael Haneke",
+      "durationMinutes": 116,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-damien-chazelle-142",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Damien Chazelle",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Damien Chazelle",
+      "durationMinutes": 92,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-chloé-zhao-143",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Chloé Zhao",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Chloé Zhao",
+      "durationMinutes": 111,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ari-aster-144",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ari Aster",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ari Aster",
+      "durationMinutes": 140,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-sean-baker-145",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Sean Baker",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Sean Baker",
+      "durationMinutes": 132,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-paolo-sorrentino-146",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Paolo Sorrentino",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Paolo Sorrentino",
+      "durationMinutes": 75,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lynne-ramsay-147",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lynne Ramsay",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lynne Ramsay",
+      "durationMinutes": 136,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-céline-sciamma-148",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Céline Sciamma",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Céline Sciamma",
+      "durationMinutes": 108,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-mati-diop-149",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Mati Diop",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mati Diop",
+      "durationMinutes": 135,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-emerald-fennell-150",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Emerald Fennell",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Emerald Fennell",
+      "durationMinutes": 139,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-tsai-ming-liang-151",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Tsai Ming-liang",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Tsai Ming-liang",
+      "durationMinutes": 86,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ryusuke-hamaguchi-152",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ryusuke Hamaguchi",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ryusuke Hamaguchi",
+      "durationMinutes": 80,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-shunji-iwai-153",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Shunji Iwai",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Shunji Iwai",
+      "durationMinutes": 69,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-kim-jee-woon-154",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Kim Jee-woon",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Kim Jee-woon",
+      "durationMinutes": 117,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-sergio-leone-155",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Sergio Leone",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Sergio Leone",
+      "durationMinutes": 64,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-bernardo-bertolucci-156",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Bernardo Bertolucci",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Bernardo Bertolucci",
+      "durationMinutes": 149,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-fritz-lang-157",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Fritz Lang",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Fritz Lang",
+      "durationMinutes": 93,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ernst-lubitsch-158",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ernst Lubitsch",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ernst Lubitsch",
+      "durationMinutes": 114,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-douglas-sirk-159",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Douglas Sirk",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Douglas Sirk",
+      "durationMinutes": 142,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-françois-truffaut-160",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "François Truffaut",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "François Truffaut",
+      "durationMinutes": 69,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-orson-welles-161",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Orson Welles",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Orson Welles",
+      "durationMinutes": 136,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-luis-buñuel-162",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Luis Buñuel",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Luis Buñuel",
+      "durationMinutes": 75,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Foreign",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-agnes-varda-163",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Agnes Varda",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Agnes Varda",
+      "durationMinutes": 149,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-james-cameron-164",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "James Cameron",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "James Cameron",
+      "durationMinutes": 129,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-david-cronenberg-165",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "David Cronenberg",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "David Cronenberg",
+      "durationMinutes": 136,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-sofia-coppola-166",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Sofia Coppola",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Sofia Coppola",
+      "durationMinutes": 137,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-jane-campion-167",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Jane Campion",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Jane Campion",
+      "durationMinutes": 89,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-isao-takahata-168",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Isao Takahata",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Isao Takahata",
+      "durationMinutes": 146,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-ang-lee-169",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ang Lee",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ang Lee",
+      "durationMinutes": 82,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lee-chang-dong-170",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lee Chang-dong",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lee Chang-dong",
+      "durationMinutes": 95,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-abbas-kiarostami-171",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Abbas Kiarostami",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Abbas Kiarostami",
+      "durationMinutes": 141,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-jafar-panahi-172",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Jafar Panahi",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Jafar Panahi",
+      "durationMinutes": 104,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-deepa-mehta-173",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Deepa Mehta",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Deepa Mehta",
+      "durationMinutes": 145,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-claire-denis-174",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Claire Denis",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Claire Denis",
+      "durationMinutes": 112,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-luc-besson-175",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Luc Besson",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Luc Besson",
+      "durationMinutes": 130,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Sci-Fi",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-lars-von-trier-176",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Lars von Trier",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lars von Trier",
+      "durationMinutes": 100,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-barry-jenkins-177",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Barry Jenkins",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Barry Jenkins",
+      "durationMinutes": 111,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-jordan-peele-178",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Jordan Peele",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Jordan Peele",
+      "durationMinutes": 119,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "dire-robert-eggers-179",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Robert Eggers",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Robert Eggers",
+      "durationMinutes": 126,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Indie",
+      "20th Century"
+    ],
+    "tier": 2
+  }
+]

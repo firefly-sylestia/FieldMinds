@@ -1,137 +1,98 @@
-import java.io.File
-import java.security.KeyStore
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
-//    alias(libs.plugins.kotlin.serialization)
 }
 
+// ── Release signing wiring ───────────────────────────────────────────────────
+//
+// Curio consumes the existing KEYSTORE_* secrets that were carried over from
+// the legacy fieldmind build's android.yml CI pipeline (KEYSTORE_BASE64 +
+// KEYSTORE_PASSWORD + KEY_ALIAS + KEY_PASSWORD). The CI workflow decodes the
+// base64-encoded keystore to ./release.keystore and exports KEYSTORE_PATH etc.
+// as env vars at build time, which we read here.
+//
+// Local dev (no env vars set): falls back to the default debug signing config,
+// so `gradlew assembleRelease` still produces an installable-but-debug-keyed
+// APK. CI: produces a properly-signed release APK.
+val keyStorePath: String? = System.getenv("KEYSTORE_PATH")
+val keyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
+val keyAlias: String? = System.getenv("KEY_ALIAS")
+val keyPassword: String? = System.getenv("KEY_PASSWORD")
 
-val unsignedApkOnly = providers.gradleProperty("unsignedApkOnly")
-    .orElse(providers.environmentVariable("UNSIGNED_APK_ONLY"))
-    .map { it.equals("true", ignoreCase = true) }
-    .getOrElse(false)
+// isNullOrBlank() catches BOTH "env var not set" (null) AND "secret is
+// configured but empty" ("" — which is how GitHub Actions exports a
+// missing ${{ secrets.X }} reference). Without the blank check, an
+// empty secret passes != null, the release signingConfig is created
+// with blank values, and AGP rejects it at packaging with
+// "SigningConfig release is missing required property keyPassword".
+// Falling back to debug signing lets the build go green; to get a
+// properly-signed release APK, populate the 4 KEYSTORE_* secrets in
+// repo Settings > Secrets and variables > Actions.
+val hasReleaseSigningMaterial: Boolean =
+    !keyStorePath.isNullOrBlank() &&
+    !keyStorePassword.isNullOrBlank() &&
+    !keyAlias.isNullOrBlank() &&
+    !keyPassword.isNullOrBlank()
+
+if (!hasReleaseSigningMaterial) {
+    logger.warn(
+        "Curio release signing material not configured " +
+        "(KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD). " +
+        "Falling back to debug signing for this build. For a properly-" +
+        "signed release APK, populate the 4 secrets in repo Settings > " +
+        "Secrets and variables > Actions."
+    )
+}
 
 android {
-    namespace = "fieldmind.research.app"
+    namespace = "com.curio.app"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "fieldmind.research.app"
+        applicationId = "com.curio.app"
         minSdk = 26
         targetSdk = 37
-        versionCode = Version.getVersionCode(project)
-        versionName = Version.getVersionName(project)
+        versionCode = 1
+        versionName = "0.1.0-curio"
 
-        // Only include English locale — saves ~5-8 MB of APK size
-        // The app's music-player origins shipped 26+ locale files
+        // Only include English locale — saves ~5-8 MB of APK size.
+        // Curio ships as a single-language app. Add others as needed.
         androidResources.localeFilters.clear()
         androidResources.localeFilters.add("en")
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // Product flavors for different distribution channels
-    flavorDimensions += "distribution"
-    
-    productFlavors {
-        create("fdroid") {
-            dimension = "distribution"
-            applicationId = "fieldmind.research.app"
-            
-            // F-Droid build: Enable all features (FOSS ethos)
-            buildConfigField("boolean", "ENABLE_YOUTUBE_MUSIC", "true")
-            buildConfigField("boolean", "ENABLE_APPLE_MUSIC", "true")
-            buildConfigField("boolean", "ENABLE_DEEZER", "true")
-            buildConfigField("boolean", "ENABLE_LRCLIB", "true")
-            buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
-            buildConfigField("String", "FLAVOR", "\"fdroid\"")
-            // URL of the deployed Cloudflare Worker bug-reporter. Empty by default —
-            // when unset, the app falls back to opening the GitHub web-URL issue form.
-            buildConfigField("String", "BUG_REPORTER_URL", "\"\"")
-
-            versionNameSuffix = "-fdroid"
+    signingConfigs {
+        // Only create the release signing config when ALL four env vars are
+        // present. When any are missing (e.g. local dev), we skip — the
+        // release buildType falls back to the default debug signing below so
+        // local `gradlew assembleRelease` still works for testing.
+        if (hasReleaseSigningMaterial) {
+            create("release") {
+                storeFile = file(keyStorePath!!)
+                storePassword = keyStorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            }
         }
-        
-        create("github") {
-            dimension = "distribution"
-            applicationId = "fieldmind.research.app"
-            
-            // GitHub releases: Enable all features (same as F-Droid)
-            buildConfigField("boolean", "ENABLE_YOUTUBE_MUSIC", "true")
-            buildConfigField("boolean", "ENABLE_APPLE_MUSIC", "true")
-            buildConfigField("boolean", "ENABLE_DEEZER", "true")
-            buildConfigField("boolean", "ENABLE_LRCLIB", "true")
-            buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
-            buildConfigField("String", "FLAVOR", "\"github\"")
-            // URL of the deployed Cloudflare Worker bug-reporter. Empty by default —
-            // when unset, the app falls back to opening the GitHub web-URL issue form.
-            buildConfigField("String", "BUG_REPORTER_URL", "\"\"")
-
-            versionNameSuffix = "-gh"
-        }
-    }
-
-    val keystorePath = System.getenv("KEYSTORE_PATH")
-    val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
-    val keyAlias = System.getenv("KEY_ALIAS")
-    val keyPassword = System.getenv("KEY_PASSWORD")
-    val hasSigningConfig = keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null
-
-    val releaseSigning = if (hasSigningConfig) {
-        signingConfigs.create("release") {
-            storeFile = file(keystorePath!!)
-            storePassword = keystorePassword
-            this.keyAlias = keyAlias
-            this.keyPassword = keyPassword
-        }
-    } else {
-        logger.warn("Signing env vars not set; using debug signing fallback for release builds.")
-        null
-    }
-    defaultConfig {
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            // Android cannot install truly unsigned APKs. When no release keystore is
-            // configured (for PR previews), fall back to the standard debug signing
-            // config so the release-variant APK is still installable for testing.
-            signingConfig = if (unsignedApkOnly) null else releaseSigning ?: signingConfigs.getByName("debug")
-//            ndk {
-//                debugSymbolLevel = "SYMBOL_TABLE"
-//            }
-            // Reproducible builds: disable build timestamp
-            if (System.getenv("CI") == "true" || System.getenv("BUILD_REPRODUCIBLE") == "true") {
-                // Use a fixed timestamp for reproducible builds  
-                tasks.configureEach {
-                    // Disable timestamps in bundle reports for reproducible builds
-                    if (name.contains("BundleReport", ignoreCase = true)) {
-                        enabled = false
-                    }
-                }
+            isMinifyEnabled = false
+            signingConfig = if (hasReleaseSigningMaterial) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
             }
         }
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            //isMinifyEnabled = false
-            //isDebuggable = true
-            signingConfig = if (unsignedApkOnly) null else signingConfigs.getByName("debug")
         }
     }
+
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -139,247 +100,159 @@ android {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
             freeCompilerArgs.addAll(
-                "-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
             )
         }
     }
     buildFeatures {
         compose = true
-        buildConfig = true
-    }
-
-    dependenciesInfo {
-        // Disables dependency metadata when building APKs (for IzzyOnDroid/F-Droid)
-        includeInApk = false
-        // Disables dependency metadata when building Android App Bundles
-        includeInBundle = false
-    }
-
-    packaging {
-        resources {
-            merges += "/META-INF/INDEX.LIST"
-            merges += "**/io.netty.versions.properties"
-        }
-    }
-
-    // ABI splits: generate one APK per CPU architecture so each device downloads
-    // only the native code it needs. arm64-v8a covers >95% of modern devices;
-    // armeabi-v7a, x86, x86_64 are kept for older / emulator coverage.
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-            isUniversalApk = false
-        }
-    }
-
-}
-
-androidComponents {
-    onVariants { variant ->
-        variant.outputs.forEach { output ->
-            val signatureLabel = if (unsignedApkOnly) "unsigned" else "signed"
-            val versionName = android.defaultConfig.versionName.orEmpty().sanitizeForApkFileName()
-            // Include the ABI filter in the filename so each split APK is identifiable.
-            // When ABI splits are enabled, the first filter's identifier is the ABI name
-            // (e.g. "arm64-v8a"). Fall back to "universal" for unsplit builds.
-            val abiLabel = output.filters.firstOrNull()?.identifier ?: "universal"
-            output.outputFileName.set(
-                "FieldMind-$versionName-${variant.name}-$signatureLabel-$abiLabel.apk"
-            )
-        }
     }
 }
 
 dependencies {
-    implementation(libs.androidx.compose.ui.unit)
-    // Desugaring library
-    coreLibraryDesugaring(libs.androidx.desugar.jdk.libs)
-
-    // Core Android dependencies
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.appcompat)
-    
-    // Compose dependencies
+    implementation(libs.androidx.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    
-    // Material 3 dependencies
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.material3.android)
-    implementation(libs.androidx.material3.window.size)
-    implementation(libs.com.google.android.material)
-
-    // Icons - core Material Icons for compatibility overloads; extended icons not needed
-    // (FieldMind uses a bundled material_symbols_outlined.ttf variable font instead)
-    implementation(libs.androidx.compose.material.icons.core)
-    implementation(libs.androidx.palette.ktx)
-    
-    // Glance for modern widgets
-    implementation(libs.androidx.glance.appwidget)
-    implementation(libs.androidx.glance.material3)
-    
-    // Physics-based animations
+    implementation(libs.androidx.material3)
+    // Icons are rendered via Material Symbols font ligatures (CurioIcon), NOT
+    // the bundled M2 vector set, so androidx.compose.material.icons.core is
+    // intentionally absent. Re-add only if a screen needs an M2 vector icon.
     implementation(libs.androidx.compose.animation)
-    //noinspection GradleDependency
-    implementation(libs.androidx.compose.animation.graphics)
-    implementation(libs.androidx.compose.animation.core)
-    
-    // Graphics Shapes — polygon morphing (circle ↔ rounded rect, etc.)
-    implementation(libs.androidx.graphics.shapes)
-    
-    // Navigation
-    implementation(libs.androidx.navigation.compose)
-    
-    // Permissions
-    implementation(libs.com.google.accompanist.accompanist.permissions)
-    
-    // Fragment
-    implementation(libs.androidx.fragment.ktx)
-    
-    // (mediarouter removed — legacy music player code stripped)
-    
-    // Coil for image loading
-    implementation(libs.io.coil.kt.coil.compose)
-    
-    // (jaudiotagger removed — legacy music player code stripped)
-    
-    // Network
-    implementation(libs.com.squareup.retrofit2.retrofit)
-    implementation(libs.com.squareup.retrofit2.converter.gson)
-    implementation(libs.com.squareup.okhttp3.okhttp)
-    implementation(libs.com.squareup.okhttp3.logging.interceptor)
-    implementation(libs.com.google.code.gson.gson)
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-//    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-
-    // osmdroid for offline maps (OpenStreetMap tiles, no API key required)
-    implementation(libs.osmdroid.android)
-
-    // Haze - Real backdrop blur for glassmorphism effects on bottom navigation
-    implementation(libs.haze)
-
-    // Biometric authentication for privacy lock
-    implementation("androidx.biometric:biometric:1.2.0-alpha05")
-
-    // Google Play Services location for geo-fencing
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-
-    // CameraX for in-app camera capture (replaces system camera intent)
-    implementation("androidx.camera:camera-core:1.4.1")
-    implementation("androidx.camera:camera-camera2:1.4.1")
-    implementation("androidx.camera:camera-lifecycle:1.4.1")
-    implementation("androidx.camera:camera-view:1.4.1")
-
-    // Coroutines for async operations
-    implementation(libs.org.jetbrains.kotlinx.coroutines.core)
     implementation(libs.org.jetbrains.kotlinx.coroutines.android)
-    implementation(libs.androidx.foundation.layout)
-    
-    // WorkManager for background tasks
-    implementation(libs.androidx.work.runtime.ktx)
-    
+
     // Room database
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // Testing
+    // ExoPlayer for audio playback
+    implementation(libs.androidx.media3.exoplayer)
+
+    // Gson for JSON serialization (CaptureData -> Room blob)
+    implementation(libs.com.google.code.gson.gson)
+
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    
-    // LeakCanary for memory leak detection (debug builds only)
-    debugImplementation(libs.com.squareup.leakcanary.leakcanary.android)
 }
 
-fun getProperties(fileName: String): Properties? {
-    val file = rootProject.file(fileName)
-    return if (file.exists()) {
-        Properties().also { properties ->
-            file.inputStream().use { properties.load(it) }
+// ── Topic data validation (CURIO_DATA_PLAN.md §5.2 step 3) ─────────────────
+//
+// Validates every JSON file under app/src/main/assets/topics/*.json against
+// the §2 schema. The root is a BARE JSON ARRAY of topic objects (see
+// SCHEMA.md in this directory — there is no wrapper). Asserts:
+//   - root IS a JSON array (wrapper format is a hard error)
+//   - every topic has id (unique cross-file) + categoryId (matches filename)
+//   - every topic has subtype/name/teaser/imageUrl/exploreAction
+//   - every exploreAction has verb/targetName/durationMinutes/instruction
+//   - every instruction <= 280 chars
+//   - tier, if present, is in 1..3
+//
+// Note: empty arrays are ACCEPTED with a warning (placeholder-empty is OK
+// during the build-out phase — categories ship one-per-PR cadence per
+// CURIO_DATA_PLAN.md §5.1, so a freshly-created category will sit at [] for
+// a PR or two before content lands). Schema errors (malformed field,
+// duplicate cross-file id, bad categoryId, instruction > 280 chars, tier
+// out of range) are still hard fails — they're real bugs, not placeholders.
+//
+// When assets/topics/ contains any JSON files, this task is wired into
+// preBuild so a malformed entry fails the assemble. When the directory is
+// empty (placeholder UI ships), the task is a no-op and preBuild is not
+// affected.
+val topicsDir = file("src/main/assets/topics")
+val hasTopicFiles: Boolean = topicsDir.exists() &&
+    topicsDir.listFiles { f -> f.extension == "json" }?.isNotEmpty() == true
+
+tasks.register("validateTopics") {
+    group = "verification"
+    description = "Validates assets/topics/*.json against the CurioTopic schema (CURIO_DATA_PLAN.md §2)."
+    doLast {
+        if (!topicsDir.exists()) {
+            logger.warn("topics/ directory missing — nothing to validate (OK for placeholder UI ships).")
+            return@doLast
         }
-    } else null
-}
-
-fun Properties.property(key: String) =
-    this.getProperty(key) ?: "$key missing"
-
-/**
- * Reads version from Git tags for reproducible releases.
- * - versionName comes from the most recent Git tag (e.g. "v1.0.0" → "1.0.0")
- * - versionCode is the total count of commits on the default branch
- * Falls back to development defaults when Git is not available (e.g. fresh clone without tags).
- */
-object Version {
-    private var cachedName: String? = null
-    private var cachedCode: Int? = null
-
-    fun getVersionName(project: Project): String {
-        if (cachedName != null) return cachedName!!
-        val tag = gitOutput(project, "describe", "--tags", "--abbrev=0")
-
-        val clean = tag?.removePrefix("v")?.removePrefix("V")?.trim().orEmpty()
-        if (clean.isNotBlank()) {
-            cachedName = clean
-            return clean
+        val jsonFiles = topicsDir.listFiles { f -> f.extension == "json" } ?: emptyArray()
+        if (jsonFiles.isEmpty()) {
+            logger.warn("topics/ has no JSON files — nothing to validate.")
+            return@doLast
         }
-        cachedName = "1.0.0"
-        return "1.0.0"
+        val parser = groovy.json.JsonSlurper()
+        // Collect every id across all files first so we can assert global
+        // uniqueness (cross-file collisions would break the Room FK on `id`).
+        val seenIds = mutableMapOf<String, String>()  // id -> first filename
+        var populatedFileCount = 0
+        jsonFiles.forEach { json ->
+            val expectedCategoryId = json.nameWithoutExtension.uppercase()
+            @Suppress("UNCHECKED_CAST")
+            val topics = parser.parse(json) as? List<Map<String, Any?>>
+                ?: throw GradleException(
+                    "${json.name}: root must be a bare JSON array of topic objects " +
+                    "(see SCHEMA.md — the wrapper `{categoryId, version, curatedDate, topics}` format was retired)"
+                )
+            if (topics.isEmpty()) {
+                logger.warn("⚠️  ${json.name}: 0 topics (placeholder — content not yet shipped for $expectedCategoryId)")
+                return@forEach
+            }
+            populatedFileCount++
+            topics.forEachIndexed { idx, t ->
+                val id = t["id"] as? String
+                    ?: throw GradleException("${json.name}: topic #$idx missing or non-string `id`")
+                val previousFile = seenIds[id]
+                if (previousFile != null) {
+                    throw GradleException(
+                        "duplicate topic id '$id' across files: first seen in $previousFile, also in ${json.name}"
+                    )
+                }
+                seenIds[id] = json.name
+                val categoryId = t["categoryId"] as? String
+                    ?: throw GradleException("${json.name}: topic '$id' missing or non-string `categoryId`")
+                require(categoryId == expectedCategoryId) {
+                    "${json.name}: topic '$id' categoryId '$categoryId' " +
+                    "does not match filename '$expectedCategoryId'"
+                }
+                listOf("subtype", "name", "teaser", "imageUrl", "exploreAction").forEach { f ->
+                    require(t.containsKey(f)) {
+                        throw GradleException("${json.name}: topic '$id' missing required field `$f`")
+                    }
+                }
+                @Suppress("UNCHECKED_CAST")
+                val action = t["exploreAction"] as Map<String, Any?>
+                listOf("verb", "targetName", "durationMinutes", "instruction").forEach { f ->
+                    require(action.containsKey(f)) {
+                        throw GradleException("${json.name}: topic '$id' exploreAction missing required field `$f`")
+                    }
+                }
+                val instruction = action["instruction"] as? String
+                    ?: throw GradleException("${json.name}: topic '$id' exploreAction.instruction missing or non-string")
+                require(instruction.length <= 280) {
+                    throw GradleException("${json.name}: topic '$id' instruction is ${instruction.length} chars (max 280)")
+                }
+                if (t.containsKey("tier")) {
+                    val tier = t["tier"]
+                    require(tier is Number && tier.toInt() in 1..3) {
+                        throw GradleException("${json.name}: topic '$id' tier must be 1, 2, or 3 (got $tier)")
+                    }
+                }
+            }
+            logger.lifecycle("✓ ${json.name}: $expectedCategoryId, ${topics.size} topics validated")
+        }
+        logger.lifecycle(
+            "── validateTopics: $populatedFileCount of ${jsonFiles.size} files have content " +
+            "(${jsonFiles.size - populatedFileCount} placeholder). " +
+            "Schema errors (if any) are listed above.)"
+        )
     }
-
-    fun getVersionCode(project: Project): Int {
-        if (cachedCode != null) return cachedCode!!
-        val count = gitOutput(project, "rev-list", "--count", "HEAD")?.toIntOrNull()
-
-        if (count != null && count > 0) {
-            cachedCode = count
-            return count
-        }
-        cachedCode = 1
-        return 1
-    }
-
-    private fun gitOutput(project: Project, vararg args: String): String? = runCatching {
-        val process = ProcessBuilder(listOf("git", *args))
-            .directory(project.rootDir)
-            .redirectError(ProcessBuilder.Redirect.DISCARD)
-            .start()
-        val output = process.inputStream.bufferedReader().readText().trim()
-        if (process.waitFor() == 0) output.takeIf { it.isNotBlank() } else null
-    }.getOrNull()
 }
 
-fun String.sanitizeForApkFileName(): String =
-    replace(Regex("[\"*:<>?|\r\n]+"), "-")
-        .trim('-', ' ', '.')
-        .ifBlank { "1.0.0" }
-
-fun Properties.hasValidSigningMaterial(rootDir: File): Boolean {
-    val alias = getProperty("key_alias")?.takeIf { it.isNotBlank() } ?: return false
-    val keyPassword = getProperty("key_password")?.takeIf { it.isNotBlank() } ?: return false
-    val storePassword = getProperty("store_password")?.takeIf { it.isNotBlank() } ?: return false
-    val storePath = getProperty("store_file")?.takeIf { it.isNotBlank() } ?: return false
-    val storeFile = File(storePath).let { if (it.isAbsolute) it else File(rootDir, storePath) }
-    if (!storeFile.isFile || storeFile.length() == 0L) return false
-
-    return listOf(KeyStore.getDefaultType(), "JKS", "PKCS12").distinct().any { type ->
-        runCatching {
-            val keyStore = KeyStore.getInstance(type)
-            storeFile.inputStream().use { keyStore.load(it, storePassword.toCharArray()) }
-            keyStore.containsAlias(alias) && keyStore.getKey(alias, keyPassword.toCharArray()) != null
-        }.getOrDefault(false)
+// Only hook validateTopics into preBuild when there's actually JSON to check.
+// Keeps placeholder-UI builds (no topics yet) friction-free.
+if (hasTopicFiles) {
+    tasks.named("preBuild") {
+        dependsOn("validateTopics")
     }
 }

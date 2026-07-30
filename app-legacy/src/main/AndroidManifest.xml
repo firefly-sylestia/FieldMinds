@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" android:required="false" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" android:required="false" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" android:required="false" />
+
+    <application
+        android:name="fieldmind.research.app.FieldMindApplication"
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="FieldMind"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:localeConfig="@xml/locale_config"
+        android:theme="@style/Theme.Rhythm"
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="36">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name="fieldmind.research.app.activities.FieldMindCrashActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FieldMind.Crash"
+            android:process=":crash_process" />
+
+        <!-- FieldMind Glance Widgets -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickCaptureWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_quick_capture" />
+        </receiver>
+
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindDashboardWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_dashboard" />
+        </receiver>
+
+        <!-- FieldMind Weather Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindWeatherWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_weather" />
+        </receiver>
+
+        <!-- FieldMind Species Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindSpeciesWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_species" />
+        </receiver>
+
+        <!-- FieldMind Research Streak Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindResearchStreakWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_streak" />
+        </receiver>
+
+        <!-- FieldMind QuickStats Combo Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickStatsWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_quickstats" />
+        </receiver>
+
+        <activity
+            android:name="fieldmind.research.app.activities.MainActivity"
+            android:exported="true"
+            android:label="FieldMind"
+            android:theme="@style/Theme.App.Starting"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|keyboard|keyboardHidden|density">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+        </activity>
+
+        <!-- Foreground timer service for reading & research session timers -->
+        <service
+            android:name="fieldmind.research.app.features.field.background.FieldMindTimerService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- WorkManager notification workers are registered via WorkManager, not manifest entries -->
+    </application>
+
+</manifest>

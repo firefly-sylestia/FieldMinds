@@ -36,31 +36,43 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Setup keystore
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+      # Reuses the legacy FieldMind keystore via the existing
+      # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
+      # app/build.gradle.kts reads these env vars at build time and signs the
+      # release APK with them when all four are present; otherwise falls back
+      # to debug signing.
 
-      - name: Build release universal APKs (all flavors)
+      - name: Decode keystore from secrets
+        run: |
+          # Strip whitespace before base64-decode in case the secret was
+          # pasted with line breaks — base64 ignores whitespace but some
+          # implementations refuse mid-pipeline newlines.
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > release.keystore
+
+      - name: Build release universal APK
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleGithubRelease assembleFdroidRelease --stacktrace
+        run: ./gradlew assembleRelease --stacktrace
 
-      - name: Verify APK outputs
+      - name: Verify APK outputs (unsigned APKs are treated as a build failure)
         run: |
           set -uo pipefail
           echo "=== APK outputs ==="
           find app/build/outputs/apk -type f -name '*.apk' -print || true
-          github_release=$(find app/build/outputs/apk/github/release -maxdepth 1 -name '*.apk' 2>/dev/null | head -1)
-          fdroid_release=$(find app/build/outputs/apk/fdroid/release -maxdepth 1 -name '*.apk' 2>/dev/null | head -1)
-          if [ -z "$github_release" ] && [ -z "$fdroid_release" ]; then
-            echo "::error::No APKs found at all. Build may have failed."
+          release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
+          if [ -z "$release_apk" ]; then
+            unsigned_found=$(find app/build/outputs/apk/release -type f -name '*-unsigned.apk' 2>/dev/null | head -1 || true)
+            if [ -n "$unsigned_found" ]; then
+              echo "::error::Found an unsigned APK at $unsigned_found but no signed APK. Add a signing config to app/build.gradle.kts."
+            else
+              echo "::error::No release APK found at app/build/outputs/apk/release/. Build may have failed."
+            fi
             exit 1
           fi
-          if [ -n "$github_release" ]; then echo "✅ GitHub release APK: $github_release"; fi
-          if [ -n "$fdroid_release" ]; then echo "✅ F-Droid release APK: $fdroid_release"; fi
+          echo "✅ Release APK: $release_apk"
 
       - name: Set prerelease flag
         id: prerelease
@@ -78,5 +90,4 @@ jobs:
           prerelease: ${{ steps.prerelease.outputs.value }}
           generate_release_notes: true
           files: |
-            app/build/outputs/apk/github/release/*.apk
-            app/build/outputs/apk/fdroid/release/*.apk
+            app/build/outputs/apk/release/*.apk
