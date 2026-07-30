@@ -7,8 +7,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import com.curio.app.data.AppPreferences
 import android.graphics.Color as AndroidColor
 import androidx.compose.ui.graphics.Color
@@ -112,9 +110,6 @@ private val CurioDarkColorScheme = darkColorScheme(
 fun CurioTheme(
     content: @Composable () -> Unit
 ) {
-    val themeMode by remember { mutableStateOf(AppPreferences.themeModeState) }
-    // Re-read the reactive state on every recomposition so theme
-    // changes propagate instantly.
     val effectiveMode = AppPreferences.themeModeState
     val isDark = when (effectiveMode) {
         "light"  -> false
