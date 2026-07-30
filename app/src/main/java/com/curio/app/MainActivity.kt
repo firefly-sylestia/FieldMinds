@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureRepository
 import com.curio.app.data.CurioDatabase
 import com.curio.app.data.CurioRepositoryHolder
@@ -42,8 +43,9 @@ class MainActivity : ComponentActivity() {
         val db = CurioDatabase.getInstance(this)
         CurioRepositoryHolder.init(db.captureDao())
 
+        val savedTheme = AppPreferences.getThemeMode(this)
         setContent {
-            CurioTheme {
+            CurioTheme(themeMode = savedTheme) {
                 CurioNavHost()
             }
         }

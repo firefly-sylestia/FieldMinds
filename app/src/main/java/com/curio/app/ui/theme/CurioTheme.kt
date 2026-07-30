@@ -3,6 +3,8 @@ package com.curio.app.ui.theme
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -90,12 +92,20 @@ private val CurioDarkColorScheme = darkColorScheme(
     outlineVariant    = CurioColors.CreamWhite.copy(alpha = 0.10f)
 )
 
+/**
+ * @param themeMode "light", "dark", or "system" — persisted via [AppPreferences].
+ */
 @Composable
 fun CurioTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    themeMode: String = "system",
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) CurioDarkColorScheme else CurioLightColorScheme
+    val isDark = when (themeMode) {
+        "light"  -> false
+        "dark"   -> true
+        else     -> isSystemInDarkTheme()  // "system" or unknown
+    }
+    val colorScheme = if (isDark) CurioDarkColorScheme else CurioLightColorScheme
 
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -106,8 +116,8 @@ fun CurioTheme(
             @Suppress("DEPRECATION")
             window.navigationBarColor = AndroidColor.TRANSPARENT
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDark
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !isDark
         }
     }
 

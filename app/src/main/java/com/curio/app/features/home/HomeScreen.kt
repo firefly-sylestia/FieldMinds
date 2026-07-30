@@ -347,11 +347,11 @@ fun HomeScreen(navController: NavController) {
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center
                                     )
+                                    val sel = selectedCategory
                                     Surface(
                                         onClick = {
-                                            val chosen = selectedCategory
-                                            if (chosen == null) navController.navigate(CurioRoutes.PICKER)
-                                            else navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
+                                            if (sel == null) navController.navigate(CurioRoutes.PICKER)
+                                            else navController.navigate(CurioRoutes.spinWithCategory(sel.id.routeSlug))
                                         },
                                         shape = RoundedCornerShape(24.dp), color = CurioColors.CoralBlush
                                     ) {
@@ -362,7 +362,7 @@ fun HomeScreen(navController: NavController) {
                                         ) {
                                             CurioIcon(CurioIcons.Casino, null, tint = CurioColors.DeepPlum, size = 16.dp)
                                             Text(
-                                                if (selectedCategory != null) "Spin ${selectedCategory!!.displayName}" else "Pick a category & spin",
+                                                if (sel != null) "Spin ${sel.displayName}" else "Pick a category & spin",
                                                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
                                                 color = CurioColors.DeepPlum
                                             )
