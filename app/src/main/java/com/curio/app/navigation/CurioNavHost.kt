@@ -23,6 +23,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.curio.app.features.bugreport.BugReportScreen
+import com.curio.app.features.crash.CurioCrashScreen
 import com.curio.app.features.lightbox.LightboxScreen
 import com.curio.app.features.managecategories.ManageCategoriesScreen
 import com.curio.app.features.onboarding.OnboardingScreen
@@ -215,6 +217,12 @@ fun CurioNavHost(
             }
             composable(CurioRoutes.TOPIC_HISTORY) {
                 TopicHistoryScreen(navController = navController)
+            }
+            composable(CurioRoutes.CRASH) {
+                CurioCrashScreen(navController = navController)
+            }
+            composable(CurioRoutes.BUG_REPORT) {
+                BugReportScreen(navController = navController)
             }
             composable(
                 route = CurioRoutes.LIGHTBOX,

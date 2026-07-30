@@ -35,6 +35,8 @@ object CurioRoutes {
     const val MANAGE_CATEGORIES = "manage-categories"
     const val TOPIC_HISTORY = "topic-history"
     const val LIGHTBOX = "lightbox/{imageUrl}"
+    const val CRASH = "crash"
+    const val BUG_REPORT = "bug-report"
 
     // ── Route builders ──────────────────────────────────────────────────────
     fun spinWithCategory(slug: String) = "spin/$slug"

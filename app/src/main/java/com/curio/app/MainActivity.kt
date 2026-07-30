@@ -8,6 +8,7 @@ import com.curio.app.data.CaptureRepository
 import com.curio.app.data.CurioDatabase
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicJsonLoader
+import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioNavHost
 import com.curio.app.ui.theme.CurioTheme
 
@@ -33,6 +34,9 @@ class MainActivity : ComponentActivity() {
         // because CurioNavHost routes are resolved synchronously on first
         // composition, before the splash coroutine has a chance to run.
         TopicJsonLoader.install(this)
+
+        // Initialize crash reporter before anything else
+        CurioCrashReporter.init(this)
 
         // Initialize Room database and repository singleton
         val db = CurioDatabase.getInstance(this)
