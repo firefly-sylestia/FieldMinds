@@ -1,5 +1,6 @@
 package com.curio.app.features.spin
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -10,7 +11,11 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -364,7 +369,7 @@ private fun TopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(horizontal = 12.dp, vertical = 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CurioBackButton(onClick = onBack)
@@ -416,14 +421,17 @@ private fun TopBar(
                 expanded = menuOpen,
                 onDismissRequest = { menuOpen = false },
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
                     .width(280.dp)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceContainerLow,
+                        RoundedCornerShape(20.dp)
+                    )
             ) {
                 Text(
                     text = "Choose a category",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 8.dp)
                 )
 
                 groups.forEachIndexed { idx, (family, cats) ->
@@ -465,7 +473,7 @@ private fun TopBar(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            "Browse all categories →",
+                            "Browse all categories",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
                         )
@@ -488,24 +496,18 @@ private fun TopBar(
 
         Spacer(Modifier.weight(1f))
 
-        // ── Right-side "Spin to discover" mini badge ──────────────────
-        if (poolCount > 0 && filteredCount > 0) {
+        // ── Right-side topic count pill ─────────────────────────────
+        if (poolCount > 0) {
             Surface(
                 shape = RoundedCornerShape(50),
-                color = Color.Transparent
+                color = cat.accent.copy(alpha = 0.12f)
             ) {
-                Row(
-                    modifier = Modifier.padding(end = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    CurioIcon(
-                        CurioIcons.AutoAwesome,
-                        null,
-                        tint = cat.accent.copy(alpha = 0.6f),
-                        size = 14.dp
-                    )
-                }
+                Text(
+                    text = "$filteredCount / $poolCount",
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                    color = cat.accent,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                )
             }
         }
     }
@@ -571,7 +573,7 @@ private fun FilterTrigger(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (activeCount > 0) accent.copy(alpha = 0.18f)
-                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                else MaterialTheme.colorScheme.surfaceVariant
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -619,21 +621,22 @@ private fun FilterSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surface,
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 28.dp)) {
             // ── Header ────────────────────────────────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "Filter ${cat.displayName}",
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
@@ -651,8 +654,8 @@ private fun FilterSheet(
                     }) {
                         Text(
                             "Clear",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -773,7 +776,7 @@ private fun FilterChoiceChip(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (selected) accent
-                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                else MaterialTheme.colorScheme.surfaceContainerHigh,
         border = if (!selected)
             BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         else null
@@ -896,67 +899,84 @@ private fun CarouselCard(
     cat: CurioCategory
 ) {
     val isCenter = slot == 0
-    val w = if (isCenter) 240.dp else 200.dp
-    val h = if (isCenter) 220.dp else 130.dp
+    val w = if (isCenter) 250.dp else 210.dp
+    val h = if (isCenter) 230.dp else 140.dp
     val yOff: Float = when (slot) {
         -1 -> -120f
         0 -> 0f
         else -> 120f
     }
     val s = if (isCenter) 1f else 0.78f
-    val alpha = if (isCenter) 1f else 0.50f
-    val corner = if (isCenter) 26.dp else 20.dp
-    val bg = if (isCenter) accent.copy(alpha = 0.14f)
-             else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+    val alpha = if (isCenter) 1f else 0.55f
+    val corner = if (isCenter) 28.dp else 22.dp
+    val isLanded = landedTopic != null && isCenter
 
     Box(
         modifier = Modifier
             .graphicsLayer {
-                scaleX = if (isCenter && landedTopic != null) landScale else s
-                scaleY = if (isCenter && landedTopic != null) landScale else s
+                scaleX = if (isLanded) landScale else s
+                scaleY = if (isLanded) landScale else s
                 this.alpha = alpha
                 translationY = yOff.dp.toPx()
             }
             .zIndex(if (isCenter) 10f else 5f)
     ) {
-        Surface(
-            shape = RoundedCornerShape(corner),
-            color = bg,
-            shadowElevation = if (isCenter) 6.dp else 2.dp,
-            tonalElevation = if (isCenter) 2.dp else 0.dp,
-            modifier = Modifier.size(w, h)
-        ) {
-            if (topic != null) {
-                CarouselCardContent(
-                    topic = topic,
-                    accent = accent,
-                    isCenter = isCenter,
-                    landed = landedTopic != null && isCenter
-                )
-            } else if (isCenter) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+        AnimatedContent(
+            targetState = topic,
+            transitionSpec = {
+                slideInVertically { height -> height } +
+                fadeIn(animationSpec = tween(160)) togetherWith
+                slideOutVertically { height -> -height } +
+                fadeOut(animationSpec = tween(120))
+            },
+            label = "carouselSlot_$slot"
+        ) { currentTopic ->
+            Surface(
+                shape = RoundedCornerShape(corner),
+                color = if (isCenter) {
+                    MaterialTheme.colorScheme.surfaceContainerHighest
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                },
+                border = if (isCenter) {
+                    BorderStroke(1.dp, accent.copy(alpha = 0.25f))
+                } else null,
+                shadowElevation = if (isCenter) 8.dp else 2.dp,
+                tonalElevation = if (isCenter) 2.dp else 0.dp,
+                modifier = Modifier.size(w, h)
+            ) {
+                if (currentTopic != null) {
+                    CarouselCardContent(
+                        topic = currentTopic,
+                        accent = accent,
+                        isCenter = isCenter,
+                        landed = isLanded
+                    )
+                } else if (isCenter) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        CurioIcon(glyph, null, tint = accent.copy(alpha = 0.5f), size = 38.dp)
-                        Text(
-                            text = "Tap spin to draw a topic",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CurioIcon(glyph, null, tint = accent.copy(alpha = 0.5f), size = 38.dp)
+                            Text(
+                                text = "Tap spin to draw a topic",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
-                }
-            } else {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CurioIcon(glyph, null, tint = accent.copy(alpha = 0.2f), size = 22.dp)
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CurioIcon(glyph, null, tint = accent.copy(alpha = 0.2f), size = 22.dp)
+                    }
                 }
             }
         }
@@ -995,7 +1015,7 @@ private fun CarouselCardContent(
                     color = accent
                 )
             }
-            // Middle: topic name
+            // Middle: topic name — onSurface for a clean, non-red read
             Text(
                 text = topic.name,
                 style = if (isCenter)

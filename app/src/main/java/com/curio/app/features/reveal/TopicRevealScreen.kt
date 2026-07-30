@@ -1,5 +1,6 @@
 package com.curio.app.features.reveal
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -135,7 +136,7 @@ fun TopicRevealScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 0.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -184,7 +185,7 @@ fun TopicRevealScreen(
                             letterSpacing = (-0.5).sp
                         ),
                         fontWeight = FontWeight.ExtraBold,
-                        color = CurioColors.DeepPlum,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis,
@@ -332,9 +333,10 @@ private fun HeroCard(
             .fillMaxWidth()
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
-        color = cat.accent.copy(alpha = 0.16f),
-        shadowElevation = 0.dp,
-        tonalElevation = 0.dp
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.18f)),
+        shadowElevation = 2.dp,
+        tonalElevation = 1.dp
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             // ── Watermark glyph (category icon) ─────────────────────────
@@ -351,7 +353,7 @@ private fun HeroCard(
             if (action != null && resolved != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.85f),
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -380,7 +382,7 @@ private fun HeroCard(
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.85f),
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)

@@ -153,7 +153,7 @@ fun HomeScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                    .padding(horizontal = 16.dp, vertical = 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -193,8 +193,6 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
             }
-
-            Spacer(Modifier.height(4.dp))
 
             // ── 2. Greeting hero ────────────────────────────────────────
             Column(
@@ -375,9 +373,9 @@ fun HomeScreen(navController: NavController) {
             Spacer(Modifier.height(20.dp))
 
             // ── 5. Categories chip row ──────────────────────────────────
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            Column {
                 Row(
-                    Modifier.fillMaxWidth(),
+                    Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -411,8 +409,9 @@ fun HomeScreen(navController: NavController) {
                 }
                 Spacer(Modifier.height(10.dp))
                 LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(end = 8.dp)
+                    contentPadding = PaddingValues(horizontal = 16.dp)
                 ) {
                     // Surprise wildcard pinned first
                     item(key = "wildcard") {
@@ -508,6 +507,11 @@ fun HomeScreen(navController: NavController) {
                             }
                         }
                     }
+
+                    // Add breathing room before the bottom card / nav bar
+                    StaggeredItem(index = 2) {
+                        Spacer(Modifier.height(12.dp))
+                    }
                 }
             }
 
@@ -519,7 +523,7 @@ fun HomeScreen(navController: NavController) {
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(32.dp))
             Spacer(Modifier.height(navInsets.calculateBottomPadding()))
         }
     }

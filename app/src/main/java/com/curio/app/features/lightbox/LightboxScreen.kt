@@ -110,7 +110,7 @@ fun LightboxScreen(imageUrl: String, navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = 12.dp, vertical = 0.dp),
             horizontalArrangement = Arrangement.End
         ) {
             Surface(

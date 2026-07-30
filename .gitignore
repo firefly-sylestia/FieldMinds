@@ -48,3 +48,4 @@ logcat.txt
 node_modules/
 node_modules
 .env
+./release-key.jks
