@@ -10,6 +10,11 @@ import android.content.Context
  */
 object AppPreferences {
 
+    /** Theme mode constants used across ProfileScreen, SettingsScreen, CurioTheme. */
+    const val THEME_LIGHT = "light"
+    const val THEME_DARK = "dark"
+    const val THEME_SYSTEM = "system"
+
     private const val NAME = "curio_app_prefs"
     private const val KEY_DISPLAY_NAME = "display_name"
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
@@ -25,7 +30,7 @@ object AppPreferences {
 
     // ── Theme ────────────────────────────────────────────────────────
     fun getThemeMode(context: Context): String =
-        prefs(context).getString(KEY_THEME_MODE, "system")!!
+        prefs(context).getString(KEY_THEME_MODE, THEME_SYSTEM)!!
 
     fun setThemeMode(context: Context, mode: String) =
         prefs(context).edit().putString(KEY_THEME_MODE, mode).apply()
