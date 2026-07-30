@@ -12,8 +12,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,9 +88,8 @@ import java.util.Calendar
  *   1. Glass-morphism top bar: ☰ Curio ✦  👤
  *   2. Welcome section: greeting + streak badge + quick stats
  *   3. Hero card: category-responsive gradient, glowing ring, floating sparkle
- *   4. Category quick-jump grid: 2-row compact cards
- *   5. Quick actions: Shuffle | Cabinet | History
- *   6. Recently explored section (real data from repository)
+ *   4. Category quick-jump grid: icon-only color pills
+ *   5. Recently explored section (real data from repository)
  */
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -129,19 +128,21 @@ fun HomeScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .statusBarsPadding()
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                CurioColors.CoralBlush.copy(alpha = 0.08f),
+                                CurioColors.CoralBlush.copy(alpha = 0.12f),
+                                CurioColors.CoralBlush.copy(alpha = 0.04f),
                                 MaterialTheme.colorScheme.background
                             )
                         )
                     )
-                    .padding(horizontal = 16.dp, vertical = 10.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -276,10 +277,10 @@ fun HomeScreen(navController: NavController) {
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
 
             // ═══════════════════════════════════════════════════════════
-            // 4. Category Quick-Jump Grid
+            // 4. Category Quick-Jump Grid — icon-only pills
             // ═══════════════════════════════════════════════════════════
             StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Fast) {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -311,24 +312,21 @@ fun HomeScreen(navController: NavController) {
                                 }
                             }
                         }
-                        Spacer(Modifier.height(12.dp))
+                        Spacer(Modifier.height(14.dp))
                     }
                     StaggeredItem(index = 1) {
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(3),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            columns = GridCells.Adaptive(minSize = 56.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
                             userScrollEnabled = false,
-                            modifier = Modifier
-                                .height(280.dp)
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                         ) {
                             item("wildcard") {
-                                CategoryMiniCard(
+                                CategoryPill(
                                     label = "Surprise",
                                     glyph = CurioIcons.Casino,
                                     accent = CurioColors.CoralBlush,
-                                    tint = CurioColors.CoralBlush.copy(alpha = 0.15f),
                                     selected = selectedCategory?.id == CategoryId.WILDCARD,
                                     onClick = {
                                         selectedCategory = if (selectedCategory?.id == CategoryId.WILDCARD) null
@@ -338,11 +336,10 @@ fun HomeScreen(navController: NavController) {
                             }
                             itemsIndexed(CurioCategories.visible) { _, cat ->
                                 if (cat.id != CategoryId.WILDCARD) {
-                                    CategoryMiniCard(
+                                    CategoryPill(
                                         label = cat.displayName,
                                         glyph = cat.iconGlyph,
                                         accent = cat.accent,
-                                        tint = cat.tint,
                                         selected = selectedCategory?.id == cat.id,
                                         onClick = {
                                             selectedCategory = if (selectedCategory?.id == cat.id) null else cat
@@ -355,65 +352,10 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
 
             // ═══════════════════════════════════════════════════════════
-            // 5. Quick Actions Row
-            // ═══════════════════════════════════════════════════════════
-            StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Fast) {
-                StaggeredItem(index = 0) {
-                    Text(
-                        text = "Quick actions",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Spacer(Modifier.height(12.dp))
-                }
-                StaggeredItem(index = 1) {
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        item {
-                            QuickActionCard(
-                                icon = CurioIcons.AutoAwesome,
-                                label = "Shuffle",
-                                subtitle = "Spin now",
-                                accent = CurioColors.CoralBlush,
-                                onClick = {
-                                    val chosen = selectedCategory
-                                    if (chosen == null) navController.navigate(CurioRoutes.SPIN)
-                                    else navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
-                                }
-                            )
-                        }
-                        item {
-                            QuickActionCard(
-                                icon = CurioIcons.Inventory2,
-                                label = "Cabinet",
-                                subtitle = "Your saves",
-                                accent = CurioColors.Sage,
-                                onClick = { navController.navigate(CurioRoutes.CABINET) }
-                            )
-                        }
-                        item {
-                            QuickActionCard(
-                                icon = CurioIcons.History,
-                                label = "History",
-                                subtitle = "Past topics",
-                                accent = CurioColors.DustyBlue,
-                                onClick = { navController.navigate(CurioRoutes.TOPIC_HISTORY) }
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(28.dp))
-
-            // ═══════════════════════════════════════════════════════════
-            // 6. Recently Explored
+            // 5. Recently Explored
             // ═══════════════════════════════════════════════════════════
             StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Base) {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -700,117 +642,40 @@ private fun BreathingGlowRing(
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// Category Mini Card (grid)
+// Category Pill (grid) — icon-only, full accent color fill
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun CategoryMiniCard(
+private fun CategoryPill(
     label: String,
     glyph: String,
     accent: Color,
-    tint: Color,
     selected: Boolean,
     onClick: () -> Unit
 ) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.04f else 1f,
+        targetValue = if (selected) 1.10f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
-        label = "catCardScale"
+        label = "catPillScale"
     )
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        color = if (selected) tint else MaterialTheme.colorScheme.surface,
-        shadowElevation = if (selected) 4.dp else 1.dp,
-        tonalElevation = if (selected) 2.dp else 0.dp,
+        shape = RoundedCornerShape(50),
+        color = accent,
+        shadowElevation = if (selected) 6.dp else 2.dp,
         modifier = Modifier.scale(scale)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Box(
+            modifier = Modifier.size(52.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(
-                        if (selected) accent.copy(alpha = 0.15f)
-                        else tint
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = glyph,
-                    contentDescription = label,
-                    tint = if (selected) accent else accent.copy(alpha = 0.6f),
-                    size = 22.dp
-                )
-            }
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                color = if (selected) accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
+            CurioIcon(
+                name = glyph,
+                contentDescription = label,
+                tint = Color.White,
+                size = 24.dp
             )
-        }
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Quick Action Card
-// ═══════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun QuickActionCard(
-    icon: String,
-    label: String,
-    subtitle: String,
-    accent: Color,
-    onClick: () -> Unit
-) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        color = accent.copy(alpha = 0.08f),
-        modifier = Modifier.width(130.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(42.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(accent.copy(alpha = 0.15f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = icon,
-                    contentDescription = label,
-                    tint = accent,
-                    size = 22.dp
-                )
-            }
-            Column {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
