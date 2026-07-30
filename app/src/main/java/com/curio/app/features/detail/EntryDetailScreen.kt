@@ -78,7 +78,6 @@ import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import coil.compose.rememberAsyncImagePainter
 import com.curio.app.ui.theme.CurioIcons
@@ -126,11 +125,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(260.dp)
-                .background(
-                    if (cat.id == CategoryId.WILDCARD)
-                        Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-                    else Brush.verticalGradient(listOf(cat.accent, cat.tint))
-                ),
+                .background(cat.accent.copy(alpha = 0.85f)),
             contentAlignment = Alignment.Center
         ) {
             CurioIcon(
@@ -744,11 +739,7 @@ private fun CurioShareCard(
     entry: CurioEntry,
     category: CurioCategory
 ) {
-    val isWildcard = category.id == CategoryId.WILDCARD
-    val bgBrush = if (isWildcard)
-        Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-    else
-        Brush.verticalGradient(listOf(category.accent, category.tint))
+    val bgColor = category.accent.copy(alpha = 0.9f)
 
     val daysAgoText = when (entry.capturedAtDaysAgo) {
         0 -> "Captured today"
@@ -759,7 +750,7 @@ private fun CurioShareCard(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(bgBrush, RoundedCornerShape(28.dp))
+            .background(bgColor, RoundedCornerShape(28.dp))
     ) {
         // ── Watermark icon ────────────────────────────────────────────
         CurioIcon(
