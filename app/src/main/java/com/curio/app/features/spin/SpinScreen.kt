@@ -926,8 +926,8 @@ private fun CarouselCard(
     val corner = if (isCenter) 28.dp else 22.dp
     val isLanded = landedTopic != null && isCenter
 
-    // Box is padded 12dp beyond card size so the shadow elevates outside
-    // the clipped shape — gives the center card real depth instead of cut-off shadow.
+    // Outer Box padded 12dp beyond card so shadow renders outside the clip.
+    // Inner Box with clip keeps rounded corners during animation.
     val boxW = w + if (isCenter) 24.dp else 0.dp
     val boxH = h + if (isCenter) 24.dp else 0.dp
     Box(
@@ -948,64 +948,71 @@ private fun CarouselCard(
                 ) else Modifier
             )
     ) {
-        AnimatedContent(
-            targetState = topic,
-            transitionSpec = {
-                slideInVertically { height -> height } +
-                fadeIn(animationSpec = tween(160)) togetherWith
-                slideOutVertically { height -> -height } +
-                fadeOut(animationSpec = tween(120))
-            },
-            label = "carouselSlot_$slot"
-        ) { currentTopic ->
-            Surface(
-                shape = RoundedCornerShape(corner),
-                color = if (isCenter) {
-                    MaterialTheme.colorScheme.surfaceContainerHighest
-                } else {
-                    MaterialTheme.colorScheme.surfaceContainer
+        // Inner clip layer — prevents sharp edges during graphicsLayer scale
+        Box(
+            modifier = Modifier
+                .size(w, h)
+                .clip(RoundedCornerShape(corner))
+        ) {
+            AnimatedContent(
+                targetState = topic,
+                transitionSpec = {
+                    slideInVertically { height -> height } +
+                    fadeIn(animationSpec = tween(160)) togetherWith
+                    slideOutVertically { height -> -height } +
+                    fadeOut(animationSpec = tween(120))
                 },
-                border = if (isCenter) {
-                    BorderStroke(1.5.dp, accent.copy(alpha = 0.45f))
-                } else {
-                    // Subtle border on side cards for definition in both modes.
-                    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-                },
-                shadowElevation = if (isCenter) 12.dp else 2.dp,
-                tonalElevation = if (isCenter) 4.dp else 0.dp,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (currentTopic != null) {
-                    CarouselCardContent(
-                        topic = currentTopic,
-                        accent = accent,
-                        isCenter = isCenter,
-                        landed = isLanded
-                    )
-                } else if (isCenter) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                label = "carouselSlot_$slot"
+            ) { currentTopic ->
+                Surface(
+                    shape = RoundedCornerShape(corner),
+                    color = if (isCenter) {
+                        MaterialTheme.colorScheme.surfaceContainerHighest
+                    } else {
+                        MaterialTheme.colorScheme.surfaceContainer
+                    },
+                    border = if (isCenter) {
+                        BorderStroke(1.5.dp, accent.copy(alpha = 0.45f))
+                    } else {
+                        // Subtle border on side cards for definition in both modes.
+                        BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    },
+                    shadowElevation = if (isCenter) 12.dp else 2.dp,
+                    tonalElevation = if (isCenter) 4.dp else 0.dp,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if (currentTopic != null) {
+                        CarouselCardContent(
+                            topic = currentTopic,
+                            accent = accent,
+                            isCenter = isCenter,
+                            landed = isLanded
+                        )
+                    } else if (isCenter) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            CurioIcon(glyph, null, tint = accent.copy(alpha = 0.5f), size = 38.dp)
-                            Text(
-                                text = "Tap spin to draw a topic",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center
-                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                CurioIcon(glyph, null, tint = accent.copy(alpha = 0.5f), size = 38.dp)
+                                Text(
+                                    text = "Tap spin to draw a topic",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
-                    }
-                } else {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CurioIcon(glyph, null, tint = accent.copy(alpha = 0.2f), size = 22.dp)
+                    } else {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CurioIcon(glyph, null, tint = accent.copy(alpha = 0.2f), size = 22.dp)
+                        }
                     }
                 }
             }
