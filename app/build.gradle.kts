@@ -133,6 +133,9 @@ dependencies {
     // ExoPlayer for audio playback
     implementation(libs.androidx.media3.exoplayer)
 
+    // Gson for JSON serialization (CaptureData -> Room blob)
+    implementation(libs.com.google.code.gson.gson)
+
     testImplementation(libs.junit)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
