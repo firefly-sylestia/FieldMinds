@@ -212,6 +212,490 @@ ALBUMS = [
     ),
 
     # ═══════════════════════════════════════════════════════════════════════
+    # ROCK BATCH 2 — Classic Rock, Punk, Post-Punk, Shoegaze, Britpop, Emo, Stoner
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-rolling-stones-exile", "Album",
+        "Exile on Main St.",
+        "The Rolling Stones 1972 — recorded in the basement of Keith Richards' rented villa in the South of France while the band was fleeing UK tax authorities. The sessions were chaos: musicians came and went at all hours, drug dealers doubled as roadies, and the electricity kept cutting out.",
+        "Exile on Main St. (1972) end-to-end", 67,
+        "Listen to 'Tumbling Dice' — the backing vocals by Merry Clayton and Clydie King were recorded at 3 AM after they'd been woken up to sing. Then 'Shine a Light' — Mick Jagger's vocal was recorded in a tiny bathroom for natural reverb. The album sounds like a radio station broadcasting from a house party you weren't invited to.",
+        ["Rock", "Blues Rock", "British", "1970s"], 1
+    ),
+    (
+        "album-rolling-stones-sticky-fingers", "Album",
+        "Sticky Fingers",
+        "The Rolling Stones 1971 — the first album on their own label, with the famous Andy Warhol zipper cover that damaged adjacent records in shipping. Recorded partly at Muscle Shoals in Alabama, partly at Mick Jagger's country house. The opening riff of 'Brown Sugar' was written by Jagger in 45 minutes during a film shoot.",
+        "Sticky Fingers (1971) end-to-end", 46,
+        "Listen to 'Wild Horses' — Keith Richards wrote the chorus while sitting in a bathroom, feeling guilty about leaving his newborn son to go on tour. Then 'Can't You Hear Me Knocking' — the jam at the end was an accident; the band thought the song was over and kept playing. The tape was still rolling.",
+        ["Rock", "Blues Rock", "British", "1970s"], 1
+    ),
+    (
+        "album-who-whos-next", "Album",
+        "Who's Next",
+        "The Who 1971 — salvaged from Pete Townshend's abandoned 'Lifehouse' project, a sci-fi rock opera he never finished. The songs were rescued and re-recorded with producer Glyn Johns. The famous synth loop on 'Baba O'Riley' was Townshend's Lowrey organ fed through a VCS3 synthesizer, programmed to cycle forever.",
+        "Who's Next (1971) end-to-end", 43,
+        "Listen to 'Baba O'Riley' — the violin solo at the end is Dave Arbus of East of Eden, recorded in one take. Then 'Behind Blue Eyes' — Townshend wrote it after a show when he felt like the audience wanted the rock star, not the person. The song shifts from ballad to full-band assault in the bridge.",
+        ["Rock", "Hard Rock", "British", "1970s"], 1
+    ),
+    (
+        "album-hendrix-are-you-experienced", "Album",
+        "Are You Experienced",
+        "Jimi Hendrix 1967 — the debut that rewired what electric guitar could sound like. Hendrix was 24, had been in the US Army, and had backed Little Richard and the Isley Brothers. He recorded the album in London with a mostly British rhythm section who couldn't believe what they were hearing.",
+        "Are You Experienced (1967) end-to-end", 40,
+        "Listen to 'Purple Haze' — the famous opening riff came to Hendrix in a dream. The solo was recorded in two passes, panned hard left and right. Then 'Third Stone from the Sun' — Hendrix slows down his guitar to sound like a cello, then a spaceship. He told the engineer to leave the mistakes in because 'mistakes are just notes that didn't know where they were going.'",
+        ["Psychedelic Rock", "Blues Rock", "American", "1960s"], 1
+    ),
+    (
+        "album-doors-debut", "Album",
+        "The Doors",
+        "The Doors 1967 — recorded in 6 days at Sunset Sound in Hollywood for $10,000. Jim Morrison was so nervous about his voice that he recorded many of the vocals in the control room with the lights off. The album ends with 'The End', an 11-minute Oedipal nightmare they'd been kicked off stage for playing live.",
+        "The Doors (1967) end-to-end", 44,
+        "Listen to 'Light My Fire' — the extended organ and guitar solos were edited down from a 7-minute jam. Robby Krieger wrote the melody; it was his first song. Then 'The End' — Morrison's vocal was recorded in one continuous take, and you can hear a door creak open at 4:22 that they decided to leave in.",
+        ["Psychedelic Rock", "American", "1960s"], 1
+    ),
+    (
+        "album-cream-disraeli-gears", "Album",
+        "Disraeli Gears",
+        "Cream 1967 — the first supergroup (Clapton, Bruce, Baker) recorded their second album in 3 days at Atlantic Studios in New York, fueled by psychedelics and sleeplessness. The album cover was designed by Australian artist Martin Sharp, who lived with Clapton in a Chelsea flat that became a psychedelic crash pad.",
+        "Disraeli Gears (1967) end-to-end", 33,
+        "Listen to 'Sunshine of Your Love' — the riff was inspired by a Jimi Hendrix show. Bruce adapted the lyric from a poem by friend Pete Brown. Then 'Tales of Brave Ulysses' — Clapton used a wah-wah pedal for the first time, having borrowed it from Hendrix. The song's lyric was written on a napkin at a Greek restaurant.",
+        ["Blues Rock", "Psychedelic Rock", "British", "1960s"], 1
+    ),
+    (
+        "album-neil-young-harvest", "Album",
+        "Harvest",
+        "Neil Young 1972 — recorded mostly in a barn in rural California with an ad-hoc band called the Stray Gators. The London Symphony Orchestra appeared on two tracks. 'Heart of Gold' became his only #1 single. Young later said the album 'put me in the middle of the road' and deliberately made darker music to escape it.",
+        "Harvest (1972) end-to-end", 37,
+        "Listen to 'Heart of Gold' — James Taylor and Linda Ronstadt sing backing vocals. The harmonica parts were recorded in a separate session in Nashville. Then 'The Needle and the Damage Done' — recorded live at UCLA, a stark solo acoustic performance about friends lost to heroin. The audience doesn't clap at the end.",
+        ["Folk Rock", "Singer-Songwriter", "Canadian", "1970s"], 1
+    ),
+    (
+        "album-neil-young-tonight-the-night", "Album",
+        "Tonight's the Night",
+        "Neil Young 1975 — recorded as a raw wake for roadie Bruce Berry and Crazy Horse guitarist Danny Whitten, both dead from heroin overdoses. Young played the album for his label's executives; they asked where the 'real' album was. He shelved it for two years before releasing it unchanged.",
+        "Tonight's the Night (1975) end-to-end", 45,
+        "Listen to the title track — Young's voice cracks on the first word and never recovers. The whole album was recorded in a single studio with the lights dimmed and the air thick with tequila and grief. Nils Lofgren plays piano on several tracks while crying. No album sounds more like a wake.",
+        ["Rock", "Singer-Songwriter", "Canadian", "1970s"], 1
+    ),
+    (
+        "album-patti-smith-horses", "Album",
+        "Horses",
+        "Patti Smith 1975 — recorded at Electric Lady Studios, the studio built for Jimi Hendrix who died before it was finished. Smith opened the album with 'Jesus died for somebody's sins but not mine', a line that made John Cale (her producer, from the Velvet Underground) know he was working with something dangerous.",
+        "Horses (1975) end-to-end", 43,
+        "Listen to 'Gloria' — Smith transforms Van Morrison's garage-rock classic into a feminist manifesto in the opening monologue. Then 'Birdland' — inspired by a Peter Reich memoir about his father Wilhelm Reich, the controversial psychoanalyst. Smith recorded the vocal reading from the book.",
+        ["Punk Rock", "Art Rock", "American", "1970s"], 1
+    ),
+    (
+        "album-ramones-debut", "Album",
+        "Ramones",
+        "Ramones 1976 — 14 songs in 29 minutes, recorded in 7 days for $6,400. The fastest, simplest rock album ever made. Johnny Ramone played every downstroke as hard as he could; Tommy played the drums standing up because his stool broke. The album invented punk rock while selling only 6,000 copies in its first year.",
+        "Ramones (1976) end-to-end", 29,
+        "Listen to 'Blitzkrieg Bop' — the 'Hey ho, let's go' chant was Tommy's idea, borrowed from the Bay City Rollers. Every song on the album has the same tempo: fast. Then 'I Wanna Be Your Boyfriend' — the slowest track at a relatively leisurely 3 minutes. The Ramones claimed they were just a bubblegum pop band playing too fast.",
+        ["Punk Rock", "American", "1970s"], 1
+    ),
+    (
+        "album-sex-pistols-never-mind-the-bollocks", "Album",
+        "Never Mind the Bollocks, Here's the Sex Pistols",
+        "Sex Pistols 1977 — the only studio album from the band that terrified the British establishment. The title got them taken to court for obscenity (they won). Recorded over several chaotic sessions with producers being fired mid-album. The band couldn't really play their instruments, which was the point.",
+        "Never Mind the Bollocks (1977) end-to-end", 39,
+        "Listen to 'God Save the Queen' — released during the Queen's Silver Jubilee, the BBC banned it. It still reached #2 on the charts (many believe it was #1 but kept off for political reasons). Then 'Anarchy in the UK' — Johnny Rotten's sneer was real; he'd been rejected by every school and employer in London.",
+        ["Punk Rock", "British", "1970s"], 1
+    ),
+    (
+        "album-buzzcocks-singles-going-steady", "Album",
+        "Singles Going Steady",
+        "Buzzcocks 1979 — a compilation of 8 UK singles that became the template for pop-punk. Pete Shelley wrote songs about unrequited love, sexual confusion, and boredom over three-chord guitar rushes that rarely passed the 2:30 mark. The album is a singles band proving the singles format is the point, not the limitation.",
+        "Singles Going Steady (1979) end-to-end", 35,
+        "Listen to 'Ever Fallen in Love (With Someone You Shouldn't've)' — Shelley wrote it about a man he was in love with while still publicly closeted. Then 'What Do I Get?' — the question is genuinely asked, not rhetorical. The Buzzcocks made punk that admitted vulnerability instead of hiding behind aggression.",
+        ["Punk Rock", "Pop Punk", "British", "1970s"], 1
+    ),
+    (
+        "album-gang-of-four-entertainment", "Album",
+        "Entertainment!",
+        "Gang of Four 1979 — Marxist theory set to funk-punk rhythms. Andy Gill's guitar playing was described by one critic as sounding like 'a dentist's drill attacking sheet metal'. The band was named after the Chinese Communist Party leaders arrested during the Cultural Revolution.",
+        "Entertainment! (1979) end-to-end", 43,
+        "Listen to 'Damaged Goods' — the bassline by Dave Allen is a funk groove played by someone who learned bass last week. Then 'Anthrax' — two vocalists sing completely different lyrics simultaneously: one a love song, the other an essay about why love songs are ideologically suspect. The album influenced R.E.M., Red Hot Chili Peppers, and Franz Ferdinand equally.",
+        ["Post-Punk", "British", "1970s"], 1
+    ),
+    (
+        "album-wire-pink-flag", "Album",
+        "Pink Flag",
+        "Wire 1977 — 21 songs in 35 minutes, none longer than 4 minutes. The album reduces punk to its atomic components: a riff, a verse, a chorus, stop. Producer Mike Thorne insisted on clean recording quality when every other punk band wanted distortion, making the album sound even more alien and precise.",
+        "Pink Flag (1977) end-to-end", 35,
+        "Listen to 'Three Girl Rhumba' — the entire song is one riff played 66 times with five words of lyric. Elastica were later sued for basing 'Connection' on it. Then 'Reuters' — the opening track that sounds nothing like the rest of the album: a slow-building drone while a BBC news broadcast plays in the background.",
+        ["Post-Punk", "British", "1970s"], 1
+    ),
+    (
+        "album-cure-disintegration", "Album",
+        "Disintegration",
+        "The Cure 1989 — Robert Smith was turning 30 and terrified of becoming irrelevant. He locked himself in his room and wrote the darkest album of his career. The band nearly broke up during recording; Lol Tolhurst was fired for alcoholism mid-session. Smith later said the album saved his life.",
+        "Disintegration (1989) end-to-end", 72,
+        "Listen to 'Pictures of You' — the opening guitar line was inspired by a fire that destroyed Smith's childhood home; photographs were among the only things he saved. Then 'Lullaby' — the spider-creature is a metaphor for Smith's depression. The album was mixed on headphones, making it sound enormous and claustrophobic simultaneously.",
+        ["Post-Punk", "Gothic Rock", "British", "1980s"], 1
+    ),
+    (
+        "album-siouxsie-and-the-banshees-juju", "Album",
+        "Juju",
+        "Siouxsie and the Banshees 1981 — the album that perfected gothic post-punk. John McGeoch's guitar work is now taught in music schools; he used a flanger pedal so creatively that Johnny Marr called him the most inventive guitarist of his generation. Siouxsie Sioux wrote the lyrics in a single feverish week.",
+        "Juju (1981) end-to-end", 41,
+        "Listen to 'Spellbound' — the drum pattern is a 12/8 gallop that never stops. McGeoch's guitar harmonics at 2:15 sound like glass breaking in slow motion. Then 'Arabian Knights' — inspired by the Middle Eastern political turmoil of 1981, the song's tension never releases. McGeoch had a nervous breakdown shortly after the album.",
+        ["Post-Punk", "Gothic Rock", "British", "1980s"], 1
+    ),
+    (
+        "album-depeche-mode-violator", "Album",
+        "Violator",
+        "Depeche Mode 1990 — the synth-pop band's pivot to stadium-sized dark electronic rock. Recorded across 8 studios in 4 countries. The album sold 7.5 million copies. The band's near-constant infighting during recording was captured on tape and later sampled into the album.",
+        "Violator (1990) end-to-end", 47,
+        "Listen to 'Enjoy the Silence' — Martin Gore wrote it as a ballad; Alan Wilder turned it into the disco-goth anthem by adding the beat without telling anyone. Then 'Personal Jesus' — the famous guitar riff was played by Gore on a Gretsch through a vintage amp, processed to sound like a synthesizer. The album made darkness danceable.",
+        ["Synth-Pop", "Alternative Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-new-order-power-corruption-lies", "Album",
+        "Power, Corruption & Lies",
+        "New Order 1983 — the band's second album after Ian Curtis's suicide and their transition from Joy Division. Peter Saville designed the cover using a 19th-century French painting; the color-code wheel on the back became the band's visual signature. The album reconciled electronic music with post-punk.",
+        "Power, Corruption & Lies (1983) end-to-end", 43,
+        "Listen to 'Age of Consent' — the opening bassline is Peter Hook playing the melody high up on the neck, his signature technique. Then 'Blue Monday' — released as a standalone 12-inch single and not on the original UK album, it became the best-selling 12-inch single of all time and bankrupted Factory Records because the die-cut sleeve cost more to produce than the record sold for.",
+        ["New Wave", "Post-Punk", "British", "1980s"], 1
+    ),
+    (
+        "album-echo-and-the-bunnymen-ocean-rain", "Album",
+        "Ocean Rain",
+        "Echo and the Bunnymen 1984 — the album they declared would be 'the greatest album ever made' before a note was written. They recorded the strings with a 35-piece orchestra in a Paris studio built by Napoleon III. The confidence paid off: it's now considered their masterpiece.",
+        "Ocean Rain (1984) end-to-end", 37,
+        "Listen to 'The Killing Moon' — Ian McCulloch wrote the lyric in a dream and woke up to scribble it down. The mandolin was played by a session musician who'd never heard the band before. Then 'Ocean Rain' — the strings were recorded in a single take because the orchestra had to catch a train. The album cover was shot in Carnglaze Caverns, an abandoned slate mine in Cornwall.",
+        ["Post-Punk", "Alternative Rock", "British", "1980s"], 1
+    ),
+    (
+        "album-television-marquee-moon", "Album",
+        "Marquee Moon",
+        "Television 1977 — the CBGB scene's most musically ambitious band. Tom Verlaine and Richard Lloyd traded guitar solos like jazz musicians trading fours. The title track is 10 minutes of interlocking guitar lines that never repeat. The album was rejected by every major label before Elektra took a chance.",
+        "Marquee Moon (1977) end-to-end", 46,
+        "Listen to the title track — Verlaine and Lloyd recorded their guitar solos facing each other in the studio, each one responding to the other's phrases in real time. Then 'Venus' — the riff sounds like it's walking upstairs, repeatedly trying and failing to resolve. Television made punk smart without making it less urgent.",
+        ["Art Punk", "Post-Punk", "American", "1970s"], 1
+    ),
+    (
+        "album-iggy-pop-lust-for-life", "Album",
+        "Lust for Life",
+        "Iggy Pop 1977 — recorded in Berlin with David Bowie producing. Iggy had just gotten clean from heroin; Bowie was about to record 'Heroes' in the same studio. The album was written and recorded in 8 days. The title track's famous drum beat was borrowed from the Motown standard 'You Can't Hurry Love' and later became the opening theme for Trainspotting.",
+        "Lust for Life (1977) end-to-end", 41,
+        "Listen to 'The Passenger' — Iggy wrote it riding the Berlin S-Bahn. The guitar riff was Bowie's idea, based on a Ricky Nelson song. Then 'Tonight' — Bowie later recorded his own version with Tina Turner, but Iggy's original, sung in a cracked baritone while barely holding a note, is the definitive take.",
+        ["Punk Rock", "American", "1970s"], 1
+    ),
+    (
+        "album-sonic-youth-daydream-nation", "Album",
+        "Daydream Nation",
+        "Sonic Youth 1988 — a double album that made noise beautiful. The band used screwdrivers, drumsticks, and various objects wedged between guitar strings to create sounds no one had heard before. The album was picked as one of the first 50 recordings preserved in the Library of Congress's National Recording Registry.",
+        "Daydream Nation (1988) end-to-end", 71,
+        "Listen to 'Teen Age Riot' — the opening track was originally named after Dinosaur Jr.'s J Mascis, a fantasy about an alternative rock revolution. Then 'The Sprawl' — inspired by William Gibson's cyberpunk novels. Thurston Moore and Lee Ranaldo's guitars are tuned to at least four different tunings across the album.",
+        ["Alternative Rock", "Noise Rock", "American", "1980s"], 1
+    ),
+    (
+        "album-smashing-pumpkins-mellon-collie", "Album",
+        "Mellon Collie and the Infinite Sadness",
+        "Smashing Pumpkins 1995 — a 28-song double album spanning 121 minutes, recorded over a year in Chicago. Billy Corgan wrote nearly 50 songs for the project. The album debuted at #1 and sold 10 million copies. The recording process was so intense that drummer Jimmy Chamberlin entered rehab shortly after completion.",
+        "Mellon Collie (1995) — disc 1", 60,
+        "Listen to '1979' — the drum machine loop was a mistake; Corgan programmed it wrong and liked the off-kilter result. Then 'Tonight, Tonight' — the orchestra was the Chicago Symphony, recorded in an old church. Corgan demanded 35 string players; the producer thought he was insane until he heard the playback.",
+        ["Alternative Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-pearl-jam-ten", "Album",
+        "Ten",
+        "Pearl Jam 1991 — recorded in 3 weeks at London Bridge Studio in Seattle for $25,000 while the band was still called Mookie Blaylock (a basketball player who later sued). The album went 13x platinum but the band famously refused to make music videos for it, pulling back from the spotlight even as they were propelled into it.",
+        "Ten (1991) end-to-end", 53,
+        "Listen to 'Alive' — Eddie Vedder wrote the lyrics imagining a son discovering his father is actually his stepfather. The guitar solo by Mike McCready was played in one take; he thought it was just a warm-up. Then 'Jeremy' — based on a real suicide by a 15-year-old in front of his classmates in Richardson, Texas.",
+        ["Grunge", "Alternative Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-soundgarden-superunknown", "Album",
+        "Superunknown",
+        "Soundgarden 1994 — the grunge band that could actually play anything. Chris Cornell's four-octave range and Kim Thayil's odd-time-signature riffs met on songs in 5/4, 7/4, and 9/8 without sounding prog. The album's cover art is a distorted photo of the band in a field of fire, representing their emotional state at the time.",
+        "Superunknown (1994) end-to-end", 70,
+        "Listen to 'Black Hole Sun' — Cornell wrote it in 15 minutes, thinking it was too poppy for the band. The surreal, melting-face music video defined 90s MTV. Then 'Spoonman' — the title refers to a real Seattle street performer, Artis the Spoonman, who plays spoons on the track. The song is in 7/4.",
+        ["Grunge", "Alternative Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-alice-in-chains-dirt", "Album",
+        "Dirt",
+        "Alice in Chains 1992 — the darkest grunge album, a raw chronicle of Layne Staley's heroin addiction. The band was using heavily during recording. Staley's vocal harmonies with Jerry Cantrell created a sound that was simultaneously beautiful and terrifying, like a choir singing from the bottom of a well.",
+        "Dirt (1992) end-to-end", 57,
+        "Listen to 'Down in a Hole' — Cantrell wrote the lyrics about his own failing relationship, but Staley sang them as if about his addiction. Then 'Would?' — the bassline by Mike Starr is one note for nearly the entire song, creating a trance-like foundation. The track was a tribute to Andrew Wood of Mother Love Bone, who died of a heroin overdose.",
+        ["Grunge", "Alternative Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-stone-temple-pilots-purple", "Album",
+        "Purple",
+        "Stone Temple Pilots 1994 — the album that proved they weren't grunge imitators. Recorded in a mansion in Atlanta, the band fought constantly. Scott Weiland wrote the lyrics while struggling with heroin. Despite the chaos, the album debuted at #1 and produced three top-10 singles.",
+        "Purple (1994) end-to-end", 47,
+        "Listen to 'Interstate Love Song' — the opening riff came to Dean DeLeo in a dream during a thunderstorm. Then 'Big Empty' — written in a single afternoon when the band needed one more track. Weiland's vocal floats over a sparse arrangement that builds into a wall of guitars, perfectly capturing the push-pull of addiction.",
+        ["Alternative Rock", "Grunge", "American", "1990s"], 1
+    ),
+    (
+        "album-my-bloody-valentine-loveless", "Album",
+        "Loveless",
+        "My Bloody Valentine 1991 — recorded over 2 years across 19 studios, nearly bankrupting Creation Records. Kevin Shields used the tremolo arm of his guitar on every chord, creating a sound that literally bends pitch. The album cost £250,000 and the label's founder said it 'nearly destroyed us', but it became the definitive shoegaze record.",
+        "Loveless (1991) end-to-end", 48,
+        "Listen to 'Only Shallow' — the opening guitar sounds like a jet engine taking off. Then 'When You Sleep' — Shields recorded the guitars at a low volume so the microphones would pick up room sound, creating the sensation of distance. The vocals were deliberately buried in the mix so you'd strain to hear them, like listening through a wall.",
+        ["Shoegaze", "Alternative Rock", "Irish-British", "1990s"], 1
+    ),
+    (
+        "album-slowdive-souvlaki", "Album",
+        "Souvlaki",
+        "Slowdive 1993 — recorded during a period when the British music press had turned viciously against shoegaze. Rachel Goswell and Neil Halstead had just broken up emotionally while still being bandmates. Brian Eno contributed keyboards to two tracks after randomly meeting them in the studio hallway.",
+        "Souvlaki (1993) end-to-end", 41,
+        "Listen to 'Alison' — Halstead wrote it about a friend who'd died, but the lyric is ambiguous enough to be a love song. Then 'When the Sun Hits' — the song is structured like a wave: quiet verse, massive wall of guitar for the chorus, retreat, repeat. Eno's contribution on 'Sing' is a single sustained note held for three minutes.",
+        ["Shoegaze", "Dream Pop", "British", "1990s"], 1
+    ),
+    (
+        "album-ride-nowhere", "Album",
+        "Nowhere",
+        "Ride 1990 — the album that defined the heavier side of shoegaze before the term existed. Produced by Marc Waterman, who insisted on recording the drums in a stairwell to get the right amount of natural reverb. The guitar interplay between Andy Bell and Mark Gardener became the blueprint for what a two-guitar band could do without a lead guitarist.",
+        "Nowhere (1990) end-to-end", 48,
+        "Listen to 'Vapour Trail' — the string arrangement at the end is not strings at all but layered and pitch-shifted guitar feedback. Then 'Dreams Burn Down' — the song builds over four minutes from a whisper to a hurricane, with the drums seemingly trying to escape the song. The album's closing 8-minute title track is a single chord cycle that never resolves.",
+        ["Shoegaze", "Alternative Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-cocteau-twins-heaven-or-las-vegas", "Album",
+        "Heaven or Las Vegas",
+        "Cocteau Twins 1990 — Elizabeth Fraser's voice as a musical instrument, singing in a self-invented language of sounds rather than words. The album was recorded during a period of severe drug addiction and the birth of Fraser's first child. The title came from a neon sign Fraser saw while driving through Nevada.",
+        "Heaven or Las Vegas (1990) end-to-end", 38,
+        "Listen to 'Cherry-coloured Funk' — try to make out the lyrics. You can't, and that's the point; Fraser's voice was an additional instrument, not a vehicle for meaning. Then the title track — the most straightforward song they ever recorded, with Robin Guthrie's shimmering guitar and Simon Raymonde's melodic bass finally letting Fraser's voice float above rather than within.",
+        ["Dream Pop", "Shoegaze", "Scottish", "1990s"], 1
+    ),
+    (
+        "album-oasis-definitely-maybe", "Album",
+        "Definitely Maybe",
+        "Oasis 1994 — the fastest-selling debut in British history at the time. Recorded in 19 days at Monnow Valley in Wales, then completely re-recorded at Sawmills in Cornwall. Noel Gallagher wrote every song; Liam Gallagher sang them with a sneer you could hear through walls. The album captured a specific British moment: late Thatcher hangover, early Cool Britannia optimism.",
+        "Definitely Maybe (1994) end-to-end", 52,
+        "Listen to 'Live Forever' — Noel wrote it in response to Nirvana's 'I Hate Myself and Want to Die', deliberately creating an anthem of defiance. Then 'Slide Away' — Liam's vocal take was his first and only; he went outside for a cigarette and never came back to re-record it. The album sounds like someone kicking open every door in the house.",
+        ["Britpop", "Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-blur-parklife", "Album",
+        "Parklife",
+        "Blur 1994 — the Britpop album that made Damon Albarn the voice of suburban British youth irony. Recorded in a small studio on Borough High Street in London. Phil Daniels (the actor from Quadrophenia) narrated the title track as a cockney geezer. The album is a love letter to a very specific, very mundane version of England.",
+        "Parklife (1994) end-to-end", 53,
+        "Listen to 'Girls & Boys' — the disco beat was Graham Coxon's idea, played on a drum machine. The lyrics about package holidays and casual sex were Albarn observing British tourists in Magaluf. Then 'This Is a Low' — the lyrics are weather shipping forecast regions: 'Biscay, Trafalgar, Dogger, Rockall.' Albarn turned the BBC shipping forecast into poetry.",
+        ["Britpop", "Indie Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-pulp-different-class", "Album",
+        "Different Class",
+        "Pulp 1995 — Jarvis Cocker's magnum opus about class, sex, and the absurdity of British life. Cocker was 32 when the album came out, having been in Pulp since he was 15. The album cover was shot at a wedding reception; the band photoshopped themselves into the guests.",
+        "Different Class (1995) end-to-end", 53,
+        "Listen to 'Common People' — Cocker wrote it based on a real Greek art student who told him she wanted to 'live like common people.' The song builds from a single keyboard note to a full-band crescendo over 6 minutes. Then 'Disco 2000' — based on Cocker's childhood crush Deborah, who he found on Facebook 25 years later.",
+        ["Britpop", "Indie Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-suede-debut", "Album",
+        "Suede",
+        "Suede 1993 — the fastest-selling debut album in British history until Oasis broke the record a year later. Brett Anderson's androgynous vocals and Bernard Butler's fluid guitar lines created a glam-rock revival filtered through British miserabilism. The cover photo of two women kissing was considered shocking for a major-label release in 1993.",
+        "Suede (1993) end-to-end", 43,
+        "Listen to 'Animal Nitrate' — Butler's guitar solo is a single sustained note fed through a wah-wah pedal. Then 'The Drowners' — the opening riff sounds like it was beamed in from a 1973 David Bowie session. Butler recorded the album's guitar parts in a closet to capture a claustrophobic, radio-unfriendly ambience.",
+        ["Britpop", "Alternative Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-manic-street-preachers-holy-bible", "Album",
+        "The Holy Bible",
+        "Manic Street Preachers 1994 — the most harrowing album of the Britpop era. Richey Edwards wrote lyrics about anorexia, the Holocaust, capital punishment, and self-harm while in the grip of severe depression. Four months after the album's release, Edwards disappeared; his car was found near the Severn Bridge. He has never been found.",
+        "The Holy Bible (1994) end-to-end", 57,
+        "Listen to '4st 7lb' — the title is the weight at which an anorexic person is at risk of death. Edwards hospitalised himself during the writing. Then 'Faster' — the opening line is 'I am an architect, they call me a butcher.' The album's references range from Primo Levi to Sylvia Plath to the Hungerford massacre.",
+        ["Alternative Rock", "Post-Punk", "British", "1990s"], 1
+    ),
+    (
+        "album-verve-urban-hymns", "Album",
+        "Urban Hymns",
+        "The Verve 1997 — the album that broke up the band. Richard Ashcroft wrote the songs after a three-year heroin detox. The string arrangement on 'Bitter Sweet Symphony' used a sample from an orchestral version of a Rolling Stones song, leading to a lawsuit that gave Mick Jagger and Keith Richards 100% of the royalties. Ashcroft earned nothing from his most famous song for 22 years.",
+        "Urban Hymns (1997) end-to-end", 76,
+        "Listen to 'Bitter Sweet Symphony' — the strings were recorded at Olympic Studios. Then 'The Drugs Don't Work' — Ashcroft wrote it watching his father die of cancer. The song's devastating chorus was sung in a single take. The album broke up the band literally: they split during the tour, reunited briefly, and split again.",
+        ["Britpop", "Alternative Rock", "British", "1990s"], 1
+    ),
+    (
+        "album-modest-mouse-lonesome-crowded-west", "Album",
+        "The Lonesome Crowded West",
+        "Modest Mouse 1997 — Isaac Brock's blistering indictment of suburban sprawl, strip malls, and spiritual emptiness. Recorded in a makeshift studio in a house in Seattle. Brock's guitar was tuned to an open chord he'd invented so he could play while drinking. The album was recorded for $10,000 and sounds like it cost ten times that.",
+        "The Lonesome Crowded West (1997) end-to-end", 74,
+        "Listen to 'Trailer Trash' — Brock's vocal cracks are real; he was drinking whiskey during the session. Then 'Cowboy Dan' — the song starts as a whisper, becomes a scream about a man who 'moves to the city' and 'shoots his rifle in the air.' Brock intentionally recorded the vocals too close to the microphone so you can hear the spit.",
+        ["Indie Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-pavement-crooked-rain", "Album",
+        "Crooked Rain, Crooked Rain",
+        "Pavement 1994 — the slacker-rock masterpiece that almost made them famous. Stephen Malkmus wrote the lyrics by cutting up newspapers and rearranging the words. The album was recorded in a studio that was also a working horse barn in rural Virginia. The single 'Cut Your Hair' was their attempt at a hit; it nearly worked.",
+        "Crooked Rain, Crooked Rain (1994) end-to-end", 42,
+        "Listen to 'Cut Your Hair' — the melody sounds like a nursery rhyme filtered through guitar fuzz. Then 'Range Life' — Malkmus's gentle mockery of the Smashing Pumpkins and Stone Temple Pilots apparently made Billy Corgan refuse to play festivals with them. The album's charm is its refusal to try too hard.",
+        ["Indie Rock", "Lo-Fi", "American", "1990s"], 1
+    ),
+    (
+        "album-built-to-spill-keep-it-like-a-secret", "Album",
+        "Keep It Like a Secret",
+        "Built to Spill 1999 — Doug Martsch's guitar meditation disguised as an indie rock album. Recorded piece by piece over a year, with Martsch playing most of the instruments and layering guitars like Brian Wilson on a budget. The album title describes Martsch's philosophy: hold something back, don't give it all away.",
+        "Keep It Like a Secret (1999) end-to-end", 47,
+        "Listen to 'Carry the Zero' — the song starts as a simple chord progression and builds into a three-guitar tapestry that peaks at 4:12 but keeps going. Then 'Else' — Martsch's guitar solo is played through a rotating Leslie speaker, making it sound like it's orbiting the rest of the song. The album rewards headphones: every listen reveals a new guitar line.",
+        ["Indie Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-interpol-turn-on-the-bright-lights", "Album",
+        "Turn On the Bright Lights",
+        "Interpol 2002 — the album that made post-punk revival a thing. Recorded in a converted church in Connecticut over a bleak winter. Paul Banks' baritone and Daniel Kessler's angular guitar lines drew constant Joy Division comparisons. The album captured post-9/11 New York anxiety without explicitly mentioning it.",
+        "Turn On the Bright Lights (2002) end-to-end", 49,
+        "Listen to 'Obstacle 1' — the opening guitar riff was Kessler trying to play a Joy Division song from memory. Then 'NYC' — the chorus 'New York cares' was written before September 11; after, it sounded like an elegy. The album's atmosphere is so consistent that it sounds like it was recorded in a single room at 3 AM.",
+        ["Post-Punk Revival", "Indie Rock", "American", "2000s"], 1
+    ),
+    (
+        "album-strokes-is-this-it", "Album",
+        "Is This It",
+        "The Strokes 2001 — 36 minutes that made rock music feel dangerous again. Recorded in 6 weeks at a studio on Manhattan's Lower East Side. Julian Casablancas recorded his vocals through a small guitar amp to get the right amount of distortion. The album's original cover featured a black-and-white photo of a naked bottom; the US release replaced it with a more abstract image.",
+        "Is This It (2001) end-to-end", 36,
+        "Listen to 'Last Nite' — the riff was Casablancas trying to write a song in the style of Tom Petty. Then 'Someday' — Albert Hammond Jr.'s guitar solo is two notes repeated for 10 seconds while the rhythm section carries the song. The album's brevity is a statement: leave before they want more.",
+        ["Indie Rock", "Garage Rock Revival", "American", "2000s"], 1
+    ),
+    (
+        "album-libertines-up-the-bracket", "Album",
+        "Up the Bracket",
+        "The Libertines 2002 — recorded in 2 weeks with Mick Jones of The Clash producing. Pete Doherty and Carl Barât wrote the songs in a flat on the Caledonian Road they called 'The Albion Rooms'. Doherty was already using heroin heavily. The album sounds like a party that's about to be broken up by the police — which it was, several times.",
+        "Up the Bracket (2002) end-to-end", 39,
+        "Listen to the title track — Doherty's vocal is slurred but the melody is perfect. Then 'Time for Heroes' — the lyrics are a snapshot of the 2000 May Day riots in London, which Barât and Doherty attended together. The album captured a specific moment of British youth culture: pre-smartphone, post-Thatcher, fuelled by cheap lager and idealism.",
+        ["Indie Rock", "Garage Rock Revival", "British", "2000s"], 1
+    ),
+    (
+        "album-killers-hot-fuss", "Album",
+        "Hot Fuss",
+        "The Killers 2004 — a Las Vegas band that sounded more British than most British bands. Recorded in Berkeley, California after the band's van broke down there. Brandon Flowers wrote densely narrative lyrics influenced by growing up Mormon in Sin City. The album's synth-heavy sound was a deliberate rejection of the garage-rock revival happening around them.",
+        "Hot Fuss (2004) end-to-end", 46,
+        "Listen to 'Mr. Brightside' — written in one night after Flowers caught his girlfriend cheating. The guitar riff was played by Dave Keuning on an Ibanez through a delay pedal. Then 'All These Things That I've Done' — the 'I got soul but I'm not a soldier' bridge was improvised in the studio. The gospel choir was a local Berkeley church group.",
+        ["Indie Rock", "New Wave Revival", "American", "2000s"], 1
+    ),
+    (
+        "album-franz-ferdinand-debut", "Album",
+        "Franz Ferdinand",
+        "Franz Ferdinand 2004 — the album that made art-school dance-rock a global phenomenon. Recorded in a former church in Glasgow. Alex Kapranos wrote lyrics about dinner parties, jealousy, and the Scottish art scene. The band's tight, clipped guitar style was inspired by the idea of making music that sounded like it was wearing a slim-fit suit.",
+        "Franz Ferdinand (2004) end-to-end", 39,
+        "Listen to 'Take Me Out' — the song famously changes tempo and feel at 0:55, a deliberate misdirection. Then 'Michael' — a disco-rock song about a male crush, sung without irony. The band's secret weapon was drummer Paul Thomson, whose hi-hat work on every song turns standard rock rhythms into dance beats.",
+        ["Indie Rock", "Dance-Punk", "Scottish", "2000s"], 1
+    ),
+    (
+        "album-white-stripes-elephant", "Album",
+        "Elephant",
+        "The White Stripes 2003 — recorded in 2 weeks at Toe Rag Studios in London, using only pre-1963 analog equipment. Jack White insisted on no computers, no Pro Tools. The album was recorded on 8-track tape. Meg White played a drum kit with only a kick, snare, and one cymbal. The limitations became the sound.",
+        "Elephant (2003) end-to-end", 50,
+        "Listen to 'Seven Nation Army' — the riff was played on a guitar tuned down an octave through a DigiTech Whammy pedal, creating a bass-like tone. Then 'Ball and Biscuit' — Jack's 7-minute blues solo was his attempt to play like Blind Willie McTell through three Marshall stacks. The album proved that restrictions breed creativity.",
+        ["Garage Rock", "Blues Rock", "American", "2000s"], 1
+    ),
+    (
+        "album-yeah-yeah-yeahs-fever-to-tell", "Album",
+        "Fever to Tell",
+        "Yeah Yeah Yeahs 2003 — Karen O's debut as a frontwoman possessed. Recorded in a converted church in Brooklyn. Nick Zinner's guitar was run through so many effects pedals that his pedalboard looked like a small city. The album was produced by David Andrew Sitek of TV on the Radio, who layered ambient noise under every track.",
+        "Fever to Tell (2003) end-to-end", 39,
+        "Listen to 'Maps' — Karen O wrote it about her then-boyfriend Angus Andrew of Liars, who was leaving for tour. She cried during the recording; the 'they don't love you like I love you' is addressed directly to him. Then 'Y Control' — Zinner's guitar sounds like a malfunctioning fire alarm in the best possible way.",
+        ["Indie Rock", "Garage Rock Revival", "American", "2000s"], 1
+    ),
+    (
+        "album-lcd-soundsystem-sound-of-silver", "Album",
+        "Sound of Silver",
+        "LCD Soundsystem 2007 — James Murphy's meditation on getting older, losing friends, and the redemptive power of dance music. Recorded in a converted barn in upstate New York. Murphy was 37, newly married, and questioning whether he should still be making dance-punk.",
+        "Sound of Silver (2007) end-to-end", 56,
+        "Listen to 'All My Friends' — a 7-minute build around a single piano figure. The lyrics catalog a lifetime of parties, friendships, and regrets. Then 'Someone Great' — written after Murphy's therapist died suddenly. The song uses the structure of dance music — repetition, build, release — to process grief. Murphy later said it was the most personal thing he'd ever written.",
+        ["Dance-Punk", "Electronic Rock", "American", "2000s"], 1
+    ),
+    (
+        "album-national-boxer", "Album",
+        "Boxer",
+        "The National 2007 — the album where they stopped trying to be a rock band and became The National. Recorded in a house in Bridgeport, Connecticut. Matt Berninger's baritone was recorded in a closet filled with blankets for soundproofing. The album's characters are lonely, drunk, anxious professionals navigating dinner parties and office politics.",
+        "Boxer (2007) end-to-end", 43,
+        "Listen to 'Fake Empire' — the song's odd time signature (4/4 over a waltzing 3/4 piano) creates a constant sense of unease. The horn arrangement was written by Padma Newsome, who also played viola. Then 'Mistaken for Strangers' — Berninger wrote it about running into a friend who didn't recognize him, which became a metaphor for his relationship with himself.",
+        ["Indie Rock", "American", "2000s"], 1
+    ),
+    (
+        "album-tame-impala-lonerism", "Album",
+        "Lonerism",
+        "Kevin Parker 2012 — recorded entirely alone in a rented house in Perth, Australia, on a laptop. Parker played every instrument, sang every vocal, produced every track. The album is about social isolation from someone who turned isolation into a creative method. The drums were recorded first, then everything else was built around them.",
+        "Lonerism (2012) end-to-end", 52,
+        "Listen to 'Feels Like We Only Go Backwards' — the swirling synth was a Korg MS-20 routed through a phaser pedal. Then 'Apocalypse Dreams' — the song's mid-point key change was Parker accidentally hitting the wrong chord and deciding it sounded better. The album's drums sound like they're recorded in a room the size of a cathedral.",
+        ["Psychedelic Rock", "Indie Rock", "Australian", "2010s"], 1
+    ),
+    (
+        "album-foals-total-life-forever", "Album",
+        "Total Life Forever",
+        "Foals 2010 — the Oxford band's pivot from math-rock to something more expansive and emotional. Recorded in a church in Gothenburg, Sweden during the coldest winter in decades. Yannis Philippakis wrote the lyrics after devouring books on futurism and transhumanism. The album's aquatic themes were inspired by the Swedish archipelago.",
+        "Total Life Forever (2010) end-to-end", 50,
+        "Listen to 'Spanish Sahara' — the song builds for 6 minutes from a single quiet guitar note to a wall of noise, then retreats. Then 'Blue Blood' — the interlocking guitar lines were recorded separately without either guitarist hearing the other's part. Philippakis said the album was about 'what happens when we upload our consciousness.'",
+        ["Indie Rock", "Math Rock", "British", "2010s"], 1
+    ),
+    (
+        "album-queens-of-the-stone-age-songs-for-the-deaf", "Album",
+        "Songs for the Deaf",
+        "Queens of the Stone Age 2002 — a concept album structured as a drive through the California desert, with fake radio station interludes between tracks. Dave Grohl played drums as a session musician, recording his parts in 3 days. Josh Homme tuned his guitar down to C-standard, creating the low, heavy 'robot rock' sound that defined the band.",
+        "Songs for the Deaf (2002) end-to-end", 59,
+        "Listen to 'No One Knows' — the riff was Homme trying to write a polka. Grohl's drum fill at 2:14 is one of the most-emulated in rock. Then 'Go with the Flow' — the distorted piano was played by Homme through a guitar amp. The entire album sounds like a car radio at full volume crossing the Mojave at midnight.",
+        ["Stoner Rock", "Hard Rock", "American", "2000s"], 1
+    ),
+    (
+        "album-kyuss-welcome-to-sky-valley", "Album",
+        "Welcome to Sky Valley",
+        "Kyuss 1994 — the album that invented stoner rock. Recorded in a remote studio in the California desert called Rancho De La Luna. The band recorded at night because the daytime heat made the equipment malfunction. Guitarist Josh Homme tuned down to C-standard and played through bass amps to create tones that sound like a truck engine idling.",
+        "Welcome to Sky Valley (1994) end-to-end", 52,
+        "Listen to 'Gardenia' — the opening riff was played through a bass amp with all the dials turned to 10. Then 'Demon Cleaner' — the slowed-down groove was achieved by recording at a faster tempo and pitching the tape down. The album is three suites of connected tracks, meant to be listened to as movements, not individual songs.",
+        ["Stoner Rock", "Desert Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-sleep-dopesmoker", "Album",
+        "Dopesmoker",
+        "Sleep 2003 — a single 63-minute song about a caravan of weed priests crossing the desert. The band's label refused to release it; they spent years fighting over the master tapes. Originally recorded in 1996, it wasn't officially released until 2003. The album has since become the most legendary stoner metal record ever made.",
+        "Dopesmoker (2003) — the full 63-minute version", 63,
+        "Listen to the whole thing in one sitting. The riff doesn't change for the first 12 minutes — bassist/vocalist Al Cisneros's mantra-like delivery treats the riff as a meditation object. Then notice how the tempo gradually, almost imperceptibly slows across the full 63 minutes, like a machine running out of fuel. The album was the sole reason Sleep were dropped from London Records.",
+        ["Stoner Metal", "Doom Metal", "American", "2000s"], 1
+    ),
+    (
+        "album-sunny-day-real-estate-diary", "Album",
+        "Diary",
+        "Sunny Day Real Estate 1994 — the album that invented emo as an art form rather than a punchline. Recorded in a basement in Seattle for $5,000. Jeremy Enigk's lyrics were written after he converted to Christianity, though the album is more spiritual questioning than religious. The album's emotional directness influenced an entire genre.",
+        "Diary (1994) end-to-end", 53,
+        "Listen to 'Seven' — the opening riff is in an unusual time signature that shifts between 4/4 and 6/8. Then 'In Circles' — Enigk's vocal jumps from a whisper to a scream in the space of a single syllable. The band broke up shortly after the album because the emotional intensity of the songs was too much to sustain live night after night.",
+        ["Emo", "Post-Hardcore", "American", "1990s"], 1
+    ),
+    (
+        "album-american-football-lp1", "Album",
+        "American Football",
+        "American Football 1999 — a single album recorded by University of Illinois students in a college dorm, then the band broke up. Over the next 15 years, the album grew from obscurity into the definitive Midwest emo record. The house on the cover became a pilgrimage site for fans; the band eventually bought it.",
+        "American Football (1999) end-to-end", 41,
+        "Listen to 'Never Meant' — the opening guitar line is in an alternate tuning (FACGCe) that Mike Kinsella invented. Then 'The Summer Ends' — the trumpet solo at the end was played by a friend who happened to be visiting the dorm during recording. The album's math-rock time signatures make the emotional content feel even more exposed.",
+        ["Emo", "Math Rock", "American", "1990s"], 1
+    ),
+    (
+        "album-deftones-white-pony", "Album",
+        "White Pony",
+        "Deftones 2000 — the album that proved a nu-metal band could make art. Recorded in Sausalito at the Record Plant, where Fleetwood Mac made Rumours. Chino Moreno brought in influences from The Cure, Depeche Mode, and My Bloody Valentine. The album's atmosphere is equal parts violence and sensuality.",
+        "White Pony (2000) end-to-end", 48,
+        "Listen to 'Change (In the House of Flies)' — the whispered verses give way to a chorus that feels like drowning. Then 'Passenger' — Maynard James Keenan of Tool trades vocals with Moreno, each trying to out-menace the other. The album's secret is DJ Frank Delgado's turntable work: subtle scratches and samples add texture without ever sounding like a gimmick.",
+        ["Alternative Metal", "Post-Hardcore", "American", "2000s"], 1
+    ),
+    (
+        "album-tool-aenima", "Album",
+        "Ænima",
+        "Tool 1996 — 77 minutes of mathematically precise progressive metal. The album opens with a Bill Hicks sample about fear-based media. The songs are built from Fibonacci sequences, polyrhythms, and shifting time signatures that music students still diagram. Despite the complexity, the album went triple platinum.",
+        "Ænima (1996) end-to-end", 77,
+        "Listen to 'Forty Six & 2' — the song is about Jungian shadow integration. The bassline by Justin Chancellor is in 7/8 while the drums are in 4/4, creating a relentless forward momentum. Then 'Eulogy' — the song's structure mirrors the five stages of grief. Tool wrote the album as a single continuous arc, not a collection of songs.",
+        ["Progressive Metal", "Alternative Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-rage-against-the-machine-debut", "Album",
+        "Rage Against the Machine",
+        "Rage Against the Machine 1992 — recorded in 3 months at a warehouse in North Hollywood. Tom Morello played guitar through a Whammy pedal, a DigiTech delay, and a wah-wah in ways no manufacturer intended, creating sounds that people initially assumed were synths. Zack de la Rocha's rap-delivery made radical leftist politics radio-friendly.",
+        "Rage Against the Machine (1992) end-to-end", 53,
+        "Listen to 'Killing in the Name' — the famous 'Fuck you, I won't do what you tell me' closing chant was improvised. Then 'Know Your Enemy' — Morello's 'guitar solo' at 2:30 is him unplugging and re-plugging his guitar cable at specific intervals to create a rhythmic pulse. The album was produced by Garth Richardson, who had to learn Morello's self-invented techniques on the fly.",
+        ["Rap Metal", "Alternative Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-system-of-a-down-toxicity", "Album",
+        "Toxicity",
+        "System of a Down 2001 — recorded in Hollywood just before 9/11. The album was accidentally released a week early; tower records in New York sold copies before street date. The band's Armenian heritage infused the music with Middle Eastern scales and rhythms no metal band had used before. Serj Tankian's operatic delivery made political songs about prison reform and the Armenian genocide feel like anthems.",
+        "Toxicity (2001) end-to-end", 44,
+        "Listen to 'Chop Suey!' — the song's title came from the way a dead body looks after autopsy. The 'father, father' bridge was Tankian quoting a Bible verse. Then 'Aerials' — the time signature shifts from 4/4 to 3/4 to 6/8 without the listener noticing. Daron Malakian wrote most of the music on an acoustic guitar in his bedroom.",
+        ["Alternative Metal", "Nu Metal", "American", "2000s"], 1
+    ),
+
+    # ═══════════════════════════════════════════════════════════════════════
     # HIP-HOP — Golden era, East Coast, West Coast, Modern
     # ═══════════════════════════════════════════════════════════════════════
     (
