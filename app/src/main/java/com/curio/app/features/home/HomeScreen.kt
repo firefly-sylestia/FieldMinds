@@ -328,7 +328,7 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(Modifier.height(14.dp))
 
-            // ── 4. Stats strip — 4 compact pills ────────────────────────
+            // ── 4. Stats strip — 3 compact pills ────────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -339,29 +339,19 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier.weight(1f),
                     glyph = "local_fire_department",
                     value = "$streakDays",
-                    label = "Streak",
                     tint = CurioColors.CoralBlush
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.Inventory2,
                     value = "$totalSaved",
-                    label = "Saved",
                     tint = CurioColors.Sage
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.History,
                     value = "${recentEntries.size}",
-                    label = "Recent",
                     tint = CurioColors.Lilac
-                )
-                StatPill(
-                    modifier = Modifier.weight(1f),
-                    glyph = CurioIcons.Palette,
-                    value = "${CurioCategories.visible.size}",
-                    label = "Lanes",
-                    tint = CurioColors.Teal
                 )
             }
 
@@ -515,7 +505,6 @@ private fun StatPill(
     modifier: Modifier = Modifier,
     glyph: String,
     value: String,
-    label: String,
     tint: Color
 ) {
     Surface(
@@ -523,24 +512,19 @@ private fun StatPill(
         shape = RoundedCornerShape(18.dp),
         color = tint.copy(alpha = 0.10f)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp, horizontal = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+                .padding(horizontal = 12.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            CurioIcon(glyph, null, tint = tint, size = 18.dp)
+            CurioIcon(glyph, null, tint = tint, size = 16.dp)
+            Spacer(Modifier.width(8.dp))
             Text(
                 value,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
                 color = tint,
-                maxLines = 1
-            )
-            Text(
-                label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1
             )
         }
