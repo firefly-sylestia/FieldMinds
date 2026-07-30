@@ -451,7 +451,7 @@ private fun StatsGrid(streak: Int, saved: Int, recent: Int, lanes: Int) {
         modifier = Modifier.fillMaxWidth()
     ) {
         // 2-row × 2-col grid
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 StatCell(Modifier.weight(1f), CurioIcons.AutoAwesome, "$streak", "Day streak", CurioColors.CoralBlush)
                 StatCell(Modifier.weight(1f), CurioIcons.Inventory2, "$saved", "Captured", CurioColors.Sage)
@@ -481,8 +481,8 @@ private fun StatCell(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 8.dp),
-            horizontalAlignment = Alignment.Start,
+                .padding(vertical = 12.dp, horizontal = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Box(
@@ -663,7 +663,7 @@ private fun PreferencesCard(
             ThinDivider()
 
             // Theme segmented
-            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -928,7 +928,7 @@ private fun RecentEntryInline(entry: CurioEntry, onClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 18.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
