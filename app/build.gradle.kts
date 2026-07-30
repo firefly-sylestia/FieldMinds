@@ -32,16 +32,6 @@ val hasReleaseSigningMaterial: Boolean =
     keyAlias != null &&
     keyPassword != null
 
-if (!hasReleaseSigningMaterial) {
-    logger.warn(
-        "Curio release signing material not configured " +
-        "(KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD). " +
-        "Falling back to debug signing for this build. For a properly-" +
-        "signed release APK, populate the 4 secrets in repo Settings > " +
-        "Secrets and variables > Actions."
-    )
-}
-
 android {
     namespace = "com.curio.app"
     compileSdk = 37
@@ -81,7 +71,13 @@ android {
                 logger.lifecycle("✓ Release APK signed with custom keystore (${keyStorePath})")
                 signingConfigs.getByName("release")
             } else {
-                logger.warn("⚠ Release APK signed with debug keystore — installable but not for distribution")
+                logger.warn(
+                    "Curio release signing material not configured " +
+                    "(KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD). " +
+                    "Release APK signed with debug keystore — installable but not for " +
+                    "distribution. For a properly-signed release APK, populate the " +
+                    "4 secrets in repo Settings > Secrets and variables > Actions."
+                )
                 signingConfigs.getByName("debug")
             }
         }
