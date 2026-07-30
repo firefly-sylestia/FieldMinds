@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -126,26 +125,13 @@ fun HomeScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState())
         ) {
             // ═══════════════════════════════════════════════════════════
-            // 1. Premium Glass-Morphism Top Bar
+            // 1. Top Bar
             // ═══════════════════════════════════════════════════════════
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                CurioColors.CoralBlush.copy(alpha = 0.12f),
-                                CurioColors.CoralBlush.copy(alpha = 0.04f),
-                                MaterialTheme.colorScheme.background
-                            )
-                        )
-                    )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .statusBarsPadding()
-                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -285,74 +271,68 @@ fun HomeScreen(navController: NavController) {
             // ═══════════════════════════════════════════════════════════
             // 4. Category Quick-Jump Grid — icon-only pills
             // ═══════════════════════════════════════════════════════════
-            StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Fast) {
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    StaggeredItem(index = 0) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Explore by category",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    if (selectedCategory != null) {
+                        Surface(
+                            onClick = { selectedCategory = null },
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant
                         ) {
                             Text(
-                                text = "Explore by category",
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                ),
-                                color = MaterialTheme.colorScheme.onBackground
+                                text = "Clear",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                             )
-                            if (selectedCategory != null) {
-                                Surface(
-                                    onClick = { selectedCategory = null },
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = MaterialTheme.colorScheme.surfaceVariant
-                                ) {
-                                    Text(
-                                        text = "Clear",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                                    )
-                                }
-                            }
                         }
-                        Spacer(Modifier.height(14.dp))
                     }
-                    StaggeredItem(index = 1) {
-                        // Fixed 4-column grid — 3 rows for 11 items (4+4+3).
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(4),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp),
-                            userScrollEnabled = false,
-                            modifier = Modifier
-                                .height(176.dp)
-                                .fillMaxWidth()
-                        ) {
-                            item("wildcard") {
-                                CategoryPill(
-                                    label = "Surprise",
-                                    glyph = CurioIcons.Casino,
-                                    accent = CurioColors.CoralBlush,
-                                    selected = selectedCategory?.id == CategoryId.WILDCARD,
-                                    onClick = {
-                                        selectedCategory = if (selectedCategory?.id == CategoryId.WILDCARD) null
-                                        else CurioCategories.byId(CategoryId.WILDCARD)
-                                    }
-                                )
+                }
+                Spacer(Modifier.height(12.dp))
+                // 4-column grid — 3 rows for 11 items (4+4+3)
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(4),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    userScrollEnabled = false,
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                ) {
+                    item("wildcard") {
+                        CategoryPill(
+                            label = "Surprise",
+                            glyph = CurioIcons.Casino,
+                            accent = CurioColors.CoralBlush,
+                            selected = selectedCategory?.id == CategoryId.WILDCARD,
+                            onClick = {
+                                selectedCategory = if (selectedCategory?.id == CategoryId.WILDCARD) null
+                                else CurioCategories.byId(CategoryId.WILDCARD)
                             }
-                            itemsIndexed(CurioCategories.visible) { _, cat ->
-                                if (cat.id != CategoryId.WILDCARD) {
-                                    CategoryPill(
-                                        label = cat.displayName,
-                                        glyph = cat.iconGlyph,
-                                        accent = cat.accent,
-                                        selected = selectedCategory?.id == cat.id,
-                                        onClick = {
-                                            selectedCategory = if (selectedCategory?.id == cat.id) null else cat
-                                        }
-                                    )
+                        )
+                    }
+                    itemsIndexed(CurioCategories.visible) { _, cat ->
+                        if (cat.id != CategoryId.WILDCARD) {
+                            CategoryPill(
+                                label = cat.displayName,
+                                glyph = cat.iconGlyph,
+                                accent = cat.accent,
+                                selected = selectedCategory?.id == cat.id,
+                                onClick = {
+                                    selectedCategory = if (selectedCategory?.id == cat.id) null else cat
                                 }
-                            }
+                            )
                         }
                     }
                 }
