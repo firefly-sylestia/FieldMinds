@@ -1,25 +1,25 @@
 package com.curio.app.features.home
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -36,6 +36,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -51,7 +52,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
@@ -59,11 +62,12 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.CurioStreakPill
+import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -71,29 +75,60 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 /**
- * Home — clean, minimal, no gradients.
+ * Home — clean, minimal, personalized.
  *
- * Layout (top to bottom):
- *   1. Compact top bar: ☰  Curio ✦  👤
- *   2. Welcome: greeting + streak + quick stats
- *   3. Compact hero banner: selected category + shuffle CTA
- *   4. Category grid: icon-only color pills
- *   5. Recently explored
+ * Layout (top to bottom), tuned for 360×800 dp:
+ *   1. **Minimal top bar** — only the avatar pill on the right; tapping
+ *      it opens the Profile drawer menu.
+ *   2. **Greeting hero** — large personalized greeting using the user's
+ *      display name (e.g. "Good afternoon, Alex"). Subtitle row with a
+ *      small streak badge if active.
+ *   3. **Quest card** — a flatter, more legible hero card. When a category
+ *      is selected it shows the chosen category's accent + CTA "Spin for
+ *      $name". Otherwise it shows the wildcard + a "Spin" CTA. Re-uses
+ *   4. **Stats strip** — four compact stat pills: Streak · Saved · Recent
+ *      · Categories.
+ *   5. **Categories chip row** — horizontally-scrollable color chips.
+ *      Each chip shows the family color, category glyph, and label.
+ *      Tapping sets the active category.
+ *   6. **Recently explored** — header row + 2-col grid of recent entry
+ *      cards, or a beautiful empty-state card prompting the first spin.
+ *   7. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
+ *      card suggesting the user try a daily spin reminder, navigating to
+ *      Settings.
+ *
+ *  The screen still hosts the `ModalNavigationDrawer` for secondary
+ *  navigation (Profile, History, Manage Categories, Replay Intro).
+ *
+ *  Top paddings tightened: `statusBarsPadding()` + `vertical = 4dp` for the
+ *  bar, `vertical = 6dp` between sections — keeps the "no empty top"
+ *  guarantee we established in Spin/TopicReveal.
  */
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
+    val displayName = remember { AppPreferences.getDisplayName(context) }
     var selectedCategory by remember { mutableStateOf<CurioCategory?>(null) }
     val streakDays = StreakTracker.getStreak(context)
+    val reminderEnabled = remember { AppPreferences.isReminderEnabled(context) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
-        value = try { CurioRepositoryHolder.repo.getAll().take(4) } catch (e: Exception) {
-            android.util.Log.e("HomeScreen", "Failed to load recent entries", e)
-            emptyList()
+        try {
+            value = CurioRepositoryHolder.repo.getAll().take(4)
+        } catch (_: Exception) {
+            value = emptyList()
         }
     }
+    var totalSaved by remember { mutableIntStateOf(0) }
+    LaunchedEffect(Unit) {
+        try {
+            totalSaved = CurioRepositoryHolder.repo.count()
+        } catch (_: Exception) {}
+    }
+
+    val navInsets = WindowInsets.navigationBars.asPaddingValues()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -113,191 +148,302 @@ fun HomeScreen(navController: NavController) {
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
         ) {
-            // ── 1. Top Bar ───────────────────────────────────────────
+            // ── 1. Minimal top bar — just the avatar ────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Surface(
-                    onClick = { scope.launch { drawerState.open() } },
-                    shape = RoundedCornerShape(14.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+                // Compact "Drawer open + logomark" hint — tiny, non-intrusive.
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    CurioIcon(
-                        CurioIcons.Menu, "Menu",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 24.dp, modifier = Modifier.padding(8.dp)
-                    )
+                    Surface(
+                        onClick = { scope.launch { drawerState.open() } },
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            CurioIcon(
+                                CurioIcons.Menu, "Open menu",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                size = 20.dp
+                            )
+                        }
+                    }
                 }
-
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        "Curio",
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.CoralBlush, size = 18.dp)
-                }
-
-                // Flat avatar — no gradient ring
+                // Avatar pill on the right (taps to Profile)
                 Surface(
                     onClick = { navController.navigate(CurioRoutes.PROFILE) },
                     shape = CircleShape,
-                    color = CurioColors.CoralBlush.copy(alpha = 0.15f),
-                    modifier = Modifier.size(38.dp)
+                    color = CurioColors.CoralBlush.copy(alpha = 0.18f),
+                    modifier = Modifier.size(40.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        CurioIcon(CurioIcons.Person, "Profile", tint = CurioColors.CoralBlush, size = 20.dp)
-                    }
-                }
-            }
-
-            // ── 2. Welcome ───────────────────────────────────────────
-            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp)) {
-                MorphEntrance(delayMs = 80) {
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(
-                            greetingForNow(),
-                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onBackground
+                        CurioIcon(
+                            CurioIcons.Person, "Profile",
+                            tint = CurioColors.CoralBlush,
+                            size = 20.dp
                         )
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CurioStreakPill(days = streakDays)
-                            if (streakDays <= 0) {
-                                Text(
-                                    "Discover something new today",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Spacer(Modifier.weight(1f))
-                            if (recentEntries.isNotEmpty()) {
-                                Surface(shape = RoundedCornerShape(12.dp), color = CurioColors.Sage.copy(alpha = 0.10f)) {
-                                    Row(
-                                        Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        CurioIcon(CurioIcons.Inventory2, null, tint = CurioColors.Sage, size = 14.dp)
-                                        Text("${recentEntries.size} saved", style = MaterialTheme.typography.labelSmall, color = CurioColors.Sage)
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(4.dp))
 
-            // ── 3. Compact Hero Banner ───────────────────────────────
-            MorphEntrance(delayMs = 100) {
-                val accent = selectedCategory?.accent ?: CurioColors.CoralBlush
+            // ── 2. Greeting hero ────────────────────────────────────────
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 4.dp)
+            ) {
+                MorphEntrance(delayMs = 60) {
+                    Text(
+                        text = greetingForNow(displayName),
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            lineHeight = 36.sp
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = greetingSubtitle(streakDays),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            // ── 3. Quest card ───────────────────────────────────────────
+            MorphEntrance(delayMs = 140) {
                 val chosen = selectedCategory
+                val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
+                val accent = if (isWildcard) CurioColors.CoralBlush else chosen!!.accent
                 Surface(
-                    shape = RoundedCornerShape(24.dp),
-                    color = accent.copy(alpha = 0.12f),
+                    onClick = {
+                        if (chosen == null || chosen.id == CategoryId.WILDCARD) {
+                            navController.navigate(CurioRoutes.SPIN)
+                        } else {
+                            navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
+                        }
+                    },
+                    shape = RoundedCornerShape(28.dp),
+                    color = accent.copy(alpha = 0.14f),
+                    shadowElevation = 0.dp,
+                    tonalElevation = 1.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
+                        .height(168.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                chosen?.displayName ?: "Discover something",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Spacer(Modifier.height(2.dp))
-                            Text(
-                                if (chosen != null) "Shuffle for a topic" else "Pick a category to get started",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Surface(
-                            onClick = {
-                                if (chosen == null) navController.navigate(CurioRoutes.PICKER)
-                                else navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
-                            },
-                            shape = RoundedCornerShape(50),
-                            color = accent
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        // Watermark glyph
+                        CurioIcon(
+                            name = if (chosen != null) chosen.iconGlyph else CurioIcons.Casino,
+                            contentDescription = null,
+                            tint = accent.copy(alpha = 0.18f),
+                            size = 140.dp,
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 8.dp)
+                        )
+                        // Content
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(20.dp),
+                            verticalArrangement = Arrangement.SpaceBetween
                         ) {
                             Row(
-                                Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                CurioIcon(
-                                    if (chosen != null) CurioIcons.Casino else CurioIcons.ArrowForward,
-                                    null,
-                                    tint =                                    if (chosen != null) CurioColors.DeepPlum else Color.White,
-                                    size = 16.dp
+                                Box(
+                                    modifier = Modifier
+                                        .width(3.dp)
+                                        .height(16.dp)
+                                        .background(accent, RoundedCornerShape(2.dp))
                                 )
                                 Text(
-                                    if (chosen != null) "Shuffle" else "Start",
-                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                                    color =                                    if (chosen != null) CurioColors.DeepPlum else Color.White
+                                    text = "TODAY'S QUEST",
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        fontWeight = FontWeight.ExtraBold,
+                                        letterSpacing = 1.2.sp
+                                    ),
+                                    color = accent
                                 )
+                            }
+                            Column {
+                                Text(
+                                    text = chosen?.displayName ?: "Spin the wheel",
+                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Spacer(Modifier.height(2.dp))
+                                Text(
+                                    text = if (chosen != null) "A new ${chosen.displayName.lowercase()} topic awaits."
+                                        else "A new topic — picked just for you.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Surface(
+                                    shape = RoundedCornerShape(50),
+                                    color = accent
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        CurioIcon(
+                                            CurioIcons.Casino, null,
+                                            tint = Color.White,
+                                            size = 16.dp
+                                        )
+                                        Text(
+                                            text = if (isWildcard) "Shuffle" else "Spin ${chosen!!.displayName}",
+                                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                                            color = Color.White
+                                        )
+                                    }
+                                }
+                                Spacer(Modifier.weight(1f))
                             }
                         }
                     }
                 }
             }
 
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(14.dp))
 
-            // ── 4. Category Grid ─────────────────────────────────────
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                Text(
-                    "Explore by category",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onBackground
+            // ── 4. Stats strip — 4 compact pills ────────────────────────
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                StatPill(
+                    modifier = Modifier.weight(1f),
+                    glyph = "local_fire_department",
+                    value = "$streakDays",
+                    label = "Streak",
+                    tint = CurioColors.CoralBlush
                 )
-                Spacer(Modifier.height(12.dp))
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    userScrollEnabled = false,
-                    modifier = Modifier.height(200.dp).fillMaxWidth()
+                StatPill(
+                    modifier = Modifier.weight(1f),
+                    glyph = CurioIcons.Inventory2,
+                    value = "$totalSaved",
+                    label = "Saved",
+                    tint = CurioColors.Sage
+                )
+                StatPill(
+                    modifier = Modifier.weight(1f),
+                    glyph = CurioIcons.History,
+                    value = "${recentEntries.size}",
+                    label = "Recent",
+                    tint = CurioColors.Lilac
+                )
+                StatPill(
+                    modifier = Modifier.weight(1f),
+                    glyph = CurioIcons.Palette,
+                    value = "${CurioCategories.visible.size}",
+                    label = "Lanes",
+                    tint = CurioColors.Teal
+                )
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            // ── 5. Categories chip row ──────────────────────────────────
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    item("wildcard") {
-                        CategoryPill(
-                            label = "Surprise", glyph = CurioIcons.Casino, accent = CurioColors.CoralBlush,
-                            selected = selectedCategory?.id == CategoryId.WILDCARD,
-                            onClick = {
-                                selectedCategory = if (selectedCategory?.id == CategoryId.WILDCARD) null
-                                else CurioCategories.byId(CategoryId.WILDCARD)
-                            }
+                    Text(
+                        "Explore categories",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Surface(
+                        onClick = { navController.navigate(CurioRoutes.PICKER) },
+                        shape = RoundedCornerShape(50),
+                        color = Color.Transparent
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            Text(
+                                "All",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            CurioIcon(
+                                CurioIcons.ArrowForward, null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                size = 14.dp
+                            )
+                        }
+                    }
+                }
+                Spacer(Modifier.height(10.dp))
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(end = 8.dp)
+                ) {
+                    // Surprise wildcard pinned first
+                    item(key = "wildcard") {
+                        CategoryChip(
+                            name = "Surprise",
+                            glyph = CurioIcons.Casino,
+                            accent = CurioColors.CoralBlush,
+                            selected = selectedCategory == null,
+                            onClick = { selectedCategory = null }
                         )
                     }
-                    itemsIndexed(CurioCategories.visible) { _, cat ->
+                    items(items = CurioCategories.visible, key = { it.id.name }) { cat ->
                         if (cat.id != CategoryId.WILDCARD) {
-                            CategoryPill(
-                                label = cat.displayName, glyph = cat.iconGlyph, accent = cat.accent,
+                            CategoryChip(
+                                name = cat.displayName,
+                                glyph = cat.iconGlyph,
+                                accent = cat.accent,
                                 selected = selectedCategory?.id == cat.id,
-                                onClick = { selectedCategory = if (selectedCategory?.id == cat.id) null else cat }
+                                onClick = {
+                                    selectedCategory =
+                                        if (selectedCategory?.id == cat.id) null else cat
+                                }
                             )
                         }
                     }
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // ── 5. Recently Explored ─────────────────────────────────
+            // ── 6. Recently explored ──────────────────────────────────
             StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Base) {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     StaggeredItem(index = 0) {
@@ -306,75 +452,55 @@ fun HomeScreen(navController: NavController) {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                "Recently explored",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                            Column {
+                                Text(
+                                    "Recently explored",
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    "Your last few spins",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                             if (recentEntries.isNotEmpty()) {
                                 Surface(
                                     onClick = { navController.navigate(CurioRoutes.CABINET) },
-                                    shape = RoundedCornerShape(12.dp), color = Color.Transparent
+                                    shape = RoundedCornerShape(50),
+                                    color = Color.Transparent
                                 ) {
-                                    Text(
-                                        "See all", style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(4.dp)
-                                    )
-                                }
-                            }
-                        }
-                        Spacer(Modifier.height(12.dp))
-                    }
-                    StaggeredItem(index = 1) {
-                        if (recentEntries.isEmpty()) {
-                            Surface(
-                                shape = RoundedCornerShape(20.dp),
-                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Column(
-                                    Modifier.fillMaxWidth().padding(28.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                                ) {
-                                    CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.CoralBlush.copy(alpha = 0.4f), size = 40.dp)
-                                    Text(
-                                        "Your journey starts here",
-                                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                                        color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        "Spin the wheel to discover your first topic — then capture what you find",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center
-                                    )
-                                    val sel = selectedCategory
-                                    Surface(
-                                        onClick = {
-                                            if (sel == null) navController.navigate(CurioRoutes.PICKER)
-                                            else navController.navigate(CurioRoutes.spinWithCategory(sel.id.routeSlug))
-                                        },
-                                        shape = RoundedCornerShape(24.dp), color = CurioColors.CoralBlush
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(2.dp)
                                     ) {
-                                        Row(
-                                            Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                                        ) {
-                                            CurioIcon(CurioIcons.Casino, null, tint = CurioColors.DeepPlum, size = 16.dp)
-                                            Text(
-                                                if (sel != null) "Spin ${sel.displayName}" else "Pick a category & spin",
-                                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                                                color = CurioColors.DeepPlum
-                                            )
-                                        }
+                                        Text(
+                                            "Open Cabinet",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                        CurioIcon(
+                                            CurioIcons.ArrowForward, null,
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            size = 14.dp
+                                        )
                                     }
                                 }
                             }
+                        }
+                        Spacer(Modifier.height(10.dp))
+                    }
+                    StaggeredItem(index = 1) {
+                        if (recentEntries.isEmpty()) {
+                            FirstTimeEmpty(
+                                onPickCategory = { navController.navigate(CurioRoutes.PICKER) },
+                                onSpinSurprise = { navController.navigate(CurioRoutes.SPIN) }
+                            )
                         } else {
-                            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                items(recentEntries, key = { it.id }) { entry ->
-                                    RecentEntryCard(
+                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                recentEntries.forEach { entry ->
+                                    RecentEntryRow(
                                         entry = entry,
                                         onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) }
                                     )
@@ -385,72 +511,312 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            Spacer(Modifier.height(40.dp))
+            // ── 7. Reminder nudge (when reminders off) ─────────────────
+            if (!reminderEnabled) {
+                Spacer(Modifier.height(16.dp))
+                ReminderNudgeCard(
+                    onTap = { navController.navigate(CurioRoutes.SETTINGS) }
+                )
+            }
+
+            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(navInsets.calculateBottomPadding()))
         }
     }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// Category Pill
+// Stat pill (compact)
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun CategoryPill(label: String, glyph: String, accent: Color, selected: Boolean, onClick: () -> Unit) {
+private fun StatPill(
+    modifier: Modifier = Modifier,
+    glyph: String,
+    value: String,
+    label: String,
+    tint: Color
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp),
+        color = tint.copy(alpha = 0.10f)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            CurioIcon(glyph, null, tint = tint, size = 18.dp)
+            Text(
+                value,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                color = tint,
+                maxLines = 1
+            )
+            Text(
+                label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Category chip — pill with leading icon + label
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun CategoryChip(
+    name: String,
+    glyph: String,
+    accent: Color,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.10f else 1f,
-        animationSpec = CurioMotion.Springs.Snappy, label = "catPillScale"
+        targetValue = if (selected) 1.04f else 1f,
+        animationSpec = CurioMotion.Springs.Snappy,
+        label = "catChipScale"
     )
     Surface(
-        onClick = onClick, shape = RoundedCornerShape(50), color = accent,
-        shadowElevation = if (selected) 6.dp else 2.dp,
+        onClick = onClick,
+        shape = RoundedCornerShape(22.dp),
+        color = if (selected) accent.copy(alpha = 0.85f) else accent.copy(alpha = 0.15f),
+        shadowElevation = if (selected) 4.dp else 0.dp,
         modifier = Modifier.scale(scale)
     ) {
-        Box(Modifier.size(52.dp), contentAlignment = Alignment.Center) {
-            CurioIcon(glyph, label, tint = Color.White, size = 24.dp)
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            CurioIcon(
+                glyph, null,
+                tint = if (selected) Color.White else accent,
+                size = 18.dp
+            )
+            Text(
+                text = name,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
+                ),
+                color = if (selected) Color.White else accent
+            )
         }
     }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// Recent Entry Card
+// Recent entry row (compact)
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun RecentEntryCard(entry: CurioEntry, onClick: () -> Unit) {
+private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
     val cat = CurioCategories.byId(entry.topic.categoryId)
     Surface(
-        onClick = onClick, shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surface, shadowElevation = 2.dp, tonalElevation = 1.dp,
-        modifier = Modifier.width(160.dp)
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 1.dp,
+        tonalElevation = 1.dp,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Column(Modifier.padding(14.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Box(Modifier.size(8.dp).clip(CircleShape).background(cat.accent))
-                Text(cat.displayName, style = MaterialTheme.typography.labelSmall, color = cat.accent, maxLines = 1)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Color swatch with category glyph
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(cat.accent.copy(alpha = 0.18f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    cat.iconGlyph, null, tint = cat.accent, size = 22.dp
+                )
             }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                entry.topic.name,
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.colorScheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                entry.bodyPreview,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    entry.topic.name,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    "${cat.displayName} · ${entry.capturedAtDaysAgoLabel()}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+            CurioIcon(
+                CurioIcons.ArrowForward, "Open capture",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                size = 18.dp
             )
         }
     }
 }
 
+private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = capturedAtDaysAgo) {
+    0 -> "today"
+    1 -> "yesterday"
+    else -> "${d}d ago"
+}
+
 // ═══════════════════════════════════════════════════════════════════════
-// Navigation Drawer — flat, no gradients
+// First-time empty state
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun FirstTimeEmpty(
+    onPickCategory: () -> Unit,
+    onSpinSurprise: () -> Unit
+) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(
+                CurioIcons.AutoAwesome, null,
+                tint = CurioColors.CoralBlush,
+                size = 36.dp
+            )
+            Text(
+                "Your journey starts here",
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                "Spin the wheel to discover your first topic. Capture what you find and it'll land here.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(top = 4.dp)
+            ) {
+                Surface(
+                    onClick = onSpinSurprise,
+                    shape = RoundedCornerShape(50),
+                    color = CurioColors.CoralBlush
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(CurioIcons.Casino, null, tint = Color.White, size = 16.dp)
+                        Text(
+                            "Surprise me",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            color = Color.White
+                        )
+                    }
+                }
+                Surface(
+                    onClick = onPickCategory,
+                    shape = RoundedCornerShape(50),
+                    color = Color.Transparent,
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    Text(
+                        "Pick a lane",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Reminder nudge card (only when reminder OFF)
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun ReminderNudgeCard(onTap: () -> Unit) {
+    Surface(
+        onClick = onTap,
+        shape = RoundedCornerShape(20.dp),
+        color = CurioColors.ButterYellow.copy(alpha = 0.18f),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(CurioColors.ButterYellow.copy(alpha = 0.45f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    CurioIcons.Notifications, null,
+                    tint = CurioColors.DeepPlum,
+                    size = 18.dp
+                )
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Try a daily spin reminder",
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = CurioColors.DeepPlum
+                )
+                Text(
+                    "Pick a time → we nudge you to discover",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = CurioColors.DeepPlum.copy(alpha = 0.78f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            CurioIcon(
+                CurioIcons.ArrowForward, "Open settings",
+                tint = CurioColors.DeepPlum.copy(alpha = 0.7f),
+                size = 18.dp
+            )
+        }
+    }
+}
+
+// Drawer (kept; minor polish)
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
 private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
     val context = LocalContext.current
+    val displayName = AppPreferences.getDisplayName(context)
     ModalDrawerSheet(
         modifier = Modifier.width(300.dp),
         drawerContainerColor = MaterialTheme.colorScheme.surface,
@@ -459,23 +825,43 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
         Box(
             Modifier
                 .fillMaxWidth()
-                .background(CurioColors.CoralBlush.copy(alpha = 0.08f))
+                .background(CurioGradients.WildcardGradientStops.first().copy(alpha = 0.10f))
                 .padding(horizontal = 20.dp, vertical = 24.dp)
         ) {
-            Column {
-                CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.CoralBlush, size = 32.dp)
-                Spacer(Modifier.height(8.dp))
-                Text("Curio", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
-                Text("Stay curious", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.CoralBlush, size = 28.dp)
+                    Text(
+                        "Curio",
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                Text(
+                    "Hi $displayName",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Spacer(Modifier.height(8.dp))
-        LazyColumn(Modifier.weight(1f).padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            item { DrawerNavItem(CurioIcons.Person, "Profile & Settings") { onNavigate(CurioRoutes.PROFILE) } }
-            item { DrawerNavItem(CurioIcons.History, "Topic History") { onNavigate(CurioRoutes.TOPIC_HISTORY) } }
-            item { DrawerNavItem(CurioIcons.DragHandle, "Manage Categories") { onNavigate(CurioRoutes.MANAGE_CATEGORIES) } }
-            item {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            item("profile") {
+                DrawerNavItem(CurioIcons.Person, "Profile & Settings") { onNavigate(CurioRoutes.PROFILE) }
+            }
+            item("history") {
+                DrawerNavItem(CurioIcons.History, "Topic History") { onNavigate(CurioRoutes.TOPIC_HISTORY) }
+            }
+            item("manage") {
+                DrawerNavItem(CurioIcons.DragHandle, "Manage Categories") { onNavigate(CurioRoutes.MANAGE_CATEGORIES) }
+            }
+            item("replay") {
                 DrawerNavItem(CurioIcons.Replay, "Replay Intro") {
                     com.curio.app.features.onboarding.CurioOnboardingState.reset(context)
                     onNavigate(CurioRoutes.ONBOARDING)
@@ -483,24 +869,58 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
             }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
-            Text("v1.0.0", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
-            Text("Made with curiosity", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+        Column(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+            Text(
+                "v1.0.0",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+            )
+            Text(
+                "Made with curiosity",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+            )
         }
     }
 }
 
 @Composable
 private fun DrawerNavItem(icon: String, label: String, onClick: () -> Unit) {
-    Surface(onClick = onClick, shape = RoundedCornerShape(14.dp), color = Color.Transparent, modifier = Modifier.fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
+        color = Color.Transparent,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
             CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
             Text(label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
 
-private fun greetingForNow(): String {
+// ═══════════════════════════════════════════════════════════════════════
+// Greeting helpers
+// ═══════════════════════════════════════════════════════════════════════
+
+private fun greetingForNow(displayName: String): String {
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-    return when (hour) { in 5..11 -> "Good morning"; in 12..16 -> "Good afternoon"; in 17..21 -> "Good evening"; else -> "Welcome back" }
+    val greeting = when (hour) {
+        in 5..11 -> "Good morning"
+        in 12..16 -> "Good afternoon"
+        in 17..21 -> "Good evening"
+        else -> "Welcome back"
+    }
+    return "$greeting, $displayName"
+}
+
+private fun greetingSubtitle(streakDays: Int): String = when {
+    streakDays > 0 -> "You're on a $streakDays-day streak. Spin to keep it going."
+    else -> "Discover something new today."
 }
