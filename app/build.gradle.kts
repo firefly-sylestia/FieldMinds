@@ -15,25 +15,22 @@ plugins {
 // Local dev (no env vars set): falls back to the default debug signing config,
 // so `gradlew assembleRelease` still produces an installable-but-debug-keyed
 // APK. CI: produces a properly-signed release APK.
-val keyStorePath: String? = System.getenv("KEYSTORE_PATH")?.trim()
-val keyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")?.trim()
-val keyAlias: String? = System.getenv("KEY_ALIAS")?.trim()
-val keyPassword: String? = System.getenv("KEY_PASSWORD")?.trim()
+val keyStorePath: String? = System.getenv("KEYSTORE_PATH")?.trim()?.takeIf { it.isNotEmpty() }
+val keyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")?.trim()?.takeIf { it.isNotEmpty() }
+val keyAlias: String? = System.getenv("KEY_ALIAS")?.trim()?.takeIf { it.isNotEmpty() }
+val keyPassword: String? = System.getenv("KEY_PASSWORD")?.trim()?.takeIf { it.isNotEmpty() }
 
-// isNullOrBlank() catches BOTH "env var not set" (null) AND "secret is
-// configured but empty" ("" — which is how GitHub Actions exports a
-// missing ${{ secrets.X }} reference). .trim() strips any accidental
-// whitespace. Without the blank check, an empty secret passes != null,
-// the release signingConfig is created with blank values, and AGP rejects
-// it at packaging with "SigningConfig release is missing required property
-// keyPassword". Falling back to debug signing lets the build go green; to
-// get a properly-signed release APK, populate the 4 KEYSTORE_* secrets in
-// repo Settings > Secrets and variables > Actions.
+// Only create release signing if ALL four secrets are present and non-empty.
+// GitHub Actions exports missing secrets as empty strings, so .takeIf { it.isNotEmpty() }
+// converts them back to null. Without this guard, AGP would create a signing config
+// with null/empty values and fail at package time. Falling back to debug signing
+// lets builds succeed locally; to get a signed release APK, populate all 4 KEYSTORE_*
+// secrets in repo Settings > Secrets and variables > Actions.
 val hasReleaseSigningMaterial: Boolean =
-    !keyStorePath.isNullOrBlank() &&
-    !keyStorePassword.isNullOrBlank() &&
-    !keyAlias.isNullOrBlank() &&
-    !keyPassword.isNullOrBlank()
+    keyStorePath != null &&
+    keyStorePassword != null &&
+    keyAlias != null &&
+    keyPassword != null
 
 if (!hasReleaseSigningMaterial) {
     logger.warn(
@@ -64,15 +61,15 @@ android {
 
     signingConfigs {
         // Only create the release signing config when ALL four env vars are
-        // present and valid. When any are missing (e.g. local dev), we skip — the
+        // present and non-empty. When any are missing (e.g. local dev), we skip — the
         // release buildType falls back to the default debug signing below so
         // local `gradlew assembleRelease` still works for testing.
-        if (hasReleaseSigningMaterial) {
+        if (hasReleaseSigningMaterial && keyStorePath != null && keyStorePassword != null && keyAlias != null && keyPassword != null) {
             create("release") {
-                storeFile = file(keyStorePath!!)
-                storePassword = keyStorePassword!!
-                this.keyAlias = keyAlias!!
-                this.keyPassword = keyPassword!!
+                storeFile = file(keyStorePath)
+                storePassword = keyStorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
             }
         }
     }
