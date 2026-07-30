@@ -3149,6 +3149,547 @@ ALBUMS = [
         "Listen to 'Hoppípolla' — the title means 'jumping in puddles' in Icelandic. The strings were recorded by a youth orchestra in a Reykjavík school hall. Then 'Sæglópur' — the song sounds like drowning — a slow piano intro, then a massive distorted bass drop at 4:00 that changes the song's language from Hopelandic to actual Icelandic.",
         ["Post-Rock", "Ambient", "Icelandic", "2000s"], 2
     ),
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # BATCH 8 — World, Metal, Country, Folk, Blues (~90 albums)
+    # ═══════════════════════════════════════════════════════════════════════
+    # ── WORLD ──
+    (
+        "album-buena-vista-social-club", "Album",
+        "Buena Vista Social Club",
+        "Ry Cooder 1997 — a session album recorded in Havana with forgotten Cuban musicians aged 60–90, including Ibrahim Ferrer, Compay Segundo, and Omara Portuondo. Cooder had planned to record a Malian-Cuban collaboration; when the African musicians couldn't get visas, he asked local musicians to fill in. The oldest participant was 92.",
+        "Buena Vista Social Club (1997) end-to-end", 60,
+        "Listen to 'Chan Chan' — Compay Segundo was 89 when he recorded his vocal; the song is a simple son about two lovers walking to the beach. Then 'Dos Gardenias' — a bolero written in 1945, sung by Omara Portuondo at age 67. The album resurrected the careers of every musician on it. Ferrer was shining shoes in Havana when Cooder found him.",
+        ["Son Cubano", "Cuban", "1990s"], 1
+    ),
+    (
+        "album-orchestra-baobab-pirates-choice", "Album",
+        "Pirate's Choice",
+        "Orchestra Baobab 1982 — the Senegalese band's masterpiece, blending Cuban son, Wolof rhythms, and Congolese rumba into a sound that defined West African nightlife. The band was named after the Baobab Club in Dakar where they were the house band. The album was recorded in two days and promptly went out of print for 20 years.",
+        "Pirate's Choice (1982) end-to-end", 74,
+        "Listen to 'Utrus Horas' — the title is Wolof for 'the same hours.' The guitar solo by Barthelemy Attisso was improvised in one take. Then 'Mouhamadou Bamba' — a tribute to the Senegalese Sufi saint, with the full horn section playing a melody that sounds like a New Orleans funeral march transposed to the Sahel.",
+        ["World", "Senegalese", "1980s"], 2
+    ),
+    (
+        "album-youssou-ndour-egypt", "Album",
+        "Egypt",
+        "Youssou N'Dour 2004 — a Senegalese pop star's tribute to the Sufi Islam of his childhood, recorded in Dakar and Cairo with Egyptian orchestral musicians. The album blends mbalax rhythms with Arabic maqam scales. It was initially banned in parts of Senegal for mixing sacred and popular music, but won a Grammy anyway.",
+        "Egypt (2004) end-to-end", 59,
+        "Listen to 'Allah' — the opening track sets a 12th-century Sufi poem to a Dakar street rhythm. N'Dour's voice soars into falsetto over a 20-piece Egyptian string section. Then 'Shukran Bamba' — a praise song for Cheikh Amadou Bamba, the founder of the Mouride Sufi order. The qanun and kora play the same melody in different tuning systems.",
+        ["World", "Senegalese", "2000s"], 2
+    ),
+    (
+        "album-mulatu-astatke-ethio-jazz", "Album",
+        "Éthiopiques Vol. 4: Mulatu Astatke",
+        "Mulatu Astatke 1998 — a compilation of the Ethiopian vibraphonist's 1969-1974 recordings, the first Ethiopian musician to study at Berklee. Astatke invented Ethio-jazz by fusing traditional Ethiopian scales with American jazz harmony and Latin rhythms. He was the first African student at Berklee College of Music in Boston.",
+        "Éthiopiques Vol. 4 (1998) end-to-end", 55,
+        "Listen to 'Yèkèrmo Sèw' — the title means 'a man of experience and knowledge.' The melody uses a pentatonic scale that exists in both Ethiopian and Japanese traditional music. Then 'Tezeta' — the title means 'memory' or 'nostalgia' in Amharic. Astatke's vibraphone floats over a rhythm section playing in 6/8 while the horns play in 4/4.",
+        ["Ethio-Jazz", "World", "Ethiopian", "1970s"], 1
+    ),
+    (
+        "album-salif-keita-soro", "Album",
+        "Soro",
+        "Salif Keita 1987 — the 'Golden Voice of Africa' recording in Paris after being exiled from Mali for his albinism (considered a curse by some). Produced by Ibrahima Sylla, who brought in synthesizers and drum machines to modernize Keita's traditional Mande griot music. The result was Afro-pop before the term existed.",
+        "Soro (1987) end-to-end", 50,
+        "Listen to 'Soro (Afriki)' — Keita's voice enters at full volume with no buildup, as is traditional in Mande praise-singing. Then 'Sina (Soumbouya)' — the kora player is Toumani Diabaté, then 21 years old, from a family of griots going back 71 generations. The drum programming was done on a Roland TR-808.",
+        ["World", "Malian", "1980s"], 2
+    ),
+    (
+        "album-oumou-sangare-moussolou", "Album",
+        "Moussolou",
+        "Oumou Sangaré 1991 — the debut album from the Malian singer that sold 200,000 copies in West Africa on cassette. Sangaré was 21 and singing Wasulu music, traditionally women's music from southern Mali, amplified by electric guitar and trap drums. The lyrics advocate for women's rights in a polygamous society.",
+        "Moussolou (1991) end-to-end", 55,
+        "Listen to 'Diaraby Nene' — the title means 'the sweetness of love.' Sangaré's vocal line is doubled by a single violin played by a member of the National Orchestra of Mali. Then 'Moussolou' — the title track is a direct address to women, telling them to stand up against forced marriage. Sangaré wrote it after her mother was abandoned by her polygamous husband.",
+        ["World", "Malian", "1990s"], 1
+    ),
+    (
+        "album-franco-20eme-anniversaire", "Album",
+        "Franco et le TP OK Jazz — 20ème Anniversaire",
+        "Franco Luambo Makiadi 1976 — a 6-LP set recorded live over 6 nights in Kinshasa, celebrating 20 years of Congo's greatest band. Franco's guitar style, known as 'mi-solo,' blends rhythm and lead into a single endlessly flowing line. The band included 30 musicians, and the lineup changed every night.",
+        "20ème Anniversaire (1976) — first disc", 60,
+        "Listen to 'Mario' — a 14-minute song about a gigolo that became a pan-African anthem. Franco narrates the story over a two-chord groove that never changes. Then 'AZDA' — a tribute to a bus company. Congolese rumba is built on a guitar pattern that cycles forever; the listener's job is to find the micro-variations.",
+        ["World", "Congolese Rumba", "Congolese", "1970s"], 2
+    ),
+    (
+        "album-jorge-ben-africa-brasil", "Album",
+        "África Brasil",
+        "Jorge Ben 1976 — a Brazilian samba-rock album that linked Black Brazilian identity to African roots. Ben played a custom guitar with only four strings because he preferred the sound. The album was recorded during Brazil's military dictatorship; the Black pride messaging was a coded form of political resistance.",
+        "África Brasil (1976) end-to-end", 40,
+        "Listen to 'Ponta de Lança Africano (Umbabarauma)' — the title refers to an African football striker. The rhythm is a samba beat played by a rock band. Then 'Xica da Silva' — a celebration of the 18th-century enslaved woman who became the wealthiest person in colonial Brazil. Ben sings her name like an incantation.",
+        ["World", "Brazilian", "Samba", "1970s"], 1
+    ),
+    (
+        "album-milton-nascimento-clube-da-esquina", "Album",
+        "Clube da Esquina",
+        "Milton Nascimento & Lô Borges 1972 — a double album recorded in a rented house in Belo Horizonte, Brazil, that invented a new Brazilian sound: Beatles-inspired songwriting filtered through Minas Gerais folk traditions and Catholic church music. Borges was 19 when he co-wrote half the songs.",
+        "Clube da Esquina (1972) end-to-end", 64,
+        "Listen to 'Tudo Que Você Podia Ser' — the song's melody was written on a piano that was out of tune. Then 'Nada Será Como Antes' — the title means 'nothing will be as it was before.' The vocal harmonies between Nascimento and Borges were recorded with both singers sharing a single microphone in an untreated room.",
+        ["World", "Brazilian", "MPB", "1970s"], 1
+    ),
+    (
+        "album-chico-buarque-construcao", "Album",
+        "Construção",
+        "Chico Buarque 1971 — a concept album about a construction worker who falls to his death from a building, recorded under Brazil's military dictatorship. Every song is a coded protest. Buarque's lyrics were so cleverly disguised that censors approved the album; only later did they realize every song was political.",
+        "Construção (1971) end-to-end", 32,
+        "Listen to the title track — every line ends with a proparoxytone word (a word stressed on the antepenultimate syllable), a formal constraint that makes the song feel like it's constantly off-balance. Then 'Deus Lhe Pague' — the title means 'God repay you,' a phrase beggars use. The song lists everything the narrator paid for and was never given.",
+        ["World", "Brazilian", "MPB", "1970s"], 1
+    ),
+    (
+        "album-elis-regina-tom-jobim-elis-and-tom", "Album",
+        "Elis & Tom",
+        "Elis Regina and Tom Jobim 1974 — the greatest Brazilian singer and the greatest Brazilian songwriter meeting in a Los Angeles studio. The sessions were tense: Jobim wanted total control, Regina wanted to interpret. At one point Regina said 'I hate you, Tom' and Jobim replied 'I hate you too.' Then they recorded 'Águas de Março' in a single flawless take.",
+        "Elis & Tom (1974) end-to-end", 38,
+        "Listen to 'Águas de Março' — the song lists everyday objects, each one a fragment of a larger mosaic. Jobim's English translation uses completely different objects from the Portuguese original. Then 'Corcovado' — recorded with the lights dimmed and Jobim at the piano. Regina's vocal at the final 'quiet nights of quiet stars' is a single breath held for 20 seconds.",
+        ["World", "Brazilian", "Bossa Nova", "1970s"], 1
+    ),
+    (
+        "album-mahmoud-ahmed-ethiopiques-vol-7", "Album",
+        "Éthiopiques Vol. 7: Mahmoud Ahmed",
+        "Mahmoud Ahmed 1975 — the golden voice of Ethiopian music. Recorded in Addis Ababa with the Ibex Band, a group of musicians from the Imperial Police Orchestra. Ahmed's melismatic style, stretching single syllables across multiple notes, comes from Ethiopian Orthodox church chanting. The albums were recorded during the last years of Emperor Haile Selassie's reign.",
+        "Éthiopiques Vol. 7 (1975) end-to-end", 60,
+        "Listen to 'Ere Mela Mela' — the 16-minute title track is built on a single pentatonic scale that repeats for the entire duration. Ahmed's voice rises and falls in waves. Then 'Atawurulign Lela' — the horn section plays in parallel fifths, a harmonic choice derived from Ethiopian church music. The rhythm section plays a 6/8 groove that never repeats.",
+        ["World", "Ethiopian", "1970s"], 2
+    ),
+    (
+        "album-ruben-blades-buscando-america", "Album",
+        "Buscando América",
+        "Rubén Blades 1984 — the Panamanian singer-composer's salsa album about Latin American identity, politics, and the disappeared. Recorded with the Seis del Solar band, who played salsa without the traditional horn section: just vibraphone, bass, piano, and percussion. Blades has a Harvard Law degree and ran for president of Panama.",
+        "Buscando América (1984) end-to-end", 44,
+        "Listen to 'Desapariciones' — a song about people 'disappeared' by Latin American dictatorships. The chorus lists the names and descriptions of the missing. Then 'El Padre Antonio y el Monaguillo Andrés' — a priest is assassinated during Mass while his altar boy watches. Blades wrote it after Archbishop Oscar Romero was murdered in El Salvador.",
+        ["World", "Salsa", "Panamanian", "1980s"], 2
+    ),
+    (
+        "album-manu-chao-clandestino", "Album",
+        "Clandestino",
+        "Manu Chao 1998 — the former Mano Negra frontman recording alone with a laptop, a guitar, and a portable studio while traveling through Latin America. The album was recorded in hotel rooms, train stations, and at a Zapatista camp in Chiapas. It's sung in Spanish, French, English, Portuguese, and Arabic. The album sold 5 million copies without mainstream radio play.",
+        "Clandestino (1998) end-to-end", 46,
+        "Listen to 'Clandestino' — the song is about being an undocumented immigrant: 'I'm a clandestine, I'm illegal.' The radio broadcast at the end is an actual Mexican border radio transmission. Then 'Desaparecido' — a song about being a person without papers, traveling without a destination. Chao recorded his vocal in a bathroom for natural reverb.",
+        ["World", "Latin Alternative", "French-Spanish", "1990s"], 1
+    ),
+    (
+        "album-tinariwen-amassakoul", "Album",
+        "Amassakoul",
+        "Tinariwen 2004 — a band of Tuareg nomads from the Sahara whose music is called 'desert blues.' Formed in Libyan refugee camps where the members received military training and electric guitars. The songs are about exile, rebellion, and the longing for the desert homeland. Many members fought in Tuareg rebellions before becoming full-time musicians.",
+        "Amassakoul (2004) end-to-end", 54,
+        "Listen to 'Amassakoul 'N' Ténéré' — the title means 'traveler in the desert.' The guitar riff cycles through three chords while the call-and-response vocals are traditional Tuareg poetry. Then 'Chet Boghassa' — a tribute to a Tuareg heroine who fought against French colonization. The rhythm is a camel's walking pace.",
+        ["World", "Desert Blues", "Malian", "2000s"], 1
+    ),
+    (
+        "album-nusrat-fateh-ali-khan-shahen-shah", "Album",
+        "Shahen-Shah",
+        "Nusrat Fateh Ali Khan 1989 — the Pakistani Qawwali master's first international release on Peter Gabriel's Real World label. Recorded in one session with his 10-member party, which included his brothers and nephews. Khan's voice could sustain a note for over a minute; he used circular breathing techniques developed from years of practice.",
+        "Shahen-Shah (1989) end-to-end", 52,
+        "Listen to 'Allah Hoo Allah Hoo' — a 12-minute praise song that starts as a whisper and becomes a storm. Khan's voice climbs through at least four octaves. Then the title track — the harmonium and tabla build a drone over which Khan improvises for minutes at a stretch. The audience shouts 'Wah!' (an expression of ecstasy) throughout.",
+        ["Qawwali", "World", "Pakistani", "1980s"], 1
+    ),
+    (
+        "album-cesaria-evora-miss-perfumado", "Album",
+        "Miss Perfumado",
+        "Cesária Évora 1992 — the barefoot diva from Cape Verde, recording at age 50 her first international hit after decades of obscurity. Évora sang morna, the melancholic music of the Cape Verde islands, a blend of Portuguese fado and African rhythms. She always performed barefoot as a gesture of solidarity with the poor.",
+        "Miss Perfumado (1992) end-to-end", 58,
+        "Listen to 'Sodade' — the title is the Cape Verdean Creole word for 'saudade,' a Portuguese term for nostalgic longing that has no English equivalent. The song is about homesickness for an island you can never return to. Then 'Angola' — a tribute to the country that many Cape Verdeans emigrated to. Évora's voice is smoke and sea salt.",
+        ["Morna", "World", "Cape Verdean", "1990s"], 1
+    ),
+
+    # ── METAL ──
+    (
+        "album-death-symbolic", "Album",
+        "Symbolic",
+        "Death 1995 — Chuck Schuldiner's sixth album, where death metal became philosophical. The lyrics explore themes of consciousness, memory, and selfhood rather than gore. Schuldiner fired the entire band before recording and assembled a new lineup. The album's technical guitar work raised the bar for every death metal band that followed.",
+        "Symbolic (1995) end-to-end", 51,
+        "Listen to the title track — Schuldiner's guitar solo at 3:40 is played in 5/4 against the band's 4/4, creating a tension that resolves only when the riff returns. Then 'Crystal Mountain' — the song's lyrics critique televangelists. The guitar harmony at the end is two parts played by Schuldiner and a second guitarist, each part recorded separately.",
+        ["Death Metal", "Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-emperor-in-the-nightside-eclipse", "Album",
+        "In the Nightside Eclipse",
+        "Emperor 1994 — the album that defined Norwegian black metal. Recorded in the famous Grieg Hall in Bergen, the same hall used by classical orchestras. The album was co-produced by Eirik 'Pytten' Hundvin, who recorded the drums in a concrete stairwell for natural reverb. Ihsahn was 18; Samoth was imprisoned during mixing.",
+        "In the Nightside Eclipse (1994) end-to-end", 49,
+        "Listen to 'I Am the Black Wizards' — the keyboards by Ihsahn create a symphonic atmosphere that floats above the blast-beat drums. The production is deliberately raw; Pytten recorded the guitars with the microphones at the far end of the room to capture the hall's natural decay. Then 'Cosmic Keys to My Creations and Times' — the song's title is lifted from a fantasy novel.",
+        ["Black Metal", "Metal", "Norwegian", "1990s"], 1
+    ),
+    (
+        "album-burzum-filosofem", "Album",
+        "Filosofem",
+        "Burzum 1996 — Varg Vikernes' fourth album, recorded entirely during a two-week prison furlough after his conviction for murder and church arson. The album was recorded on the worst equipment Vikernes could find: a headset microphone for vocals, a tiny practice amp for guitar. The result is one of the most influential black metal albums ever made.",
+        "Filosofem (1996) end-to-end", 64,
+        "Listen to 'Dunkelheit' — the 7-minute opening track repeats the same four chords for its entire duration while the drums blast underneath. The vocal is a shriek recorded through a headset mic. Then 'Rundtgåing av den Transcendentale Egenbetens Støtte' — a 25-minute ambient track of a single synthesizer note slowly decaying.",
+        ["Black Metal", "Metal", "Norwegian", "1990s"], 2
+    ),
+    (
+        "album-carcass-heartwork", "Album",
+        "Heartwork",
+        "Carcass 1993 — the album where the grindcore pioneers pivoted to melodic death metal and invented the template that dozens of bands would follow. The cover art is an H.R. Giger sculpture of a human figure made of welded metal. The lyrics were written by Jeff Walker, a former pathology student, using genuine medical terminology.",
+        "Heartwork (1993) end-to-end", 42,
+        "Listen to the title track — the riff at 2:10 is a harmonized twin-guitar line that sounds more like Iron Maiden than any death metal band before it. Then 'No Love Lost' — the opening riff was Bill Steer's attempt to write a song in the style of a ZZ Top boogie, played at double-speed through a distortion pedal.",
+        ["Death Metal", "Melodic Death Metal", "British", "1990s"], 1
+    ),
+    (
+        "album-ulver-bergtatt", "Album",
+        "Bergtatt",
+        "Ulver 1995 — a Norwegian album that fused black metal with Norwegian folk music. The title means 'spellbound' or 'taken into the mountain' in archaic Norwegian, referring to a folk tale about a maiden lured into a mountain by a supernatural being. Garm's vocals alternate between black metal screams and clean folk singing.",
+        "Bergtatt (1995) end-to-end", 35,
+        "Listen to 'Capitel I: I Troldskog faren vild' — the title means 'lost in the troll forest.' The song shifts from acoustic folk to black metal without a transition, as if the music itself has been kidnapped. Then 'Capitel III: Graablick blev hun vaer' — the clean vocal sections are sung in a style derived from Norwegian folk hymns.",
+        ["Black Metal", "Folk Metal", "Norwegian", "1990s"], 2
+    ),
+    (
+        "album-drudkh-autumn-aurora", "Album",
+        "Autumn Aurora",
+        "Drudkh 2004 — Ukrainian black metal inspired by the landscapes of Eastern Europe. The band is anonymous by choice. The lyrics are Ukrainian poetry by authors like Oleksandr Oles and Oleh Olzhych, both suppressed during the Soviet era. The album's title and sound evoke the Ukrainian steppe in late autumn: barren, beautiful, and cold.",
+        "Autumn Aurora (2004) end-to-end", 40,
+        "Listen to 'Summoning the Rain' — the opening blast beat is so fast it becomes texture rather than rhythm. Then the keyboards enter like a fog rolling across a field. The guitar melodies are in a minor scale that sounds like Ukrainian folk music slowed to 1/4 speed.",
+        ["Black Metal", "Metal", "Ukrainian", "2000s"], 2
+    ),
+    (
+        "album-electric-wizard-dopethrone", "Album",
+        "Dopethrone",
+        "Electric Wizard 2000 — the heaviest album ever made, according to its own press release. Recorded in a disused church in Dorset, UK, with the volume turned up to levels that damaged the band's hearing permanently. The riffs are played so slowly that the gaps between notes become the music. The lyrics are about Lovecraft, Satan, weed, and the apocalypse.",
+        "Dopethrone (2000) end-to-end", 71,
+        "Listen to 'Funeralopolis' — the opening riff drops to a frequency that vibrates your chest rather than your ears. The bass and guitar are tuned down to B-standard. Then 'We Hate You' — the lyrics are a list of things the band hates, screamed through a distortion pedal. The album was mixed at a volume so high the studio monitors caught fire.",
+        ["Doom Metal", "Stoner Metal", "British", "2000s"], 1
+    ),
+    (
+        "album-sleep-dopesmoker", "Album",
+        "Dopesmoker",
+        "Sleep 2003 — a single 63-minute song about a caravan of weed priests crossing the desert. The band recorded it in 1996; the label rejected it as unmarketable. The band broke up. The album circulated as a bootleg for years before being officially released. It's one riff played for an hour, and metal fans argue about which minute is the best.",
+        "Dopesmoker (2003) — first 30 minutes", 30,
+        "Listen to the first 15 minutes: the riff enters, a single note repeated, and never stops. The bassist plays the same note for the entire track. The drummer plays a shuffle at a pace that a geologist would describe as 'glacial.' Then skip to minute 45 — the riff has shifted by a half-step. This is the climax.",
+        ["Doom Metal", "Stoner Metal", "American", "2000s"], 2
+    ),
+    (
+        "album-mastodon-leviathan", "Album",
+        "Leviathan",
+        "Mastodon 2004 — a concept album about Moby Dick, with each member's instrument representing a character: guitar as Ahab, bass as the whale, drums as the ocean. The album was recorded in Seattle with Matt Bayles in a converted warehouse. The band wore life jackets and used fog machines during recording sessions.",
+        "Leviathan (2004) end-to-end", 47,
+        "Listen to 'Blood and Thunder' — the opening lyric 'I think that someone is trying to kill me!' is from the 1956 film adaptation of Moby Dick. Neil Fallon of Clutch sings the part of Ahab. Then 'Hearts Alive' — a 13-minute epic that tracks the Pequod's final chase. The bassline follows the whale; the guitar follows Ahab.",
+        ["Progressive Metal", "Sludge Metal", "American", "2000s"], 1
+    ),
+    (
+        "album-between-the-buried-and-me-colors", "Album",
+        "Colors",
+        "Between the Buried and Me 2007 — a single continuous 64-minute song broken into 8 tracks, recorded in one take. The album cycles through death metal, jazz fusion, surf rock, polka, and country in a single unbroken performance. The band rehearsed the entire album for two months before recording.",
+        "Colors (2007) end-to-end", 64,
+        "Listen to 'Sun of Nothing' — the song shifts from death metal blast beats to a lounge-jazz piano solo at 5:00, then to a country hoedown at 7:30, all without a break. Then 'White Walls' — the closing 14-minute track has a guitar solo that quotes the opening track's melody, bringing the album full circle. The final note hangs for 30 seconds.",
+        ["Progressive Metal", "Death Metal", "American", "2000s"], 2
+    ),
+    (
+        "album-converge-jane-doe", "Album",
+        "Jane Doe",
+        "Converge 2001 — 45 minutes of pure aggression about a failed relationship, recorded in three weeks. Jacob Bannon's vocals are unintelligible; the lyrics were printed separately because no one could understand them. The cover art is a distorted photograph of a woman's face that Bannon took himself. Every metalcore band since has tried and failed to match this.",
+        "Jane Doe (2001) end-to-end", 45,
+        "Listen to 'Concubine' — the opening track is 1:19 long and opens with a scream that sounds like someone being thrown from a window. Then the title track — 11 minutes that starts as a ballad, becomes a thrash assault, and ends in feedback. Bannon's cat can be heard meowing in the pause at 7:12.",
+        ["Metal", "Metalcore", "Hardcore", "American", "2000s"], 1
+    ),
+    (
+        "album-deafheaven-sunbather", "Album",
+        "Sunbather",
+        "Deafheaven 2013 — a black metal album that alienated black metal fans by being beautiful. Named after frontman George Clarke's experience watching a sunbather in his apartment complex while struggling financially. The album cover is a photograph by Clarke of a sunset in the San Francisco Bay area, printed with the letters in hot pink.",
+        "Sunbather (2013) end-to-end", 60,
+        "Listen to 'Dream House' — the opening guitar riff is in a major key and sounds like My Bloody Valentine playing black metal. Then 'Vertigo' — the blast beats enter at 2:00 and don't stop for 10 minutes, but the tremolo-picked chords underneath stay beautiful. The album was mixed without bass guitar, so the guitars dominate everything.",
+        ["Black Metal", "Post-Rock", "American", "2010s"], 1
+    ),
+    (
+        "album-plebeian-grandstand-lowgazers", "Album",
+        "Lowgazers",
+        "Plebeian Grandstand 2014 — French dissonant blackened hardcore that sounds like a building collapsing. The band tuned their guitars to such low frequencies that the notes became percussive rather than melodic. The album's production is intentionally suffocating: there is no space between the instruments.",
+        "Lowgazers (2014) end-to-end", 38,
+        "Listen to 'Thick Jar of Hallucinations' — the track opens with a single dissonant chord sustained for 30 seconds before the drums shatter it. Then 'Lowgazers' — the title track layers three vocals: a scream, a growl, and a chant, all at the same time, saying different things. The album cover is a painting of a head with no face.",
+        ["Black Metal", "Hardcore", "French", "2010s"], 2
+    ),
+    (
+        "album-bell-witch-mirror-reaper", "Album",
+        "Mirror Reaper",
+        "Bell Witch 2017 — a single 83-minute song for two members: bass and drums. Written as a memorial for their former drummer Adrian Guerra, who died a year before the album's release. The song contains sections of complete silence, and at one point the bass and drums trade roles. The album art is a painting by Mariusz Lewandowski.",
+        "Mirror Reaper (2017) — first 40 minutes", 40,
+        "Listen to the first 20 minutes: the bassline cycles through four notes while the drums roll like distant thunder. Then skip to minute 50: a vocal sample of their deceased drummer can be heard, his voice pulled from an old demo. The album's final 10 minutes are just bass feedback fading into silence.",
+        ["Doom Metal", "Funeral Doom", "American", "2010s"], 2
+    ),
+    (
+        "album-judas-priest-painkiller", "Album",
+        "Painkiller",
+        "Judas Priest 1990 — recorded after the band fired their drummer and brought in Scott Travis, whose double-bass drumming completely rewired the band's sound. Rob Halford was dealing with the end of a relationship and channeled the pain into a vocal performance that set a new standard for heavy metal singing. The album is about a cyborg messiah.",
+        "Painkiller (1990) end-to-end", 47,
+        "Listen to the title track — the opening drum fill by Travis was his audition piece. Halford recorded the chorus in a single breath, hitting a high C. Then 'A Touch of Evil' — the most atmospheric song Priest ever wrote, with synthesized orchestration and Halford singing about a serial killer in a whisper before the full band detonates.",
+        ["Heavy Metal", "Metal", "British", "1990s"], 1
+    ),
+    (
+        "album-megadeth-rust-in-peace", "Album",
+        "Rust in Peace",
+        "Megadeth 1990 — Dave Mustaine's fourth album, recorded after firing the entire band and hiring new members. Marty Friedman, the new guitarist, had never played thrash metal before; his exotic-scale solos came from his background in Japanese pop and flamenco. Mustaine was in and out of rehab during recording.",
+        "Rust in Peace (1990) end-to-end", 41,
+        "Listen to 'Holy Wars... The Punishment Due' — the song was originally two separate tracks that Mustaine stitched together after a fan at a concert in Northern Ireland asked him to play something about 'the Cause.' Friedman's solo at 3:30 uses the Phrygian dominant scale, a Middle Eastern mode that sounds like a snake charmer at high speed.",
+        ["Thrash Metal", "Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-pantera-vulgar-display-of-power", "Album",
+        "Vulgar Display of Power",
+        "Pantera 1992 — the album where groove metal was born. Recorded at Pantego Sound Studio in Texas, a converted garage. Dimebag Darrell recorded his guitar solos in a single day, one after another, without referencing the songs. The album's title came from a line in the film The Exorcist. The cover photo is a fan being punched in the face.",
+        "Vulgar Display of Power (1992) end-to-end", 53,
+        "Listen to 'Walk' — the opening riff is one note played with Dimebag's signature 'squeal' pinch harmonic. Phil Anselmo's vocal is a barked command. Then 'This Love' — the ballad starts as a clean arpeggio and becomes a scream of betrayal. Anselmo wrote the lyrics about a girlfriend who left him while he was in rehab.",
+        ["Groove Metal", "Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-sepultura-chaos-ad", "Album",
+        "Chaos A.D.",
+        "Sepultura 1993 — the Brazilian band's pivot from death metal to groove metal, recorded in Rockfield Studios in Wales. The album was influenced by the band's visit to indigenous communities in the Amazon, and the title reflects that: the chaos after Christ. The album closes with a cover of New Model Army's 'The Hunt.'",
+        "Chaos A.D. (1993) end-to-end", 47,
+        "Listen to 'Refuse/Resist' — the opening drumbeat is a heartbeat played on a floor tom. The lyrics are about standing up to authority. Then 'Kaiowas' — recorded in an empty hall with the band playing only percussion instruments they built themselves. The song is named after an indigenous Brazilian tribe, the Kaiowá, who were being displaced from their land.",
+        ["Groove Metal", "Thrash Metal", "Brazilian", "1990s"], 1
+    ),
+    (
+        "album-type-o-negative-bloody-kisses", "Album",
+        "Bloody Kisses",
+        "Type O Negative 1993 — a gothic doom metal album from Brooklyn that sounds like the Addams Family formed a rock band. Peter Steele's bass-baritone voice goes subsonic. The album's themes of death, sex, and Catholicism are filtered through a humor so dark it's often mistaken for sincerity. Steele was 6 feet 8 inches tall and his bass was custom-built to match.",
+        "Bloody Kisses (1993) end-to-end", 74,
+        "Listen to 'Christian Woman' — the song is 9 minutes of whispered seduction over funeral-paced riffs. Steele's vocal drops to a basso profundo C2 at 5:30. Then 'Black No. 1' — an 11-minute song about a goth girl who dyes her hair black. The title is a hair color code. The song takes 3 minutes to get to the first verse.",
+        ["Doom Metal", "Gothic Metal", "American", "1990s"], 2
+    ),
+
+    # ── COUNTRY ──
+    (
+        "album-johnny-cash-at-san-quentin", "Album",
+        "At San Quentin",
+        "Johnny Cash 1969 — a live album recorded at San Quentin State Prison in California. Cash performed 'A Boy Named Sue' for the first time, reading the lyrics off a sheet of paper because Shel Silverstein had handed them to him that morning. The prisoners' cheers on the recording are genuine: Cash performed a song called 'San Quentin' that said they should burn the place down.",
+        "At San Quentin (1969) end-to-end", 42,
+        "Listen to 'San Quentin' — Cash sings 'San Quentin, may you rot and burn in hell' and 1,000 inmates roar approval. The song was banned by the California Department of Corrections. Then 'A Boy Named Sue' — recorded without rehearsal. Cash flubs the lyrics twice; the band stops and restarts. The version you hear is the second attempt.",
+        ["Country", "Outlaw Country", "American", "1960s"], 1
+    ),
+    (
+        "album-merle-haggard-mama-tried", "Album",
+        "Mama Tried",
+        "Merle Haggard 1968 — the album where the Bakersfield Sound peaked. Haggard spent his 21st birthday in San Quentin Prison (he was in the audience for Johnny Cash's first prison concert there). The title track is about his mother's failed attempts to keep him on the straight path. The album's telecaster-driven sound was a deliberate rejection of Nashville's string-laden productions.",
+        "Mama Tried (1968) end-to-end", 32,
+        "Listen to the title track — Haggard wrote it in 20 minutes on a tour bus. The line 'I turned 21 in prison doing life without parole' is autobiographical. Then 'Little Ole Wine Drinker Me' — Dean Martin had the hit version, but Haggard's is looser and sadder. The Bakersfield guitar style, played by Roy Nichols, bends notes like a pedal steel.",
+        ["Country", "Bakersfield Sound", "American", "1960s"], 1
+    ),
+    (
+        "album-patsy-cline-showcase", "Album",
+        "Showcase",
+        "Patsy Cline 1961 — recorded in five sessions over nine months at Bradley's Barn in Nashville with producer Owen Bradley. The album features 'I Fall to Pieces' and 'Crazy,' the latter written by Willie Nelson. Cline was skeptical about 'Crazy' because Nelson's demo was 'too jazzy.' Bradley convinced her by slowing the tempo and adding strings.",
+        "Showcase (1961) end-to-end", 31,
+        "Listen to 'Crazy' — Cline recorded the vocal while on crutches after a car accident. She had to be helped to the microphone. Then 'I Fall to Pieces' — the song was her first #1 country hit. Cline's vocal was overdubbed because the session musicians had recorded the backing track in the wrong key. She found the correct key without rehearsal.",
+        ["Country", "American", "1960s"], 1
+    ),
+    (
+        "album-loretta-lynn-coal-miners-daughter", "Album",
+        "Coal Miner's Daughter",
+        "Loretta Lynn 1971 — named after her autobiographical song about growing up in Butcher Holler, Kentucky, in a cabin with no electricity or running water. Lynn was married at 15, had four children by 18, and taught herself guitar while her husband was working. The album was recorded in Nashville with Owen Bradley producing.",
+        "Coal Miner's Daughter (1971) end-to-end", 28,
+        "Listen to the title track — Lynn wrote it in 20 minutes while doing dishes. Every detail is factual: her father washing coal dust off his back, her mother reading the Bible by coal-oil light. Then 'You're Lookin' at Country' — a statement of identity from a woman who was told she was 'too country' for country radio. She was right and they were wrong.",
+        ["Country", "American", "1970s"], 1
+    ),
+    (
+        "album-gram-parsons-grievous-angel", "Album",
+        "Grievous Angel",
+        "Gram Parsons 1974 — released 4 months after his death from a morphine overdose at age 26. Parsons invented 'cosmic American music,' fusing country, rock, soul, and gospel into a sound that no one at the time knew how to categorize. Emmylou Harris, 26, sings harmony on every track; it was her first major recording and launched her career.",
+        "Grievous Angel (1974) end-to-end", 36,
+        "Listen to 'Return of the Grievous Angel' — Parson's voice cracks on the word 'angel' at 3:10 because he was recording at 4 AM after a night of drinking. Then 'In My Hour of Darkness' — Parsons recorded the vocal in his living room on a 4-track while dying of drug addiction and grief. His body was stolen by his manager and burned in Joshua Tree.",
+        ["Country Rock", "Americana", "American", "1970s"], 1
+    ),
+    (
+        "album-townes-van-zandt-live-at-the-old-quarter", "Album",
+        "Live at the Old Quarter, Houston, Texas",
+        "Townes Van Zandt 1977 — recorded over two nights at a 150-seat club in Houston, just Van Zandt's voice and a guitar. The audience is so quiet you can hear the ice cubes in glasses. Van Zandt tells stories between songs that are as gripping as the songs themselves. He was 33 and already sounded ancient.",
+        "Live at the Old Quarter (1977) end-to-end", 93,
+        "Listen to 'Pancho and Lefty' — the definitive version of his most famous song, with an introduction where he explains he's 'a songwriter, not a performer.' Then 'For the Sake of the Song' — he flubs a chord and mutters 'sorry' to himself. Van Zandt died at 52 on New Year's Day. His tombstone reads 'To Live Is to Fly.'",
+        ["Country", "Americana", "Singer-Songwriter", "American", "1970s"], 1
+    ),
+    (
+        "album-gillian-welch-time-the-revelator", "Album",
+        "Time (The Revelator)",
+        "Gillian Welch 2001 — recorded in Nashville with David Rawlings on archtop guitar and harmony vocals. The album's sound is so authentically old-time that critics assumed it was recorded in the 1930s. Welch wrote the songs over 4 years, inspired by the Carter Family, the Stanley Brothers, and a deep reading of American history.",
+        "Time (The Revelator) (2001) end-to-end", 52,
+        "Listen to 'Elvis Presley Blues' — written the day after Welch watched a documentary about Presley's final years. Then 'I Dream a Highway' — a 14-minute meditation that repeats the same five chords for its entire duration. Welch's vocal is so intimate that it sounds like she's singing from the next room. The song is about the impossibility of going home.",
+        ["Americana", "Folk", "American", "2000s"], 1
+    ),
+    (
+        "album-lucinda-williams-car-wheels-on-a-gravel-road", "Album",
+        "Car Wheels on a Gravel Road",
+        "Lucinda Williams 1998 — recorded over 6 years in 5 different studios with 3 different producers. Williams fired two producers because she wanted a sound that existed only in her head. The album cost $300,000 — extravagant for a folk album — and it won a Grammy for Best Contemporary Folk Album.",
+        "Car Wheels on a Gravel Road (1998) end-to-end", 52,
+        "Listen to the title track — the song is a list of Southern childhood images: car wheels on gravel, Loretta Lynn on the radio, a child in the back seat. Then 'Joy' — produced by Steve Earle, who kept urging her to sing louder until she was shouting. The song's title is ironic: 'You got no right to take my joy, I want it back.'",
+        ["Americana", "Country", "American", "1990s"], 1
+    ),
+    (
+        "album-steve-earle-copperhead-road", "Album",
+        "Copperhead Road",
+        "Steve Earle 1988 — an album that fused country songwriting with hard rock production, recorded with members of the Pogues and Earle's own backing band the Dukes. The title track, about a Vietnam vet who runs moonshine and then marijuana, was banned by some country radio stations but became a rock-radio staple.",
+        "Copperhead Road (1988) end-to-end", 43,
+        "Listen to the title track — the drum loop was created by sampling a shotgun being cocked. The song follows three generations of Appalachian men: a moonshiner, a bootlegger, and a Vietnam vet growing weed. Then 'Johnny Come Lately' — a collaboration with the Pogues, recorded in Dublin. Earle was heavily addicted to heroin during the sessions.",
+        ["Country Rock", "Americana", "American", "1980s"], 1
+    ),
+    (
+        "album-emmylou-harris-wrecking-ball", "Album",
+        "Wrecking Ball",
+        "Emmylou Harris 1995 — produced by Daniel Lanois in a New Orleans church, using the building's natural reverb as an instrument. Harris was 48 and had spent her career in traditional country. This album completely reinvented her sound with atmospheric production and songs by young songwriters like Gillian Welch, Steve Earle, and Lucinda Williams.",
+        "Wrecking Ball (1995) end-to-end", 53,
+        "Listen to 'Where Will I Be' — the opening track, with Larry Mullen Jr. of U2 playing drums in a New Orleans church while Harris's voice floats through 7 seconds of natural reverb. Then 'Goodbye' — a Steve Earle song recorded at 2 AM with Lanois playing a dobro. Harris's vocal was the first take; Lanois refused to let her do a second.",
+        ["Americana", "Country", "American", "1990s"], 1
+    ),
+    (
+        "album-george-jones-the-grand-tour", "Album",
+        "The Grand Tour",
+        "George Jones 1974 — recorded during the most turbulent period of his marriage to Tammy Wynette. The title track is a guided tour of an empty house after a wife has left, with each room representing a stage of grief. Jones was drunk for most of the sessions; producer Billy Sherrill would record Jones's vocals one line at a time because he couldn't remember full songs.",
+        "The Grand Tour (1974) end-to-end", 29,
+        "Listen to the title track — Jones recorded it at 10 AM while hungover. His vocal catches on 'the chair where she'd bring the bottle to me' because the line was too personal. Then 'Once You've Had the Best' — Sherrill had to tape Jones's lyric sheet to the microphone stand. Jones is considered the greatest country singer who ever lived, and he would tell you his life was the reason.",
+        ["Country", "Honky-Tonk", "American", "1970s"], 1
+    ),
+
+    # ── FOLK ──
+    (
+        "album-pentangle-basket-of-light", "Album",
+        "Basket of Light",
+        "Pentangle 1969 — the British folk supergroup at their peak. John Renbourn and Bert Jansch on guitars, Jacqui McShee on vocals, Danny Thompson on bass, and Terry Cox on drums. The band fused traditional English ballads with jazz improvisation. Thompson's upright bass was so virtuosic that he was later hired by Nick Drake and John Martyn.",
+        "Basket of Light (1969) end-to-end", 42,
+        "Listen to 'Light Flight' — the song was used as the theme for the BBC drama Take Three Girls. The guitar interplay between Renbourn and Jansch is so intertwined you can't tell who's playing what. Then 'Once I Had a Sweetheart' — an old English ballad that McShee sings without accompaniment for the first 90 seconds. The silence is as important as the notes.",
+        ["Folk", "British Folk", "British", "1960s"], 2
+    ),
+    (
+        "album-richard-and-linda-thompson-i-want-to-see-the-bright-lights-tonight", "Album",
+        "I Want to See the Bright Lights Tonight",
+        "Richard and Linda Thompson 1974 — the first album by the married couple, recorded in 10 days for £2,500. Richard's guitar playing draws from British folk, rock, and Arabic modes (he later became a Sufi Muslim). Linda's voice, untrained and pure, carries songs about death, despair, and the occasional night out.",
+        "I Want to See the Bright Lights Tonight (1974) end-to-end", 38,
+        "Listen to 'The Great Valerio' — a song about a tightrope walker that's really about the fragility of performance. Then 'The End of the Rainbow' — a lullaby for a newborn baby that tells the baby life will be miserable. Richard played the accordion part on a cheap instrument that could only play in one key. Linda was pregnant during the recording.",
+        ["Folk", "British Folk", "British", "1970s"], 1
+    ),
+    (
+        "album-vashti-bunyan-just-another-diamond-day", "Album",
+        "Just Another Diamond Day",
+        "Vashti Bunyan 1970 — recorded in a London studio over 6 months with contributions from members of Fairport Convention and the Incredible String Band. Bunyan had spent 2 years traveling by horse and wagon from London to the Outer Hebrides. The album sold fewer than 100 copies and she quit music for 30 years. Rediscovered in 2000, it's now considered a lost masterpiece.",
+        "Just Another Diamond Day (1970) end-to-end", 31,
+        "Listen to 'Diamond Day' — the song was written on the back of a horse-drawn wagon during a rainstorm in Scotland. Then 'Where I Like to Stand' — the only recording where you can hear the sound of Bunyan's horse, Bess, neighing in the background. The album is so gentle it barely touches the ground.",
+        ["Folk", "British Folk", "British", "1970s"], 1
+    ),
+    (
+        "album-simon-and-garfunkel-parsley-sage", "Album",
+        "Parsley, Sage, Rosemary and Thyme",
+        "Simon and Garfunkel 1966 — the album where Paul Simon took over production from the label's house producer. He insisted on recording his guitar and vocals at the same time, then layering Art Garfunkel's harmonies. The album was recorded over 7 months in 6 different studios. 'Scarborough Fair' was their first song to use a folk-rock arrangement.",
+        "Parsley, Sage, Rosemary and Thyme (1966) end-to-end", 27,
+        "Listen to 'Scarborough Fair/Canticle' — the song is two different compositions sung simultaneously. The main melody is a traditional English ballad; the counter-melody is a reworked anti-war song by Simon. Then '7 O'Clock News/Silent Night' — the duo sing 'Silent Night' over a news broadcast listing the day's deaths in Vietnam.",
+        ["Folk Rock", "Pop", "American", "1960s"], 1
+    ),
+    (
+        "album-the-band-music-from-big-pink", "Album",
+        "Music from Big Pink",
+        "The Band 1968 — recorded in a pink house in West Saugerties, New York, that the band shared. The album rejected psychedelia and returned American music to its roots: folk, country, gospel, and R&B. Bob Dylan, who lived nearby, contributed three songs. Eric Clapton quit Cream after hearing this album because he felt his own music was pointless.",
+        "Music from Big Pink (1968) end-to-end", 42,
+        "Listen to 'The Weight' — Levon Helm sings the lead on the choruses and Rick Danko on the verses, each playing a different character in the story. Then 'I Shall Be Released' — Dylan's song, but Richard Manuel's falsetto at the climax makes it his. The album was recorded in a basement with the microphones clustered around a single spot on the floor.",
+        ["Americana", "Folk Rock", "Canadian-American", "1960s"], 1
+    ),
+    (
+        "album-fairport-convention-liege-and-lief", "Album",
+        "Liege & Lief",
+        "Fairport Convention 1969 — the album that invented British folk-rock. Recorded after their drummer died in a van accident at 19, the band salvaged their grief by recording traditional British ballads with electric instruments. Sandy Denny's voice — simultaneously ancient and modern — sounds like she's channeling every British folk singer who ever lived.",
+        "Liege & Lief (1969) end-to-end", 41,
+        "Listen to 'Matty Groves' — an 8-minute telling of a 400-year-old murder ballad where a lord's wife sleeps with a servant and the lord kills him. Then 'Tam Lin' — the longest song on the album, telling the story of a woman who rescues her lover from the Queen of the Fairies. Dave Swarbrick's fiddle solo at 5:00 is a single take.",
+        ["Folk Rock", "British Folk", "British", "1960s"], 1
+    ),
+    (
+        "album-ravi-shankar-at-monterey", "Album",
+        "Live at Monterey",
+        "Ravi Shankar 1967 — an 18-minute afternoon set at the Monterey Pop Festival that introduced Indian classical music to a Western audience. Shankar's sitar and Alla Rakha's tabla held a crowd of hippies in complete silence. The recording captures a single dhun (a light raga) performed with the intensity of a full concert.",
+        "Live at Monterey (1967) — full set", 18,
+        "Listen to 'Dhun' — Shankar begins with a 4-minute alap, exploring the raga without rhythm. Then the tabla enters and Shankar's fingers move so fast that the sitar sounds like it's generating multiple melodies from a single string. The encore is captured, with the audience—stoned and silent—erupting at the final note.",
+        ["Indian Classical", "World", "Indian", "1960s"], 2
+    ),
+
+    # ── BLUES ──
+    (
+        "album-robert-johnson-king-of-the-delta-blues", "Album",
+        "King of the Delta Blues Singers",
+        "Robert Johnson 1961 — a compilation released 23 years after Johnson's death at 27, introducing the Delta blues legend to a generation of British musicians. Johnson recorded only 29 songs in his lifetime, in two sessions in 1936-37 in San Antonio and Dallas. The myth that he sold his soul to the devil at a crossroads comes from these recordings.",
+        "King of the Delta Blues Singers (1961) end-to-end", 42,
+        "Listen to 'Cross Road Blues' — Johnson's guitar sounds like two players because he played the bassline with his thumb and the melody with his fingers simultaneously. Then 'Hellhound on My Trail' — recorded in a makeshift San Antonio hotel-room studio with Johnson facing the corner of the room because he didn't want the engineers to see his guitar technique.",
+        ["Blues", "Delta Blues", "American", "1930s"], 1
+    ),
+    (
+        "album-muddy-waters-folk-singer", "Album",
+        "Folk Singer",
+        "Muddy Waters 1964 — an acoustic album recorded when Chess Records was trying to market Waters to the folk revival audience. Stripped of his electric band, Waters is alone with his guitar, Willie Dixon on upright bass, and Buddy Guy on second guitar. The recording engineer was so careful that Waters later said it was the best-sounding album he ever made.",
+        "Folk Singer (1964) end-to-end", 39,
+        "Listen to 'My Home Is in the Delta' — Waters recounts his childhood in Mississippi over a single repeated guitar riff. Then 'Feel Like Going Home' — the song is about a longing that has no specific object. The microphone was placed so close to Waters's guitar that you can hear his thumb slide on the strings between chords.",
+        ["Blues", "Chicago Blues", "American", "1960s"], 1
+    ),
+    (
+        "album-howlin-wolf-the-rockin-chair-album", "Album",
+        "The Rockin' Chair Album",
+        "Howlin' Wolf 1962 — a compilation of Chess singles by the man with the most terrifying voice in American music. Wolf was 6 foot 3, 275 pounds, and his voice sounded like a gravel truck downshifting. He learned guitar from Charley Patton and harmonica from Sonny Boy Williamson. The album's cover, of a rocking chair and a guitar, is misleadingly peaceful.",
+        "The Rockin' Chair Album (1962) end-to-end", 34,
+        "Listen to 'Smokestack Lightning' — the song was recorded in one take at 3 AM. Wolf sings the opening line a cappella, then his band enters one by one. Then 'Spoonful' — a song about how a spoonful of love/drugs/anything can kill you, delivered over a single-chord drone. Wolf's producer said the sessions were 'like a hurricane' and he stayed in the control room.",
+        ["Blues", "Chicago Blues", "American", "1960s"], 1
+    ),
+    (
+        "album-bb-king-live-at-the-regal", "Album",
+        "Live at the Regal",
+        "B.B. King 1965 — the definitive live blues album, recorded at the Regal Theater in Chicago with a full horn section. King's guitar, Lucille, sings and cries between every vocal line. The audience screams for every note. King was 39 and had been touring for 15 years; this was the album where everything clicked.",
+        "Live at the Regal (1965) end-to-end", 35,
+        "Listen to 'How Blue Can You Get' — B.B. sings 'I gave you seven children, and now you want to give them back' and the audience loses their minds. Then 'Sweet Little Angel' — he holds a single note on Lucille for 15 seconds while the crowd screams louder and louder. B.B. King said he sang through Lucille because his voice couldn't do what the guitar could.",
+        ["Blues", "Electric Blues", "American", "1960s"], 1
+    ),
+    (
+        "album-albert-king-born-under-a-bad-sign", "Album",
+        "Born Under a Bad Sign",
+        "Albert King 1967 — recorded with Booker T. & the M.G.'s as the backing band. King played guitar upside-down and left-handed, bending strings so far they sounded like they were being tortured. The title track was written by William Bell and Booker T. Jones, but King's version became definitive. The album was recorded in a single day.",
+        "Born Under a Bad Sign (1967) end-to-end", 34,
+        "Listen to the title track — the opening riff was played by Steve Cropper on a Telecaster, but King's response bends a single note through three pitches. Then 'Personal Manager' — King plays a 2-minute solo that hits the same bent note 8 times, each one slightly different. Eric Clapton later said King's bends sounded like 'a man crying.'",
+        ["Blues", "Electric Blues", "American", "1960s"], 1
+    ),
+    (
+        "album-john-lee-hooker-the-healer", "Album",
+        "The Healer",
+        "John Lee Hooker 1989 — an album of duets recorded when Hooker was 72 and had been largely forgotten by the mainstream. Carlos Santana, Bonnie Raitt, and Los Lobos all appear. The album won Hooker his first Grammy. Hooker's signature style — a single guitar chord repeated over a foot-stomped rhythm — is the sound of the Delta distilled.",
+        "The Healer (1989) end-to-end", 42,
+        "Listen to the title track with Carlos Santana — Santana's guitar weeps over Hooker's single chord. Then 'I'm in the Mood' with Bonnie Raitt — the song that made Hooker a star again at 72. Hooker's voice floats behind the beat as if the rhythm is a train he's not sure he wants to catch.",
+        ["Blues", "Delta Blues", "American", "1980s"], 2
+    ),
+    (
+        "album-stevie-ray-vaughan-texas-flood", "Album",
+        "Texas Flood",
+        "Stevie Ray Vaughan 1983 — the debut album that brought blues back to rock radio. Recorded in 3 days at Jackson Browne's studio in LA. Vaughan was 28 and had been playing Texas bars for 15 years. His guitar tone was so powerful that the studio monitors kept blowing. The album was nominated for a Grammy and lost, which now seems absurd.",
+        "Texas Flood (1983) end-to-end", 39,
+        "Listen to the title track — Vaughan recorded it in one take with the lights off because the studio had a power outage. Then 'Pride and Joy' — the guitar part switches between rhythm and lead so seamlessly you don't realize Vaughan is the only guitarist. The band recorded the whole album live with no overdubs.",
+        ["Blues", "Texas Blues", "American", "1980s"], 1
+    ),
+    (
+        "album-etta-james-at-last", "Album",
+        "At Last!",
+        "Etta James 1961 — her debut album, recorded in Chicago with the Riley Hampton Orchestra, a 30-piece string section that producer Leonard Chess thought would turn James into a pop star. The title track was written in 1941 and had been recorded by Glenn Miller, but James's version — full of ache and want — made it immortal.",
+        "At Last! (1961) end-to-end", 29,
+        "Listen to the title track — James recorded it in one take at 3 AM after waiting all day for the orchestra to be ready. The string arrangement was conducted by Hampton in a former church in Chicago. Then 'I Just Want to Make Love to You' — the song was written by Willie Dixon, and James sings it like a threat. Her voice moves from a whisper to a growl in a single phrase.",
+        ["Blues", "Soul", "R&B", "American", "1960s"], 1
+    ),
+    (
+        "album-taj-mahal-debut", "Album",
+        "Taj Mahal",
+        "Taj Mahal 1968 — the debut that announced a new kind of blues musician: scholarly, omnivorous, and unbound by genre. Mahal studied at UMass Amherst and played with Ry Cooder in a band called the Rising Sons. The album includes songs by Sleepy John Estes, Blind Willie McTell, and Mahal himself, played with a band that included Jesse Ed Davis on slide guitar.",
+        "Taj Mahal (1968) end-to-end", 37,
+        "Listen to 'Leaving Trunk' — the opening slide guitar was played on a National resonator guitar that Mahal found in a pawn shop. Then 'Statesboro Blues' — 15 years before the Allman Brothers made it a rock anthem, Mahal plays it as a solo acoustic blues. The album was recorded for $4,000.",
+        ["Blues", "Folk", "American", "1960s"], 2
+    ),
+    (
+        "album-big-bill-broonzy-the-bill-broonzy-story", "Album",
+        "The Bill Broonzy Story",
+        "Big Bill Broonzy 1957 — recorded over two days in Chicago, a few months before Broonzy's death from throat cancer. The album is just Broonzy's voice and acoustic guitar, interspersed with stories about learning guitar from an uncle who made him play for food as a child. Broonzy was one of the crucial links between pre-war country blues and post-war Chicago blues.",
+        "The Bill Broonzy Story (1957) — openers", 30,
+        "Listen to 'Black, Brown, and White' — a protest song about racial discrimination written in 1947, when recording it was professionally dangerous. Broonzy's guitar accompanies his voice like a second conversation partner. He tells a story about being asked to play at a club that wouldn't serve him. Then he plays the song.",
+        ["Blues", "Country Blues", "American", "1950s"], 2
+    ),
+(
+        "album-son-house-father-of-the-delta-blues", "Album",
+        "Father of the Delta Blues: The Complete 1965 Sessions",
+        "Son House 1965 — recorded after a 20-year absence from music, when a group of young blues enthusiasts tracked him down in Rochester, New York, where he was working as a railroad porter. House had taught Robert Johnson how to play and was considered the most intense performer in the Delta. His slide guitar sounds like metal scraping against bone.",
+        "The Complete 1965 Sessions (1965) end-to-end", 58,
+        "Listen to 'Death Letter' — a song about receiving the news that a lover has died, played on a National resonator guitar. House's voice breaks on the word 'dead.' Then 'John the Revelator' — an a cappella spiritual where House claps his hands on the offbeats. The recording captures the sound of a 63-year-old man singing songs he learned in church as a boy.",
+        ["Blues", "Delta Blues", "American", "1960s"], 1
+    ),
+    (
+        "album-rl-burnside-too-bad-jim", "Album",
+        "Too Bad Jim",
+        "R.L. Burnside 1994 — raw, droning Mississippi hill country blues recorded in a converted barn in Holly Springs by Fat Possum Records. Burnside's style uses a single chord with a droning bass string, creating a trance-like groove that sounds more like West African music than Chicago blues. He was 67 when this was recorded.",
+        "Too Bad Jim (1994) end-to-end", 42,
+        "Listen to 'Shake 'Em On Down' — the rhythm is a single guitar riff repeated for 5 minutes while Burnside shouts encouragement to the dancers. Then 'When My First Wife Left Me' — recorded in one take with a 1970s drum machine. Burnside's grandchildren can be heard playing in the next room during the quieter passages.",
+        ["Blues", "Hill Country Blues", "American", "1990s"], 2
+    ),
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
