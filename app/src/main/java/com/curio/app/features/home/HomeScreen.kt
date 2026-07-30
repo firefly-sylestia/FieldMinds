@@ -1,6 +1,13 @@
 package com.curio.app.features.home
 
+import androidx.compose.animation.core.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,8 +52,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -478,11 +488,27 @@ private fun PremiumHeroCard(
 ) {
     var pressed by remember { mutableStateOf(false) }
     val isWildcard = selectedCategory?.id == CategoryId.WILDCARD
-    val activeAccent = when {
+
+    // Smooth color interpolation when switching categories
+    val targetAccent = when {
         isWildcard -> CurioColors.CoralBlush
         selectedCategory != null -> selectedCategory.accent
         else -> CurioColors.CoralBlush
     }
+    val activeAccent by animateColorAsState(
+        targetValue = targetAccent,
+        animationSpec = tween(durationMillis = 500),
+        label = "heroAccent"
+    )
+
+    // Sparkle rotation: spins when a category is selected
+    val sparkleTarget = if (selectedCategory != null) 1f else 0f
+    val sparkleRotation by animateFloatAsState(
+        targetValue = sparkleTarget * 360f,
+        animationSpec = tween(durationMillis = 600),
+        label = "sparkleRotation"
+    )
+
     val pressScale by animateFloatAsState(
         targetValue = if (pressed) 0.97f else 1f,
         animationSpec = CurioMotion.Springs.Press,
@@ -559,7 +585,8 @@ private fun PremiumHeroCard(
                         name = CurioIcons.AutoAwesome,
                         contentDescription = null,
                         tint = CurioColors.ButterYellow.copy(alpha = 0.7f),
-                        size = 22.dp
+                        size = 22.dp,
+                        modifier = Modifier.graphicsLayer { rotationZ = sparkleRotation }
                     )
                 }
 
@@ -591,6 +618,13 @@ private fun PremiumHeroCard(
                     )
                 }
             }
+
+            // ── Breathing glow ring (topmost layer, renders above content) ──
+            BreathingGlowRing(
+                accent = activeAccent,
+                isSelected = selectedCategory != null,
+                modifier = Modifier.matchParentSize()
+            )
         }
     }
 
@@ -599,6 +633,52 @@ private fun PremiumHeroCard(
             kotlinx.coroutines.delay(300)
             pressed = false
         }
+    }
+}
+
+/**
+ * Subtle pulsing glow ring around the hero card.
+ * Intensifies when a category is selected, breathing slowly in and out.
+ */
+@Composable
+private fun BreathingGlowRing(
+    accent: Color,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val transition = rememberInfiniteTransition(label = "glowRing")
+    val pulse by transition.animateFloat(
+        initialValue = 0.7f,
+        targetValue = 1.3f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2400, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glowPulse"
+    )
+
+    val alphaTarget = if (isSelected) 0.35f else 0.12f
+    val ringAlpha by animateFloatAsState(
+        targetValue = alphaTarget * pulse,
+        animationSpec = CurioMotion.Springs.Snappy,
+        label = "ringAlpha"
+    )
+
+    if (!isSelected && ringAlpha < 0.02f) return
+
+    Canvas(modifier = modifier) {
+        val strokeWidth = 3.dp.toPx()
+        val inset = strokeWidth / 2f
+        drawRoundRect(
+            color = accent.copy(alpha = ringAlpha),
+            topLeft = Offset(inset, inset),
+            size = androidx.compose.ui.geometry.Size(
+                size.width - inset * 2,
+                size.height - inset * 2
+            ),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(32.dp.toPx()),
+            style = Stroke(width = strokeWidth)
+        )
     }
 }
 
