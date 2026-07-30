@@ -148,47 +148,43 @@ fun HomeScreen(navController: NavController) {
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
         ) {
-            // ── 1. Minimal top bar — just the avatar ────────────────────
+            // ── 1. Minimal top bar — reduced padding, refined icons ─────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 0.dp),
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Compact "Drawer open + logomark" hint — tiny, non-intrusive.
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                // Refined menu button with better icon
+                Surface(
+                    onClick = { scope.launch { drawerState.open() } },
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                    modifier = Modifier.size(42.dp)
                 ) {
-                    Surface(
-                        onClick = { scope.launch { drawerState.open() } },
-                        shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                            CurioIcon(
-                                CurioIcons.Menu, "Open menu",
-                                tint = MaterialTheme.colorScheme.onSurface,
-                                size = 20.dp
-                            )
-                        }
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        CurioIcon(
+                            CurioIcons.Menu, "Open menu",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            size = 22.dp
+                        )
                     }
                 }
-                // Avatar pill on the right (taps to Profile)
+                // Refined avatar pill with better styling
                 Surface(
                     onClick = { navController.navigate(CurioRoutes.PROFILE) },
                     shape = CircleShape,
-                    color = CurioColors.CoralBlush.copy(alpha = 0.18f),
-                    modifier = Modifier.size(40.dp)
+                    color = CurioColors.CoralBlush.copy(alpha = 0.20f),
+                    border = BorderStroke(1.5.dp, CurioColors.CoralBlush.copy(alpha = 0.3f)),
+                    modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         CurioIcon(
                             CurioIcons.Person, "Profile",
                             tint = CurioColors.CoralBlush,
-                            size = 20.dp
+                            size = 22.dp
                         )
                     }
                 }
@@ -498,7 +494,7 @@ fun HomeScreen(navController: NavController) {
 
 // ═══════════════════════════════════════════════════════════════════════
 // Stat pill (compact)
-// ═══════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════���════════════════════════
 
 @Composable
 private fun StatPill(
@@ -793,89 +789,162 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
     val context = LocalContext.current
     val displayName = AppPreferences.getDisplayName(context)
     ModalDrawerSheet(
-        modifier = Modifier.width(300.dp),
+        modifier = Modifier.width(320.dp),
         drawerContainerColor = MaterialTheme.colorScheme.surface,
         drawerContentColor = MaterialTheme.colorScheme.onSurface
     ) {
+        // ── Redesigned header with gradient accent ──────────────────────
         Box(
             Modifier
                 .fillMaxWidth()
-                .background(CurioGradients.WildcardGradientStops.first().copy(alpha = 0.10f))
-                .padding(horizontal = 20.dp, vertical = 24.dp)
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.CoralBlush, size = 28.dp)
-                    Text(
-                        "Curio",
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                        color = MaterialTheme.colorScheme.onSurface
+                .background(
+                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                        colors = listOf(
+                            CurioColors.CoralBlush.copy(alpha = 0.15f),
+                            CurioColors.CoralBlush.copy(alpha = 0.05f)
+                        )
                     )
-                }
-                Text(
-                    "Hi $displayName",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                .padding(horizontal = 24.dp, vertical = 28.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = CurioColors.CoralBlush.copy(alpha = 0.2f),
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            CurioIcon(
+                                CurioIcons.AutoAwesome, null,
+                                tint = CurioColors.CoralBlush,
+                                size = 28.dp
+                            )
+                        }
+                    }
+                    Column {
+                        Text(
+                            "Curio",
+                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            "Hi $displayName",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Spacer(Modifier.height(8.dp))
+        
+        Spacer(Modifier.height(16.dp))
+        
+        // ── Redesigned nav items with better spacing and icons ──────────
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             item("profile") {
-                DrawerNavItem(CurioIcons.Person, "Profile & Settings") { onNavigate(CurioRoutes.PROFILE) }
+                DrawerNavItem(
+                    icon = CurioIcons.Person,
+                    label = "Profile & Settings",
+                    iconTint = CurioColors.Lilac
+                ) { onNavigate(CurioRoutes.PROFILE) }
             }
             item("history") {
-                DrawerNavItem(CurioIcons.History, "Topic History") { onNavigate(CurioRoutes.TOPIC_HISTORY) }
+                DrawerNavItem(
+                    icon = CurioIcons.History,
+                    label = "Topic History",
+                    iconTint = CurioColors.DustyBlue
+                ) { onNavigate(CurioRoutes.TOPIC_HISTORY) }
             }
             item("manage") {
-                DrawerNavItem(CurioIcons.DragHandle, "Manage Categories") { onNavigate(CurioRoutes.MANAGE_CATEGORIES) }
+                DrawerNavItem(
+                    icon = CurioIcons.DragHandle,
+                    label = "Manage Categories",
+                    iconTint = CurioColors.Sage
+                ) { onNavigate(CurioRoutes.MANAGE_CATEGORIES) }
             }
             item("replay") {
-                DrawerNavItem(CurioIcons.Replay, "Replay Intro") {
+                DrawerNavItem(
+                    icon = CurioIcons.Replay,
+                    label = "Replay Intro",
+                    iconTint = CurioColors.Peach
+                ) {
                     com.curio.app.features.onboarding.CurioOnboardingState.reset(context)
                     onNavigate(CurioRoutes.ONBOARDING)
                 }
             }
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Column(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+        
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        
+        // ── Footer with version info ────────────────────────────────────
+        Column(
+            Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             Text(
                 "v1.0.0",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
             Text(
                 "Made with curiosity",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
         }
     }
 }
 
 @Composable
-private fun DrawerNavItem(icon: String, label: String, onClick: () -> Unit) {
+private fun DrawerNavItem(
+    icon: String,
+    label: String,
+    iconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    onClick: () -> Unit
+) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(16.dp),
         color = Color.Transparent,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 14.dp),
+                .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Text(label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = iconTint.copy(alpha = 0.15f),
+                modifier = Modifier.size(40.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(
+                        icon, null,
+                        tint = iconTint,
+                        size = 22.dp
+                    )
+                }
+            }
+            Text(
+                label,
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
