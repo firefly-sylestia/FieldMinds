@@ -626,9 +626,8 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
-        shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
+        shadowElevation = 2.dp,
+        tonalElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -690,8 +689,9 @@ private fun FirstTimeEmpty(
     onSpinSurprise: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(24.dp),                    color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
