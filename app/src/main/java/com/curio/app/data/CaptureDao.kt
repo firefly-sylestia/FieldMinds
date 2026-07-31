@@ -33,4 +33,8 @@ interface CaptureDao {
 
     @Query("SELECT COUNT(*) FROM captures")
     suspend fun count(): Int
+
+    /** Wipe every capture — used by restore-from-backup before re-inserting. */
+    @Query("DELETE FROM captures")
+    suspend fun clearAll(): Int
 }

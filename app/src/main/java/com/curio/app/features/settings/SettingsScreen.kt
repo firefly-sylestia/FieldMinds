@@ -1,5 +1,7 @@
 package com.curio.app.features.settings
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +41,7 @@ import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioQuality
 import com.curio.app.data.AudioQualitySettings
+import com.curio.app.data.CurioBackupManager
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
@@ -45,6 +49,10 @@ import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,6 +66,49 @@ fun SettingsScreen(navController: NavController) {
     var showNameDialog by remember { mutableStateOf(false) }
     var nameInput by remember(displayName) { mutableStateOf(displayName) }
     val versionName = "1.0.0"
+
+    // ── Backup & restore (in-app JSON export/import) ─────────────────
+    var showRestoreConfirm by remember { mutableStateOf(false) }
+    var backupStatus by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
+    var lastBackupAt by remember { mutableStateOf(CurioBackupManager.lastBackupAtMillis(context)) }
+    val scope = rememberCoroutineScope()
+
+    // Export → user picks where the backup file goes (Downloads, Drive…).
+    val backupLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument(CurioBackupManager.MIME_TYPE)
+    ) { uri ->
+        if (uri != null) {
+            scope.launch {
+                try {
+                    val result = CurioBackupManager.export(context, uri)
+                    lastBackupAt = CurioBackupManager.lastBackupAtMillis(context)
+                    backupStatus = true to
+                        "Backed up ${result.captureCount} capture(s) and your settings.\n" +
+                        "Keep the file somewhere safe — it brings everything back on a new device."
+                } catch (e: Exception) {
+                    backupStatus = false to "Backup failed: ${e.message ?: "unknown error"}"
+                }
+            }
+        }
+    }
+
+    // Import → user picks a Curio backup file.
+    val restoreLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            scope.launch {
+                try {
+                    val result = CurioBackupManager.restore(context, uri)
+                    backupStatus = true to
+                        "Restored ${result.captureCount} capture(s) and your settings.\n" +
+                        "Restart the app to pick up restored theme and reminder choices."
+                } catch (e: Exception) {
+                    backupStatus = false to "Restore failed: ${e.message ?: "unknown error"}"
+                }
+            }
+        }
+    }
 
     val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
     val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
@@ -85,6 +136,48 @@ fun SettingsScreen(navController: NavController) {
             },
             dismissButton = {
                 TextButton(onClick = { showNameDialog = false }) { Text("Cancel") }
+            }
+        )
+    }
+
+    // ── Restore confirmation — warns that current data gets replaced ──
+    if (showRestoreConfirm) {
+        AlertDialog(
+            onDismissRequest = { showRestoreConfirm = false },
+            shape = RoundedCornerShape(24.dp),
+            title = { Text("Restore backup?", fontWeight = FontWeight.Bold) },
+            text = {
+                Text(
+                    "This replaces all of your current captures and settings with " +
+                    "the contents of the backup file. This can't be undone."
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showRestoreConfirm = false
+                    restoreLauncher.launch(arrayOf(CurioBackupManager.MIME_TYPE))
+                }) { Text("Continue") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRestoreConfirm = false }) { Text("Cancel") }
+            }
+        )
+    }
+
+    // ── Backup/restore result feedback ───────────────────────────────
+    backupStatus?.let { (success, message) ->
+        AlertDialog(
+            onDismissRequest = { backupStatus = null },
+            shape = RoundedCornerShape(24.dp),
+            title = {
+                Text(
+                    if (success) "Done" else "Couldn't do that",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = { Text(message) },
+            confirmButton = {
+                TextButton(onClick = { backupStatus = null }) { Text("OK") }
             }
         )
     }
@@ -198,6 +291,26 @@ fun SettingsScreen(navController: NavController) {
                     SettingsItem(CurioIcons.DragHandle, "Manage categories", "Show, hide, or reorder") {
                         navController.navigate(CurioRoutes.MANAGE_CATEGORIES)
                     }
+                }
+
+                // Backup & restore
+                item { SectionHeader("Backup & restore") }
+                item {
+                    SettingsItem(CurioIcons.Backup, "Back up now", "Save captures + settings to a file") {
+                        backupLauncher.launch(CurioBackupManager.suggestedFileName())
+                    }
+                }
+                item {
+                    SettingsItem(CurioIcons.Restore, "Restore from backup", "Replace current data from a file") {
+                        showRestoreConfirm = true
+                    }
+                }
+                item {
+                    val whenLast = if (lastBackupAt > 0L) {
+                        SimpleDateFormat("MMM d, yyyy · h:mm a", Locale.getDefault())
+                            .format(Date(lastBackupAt))
+                    } else "Never"
+                    SettingsItem(CurioIcons.History, "Last backup", whenLast) {}
                 }
 
                 // About

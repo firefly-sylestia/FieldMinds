@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Curio Auto Backup rules — Android 11 and lower (fullBackupContent).
+
+    Mirrors data_extraction_rules.xml for devices running API <= 30:
+    back up only the Room database + shared prefs; keep audio (files/ domain)
+    out of the 25 MB cloud quota and crash logs out of user data.
+-->
+<full-backup-content>
+    <include domain="database" path="." />
+    <include domain="sharedpref" path="." />
+    <exclude domain="sharedpref" path="curio_crash_logs.xml" />
+</full-backup-content>

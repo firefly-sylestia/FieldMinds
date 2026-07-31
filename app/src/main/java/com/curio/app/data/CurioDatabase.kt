@@ -25,7 +25,13 @@ abstract class CurioDatabase : RoomDatabase() {
                     CurioDatabase::class.java,
                     "curio_database"
                 )
-                    .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
+                    // TRUNCATE journal mode (not WAL): Android Auto Backup can
+                    // restore a WAL-mode database in an inconsistent state because
+                    // the -wal/-shm files aren't guaranteed to be backed up in sync
+                    // with the main .db file. Curio's DB is a small single-table
+                    // text store, so the write-throughput tradeoff is negligible —
+                    // backup integrity wins.
+                    .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
                     .fallbackToDestructiveMigration(false)
                     .build()
                     .also { INSTANCE = it }

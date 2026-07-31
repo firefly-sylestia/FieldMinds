@@ -85,6 +85,10 @@ object CurioIcons {
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
 
+    // ── Backup / restore glyphs (Settings → Backup & restore)
+    const val Backup       = "backup"        // cloud upload — export data
+    const val Restore      = "restore"       // cloud download — import data
+
     // ── Status / report glyphs
     const val ErrorOutline = "error_outline"
     const val BugReport     = "bug_report"

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Curio Auto Backup rules — Android 12+ (targetSdk 31+).
+
+    The uninstall/reinstall "keep my data" behavior comes from Auto Backup:
+    with allowBackup=true the system uploads the data below to Google Drive
+    and restores it on reinstall/device setup.
+
+    Because <include> restricts the backup to ONLY the named domains, the
+    `files/` domain (audio recordings in filesDir/audio) is left out — audio
+    is large and would blow the 25 MB per-app cloud quota, which would
+    silently disable ALL cloud backup. Captures + settings are tiny text.
+
+    Crash logs (curio_crash_logs) are device noise, not user data, so they
+    are excluded; <exclude> takes precedence over <include>.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="database" path="." />
+        <include domain="sharedpref" path="." />
+        <exclude domain="sharedpref" path="curio_crash_logs.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="database" path="." />
+        <include domain="sharedpref" path="." />
+        <exclude domain="sharedpref" path="curio_crash_logs.xml" />
+    </device-transfer>
+</data-extraction-rules>
