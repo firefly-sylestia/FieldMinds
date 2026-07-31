@@ -987,11 +987,8 @@ private fun Carousel(
                 } else {
                     PeekCard(
                         slot = slot,
-                        accent = cat.accent,
-                        glyph = cat.iconGlyph,
-                        topic = topic,
-                        landed = landedTopic != null,
-                        shuffling = shuffling
+                        cat = cat,
+                        topic = topic
                     )
                 }
             }
@@ -1239,11 +1236,8 @@ private fun HeroTicketCard(
 @Composable
 private fun PeekCard(
     slot: Int,
-    accent: Color,
-    glyph: String,
-    topic: CurioTopic?,
-    landed: Boolean,
-    shuffling: Boolean
+    cat: CurioCategory,
+    topic: CurioTopic?
 ) {
     val isTop = slot < 0
     val far = kotlin.math.abs(slot) == 2
@@ -1255,6 +1249,14 @@ private fun PeekCard(
     }
     val w = if (far) 272.dp else 300.dp
     val h = if (far) 78.dp else 96.dp
+    // Corner radius scales with card height so the slim far deck cards
+    // keep crisp, proportional corners instead of over-rounded ones.
+    val corner = if (far) 12.dp else 16.dp
+    // Same solid card color as the hero ticket — accent for regular
+    // categories, the warm blush for the wildcard deck.
+    val cardColor = remember(cat.id) {
+        if (cat.id == CategoryId.WILDCARD) CurioColors.CoralBlush else cat.accent
+    }
 
     Box(
         modifier = Modifier
@@ -1283,11 +1285,11 @@ private fun PeekCard(
             label = "peekSlot_$slot"
         ) { currentTopic ->
             Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (shuffling) 0.16f else 0.08f),
+                shape = RoundedCornerShape(corner),
+                color = cardColor,
                 shadowElevation = 0.dp,
-                tonalElevation = if (far) 0.dp else 1.dp,
-                border = BorderStroke(1.dp, accent.copy(alpha = if (far) 0.10f else 0.20f)),
+                tonalElevation = 0.dp,
+                border = BorderStroke(1.dp, Color.White.copy(alpha = if (far) 0.12f else 0.22f)),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
@@ -1301,15 +1303,15 @@ private fun PeekCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         CurioIcon(
-                            name = glyph,
+                            name = cat.iconGlyph,
                             contentDescription = null,
-                            tint = accent.copy(alpha = 0.55f),
+                            tint = Color.White.copy(alpha = 0.75f),
                             size = 20.dp
                         )
                         Text(
                             text = currentTopic?.name ?: "…",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = Color.White,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -1805,9 +1807,11 @@ private fun resolveTopicForSlot(
     return when {
         landedTopic != null && slot == 0 -> landedTopic
         !shuffling -> when (slot) {
+            -2 -> pool[idxOf(pool.size - 2)]
             -1 -> pool[idxOf(pool.size - 1)]
             0 -> pool[0]
-            else -> pool[idxOf(1)]
+            1 -> pool[idxOf(1)]
+            else -> pool[idxOf(2)]
         }
         else -> when (slot) {
             -2 -> pool[idxOf(cycleIndex - 2)]
