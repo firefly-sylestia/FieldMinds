@@ -232,14 +232,11 @@ fun CurioNavHost(
             composable(CurioRoutes.BUG_REPORT) {
                 BugReportScreen(navController = navController)
             }
-            composable(
-                route = CurioRoutes.LIGHTBOX,
-                arguments = listOf(navArgument("imageUrl") { type = NavType.StringType })
-            ) { entry ->
-                LightboxScreen(
-                    imageUrl = safeDecode(entry.arguments?.getString("imageUrl")),
-                    navController = navController
-                )
+            composable(route = CurioRoutes.LIGHTBOX) {
+                // The image URI is handed off out-of-band via LightboxTarget
+                // (see CurioRoutes.lightbox) — no route arg, so no encoding/
+                // decoding round-trip that could corrupt content URIs.
+                LightboxScreen(navController = navController)
             }
         }
     }

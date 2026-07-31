@@ -62,6 +62,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.curio.app.ui.components.WaveformExtractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -751,6 +753,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
+    var boardExpanded by remember { mutableStateOf(false) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Mood board canvas with tile positions ──────────────────────
@@ -765,6 +768,28 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 val canvasH = with(density) { 460.dp.toPx() }
 
                 if (data.tileLayouts.isNotEmpty()) {
+                    // ── Expand button — full-screen collage ──────────────
+                    Surface(
+                        onClick = { boardExpanded = true },
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        shadowElevation = 0.dp,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(12.dp)
+                            .size(36.dp)
+                            .zIndex(999f)
+                    ) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            CurioIcon(
+                                name = CurioIcons.Fullscreen,
+                                contentDescription = "Expand mood board",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                size = 18.dp
+                            )
+                        }
+                    }
+
                     data.tileLayouts.forEachIndexed { i, tile ->
                         Box(
                             modifier = Modifier
@@ -830,6 +855,129 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+
+        if (boardExpanded) {
+            ExpandedMoodBoardDialog(
+                data = data,
+                navController = navController,
+                onDismiss = { boardExpanded = false }
+            )
+        }
+    }
+}
+
+/**
+ * Full-screen expanded mood board — scales the tile collage up to fill the
+ * screen, centers it, and keeps per-tile tap → Lightbox. Close button
+ * top-right; back/outside tap dismisses.
+ */
+@Composable
+private fun ExpandedMoodBoardDialog(
+    data: CaptureData.GalleryWall,
+    navController: NavController,
+    onDismiss: () -> Unit
+) {
+    val density = LocalDensity.current
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                val dialogW = with(density) { maxWidth.toPx() }
+                val dialogH = with(density) { maxHeight.toPx() }
+
+                if (data.tileLayouts.isNotEmpty()) {
+                    // Board bounds from stored tile geometry
+                    val maxX = data.tileLayouts.maxOf { it.offsetXPx + it.widthPx }
+                    val maxY = data.tileLayouts.maxOf { it.offsetYPx + it.heightPx }
+                    val scale = if (maxX > 0f && maxY > 0f) {
+                        (dialogW / maxX).coerceAtMost(dialogH / maxY)
+                    } else 1f
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .offset {
+                                IntOffset(
+                                    ((dialogW - maxX * scale) / 2f).roundToInt(),
+                                    ((dialogH - maxY * scale) / 2f).roundToInt()
+                                )
+                            }
+                    ) {
+                        data.tileLayouts.forEachIndexed { i, tile ->
+                            Box(
+                                modifier = Modifier
+                                    .offset {
+                                        IntOffset(
+                                            (tile.offsetXPx * scale).roundToInt(),
+                                            (tile.offsetYPx * scale).roundToInt()
+                                        )
+                                    }
+                                    .zIndex(i.toFloat())
+                            ) {
+                                Surface(
+                                    onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) },
+                                    shape = RoundedCornerShape(18.dp),
+                                    color = MaterialTheme.colorScheme.surface,
+                                    shadowElevation = 0.dp,
+                                    modifier = Modifier
+                                        .size(
+                                            width = with(density) { (tile.widthPx * scale).toDp() },
+                                            height = with(density) { (tile.heightPx * scale).toDp() }
+                                        )
+                                        .rotate(tile.rotationDeg)
+                                ) {
+                                    Image(
+                                        painter = rememberAsyncImagePainter(tile.uri),
+                                        contentDescription = "Open image",
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(6.dp)
+                                            .clip(RoundedCornerShape(14.dp))
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ── Close button ─────────────────────────────────────────
+                Surface(
+                    onClick = onDismiss,
+                    shape = RoundedCornerShape(50),
+                    color = Color.Black.copy(alpha = 0.55f),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .size(44.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        CurioIcon(
+                            name = CurioIcons.Close,
+                            contentDescription = "Close expanded mood board",
+                            tint = Color.White,
+                            size = 22.dp
+                        )
+                    }
+                }
+
+                // ── Hint ─────────────────────────────────────────────────
+                Text(
+                    text = "Tap a tile to open it full screen",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = Color.White.copy(alpha = 0.6f),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 24.dp)
                 )
             }
         }

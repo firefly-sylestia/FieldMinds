@@ -11,6 +11,19 @@ import android.net.Uri
  * phase keeps everything in one NavHost — switching tabs uses saveState /
  * restoreState so back-stack inside each tab is preserved.
  */
+/**
+ * Out-of-band handoff for the Lightbox target URI.
+ *
+ * The image URI is passed here (not through the nav route string) because
+ * Compose Navigation auto-decodes path arguments — combined with a second
+ * decode in the NavHost this corrupts percent-encoded content URIs and the
+ * image never loads. Setting [uri] right before navigating and reading it in
+ * the Lightbox keeps the URI byte-for-byte intact.
+ */
+object LightboxTarget {
+    var uri: String? = null
+}
+
 object CurioRoutes {
 
     // ── Bottom-nav tabs (always rendered with the bottom nav bar)
@@ -34,7 +47,7 @@ object CurioRoutes {
     const val SETTINGS = "settings"
     const val MANAGE_CATEGORIES = "manage-categories"
     const val TOPIC_HISTORY = "topic-history"
-    const val LIGHTBOX = "lightbox/{imageUrl}"
+    const val LIGHTBOX = "lightbox"
     const val CRASH = "crash"
     const val BUG_REPORT = "bug-report"
 
@@ -45,7 +58,11 @@ object CurioRoutes {
     fun captureFor(categorySlug: String, topicName: String) =
         "capture/$categorySlug/${Uri.encode(topicName)}"
     fun entryDetail(entryId: String) = "detail/$entryId"
-    fun lightbox(imageUrl: String) = "lightbox/${Uri.encode(imageUrl)}"
+    /** Sets the out-of-band target and returns the arg-free Lightbox route. */
+    fun lightbox(imageUrl: String): String {
+        LightboxTarget.uri = imageUrl
+        return LIGHTBOX
+    }
 
     /** Routes where the bottom navigation bar should be visible. */
     val bottomNavRoutes: Set<String> = setOf(HOME, SPIN, CABINET)

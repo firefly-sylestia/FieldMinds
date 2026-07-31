@@ -72,6 +72,7 @@ object CurioIcons {
     const val Mic         = "mic"
     const val MicNone     = "mic_none"
     const val Image       = "image"
+    const val Fullscreen  = "fullscreen"   // ⤢ — expand mood board
     const val PlayArrow   = "play_arrow"
     const val Pause       = "pause"
     const val Stop        = "stop"
