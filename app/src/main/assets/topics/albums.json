@@ -4011,28 +4011,6 @@
     "tier": 1
   },
   {
-    "id": "album-flying-lotus-cosmogramma",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "Cosmogramma",
-    "teaser": "Flying Lotus (Steven Ellison) 2010 — the album that blurred the line between hip-hop, electronic, and jazz into a new genre. Ellison, the grand-nephew of Alice Coltrane, recorded the album in his Los Angeles apartment.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "Cosmogramma (2010) end-to-end",
-      "durationMinutes": 45,
-      "instruction": "Listen to 'Zodiac Shit' — the track samples a 1970s spiritual jazz record that Ellison found in his aunt's collection, then runs it through a digital blender. Then 'Do the Astral Plane' — the bassline was played by Thundercat, who Ellison discovered playing jazz clubs."
-    },
-    "tags": [
-      "Electronic",
-      "Experimental",
-      "Wonky",
-      "American",
-      "2010s"
-    ],
-    "tier": 1
-  },
-  {
     "id": "album-four-tet-rounds",
     "categoryId": "ALBUMS",
     "subtype": "Album",
@@ -4866,22 +4844,6 @@
     "tier": 1
   },
   {
-    "id": "album-lauren-hill-miseducation",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "The Miseducation of Lauryn Hill",
-    "teaser": "Already in catalog — see Hip-Hop section.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "",
-      "durationMinutes": 0,
-      "instruction": ""
-    },
-    "tags": [],
-    "tier": 1
-  },
-  {
     "id": "album-maxwell-urban-hang-suite",
     "categoryId": "ALBUMS",
     "subtype": "Album",
@@ -4920,27 +4882,6 @@
       "Sophisti-Pop",
       "British-Nigerian",
       "1990s"
-    ],
-    "tier": 1
-  },
-  {
-    "id": "album-sly-and-the-family-stone-theres-a-riot",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "There's a Riot Goin' On",
-    "teaser": "Sly and the Family Stone 1971 — recorded almost entirely by Sly Stone alone in a drug-fueled haze at the Record Plant in Los Angeles. The album is a deliberate deconstruction of the optimistic funk of 'Dance to the Music'.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "There's a Riot Goin' On (1971) end-to-end",
-      "durationMinutes": 48,
-      "instruction": "Listen to 'Family Affair' — the drum machine was Sly's new Maestro Rhythm King, the first time a drum machine had driven a #1 hit. Then 'Runnin' Away' — the horns are so buried in the mix they sound like they're playing from another room."
-    },
-    "tags": [
-      "Funk",
-      "Soul",
-      "American",
-      "1970s"
     ],
     "tier": 1
   },
@@ -5024,28 +4965,6 @@
     "tags": [
       "Disco",
       "Funk",
-      "American",
-      "1970s"
-    ],
-    "tier": 1
-  },
-  {
-    "id": "album-earth-wind-and-fire-thats-the-way",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "That's the Way of the World",
-    "teaser": "Earth, Wind & Fire 1975 — the album that perfected the intersection of funk, soul, jazz, and spirituality. Recorded at Caribou Ranch in Colorado, where the band could see mountains from the studio window.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "That's the Way of the World (1975) end-to-end",
-      "durationMinutes": 39,
-      "instruction": "Listen to 'Shining Star' — the opening synth riff was played on a Moog by Larry Dunn. Then 'Reasons' — Philip Bailey's falsetto hits notes that shouldn't be physically possible. The horn section, the Phenix Horns, were recorded in a single day."
-    },
-    "tags": [
-      "Funk",
-      "Soul",
-      "R&B",
       "American",
       "1970s"
     ],
@@ -5153,27 +5072,6 @@
       "Solo Piano",
       "American",
       "1970s"
-    ],
-    "tier": 1
-  },
-  {
-    "id": "album-charles-mingus-black-saint",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "The Black Saint and the Sinner Lady",
-    "teaser": "Charles Mingus 1963 — a six-part ballet for an 11-piece band, recorded as a single continuous take (then split into tracks for the LP). Mingus wrote the album after being released from Bellevue psychiatric hospital. His therapist encouraged him to write music as therapy.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "The Black Saint and the Sinner Lady (1963) end-to-end",
-      "durationMinutes": 40,
-      "instruction": "Listen to 'Track A — Solo Dancer' — the opening is a single held saxophone note over frantic percussion. Then 'Track C — Group Dancers' — the horns play a melody that sounds like Duke Ellington arranged by a madman."
-    },
-    "tags": [
-      "Jazz",
-      "Avant-Garde Jazz",
-      "American",
-      "1960s"
     ],
     "tier": 1
   },
@@ -8432,27 +8330,6 @@
     "tier": 2
   },
   {
-    "id": "album-robert-johnson-king-of-the-delta-blues",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "King of the Delta Blues Singers",
-    "teaser": "Robert Johnson 1961 — a compilation released 23 years after Johnson's death at 27, introducing the Delta blues legend to a generation of British musicians. Johnson recorded only 29 songs in his lifetime, in two sessions in 1936-37 in San Antonio and Dallas.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "King of the Delta Blues Singers (1961) end-to-end",
-      "durationMinutes": 42,
-      "instruction": "Listen to 'Cross Road Blues' — Johnson's guitar sounds like two players because he played the bassline with his thumb and the melody with his fingers simultaneously."
-    },
-    "tags": [
-      "Blues",
-      "Delta Blues",
-      "American",
-      "1930s"
-    ],
-    "tier": 1
-  },
-  {
     "id": "album-muddy-waters-folk-singer",
     "categoryId": "ALBUMS",
     "subtype": "Album",
@@ -8765,27 +8642,6 @@
       "Classical",
       "Minimalism",
       "Opera",
-      "American",
-      "1970s"
-    ],
-    "tier": 1
-  },
-  {
-    "id": "album-steve-reich-music-for-18-musicians",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "Music for 18 Musicians",
-    "teaser": "Steve Reich 1978 — an hour-long pulse-based composition for violin, cello, clarinets, pianos, marimbas, xylophones, metallophone, and women's voices. The piece is built on 11 chords that cycle and transform over time.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "Music for 18 Musicians (1978) end-to-end",
-      "durationMinutes": 56,
-      "instruction": "Listen to the opening — a pulse emerges from silence, then the voices enter on a single syllable. Each chord cycle lasts about 5 minutes. The transition from Section V to Section VI at ~25:00 is where everything you've been hearing suddenly makes sense."
-    },
-    "tags": [
-      "Classical",
-      "Minimalism",
       "American",
       "1970s"
     ],
@@ -9298,29 +9154,6 @@
       "Pop",
       "Rock",
       "British",
-      "1970s"
-    ],
-    "tier": 1
-  },
-  {
-    "id": "album-stevie-wonder-songs-in-the-key-of-life",
-    "categoryId": "ALBUMS",
-    "subtype": "Album",
-    "name": "Songs in the Key of Life",
-    "teaser": "Stevie Wonder 1976 — a double album plus a bonus EP, released on Stevie's 26th birthday. He played most of the instruments himself, including drums, bass, keyboards, and harmonica. The album took over a year to record and nearly bankrupted Motown.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Listen",
-      "targetName": "Songs in the Key of Life (1976) — disc 1",
-      "durationMinutes": 50,
-      "instruction": "Listen to 'Sir Duke' — the horn arrangement took 3 days to perfect. Stevie wrote it as a tribute to Duke Ellington, who had just died. Then 'As' — the song's chord progression never fully resolves, creating a sense of perpetual motion that matches the lyric about eternal love."
-    },
-    "tags": [
-      "Soul",
-      "Pop",
-      "Funk",
-      "R&B",
-      "American",
       "1970s"
     ],
     "tier": 1

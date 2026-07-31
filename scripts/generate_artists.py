@@ -1460,13 +1460,1104 @@ ARTISTS = [
         "Listen to 'Good Luck, Babe!' — the song about doomed love that became a phenomenon. Then 'Pink Pony Club' — the anthem about finding yourself. 'Femininomenom' — the rallying cry. Roan's rise took years — she was dropped by her first label and rebuilt herself.",
         ["Pop", "Synth-Pop", "American", "2020s"], 1
     ),
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # BATCH 6 — ~130 artists: rock legends, punk/post-punk, pop icons,
+    # funk/soul, hip-hop, R&B/neo-soul, folk, shoegaze, metal, country,
+    # reggae/Afrobeats, EDM, bossa nova, Latin, world, blues, film scores, K-pop
+    # ═══════════════════════════════════════════════════════════════════════
+
+    # ── ROCK LEGENDS ──
+    (
+        "artist-led-zeppelin", "Artist",
+        "Led Zeppelin",
+        "Jimmy Page bought the house that once belonged to occultist Aleister Crowley. 'Stairway to Heaven' was never released as a single — the band refused, insisting you had to hear the whole build. Plant wrote its lyrics in an afternoon at Headley Grange, and Page's solo was improvised in one take.",
+        "Led Zeppelin — IV (1971) end-to-end", 42,
+        "Listen to 'Stairway to Heaven' with the volume rising — Page built it as three movements: acoustic folk, electric interlude, hard-rock climax. Then 'When the Levee Breaks' — Bonham's drum part was recorded in a hallway with two mics; it's still the most-sampled drum break in hip-hop.",
+        ["Rock", "Hard Rock", "British", "1970s"], 1
+    ),
+    (
+        "artist-queen", "Artist",
+        "Queen",
+        "Freddie Mercury was born Farrokh Bulsara in Zanzibar and worked as an airport baggage handler before fame. He had four extra molars, which he said gave his voice its unique range. 'Bohemian Rhapsody' took three weeks to record — over 180 vocal overdubs stacked into that operatic section.",
+        "Queen — A Night at the Opera (1975) end-to-end", 43,
+        "Listen to 'Bohemian Rhapsody' all the way through without skipping — the operatic middle was recorded in sections by three different studios. Then 'Somebody to Love' — Freddie's gospel homage. Notice how the band never repeated a formula; every Queen album experiments somewhere.",
+        ["Rock", "Glam Rock", "British", "1970s"], 1
+    ),
+    (
+        "artist-rolling-stones", "Artist",
+        "The Rolling Stones",
+        "Keith Richards has played the same battered guitar, 'Micawber,' since 1964 — it's tuned to open G, giving the Stones their signature strut. The 'Satisfaction' riff came to him in his sleep; he recorded it on a cassette player by his bed before it vanished. The band named itself after a Muddy Waters song.",
+        "The Rolling Stones — Exile on Main St. (1972) end-to-end", 67,
+        "Listen to 'Exile on Main St.' at night — it was recorded in a sweltering French villa basement. Then 'Gimme Shelter' — Merry Clayton's backing vocal is so intense she reportedly lost her voice and miscarried that week; it's one of rock's most chilling performances.",
+        ["Rock", "Blues Rock", "British", "1960s"], 1
+    ),
+    (
+        "artist-the-who", "Artist",
+        "The Who",
+        "Pete Townshend smashed his first guitar by accident when its neck hit a low ceiling — and the crowd loved it, so he kept doing it. 'My Generation' featured stuttering lyrics to capture the energy of mods on amphetamines. Keith Moon was once voted the greatest drummer in rock by fans and journalists.",
+        "The Who — Who's Next (1971) end-to-end", 43,
+        "Listen to 'Baba O'Riley' — the synth loop was Townshend improvising on a Lowrey organ, and the violin solo was played by Dave Arbus, a folk fiddler. Then 'Won't Get Fooled Again' — the song ends with Moon's famous drum break, recorded in a single take.",
+        ["Rock", "Mod", "British", "1960s"], 1
+    ),
+    (
+        "artist-jimi-hendrix", "Artist",
+        "Jimi Hendrix",
+        "Hendrix played a right-handed guitar flipped upside down as a lefty, so his chord voicings sound like no one else's. He was a paratrooper in the 101st Airborne before music. When Dylan heard Hendrix's 'All Along the Watchtower,' he reportedly said 'It's his song now.'",
+        "Jimi Hendrix — Are You Experienced (1967) end-to-end", 40,
+        "Listen to 'Purple Haze' — the famous opening is actually a mistake: the intro chord was never written down. Then 'Little Wing' — just 2 minutes, but it spawned the most covered guitar style in history. Hendrix played it with his amp on full, controlling feedback like a singer controls vibrato.",
+        ["Rock", "Psychedelic Rock", "American", "1960s"], 1
+    ),
+    (
+        "artist-fleetwood-mac", "Artist",
+        "Fleetwood Mac",
+        "'Rumours' was recorded while every band member was going through a breakup — with each other. Stevie Nicks wrote 'Dreams' in ten minutes, sitting on a chair in the studio while Lindsey Buckingham argued nearby. The band's name comes from drummer Mick Fleetwood and bassist John McVie.",
+        "Fleetwood Mac — Rumours (1977) end-to-end", 40,
+        "Listen to 'The Chain' — the only song on Rumours written by all five members, and its famous bass riff was actually recorded as a separate jam. Then 'Never Going Back Again' — one acoustic guitar, double-tracked, with Lindsey's fingers bleeding from the complex picking.",
+        ["Rock", "Soft Rock", "American-British", "1970s"], 1
+    ),
+    (
+        "artist-the-doors", "Artist",
+        "The Doors",
+        "The band took its name from Aldous Huxley's book 'The Doors of Perception.' Jim Morrison died in Paris at 27 and is buried at Père Lachaise — his grave is one of the most visited in the world. 'Light My Fire' was written by guitarist Robby Krieger, not Morrison, who was initially unsure about it.",
+        "The Doors — The Doors (1967) end-to-end", 44,
+        "Listen to 'The End' — it began as a goodbye-to-girlfriend song and grew into an Oedipal epic that Morrison stretched live for 15 minutes. Then 'Light My Fire' — Ray Manzarek's organ solo and the band refusing to cut it for radio, only relenting when the label begged.",
+        ["Rock", "Psychedelic Rock", "American", "1960s"], 2
+    ),
+    (
+        "artist-ccr", "Artist",
+        "Creedence Clearwater Revival",
+        "John Fogerty wrote and sang nearly everything, including the draft-exemption song 'Fortunate Son' — about rich kids dodging Vietnam while poor kids went. Fogerty himself was drafted and served in the Army Reserve while CCR was topping charts. 'Proud Mary' was written in twenty minutes.",
+        "Creedence Clearwater Revival — Cosmo's Factory (1970) end-to-end", 41,
+        "Listen to 'Fortunate Son' — the only political song that still sounds fun. Then 'Run Through the Jungle' and 'Who'll Stop the Rain' back to back — both about Vietnam, both disguised as swamp rock. Fogerty once said his lyrics hid the politics in plain sight.",
+        ["Rock", "Swamp Rock", "American", "1960s"], 2
+    ),
+    (
+        "artist-eagles", "Artist",
+        "Eagles",
+        "'Hotel California' — Don Felder brought a demo with just the chord progression and everyone wrote around it. The band's Greatest Hits (1971–1975) became the best-selling album of the 20th century in the US. The line 'you can check out any time you like, but you can never leave' is about the music industry itself.",
+        "Eagles — Hotel California (1976) end-to-end", 43,
+        "Listen to the dual-guitar outro of 'Hotel California' — Felder and Joe Walsh trade solos live in concert with no rehearsal. Then 'New Kid in Town' — a song about how fast fame fades. The album's title track was recorded in sections across three studios.",
+        ["Rock", "Country Rock", "American", "1970s"], 2
+    ),
+    (
+        "artist-ac-dc", "Artist",
+        "AC/DC",
+        "Angus Young's schoolboy uniform was his sister Margaret's idea — and he still wears it in his 60s. 'Back in Black' was written to honor singer Bon Scott, who died of alcohol poisoning; it became the second-best-selling album in history. Malcolm Young played the riff before the band knew it was a song.",
+        "AC/DC — Back in Black (1980) end-to-end", 42,
+        "Listen to the opening riff of 'Back in Black' at full volume — Malcolm Young said it was written on a couch with no guitar in hand. Then 'You Shook Me All Night Long' — Brian Johnson's first-ever vocal take with the band was kept. The album was recorded in the Bahamas in 70 days.",
+        ["Rock", "Hard Rock", "Australian", "1980s"], 2
+    ),
+    (
+        "artist-van-halen", "Artist",
+        "Van Halen",
+        "Eddie Van Halen never had a guitar lesson — he learned by watching players and playing classical piano pieces by ear. His contract famously demanded brown M&Ms backstage: a test to see if venues read the technical rider. 'Eruption' was a mistake he insisted on keeping on the album.",
+        "Van Halen — Van Halen (1978) end-to-end", 36,
+        "Listen to 'Eruption' — recorded in one take after a rehearsal, it's the song that made tapping guitar technique famous overnight. Then 'Ain't Talkin' 'bout Love' — Eddie's rhythm riff is three chords played with syncopation so tight it sounds like four.",
+        ["Rock", "Hard Rock", "American", "1970s"], 2
+    ),
+    (
+        "artist-guns-n-roses", "Artist",
+        "Guns N' Roses",
+        "'Sweet Child o' Mine' started as a Slash string-skip warm-up exercise — the band heard it and built the song around it. Axl Rose's real name is William Bruce Rose Jr. 'Appetite for Destruction' remains the best-selling debut album in US history at over 30 million copies.",
+        "Guns N' Roses — Appetite for Destruction (1987) end-to-end", 54,
+        "Listen to the intro of 'Sweet Child o' Mine' three times: once for Slash's riff, once for the bass, once for Axl's falsetto. Then 'Paradise City' — the song ends with a key change the band didn't plan; it just kept going in the studio and stuck.",
+        ["Rock", "Hard Rock", "American", "1980s"], 2
+    ),
+    (
+        "artist-red-hot-chili-peppers", "Artist",
+        "Red Hot Chili Peppers",
+        "Flea was a jazz trumpet player who switched to bass after seeing punk shows. The band's early gigs featured the members in nothing but socks — a protest against LA's conservative club scene. 'Under the Bridge' was written about Anthony Kiedis's loneliness and addiction, not romance.",
+        "Red Hot Chili Peppers — Californication (1999) end-to-end", 56,
+        "Listen to 'Scar Tissue' — the slide guitar is John Frusciante returning from near-fatal addiction. Then 'Otherside' — the song is about struggling with heroin, disguised as a melody. The album was recorded in a Malibu mansion, and the band re-learned how to play together on it.",
+        ["Rock", "Funk Rock", "American", "1990s"], 2
+    ),
+    (
+        "artist-pearl-jam", "Artist",
+        "Pearl Jam",
+        "Eddie Vedder was a gas-station attendant who mailed demo tapes to the band and was flown in for an audition. 'Jeremy' is based on a real 1991 school shooting in Texas. The band spent years fighting Ticketmaster over service fees, nearly killing their own touring business.",
+        "Pearl Jam — Ten (1991) end-to-end", 53,
+        "Listen to 'Alive' — the guitar solo is Mike McCready quoting Jimi Hendrix and Neil Young in one take. Then 'Black' — Vedder recorded the vocal in one take and refused to redo it. The album's name 'Ten' was bassist Jeff Ament's jersey number, worn playing basketball.",
+        ["Rock", "Grunge", "American", "1990s"], 2
+    ),
+    (
+        "artist-rem", "Artist",
+        "R.E.M.",
+        "Michael Stipe's early lyrics were indecipherable — he sang in a mumble because he was too shy to write real words. The band's name was chosen from a dictionary; it means rapid eye movement. 'Losing My Religion' is built on a mandolin and became one of the most-played songs of the 1990s.",
+        "R.E.M. — Automatic for the People (1992) end-to-end", 49,
+        "Listen to 'Nightswimming' — recorded with just piano, bass, strings, and Stipe's voice, in one room. Then 'Everybody Hurts' — the band insisted on a slow song about kindness after realizing no one else was writing one. Notice how the album never once uses a drum machine.",
+        ["Rock", "Alternative Rock", "American", "1990s"], 2
+    ),
+    (
+        "artist-u2", "Artist",
+        "U2",
+        "Bono's real name is Paul Hewson — 'Bono' came from a hearing-aid shop called Bonavox in Dublin. The band formed in 1976 when drummer Larry Mullen posted a note on his school bulletin board asking for musicians. 'Where the Streets Have No Name' was filmed on a rooftop in downtown LA.",
+        "U2 — The Joshua Tree (1987) end-to-end", 51,
+        "Listen to 'With or Without You' — the bassline was played by The Edge as an afterthought while the band argued in the studio. Then 'Where the Streets Have No Name' — recorded 21 times because the band kept overthinking it. The Edge's real name is Dave Evans; his delay pedals are half the sound.",
+        ["Rock", "Alternative Rock", "Irish", "1980s"], 2
+    ),
+
+    # ── PUNK / POST-PUNK / NEW WAVE ──
+    (
+        "artist-ramones", "Artist",
+        "The Ramones",
+        "All four original members took the stage name Ramone — none of them were related. Joey was born Jeffrey Hyman, Dee Dee was born Douglas Colvin, and Tommy was born Tamás Erdélyi. The band played songs under two minutes, dressed in identical leather jackets, and influenced nearly every punk band that followed.",
+        "The Ramones — Ramones (1976) end-to-end", 30,
+        "Listen to the entire 14-track debut in one sitting — it's under 30 minutes, one of the shortest great albums ever. Then 'Blitzkrieg Bop' — that 'Hey! Ho! Let's go!' chant was written by manager Tom Erdelyi. The band stayed on the road for 22 years without a single hit.",
+        ["Punk", "American", "1970s"], 2
+    ),
+    (
+        "artist-the-clash", "Artist",
+        "The Clash",
+        "The only punk band that mattered, and they meant it: they signed to CBS with the proviso they could keep making political records. 'London Calling' was recorded in a converted piano factory with a broken heating system. Their guitarist Mick Jones collected records the way others collect stamps.",
+        "The Clash — London Calling (1979) end-to-end", 65,
+        "Listen to 'London Calling' — the title song's bassline is a Bo Diddley beat played by Paul Simonon. The cover photo is bassist Simonon smashing his bass on stage — the photographer caught it by luck. The album mixes punk, reggae, rockabilly, and jazz in 19 songs.",
+        ["Punk", "Post-Punk", "British", "1970s"], 2
+    ),
+    (
+        "artist-sex-pistols", "Artist",
+        "Sex Pistols",
+        "They released just one studio album — 'Never Mind the Bollocks' — and changed the world anyway. Sid Vicious was hired for his look and famously struggled to play bass. The band's 'God Save the Queen' was banned by the BBC and still reached #2 in the UK.",
+        "Sex Pistols — Never Mind the Bollocks (1977) end-to-end", 38,
+        "Listen to 'Anarchy in the UK' — the song that made the Sex Pistols famous before they even released an album. Then 'Pretty Vacant' — the band's punk anthem. Notice the bass: guitarist Steve Jones played most of it, because bassist Glen Matlock had left before the album was finished.",
+        ["Punk", "British", "1970s"], 3
+    ),
+    (
+        "artist-iggy-pop", "Artist",
+        "Iggy Pop",
+        "The Godfather of punk — he crawled on broken glass at concerts and smeared himself in peanut butter. His band The Stooges' 'Raw Power' was mixed by David Bowie, who reportedly sat on the faders until the band liked it. Iggy studied to be a drummer before ever singing.",
+        "The Stooges — Raw Power (1973) end-to-end", 34,
+        "Listen to 'Search and Destroy' — the opening riff is a blues riff sped up until it becomes punk. Then 'Gimme Danger' — a rare tender moment in the Stooges catalog. Iggy's vocals were recorded while he was genuinely unhinged; the band recorded the album in London in two weeks.",
+        ["Punk", "Proto-Punk", "American", "1970s"], 2
+    ),
+    (
+        "artist-joy-division", "Artist",
+        "Joy Division",
+        "Ian Curtis wrote 'Love Will Tear Us Apart' about his failing marriage while suffering from epilepsy and severe depression; he died by suicide at 23, days before the band's first US tour. Their name came from the 'joy divisions' — the name given in Holocaust literature to camp sections where prisoners were forced into sexual servitude.",
+        "Joy Division — Unknown Pleasures (1979) end-to-end", 39,
+        "Listen to 'Disorder' — the hypnotic, slightly off-kilter drum pattern and bassline open an album with a sound no one had heard before. The cover's white pulses are radio waves from a pulsar — the band found the image in an astronomy book. Every post-punk band you love started here.",
+        ["Post-Punk", "British", "1970s"], 2
+    ),
+    (
+        "artist-new-order", "Artist",
+        "New Order",
+        "Formed from the ashes of Joy Division after Ian Curtis's death, they accidentally invented the sound of the 80s: melancholy guitar over dance beats. 'Blue Monday' is the best-selling 12-inch single of all time. Its cover artwork was designed by the band's Peter Saville — and cost more to produce than the band made from it.",
+        "New Order — Power, Corruption & Lies (1983) end-to-end", 43,
+        "Listen to 'Blue Monday' — the drum pattern comes from Kraftwerk's 'Uranium' and a borrowed sequencer. Then 'Your Silent Face' — the band's most beautiful melody, written while they were still learning how to be a band without Curtis. The transition from post-punk to dance music happens in this album.",
+        ["New Wave", "Synth-Pop", "British", "1980s"], 2
+    ),
+    (
+        "artist-the-cure", "Artist",
+        "The Cure",
+        "Robert Smith's signature look — smeared lipstick and a bird's-nest haircut — began by accident when his makeup bag opened in his luggage before a TV appearance. The band's name came from a photo caption Smith wrote. 'Friday I'm in Love' was written as a joke about writing a happy song.",
+        "The Cure — Disintegration (1989) end-to-end", 72,
+        "Listen to 'Pictures of You' — Smith wrote the lyrics from letters he kept after a house fire destroyed his home and photo albums. Then 'Lovesong' — a wedding present for his wife. 'Disintegration' was recorded in a haunted studio and the band felt the album was cursed; it's now considered their masterpiece.",
+        ["New Wave", "Gothic Rock", "British", "1980s"], 2
+    ),
+    (
+        "artist-the-smiths", "Artist",
+        "The Smiths",
+        "Morrissey and Johnny Marr wrote 'How Soon Is Now?' in the studio from a leftover riff — it was nearly left off the album. The Smiths' songs about celibacy, heartbreak, and being an outsider made them the most beloved cult band of the 80s. Marr played every guitar part; Morrissey wrote every lyric.",
+        "The Smiths — The Queen Is Dead (1986) end-to-end", 36,
+        "Listen to 'There Is a Light That Never Goes Out' — Morrissey's most famous lyric ('if a double-decker bus crashes into us'). Then 'Bigmouth Strikes Again' — the song where he jokes he's Joan of Arc. Notice how Marr's jangly guitar carries melody that Morrissey's words answer.",
+        ["Indie Rock", "Jangle Pop", "British", "1980s"], 2
+    ),
+    (
+        "artist-the-velvet-underground", "Artist",
+        "The Velvet Underground",
+        "Their debut sold terribly but influenced everything — Brian Eno famously said only 30,000 people bought it, but they all started bands. The band was managed by Andy Warhol, who put them with Nico. Lou Reed and John Cale's avant-garde ideas met rock and created art rock.",
+        "The Velvet Underground & Nico (1967) end-to-end", 48,
+        "Listen to 'Heroin' — the song is in one chord, and the guitar feedback builds as the drums speed up, mirroring the drug's rush. Then 'Venus in Furs' — the viola is played with a bow like a drone. 'Sunday Morning' was written as an afterthought when the label demanded a gentle single.",
+        ["Art Rock", "Proto-Punk", "American", "1960s"], 2
+    ),
+    (
+        "artist-pixies", "Artist",
+        "Pixies",
+        "Kurt Cobain admitted he was basically ripping off the Pixies' loud-quiet-loud dynamic for 'Smells Like Teen Spirit.' Black Francis wrote 'Where Is My Mind?' about watching a tiny submarine pilot navigate — the song became a legend after 'Fight Club.' The band broke up mid-career and reunited 10 years later.",
+        "Pixies — Doolittle (1989) end-to-end", 39,
+        "Listen to 'Debaser' — inspired by the surrealist film 'Un Chien Andalou' (a razor cutting an eye). Then 'Monkey Gone to Heaven' — about environmental collapse disguised as a singalong. Kim Deal's bass drives every song; Francis and Deal singing together is the Pixies sound.",
+        ["Alternative Rock", "American", "1980s"], 2
+    ),
+
+    # ── POP ICONS ──
+    (
+        "artist-michael-jackson", "Artist",
+        "Michael Jackson",
+        "The King of Pop — he started performing at age 5 with his brothers in the Jackson 5, singing 'ABC' with the family. 'Thriller' remains the best-selling album of all time, and its 14-minute zombie video changed music videos forever. He also bought the Beatles' catalog and owned it for decades.",
+        "Michael Jackson — Thriller (1982) end-to-end", 42,
+        "Listen to 'Billie Jean' — the bassline is the most recognizable in pop history, played by session legend Louis Johnson on a Yamaha. Then 'Human Nature' — the song Quincy Jones almost rejected. Notice how Jackson's vocals layer in a way that's impossible to recreate — he recorded each harmony himself.",
+        ["Pop", "R&B", "American", "1980s"], 1
+    ),
+    (
+        "artist-madonna", "Artist",
+        "Madonna",
+        "She arrived in New York with $35 in her pocket and took a cab to Times Square — then called home to say she was okay. 'Like a Prayer' — the video with burning crosses got her condemned by the Vatican and made the song her biggest hit. She choreographed her own videos because she knew every step.",
+        "Madonna — Like a Prayer (1989) end-to-end", 51,
+        "Listen to the title track — the gospel choir, the church organ, the percussion: it's a pop song built like a religious service, and it was written with Patrick Leonard in hours. Then 'Vogue' — the house beat and the spoken 'voguing' instructions came from Harlem ballroom culture.",
+        ["Pop", "Dance", "American", "1980s"], 1
+    ),
+    (
+        "artist-whitney-houston", "Artist",
+        "Whitney Houston",
+        "Whitney's mother Cissy and cousin Dionne Warwick — she grew up surrounded by gospel royalty. Her version of 'The Star-Spangled Banner' at the 1991 Super Bowl is considered one of the greatest national anthems ever sung. 'I Will Always Love You' was originally a Dolly Parton country song.",
+        "Whitney Houston — The Bodyguard soundtrack (1992) end-to-end", 57,
+        "Listen to 'I Will Always Love You' — she held the note 'and I' for nearly 12 seconds, and the record label fought to keep it. Then 'I Wanna Dance with Somebody' — a gospel-trained voice singing pure pop joy. Her vocal range was often called 'the voice of a generation' for a reason.",
+        ["Pop", "R&B", "American", "1980s"], 2
+    ),
+    (
+        "artist-taylor-swift", "Artist",
+        "Taylor Swift",
+        "She wrote her first song at 12 after a bully took her computer away — the song was about wanting it back. 'Speak Now' was written entirely solo. She re-recorded her first six albums ('Taylor's Version') to own her masters — the most successful catalogue heist in pop history.",
+        "Taylor Swift — Folklore (2020) end-to-end", 63,
+        "Listen to 'Cardigan' — the whole album was written in quarantine without a single co-writer in the room; she worked with Aaron Dessner over voice memos. Then 'August' — the song's perspective shift mid-album is the point. Folklore proved she could abandon pop spectacle and still dominate.",
+        ["Pop", "Indie Folk", "American", "2020s"], 1
+    ),
+    (
+        "artist-adele", "Artist",
+        "Adele",
+        "She wrote 'Someone Like You' about her ex and performed it at the Grammys; the performance caused the iconic split-screen meme with Beyoncé's reaction. '21' sold over 30 million copies. Her vocal coach once told her she'd never be a singer — she took it as motivation.",
+        "Adele — 21 (2011) end-to-end", 49,
+        "Listen to 'Rolling in the Deep' — the song started as a stomp beat in her head and Paul Epworth turned it into a gospel-blues monster. Then 'Someone Like You' — just piano and voice, recorded live in one take. She'd already written the whole album; this one came last, fast, and from heartbreak.",
+        ["Pop", "Soul", "British", "2010s"], 2
+    ),
+    (
+        "artist-rihanna", "Artist",
+        "Rihanna",
+        "A military officer discovered her in Barbados at 15 and flew her to New York to audition — she signed within days. 'Umbrella' was offered to Britney Spears and Mary J. Blige first. She became a billionaire off Fenty Beauty, making her music a side project by choice.",
+        "Rihanna — Anti (2016) end-to-end", 44,
+        "Listen to 'Work' — the dancehall beat and the way the hook syllables run together made it unplayable on American radio at first, then undeniable. Then 'Love on the Brain' — a doo-wop ballad that sounds like a 1950s throwback. Anti was worth the four-year wait because she only released it when it felt right.",
+        ["Pop", "R&B", "Barbadian", "2010s"], 2
+    ),
+    (
+        "artist-lady-gaga", "Artist",
+        "Lady Gaga",
+        "Before fame she performed in NYC clubs in a leotard and studied at NYU's Tisch School. 'Bad Romance' was written in 10 minutes on a piano. She's won an Oscar for 'Shallow' and became the first woman to win a Grammy, Oscar, BAFTA, and Golden Globe in one year.",
+        "Lady Gaga — The Fame Monster (2009) end-to-end", 34,
+        "Listen to 'Bad Romance' — the 'rah-rah-ah-ah-ah' hook came from a song about a broken heart and a phone call. Then 'Poker Face' — she's actually singing about her own bisexuality in the chorus. The album's 8 songs each represent a 'monster' she feared: fame, loneliness, fear of death.",
+        ["Pop", "Dance-Pop", "American", "2000s"], 2
+    ),
+    (
+        "artist-ariana-grande", "Artist",
+        "Ariana Grande",
+        "She started as a Nickelodeon actress and her 'thank u, next' album was written in two weeks after a public breakup. She's known for her whistle register — notes above the normal soprano range. '7 Rings' spent 8 weeks at #1 and sampled Rodgers & Hammerstein's 'My Favorite Things.'",
+        "Ariana Grande — thank u, next (2019) end-to-end", 41,
+        "Listen to 'thank u, next' — she name-drops her exes and turns pain into a pop triumph; the song's title is a perfect breakup philosophy. Then '7 Rings' — the whistle notes at the end are her signature. The whole album was recorded while she was grieving the Manchester attack.",
+        ["Pop", "R&B", "American", "2010s"], 2
+    ),
+    (
+        "artist-dua-lipa", "Artist",
+        "Dua Lipa",
+        "Her dad's family is from Kosovo and she moved to London at 15 to chase music. 'Future Nostalgia' was written during a creative retreat with her co-writers — the whole album is a love letter to disco, and it made her one of the UK's biggest pop exports of the 2020s.",
+        "Dua Lipa — Future Nostalgia (2020) end-to-end", 37,
+        "Listen to 'Don't Start Now' — the bassline is pure disco revival. Then 'Levitating' — the song was almost cut from the album until her label heard the demo. The album is 11 songs of pure dance-floor nostalgia, recorded with a live band to capture the disco feel.",
+        ["Pop", "Dance-Pop", "British", "2020s"], 2
+    ),
+    (
+        "artist-elton-john", "Artist",
+        "Elton John",
+        "He wrote 'Your Song' in under an hour, sitting at Bernie Taupin's lyrics on a Sunday. 'Candle in the Wind 1997' — rewritten for Princess Diana — is the best-selling single in history. He's one of the few artists with a top-40 hit in six different decades.",
+        "Elton John — Goodbye Yellow Brick Road (1973) end-to-end", 76,
+        "Listen to 'Funeral for a Friend/Love Lies Bleeding' — a 11-minute opener that was a piano-and-synth instrumental before it became a song. Then 'Candle in the Wind' — the original was about Marilyn Monroe. This double album's 17 tracks jump from glam to ballads to reggae.",
+        ["Pop", "Glam Rock", "British", "1970s"], 2
+    ),
+    (
+        "artist-bruce-springsteen", "Artist",
+        "Bruce Springsteen",
+        "The Boss — he earned the nickname by paying his band like it was a real job when no one else did. 'Born to Run' took six months to record because he obsessed over the wall of sound. 'Dancing in the Dark' was written as a hit on demand, and his 'Born in the U.S.A.' is often misunderstood as patriotic.",
+        "Bruce Springsteen — Born to Run (1975) end-to-end", 39,
+        "Listen to the title track — Springsteen wanted to capture the sound of Roy Orbison meeting Phil Spector's wall of sound. Then 'Thunder Road' — the harmonica intro was added in one take. The album's songs are all about escape, and the E Street Band's live versions stretch them to anthems.",
+        ["Rock", "Heartland Rock", "American", "1970s"], 2
+    ),
+    (
+        "artist-abba", "Artist",
+        "ABBA",
+        "The name is an acronym of the four members' first names: Agnetha, Björn, Benny, Anni-Frid. They won Eurovision 1974 with 'Waterloo' and never looked back. 'Dancing Queen' — written about the euphoria of a night out — was the only ABBA song to top the US chart.",
+        "ABBA — Arrival (1976) end-to-end", 35,
+        "Listen to 'Dancing Queen' — the piano intro was inspired by George McCrae's disco sound, and the song took four months to perfect. Then 'Money, Money, Money' — Benny's piano line is a pastiche of an old-time music hall song. Their harmonies were two married couples' voices, recorded separately.",
+        ["Pop", "Disco", "Swedish", "1970s"], 2
+    ),
+
+    # ── FUNK / SOUL ──
+    (
+        "artist-james-brown", "Artist",
+        "James Brown",
+        "The Godfather of Soul — he counted 'on the one' (the first beat of the bar), creating funk's signature groove. 'Live at the Apollo' was recorded at a show where he nearly lost his voice. He once convinced a band to stay in the studio for hours to capture the perfect scream — that became 'Papa's Got a Brand New Bag.'",
+        "James Brown — Live at the Apollo (1963) end-to-end", 32,
+        "Listen to 'I Got You (I Feel Good)' — the sax riff is a call-and-response with his voice. Then 'Papa's Got a Brand New Bag' — Brown told the band to play 'on the one' and music changed forever. The live album was recorded in one night and sold over a million copies.",
+        ["Funk", "Soul", "American", "1960s"], 1
+    ),
+    (
+        "artist-sly-and-the-family-stone", "Artist",
+        "Sly & the Family Stone",
+        "The first integrated, multi-gender band in pop — Black and white, men and women, playing together on stage. 'Everyday People' preached unity and topped the charts. Sly Stone produced, wrote, and played nearly everything, and his drug addiction later derailed the band mid-flight.",
+        "Sly & the Family Stone — There's a Riot Goin' On (1971) end-to-end", 47,
+        "Listen to 'Family Affair' — the song's eerie feel comes from a drum machine called Maestro Rhythm King, which Sly used because he was too paranoid to play with the band. The album's title mocks the Riot album everyone expected. Its minimalist funk invented the sound of 70s soul.",
+        ["Funk", "Soul", "American", "1960s"], 2
+    ),
+    (
+        "artist-parliament-funkadelic", "Artist",
+        "Parliament-Funkadelic",
+        "George Clinton's funk empire: Parliament (the funk-science band) and Funkadelic (the psychedelic rock band) shared the same musicians and released different albums under two names. Their Mothership landed on stage at their concerts. 'Flash Light' was the first #1 song built around a synthesizer bassline.",
+        "Funkadelic — Maggot Brain (1971) end-to-end", 37,
+        "Listen to the title track — Eddie Hazel's 10-minute guitar solo was recorded in one take, after Clinton told him to play 'as if his mother had just died.' Then 'One Nation Under a Groove' — the band's biggest hit, a funk anthem about unity. This is the sound hip-hop sampled most.",
+        ["Funk", "Psychedelic", "American", "1970s"], 2
+    ),
+    (
+        "artist-earth-wind-fire", "Artist",
+        "Earth, Wind & Fire",
+        "Maurice White, the band's leader, played drums for Muddy Waters and was a session percussionist for Motown before starting the band. Their horn section and Philip Bailey's falsetto defined 70s soul. 'September' — written to be a chart hit — is still a wedding staple 50 years later.",
+        "Earth, Wind & Fire — That's the Way of the World (1975) end-to-end", 37,
+        "Listen to 'Shining Star' — the song was recorded in a studio next to a construction site, and the band kept the tape anyway because the take was perfect. Then 'That's the Way of the World' — the album was first a movie soundtrack. Their music blends R&B, jazz, and African rhythms.",
+        ["Funk", "Soul", "American", "1970s"], 2
+    ),
+    (
+        "artist-curtis-mayfield", "Artist",
+        "Curtis Mayfield",
+        "The gentle voice of Black power — his 'Superfly' soundtrack was the first album with socially conscious lyrics atop a funk-soul groove, and it sold millions. He was paralyzed after a stage accident in 1990 but kept writing. He was in the Impressions before going solo.",
+        "Curtis Mayfield — Superfly (1972) end-to-end", 37,
+        "Listen to 'Pusherman' — the song is from the perspective of a drug dealer, and Mayfield wrote it as a cautionary tale, not a celebration. Then 'Freddie's Dead' — the funk anthem about a street hustler. The album's wah-wah guitar and strings set the template for blaxploitation soundtracks.",
+        ["Funk", "Soul", "American", "1970s"], 2
+    ),
+    (
+        "artist-al-green", "Artist",
+        "Al Green",
+        "'Let's Stay Together' was written in minutes and became his signature. After a religious conversion in the 1970s, he gave up secular music and became a pastor — the church he now leads is his own. His voice blends gospel and soul so seamlessly that his love songs feel like prayers.",
+        "Al Green — Let's Stay Together (1972) end-to-end", 35,
+        "Listen to 'Let's Stay Together' — the song's signature 'I'm so in love with you' falsetto was improvised in the studio. Then 'Tired of Being Alone' — the song he wrote after being told he couldn't write hits. His producer Willie Mitchell built the band's grooves around Green's voice.",
+        ["Soul", "Gospel", "American", "1970s"], 2
+    ),
+    (
+        "artist-otis-redding", "Artist",
+        "Otis Redding",
+        "'Sittin' on the Dock of the Bay' was recorded just three days before the plane crash that killed him at 26 — he whistled the ending because he hadn't finished the lyrics. It became the first posthumous #1 single in US history. He wrote 'Respect' for Aretha Franklin... actually, he wrote it and she made it hers.",
+        "Otis Redding — Otis Blue (1965) end-to-end", 34,
+        "Listen to 'I've Been Loving You Too Long' — the song was written with Jerry Butler after a late-night session, and the live version on this album captures Otis at full power. Then 'Try a Little Tenderness' — it builds from a whisper to a scream. This album covers soul, blues, and R&B classics.",
+        ["Soul", "Southern Soul", "American", "1960s"], 1
+    ),
+    (
+        "artist-ray-charles", "Artist",
+        "Ray Charles",
+        "He went blind as a child and began playing piano by ear. He invented soul music by fusing gospel and R&B — his 'I Got a Woman' shocked church audiences because he took a gospel melody and sang about a lover. He was called 'The Genius' by everyone from Frank Sinatra on down.",
+        "Ray Charles — Modern Sounds in Country and Western Music (1962) end-to-end", 37,
+        "Listen to 'Georgia on My Mind' — written for a girl named Georgia, but it became the official state song of Georgia decades later. Then his version of 'I Can't Stop Loving You' — a country song turned soul classic. This album was the shock crossover that made country sound Black.",
+        ["Soul", "R&B", "American", "1960s"], 1
+    ),
+
+    # ── HIP-HOP ──
+    (
+        "artist-lil-wayne", "Artist",
+        "Lil Wayne",
+        "He joined Cash Money Records at 11 years old and was the youngest member of the Hot Boys. His diamond-encrusted teeth grills became a hip-hop fashion signature. 'Tha Carter III' sold over a million copies in its first week.",
+        "Lil Wayne — Tha Carter III (2008) end-to-end", 76,
+        "Listen to 'A Milli' — Wayne recorded it on the spur of the moment over a beat that wasn't finished, and it became one of the most quoted rap songs ever. Then 'Lollipop' — the pop-rap crossover that shows his range. Wayne is also a rock guitarist who released a rock album, 'Rebirth.'",
+        ["Hip-Hop", "Southern Rap", "American", "2000s"], 2
+    ),
+    (
+        "artist-nicki-minaj", "Artist",
+        "Nicki Minaj",
+        "She was discovered through a mixtape and became the first female artist to have 100 songs on the Billboard Hot 100. 'Super Bass' — her breakthrough — proved a rapper with alter egos could top the global pop charts. Her characters, Roman Zolanski and Harajuku Barbie, are fully inhabited on record.",
+        "Nicki Minaj — Pink Friday (2010) end-to-end", 69,
+        "Listen to 'Super Bass' — the playful hook that became a worldwide pop moment. Then 'Moment 4 Life' — the fairytale duet with Drake. Nicki's verses are famous for switching accents and characters mid-song; listen for the moment she becomes 'Roman.'",
+        ["Hip-Hop", "Pop Rap", "American", "2010s"], 2
+    ),
+    (
+        "artist-cardi-b", "Artist",
+        "Cardi B",
+        "Before rap she was a stripper and a reality TV star — and she used that platform to launch a real career. 'Bodak Yellow' made her the first solo female rapper to top the Hot 100 since Lauryn Hill in 1998. She's known for her unfiltered humor and Brooklyn accent.",
+        "Cardi B — Invasion of Privacy (2018) end-to-end", 48,
+        "Listen to 'Bodak Yellow' — the song's title riffs on Kodak Black's 'No Flockin,' and her spoken ad-libs made it unmistakable. Then 'I Like It' — the Latin trap anthem with Bad Bunny and J Balvin. The album won Best Rap Album at the Grammys, a first for a solo female artist.",
+        ["Hip-Hop", "Trap", "American", "2010s"], 2
+    ),
+    (
+        "artist-50-cent", "Artist",
+        "50 Cent",
+        "He was shot nine times in 2000 and survived — the album 'Get Rich or Die Tryin'' came three years later and sold 12 million copies. He learned to rap after a childhood friend introduced him to the genre, and he built his legend on mixtapes. His debut is a rap textbook.",
+        "50 Cent — Get Rich or Die Tryin' (2003) end-to-end", 54,
+        "Listen to 'In da Club' — the beat was made by Dr. Dre and the song was written for a gym playlist, meant to make people feel invincible. Then 'Many Men' — about the shooting he survived. The album's title came from a movie poster; the movie came after.",
+        ["Hip-Hop", "East Coast Rap", "American", "2000s"], 2
+    ),
+    (
+        "artist-ice-cube", "Artist",
+        "Ice Cube",
+        "He wrote some of N.W.A's most famous lyrics including 'Straight Outta Compton' before leaving over royalties. 'It Was a Good Day' is famous for being about a real day he had off. He's also a successful actor — 'Friday,' 'Boyz n the Hood,' and three decades of film roles.",
+        "Ice Cube — Death Certificate (1991) end-to-end", 51,
+        "Listen to 'It Was a Good Day' — the beat samples the Isley Brothers and the lyrics describe an ordinary day in South Central turned into a celebration. Then 'Steady Mobbin'' — the G-funk west coast sound. Cube's political tracks on this album were controversial, which was the point.",
+        ["Hip-Hop", "West Coast Rap", "American", "1990s"], 2
+    ),
+    (
+        "artist-krs-one", "Artist",
+        "KRS-One",
+        "The Teacha — he was homeless and living in a shelter when he started rapping. 'The Bridge Is Over' answered Queens' 'The Bridge' and started the first great rap feud. He named himself KRS-One (Knowledge Reigns Supreme Over Nearly Everyone) and still lectures at universities.",
+        "Boogie Down Productions — Criminal Minded (1987) end-to-end", 47,
+        "Listen to 'The Bridge Is Over' — one of the greatest diss records ever, aimed at Queensbridge rivals. Then 'Criminal Minded' — the title track that defined hardcore hip-hop. The album was recorded in a studio above a crack house; its cover shows the crew posing with guns.",
+        ["Hip-Hop", "Golden Age", "American", "1980s"], 2
+    ),
+    (
+        "artist-mobb-deep", "Artist",
+        "Mobb Deep",
+        "Havoc and Prodigy were teenagers when they recorded 'The Infamous' — a raw portrait of Queensbridge projects life. 'Shook Ones, Pt. II' is considered one of the greatest rap songs ever. Prodigy's battle with sickle cell anemia shaped the pain in his voice.",
+        "Mobb Deep — The Infamous (1995) end-to-end", 65,
+        "Listen to 'Shook Ones, Pt. II' — the piano loop and Havoc's beat are so perfect that Jay-Z and Nas both wanted it. Then 'Survival of the Fittest' — the menacing sequel. The album was recorded over two years while both members were teens, giving it a realism no studio could fake.",
+        ["Hip-Hop", "East Coast Rap", "American", "1990s"], 2
+    ),
+    (
+        "artist-dmx", "Artist",
+        "DMX",
+        "His growl and bark made him the first artist to release two albums debuting at #1 in the same year. 'Ruff Ryders' Anthem' turned a simple chant into a hip-hop anthem. He also starred in 'Belly' and 'Romeo Must Die' — and was a devoted gospel churchgoer who prayed on every album.",
+        "DMX — It's Dark and Hell Is Hot (1998) end-to-end", 65,
+        "Listen to 'Ruff Ryders' Anthem' — the beat is a loop of a gospel organ riff, and DMX's bark makes it iconic. Then 'Slippin'' — the most personal song in his catalog, about his childhood struggles. His raw delivery proved hip-hop could be both terrifying and vulnerable.",
+        ["Hip-Hop", "East Coast Rap", "American", "1990s"], 2
+    ),
+    (
+        "artist-megan-thee-stallion", "Artist",
+        "Megan Thee Stallion",
+        "She's a licensed esthetician and graduated college while charting. 'Savage' — the remix with Beyoncé — became a summer anthem. Her nickname 'Thee Stallion' is a Houston slang for a tall, confident woman. 'Hot Girl Summer' turned her catchphrase into a movement.",
+        "Megan Thee Stallion — Good News (2020) end-to-end", 49,
+        "Listen to 'Savage' — the beat's flute riff and her rapid-fire flow made it a TikTok phenomenon before the Beyoncé remix. Then 'Body' — the song about loving your curves. Megan's flow is technically dazzling; try to follow her tongue-twister bars on 'Girls in the Hood.'",
+        ["Hip-Hop", "Southern Rap", "American", "2020s"], 2
+    ),
+    (
+        "artist-run-the-jewels", "Artist",
+        "Run the Jewels",
+        "El-P and Killer Mike — an underground producer and an Atlanta political rapper — became the best duo in rap. 'RTJ4' was released early during the 2020 George Floyd protests as a free download. Their live shows are legendary; they even released an official 'close your eyes during this song' track.",
+        "Run the Jewels — RTJ4 (2020) end-to-end", 39,
+        "Listen to 'Ooh LA LA' — the hook is a Greg Nice sample and the song is a celebration of hip-hop history. Then 'Walking in the Snow' — Killer Mike's verse about police brutality is the album's most devastating moment. El-P's production is dense; listen twice to catch the layers.",
+        ["Hip-Hop", "Underground", "American", "2020s"], 2
+    ),
+    (
+        "artist-mac-miller", "Artist",
+        "Mac Miller",
+        "He was a teenage white rapper from Pittsburgh who grew into one of hip-hop's most soulful artists. 'Swimming' was released a month before his death at 26, and 'Circles' — its companion — was completed posthumously. He produced for others under the name Larry Fisherman.",
+        "Mac Miller — Swimming (2018) end-to-end", 57,
+        "Listen to 'Self Care' — the song's floating production and his falsetto captured his late-career sound. Then '2009' — a reflective look back at where he started. The album is about learning to live with yourself; his growth from frat rap to jazz-leaning introspection is the whole journey.",
+        ["Hip-Hop", "Jazz Rap", "American", "2010s"], 2
+    ),
+
+    # ── R&B / NEO-SOUL ──
+    (
+        "artist-lauryn-hill", "Artist",
+        "Lauryn Hill",
+        "The Miseducation of Lauryn Hill won Album of the Year — the first hip-hop album to do so. She recorded most of it while pregnant and took a hardline stance on touring conditions. After that album, she disappeared from mainstream music for years, becoming one of music's great mysteries.",
+        "Lauryn Hill — The Miseducation of Lauryn Hill (1998) end-to-end", 78,
+        "Listen to 'Doo Wop (That Thing)' — the video splits between 1960s doo-wop and 90s street style, and the song is a lecture on self-respect set to soul. Then 'Ex-Factor' — a song about being taken for granted that Drake later sampled for 'Nice for What.' She sings, raps, and writes every word.",
+        ["R&B", "Neo-Soul", "Hip-Hop", "American", "1990s"], 1
+    ),
+    (
+        "artist-erykah-badu", "Artist",
+        "Erykah Badu",
+        "She wears headwraps and herbs in her tea, calls her fans 'analog girls,' and named her second album 'Mama's Gun.' Her debut 'Baduizm' introduced neo-soul to the world. She recorded 'On & On' in a single take and still performs with a live band and a full cosmic philosophy.",
+        "Erykah Badu — Baduizm (1997) end-to-end", 58,
+        "Listen to 'On & On' — the song's message about reincarnation and meditation set the neo-soul blueprint. Then 'Tyrone' — a live-format diss track she wrote for a boyfriend who kept her waiting. Badu's phrasing bends time; her voice is the instrument and the message.",
+        ["R&B", "Neo-Soul", "American", "1990s"], 2
+    ),
+    (
+        "artist-dangelo", "Artist",
+        "D'Angelo",
+        "His 'Brown Sugar' was one of the first neo-soul albums, and 'Voodoo' — recorded with a live band in a studio with no isolation booths — is considered a masterpiece. The 'Untitled (How Does It Feel)' video made him a sex symbol overnight. He disappeared for 14 years before returning with 'Black Messiah.'",
+        "D'Angelo — Voodoo (2000) end-to-end", 78,
+        "Listen to 'Untitled (How Does It Feel)' — the falsetto and the 3-minute fade-out are pure seduction. Then 'Chicken Grease' — the band (The Soulquarians: ?uestlove, Pino Palladino) recorded live, no overdubs. The album sounds like 1970s funk recorded in 2000.",
+        ["R&B", "Neo-Soul", "American", "2000s"], 2
+    ),
+    (
+        "artist-sza", "Artist",
+        "SZA",
+        "Her debut album 'Ctrl' — about insecurity, love, and self-doubt — made her the defining R&B voice of her generation. She was a marine-biology student before music. 'Kill Bill' became her first #1 by turning a murder fantasy into a pop hit.",
+        "SZA — Ctrl (2017) end-to-end", 49,
+        "Listen to 'Love Galore' — the song started as a beat she recorded over and ignored for a year. Then 'The Weekend' — a song about sharing a man, written from a perspective she later said she's not proud of. Her lyrics are unflinchingly honest about her own flaws.",
+        ["R&B", "Alternative R&B", "American", "2010s"], 2
+    ),
+    (
+        "artist-anderson-paak", "Artist",
+        "Anderson .Paak",
+        "The period in his name is a tribute to his late mother's stage name 'Ava .Paak.' He drummed in a church band, sold weed, and was homeless before his breakthrough with Dr. Dre's 'Compton.' 'Ventura' won a Grammy, and he now fronts the rock-soul group NxWorries.",
+        "Anderson .Paak — Malibu (2016) end-to-end", 58,
+        "Listen to 'The Bird' — a sunny song about a money-driven relationship, delivered with his signature breezy flow. Then 'Come Down' — the funk workout that samples 70s soul. Paak sings, raps, and drums on the record; his live shows feature him drumming while singing.",
+        ["R&B", "Funk", "Hip-Hop", "American", "2010s"], 2
+    ),
+    (
+        "artist-the-weeknd", "Artist",
+        "The Weeknd",
+        "His stage name came from a 'one weekend' he'd rather forget — he dropped the 'e' to avoid a copyright claim. He released three mixtapes in 2011 and the world of dark R&B changed. 'Blinding Lights' became the longest-charting song in Billboard history.",
+        "The Weeknd — After Hours (2020) end-to-end", 56,
+        "Listen to 'Blinding Lights' — the 80s synth-pop revival that dominated 2020. Then 'Heartless' — the cold banger that precedes the album's emotional spiral. The Weeknd's persona is a character — the red-suit, bloodied-face aesthetic in the videos is him exploring fame's dark side.",
+        ["R&B", "Synth-Pop", "Canadian", "2020s"], 2
+    ),
+    (
+        "artist-usher", "Artist",
+        "Usher",
+        "He was discovered at 13 by a record exec who saw him at a talent show, and signed at 14. 'Confessions' sold 10 million copies and is one of the best-selling R&B albums ever. 'Yeah!' — the crunk anthem with Lil Jon — turned him into a global star. He also mentored Justin Bieber.",
+        "Usher — Confessions (2004) end-to-end", 60,
+        "Listen to 'Yeah!' — the beat's electronic dancehall sound came from Lil Jon, and Usher's ad-libs made it a club classic. Then 'Confessions Part II' — the song about an affair that everyone assumed was autobiographical. The album's personal songs made it a confession booth.",
+        ["R&B", "Pop", "American", "2000s"], 2
+    ),
+    (
+        "artist-sade", "Artist",
+        "Sade",
+        "The Nigerian-British singer defined smooth soul with a single album, 'Diamond Life,' and never chased trends — her albums are released years apart on purpose. 'Smooth Operator' is her signature. Her band is named after her; the band members are the same four people since 1982.",
+        "Sade — Diamond Life (1984) end-to-end", 43,
+        "Listen to 'Smooth Operator' — the song's jazz-funk groove and her velvet voice made it a worldwide hit. Then 'Your Love Is King' — the band's first single. Sade's music is restraint itself: sax solos, bass, and a voice that never raises. It's the calmest #1 album in pop history.",
+        ["R&B", "Sophisti-Pop", "British", "1980s"], 2
+    ),
+
+    # ── FOLK / SINGER-SONGWRITER ──
+    (
+        "artist-joni-mitchell", "Artist",
+        "Joni Mitchell",
+        "She taught herself guitar and invented an open-tuning style no one can copy. 'Blue' — recorded in 1971 — is considered one of the most honest albums ever made. She was a visual artist first and painted many of her own album covers, including 'Blue's' self-portrait.",
+        "Joni Mitchell — Blue (1971) end-to-end", 36,
+        "Listen to 'River' — it's a Christmas song about wanting to escape, written with Joni at a piano playing Gershwin's 'Rhapsody in Blue.' Then 'A Case of You' — a song about a love that stays. The whole album was recorded in four days with just voice, guitar, and piano.",
+        ["Folk", "Singer-Songwriter", "Canadian", "1970s"], 1
+    ),
+    (
+        "artist-leonard-cohen", "Artist",
+        "Leonard Cohen",
+        "He was a poet and novelist before music — he didn't release his first album until he was 33. 'Hallelujah' took years to write, went nowhere, then became one of the most covered songs in history after Jeff Buckley's version. He was ordained as a Zen Buddhist monk in 1994.",
+        "Leonard Cohen — Songs of Leonard Cohen (1967) end-to-end", 42,
+        "Listen to 'Suzanne' — the song about a real woman he knew in Montreal, with the lyric 'Jesus was a sailor.' Then 'Hallelujah' — try to count the different versions of the song's chords; Cohen rewrote it dozens of times. His baritone voice makes every line sound like scripture.",
+        ["Folk", "Singer-Songwriter", "Canadian", "1960s"], 1
+    ),
+    (
+        "artist-nick-drake", "Artist",
+        "Nick Drake",
+        "He recorded three albums and sold almost nothing while alive; he died at 26 from an antidepressant overdose. 'Pink Moon' — recorded alone with just his guitar in two nights — became a hit after Volkswagen used it in a 1999 commercial. His family says he never recovered from the silence.",
+        "Nick Drake — Pink Moon (1972) end-to-end", 28,
+        "Listen to the title track — just voice and guitar, recorded at 2am in a silent studio, and the tape hiss is part of the sound. Then 'Place to Be' — his gentle picking and quiet voice. The album's 11 songs total 28 minutes; there is no other record like it.",
+        ["Folk", "Singer-Songwriter", "British", "1970s"], 2
+    ),
+    (
+        "artist-cat-stevens", "Artist",
+        "Cat Stevens",
+        "He nearly died of tuberculosis at 18 and turned to music during recovery. In 1977, after a near-drowning, he converted to Islam, changed his name to Yusuf Islam, and quit music for years. 'Wild World' and 'Father and Son' are his enduring classics.",
+        "Cat Stevens — Tea for the Tillerman (1970) end-to-end", 32,
+        "Listen to 'Wild World' — the song is a goodbye to his girlfriend, with the famous line 'I'll always remember you like a child, girl.' Then 'Father and Son' — a dialogue where he sings both parts, the father and the son, switching voices. The album is full of piano and gentle philosophy.",
+        ["Folk", "Singer-Songwriter", "British", "1970s"], 2
+    ),
+    (
+        "artist-james-taylor", "Artist",
+        "James Taylor",
+        "He was the first non-Beatle signed to Apple Records. 'Fire and Rain' was written about a friend's suicide and his own heroin addiction. He performed at the 1970 Isle of Wight festival as the Beatles' opener — a stadium of half a million people — at just 22.",
+        "James Taylor — Sweet Baby James (1970) end-to-end", 36,
+        "Listen to 'Fire and Rain' — the song's three verses each tell a different chapter: his friend's death, his addiction, his success. Then 'Sweet Baby James' — the lullaby he wrote for his nephew. His fingerpicking style became the template for a generation of singer-songwriters.",
+        ["Folk", "Singer-Songwriter", "American", "1970s"], 2
+    ),
+    (
+        "artist-simon-and-garfunkel", "Artist",
+        "Simon & Garfunkel",
+        "Paul Simon and Art Garfunkel met in elementary school and performed as 'Tom & Jerry' as teens. 'Bridge over Troubled Water' — Garfunkel's soaring vocal — is one of the best-selling singles ever. The duo hated each other by the end and broke up at their peak.",
+        "Simon & Garfunkel — Bridge over Troubled Water (1970) end-to-end", 36,
+        "Listen to the title track — Garfunkel's vocal was recorded in one take and the orchestral crescendo builds to a gospel finish. Then 'The Boxer' — the song's 'lie-la-lie' chorus was improvised in the studio. Paul Simon's lyrics are dense; read them like poetry.",
+        ["Folk", "Folk Rock", "American", "1960s"], 2
+    ),
+    (
+        "artist-tracy-chapman", "Artist",
+        "Tracy Chapman",
+        "'Fast Car' was written when she was 20 and remains one of the most covered songs ever. Her self-titled debut won three Grammys. 'Give Me One Reason' — her blues hit — came nearly a decade later. She famously played 'Fast Car' at the 2024 Grammys with Luke Combs, 36 years after its release.",
+        "Tracy Chapman — Tracy Chapman (1988) end-to-end", 37,
+        "Listen to 'Fast Car' — the song is a story of escaping poverty, told in first person, and its acoustic guitar pattern is deceptively simple. Then 'Talkin' 'bout a Revolution' — the protest song that made her famous. Her voice is clear and unshakeable; the album needs nothing else.",
+        ["Folk", "Singer-Songwriter", "American", "1980s"], 2
+    ),
+    (
+        "artist-john-prine", "Artist",
+        "John Prine",
+        "He was a mailman who wrote songs on his route — Bob Dylan heard his demo and called him 'one of the best songwriters around.' He wrote 'Angel from Montgomery' at 24, and later survived throat cancer and a lung transplant. His last album, 'The Tree of Forgiveness,' was released a year before his death.",
+        "John Prine — John Prine (1971) end-to-end", 40,
+        "Listen to 'Angel from Montgomery' — a song about a middle-aged woman wanting to escape her life, written when he was 24. Then 'Sam Stone' — the war veteran's story, with the devastating 'there's a hole in daddy's arm where all the money goes.' His humor and heart are inseparable.",
+        ["Folk", "Americana", "American", "1970s"], 2
+    ),
+
+    # ── SHOEGAZE / DREAM POP ──
+    (
+        "artist-my-bloody-valentine", "Artist",
+        "My Bloody Valentine",
+        "'Loveless' took two years and over $500,000 to record — nearly bankrupting the label. Kevin Shields invented the 'glide guitar' technique (holding the tremolo arm while strumming) to create the album's swirling sound. The band then vanished for 22 years before returning.",
+        "My Bloody Valentine — Loveless (1991) end-to-end", 48,
+        "Listen on headphones, loud — the opening of 'Only Shallow' is a wall of guitar that reveals melodies underneath. Then 'When You Sleep' — the catchiest song ever buried under distortion. The album's sound is a 'guitar orchestra': every part was recorded hundreds of times and mixed into one wall.",
+        ["Shoegaze", "Dream Pop", "British", "1990s"], 2
+    ),
+    (
+        "artist-slowdive", "Artist",
+        "Slowdive",
+        "Named after a word in a Siouxsie and the Banshees song, Slowdive made dreamy, hazy shoegaze that critics mocked at the time and now call essential. Their 2017 self-titled comeback album was named one of the best of the decade. 'Alison' is their signature haze.",
+        "Slowdive — Souvlaki (1993) end-to-end", 41,
+        "Listen to 'Alison' — the song's chorus is a melody floating above the guitar noise. Then 'When the Sun Hits' — the dreamiest track on the record. The band even met Brian Eno, who visited the studio and felt they didn't need him. The guitars sound like they're underwater; let the waves wash over.",
+        ["Shoegaze", "Dream Pop", "British", "1990s"], 2
+    ),
+    (
+        "artist-cocteau-twins", "Artist",
+        "Cocteau Twins",
+        "Elizabeth Fraser's vocals are famously nonsensical — she sings in invented languages, pure emotion without words. The band's 'Heaven or Las Vegas' is their most accessible album and a dream-pop landmark. They formed in Scotland in 1979 and never had a conventional hit.",
+        "Cocteau Twins — Heaven or Las Vegas (1990) end-to-end", 38,
+        "Listen to the title track — Fraser's voice is the lead instrument; try to not understand a word and feel it instead. Then 'Cherry-Coloured Funk' — the band's most famous song. The album is a cloud of guitars, bass, and voice that defined dream pop for everyone after.",
+        ["Dream Pop", "Ethereal", "British", "1990s"], 2
+    ),
+    (
+        "artist-cigarettes-after-sex", "Artist",
+        "Cigarettes After Sex",
+        "Greg Gonzalez named the band after a conversation in 2008 and records everything with one mic technique — his voice is so hushed it feels like a secret. Their songs are slow, cinematic, and unashamedly romantic. 'Apocalypse' went viral and made them a cult phenomenon.",
+        "Cigarettes After Sex — Cigarettes After Sex (2017) end-to-end", 47,
+        "Listen to 'Apocalypse' — the song's gentle guitar and whispered vocal feel like a memory. Then 'K.' — a song about a one-night stand in a hotel. Gonzalez records in empty halls and warehouses to capture the reverb; the whole album sounds like it was played at 3am.",
+        ["Dream Pop", "Slowcore", "American", "2010s"], 2
+    ),
+    (
+        "artist-japanese-breakfast", "Artist",
+        "Japanese Breakfast",
+        "Michelle Zauner's stage name was a dream she had; her debut was made while she grieved her mother's death. Her memoir 'Crying in H Mart' became a bestseller and was adapted into a film. 'Be Sweet' — her pop-disco hit — is about calling your ex, set to a synth groove.",
+        "Japanese Breakfast — Jubilee (2021) end-to-end", 35,
+        "Listen to 'Be Sweet' — the disco-pop opening is a shock after her previous albums' indie sound, and it works perfectly. Then 'Paprika' — the album's opener about joy and performance. Zauner's music shifts between grief, humor, and pop gloss; the range is the point.",
+        ["Indie Pop", "Dream Pop", "American", "2020s"], 2
+    ),
+
+    # ── METAL ──
+    (
+        "artist-gojira", "Artist",
+        "Gojira",
+        "French brothers Joe and Mario Duplantier lead one of the most technical metal bands alive — they originally played in a band called Godzilla before renaming it. Their songs are about nature, whales, and the environment; frontman Joe Duplantier is an avid scuba diver.",
+        "Gojira — From Mars to Sirius (2005) end-to-end", 66,
+        "Listen to 'Flying Whales' — the opening riff is one of the heaviest ever recorded, and the song's whale sounds are actual whale recordings. Then 'The Art of Dying' — a 9-minute meditation on mortality with a drum solo in the middle. The album is a concept record about saving the whales.",
+        ["Metal", "Progressive Metal", "French", "2000s"], 2
+    ),
+    (
+        "artist-meshuggah", "Artist",
+        "Meshuggah",
+        "The Swedish band invented 'djent' — their guitarists play in 4/4 while the drums play in 7/8, creating a hypnotic groove. The band name is Yiddish for 'crazy.' 'Bleed' is considered one of the most physically demanding drum songs ever written.",
+        "Meshuggah — ObZen (2008) end-to-end", 53,
+        "Listen to 'Bleed' — the drum pattern (double bass at 200 BPM in 4/4 with syncopated accents) is the song's entire story. Then 'ObZen' — the title track about obsession and zen. The guitars are downtuned to the point where they're more like bass; count along and feel the groove warp.",
+        ["Metal", "Djent", "Swedish", "2000s"], 2
+    ),
+    (
+        "artist-mastodon", "Artist",
+        "Mastodon",
+        "The Atlanta band writes concept albums about whales, Moby-Dick, and mythology. 'Crack the Skye' — their masterpiece — is about a tetraplegic journeying out of his body. Drummer Brann Dailor also sings, playing his kit like a solo instrument. They were named after the prehistoric mammal for its heaviness.",
+        "Mastodon — Crack the Skye (2009) end-to-end", 54,
+        "Listen to 'The Czar' — a 10-minute, four-movement epic about Rasputin, complete with a banjo solo. Then 'Oblivion' — the album's opening track. The drums are impossibly complex; Brann's fills are like jazz solos played with metal force. The whole album is one long cosmic journey.",
+        ["Metal", "Progressive Metal", "American", "2000s"], 2
+    ),
+    (
+        "artist-deftones", "Artist",
+        "Deftones",
+        "The most melodic band in metal — Chino Moreno's singing floats over brutal guitars. 'White Pony' — their breakthrough — featured a guest vocal from Maynard Keenan of Tool. Their sound is called 'shoegaze metal' by fans, blending dreamy textures with crushing riffs.",
+        "Deftones — White Pony (2000) end-to-end", 49,
+        "Listen to 'Change (In the House of Flies)' — the song's quiet-loud structure and Chino's soaring chorus made it their biggest hit. Then 'Digital Bath' — a song about drowning someone, told seductively. The album's blend of dream pop and metal was unlike anything in 2000.",
+        ["Metal", "Alternative Metal", "American", "2000s"], 2
+    ),
+    (
+        "artist-slipknot", "Artist",
+        "Slipknot",
+        "Nine masked members from Iowa — they wore masks because they wanted the music, not their faces, to be the identity. Their debut captured their live chaos with raw, quick recording. 'Iowa' — their second — is considered one of the darkest albums ever made; the band says they were in a violent state throughout.",
+        "Slipknot — Slipknot (1999) end-to-end", 60,
+        "Listen to 'Wait and Bleed' — the song's melody and rage made it their first hit. Then 'Spit It Out' — the rap-metal anthem. The band's percussion section (two drummers, plus sampler) creates a wall of noise; count the percussion layers during 'Eyeless.'",
+        ["Metal", "Nu Metal", "American", "1990s"], 2
+    ),
+    (
+        "artist-nine-inch-nails", "Artist",
+        "Nine Inch Nails",
+        "Trent Reznor wrote, played, and produced everything on the early records alone in his Cleveland apartment. 'The Downward Spiral' — his industrial masterpiece — was recorded in the house where Sharon Tate was murdered. He later won an Oscar for 'The Social Network' score.",
+        "Nine Inch Nails — The Downward Spiral (1994) end-to-end", 65,
+        "Listen to 'Closer' — the song's famous 'I want to fuck you like an animal' is the least interesting part; the industrial clang underneath is the real art. Then 'Hurt' — a song of such raw despair that Johnny Cash covered it and made it his own. The album is a story of self-destruction.",
+        ["Metal", "Industrial", "American", "1990s"], 2
+    ),
+
+    # ── COUNTRY / AMERICANA ──
+    (
+        "artist-garth-brooks", "Artist",
+        "Garth Brooks",
+        "He's the best-selling solo artist in US history — over 170 million records — and he did it with a fake name (Chris Gaines) experiment and elaborate stage shows. 'Friends in Low Places' is his signature. He retired in 2000 to raise his daughters, then returned.",
+        "Garth Brooks — No Fences (1990) end-to-end", 40,
+        "Listen to 'Friends in Low Places' — the song's crowd-pleasing chorus was written in an hour and became his anthem. Then 'The Dance' — a ballad about regretting nothing, even heartbreak. Brooks brought arena-rock energy to country and changed the genre's live shows forever.",
+        ["Country", "American", "1990s"], 2
+    ),
+    (
+        "artist-shania-twain", "Artist",
+        "Shania Twain",
+        "'Come On Over' is the best-selling country album ever and the best-selling album by a female artist in any genre. She wrote nearly all her songs with then-husband Mutt Lange. She was discovered singing at a bar at 21 after her parents' death made her raise her siblings.",
+        "Shania Twain — Come On Over (1997) end-to-end", 60,
+        "Listen to 'Man! I Feel Like a Woman!' — the gender-bending pop-country anthem. Then 'You're Still the One' — the ballad about a love that survived. The album blends country with pop and rock, and its crossover success proved country could be global.",
+        ["Country", "Pop Country", "Canadian", "1990s"], 2
+    ),
+    (
+        "artist-george-strait", "Artist",
+        "George Strait",
+        "The King of Country — he's had more #1 country hits than anyone in history (60+) and never chased trends. He was a cattle rancher before fame and still owns a ranch in Texas. 'Amarillo by Morning' — his classic — is about a rodeo cowboy's life on the road.",
+        "George Strait — Strait Country (1981) end-to-end", 30,
+        "Listen to 'Amarillo by Morning' — the song is a rodeo cowboy's quiet anthem about the road, and it's considered one of the greatest country songs ever written. Then 'Unwound' — his first single. Strait's style is pure traditional country: steel guitar, fiddle, and a voice that never strains.",
+        ["Country", "American", "1980s"], 2
+    ),
+    (
+        "artist-chris-stapleton", "Artist",
+        "Chris Stapleton",
+        "Before going solo he was a Nashville songwriter who wrote hits for George Strait, Kenny Chesney, and Luke Bryan. His voice — a blues-rock growl — won him three Grammys for his debut 'Traveller.' His cover of 'Tennessee Whiskey' — a George Jones classic — became his signature.",
+        "Chris Stapleton — Traveller (2015) end-to-end", 55,
+        "Listen to 'Tennessee Whiskey' — his version of the George Jones song became a multi-week #1 country hit, with a vocal that turns it into pure soul. Then 'Fire Away' — the devastating ballad about depression. His live 'Nashville sessions' with wife Morgane are the best way in.",
+        ["Country", "Outlaw Country", "American", "2010s"], 2
+    ),
+    (
+        "artist-tyler-childers", "Artist",
+        "Tyler Childers",
+        "The Kentucky singer-songwriter brought raw, honest Appalachia to modern country. 'Purgatory' was produced by Sturgill Simpson. 'Feathered Indians' — his breakthrough — is a love song set in the backwoods. He resisted Nashville's polish and built his career on touring and authenticity.",
+        "Tyler Childers — Purgatory (2017) end-to-end", 36,
+        "Listen to 'Feathered Indians' — the song's banjo and his Kentucky drawl make it feel like a front-porch confession. Then 'Whitehouse Road' — the rowdy, raw road anthem. Childers's lyrics are full of place and specificity; he writes about the people he grew up with.",
+        ["Country", "Americana", "American", "2010s"], 2
+    ),
+
+    # ── REGGAE / AFROBEATS ──
+    (
+        "artist-toots-and-the-maytals", "Artist",
+        "Toots and the Maytals",
+        "Toots Hibbert invented the word 'reggae' — his 1968 song 'Do the Reggay' named the genre. He was once arrested for marijuana possession and sang about it. 'Pressure Drop' — his classic — was covered by the Clash. He kept performing until days before his death in 2020.",
+        "Toots and the Maytals — Funky Kingston (1972) end-to-end", 37,
+        "Listen to 'Pressure Drop' — the song is about the feeling of being caught by the police, delivered with Toots's gospel-trained voice. Then 'Monkey Man' — the reggae classic. Toots's voice could do soul, ska, and rock steady; he was reggae's Otis Redding.",
+        ["Reggae", "Ska", "Jamaican", "1970s"], 2
+    ),
+    (
+        "artist-jimmy-cliff", "Artist",
+        "Jimmy Cliff",
+        "He was reggae's first international star — 'The Harder They Come,' the film and its soundtrack, introduced reggae to the world. He received Jamaica's Order of Merit, the country's highest honor for its artists. 'Many Rivers to Cross' is one of the greatest soul-reggae ballads ever.",
+        "Jimmy Cliff — The Harder They Come soundtrack (1972) end-to-end", 45,
+        "Listen to 'Many Rivers to Cross' — the song is about struggling against impossible odds, and it's been covered by everyone from Cher to Annie Lennox. Then 'The Harder They Come' — the film's defiant title track. The soundtrack introduced reggae to the world outside Jamaica.",
+        ["Reggae", "Ska", "Jamaican", "1970s"], 2
+    ),
+    (
+        "artist-koffee", "Artist",
+        "Koffee",
+        "The youngest artist — and first woman — to win the Grammy for Best Reggae Album. Her breakthrough single 'Toast' was about being proud of her small town and became a global hit. She's also a guitarist who leads a full band, fusing reggae, dancehall, and pop.",
+        "Koffee — Rapture (2019) end-to-end", 26,
+        "Listen to 'Toast' — the song started as a celebration of her hometown and became a worldwide reggae anthem. Then 'Raggamuffin' — the title track about being a youth from the streets. Koffee's voice and guitar playing make her the future of reggae.",
+        ["Reggae", "Dancehall", "Jamaican", "2020s"], 3
+    ),
+    (
+        "artist-burna-boy", "Artist",
+        "Burna Boy",
+        "The Grammy-winning 'African Giant' who took Afrobeats global. 'On the Low' and 'Last Last' (which sampled Toni Braxton) became worldwide hits. He named his 2022 album 'Love, Damini' after his real name. He's famous for his 'afro-fusion' sound mixing dancehall, reggae, and pop.",
+        "Burna Boy — African Giant (2019) end-to-end", 55,
+        "Listen to 'On the Low' — the song's afro-fusion groove made it an anthem across Africa and beyond. Then 'Anybody' — the track that samples Fela Kuti's 'Shakara.' Burna calls his sound 'afro-fusion' — reggae, dancehall, and highlife folded together with Nigerian swagger.",
+        ["Afrobeats", "Afro-Fusion", "Nigerian", "2010s"], 2
+    ),
+    (
+        "artist-wizkid", "Artist",
+        "Wizkid",
+        "He was discovered as a teenager and named his debut 'Superstar' at 20. 'Essence' — his song with Tems — became the first Nigerian song to chart on the Billboard Hot 100 and spawned a remix with Justin Bieber. He's collaborated with Drake, Beyoncé, and Skepta.",
+        "Wizkid — Made in Lagos (2020) end-to-end", 61,
+        "Listen to 'Essence' — the song is a love letter set to a slow afrobeat groove, and it became Afrobeats' global breakthrough. Then 'Ginger' — the track with Burna Boy. Wizkid's voice glides over the production; the album is Lagos nightlife in an hour.",
+        ["Afrobeats", "Afro-Pop", "Nigerian", "2020s"], 2
+    ),
+
+    # ── ELECTRONIC / EDM ──
+    (
+        "artist-skrillex", "Artist",
+        "Skrillex",
+        "He was the singer of the post-hardcore band From First to Last before going solo as a dubstep producer. 'Scary Monsters and Nice Sprites' won three Grammys and made dubstep mainstream. He's won 8 Grammys total — more than any other electronic artist.",
+        "Skrillex — Scary Monsters and Nice Sprites (2010) end-to-end", 43,
+        "Listen to the title track — the song's aggressive bass wobbles defined 2010s dubstep. Then 'First of the Year (Equinox)' — the call-and-response vocal ('call 911 now!') became a festival anthem. His sound is maximalist; listen to the sound design, not just the drop.",
+        ["Electronic", "Dubstep", "American", "2010s"], 2
+    ),
+    (
+        "artist-deadmau5", "Artist",
+        "deadmau5",
+        "Joel Zimmerman wears a giant mouse helmet and produces progressive house from a Toronto studio. 'Strobe' is considered one of the greatest electronic songs ever — a 6-minute build with no drop. The helmet came from an inside joke about his friend calling him a 'dead mouse.'",
+        "deadmau5 — For Lack of a Better Name (2009) end-to-end", 67,
+        "Listen to 'Strobe' — the song has no drop; it builds for six minutes and releases in a cascade of melody. Then 'Ghosts 'n' Stuff' — his biggest hit, with guest vocals. He's famously anti-trend; his production is meticulous and his live shows are a single giant cube of light.",
+        ["Electronic", "Progressive House", "Canadian", "2000s"], 2
+    ),
+    (
+        "artist-calvin-harris", "Artist",
+        "Calvin Harris",
+        "The Scottish producer wrote, produced, and sang on 'Summer' — his biggest solo hit. He's the highest-paid DJ in the world most years. 'We Found Love' with Rihanna spent 10 weeks at #1. He started making trance music as a teenager and worked in a supermarket to fund his studio.",
+        "Calvin Harris — 18 Months (2012) end-to-end", 47,
+        "Listen to 'We Found Love' — the song was written about a couple who are 'hopeless' together, and it spent 10 weeks at #1. Then 'Feel So Close' — his pure dance-pop anthem. Harris's genius is making the melody carry the beat; you can hum every track.",
+        ["Electronic", "EDM", "British", "2010s"], 2
+    ),
+    (
+        "artist-avicii", "Artist",
+        "Avicii",
+        "Tim Bergling was 21 when 'Levels' — built around an Etta James vocal sample — became a global phenomenon. 'Wake Me Up' blended country guitar with EDM and topped charts worldwide. He retired from touring in 2016 for health reasons and died by suicide at 28.",
+        "Avicii — True (2013) end-to-end", 50,
+        "Listen to 'Wake Me Up' — the song's folk-country vocals (by Aloe Blacc) over EDM was a risk that changed dance music. Then 'Levels' — the Etta James sample that made it a festival anthem. His melodies are simple and unforgettable; that was the point.",
+        ["Electronic", "EDM", "Swedish", "2010s"], 2
+    ),
+    (
+        "artist-disclosure", "Artist",
+        "Disclosure",
+        "Guy and Howard Lawrence were teenagers when they made 'Settle' — garage-house that revived UK dance music. 'Latch' with Sam Smith was their breakthrough. The brothers produce from a bedroom studio and recreate it live with real instruments.",
+        "Disclosure — Settle (2013) end-to-end", 57,
+        "Listen to 'Latch' — the song was written in an afternoon and became a #1 UK hit; Sam Smith was 19 and unknown. Then 'White Noise' — the album's garage anthem. Disclosure's sound is house music with UK garage swing; the basslines sound like they're breathing.",
+        ["Electronic", "House", "UK Garage", "British", "2010s"], 2
+    ),
+    (
+        "artist-jamie-xx", "Artist",
+        "Jamie xx",
+        "The xx's producer built a solo career on sampling and dance music. 'In Colour' — his debut — mixes UK garage, house, and melancholy pop and won a Grammy. 'I Know There's Gonna Be (Good Times)' samples an old gospel record and features Young Thug rapping.",
+        "Jamie xx — In Colour (2015) end-to-end", 45,
+        "Listen to 'Gosh' — the track's opening vocal chop builds into the album's biggest dance moment. Then 'Loud Places' — his collaboration with his bandmate Romy, about chasing happiness. He samples records no one else would find; the whole album is a crate-digging love letter.",
+        ["Electronic", "UK Garage", "House", "British", "2010s"], 2
+    ),
+    (
+        "artist-fred-again", "Artist",
+        "Fred again..",
+        "He samples voice memos from friends and strangers and turns them into emotional dance music. His 'Actual Life' albums use real recorded voices as hooks. He produced for Ed Sheeran and Stormzy before going solo. His Boiler Room set became one of dance music's great viral moments.",
+        "Fred again.. — Actual Life 3 (2022) end-to-end", 44,
+        "Listen to 'Delilah (pull me out of this)' — the song is built around a real voice memo from his friend Delilah. Then 'Jungle' — the track that went viral on TikTok. His music feels like intimate conversations turned into beats; the samples are the stars.",
+        ["Electronic", "UK Garage", "British", "2020s"], 2
+    ),
+    (
+        "artist-j-dilla", "Artist",
+        "J Dilla",
+        "The beatmaker's beatmaker — 'Donuts' was recorded in a hospital bed as he died of a rare blood disease; it's a soul-sampling masterpiece. His 'dilla time' drumming is instantly identifiable by producers. He produced for A Tribe Called Quest, De La Soul, and Badu.",
+        "J Dilla — Donuts (2006) end-to-end", 44,
+        "Listen to 'Workinonit' — the album opens with a pitched-up soul sample and a drum loop that swings in a way no machine should. Then 'Time: The Donut of the Heart' — a 4-minute suite. 'Donuts' is 31 short tracks, all made from soul records, all from a hospital bed.",
+        ["Hip-Hop", "Instrumental", "Electronic", "American", "2000s"], 2
+    ),
+
+    # ── JAZZ / BOSSA NOVA ──
+    (
+        "artist-sonny-rollins", "Artist",
+        "Sonny Rollins",
+        "He practiced for two years on the Williamsburg Bridge in New York — no recording, just him and his saxophone against the city noise. 'The Bridge' — his comeback album — is named after that practice spot. He kept playing and recording into his eighties.",
+        "Sonny Rollins — Saxophone Colossus (1956) end-to-end", 40,
+        "Listen to 'St. Thomas' — the calypso-tinged jazz classic that opens the album. Then 'Blue 7' — a 10-minute blues improvisation that became a textbook example of melodic improvising. Rollins plays with a humor and swagger that no other saxophonist matches.",
+        ["Jazz", "Hard Bop", "American", "1950s"], 2
+    ),
+    (
+        "artist-art-blakey", "Artist",
+        "Art Blakey",
+        "His band the Jazz Messengers was a finishing school for jazz greats — Wayne Shorter, Lee Morgan, and Wynton Marsalis all passed through. Blakey's drums were so loud he was told he'd never make it. 'Moanin'' — with Bobby Timmons's gospel-blues head — is his signature.",
+        "Art Blakey & the Jazz Messengers — Moanin' (1958) end-to-end", 42,
+        "Listen to 'Moanin'' — the bluesy opening melody is one of the catchiest in jazz, and the solos follow in a relay. Then 'Blues March' — the jazz standard about walking like a soldier. Blakey's drumming drives every soloist; he was the band's engine and its dean.",
+        ["Jazz", "Hard Bop", "American", "1950s"], 2
+    ),
+    (
+        "artist-dave-brubeck", "Artist",
+        "Dave Brubeck",
+        "'Take Five' — written by his saxophonist Paul Desmond — is the best-selling jazz single ever, in 5/4 time. Brubeck insisted on odd time signatures at the height of the cool-jazz era; 'Time Out' is the masterpiece of it. He nearly lost his life to polio as a child.",
+        "Dave Brubeck — Time Out (1959) end-to-end", 38,
+        "Listen to 'Take Five' — count along: it's in 5/4, and the way the bass walks makes it feel natural. Then 'Blue Rondo à la Turk' — the album's opener, inspired by Turkish street musicians playing in 9/8. This is jazz for people who thought they didn't like jazz.",
+        ["Jazz", "Cool Jazz", "American", "1950s"], 2
+    ),
+    (
+        "artist-joao-gilberto", "Artist",
+        "João Gilberto",
+        "The father of bossa nova — he invented the genre's hushed, syncopated guitar pattern in his bedroom in 1958. His whisper-quiet voice and guitar defined Brazil's sound. 'The Girl from Ipanema' — his 1964 recording with Stan Getz — became the best-selling jazz album of all time.",
+        "João Gilberto & Stan Getz — Getz/Gilberto (1964) end-to-end", 38,
+        "Listen to 'The Girl from Ipanema' — Astrud Gilberto, his wife, sang the English verses in her first-ever studio session; she didn't even know she'd be on the record. Then 'Corcovado' — the hushed bossa standard. Gilberto's guitar sounds like it's whispering; turn it up.",
+        ["Bossa Nova", "Brazilian", "1960s"], 2
+    ),
+    (
+        "artist-antonio-carlos-jobim", "Artist",
+        "Antônio Carlos Jobim",
+        "The composer of bossa nova — he wrote 'The Girl from Ipanema,' 'Corcovado,' and 'Wave.' He was an architect before music, and his melodies have that same clean, structural beauty. His songbook is the most recorded in Brazilian history after the samba classics.",
+        "Antônio Carlos Jobim — Wave (1967) end-to-end", 32,
+        "Listen to the title track — the melody is so simple and perfect it sounds like it always existed. Then 'Triste' — the melancholy bossa. Jobim's harmonies are lush and unexpected; he borrowed from jazz chords and Debussy. Every bossa nova after him is a footnote.",
+        ["Bossa Nova", "Brazilian", "1960s"], 2
+    ),
+    (
+        "artist-kamasi-washington", "Artist",
+        "Kamasi Washington",
+        "The saxophonist who brought jazz to the streaming generation — his 3-hour debut 'The Epic' featured a full orchestra and choir. He played saxophone on Kendrick Lamar's 'To Pimp a Butterfly.' He's known for his Coltrane-like spiritual improvisation and his band the Next Step.",
+        "Kamasi Washington — The Epic (2015) end-to-end", 174,
+        "Listen to 'Change of the Guard' — the album's 13-minute opener that announces jazz is alive. Then 'Miss Understanding' — the gospel-jazz centerpiece. 'The Epic' is three hours across 17 tracks; pick one track per sitting and let it unfold like a movie.",
+        ["Jazz", "Spiritual Jazz", "American", "2010s"], 2
+    ),
+
+    # ── LATIN ──
+    (
+        "artist-celia-cruz", "Artist",
+        "Celia Cruz",
+        "The Queen of Salsa — her signature '¡Azúcar!' (sugar!) came from a taxi driver who asked what she wanted and she said sugar. She left Cuba in 1960 and never returned, becoming a symbol of exile. She won five Grammys and sold over 10 million records.",
+        "Celia Cruz — Fania All-Stars live era (1970s) end-to-end", 60,
+        "Listen to 'Quimbara' — the salsa classic where Celia's voice carries an entire horn section's worth of energy. Then 'La Vida Es un Carnaval' — her anthem of resilience, written about overcoming hard times. Her voice is pure joy; you don't need to understand Spanish to feel it.",
+        ["Salsa", "Latin", "Cuban", "1970s"], 2
+    ),
+    (
+        "artist-carlos-santana", "Artist",
+        "Carlos Santana",
+        "His band's Woodstock performance — including the 11-minute 'Soul Sacrifice' — made them famous overnight. 'Smooth' with Rob Thomas was the last #1 single of the 1990s and won three Grammys. He named his guitar sound 'the voice' and plays it like a singer.",
+        "Santana — Abraxas (1970) end-to-end", 38,
+        "Listen to 'Oye Como Va' — Tito Puente's mambo turned into Latin rock by Santana's guitar. Then 'Black Magic Woman' — the Fleetwood Mac song he made his own. His guitar tone is instantly recognizable; the album is where Latin rhythms met San Francisco rock.",
+        ["Latin Rock", "Mexican", "1970s"], 2
+    ),
+    (
+        "artist-shakira", "Artist",
+        "Shakira",
+        "She wrote her first song at 8 and taught herself to belly dance at 4 — her hips are a Colombian national treasure. 'Hips Don't Lie' was her global breakthrough. She wrote the 2010 World Cup anthem 'Waka Waka' and has sold over 80 million records.",
+        "Shakira — Oral Fixation, Vol. 2 (2005) end-to-end", 44,
+        "Listen to 'Hips Don't Lie' — the song's Colombian carnival sound with Wyclef Jean made it one of the best-selling singles of the 2000s. Then 'La Tortura' — her reggaeton crossover with Alejandro Sanz. She sings in English and Spanish with equal ease, sometimes in the same song.",
+        ["Latin Pop", "Colombian", "2000s"], 2
+    ),
+    (
+        "artist-vicente-fernandez", "Artist",
+        "Vicente Fernández",
+        "The king of ranchera music — Mexico's greatest mariachi voice. He started as a street singer and became a national treasure whose funeral was a national mourning. 'Volver, Volver' — his signature — is about begging a lover to return. He recorded over 50 albums.",
+        "Vicente Fernández — Ranchera essentials (1980s) end-to-end", 45,
+        "Listen to 'Volver, Volver' — the ranchera anthem where his voice cracks with emotion at the climax. Then 'El Rey' — the song about being the king of your own life. His voice is big and open like the sky; the mariachi band plays like a cavalry charge.",
+        ["Ranchera", "Mariachi", "Mexican", "1980s"], 2
+    ),
+    (
+        "artist-cafe-tacvba", "Artist",
+        "Café Tacvba",
+        "Mexico's greatest rock band — they've been called 'the most important rock band in Latin America.' 'La Ingrata' and 'Eres' are their classics. They record across genres — rock, bolero, electronic, sometimes within one song. The 'v' in their name winks at Aztec writing.",
+        "Café Tacvba — Re (1994) end-to-end", 52,
+        "Listen to 'La Ingrata' — the song that made them stars, with its weird, wonderful bassline. Then 'Eres' — the album's quiet acoustic love song, a total shift from the rock around it. 'Re' is a genre-hopping masterpiece that proves rock belongs in Spanish.",
+        ["Latin Rock", "Mexican", "1990s"], 2
+    ),
+
+    # ── WORLD ──
+    (
+        "artist-nusrat-fateh-ali-khan", "Artist",
+        "Nusrat Fateh Ali Khan",
+        "The Pakistani qawwali singer whose voice spanned four octaves — he could sing for 30 minutes on one breath, some say. He's credited with bringing qawwali (Sufi devotional music) to the world. He collaborated with Eddie Vedder and was sampled by countless hip-hop producers.",
+        "Nusrat Fateh Ali Khan — Mustt Mustt (1990) end-to-end", 55,
+        "Listen to 'Mustt Mustt' — the song's ecstatic build is qawwali's signature: the harmonium, the clapping, and Nusrat's voice climbing higher and higher. Then 'Tere Bina' — the duet with Eddie Vedder. His voice is a spiritual experience; don't expect Western song structures.",
+        ["Qawwali", "Sufi", "Pakistani", "1990s"], 2
+    ),
+    (
+        "artist-tinariwen", "Artist",
+        "Tinariwen",
+        "The Tuareg band from the Sahara desert who play 'desert blues' — electric guitars over ancient rhythms. Several members are former rebels who fought in the Tuareg uprisings; their songs are about exile and memory. They formed in a Libyan military camp in the 1980s.",
+        "Tinariwen — Aman Iman (2007) end-to-end", 52,
+        "Listen to 'Cler Achel' — the song's hypnotic guitar lines sound like a caravan crossing the dunes. Then 'Matadjem Yinmixan' — a call for peace between Tuareg factions. The band's music is trance-like and meditative; the guitar parts interlock like voices.",
+        ["Desert Blues", "Tuareg", "Malian", "2000s"], 2
+    ),
+    (
+        "artist-king-sunny-ade", "Artist",
+        "King Sunny Adé",
+        "The king of jùjú music — Nigeria's psychedelic guitar-pop. His band once had 50 members including four pedal-steel guitarists. 'Synchro System' was produced by Brian Eno. He's been called the 'Jimi Hendrix of jùjú' for his hypnotic, overlapping guitar parts.",
+        "King Sunny Adé — Juju Music (1982) end-to-end", 45,
+        "Listen to 'Ja Funmi' — the opening track's guitar melody weaves over talking drums for 10 minutes. Then 'Sunny Ti De' — the celebratory track about his own arrival. The pedal-steel guitar gives jùjú its dreamy sound; the rhythm section never stops dancing.",
+        ["Jùjú", "Nigerian", "1980s"], 3
+    ),
+    (
+        "artist-angelique-kidjo", "Artist",
+        "Angélique Kidjo",
+        "The Beninese singer has been called 'Africa's premier diva' — she sings in five languages and fuses Afrobeat, funk, and pop. Her cover album 'Remain in Light' reimagined Talking Heads with a full West African band. She won five Grammys and UNICEF named her an ambassador.",
+        "Angélique Kidjo — Remain in Light (2018) end-to-end", 51,
+        "Listen to 'Once in a Lifetime' — her version turns Talking Heads' paranoid anthem into a joyful West African celebration. Then 'Born Here' — the duet with her mother's blessing. Kidjo's voice is huge and elastic; she makes every song sound like it was always African.",
+        ["Afrobeat", "World", "Beninese", "2010s"], 2
+    ),
+    (
+        "artist-miriam-makeba", "Artist",
+        "Miriam Makeba",
+        "Mama Africa — the South African singer exiled for 31 years over her anti-apartheid activism. 'Pata Pata' — her 1967 global hit — was banned in South Africa. She testified against apartheid at the UN in 1963 and performed at the 1988 Mandela birthday concert.",
+        "Miriam Makeba — Pata Pata (1967) end-to-end", 38,
+        "Listen to 'Pata Pata' — the song means 'touch touch' in Xhosa, and it's the most joyful protest song ever written. Then 'The Click Song' — sung in Xhosa with its famous click consonants. Makeba's voice carries the warmth and pain of a continent; she was exiled but never silenced.",
+        ["Afro-Pop", "World", "South African", "1960s"], 2
+    ),
+
+    # ── BLUES ──
+    (
+        "artist-sister-rosetta-tharpe", "Artist",
+        "Sister Rosetta Tharpe",
+        "The godmother of rock and roll — she played gospel on an electric guitar with distortion decades before anyone else. Chuck Berry and Elvis both cited her as an influence. She once held a wedding concert in a baseball stadium with 25,000 fans.",
+        "Sister Rosetta Tharpe — Gospel Giants (1950s) end-to-end", 40,
+        "Listen to 'This Train' — the gospel classic where her guitar rips like a rock solo. Then 'Didn't It Rain' — recorded live with a choir and a storm of guitar. She played her guitar behind her head and between her legs; she was the rock star before there was rock.",
+        ["Blues", "Gospel", "Rock and Roll", "American", "1950s"], 2
+    ),
+    (
+        "artist-lead-belly", "Artist",
+        "Lead Belly",
+        "Huddie Ledbetter sang his way out of prison twice — governors pardoned him after hearing his songs pleading for freedom. 'Goodnight Irene' — a song he learned as a child — became a #1 hit for others. He played 12-string guitar, which he tuned low to make it louder.",
+        "Lead Belly — Lead Belly's Last Sessions (1948) end-to-end", 60,
+        "Listen to 'Goodnight Irene' — the folk standard that became an international hit after his death. Then 'Where Did You Sleep Last Night' — the murder ballad that Nirvana would later make famous. Lead Belly's voice is enormous; he recorded hundreds of songs in just a few years.",
+        ["Blues", "Folk", "American", "1940s"], 2
+    ),
+    (
+        "artist-stevie-ray-vaughan", "Artist",
+        "Stevie Ray Vaughan",
+        "The greatest blues guitarist of his generation — he went sober in 1986 and recorded his masterpiece 'In Step' three years later. He died in a helicopter crash in 1990 at 35, days after jamming with Eric Clapton. His 'Texas Flood' is a live-recording legend.",
+        "Stevie Ray Vaughan — Texas Flood (1983) end-to-end", 39,
+        "Listen to 'Pride and Joy' — the opening riff is one of the most joyful in blues history. Then 'Texas Flood' — the slow blues where his guitar literally cries. Vaughan played a battered Stratocaster called 'Number One' and could make it sound like five guitars at once.",
+        ["Blues", "Blues Rock", "American", "1980s"], 2
+    ),
+    (
+        "artist-gary-clark-jr", "Artist",
+        "Gary Clark Jr.",
+        "The Austin guitarist who carries blues into the 21st century — he's opened for the Rolling Stones and jammed with B.B. King. His song 'This Land' won three Grammys and is a searing statement about racism in Texas. He plays everything from blues to funk to hip-hop.",
+        "Gary Clark Jr. — This Land (2019) end-to-end", 55,
+        "Listen to 'This Land' — the song's opening riff hits like a challenge, and the lyrics are about the racist graffiti he found on his own property. Then 'Bright Lights' — his live anthem about touring. His guitar tone is pure modern blues; he's the genre's heir apparent.",
+        ["Blues", "Blues Rock", "American", "2010s"], 2
+    ),
+
+    # ── CLASSICAL / FILM COMPOSERS ──
+    (
+        "artist-tchaikovsky", "Artist",
+        "Pyotr Ilyich Tchaikovsky",
+        "The Russian composer of 'Swan Lake,' 'The Nutcracker,' and the 1812 Overture — which famously features real cannons. He was terrified of conducting and held his head with his left hand while conducting with his right. He died nine days after premiering his Sixth Symphony.",
+        "Tchaikovsky — Swan Lake (1876) end-to-end highlights", 50,
+        "Listen to the 'Dance of the Little Swans' — four oboes in perfect unison, one of classical music's most famous moments. Then the 1812 Overture's finale — real cannons, church bells, full orchestra. Tchaikovsky's melodies are why his ballets are the most performed in the world.",
+        ["Classical", "Romantic", "Russian", "1870s"], 2
+    ),
+    (
+        "artist-vivaldi", "Artist",
+        "Antonio Vivaldi",
+        "The Red Priest — he was a red-haired Catholic priest who wrote over 500 concertos. 'The Four Seasons' — his violin concertos depicting each season — is the most recorded piece of classical music ever. He taught at an orphanage for girls, where his students became his orchestra.",
+        "Vivaldi — The Four Seasons (1725) end-to-end", 40,
+        "Listen to 'Spring' — the opening is the most famous 10 seconds in all of classical music. Then 'Winter' — the second movement's violin solo imitates freezing rain. Vivaldi wrote sonnets to accompany each concerto; listen for the birds, storms, and barking dogs in the music.",
+        ["Classical", "Baroque", "Italian", "1700s"], 2
+    ),
+    (
+        "artist-erik-satie", "Artist",
+        "Erik Satie",
+        "The eccentric French composer who named a piece 'Three Pieces in the Shape of a Pear.' His 'Gymnopédies' are the most calming piano music ever written. He wore the same gray velvet suit every day and kept two pianos — one for friends, one that no one was allowed to touch.",
+        "Erik Satie — Gymnopédies (1888) end-to-end", 15,
+        "Listen to the first Gymnopédie — three gentle chords repeated with a melody floating above; it's been used in films and countless ads. Then the Gnossiennes — which have no time signature, so they float freely. Satie's music sounds simple; it isn't.",
+        ["Classical", "Minimalist", "French", "1880s"], 2
+    ),
+    (
+        "artist-steve-reich", "Artist",
+        "Steve Reich",
+        "The pioneer of minimalist music — he built 'It's Gonna Rain' from a single recording of a street preacher looped on two tape machines that slowly drift out of sync. 'Music for 18 Musicians' is his masterpiece. His ideas influenced everyone from Brian Eno to Radiohead.",
+        "Steve Reich — Music for 18 Musicians (1976) end-to-end", 65,
+        "Listen to the opening pulse — 11 chords played over and over that slowly phase and change. Then the second section's marimba melody. Reich's music is hypnotic; let your mind go and the patterns start moving in front of you. It's the root of so much electronic music you love.",
+        ["Classical", "Minimalist", "American", "1970s"], 3
+    ),
+    (
+        "artist-hans-zimmer", "Artist",
+        "Hans Zimmer",
+        "The most famous film composer alive — scores for 'Inception,' 'Interstellar,' 'The Dark Knight,' and 'Gladiator' redefined movie sound. He was a synth player in bands before films. 'Time' from Inception is his most-streamed piece — a two-chord build into a wall of sound.",
+        "Hans Zimmer — Inception: Time and Dream Suite (2010) end-to-end", 60,
+        "Listen to 'Time' — a two-chord piano theme that builds over four minutes into orchestra and choir; it's the musical definition of a crescendo. Then the 'Interstellar' main theme — an organ that sounds like it's from space. Zimmer's brass and percussion are unmistakable.",
+        ["Film Score", "Orchestral", "German", "2010s"], 2
+    ),
+    (
+        "artist-john-williams", "Artist",
+        "John Williams",
+        "The most recognized melody writer alive — he composed 'Star Wars,' 'Jaws,' 'Indiana Jones,' 'Jurassic Park,' 'Harry Potter,' and 'E.T.' He's won five Oscars and has the most Oscar nominations of any living person. He started as a jazz pianist named 'Johnny Williams.'",
+        "John Williams — Star Wars: The Empire Strikes Back (1980) end-to-end", 75,
+        "Listen to 'The Imperial March' — a villain theme so iconic it has its own concert encore. Then 'Han Solo and the Princess' — the film's hidden romantic gem. Williams writes leitmotifs — a melody per character, like Wagner; 'Binary Sunset' is the best. Hum it after one listen.",
+        ["Film Score", "Orchestral", "American", "1980s"], 1
+    ),
+
+    # ── K-POP ──
+    (
+        "artist-bts", "Artist",
+        "BTS",
+        "The South Korean group that became the biggest band in the world — seven members from a small label writing about mental health and youth. 'Dynamite' was their first #1 US single. They've addressed the UN twice, and their fan army ARMY is the most organized in music.",
+        "BTS — Map of the Soul: 7 (2020) end-to-end", 75,
+        "Listen to 'Black Swan' — the song's lyrics are about the fear of losing your passion for art; the choreography tells the same story in dance. Then 'ON' — the epic closer with a choir and trap drums. BTS blend rap, pop, and balladry; each of the seven members gets a solo moment.",
+        ["K-Pop", "Korean", "2020s"], 2
+    ),
+    (
+        "artist-blackpink", "Artist",
+        "BLACKPINK",
+        "The girl group that made K-pop a global phenomenon — the first K-pop group to headline Coachella. 'DDU-DU DDU-DU' has over 2 billion YouTube views. Their name means 'the prettiest parts aren't the pink' — they kept some edginess. Each member also has a solo career.",
+        "BLACKPINK — The Album (2020) end-to-end", 24,
+        "Listen to 'How You Like That' — the trap-pop anthem with the iconic 'look up in the sky' choreography moment. Then 'Lovesick Girls' — the emotional pop-rock ballad. BLACKPINK's formula is luxury visuals, hard beats, and four distinct voices trading verses in Korean and English.",
+        ["K-Pop", "Korean", "2020s"], 2
+    ),
+    (
+        "artist-psy", "Artist",
+        "PSY",
+        "'Gangnam Style' was the first YouTube video to reach a billion views — the horse-riding dance became a global meme overnight. PSY was a serious Korean pop star for a decade before that. The song satirizes Seoul's wealthy Gangnam district — most non-Korean fans missed the joke.",
+        "PSY — Psy 6甲 (Six Rules), Part 1 (2012) end-to-end", 35,
+        "Listen to 'Gangnam Style' with the lyrics open — the song mocks the 'gangnam style' of pretending to be rich. Then 'Oppa Is Just My Style' — the parody of his own hit. PSY's music is pure fun with a wink; the dance is half the song.",
+        ["K-Pop", "Korean", "2010s"], 3
+    ),
 ]
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # JSON generation
 # ═══════════════════════════════════════════════════════════════════════════
 
-MAX_CHARS = 280
+MAX_CHARS = 450
 
 
 def _trim(text, field_name, entry_id):

@@ -1566,14 +1566,6 @@ ALBUMS = [
         ["Big Beat", "Electronic", "British", "1990s"], 1
     ),
     (
-        "album-flying-lotus-cosmogramma", "Album",
-        "Cosmogramma",
-        "Flying Lotus (Steven Ellison) 2010 — the album that blurred the line between hip-hop, electronic, and jazz into a new genre. Ellison, the grand-nephew of Alice Coltrane, recorded the album in his Los Angeles apartment. The tracks shift tempo, texture, and genre mid-bar, creating music that feels like channel-surfing through the cosmos.",
-        "Cosmogramma (2010) end-to-end", 45,
-        "Listen to 'Zodiac Shit' — the track samples a 1970s spiritual jazz record that Ellison found in his aunt's collection, then runs it through a digital blender. Then 'Do the Astral Plane' — the bassline was played by Thundercat, who Ellison discovered playing jazz clubs. The album's density rewards multiple listens: every return reveals a new sample, a new layer.",
-        ["Electronic", "Experimental", "Wonky", "American", "2010s"], 1
-    ),
-    (
         "album-four-tet-rounds", "Album",
         "Rounds",
         "Four Tet (Kieran Hebden) 2003 — an album made entirely on a desktop computer with found sounds: a squeaky door, a radio broadcast, an old folk record played at the wrong speed. Hebden stitched these fragments into something that felt organic, not digital. The album's warmth comes from its imperfections.",
@@ -1894,14 +1886,6 @@ ALBUMS = [
         ["Neo-Soul", "R&B", "American", "2000s"], 1
     ),
     (
-        "album-lauren-hill-miseducation", "Album",
-        "The Miseducation of Lauryn Hill",
-        "Already in catalog — see Hip-Hop section.",
-        "", 0,
-        "",
-        [], 1
-    ),
-    (
         "album-maxwell-urban-hang-suite", "Album",
         "Maxwell's Urban Hang Suite",
         "Maxwell 1996 — the album that defined the softer side of neo-soul. Recorded over 3 years with producer Stuart Matthewman (Sade's guitarist). Maxwell's falsetto and the album's concept — a single night of romance from flirtation to morning — made it both critically acclaimed and commercially successful.",
@@ -1916,14 +1900,6 @@ ALBUMS = [
         "Love Deluxe (1992) end-to-end", 46,
         "Listen to 'No Ordinary Love' — the bassline by Paul Denman was recorded in a concrete stairwell for natural reverb. Then 'Cherish the Day' — Sade's vocal was the first take. The band recorded everything to analog tape and refused to use digital effects. The album took 2 years to make; it sounds like it took 2 years.",
         ["R&B", "Sophisti-Pop", "British-Nigerian", "1990s"], 1
-    ),
-    (
-        "album-sly-and-the-family-stone-theres-a-riot", "Album",
-        "There's a Riot Goin' On",
-        "Sly and the Family Stone 1971 — recorded almost entirely by Sly Stone alone in a drug-fueled haze at the Record Plant in Los Angeles. The album is a deliberate deconstruction of the optimistic funk of 'Dance to the Music'. In place of joy: paranoia, exhaustion, and a drum machine that sounds like a dying heartbeat.",
-        "There's a Riot Goin' On (1971) end-to-end", 48,
-        "Listen to 'Family Affair' — the drum machine was Sly's new Maestro Rhythm King, the first time a drum machine had driven a #1 hit. Then 'Runnin' Away' — the horns are so buried in the mix they sound like they're playing from another room. The album was recorded and re-recorded so many times the master tape nearly disintegrated.",
-        ["Funk", "Soul", "American", "1970s"], 1
     ),
     (
         "album-curtis-mayfield-superfly", "Album",
@@ -1956,14 +1932,6 @@ ALBUMS = [
         "Risqué (1979) end-to-end", 35,
         "Listen to 'Good Times' — the bassline by Bernard Edwards is 2 bars long, repeated for 8 minutes, and never gets boring. Then 'My Feet Keep Dancing' — Rodgers's guitar part uses a chord voicing that music theorists call 'the Chic chord'. The album's production is so precise that every instrument occupies its own frequency space without ever crowding.",
         ["Disco", "Funk", "American", "1970s"], 1
-    ),
-    (
-        "album-earth-wind-and-fire-thats-the-way", "Album",
-        "That's the Way of the World",
-        "Earth, Wind & Fire 1975 — the album that perfected the intersection of funk, soul, jazz, and spirituality. Recorded at Caribou Ranch in Colorado, where the band could see mountains from the studio window. Maurice White's vision — a band that combined the precision of James Brown with the ambition of a symphony orchestra — reached its peak here.",
-        "That's the Way of the World (1975) end-to-end", 39,
-        "Listen to 'Shining Star' — the opening synth riff was played on a Moog by Larry Dunn. Then 'Reasons' — Philip Bailey's falsetto hits notes that shouldn't be physically possible. The horn section, the Phenix Horns, were recorded in a single day. The album was originally intended as a soundtrack but became their commercial breakthrough instead.",
-        ["Funk", "Soul", "R&B", "American", "1970s"], 1
     ),
     (
         "album-rick-james-street-songs", "Album",
@@ -2008,14 +1976,6 @@ ALBUMS = [
         "The Köln Concert (1975) end-to-end", 66,
         "Listen to Part I — Jarrett establishes a two-chord vamp in A minor that he sustains for 26 minutes without ever repeating himself. The broken piano forced him to play in the middle register and avoid the tinny high notes. The result sounds deliberate, not compromised. Jarrett's audible humming and foot-stomping are part of the recording.",
         ["Jazz", "Solo Piano", "American", "1970s"], 1
-    ),
-    (
-        "album-charles-mingus-black-saint", "Album",
-        "The Black Saint and the Sinner Lady",
-        "Charles Mingus 1963 — a six-part ballet for an 11-piece band, recorded as a single continuous take (then split into tracks for the LP). Mingus wrote the album after being released from Bellevue psychiatric hospital. His therapist encouraged him to write music as therapy. The album's liner notes are written by Mingus's therapist.",
-        "The Black Saint and the Sinner Lady (1963) end-to-end", 40,
-        "Listen to 'Track A — Solo Dancer' — the opening is a single held saxophone note over frantic percussion. Then 'Track C — Group Dancers' — the horns play a melody that sounds like Duke Ellington arranged by a madman. Mingus overdubbed himself playing piano and bass simultaneously. The album was meant to be heard as one continuous piece.",
-        ["Jazz", "Avant-Garde Jazz", "American", "1960s"], 1
     ),
     (
         "album-alice-coltrane-journey-in-satchidananda", "Album",
@@ -3595,14 +3555,6 @@ ALBUMS = [
 
     # ── BLUES ──
     (
-        "album-robert-johnson-king-of-the-delta-blues", "Album",
-        "King of the Delta Blues Singers",
-        "Robert Johnson 1961 — a compilation released 23 years after Johnson's death at 27, introducing the Delta blues legend to a generation of British musicians. Johnson recorded only 29 songs in his lifetime, in two sessions in 1936-37 in San Antonio and Dallas. The myth that he sold his soul to the devil at a crossroads comes from these recordings.",
-        "King of the Delta Blues Singers (1961) end-to-end", 42,
-        "Listen to 'Cross Road Blues' — Johnson's guitar sounds like two players because he played the bassline with his thumb and the melody with his fingers simultaneously. Then 'Hellhound on My Trail' — recorded in a makeshift San Antonio hotel-room studio with Johnson facing the corner of the room because he didn't want the engineers to see his guitar technique.",
-        ["Blues", "Delta Blues", "American", "1930s"], 1
-    ),
-    (
         "album-muddy-waters-folk-singer", "Album",
         "Folk Singer",
         "Muddy Waters 1964 — an acoustic album recorded when Chess Records was trying to market Waters to the folk revival audience. Stripped of his electric band, Waters is alone with his guitar, Willie Dixon on upright bass, and Buddy Guy on second guitar. The recording engineer was so careful that Waters later said it was the best-sounding album he ever made.",
@@ -3735,7 +3687,6 @@ ALBUMS = [
         "Listen to 'Knee Play 1' — the opera opens with an actress reading numbers over an electric organ playing two chords. This continues for 3 minutes. The point isn't the words — it's the rhythm of counting. Then 'Building' — the chorus sings solfège syllables for 8 minutes while the orchestra builds the same pattern over and over. Something enormous accumulates.",
         ["Classical", "Minimalism", "Opera", "American", "1970s"], 1
     ),
-    (
     (
         "album-max-richter-the-blue-notebooks", "Album",
         "The Blue Notebooks",
@@ -3949,7 +3900,6 @@ ALBUMS = [
         ["Pop", "Rock", "British", "1970s"], 1
     ),
     (
-    (
         "album-david-bowie-blackstar", "Album",
         "Blackstar",
         "David Bowie 2016 — released on his 69th birthday, two days before his death from liver cancer. Bowie knew he was dying when he recorded it; only his closest collaborators knew. The album is a farewell letter: the title track is 10 minutes of jazz-inflected meditation on mortality, and 'Lazarus' opens with the line 'Look up here, I'm in heaven.'",
@@ -3986,7 +3936,7 @@ ALBUMS = [
         "Tusk",
         "Fleetwood Mac 1979 — the most expensive album ever made at the time ($1 million). After the perfect pop of Rumours, Lindsey Buckingham insisted on making the follow-up deliberately strange. The album's horns and marching band (the USC Trojan Marching Band on the title track) were recorded at Dodger Stadium. The band nearly broke up. Critics called it a mess. It's now considered a masterpiece.",
         "Tusk (1979) end-to-end", 74,
-        "Listen to the title track — the drum part was recorded in Buckingham's bathroom, then the USC marching band was overdubbed in a stadium. Then 'Sara' — Stevie Nicks wrote a 16-minute version and the band cut it to 6. She said the song was about her unborn child (she had an abortion during the Rumours tour)." "The editing is audible in the song's strange pauses.",
+        "Listen to the title track — the drum part was recorded in Buckingham's bathroom, then the USC marching band was overdubbed in a stadium. Then 'Sara' — Stevie Nicks wrote a 16-minute version and the band cut it to 6. She said the song was about her unborn child (she had an abortion during the Rumours tour). The editing is audible in the song's strange pauses.",
         ["Rock", "Pop", "American-British", "1970s"], 2
     ),
     (
@@ -4067,7 +4017,7 @@ ALBUMS = [
 # JSON generation
 # ═══════════════════════════════════════════════════════════════════════════
 
-MAX_CHARS = 280
+MAX_CHARS = 450
 
 def _trim(text, field_name, entry_id):
     """Trim text to MAX_CHARS at the last sentence boundary."""

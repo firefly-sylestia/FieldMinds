@@ -38,7 +38,7 @@ for match in ERR_RE.finditer(output):
 
 # Heuristically classify "rest" by keywords
 def classify(rest):
-    if "instruction is" in rest and "max 280" in rest:
+    if "instruction is" in rest and "max 450" in rest:
         return "instruction_over_length_280"
     if "exploreAction" in rest and "missing" in rest:
         return "missing_exploreAction"
