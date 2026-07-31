@@ -86,6 +86,7 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
+import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.CurioTopic
 import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicJsonLoader
@@ -157,6 +158,13 @@ import kotlin.random.Random
  *     user spins in (chosen in-screen or opened via a category slug) is
  *     stored in [AppPreferences]; opening the plain Spin tab without a
  *     slug picks up where they left off instead of defaulting to Surprise.
+ *
+ * v5.6 changes:
+ * 12. **Landed topic survives closing Reveal** — auto-open still fires on
+ *     a fresh landing, but if the user closes Topic Reveal without saving
+ *     the topic, it stays on the card with "Tap to open" active until
+ *     they explore (capture) it or tap Spin again. A `landingAlreadyOpened`
+ *     guard stops auto-open from re-firing when returning from Reveal.
  */
 // ═══════════════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -238,7 +246,19 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var shuffling by remember { mutableStateOf(false) }
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
-    var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
+    // ── Landed topic — persisted by NAME (v5.6) so closing Reveal without
+    //    saving keeps it on the card, tappable, until explored or spun
+    //    again. The full CurioTopic is re-derived from the pool below.
+    var landedTopicName by rememberSaveable(activeCategory.id) { mutableStateOf<String?>(null) }
+    // v5.6 — true once THIS landing has already opened (auto or tap). Stops
+    // auto-open re-firing when the user returns from Reveal; reset per spin.
+    var landingAlreadyOpened by rememberSaveable(activeCategory.id) { mutableStateOf(false) }
+    val landedTopic: CurioTopic? = remember(landedTopicName, filteredPool) {
+        landedTopicName?.let { name ->
+            filteredPool.firstOrNull { it.name == name }
+                ?: TopicJsonLoader.cached(activeCategory.id)?.firstOrNull { it.name == name }
+        }
+    }
     // v5.4 — true only during the brief auto-open pause before navigating
     // to Reveal; the landed ticket swaps its hint to a pulsing "Opening…".
     var isOpening by remember { mutableStateOf(false) }
@@ -261,7 +281,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // NOT be cleared here, or restored state would be wiped on the first
     // composition after process death.
     LaunchedEffect(activeCategory.id) {
-        landedTopic = null
+        landedTopicName = null
+        landingAlreadyOpened = false
         shuffling = false
         isOpening = false
     }
@@ -270,7 +291,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     LaunchedEffect(shuffleCount) {
         if (shuffleCount == 0 || filteredPool.isEmpty()) return@LaunchedEffect
         shuffling = true
-        landedTopic = null
+        landedTopicName = null
+        landingAlreadyOpened = false
         isOpening = false
         // v5.4 — randomized within the spec's spin window; every spin
         // settles at a slightly different moment like a real wheel.
@@ -300,7 +322,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
         // Pick a single topic
         val primary = pickFrom(filteredPool, recentTopicIds)
-        landedTopic = primary
+        landedTopicName = primary?.name
         if (primary != null) {
             val idx = displayPool.indexOfFirst { it.id == primary.id }
             if (idx >= 0) cycleIndex = idx
@@ -312,21 +334,42 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
     // ── Auto-open once the spin settles (CURIO_SPEC §5) ──────────────
     // After the ~400ms RevealHold pause the landed topic transitions to
-    // Topic Reveal on its own. Keyed on the landed topic so it fires once
-    // per landing; popping back from Reveal leaves landedTopic unchanged
-    // so the effect does NOT re-fire (no navigation loop). launchSingleTop
-    // makes this a no-op if the user already tapped the card open.
-    LaunchedEffect(landedTopic) {
+    // Topic Reveal on its own. launchSingleTop makes it a no-op if the
+    // user already tapped the card open.
+    LaunchedEffect(landedTopicName) {
         val landed = landedTopic ?: return@LaunchedEffect
+        // v5.6 — only auto-open the FIRST presentation of a landing. If the
+        // user closes Reveal without saving, landingAlreadyOpened stays true
+        // and the topic remains on the card with tap-to-open active until
+        // explored or spun again.
+        if (landingAlreadyOpened) return@LaunchedEffect
         // v5.4 — flag the RevealHold pause so the ticket shows a pulsing
         // "Opening…" hint; cleared just before navigation fires.
-        // launchSingleTop makes this a no-op if the user already tapped
-        // the card open, and popping back from Reveal doesn't re-fire.
         isOpening = true
         delay(CurioMotion.Durations.RevealHold.toLong())
         isOpening = false
+        landingAlreadyOpened = true
         navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
             launchSingleTop = true
+        }
+    }
+
+    // ── v5.6 — once the topic has been explored, drop the landing ─────
+    // Runs when the screen (re)enters composition (e.g. returning from
+    // Reveal). If the landed topic was saved to the Cabinet, it counts as
+    // explored: the card returns to idle. Otherwise it stays on the card,
+    // tappable, until the user explores it or spins again.
+    LaunchedEffect(Unit) {
+        val name = landedTopicName ?: return@LaunchedEffect
+        val topicId = landedTopic?.id
+        val explored = runCatching {
+            CurioRepositoryHolder.repo.getAll().any { entry ->
+                entry.topic.id == topicId || entry.topic.name == name
+            }
+        }.getOrDefault(false)
+        if (explored) {
+            landedTopicName = null
+            landingAlreadyOpened = false
         }
     }
 
@@ -373,8 +416,10 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 if (shuffling || filteredPool.isEmpty()) return@Carousel
                 val landed = landedTopic
                 if (landed != null) {
-                    // Manual tap — opens instantly. launchSingleTop makes it
-                    // a no-op if the auto-open already pushed Reveal.
+                    // Manual tap — opens instantly and marks this landing as
+                    // opened (cancels any pending auto-open). launchSingleTop
+                    // makes it a no-op if the auto-open already pushed Reveal.
+                    landingAlreadyOpened = true
                     navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
                         launchSingleTop = true
                     }
