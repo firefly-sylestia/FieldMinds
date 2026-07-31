@@ -665,5 +665,1325 @@
       "1950s"
     ],
     "tier": 1
+  },
+  {
+    "id": "artist-they-might-be-giants",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "They Might Be Giants",
+    "teaser": "Named after a 1971 George C. Scott film about a man who thinks he's Sherlock Holmes. They ran Dial-A-Song — a phone line you could call for a new song — and played 52 shows in 52 states in 52 days. 'Istanbul (Not Constantinople),' their biggest hit, is a cover of a 1953 song.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "They Might Be Giants — Flood (1990) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Birdhouse in Your Soul' — it's sung from the perspective of a canary nightlight in a blue house. Then 'Istanbul (Not Constantinople)' and count the history facts crammed into three minutes. Linnell and Flansburgh met in elementary school and still record in Brooklyn."
+    },
+    "tags": [
+      "Alternative Rock",
+      "Indie Pop",
+      "Comedy",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-weird-al",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "\"Weird Al\" Yankovic",
+    "teaser": "The best-selling comedy artist of all time, and a genuine accordion virtuoso — his parents bought his first accordion from a door-to-door salesman for $40. He studied architecture at Cal Poly. An asteroid, 28403 Weird Al, is named after him. He's also an Eagle Scout.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Weird Al — The Food Album (1993) end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Play 'Amish Paradise' against Coolio's 'Gangsta's Paradise' — Coolio was furious for years before they made up. Then 'White & Nerdy' — he got Donny Osmond in the video. Artists literally send Al their songs hoping to be parodied; it's an honor."
+    },
+    "tags": [
+      "Comedy",
+      "Pop",
+      "Parody",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-ok-go",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "OK Go",
+    "teaser": "'Here It Goes Again' — the famous treadmill video — was one continuous take in the band's backyard on four treadmills. It won a Grammy and launched a series of choreographed one-take videos with drones, cars, and a giant Rube Goldberg machine.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "OK Go — Oh No (2005) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Watch 'This Too Shall Pass' (the Rube Goldberg version) — the machine took two months to build and dozens of takes. Then 'The One Moment' — the whole video is four real seconds slowed down. OK Go's videos are engineering projects as much as songs."
+    },
+    "tags": [
+      "Indie Rock",
+      "Alternative Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-b52s",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The B-52s",
+    "teaser": "Named after the beehive hairdo. They formed in Athens, Georgia after a night of flaming-volcano drinks at a Chinese restaurant, then wrote 'Rock Lobster' in a living room hours later. John Lennon heard it in a club and it inspired him to come back to music after five years away.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The B-52s — Cosmic Thing (1989) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'Rock Lobster' and identify every animal sound in the bridge. Then 'Love Shack' — it's about a real shack in Athens, Georgia where the band partied. Fred Schneider's deadpan vocals are the whole aesthetic: no one else would dare."
+    },
+    "tags": [
+      "New Wave",
+      "Pop Rock",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-devo",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Devo",
+    "teaser": "Art students from Kent State, on campus in 1970 when the National Guard shot four students — the experience shaped their theory that humans are 'de-evolving.' Their red 'energy dome' hats were made from plastic flowerpots, and they weaponized irony.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Devo — Q: Are We Not Men? A: We Are Devo! (1978) end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Listen to 'Whip It' with the video — the song was nearly left off the album. Then 'Beautiful World' — the cheery melody over apocalyptic lyrics is the entire Devo trick. Mark Mothersbaugh later scored Rugrats, The Royal Tenenbaums, and every Wes Anderson film's trailer."
+    },
+    "tags": [
+      "New Wave",
+      "Synth-Pop",
+      "Punk",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-talking-heads",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Talking Heads",
+    "teaser": "Formed at the Rhode Island School of Design. David Byrne's jerky dance in 'Once in a Lifetime' was improvised. Stop Making Sense — directed by Jonathan Demme — is often called the greatest concert film ever made, and the 'big suit' Byrne wears was entirely his own idea.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Talking Heads — Stop Making Sense (1984) end-to-end",
+      "durationMinutes": 78,
+      "instruction": "Watch 'Once in a Lifetime' — Byrne says the lyrics came from words that 'felt good in the mouth.' Then 'Psycho Killer' — the French verse is about a paranoid killer. Bassist Tina Weymouth learned to play bass just weeks before the band's first show."
+    },
+    "tags": [
+      "New Wave",
+      "Art Rock",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-tenacious-d",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tenacious D",
+    "teaser": "Jack Black and Kyle Gass met at an acting conservatory in LA. Their first gig was at a coffee shop where they screamed 'Fuck Her Gently' at six people. 'Tribute' — their signature song — is a tribute to 'the greatest song in the world,' which they claim to have forgotten.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tenacious D — Tenacious D (2001) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Listen to 'Tribute' — legend says Kyle once quit the band, and Jack wrote it to win him back. Then 'Kielbasa Sausage' — the very first song they ever wrote together. Their HBO show won an Emmy, and every D song is a miniature rock opera with a punchline."
+    },
+    "tags": [
+      "Comedy",
+      "Hard Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-flight-of-the-conchords",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Flight of the Conchords",
+    "teaser": "Bret and Jemaine met at university in Wellington, NZ. Their hit HBO show grew out of a BBC radio series. Bret won an Oscar for writing 'Man or Muppet' — and the Conchords are famous for deadpan harmonies about business time and the Hiphopopotamus vs. the Rhymenoceros.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Flight of the Conchords — Flight of the Conchords (2008) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Listen to 'Hiphopopotamus vs. Rhymenoceros' — a battle rap between two rappers too shy to insult each other. Then 'The Most Beautiful Girl (In the Room)' — Jemaine's accidental love song. Most of their songs were written in a single night, and it shows in the best way."
+    },
+    "tags": [
+      "Comedy",
+      "Folk Pop",
+      "New Zealand",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-presidents-of-usa",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Presidents of the United States of America",
+    "teaser": "Chris Ballew plays the 'basitar' — a three-string bass tuned like a guitar, built from a salvaged guitar neck. 'Lump' became one of the most-played songs of the 90s, and the band's huge debut album was recorded on a tiny budget with absurdly short songs about peaches and candy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Presidents of the United States of America — debut (1995) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to 'Lump' — the nonsense lyrics were improvised in an afternoon. Then 'Peaches' — the bassline lives on the three-string basitar, tuned like a guitar so it feels upside down. 'Kitty' — the song about a cat who moves out. The band is named after the presidents."
+    },
+    "tags": [
+      "Alternative Rock",
+      "Comedy",
+      "American",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-lemon-demon",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Lemon Demon",
+    "teaser": "Neil Cicierega's flash-era hit 'The Ultimate Showdown of Ultimate Destiny' — Abraham Lincoln vs. Chuck Norris vs. Mr. Rogers — introduced millions to internet music. He also made the Potter Puppet Pals videos and 'Mouth Sounds,' an album of surreal pop mashups.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lemon Demon — Spirit Phone (2016) end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Listen to 'The Ultimate Showdown of Ultimate Destiny' and count the celebrities who die. Then 'Two Trucks' — a romantic ballad about trucks, somehow. His 'Mouth' albums mash dozens of pop songs into impossible new ones. Every Lemon Demon song is a cartoon in audio form."
+    },
+    "tags": [
+      "Comedy",
+      "Electronic",
+      "Indie Pop",
+      "American",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-tally-hall",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tally Hall",
+    "teaser": "Five guys from Michigan who wear matching colored ties — red, yellow, blue, green, and gray. Their debut album is named after a real arcade-oddities museum. 'Ruler of Everything' went viral on TikTok in 2020, a full decade after they made it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tally Hall — Marvin's Marvelous Mechanical Museum (2005) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to 'Ruler of Everything' — the song flips between two voices and accelerates into cheerful madness. Then 'Good Day' — genuinely the happiest song about a terrible day. The band calls their sound 'fabloo,' a made-up word, and they met in a college a cappella group."
+    },
+    "tags": [
+      "Indie Pop",
+      "Alternative Rock",
+      "Comedy",
+      "American",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-jack-stauber",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Jack Stauber",
+    "teaser": "Makes lo-fi synth-pop with stop-motion claymation videos he animates himself. 'Buttercup' became a TikTok phenomenon in 2020. His surreal animated musical 'Opal' (2019) packs a whole nightmare into eight minutes, and he records everything on deliberately degraded gear.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Jack Stauber — HiLo (2018) end-to-end",
+      "durationMinutes": 30,
+      "instruction": "Listen to 'Buttercup' — the song about wanting someone's affection so badly it hurts. Then watch 'Opal' — his animated short about a girl in a house with a lamp. 'Fighter' — the upbeat song that's secretly devastating. His music sounds like a broken TV that makes you cry."
+    },
+    "tags": [
+      "Indie Pop",
+      "Experimental",
+      "Lo-Fi",
+      "American",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-lonely-island",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Lonely Island",
+    "teaser": "Andy Samberg, Akiva Schaffer, and Jorma Taccone turned Saturday Night Live's Digital Shorts into a comedy-music empire. 'Dick in a Box' won an Emmy for Outstanding Original Music and Lyrics, and 'I'm on a Boat' with T-Pain earned a Grammy nomination for a song about a boat.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Lonely Island — Turtleneck & Chain (2011) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'I'm on a Boat' and remember it's unironically great. Then 'Jizz in My Pants' — a four-minute joke with a real music video budget. The three met in high school in Berkeley, California, and their songs are sketches with genuine beats underneath."
+    },
+    "tags": [
+      "Comedy",
+      "Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-sparks",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Sparks",
+    "teaser": "Brothers Ron and Russell Mael have released records in six consecutive decades — a feat almost no one has matched. 'This Town Ain't Big Enough for Both of Us' made them heroes to every new-wave kid who followed, and they wrote the entire 2021 film 'Annette' starring Adam Driver.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sparks — Kimono My House (1974) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Listen to 'This Town Ain't Big Enough for Both of Us' — the operatic falsetto over a crashing band. Then 'The Number One Song in Heaven' — their Giorgio Moroder collaboration. Ron's mustache hasn't changed since 1971, and they were the template for every art-pop band since."
+    },
+    "tags": [
+      "Art Pop",
+      "Glam Rock",
+      "New Wave",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-strokes",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Strokes",
+    "teaser": "Julian Casablancas is the son of the founder of the Elite modeling agency. The US cover of 'Is This It' — a buttock in a latex glove — was swapped after 9/11. The band met at a Swiss boarding school and a New York music scene, and 'Last Nite' launched the 2000s NYC rock revival.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Strokes — Is This It (2001) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Listen to 'Last Nite' — the riff is basically Tom Petty's 'American Girl' sped up, and Petty was a fan. Then 'Reptilia' — Julian's vocal melody was improvised in the booth. The album was recorded in a tiny Manhattan studio in about three weeks, and it saved rock radio."
+    },
+    "tags": [
+      "Indie Rock",
+      "Garage Rock Revival",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-arctic-monkeys",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Arctic Monkeys",
+    "teaser": "'Whatever People Say I Am, That's What I'm Not' became the fastest-selling debut album in UK history, shifting 363,000 copies in its first week. They got famous by giving away free demo CDs at Sheffield gigs, which fans ripped and spread online. Alex Turner was 19.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Arctic Monkeys — Whatever People Say I Am (2006) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'A Certain Romance' — the album's wise closer about nights out. Then 'Fluorescent Adolescent' — lyrics written about losing your youth. 'Do I Wanna Know?' — the drum intro that defined the 2010s. The debut is basically a diary of being young in Sheffield."
+    },
+    "tags": [
+      "Indie Rock",
+      "British",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-arcade-fire",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Arcade Fire",
+    "teaser": "'Funeral' is named after the funerals of several band members' grandparents during recording. Win Butler and Régine Chassagne met at McGill University in Montreal, and Win's grandfather was Alvino Rey, a pioneering electric guitarist. 'Wake Up' became a stadium anthem.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Arcade Fire — Funeral (2004) end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Listen to 'Neighborhood #1 (Tunnels)' — the album opens with two people in a snowstorm. Then 'Wake Up' — the choir-style anthem sports arenas adopted. 'Funeral' was recorded in a Montreal loft with a hurdy-gurdy, a glockenspiel, and a lot of grief."
+    },
+    "tags": [
+      "Indie Rock",
+      "Art Rock",
+      "Canadian",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-shins",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Shins",
+    "teaser": "In the movie Garden State, Natalie Portman's character says 'New Slang' will 'change your life' — it did, for a generation of indie kids. James Mercer recorded the debut in a bedroom in Albuquerque on a broken four-track, vocals at 3 AM so the neighbors wouldn't hear.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Shins — Oh, Inverted World (2001) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Listen to 'New Slang' first — it's the song that made a million mixtapes. Then 'Phantom Limb' — the best of their pop-perfect second era. Mercer wrote most of the debut alone in his bedroom; the hiss on the recordings is part of the charm."
+    },
+    "tags": [
+      "Indie Rock",
+      "Indie Pop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-modest-mouse",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Modest Mouse",
+    "teaser": "The name comes from a Virginia Woolf short story. 'Float On' — their biggest hit — is a cheerful anthem written the year their drummer died. They recorded 'The Moon & Antarctica' in a cabin; Brock's lyrics read like nervous breakdowns you can dance to.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Modest Mouse — The Moon & Antarctica (2000) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'Float On' — the chorus is a survival mantra: 'we'll all float on okay.' Then 'The Good Times Are Killing Me' — a party song that's secretly about death. '3rd Planet' — the opener that sets the album's lonely tone."
+    },
+    "tags": [
+      "Indie Rock",
+      "Alternative Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-death-cab-for-cutie",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Death Cab for Cutie",
+    "teaser": "Named after a Bonzo Dog Doo-Dah Band song from the Beatles' film Magical Mystery Tour. Ben Gibbard wrote most of 'Transatlanticism' during a long-distance relationship, and the title track is about that distance. The band became the biggest indie act of the 2000s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Death Cab for Cutie — Transatlanticism (2003) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Transatlanticism' — the title track builds for seven minutes into a wall of sound. Then 'I Will Follow You into the Dark' — the song Gibbard wrote in one sitting, about following someone anywhere. His other project, The Postal Service, shares the same voice."
+    },
+    "tags": [
+      "Indie Rock",
+      "Indie Pop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-postal-service",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Postal Service",
+    "teaser": "Ben Gibbard and Jimmy Tamborello recorded their album by mailing hard drives between LA and Seattle — that's the name. They didn't tour for a decade, and 'Such Great Heights' became an anthem anyway. 'Give Up' went platinum ten years after release.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Postal Service — Give Up (2003) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Listen to 'Such Great Heights' — the melody that launched a thousand weddings and movie scenes. Then 'The District Sleeps Alone Tonight' — the song about arriving somewhere alone. Tamborello's drum machines are the whole heartbeat of the record."
+    },
+    "tags": [
+      "Indie Pop",
+      "Electronic",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-wilco",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Wilco",
+    "teaser": "Their masterpiece 'Yankee Hotel Foxtrot' was rejected by their own label, who called it 'career suicide.' Wilco bought the master tapes back for $50,000 and streamed the album free on their website — it became their best-seller and one of the most acclaimed albums of the century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Wilco — Yankee Hotel Foxtrot (2002) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to 'I Am Trying to Break Your Heart' — the opening track was assembled from random tape experiments. Then 'Jesus, Etc.' — the lap steel lullaby. The album was made while the band was imploding, and the chaos is right there in the music."
+    },
+    "tags": [
+      "Alternative Rock",
+      "Indie Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-decemberists",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Decemberists",
+    "teaser": "'The Mariner's Revenge Song' is an 8-minute murder ballad that ends with the narrator getting swallowed by a whale — along with the mother of the man who ruined his life. Colin Meloy studied creative writing, and it shows: the band's songs are literary short stories with hooks.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Decemberists — Picaresque (2005) end-to-end",
+      "durationMinutes": 50,
+      "instruction": "Listen to 'The Mariner's Revenge Song' all the way through — it's a complete story with a twist ending. Then '16 Military Wives' — the marching-band satire. 'O Valencia!' — a modern Romeo and Juliet set to accordion. No other band writes songs like a Victorian novel."
+    },
+    "tags": [
+      "Indie Rock",
+      "Folk Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-vampire-weekend",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Vampire Weekend",
+    "teaser": "The members met at Columbia University. 'Oxford Comma' is literally named after the punctuation mark, written while Ezra Koenig was being pressured to use one. The band name comes from a short film Ezra made, and 'A-Punk' brought Afro-pop guitars to indie radio.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vampire Weekend — Vampire Weekend (2008) end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Listen to 'Oxford Comma' and appreciate a song about grammar being a hit. Then 'Cape Cod Kwassa Kwassa' — the title translates to a Congolese dance. 'Harmony Hall' — the 2019 comeback about how growing up is a trap. The first album was recorded in a cabin in Vermont."
+    },
+    "tags": [
+      "Indie Rock",
+      "Indie Pop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-tame-impala",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tame Impala",
+    "teaser": "Kevin Parker is the entire band — he writes, records, plays every instrument, and produces alone in his home studio. His drums are famously 'wrong' sounding on purpose. He also drums for the band Pond. 'Currents' was his breakup masterpiece and the sound of a new decade.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tame Impala — Currents (2015) end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Listen to 'Let It Happen' — the seven-minute song where the music literally glitches and reassembles. Then 'The Less I Know the Better' — the funk single about betrayal. 'Eventually' — the mantra that 'it's okay to be sad.' Parker recorded the whole album alone in Fremantle."
+    },
+    "tags": [
+      "Psychedelic Rock",
+      "Synth-Pop",
+      "Australian",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-mgmt",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "MGMT",
+    "teaser": "Andrew VanWyngarden and Ben Goldwasser met at Wesleyan's electronic music lab. 'Time to Pretend' — their breakthrough — is a satirical fantasy about rock-star excess, written as a joke. 'Kids' came from a toy keyboard, and they were uncomfortable with the fame it brought.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "MGMT — Oracular Spectacular (2007) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Kids' — the riff came from a cheap keyboard preset. Then 'Electric Feel' — the bass-heavy funk cut. 'Congratulations' — the follow-up where they refused to repeat the formula and their label panicked. They've spent their career running from their own hits."
+    },
+    "tags": [
+      "Indie Rock",
+      "Synth-Pop",
+      "Psychedelic Pop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-phoenix",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Phoenix",
+    "teaser": "Four childhood friends from Versailles, France, who played their first show at 13. Singer Thomas Mars is married to director Sofia Coppola. '1901' — their US breakthrough — has a chorus that made every indie band want a Moog. 'Wolfgang Amadeus Phoenix' won a Grammy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Phoenix — Wolfgang Amadeus Phoenix (2009) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to '1901' — the bass and the Moog synth line lock into pure joy. Then 'Lisztomania' — the song named after a 1975 film about Liszt. 'Long Distance Call' — the ballad that sneaks up on you. French pop filtered through 80s synths and a lot of confidence."
+    },
+    "tags": [
+      "Indie Rock",
+      "Synth-Pop",
+      "French",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-yeah-yeah-yeahs",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Yeah Yeah Yeahs",
+    "teaser": "Karen O was born in Busan, South Korea, and raised in New Jersey. 'Maps' is an acronym — 'My Angus Please Stay' — written for her boyfriend who was leaving on tour. Her stage outfits, including a baby-doll nightgown, became part of the legend.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Yeah Yeah Yeahs — Fever to Tell (2003) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Maps' — the song that made everyone cry at festivals. Then 'Heads Will Roll' — the disco-punk anthem that took over clubs. 'Zero' — the glam opener. Karen O's live shows are part sermon, part exorcism, all outfit."
+    },
+    "tags": [
+      "Indie Rock",
+      "Art Punk",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-interpol",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Interpol",
+    "teaser": "One of the bands that revived New York rock in the early 2000s. Their debut 'Turn On the Bright Lights' was recorded in about a week. Paul Banks' deep baritone and Carlos Dengler's basslines defined the sound, and 'Evil' became their biggest song by accident.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Interpol — Turn On the Bright Lights (2002) end-to-end",
+      "durationMinutes": 49,
+      "instruction": "Listen to 'Obstacle 1' — the bassline that started a thousand imitators. Then 'Evil' — the singalong about a girl with 'a thousand and one'. 'PDA' — the song with the legendary outro. The album's opening track, 'Untitled', is still the best way to start a record."
+    },
+    "tags": [
+      "Indie Rock",
+      "Post-Punk Revival",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-national",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The National",
+    "teaser": "Matt Berninger's deep, conversational baritone is the band's signature. The five members are friends from Cincinnati who formed the band in Brooklyn. Aaron Dessner has also produced albums for Taylor Swift, and 'Bloodbuzz Ohio' is about homesickness and debt.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The National — High Violet (2010) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Listen to 'About Today' — the quiet four-minute song that builds to a wall of sound. Then 'Mr. November' — the song where Matt screams 'I won't fuck us over.' Their lyrics read like overheard therapy sessions set to strings."
+    },
+    "tags": [
+      "Indie Rock",
+      "Art Rock",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-king-gizzard",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "King Gizzard & the Lizard Wizard",
+    "teaser": "The most prolific band alive — 25+ albums since 2012, including five in a single year. 'Polygondwanaland' was given away free, with an invitation for fans to press their own vinyl. Their microtonal album 'Flying Microtonal Banana' used custom-built quarter-tone guitars.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "King Gizzard — Flying Microtonal Banana (2017) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to 'Polygondwanaland' — the album is one continuous suite with a theme about a utopia. Then 'Rattlesnake' — the hypnotic opener that goes on forever and never gets old. The band is from Melbourne and their live shows are relentless, rotating drummers and all."
+    },
+    "tags": [
+      "Psychedelic Rock",
+      "Garage Rock",
+      "Australian",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-foster-the-people",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Foster the People",
+    "teaser": "Mark Foster was a commercial jingle writer before forming the band. 'Pumped Up Kicks' — a song about a school shooting — was written in about 20 minutes and became one of the biggest indie-pop hits of the decade despite its subject matter. The sunny sound is the point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Foster the People — Torches (2011) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Listen to 'Pumped Up Kicks' twice — once for the melody, once for the story. Then 'Houdini' — the song about escaping. 'Best Friend' — the weird synth-pop cut. The contrast between the bouncy production and the dark lyrics is the whole project."
+    },
+    "tags": [
+      "Indie Pop",
+      "Alternative Rock",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-bon-iver",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Bon Iver",
+    "teaser": "Justin Vernon recorded 'For Emma, Forever Ago' alone in his father's hunting cabin in Wisconsin over a snowy winter, surviving on deer meat and a wood stove. 'Bon Iver' is misspelled French for 'good winter.' The self-released album became a worldwide phenomenon.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bon Iver — For Emma, Forever Ago (2007) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to 'Re: Stacks' — the album's quiet closer, recorded by a fire. Then 'Holocene' — the song about a moment of feeling tiny and okay with it. 'Skinny Love' — the song that launched a thousand covers. Everything was recorded on a four-track in a cabin with no running water."
+    },
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-fleet-foxes",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Fleet Foxes",
+    "teaser": "The band's layered vocal harmonies sound like a forest choir. 'White Winter Hymnal' — their signature song — has at least six voices stacked. Robin Pecknold wrote 'Helplessness Blues' about feeling lost in your twenties, and the debut album was recorded in a Seattle basement.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Fleet Foxes — Fleet Foxes (2008) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'White Winter Hymnal' and try to separate the voices — they're stacked like a Renaissance choir. Then 'Mykonos' — the song that shifts halfway. 'Helplessness Blues' — the title track about wanting to be anything but yourself. Sun Giant was recorded in a garage."
+    },
+    "tags": [
+      "Indie Folk",
+      "Folk Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-sufjan-stevens",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Sufjan Stevens",
+    "teaser": "He once announced a plan to make an album for all 50 US states — he got through two (Michigan and Illinois) before giving up. 'Illinois' is packed with state trivia, and 'Casimir Pulaski Day' is about a friend who died of bone cancer. He plays 20+ instruments.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sufjan Stevens — Illinois (2005) end-to-end",
+      "durationMinutes": 74,
+      "instruction": "Listen to 'Concerning the UFO Sighting Near Highland, Illinois' — an album opener about aliens. Then 'Casimir Pulaski Day' — the saddest banjo song ever written. 'Chicago' — the anthem about moving on. He recorded 'Illinois' with a 40-piece orchestra in a church."
+    },
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "Baroque Pop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-elliott-smith",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Elliott Smith",
+    "teaser": "'Miss Misery' — from the film Good Will Hunting — was nominated for an Oscar, and Smith performed it at the 1998 ceremony in a white suit, looking like he'd rather be anywhere else. He recorded 'Either/Or' in a tiny studio, often keeping imperfect live takes on purpose.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Elliott Smith — Either/Or (1997) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to 'Angeles' — one of the most beautiful fingerpicking patterns ever recorded. Then 'Between the Bars' — the lullaby about drinking. 'Say Yes' — the gentle closer that sounds like hope. His songs feel like secrets told to a friend."
+    },
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "Lo-Fi",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-neutral-milk-hotel",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Neutral Milk Hotel",
+    "teaser": "'In the Aeroplane Over the Sea' is a surreal concept album that references Anne Frank, recorded by Jeff Mangum and his Elephant 6 friends. After touring, Mangum vanished from music for 15 years, then returned for reunion shows. The cover is an old anonymous family photo.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Neutral Milk Hotel — In the Aeroplane Over the Sea (1998) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Holland, 1945' — the song that ties the album to Anne Frank. Then 'Two-Headed Boy' — the emotional core. 'The King of Carrot Flowers' — the fever-dream opener. The album was recorded in a Denver house with friends playing horns and saws."
+    },
+    "tags": [
+      "Indie Folk",
+      "Psychedelic Folk",
+      "Lo-Fi",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-bright-eyes",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Bright Eyes",
+    "teaser": "Conor Oberst released his first recording at 13 and ran the Omaha indie scene by 18. 'First Day of My Life' is his rare unguarded love song, and 'Lua' is a hushed song about addiction. He was called 'the next Bob Dylan' before he was 20, which he hated.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bright Eyes — I'm Wide Awake, It's Morning (2005) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to 'Lua' — four minutes of voice and guitar recorded almost live. Then 'First Day of My Life' — the wedding song that isn't for anyone in particular. 'Four Winds' — the folk-rock stomp. Oberst's songs are confessional in a way that made everyone else sound fake."
+    },
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-mountain-goats",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Mountain Goats",
+    "teaser": "John Darnielle recorded his early albums on a $200 Panasonic boombox, sometimes writing four songs a day. He worked as a psychiatric nurse for years before music paid. 'No Children' — a duet about mutual hatred — is somehow the band's most beloved song.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Mountain Goats — Tallahassee (2002) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'No Children' and try not to sing 'I hope you die' along — impossible. Then 'This Year' — the anthem that says 'I am gonna make it through this year if it kills me.' 'The Best Ever Death Metal Band in Denton' — the song about two kids who form a band against the world."
+    },
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "Lo-Fi",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-daniel-johnston",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Daniel Johnston",
+    "teaser": "The lo-fi legend who recorded on a boombox at his parents' house in West Virginia. Kurt Cobain wore a t-shirt with Johnston's 'Hi, How Are You' frog drawing. 'True Love Will Find You in the End' became a mantra for the heartbroken. He died in 2019.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Daniel Johnston — Hi, How Are You (1983) end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Listen to 'True Love Will Find You in the End' — a two-minute promise. Then 'Speeding Motorcycle' — covered by everyone from Yo La Tengo to Mary Lou Lord. 'Walking the Cow' — the anthem of the restless. The documentary 'The Devil and Daniel Johnston' is essential viewing."
+    },
+    "tags": [
+      "Lo-Fi",
+      "Singer-Songwriter",
+      "Outsider Music",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-mac-demarco",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Mac DeMarco",
+    "teaser": "'Ode to Viceroy' is literally a love song to his favorite cigarette brand. He's known for goofy stage antics, a permanently laid-back vibe, and recording at home — '2' was made in a friend's living room on a four-track. He was born in British Columbia and raised in Edmonton.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mac DeMarco — Salad Days (2014) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to 'My Kind of Woman' — the slow-dance love song. Then 'Chamber of Reflection' — the synth ballad based on a 70s Japanese TV theme. 'Salad Days' — the title track about getting old at 23. His concerts end with kids getting pulled on stage."
+    },
+    "tags": [
+      "Indie Rock",
+      "Lo-Fi",
+      "Jangle Pop",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-father-john-misty",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Father John Misty",
+    "teaser": "Josh Tillman drummed for Fleet Foxes for four years before going solo under a new name. 'I Love You, Honeybear' is an album-long love letter to his wife Emma, and 'Real Love Baby' is the rare straightforward pop song. His stage persona is a parody of a folk singer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Father John Misty — I Love You, Honeybear (2015) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Listen to 'Hollywood Forever Cemetery Sings' — a love song set in a graveyard. Then 'I Love You, Honeybear' — the title track, the most romantic thing he's ever recorded. 'Real Love Baby' — three minutes of pure pop. His shows feature long, hilarious monologues."
+    },
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-phoebe-bridgers",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Phoebe Bridgers",
+    "teaser": "'Motion Sickness' — her breakthrough — is a song about her relationship with Ryan Adams, whom she opened for in her early 20s. She founded the label Saddest Factory Records, and 'Kyoto' is a song about her dad in Japan written from a tour bus. She's one third of boygenius.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Phoebe Bridgers — Punisher (2020) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Motion Sickness' — the song that made everyone in indie music gasp. Then 'Kyoto' — the trumpet-filled song about being on tour while your dad is far away. 'I Know the End' — the album closer that builds into a full scream. 'Scott Street' — the song about old friends."
+    },
+    "tags": [
+      "Indie Rock",
+      "Singer-Songwriter",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-mitski",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Mitski",
+    "teaser": "Born in Japan and raised across Malaysia, Turkey, and the US, Mitski studied at a music conservatory in New York. 'Nobody' took four years to write and became her viral breakout. 'Be the Cowboy' imagines a cowboy persona. Her lyrics are precise and devastating.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mitski — Be the Cowboy (2018) end-to-end",
+      "durationMinutes": 33,
+      "instruction": "Listen to 'First Love / Late Spring' — the wailing climax that made her a legend. Then 'Nobody' — the song about wanting to be wanted. 'Washing Machine Heart' — the one that went viral on TikTok. 'Last Words of a Shooting Star' — the closer about dying in a plane crash."
+    },
+    "tags": [
+      "Indie Rock",
+      "Art Pop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-clairo",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Clairo",
+    "teaser": "'Pretty Girl' was recorded in GarageBand in her bedroom at 16 and posted with a webcam video — it blew up overnight and defined bedroom pop. Her real name is Claire Cottrill. 'Bags' and 'Sofia' showed she was a real songwriter, not a meme.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Clairo — Immunity (2019) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'Pretty Girl' — the raw bedroom recording that started everything. Then 'Bags' — the song about unspoken feelings between friends. 'Sofia' — the queer love song that became a singalong. She made 'Immunity' with producer Jack Antonoff, but the honesty is all hers."
+    },
+    "tags": [
+      "Bedroom Pop",
+      "Indie Pop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-snail-mail",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Snail Mail",
+    "teaser": "Lindsey Jordan signed to indie giant Matador Records at 17 while still in high school in Maryland. Her debut album 'Lush' — recorded at 18 — captures teenage heartbreak with the force of a grown-up rock band. She taught herself guitar from YouTube.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Snail Mail — Lush (2018) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Pristine' — the album's opener about loving someone completely. Then 'Heat Wave' — the single with the huge chorus. 'Forever (Sailing)' — the emotional closer. Jordan's songs sound like diary entries recorded through a cranked guitar amp."
+    },
+    "tags": [
+      "Indie Rock",
+      "Bedroom Pop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-soccer-mommy",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Soccer Mommy",
+    "teaser": "Sophie Allison started posting home recordings to Bandcamp from her Nashville bedroom. 'Your Dog' — her breakout single — is a snarling anti-possession song. Her songs sound like 90s alt-rock filtered through a laptop, which is exactly the point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Soccer Mommy — Clean (2018) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Your Dog' — the chorus is a rejection of being treated like a pet. Then 'Bloodstream' — the dreamy single. 'Circle the Drain' — the grunge-tinged closer. She recorded 'Color Theory' — her second album — during the pandemic, which you can hear in its darkness."
+    },
+    "tags": [
+      "Bedroom Pop",
+      "Indie Rock",
+      "American",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-boygenius",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "boygenius",
+    "teaser": "The supergroup of Phoebe Bridgers, Julien Baker, and Lucy Dacus — three of the most celebrated indie songwriters of their generation. Their debut EP was recorded in four days and named after a joke in a group chat. Their first full album 'the record' topped charts worldwide.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "boygenius — the record (2023) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to 'Me & My Dog' — the song about co-dependence. Then 'Not Strong Enough' — the song where all three trade lines about depression. 'Cool About It' — the song about pretending to be fine. The three met on tour in 2016 and became best friends first, band second."
+    },
+    "tags": [
+      "Indie Rock",
+      "Singer-Songwriter",
+      "American",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-st-vincent",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "St. Vincent",
+    "teaser": "Annie Clark named herself after a Nick Cave song ('There She Goes, My Beautiful World'). She played in The Polyphonic Spree and Sufjan Stevens' touring band before going solo. Her album 'Masseduction' won a Grammy for best alternative album.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "St. Vincent — Strange Mercy (2011) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Digital Witness' — the song about living under surveillance. Then 'Cruel' — the singalong with the unsettling chorus. 'Los Ageless' — the song about LA's hollow glitter. She's one of the best guitar players alive, and her shows are pure theater."
+    },
+    "tags": [
+      "Art Rock",
+      "Indie Rock",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-grimes",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Grimes",
+    "teaser": "Claire Boucher recorded her breakout album 'Visions' in three weeks of sleepless, manic sessions in a Montreal apartment. 'Kill V. Maim' is sung from the perspective of Al Pacino's character in The Godfather Part II, reimagined as a vampire gangster. She taught herself to sing.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Grimes — Visions (2012) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Oblivion' — the deceptively gentle song about being followed home. Then 'Kill V. Maim' — the shout-along from a vampire's perspective. 'Genesis' — the video shot in a volcano. She makes her own visuals, and her world-building is half the art."
+    },
+    "tags": [
+      "Art Pop",
+      "Synth-Pop",
+      "Electronic",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-beach-house",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Beach House",
+    "teaser": "Victoria Legrand is the niece of Michel Legrand, the legendary French film composer. 'Space Song' — their most streamed track — went viral on TikTok years after release. The Baltimore duo make dream-pop that feels like a memory of a dream.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Beach House — Bloom (2012) end-to-end",
+      "durationMinutes": 61,
+      "instruction": "Listen to 'Space Song' in the dark — the shoegaze wash is the whole point. Then 'Myth' — the opener of 'Bloom'. 'PPP' — the song that sounds like a slow motion car crash in the best way. Their shows are loud enough to feel physical."
+    },
+    "tags": [
+      "Dream Pop",
+      "Shoegaze",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-alex-g",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Alex G",
+    "teaser": "Alexander Giannascoli put out seven self-made albums on Bandcamp from his childhood bedroom in Pennsylvania before signing to Domino Records. He's also a sought-after producer who worked with Frank Ocean. His songs are lo-fi, weird, and strangely beautiful.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Alex G — Rocket (2017) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'Gnaw' — the unhinged chorus that becomes a mantra. Then 'Proud' — the gentle country-ish ballad. 'Runner' — the synth-led single. He produced tracks for Frank Ocean's Blonde, which is how half the internet found him."
+    },
+    "tags": [
+      "Indie Rock",
+      "Lo-Fi",
+      "American",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-lorde",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Lorde",
+    "teaser": "She was 16 when 'Royals' hit #1 in the US — the youngest solo artist to top the chart in years. She wrote it in about 30 minutes, inspired by a photo of a baseball player signing autographs. Her real name is Ella Yelich-O'Connor, and she's from New Zealand.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lorde — Melodrama (2017) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Royals' — the anti-luxury anthem written by someone with no luxury. Then 'Ribs' — the song about the fear of growing up. 'Green Light' — the breakup banger built on a piano riff. 'Melodrama' is structured like a house party from start to finish."
+    },
+    "tags": [
+      "Art Pop",
+      "Electropop",
+      "New Zealand",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-billie-eilish",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Billie Eilish",
+    "teaser": "'Ocean Eyes' — written by her brother Finneas — was uploaded to SoundCloud when she was 14 and went viral overnight. She and Finneas record in his childhood bedroom in Los Angeles; her debut album was made entirely in that small room with bunk beds. She has Tourette's.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Billie Eilish — When We All Fall Asleep (2019) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'Ocean Eyes' — the song that started it all, recorded in a bedroom. Then 'everything i wanted' — the song about a dream where she drowned. 'bad guy' — the bass-heavy hit. Their bedroom studio in Highland Park has bunk beds and poster-covered walls."
+    },
+    "tags": [
+      "Art Pop",
+      "Electropop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-vulfpeck",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Vulfpeck",
+    "teaser": "The band famously released 'Sleepify' — an album of complete silence — and asked fans to stream it on repeat, using the Spotify royalties to fund a completely free tour. Their tight, bass-driven funk made 'Dean Town' and '1612' internet anthems.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vulfpeck — The Beautiful Game (2016) end-to-end",
+      "durationMinutes": 31,
+      "instruction": "Listen to 'Dean Town' — the bassline that bass players worship. Then 'Animal Spirits' — the funk with the falsetto hook. '1612' — the song about the year. They record albums live in one room with no overdubs, like a 60s soul session with jokes."
+    },
+    "tags": [
+      "Funk",
+      "Jazz Fusion",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-khruangbin",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Khruangbin",
+    "teaser": "'Khruangbin' is Thai for 'aeroplane' — literally 'engine fly.' Bassist Laura Lee spotted the word on a Thai cassette and adopted it. The Houston trio play a dubbed-out mix of Thai funk, Persian pop, and surf rock, and famously dress in matching black.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Khruangbin — The Universe Smiles Upon You (2015) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'White Gloves' — the dreamy instrumental that made them famous. Then 'People Everywhere (Still Alive)' — the funk cut. Their sound is built on space: bass, guitar, drums, and silence. 'Texas Sun' — their collaboration with Leon Bridges — is essential."
+    },
+    "tags": [
+      "Funk",
+      "Psychedelic Rock",
+      "Thai",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-thundercat",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Thundercat",
+    "teaser": "Stephen Bruner — known as Thundercat — is one of the greatest living bass players, famous for his six-string fretless. He played bass all over Kendrick Lamar's 'To Pimp a Butterfly,' and 'Dragonball Durag' is a love song about his durag and Dragon Ball Z.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Thundercat — Drunk (2017) end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Listen to 'Them Changes' — the groove built on a vintage soul sample and Bruner's own bass. Then 'Dragonball Durag' — the absurdly smooth R&B song about his durag. 'Oh Sheit It's X' — the one that sounds like a video game boss fight. His music is jazz, funk, and cartoons."
+    },
+    "tags": [
+      "Neo-Soul",
+      "Jazz Fusion",
+      "Funk",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-flying-lotus",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Flying Lotus",
+    "teaser": "Steven Ellison is the great-nephew of jazz legends Alice Coltrane and, by marriage, John Coltrane. He runs the Brainfeeder label, and 'Never Catch Me' features Kendrick Lamar, who appears on the cover in a casket. His music blends jazz, hip-hop, and sci-fi.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Flying Lotus — You're Dead! (2014) end-to-end",
+      "durationMinutes": 38,
+      "instruction": "Listen to 'Never Catch Me' — the Kendrick collaboration with a stunning dance video. Then 'Coronus, the Terminator' — the sci-fi jazz cut. 'Black Balloons Reprise' — the song with Denzel Curry. He's also a filmmaker — he directed the feature 'Kuso.'"
+    },
+    "tags": [
+      "Electronic",
+      "Jazz Fusion",
+      "Instrumental Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-badbadnotgood",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "BADBADNOTGOOD",
+    "teaser": "A group of Canadian jazz-school students who went viral covering Odd Future songs as jazz in 2011. That led to real collaborations with Kendrick Lamar, Tyler, the Creator, and Ghostface Killah. Their albums blend jazz, hip-hop, and funk into something new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "BADBADNOTGOOD — III (2014) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to 'Time Moves Slow' — the moody track with Sam Herring of Future Islands. Then 'Lavender' — the woozy single with Kaytranada. 'Can't Push Too Much' — the one that sounds like a jazz band crashing a rap session. They recorded 'III' in a church."
+    },
+    "tags": [
+      "Jazz Fusion",
+      "Instrumental Hip-Hop",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-men-i-trust",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Men I Trust",
+    "teaser": "The Canadian trio make hazy, bass-driven dream-pop. 'Show Me How' became a slow-burn internet hit years after release. Their music videos — shot on 16mm film — feel like home movies. They record in a cabin studio in the woods of Quebec, which is why everything sounds so calm.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Men I Trust — Oncle Jazz (2019) end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Listen to 'Show Me How' — the hypnotic bassline and whisper vocals. Then 'Lauren' — the song that sounds like driving at dusk. 'Numb' — the one that builds and never quite explodes. Their whole catalog rewards headphones and patience."
+    },
+    "tags": [
+      "Dream Pop",
+      "Indie Pop",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-crumb",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Crumb",
+    "teaser": "The Brooklyn quartet formed while studying at Tufts University in Boston. 'Locket' — their breakout — has a trippy animated video. Their sound is a dreamy mix of psych-rock and jazz, led by guitarist Lila Ramani's whispery vocals.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Crumb — Jinx (2019) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to 'Locket' — the hypnotic bass riff that made the song viral. Then 'Jinx' — the title track. 'Fall Down' — the one with the unexpected tempo change. Their songs sound like a lava lamp feels."
+    },
+    "tags": [
+      "Psychedelic Pop",
+      "Indie Rock",
+      "Jazz Rock",
+      "American",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-still-woozy",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Still Woozy",
+    "teaser": "Sven Gamsky writes, records, and produces everything from a backyard studio in Oakland. 'Goodie Bag' — his debut single — became a streaming hit with no label push. His songs blend lo-fi beats, funk bass, and falsetto hooks into instant serotonin.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Still Woozy — Lately EP (2019) end-to-end",
+      "durationMinutes": 20,
+      "instruction": "Listen to 'Goodie Bag' — the song that made him a star from a bedroom. Then 'Habit' — the one about being unable to let go. 'Wolfcat' — the fuzzy, weird one. He plays every instrument, recording vocals in his closet for the right sound."
+    },
+    "tags": [
+      "Bedroom Pop",
+      "Indie Pop",
+      "Funk",
+      "American",
+      "2010s"
+    ],
+    "tier": 3
   }
 ]
