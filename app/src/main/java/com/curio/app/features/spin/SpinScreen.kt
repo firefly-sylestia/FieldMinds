@@ -340,11 +340,31 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             StreakTracker.recordActivity(context)
         }
         confettiTrigger++
+
+        // Auto-open the landed topic: once the wheel settles, reveal it
+        // immediately. The landed card state is preserved (landedTopicName +
+        // landingAlreadyOpened), so returning from Reveal keeps it tappable
+        // until spun again — nothing else about the flow changes. A short
+        // pause lets the settle + confetti read before navigating; spinning
+        // again within that window cancels this effect (keyed on
+        // shuffleCount) and no navigation happens.
+        if (primary != null) {
+            landingAlreadyOpened = true
+            delay(600)
+            // Guard against a category switch during the pause: the effect
+            // captured `cat` at launch, so only navigate if it's still the
+            // active category.
+            if (cat.id != activeCategory.id) return@LaunchedEffect
+            navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, primary.name)) {
+                launchSingleTop = true
+            }
+        }
     }
 
-    // ── Landed topics open only by user intent ───────────────────────
-    // The center card is no longer a spin trigger: it opens an already
-    // landed topic, while the Shuffle CTA owns all spin/shuffle starts.
+    // ── Landed topic auto-opens on landing ───────────────────────────
+    // The wheel now reveals its landed topic automatically; the center card
+    // is no longer a spin trigger — it opens an already landed topic, while
+    // the Shuffle CTA owns all spin/shuffle starts.
 
     // ── v5.9 — landed card stays tappable until the user explicitly
     //    spins/shuffles again.  No longer auto-clears when explored.
