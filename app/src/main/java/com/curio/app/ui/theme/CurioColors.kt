@@ -42,13 +42,11 @@ object CurioColors {
  * deep-maroon → accent → warm-white progression.
  */
 object CurioGradients {
-    /** Pastel rainbow spectrum for the Wildcard. */
+    /** Warm sunset spectrum for the Wildcard — cohesive with the brand palette. */
     val WildcardGradientStops = listOf(
-        CurioColors.Lilac,
-        CurioColors.DustyBlue,
-        CurioColors.Sage,
+        CurioColors.CoralBlush,
         CurioColors.Peach,
-        CurioColors.Teal
+        CurioColors.ButterYellow
     )
 
     /**
@@ -63,15 +61,15 @@ object CurioGradients {
     )
 
     /**
-     * Solid wildcard card gradient — the pastel rainbow, deepened
-     * at the ends with neutral black so text stays readable.
+     * Solid wildcard card gradient — a warm sunset sweep from deep
+     * pink-maroon through coral, peach, and butter to warm white.
      */
     fun wildcardCardGradient(): List<Color> = listOf(
-        lerp(CurioColors.Lilac,     Color.Black, 0.20f),
-        CurioColors.Lilac,
-        CurioColors.Teal,
+        lerp(CurioColors.CoralBlush, CurioColors.DeepPlum, 0.40f),
+        CurioColors.CoralBlush,
+        lerp(CurioColors.CoralBlush, CurioColors.Peach, 0.55f),
         CurioColors.Peach,
-        CurioColors.DustyBlue,
-        lerp(CurioColors.DustyBlue, CurioColors.CreamWhite, 0.30f)
+        CurioColors.ButterYellow,
+        lerp(CurioColors.ButterYellow, CurioColors.CreamWhite, 0.45f)
     )
 }
