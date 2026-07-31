@@ -45,6 +45,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -1133,36 +1134,90 @@ private fun BottomCta(
     onFilter: () -> Unit
 ) {
     val showExplore = landedTopic != null
-    Row(
+    val hasFilters = filterActiveCount > 0
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .navigationBarsPadding()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // ── Categories button — same level as Filter ────────────────
-        Surface(
-            onClick = onCategories,
-            shape = RoundedCornerShape(50),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            shadowElevation = 1.dp
+        // ── Main CTA — Shuffle or Explore, centered at its level ──
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            if (showExplore) {
+                Button(
+                    onClick = onExplore,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = cat.accent,
+                        contentColor = Color.White
+                    ),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                ) {
+                    CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 18.dp)
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = "Explore",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    )
+                }
+            } else {
+                Button(
+                    onClick = onSpin,
+                    enabled = canSpin,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = cat.accent,
+                        contentColor = Color.White,
+                        disabledContainerColor = cat.tint,
+                        disabledContentColor = Color.White.copy(alpha = 0.6f)
+                    ),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                ) {
+                    CurioIcon(
+                        CurioIcons.Casino, null,
+                        tint = Color.White,
+                        size = 18.dp
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = if (shuffling) "Spinning…" else "Shuffle",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    )
+                }
+            }
+        }
+
+        // ── Categories · Filter — Material buttons below the CTA ──
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            // ── Categories button ──────────────────────────────────
+            OutlinedButton(
+                onClick = onCategories,
+                shape = RoundedCornerShape(50),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+                modifier = Modifier.weight(1f)
             ) {
                 CurioIcon(
                     cat.iconGlyph, null,
                     tint = cat.accent,
                     size = 18.dp
                 )
+                Spacer(Modifier.width(6.dp))
                 Text(
                     text = cat.displayName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
                 )
                 CurioIcon(
                     CurioIcons.KeyboardArrowDown, null,
@@ -1170,29 +1225,34 @@ private fun BottomCta(
                     size = 16.dp
                 )
             }
-        }
 
-        // ── Filter button — same visual level as Categories ─────────
-        val hasFilters = filterActiveCount > 0
-        Surface(
-            onClick = onFilter,
-            shape = RoundedCornerShape(50),
-            color = if (hasFilters) cat.accent.copy(alpha = 0.12f)
-                else MaterialTheme.colorScheme.surfaceContainerHigh,
-            border = if (hasFilters) BorderStroke(1.5.dp, cat.accent.copy(alpha = 0.6f))
-                else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            shadowElevation = if (hasFilters) 2.dp else 1.dp
-        ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            // ── Filter button — highlights when filters are active ─
+            OutlinedButton(
+                onClick = onFilter,
+                shape = RoundedCornerShape(50),
+                border = if (hasFilters)
+                    BorderStroke(1.5.dp, cat.accent.copy(alpha = 0.6f))
+                else
+                    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                colors = if (hasFilters)
+                    ButtonDefaults.outlinedButtonColors(
+                        containerColor = cat.accent.copy(alpha = 0.12f),
+                        contentColor = cat.accent
+                    )
+                else
+                    ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+                modifier = Modifier.weight(1f)
             ) {
                 CurioIcon(
                     CurioIcons.Search, null,
                     tint = if (hasFilters) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
                     size = 18.dp
                 )
+                Spacer(Modifier.width(6.dp))
                 Text(
                     text = "Filter",
                     style = MaterialTheme.typography.labelLarge.copy(
@@ -1202,7 +1262,7 @@ private fun BottomCta(
                     maxLines = 1
                 )
                 if (hasFilters) {
-                    Spacer(Modifier.width(2.dp))
+                    Spacer(Modifier.width(6.dp))
                     Surface(
                         shape = RoundedCornerShape(50),
                         color = cat.accent
@@ -1215,52 +1275,6 @@ private fun BottomCta(
                         )
                     }
                 }
-            }
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        // ── Main CTA — Shuffle or Explore ──────────────────────────
-        if (showExplore) {
-            Button(
-                onClick = onExplore,
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = cat.accent,
-                    contentColor = Color.White
-                ),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
-            ) {
-                CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 18.dp)
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "Explore",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                )
-            }
-        } else {
-            Button(
-                onClick = onSpin,
-                enabled = canSpin,
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = cat.accent,
-                    contentColor = Color.White,
-                    disabledContainerColor = cat.tint,
-                    disabledContentColor = Color.White.copy(alpha = 0.6f)
-                ),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
-            ) {
-                CurioIcon(
-                    CurioIcons.Casino, null,
-                    tint = Color.White,
-                    size = 18.dp
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = if (shuffling) "Spinning…" else "Shuffle",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                )
             }
         }
     }
