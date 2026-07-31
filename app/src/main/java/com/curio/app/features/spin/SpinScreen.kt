@@ -273,7 +273,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         mutableStateOf(setOf<String>())
     }
 
-    val displayPool = remember(filteredPool) {
+    // Re-shuffled EVERY spin so the fan (and the hero cycle) shows a fresh
+    // spread of topics instead of the same handful in the same order.
+    val displayPool = remember(shuffleCount, filteredPool) {
         if (filteredPool.isEmpty()) emptyList()
         else {
             val s = filteredPool.shuffled()
@@ -313,9 +315,10 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val elapsed = System.currentTimeMillis() - start
             if (elapsed >= durationMs) break
             val progress = (elapsed.toFloat() / durationMs).coerceIn(0f, 1f)
-            // Sinusoidal ease-out: slows down with a natural curve, not
-            // an abrupt cubic halt.
-            val eased = sin((1f - progress) * Math.PI.toFloat() / 2f)
+            // Sinusoidal ease-out: fast start that decelerates toward the
+            // end — intervals grow from ~40ms to ~400ms as it settles.
+            // (The previous curve was inverted and sped up at the end.)
+            val eased = sin(progress * Math.PI.toFloat() / 2f)
             val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
             // Soft ratcheting tick — light haptic on each card cycle.
@@ -412,7 +415,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp),
+                .padding(top = 26.dp, bottom = 12.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
@@ -957,7 +960,7 @@ private fun Carousel(
 ) {
     val poolSize = displayPool.size
     Box(
-        modifier = modifier.height(396.dp),
+        modifier = modifier.height(420.dp),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -988,7 +991,8 @@ private fun Carousel(
                     PeekCard(
                         slot = slot,
                         cat = cat,
-                        topic = topic
+                        topic = topic,
+                        shuffling = shuffling
                     )
                 }
             }
@@ -1299,27 +1303,31 @@ private fun HeroTicketCard(
 private fun PeekCard(
     slot: Int,
     cat: CurioCategory,
-    topic: CurioTopic?
+    topic: CurioTopic?,
+    shuffling: Boolean
 ) {
     val isTop = slot < 0
     val far = kotlin.math.abs(slot) == 2
+    // Slightly lower + wider fan: the whole deck sits a few px closer to
+    // the spin button and the far pair is spread a touch more so each
+    // layer reads as a separate card instead of one blurred pile.
     val yOff = when (slot) {
-        -2 -> -178f
-        -1 -> -136f
-        1 -> 136f
-        else -> 178f
+        -2 -> -174f
+        -1 -> -130f
+        1 -> 142f
+        else -> 184f
     }
     val w = if (far) 272.dp else 300.dp
     val h = if (far) 78.dp else 96.dp
     // Corner radius scales with card height so the slim far deck cards
     // keep crisp, proportional corners instead of over-rounded ones.
     val corner = if (far) 12.dp else 16.dp
-    // Solid card color derived from the accent, but a deeper shade than
-    // the hero ticket so the fan of background cards recedes and the
-    // center card pops. White content stays readable on the dimmed fill.
-    val cardColor = remember(cat.id) {
+    // Level-based shading — near cards step one shade down from the hero,
+    // far cards step down again, so the deck fades into the background in
+    // distinct layers. White content stays readable on the dimmed fill.
+    val cardColor = remember(cat.id, far) {
         val base = if (cat.id == CategoryId.WILDCARD) CurioColors.CoralBlush else cat.accent
-        lerp(base, Color.Black, 0.28f)
+        lerp(base, Color.Black, if (far) 0.42f else 0.28f)
     }
 
     Box(
@@ -1340,14 +1348,24 @@ private fun PeekCard(
         AnimatedContent(
             targetState = topic,
             transitionSpec = {
-                slideInVertically(
-                    animationSpec = tween(240, easing = FastOutSlowInEasing)
-                ) { height -> if (isTop) -height / 3 else height / 3 } +
-                fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
-                slideOutVertically(
-                    animationSpec = tween(200, easing = FastOutSlowInEasing)
-                ) { height -> if (isTop) height / 3 else -height / 3 } +
-                fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
+                if (shuffling) {
+                    // Rapid cycling — fast pure crossfade with no slide so
+                    // the deck blurs past on every tick instead of janking
+                    // through 240ms slides at ~100ms intervals. Kept short
+                    // (~70ms) so the fade completes even on the fastest
+                    // early ticks instead of flickering mid-fade.
+                    fadeIn(animationSpec = tween(70, easing = LinearEasing)) togetherWith
+                        fadeOut(animationSpec = tween(60, easing = LinearEasing))
+                } else {
+                    slideInVertically(
+                        animationSpec = tween(240, easing = FastOutSlowInEasing)
+                    ) { height -> if (isTop) -height / 3 else height / 3 } +
+                    fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
+                    slideOutVertically(
+                        animationSpec = tween(200, easing = FastOutSlowInEasing)
+                    ) { height -> if (isTop) height / 3 else -height / 3 } +
+                    fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
+                }
             },
             label = "peekSlot_$slot"
         ) { currentTopic ->
@@ -1356,8 +1374,13 @@ private fun PeekCard(
                 color = cardColor,
                 shadowElevation = 0.dp,
                 tonalElevation = 0.dp,
-                // No border — a thin stroke on a rotated rounded card aliases
-                // into jagged/pixelated edges. Solid fill keeps it crisp.
+                // Subtle hairline outline — kept very light so the rotated
+                // stroke stays crisp instead of aliasing into pixel noise —
+                // lets each deck layer read as a distinct card.
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = Color.White.copy(alpha = if (far) 0.14f else 0.22f)
+                ),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
@@ -1373,13 +1396,15 @@ private fun PeekCard(
                         CurioIcon(
                             name = cat.iconGlyph,
                             contentDescription = null,
-                            tint = Color.White.copy(alpha = 0.75f),
+                            tint = Color.White.copy(alpha = if (far) 0.55f else 0.75f),
                             size = 20.dp
                         )
                         Text(
                             text = currentTopic?.name ?: "…",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White,
+                            // Far deck cards dim their content too, reinforcing
+                            // the layered fade into the background.
+                            color = Color.White.copy(alpha = if (far) 0.65f else 1f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
