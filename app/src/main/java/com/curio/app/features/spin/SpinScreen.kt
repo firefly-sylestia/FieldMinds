@@ -2,6 +2,7 @@ package com.curio.app.features.spin
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -344,11 +345,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     //    spins/shuffles again.  No longer auto-clears when explored.
 
     // ── Animations ────────────────────────────────────────────────────
-    val landScale by animateFloatAsState(
-        targetValue = if (landedTopic != null) 1.04f else 1f,
-        animationSpec = CurioMotion.Springs.Elastic,
-        label = "landScale"
-    )
     val buttonPulse by animateFloatAsState(
         targetValue = if (shuffling) 1.06f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
@@ -393,7 +389,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             shuffling = shuffling,
             landedTopic = landedTopic,
             opening = isOpening,
-            landScale = landScale,
             enabled = filteredPool.isNotEmpty() && !shuffling,
             onCardTap = {
                 if (shuffling || filteredPool.isEmpty()) return@Carousel
@@ -943,6 +938,9 @@ private fun CompactChip(
 // Fan-deck carousel — hero "ticket" card + slim prev/next peek cards
 // ═══════════════════════════════════════════════════════════════════════════
 
+/** Rest scale the hero card settles to after a shuffle lands. */
+private const val LandedRestScale = 1.04f
+
 @Composable
 private fun Carousel(
     cat: CurioCategory,
@@ -951,7 +949,6 @@ private fun Carousel(
     shuffling: Boolean,
     landedTopic: CurioTopic?,
     opening: Boolean,
-    landScale: Float,
     enabled: Boolean,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
@@ -982,7 +979,6 @@ private fun Carousel(
                         landed = landedTopic != null,
                         shuffling = shuffling,
                         opening = opening,
-                        landScale = landScale,
                         enabled = enabled && landedTopic != null,
                         onTap = onCardTap
                     )
@@ -1049,7 +1045,6 @@ private fun HeroTicketCard(
     landed: Boolean,
     shuffling: Boolean,
     opening: Boolean,
-    landScale: Float,
     enabled: Boolean,
     onTap: () -> Unit
 ) {
@@ -1074,6 +1069,38 @@ private fun HeroTicketCard(
             label = "heroPulse"
         )
     val bounceWave = sin(heroPulse * kotlin.math.PI.toFloat()) // 0→1→0
+    // Single source of truth for the wave values — the graphicsLayer and
+    // the landing snap must stay in sync or the handoff would jump.
+    val waveScale = 1f + bounceWave * 0.035f
+    val waveY = -6f - bounceWave * 8f
+
+    // ── Landing settle — seamless handoff from the shuffle bounce wave
+    //    to the elastic rest spring.  On landing, snap to wherever the
+    //    wave left off (zero visual jump) then spring down to the rest
+    //    scale + vertical position with the Elastic spring.
+    val settleScale = remember { Animatable(1f) }
+    val settleY = remember { Animatable(0f) }
+
+    // Snap both to the wave's last position on landing (zero visual jump),
+    // reset to rest when a new shuffle begins.
+    LaunchedEffect(landed) {
+        if (landed) {
+            settleScale.snapTo(waveScale)
+            settleY.snapTo(waveY)
+        } else {
+            settleScale.snapTo(1f)
+            settleY.snapTo(0f)
+        }
+    }
+
+    // Settle scale + vertical position in parallel (separate coroutines)
+    // so the card lands as one unified bounce, not two sequential springs.
+    LaunchedEffect(landed) {
+        if (landed) settleScale.animateTo(LandedRestScale, CurioMotion.Springs.Elastic)
+    }
+    LaunchedEffect(landed) {
+        if (landed) settleY.animateTo(0f, CurioMotion.Springs.Elastic)
+    }
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
     // Inner clip layer keeps rounded corners crisp during scale.
@@ -1082,17 +1109,21 @@ private fun HeroTicketCard(
             .size(w + 24.dp, h + 24.dp)
             .graphicsLayer {
                 scaleX = when {
-                    landed -> landScale
-                    shuffling -> 1f + bounceWave * 0.035f
+                    landed -> settleScale.value
+                    shuffling -> waveScale
                     else -> 1f
                 }
                 scaleY = when {
-                    landed -> landScale
-                    shuffling -> 1f + bounceWave * 0.035f
+                    landed -> settleScale.value
+                    shuffling -> waveScale
                     else -> 1f
                 }
                 rotationZ = if (shuffling) ((cycleIndexPulse(glyph, topic?.id) - 0.5f) * 3.5f) else 0f
-                translationY = if (shuffling) -6f - bounceWave * 8f else 0f
+                translationY = when {
+                    landed -> settleY.value
+                    shuffling -> waveY
+                    else -> 0f
+                }
             }
             .zIndex(10f)
             .then(
