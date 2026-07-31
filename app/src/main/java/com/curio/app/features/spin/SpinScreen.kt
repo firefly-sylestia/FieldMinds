@@ -66,6 +66,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -1145,6 +1146,10 @@ private fun HeroTicketCard(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
                 shadowElevation = 0.dp,
+                // Subtle outline — a slim white edge that traces the ticket
+                // silhouette so the hero card reads as a distinct surface
+                // above the dimmer peek cards behind it.
+                border = BorderStroke(1.5.dp, Color.White.copy(alpha = 0.35f)),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
@@ -1308,10 +1313,12 @@ private fun PeekCard(
     // Corner radius scales with card height so the slim far deck cards
     // keep crisp, proportional corners instead of over-rounded ones.
     val corner = if (far) 12.dp else 16.dp
-    // Same solid card color as the hero ticket — accent for regular
-    // categories, the warm blush for the wildcard deck.
+    // Solid card color derived from the accent, but a deeper shade than
+    // the hero ticket so the fan of background cards recedes and the
+    // center card pops. White content stays readable on the dimmed fill.
     val cardColor = remember(cat.id) {
-        if (cat.id == CategoryId.WILDCARD) CurioColors.CoralBlush else cat.accent
+        val base = if (cat.id == CategoryId.WILDCARD) CurioColors.CoralBlush else cat.accent
+        lerp(base, Color.Black, 0.28f)
     }
 
     Box(
