@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio launcher icon — centered discovery wheel foreground.
+    Curio Midnight Signal launcher mark.
 
-    The artwork is intentionally contained inside the adaptive-icon safe zone:
-    the wheel spans 44..84 in the 108dp viewport, leaving comfortable space
-    for launcher masks, parallax, and small app-icon rendering. The coral
-    background supplies the brand field; this layer supplies the cream wheel,
-    six category colors, and deep-plum center mark.
-
-    Keep this composition flat and vector-only so it remains crisp at launcher
-    size and can be mirrored by the website icon asset.
+    This is a new geometric identity, not a recolor of the former wheel:
+    an angular open portal with a bright signal spark. Everything stays inside
+    the adaptive safe zone (29..79 in the 108dp viewport) for clean launcher
+    masks and small-size rendering.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -17,36 +13,24 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Cream wheel frame: centered at (54,54), radius 32dp. -->
+    <!-- Electric-blue hexagonal portal frame with a navy cutout. -->
     <path
-        android:fillColor="#FFFBF5"
-        android:pathData="M54,22 A32,32 0,1 1,53.99,22 Z" />
+        android:fillColor="#3D8CFF"
+        android:fillType="evenOdd"
+        android:pathData="M54,25 L79,39 L79,69 L54,83 L29,69 L29,39 Z M54,36 L68,44 L68,64 L54,72 L40,64 L40,44 Z" />
 
-    <!-- Six category wedges, inset from the cream frame for a clear rim. -->
+    <!-- Mint aperture: the open path through the portal. -->
     <path
-        android:fillColor="#C9A6F2"
-        android:pathData="M54,54 L54,29 A25,25 0,0 1,75.65,41.5 Z" />
-    <path
-        android:fillColor="#9BB8E8"
-        android:pathData="M54,54 L75.65,41.5 A25,25 0,0 1,75.65,66.5 Z" />
-    <path
-        android:fillColor="#A8C99A"
-        android:pathData="M54,54 L75.65,66.5 A25,25 0,0 1,54,79 Z" />
-    <path
-        android:fillColor="#FFB585"
-        android:pathData="M54,54 L54,79 A25,25 0,0 1,32.35,66.5 Z" />
-    <path
-        android:fillColor="#6FC7BE"
-        android:pathData="M54,54 L32.35,66.5 A25,25 0,0 1,32.35,41.5 Z" />
-    <path
-        android:fillColor="#FFD97D"
-        android:pathData="M54,54 L32.35,41.5 A25,25 0,0 1,54,29 Z" />
+        android:fillColor="#009E83"
+        android:pathData="M54,41 L64,47 L64,61 L54,67 L44,61 L44,47 Z" />
 
-    <!-- Deep-plum center: a compact, high-contrast identity at icon size. -->
+    <!-- Orange signal spark, offset so the mark has forward motion. -->
     <path
-        android:fillColor="#3B0A17"
-        android:pathData="M54,43 A11,11 0,1 1,53.99,43 Z" />
+        android:fillColor="#E6652F"
+        android:pathData="M78,25 L81,30 L86,33 L81,36 L78,41 L75,36 L70,33 L75,30 Z" />
+
+    <!-- Small cream calibration notch. -->
     <path
-        android:fillColor="#FFFBF5"
-        android:pathData="M54,48 A6,6 0,1 1,53.99,48 Z" />
+        android:fillColor="#F8FBFF"
+        android:pathData="M51,47 L57,47 L57,61 L51,61 Z" />
 </vector>

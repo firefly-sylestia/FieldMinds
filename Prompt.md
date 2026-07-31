@@ -1,29 +1,27 @@
-# CI compile repair — HomeScreen and SpinScreen — completion summary
+# Midnight Signal icon and palette rebrand
 
 ## Request
 
-Fix CI `compileDebugKotlin` errors:
+The user rejected the pastel discovery-wheel icon and requested a completely new icon design and fully changed palette—not a recolor.
 
-- `HomeScreen.kt:421` and `:431`: unresolved `CategoryChip`
-- `HomeScreen.kt:554`: `private` not applicable to local function
-- `SpinScreen.kt:1152`: unresolved `fillMaxHeight`
+## Decision
 
-## Diagnosis and fixes
+User selected **Midnight Signal**: deep navy/ink foundations, electric blue primary signal, orange energy accent, mint aperture highlight, and a genuinely new angular portal/beacon mark.
 
-- `HomeScreen.kt`'s `StatPill` helper was missing a closing brace, causing the following file-level `CategoryChip` declaration to be parsed as a local function. Added the missing scope closure and corrected the adjacent brace count so `CategoryChip` is file-scoped again.
-- Added `androidx.compose.foundation.layout.fillMaxHeight` to `SpinScreen.kt` imports for the existing modifier call.
-- No behavior or public symbol changes were needed.
+## Completed implementation
 
-## Verification
+- Replaced Android adaptive launcher background/foreground with an angular open portal, mint aperture, orange spark, and dedicated monochrome themed-icon mask.
+- Replaced the web SVG with matching angular geometry and updated the web CSS/Tailwind palettes, dark mode, shadows, and documentation.
+- Replaced Compose palette tokens and dark surfaces while preserving source-compatible token names across existing screens.
+- Replaced the splash auto-awesome glyph with the native multi-color launcher vector.
+- Updated XML bootstrap resources, CURIO_SPEC, CURIO_DATA_PLAN, app/web ownership docs, and the store changelog.
+- Corrected Material primary text contrast for the new signal-blue controls.
 
-- `scripts/check_braces.py` reports `HomeScreen.kt BALANCED`.
-- `scripts/check_braces.py` reports `SpinScreen.kt BALANCED`.
-- Static assertions confirm exactly one file-level `CategoryChip` declaration, balanced `StatPill` through `CategoryChip` scope, and the `fillMaxHeight` import.
-- `git diff --check` passes.
-- Code review reports no actionable blockers.
-- No Gradle compile/build/test/lint command was run because the repository's AGENTS.md explicitly forbids local Android build validation; CI remains the source of truth.
+## Validation
 
-## Closeout
+- XML/SVG parsing, source assertions, brace checks, CSS balance, stale-reference scan, and `git diff --check` are planned.
+- Gradle compilation/build/lint/test are not run locally because the repository explicitly forbids Android build commands; CI remains the compiler check.
 
-- Changes are ready to commit and push on branch `revamp`.
-- No What's New entry was added because this is a targeted CI compile repair with no user-facing feature change.
+## Status
+
+- Implementation complete; final review and static validation in progress.

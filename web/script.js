@@ -647,12 +647,12 @@ function setupUpdatePopup() {
             imageExists(`${data.image}`, (exists) => { // Path is relative to updates.html
                 if (!exists) {
                     item.classList.add('no-image');
-                    itemImage.insertAdjacentHTML('afterend', `<img src="assets/icon.svg" alt="Rhythm Logo" class="fallback-logo">`);
+                    itemImage.insertAdjacentHTML('afterend', `<img src="assets/icon.svg" alt="Curio signal portal icon" class="fallback-logo">`);
                 }
             });
         } else {
             item.classList.add('no-image');
-            itemImage.insertAdjacentHTML('afterend', `<img src="assets/icon.svg" alt="Rhythm Logo" class="fallback-logo">`);
+            itemImage.insertAdjacentHTML('afterend', `<img src="assets/icon.svg" alt="Curio signal portal icon" class="fallback-logo">`);
         }
 
         item.addEventListener('click', () => {
@@ -662,11 +662,11 @@ function setupUpdatePopup() {
                         if (exists) {
                             popupImage.src = `${data.image}`;
                         } else {
-                            popupImage.src = "assets/icon.svg"; // Fallback to app logo
+                            popupImage.src = "assets/icon.svg"; // Fallback to the Curio signal mark
                         }
                     });
                 } else {
-                    popupImage.src = "assets/icon.svg"; // Fallback to app logo
+                    popupImage.src = "assets/icon.svg"; // Fallback to the Curio signal mark
                 }
                 
                 popupHeadline.textContent = data.headline;

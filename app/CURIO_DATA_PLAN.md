@@ -5,7 +5,7 @@
 **Purpose:** Define Curio's content layer — the categories, the topics, the per-topic "what to do" prompt, the schema, and the rollout cadence. Sits alongside `CURIO_SPEC.md` (which defines the UX shell). Everything below is the data layer's contract; the spec defines how the UI consumes it.
 
 **How this doc relates to `CURIO_SPEC.md`:**
-- `CURIO_SPEC.md` §0.2 owns the **6-category starter palette** and the Wildcard rule. That section is still authoritative for what's shipped NOW.
+- `CURIO_SPEC.md` §0.2 owns the **6-category Midnight Signal starter palette** and the Wildcard rule. That section is still authoritative for what's shipped NOW.
 - This doc owns the **forward-looking 10-category roadmap**, the **topic data schema**, the **authoring pipeline**, and the **per-category rollout cadence**.
 - When a new category's topics are authored + shipped, this doc becomes the source-of-truth `§0.2` supersedes; the original `CURIO_SPEC.md` §0.2 gets a one-line history entry pointing here.
 
@@ -17,11 +17,11 @@
 
 | ID | Category          | Accent (CURIO_SPEC §0.2) | Glyph (CURIO_SPEC §0.6)       | §8 capture format | Status |
 |----|-------------------|---------------------------|-------------------------------|-------------------|--------|
-| MUSIC      | Music / Artists       | Lilac      #C9A6F2 | `album`       | Sound Bite (voice note)   | shipped (placeholder UI) |
-| MOVIES     | Movies / Directors    | Dusty Blue #9BB8E8 | `movie`       | Reel Notes (review + collage) | shipped (placeholder UI) |
-| BOOKS      | Books / Authors       | Sage       #A8C99A | `menu_book`   | Marginalia (journal + quotes)  | shipped (placeholder UI) |
-| VISUAL_ART | Visual Art / Painters | Peach      #FFB585 | `palette`     | Gallery Wall (moodboard)  | shipped (placeholder UI) |
-| SCIENCE    | Science & Nature      | Teal       #6FC7BE | `science`     | Field Notes (3-section report) | shipped (placeholder UI) |
+| MUSIC      | Music / Artists       | Electric Blue #3D8CFF | `album`       | Sound Bite (voice note)   | shipped (placeholder UI) |
+| MOVIES     | Movies / Directors    | Cobalt        #5B5FEF | `movie`       | Reel Notes (review + collage) | shipped (placeholder UI) |
+| BOOKS      | Books / Authors       | Mint          #16B89A | `menu_book`   | Marginalia (journal + quotes)  | shipped (placeholder UI) |
+| VISUAL_ART | Visual Art / Painters | Orange        #E6652F | `palette`     | Gallery Wall (moodboard)  | shipped (placeholder UI) |
+| SCIENCE    | Science & Nature      | Cyan          #079DB8 | `science`     | Field Notes (3-section report) | shipped (placeholder UI) |
 | WILDCARD   | Wildcard              | Rainbow gradient   | `casino`      | Open Notebook (pick format) | shipped (placeholder UI) |
 
 ### Planned v1 additions (rollout in §5 below)

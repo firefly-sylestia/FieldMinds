@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!--
-        Curio Material 3 theme.
-        Compose is the primary UI system; this XML theme just configures the
-        splash background + system bars at the activity level before Compose
-        takes over. All colors come from CurioTheme inside Compose at runtime.
-    -->
+    <!-- Compose owns the runtime theme; this XML provides the Midnight Signal
+         bootstrap surface before Compose takes over. -->
     <style name="Theme.Curio" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/curio_cream_white</item>
-        <item name="android:navigationBarColor">@color/curio_cream_white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
-        <item name="android:windowBackground">@color/curio_cream_white</item>
+        <item name="android:statusBarColor">@color/curio_deep_plum</item>
+        <item name="android:navigationBarColor">@color/curio_deep_plum</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="android:windowBackground">@color/curio_deep_plum</item>
     </style>
 </resources>

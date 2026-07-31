@@ -17,7 +17,7 @@ import androidx.core.view.WindowCompat
  * Curio's M3 theme wrapper — see CURIO_SPEC.md §0.
  *
  * Combines:
- * - CurioColors (light + dark variants — pastel & playful palette)
+ * - CurioColors (light + dark Midnight Signal variants)
  * - CurioTypography (geom for display, M3 default for body)
  * - CurioShapes (rounder than M3 default per §0.3)
  *
@@ -31,8 +31,8 @@ import androidx.core.view.WindowCompat
 
 private val CurioLightColorScheme = lightColorScheme(
     primary           = CurioColors.CoralBlush,
-    onPrimary         = CurioColors.DeepPlum,
-    primaryContainer  = CurioColors.Lilac,            // soft tint base
+    onPrimary         = CurioColors.CreamWhite,
+    primaryContainer  = Color(0xFFD6E8FF),            // signal-blue wash
     onPrimaryContainer = CurioColors.DeepPlum,
 
     secondary           = CurioColors.ButterYellow,
@@ -54,9 +54,9 @@ private val CurioLightColorScheme = lightColorScheme(
     onSurfaceVariant         = CurioColors.DeepPlum.copy(alpha = 0.75f),
     surfaceContainerLowest   = CurioColors.CreamWhite,
     surfaceContainerLow      = CurioColors.SoftSand,
-    surfaceContainer         = Color(0xFFEEE6DB),
-    surfaceContainerHigh     = Color(0xFFE8E0D5),
-    surfaceContainerHighest  = Color(0xFFE2DAD0),
+    surfaceContainer         = Color(0xFFDCE8F5),
+    surfaceContainerHigh     = Color(0xFFD3E1F1),
+    surfaceContainerHighest  = Color(0xFFC9D9EC),
 
     error             = CurioColors.WarmCoralRed,
     onError           = CurioColors.CreamWhite,
@@ -67,7 +67,7 @@ private val CurioLightColorScheme = lightColorScheme(
 
 private val CurioDarkColorScheme = darkColorScheme(
     primary           = CurioColors.CoralBlush,
-    onPrimary         = CurioColors.DeepPlum,
+    onPrimary         = CurioColors.CreamWhite,
     primaryContainer  = CurioColors.CoralBlush.copy(alpha = 0.30f),
     onPrimaryContainer = CurioColors.CreamWhite,
 
@@ -81,18 +81,18 @@ private val CurioDarkColorScheme = darkColorScheme(
     tertiaryContainer  = CurioColors.SkyMint.copy(alpha = 0.20f),
     onTertiaryContainer = CurioColors.CreamWhite,
 
-    background = Color(0xFF1A1219),  // warm dark plum (not pure black)
+    background = Color(0xFF061326),  // midnight ink, lifted for readable dark mode
     onBackground = CurioColors.CreamWhite,
 
-    surface                  = Color(0xFF221820),
+    surface                  = Color(0xFF081B33),
     onSurface                = CurioColors.CreamWhite,
-    surfaceVariant           = Color(0xFF2D2229),
-    onSurfaceVariant         = CurioColors.CreamWhite.copy(alpha = 0.75f),
-    surfaceContainerLowest   = Color(0xFF1A1219),
-    surfaceContainerLow      = Color(0xFF221820),
-    surfaceContainer         = Color(0xFF2D2229),
-    surfaceContainerHigh     = Color(0xFF372B33),
-    surfaceContainerHighest  = Color(0xFF41353D),
+    surfaceVariant           = Color(0xFF102B49),
+    onSurfaceVariant         = Color(0xFFB5C9DF),
+    surfaceContainerLowest   = Color(0xFF061326),
+    surfaceContainerLow      = Color(0xFF081B33),
+    surfaceContainer         = Color(0xFF102B49),
+    surfaceContainerHigh     = Color(0xFF17385B),
+    surfaceContainerHighest  = Color(0xFF20466E),
 
     error             = CurioColors.WarmCoralRed,
     onError           = CurioColors.CreamWhite,

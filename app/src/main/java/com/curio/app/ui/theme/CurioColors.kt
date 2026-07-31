@@ -4,84 +4,64 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 
 /**
- * Curio's color palette — see CURIO_SPEC.md §0.2.
+ * Curio's Midnight Signal color system — see CURIO_SPEC.md §0.2.
  *
- * Base on M3's tonal palette generator, but seed from a warm coral instead of
- * a cold blue so default M3 doesn't feel corporate.
- *
- * Each of the 6 categories also has its OWN accent color layered on top of the
- * base palette (used for chips, category headers, spin-segment fills).
+ * The identity is built around a deep navigation-night foundation, an electric
+ * blue signal, a warm orange energy accent, and a mint aperture highlight. The
+ * category tokens remain named for source compatibility, but their values now
+ * belong to the new brand rather than the retired pastel palette.
  */
 object CurioColors {
 
-    // ── Base palette (warm coral seed) ─────────────────────────────────────
-    val CoralBlush       = Color(0xFFFF8FA3)  // Primary, tone 60
-    val ButterYellow     = Color(0xFFFFD97D)  // Secondary
-    val SkyMint          = Color(0xFF8FE3CF)  // Tertiary
-    val CreamWhite       = Color(0xFFFFFBF5)  // Surface
-    val SoftSand         = Color(0xFFF6EFE4)  // Surface Container
-    val WarmCoralRed     = Color(0xFFE4626F)  // Error
-    val DeepPlum         = Color(0xFF3B0A17)  // On-Primary
+    // ── Midnight Signal foundation ─────────────────────────────────────────
+    val CoralBlush       = Color(0xFF1264C5)  // Primary signal blue
+    val ButterYellow     = Color(0xFFE6652F)  // Secondary signal orange
+    val SkyMint          = Color(0xFF009E83)  // Tertiary aperture mint
+    val CreamWhite       = Color(0xFFF8FBFF)  // Light surface
+    val SoftSand         = Color(0xFFE7EEF6)  // Light surface container
+    val WarmCoralRed     = Color(0xFFBA3A4B)  // Error
+    val DeepPlum         = Color(0xFF081B33)  // Midnight ink / on-primary
 
-    // ── Category accent colors ─────────────────────────────────────────────
-    val Lilac            = Color(0xFFC9A6F2)  // Music / Artists
-    val DustyBlue        = Color(0xFF9BB8E8)  // Movies / Directors
-    val Sage             = Color(0xFFA8C99A)  // Books / Authors
-    val Peach            = Color(0xFFFFB585)  // Visual Art / Painters
-    val Teal             = Color(0xFF6FC7BE)  // Science & Nature
-    // Wildcard uses a rainbow gradient (see CurioGradients.WildcardGradient)
+    // ── Category signal colors ─────────────────────────────────────────────
+    val Lilac            = Color(0xFF3D8CFF)  // Music / Artists — electric blue
+    val DustyBlue        = Color(0xFF5B5FEF)  // Movies / Directors — cobalt
+    val Sage             = Color(0xFF16B89A)  // Books / Authors — mint
+    val Peach            = Color(0xFFE6652F)  // Visual Art / Painters — orange
+    val Teal             = Color(0xFF079DB8)  // Science & Nature — cyan
+    // Wildcard uses a signal-spectrum gradient (see CurioGradients).
 
-    /** Tinted (20% alpha) versions of category accents for backgrounds. */
-    val LilacTint    = Lilac.copy(alpha = 0.20f)
-    val DustyBlueTint = DustyBlue.copy(alpha = 0.20f)
-    val SageTint     = Sage.copy(alpha = 0.20f)
-    val PeachTint    = Peach.copy(alpha = 0.20f)
-    val TealTint     = Teal.copy(alpha = 0.20f)
+    /** Restrained signal washes for category backgrounds. */
+    val LilacTint     = Lilac.copy(alpha = 0.16f)
+    val DustyBlueTint = DustyBlue.copy(alpha = 0.16f)
+    val SageTint      = Sage.copy(alpha = 0.16f)
+    val PeachTint     = Peach.copy(alpha = 0.16f)
+    val TealTint      = Teal.copy(alpha = 0.16f)
 }
 
 /**
- * Rainbow gradient used ONLY by the Wildcard category — see CURIO_SPEC.md §0.2.
- * This is the one place in the app where a gradient appears, so it stays special.
+ * Signal-spectrum gradients used for wildcard and hero depth.
+ * Gradients are decorative; core cards still use opaque theme surfaces.
  */
 object CurioGradients {
     val WildcardGradientStops = listOf(
         CurioColors.Lilac,
-        CurioColors.DustyBlue,
+        CurioColors.Teal,
         CurioColors.Sage,
-        CurioColors.Peach,
-        CurioColors.Teal
+        CurioColors.ButterYellow,
+        CurioColors.DustyBlue
     )
 
-    /**
-     * Hue-preserving ticket stops for a named category (Spin + Reveal hero).
-     *
-     * Every stop deepens toward **Black** — never toward [CurioColors.DeepPlum]
-     * — so the accent's hue stays alive: deep lilac reads as lilac, deep teal
-     * as teal, instead of collapsing into muddy maroon. Dark mode lifts the
-     * crown (lightens the top stop) and keeps more hue in the base so the
-     * ticket glows against the plum background instead of melting into it.
-     * The stops are still dark enough for white text on the top half.
-     */
+    /** Hue-preserving signal stops for named-category hero treatments. */
     fun ticketStops(accent: Color, isDark: Boolean): List<Color> = listOf(
-        // Crown — the corner where the subtype badge sits; only a whisper
-        // of darkening so the ticket catches light without hurting the
-        // white-text contrast on the name band below it.
-        lerp(accent, Color.Black, if (isDark) 0.06f else 0.10f),
-        // True accent body — dark enough for bold white text.
-        lerp(accent, Color.Black, if (isDark) 0.18f else 0.26f),
-        // Deepened accent — hue intact, solid white-text band.
-        lerp(accent, Color.Black, if (isDark) 0.34f else 0.44f),
-        // Base — keeps a whisper of accent hue instead of fading to neutral.
-        lerp(accent, Color.Black, if (isDark) 0.52f else 0.62f)
+        lerp(accent, Color.Black, if (isDark) 0.04f else 0.10f),
+        lerp(accent, Color.Black, if (isDark) 0.16f else 0.24f),
+        lerp(accent, Color.Black, if (isDark) 0.32f else 0.42f),
+        lerp(accent, Color.Black, if (isDark) 0.50f else 0.60f)
     )
 
-    /**
-     * Wildcard rainbow stops — deepened toward Black (hue-preserving) so the
-     * rainbow stays readable under white text. Dark mode keeps the rainbow
-     * luminous (less black) so it glows against the plum background.
-     */
+    /** Signal-spectrum stops deepened enough for white text and small UI. */
     fun wildcardTicketStops(isDark: Boolean): List<Color> =
         WildcardGradientStops.map {
-            lerp(it, Color.Black, if (isDark) 0.18f else 0.36f)
+            lerp(it, Color.Black, if (isDark) 0.16f else 0.34f)
         }
 }

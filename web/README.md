@@ -59,12 +59,13 @@ web/
 
 ## Design System
 
-The landing page uses the FieldMinds Material Design 3 color palette:
+The landing page uses the Curio Midnight Signal palette:
 
-- **Primary**: #6750A4 (Purple)
-- **Secondary**: #625B71 (Neutral Purple)
-- **Tertiary**: #7D5260 (Rosy Pink)
-- **Background**: #FAF5FF (Soft Purple)
+- **Primary**: #1264C5 (Signal Blue)
+- **Secondary**: #E6652F (Signal Orange)
+- **Tertiary**: #009E83 (Aperture Mint)
+- **Background**: #F3F7FC (Signal White)
+- **Mark**: angular open portal with a mint aperture and orange spark
 
 ## License
 

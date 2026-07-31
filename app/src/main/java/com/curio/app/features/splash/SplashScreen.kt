@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,16 +34,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.curio.app.R
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
-import com.curio.app.ui.theme.CurioIcon
-import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.CurioTheme
 import kotlinx.coroutines.delay
@@ -182,11 +183,11 @@ fun SplashScreen(navController: NavHostController) {
                                     shape = RoundedCornerShape(50)
                                 )
                         )
-                        CurioIcon(
-                            name = CurioIcons.AutoAwesome,
+                        Image(
+                            painter = painterResource(R.drawable.ic_launcher_foreground),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            size = 96.dp
+                            modifier = Modifier.size(112.dp),
+                            contentScale = ContentScale.Fit
                         )
                     }
 

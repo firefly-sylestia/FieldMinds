@@ -30,7 +30,7 @@ app/src/main/java/com/curio/app/
 │   └── CurioNavHost.kt             # Scaffold-wrapped NavHost with conditional bottom nav
 ├── ui/
 │   ├── theme/                      # design system primitives
-│   │   ├── CurioColors.kt          # pastel coral palette + 6 category accents + wildcard gradient
+│   │   ├── CurioColors.kt          # Midnight Signal palette + 6 category accents + wildcard gradient
 │   │   ├── CurioTypography.kt      # geom.ttf for display/headline/label; M3 default for body
 │   │   ├── CurioShapes.kt          # 16/24/32/48 corner tokens
 │   │   ├── CurioIcons.kt           # glyph constants + CurioIcon(name, ...) ligature renderer
@@ -42,7 +42,7 @@ app/src/main/java/com/curio/app/
 │       ├── CurioHeroCard.kt        # ~40% vertical hero Spin card on Home
 │       └── CurioStreakPill.kt      # streak indicator pill + CurioSecondaryAction helper
 └── features/
-    ├── splash/SplashScreen.kt      # §13.1 splash — auto_awesome glyph + "Curio" + 3-dot pulse, 800ms → HOME
+    ├── splash/SplashScreen.kt      # §13.1 splash — angular signal-portal mark + "Curio" + 3-dot pulse, 800ms → HOME
     ├── home/HomeScreen.kt          # §3 home — top bar, greeting, streak, hero, chips, recently explored empty state
     └── PlaceholderScreens.kt       # ONE file containing 11 stubs: Spin, Cabinet, CategoryPicker, TopicReveal, SaveCapture, EntryDetail, Settings, Onboarding, ManageCategories, TopicHistory, Lightbox. Each uses a shared `PlaceholderScaffold` with back arrow + glyph + title + subtitle + "Design phase · logic comes later". Real implementations replace these one-by-one in later phases.
 ```
@@ -52,10 +52,10 @@ app/src/main/java/com/curio/app/
 - `app/src/main/res/font/geom.ttf` — display/headline typography (copied from `app-legacy/src/main/res/font/geom.ttf`)
 - `app/src/main/res/font/material_symbols_outlined.ttf` — UI + category icons (copied from `app-legacy/src/main/res/font/material_symbols_outlined.ttf`)
 - `app/src/main/res/values/strings.xml` — Curio app name + screen titles + category display names
-- `app/src/main/res/values/themes.xml` — `Theme.Curio` (M3 DayNight no-actionbar, cream surface)
-- `app/src/main/res/values/colors.xml` — XML color resources (cream + coral + plum) used at the OS-level splash background before Compose takes over
-- `app/src/main/res/drawable/ic_launcher_{background,foreground}.xml` — adaptive launcher icon (coral background + cream wheel + 3 colored wedges + plum pointer + butter yellow sparkle)
-- `app/src/main/res/mipmap-anydpi-v26/ic_launcher{,_round}.xml` — adaptive-icon declarations referencing the drawables above
+- `app/src/main/res/values/themes.xml` — `Theme.Curio` (M3 DayNight no-actionbar, Midnight Signal bootstrap surface)
+- `app/src/main/res/values/colors.xml` — Midnight Signal XML resources used at the OS-level splash/background before Compose takes over
+- `app/src/main/res/drawable/ic_launcher_{background,foreground,monochrome}.xml` — angular open-portal launcher mark with midnight background, electric-blue frame, mint aperture, orange spark, and themed monochrome mask
+- `app/src/main/res/mipmap-anydpi-v26/ic_launcher{,_round}.xml` — adaptive-icon declarations referencing the colored and monochrome layers above
 - `app/src/main/assets/topics/` — Curio topic data files (one per ready category; see Content authoring below)
 
 ### Canonical design doc

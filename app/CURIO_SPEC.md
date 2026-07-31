@@ -1,7 +1,7 @@
 # CURIO — DISCOVERY APP
 ## UI/UX SPEC v2
 
-Style system: Material Design 3, customized with a pastel + playful skin.
+Style system: Material Design 3, customized with the Midnight Signal identity: deep navy surfaces, electric-blue signal geometry, orange energy accents, and mint aperture highlights.
 **Inherits icon system + geom typography from the legacy FieldMind app** (preserved at `app-legacy/`).
 
 ---
@@ -14,6 +14,7 @@ Style system: Material Design 3, customized with a pastel + playful skin.
 | **v2** | today | **Category Picker → full-screen page** (own back-stack entry). **Exploration Hub removed** from the flow (Topic Reveal goes straight to Record/Capture; scratchpad state preserved for future). **No emoji anywhere** — Material Symbols (inherited from `app-legacy/`) for category glyphs, `geom.ttf` (inherited from `app-legacy/`) for display/headline typography. "Recently explored" carousel confirmed on Home + Cabinet stays as separate bottom-nav tab. New §13 (Missing/Additional Screens) + §14 (Open Decisions). |
 | **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. The Spin screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
 | **v4** | 2026-07-31 | Home, Spin, and Topic Reveal use an opaque paper-card visual language: warm solid surfaces, crisp category-color edges, and layered elevation for depth. Ambient background gradients, glassy sheens, translucent card shells, and accent halos are intentionally excluded. |
+| **v5** | 2026-07-31 | Replaced the pastel discovery wheel with the Midnight Signal angular portal/beacon mark. Replaced the palette across Android, splash, launcher, themed icon, website, and category accents with navy, electric blue, orange, mint, cyan, and cobalt tokens. |
 
 Working name for the app: **CURIO**
 Working name for the roulette feature: **THE SPIN**
@@ -30,27 +31,31 @@ Curio's whole point is "delighted curiosity." Every screen should feel like open
 
 **Surface direction (v4):** Home, The Spin, and Topic Reveal are tactile paper interfaces, not glass interfaces. Cards and trays must use opaque theme surfaces, visible category-color rules/edges, and elevation or offset layering to create depth. Do not add ambient background gradients, translucent card shells, blur, glossy sheens, or accent halos to these screens. Alpha is reserved for decorative ink, icon/text hierarchy, and subtle borders.
 
-### 0.2 COLOR SYSTEM (pastel & playful)
-Base on M3's tonal palette generator, but seed it from a warm coral instead of a cold blue so default M3 doesn't feel corporate.
+### 0.2 COLOR SYSTEM — MIDNIGHT SIGNAL
+The brand is intentionally not a recolor of the former wheel. Midnight Signal uses a cool, high-contrast foundation with a geometric signal language: midnight ink for focus, electric blue for discovery, orange for energy, mint for the aperture, and cyan/cobalt for category distinction.
 
-  Seed / Primary........ Coral Blush   #FF8FA3  (tone 60 primary)
-  Secondary............. Butter Yellow #FFD97D
-  Tertiary.............. Sky Mint      #8FE3CF
-  Surface............... Cream White   #FFFBF5
-  Surface Container..... Soft Sand     #F6EFE4
-  Error................. Warm Coral Red #E4626F
-  On-Primary............ #3B0A17 (deep plum text on primary, not pure black
-                          — keeps the whole palette feeling warm, never
-                          clinical)Each of the 6 categories gets its OWN accent color layered on top of the
-  base palette (used for chips, category headers, spin-segment fills):
-    Music / Artists ........ Lilac      #C9A6F2
-    Movies / Directors ..... Dusty Blue #9BB8E8
-    Books / Authors ........ Sage       #A8C99A
-    Visual Art / Painters .. Peach     #FFB585
-    Science & Nature ....... Teal      #6FC7BE
-    Wildcard ............... Rainbow gradient (all 5 colors swept together —
-                              this is the ONLY place a gradient is used, so
-                              it stays special)
+  Midnight Ink / On-Primary.. #081B33
+  Signal Blue / Primary....... #1264C5
+  Electric Blue............... #3D8CFF
+  Signal Orange / Secondary... #E6652F
+  Aperture Mint / Tertiary.... #009E83
+  Light Surface............... #F8FBFF
+  Light Container............. #E7EEF6
+  Error....................... #BA3A4B
+
+Each category keeps its existing source-compatible token name while adopting a
+signal color used for chips, category headers, spin segments, and hero rules:
+    Music / Artists ........ Electric Blue #3D8CFF
+    Movies / Directors ..... Cobalt        #5B5FEF
+    Books / Authors ........ Mint          #16B89A
+    Visual Art / Painters .. Orange        #E6652F
+    Science & Nature ....... Cyan          #079DB8
+    Wildcard ............... Signal-spectrum gradient (blue → cyan → mint →
+                              orange → cobalt)
+
+The launcher mark is an angular open portal with a mint aperture and an orange
+signal spark. It is used consistently by the adaptive launcher, themed icon,
+splash screen, web SVG, and download presentation.
 
   **Forward note:** the category palette will expand from 6 → 10 categories
   over v1.1–v1.4 (adds Philosophy & Ideas, History & Mythology,
