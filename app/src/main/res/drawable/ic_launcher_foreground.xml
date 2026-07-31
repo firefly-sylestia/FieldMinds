@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio gradient-card launcher mark.
+    Curio pastel gradient-card launcher mark.
 
-    Matches the Spin screen card hierarchy: a solid rounded-rectangle card
-    split into two bands — a slightly differentiated DeepPlum-deep on top
-    and Lilac below.  Card is centered within the adaptive safe zone (y=30).
-    No glyph — the card itself is the mark.
+    A solid rounded-rectangle card split into two bands — deep maroon
+    on top and soft pink coral below.  No glyph — the card itself is
+    the mark.  Card sits within the adaptive safe zone (y=30).
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -13,14 +12,13 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Top band: DeepPlum-deep (#0F2345) — slightly lighter than
-         the background (#081B33) so the card shape reads as a whole. -->
+    <!-- Top band: deep maroon, slightly lighter than the background. -->
     <path
-        android:fillColor="#0F2345"
+        android:fillColor="#4B1522"
         android:pathData="M42,30 L66,30 A10,10 0 0,1 76,40 L76,56 L32,56 L32,40 A10,10 0 0,1 42,30 Z" />
 
-    <!-- Bottom band: Lilac — the electric signal half of the card. -->
+    <!-- Bottom band: soft pink coral — the signature warm pastel. -->
     <path
-        android:fillColor="#3D8CFF"
+        android:fillColor="#FF8FA3"
         android:pathData="M32,56 L76,56 L76,72 A10,10 0 0,1 66,82 L42,82 A10,10 0 0,1 32,72 Z" />
 </vector>

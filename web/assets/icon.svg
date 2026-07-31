@@ -1,12 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
   <title id="title">Curio app icon</title>
-  <desc id="desc">A solid gradient card matching the Spin screen hierarchy — a DeepPlum-deep top band with Lilac signal below — on a midnight navy field.</desc>
-  <rect width="512" height="512" rx="112" fill="#081B33"/>
-  <!-- Card: 2-band hierarchy.
-       Top band = DeepPlum-deep (#0F2345), distinguished from background.
-       Bottom band = Lilac (#3D8CFF).
-       Thin white hairline at the split. -->
-  <path d="M200 136 L312 136 A48 48 0 0 1 360 184 L360 264 L152 264 L152 184 A48 48 0 0 1 200 136 Z" fill="#0F2345"/>
-  <path d="M152 264 L360 264 L360 344 A48 48 0 0 1 312 392 L200 392 A48 48 0 0 1 152 344 Z" fill="#3D8CFF"/>
+  <desc id="desc">A pastel gradient card — deep maroon above, soft pink coral below — on a warm dark field.</desc>
+  <rect width="512" height="512" rx="112" fill="#3B0A17"/>
+  <!-- Card: 2-band pastel hierarchy.
+       Top band = deep maroon (#4B1522), distinguished from background.
+       Bottom band = soft pink coral (#FF8FA3). -->
+  <path d="M200 136 L312 136 A48 48 0 0 1 360 184 L360 264 L152 264 L152 184 A48 48 0 0 1 200 136 Z" fill="#4B1522"/>
+  <path d="M152 264 L360 264 L360 344 A48 48 0 0 1 312 392 L200 392 A48 48 0 0 1 152 344 Z" fill="#FF8FA3"/>
   <line x1="156" y1="264" x2="356" y2="264" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2"/>
 </svg>
