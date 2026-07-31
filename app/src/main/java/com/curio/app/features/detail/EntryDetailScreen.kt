@@ -104,8 +104,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     val context = LocalContext.current
     val authority = remember { "${context.packageName}.fileprovider" }
     val entry by produceState<CurioEntry?>(initialValue = null, entryId) {
-        value = CurioRepositoryHolder.repo.getById(entryId)
-            ?: TopicCatalog.sampleEntries().find { it.id == entryId }
+        value = runCatching {
+            CurioRepositoryHolder.repo.getById(entryId)
+                ?: TopicCatalog.sampleEntries().find { it.id == entryId }
+        }.getOrNull()
     }
 
     LaunchedEffect(entry) {
@@ -275,7 +277,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     scope.launch {
                         val data = resolvedEntry.captureData as? CaptureData.SoundBite
                         AudioStorageManager.deleteAudio(context, data?.audioFilePath)
-                        CurioRepositoryHolder.repo.deleteById(resolvedEntry.id)
+                        runCatching { CurioRepositoryHolder.repo.deleteById(resolvedEntry.id) }
                         navController.popBackStack()
                     }
                 }) { Text("Delete", color = MaterialTheme.colorScheme.error) }

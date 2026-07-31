@@ -126,7 +126,7 @@ fun CategoryPickerScreen(navController: NavController) {
                         onClick = {
                             navController.navigate(
                                 CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                            )
+                            ) { launchSingleTop = true }
                         }
                     )
                 }
@@ -134,7 +134,7 @@ fun CategoryPickerScreen(navController: NavController) {
         }
 
         FilledTonalButton(
-            onClick = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
+            onClick = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true } },
             shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.filledTonalButtonColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,

@@ -268,15 +268,15 @@ fun ProfileScreen(navController: NavController) {
                         reminderHour = hour
                         AppPreferences.setReminderHour(context, hour)
                     },
-                    onManageCategories = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) }
+                    onManageCategories = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true } }
                 )
             }
             if (categoryCounts.isNotEmpty()) {
                 item {
                     CategoriesCard(
                         counts = categoryCounts,
-                        onManage = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
-                        onCabinet = { navController.navigate(CurioRoutes.CABINET) }
+                        onManage = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true } },
+                        onCabinet = { navController.navigate(CurioRoutes.CABINET) { launchSingleTop = true } }
                     )
                 }
             }
@@ -284,7 +284,7 @@ fun ProfileScreen(navController: NavController) {
                 item {
                     RecentActivityCard(
                         entries = recentEntries,
-                        onEntryClick = { navController.navigate(CurioRoutes.entryDetail(it)) }
+                        onEntryClick = { navController.navigate(CurioRoutes.entryDetail(it)) { launchSingleTop = true } }
                     )
                 }
             }
@@ -292,11 +292,11 @@ fun ProfileScreen(navController: NavController) {
                 DeveloperCard(
                     crashCount = crashCount,
                     onTestCrash = { CurioCrashReporter.testCrash() },
-                    onCrashLogs = { navController.navigate(CurioRoutes.CRASH) },
-                    onReportBug = { navController.navigate(CurioRoutes.BUG_REPORT) },
+                    onCrashLogs = { navController.navigate(CurioRoutes.CRASH) { launchSingleTop = true } },
+                    onReportBug = { navController.navigate(CurioRoutes.BUG_REPORT) { launchSingleTop = true } },
                     onReplayIntro = {
                         CurioOnboardingState.reset(context)
-                        navController.navigate(CurioRoutes.ONBOARDING)
+                        navController.navigate(CurioRoutes.ONBOARDING) { launchSingleTop = true }
                     },
                     versionName = versionName,
                     onVersion = { showVersionDialog = true }

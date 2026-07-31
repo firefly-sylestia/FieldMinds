@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +55,10 @@ import com.curio.app.ui.theme.CurioIcons
  */
 @Composable
 fun LightboxScreen(imageUrl: String, navController: NavController) {
+    // Edge case — blank/empty image URL: nothing to view, return silently.
+    LaunchedEffect(imageUrl) {
+        if (imageUrl.isBlank()) navController.popBackStack()
+    }
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     var offsetY by remember { mutableFloatStateOf(0f) }

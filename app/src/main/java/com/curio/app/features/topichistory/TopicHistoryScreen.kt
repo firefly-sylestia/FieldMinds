@@ -131,7 +131,7 @@ fun TopicHistoryScreen(navController: NavController) {
                                         entry.categoryId.routeSlug,
                                         entry.topicName
                                     )
-                                )
+                                ) { launchSingleTop = true }
                             }
                         )
                     }

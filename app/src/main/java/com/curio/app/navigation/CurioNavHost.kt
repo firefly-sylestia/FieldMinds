@@ -43,6 +43,14 @@ import com.curio.app.ui.components.CurioBottomBar
 import com.curio.app.ui.theme.CurioMotion
 
 /**
+ * Decodes a nav-argument string safely — malformed percent-escapes or
+ * unpaired surrogates fall back to the raw value instead of crashing
+ * with IllegalArgumentException.
+ */
+private fun safeDecode(raw: String?): String =
+    runCatching { Uri.decode(raw.orEmpty()) }.getOrDefault(raw.orEmpty())
+
+/**
  * The Curio NavHost — single-NavHost scaffold for the active app.
  *
  * All routes are flat. The bottom nav is rendered by a [Scaffold] wrapper
@@ -178,7 +186,7 @@ fun CurioNavHost(
             ) { entry ->
                 TopicRevealScreen(
                     categorySlug = entry.arguments?.getString("categorySlug").orEmpty(),
-                    topicName    = Uri.decode(entry.arguments?.getString("topicName").orEmpty()),
+                    topicName    = safeDecode(entry.arguments?.getString("topicName")),
                     navController = navController
                 )
             }
@@ -191,7 +199,7 @@ fun CurioNavHost(
             ) { entry ->
                 SaveCaptureScreen(
                     categorySlug = entry.arguments?.getString("categorySlug").orEmpty(),
-                    topicName    = Uri.decode(entry.arguments?.getString("topicName").orEmpty()),
+                    topicName    = safeDecode(entry.arguments?.getString("topicName")),
                     navController = navController
                 )
             }
@@ -229,7 +237,7 @@ fun CurioNavHost(
                 arguments = listOf(navArgument("imageUrl") { type = NavType.StringType })
             ) { entry ->
                 LightboxScreen(
-                    imageUrl = Uri.decode(entry.arguments?.getString("imageUrl").orEmpty()),
+                    imageUrl = safeDecode(entry.arguments?.getString("imageUrl")),
                     navController = navController
                 )
             }

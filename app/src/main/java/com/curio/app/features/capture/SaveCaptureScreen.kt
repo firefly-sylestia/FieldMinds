@@ -100,7 +100,9 @@ fun SaveCaptureScreen(
             return@produceState
         }
         val pool = TopicJsonLoader.load(cat.id)
-        value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
+        // Graceful fallback: an unknown topic stays null so the save CTA
+        // stays disabled instead of silently capturing the wrong topic.
+        value = pool.firstOrNull { it.name == topicName }
     }
 
     var canSave by remember { mutableStateOf(false) }
@@ -112,7 +114,6 @@ fun SaveCaptureScreen(
     var showDiscardDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    val repo = CurioRepositoryHolder.repo
 
     // ── Handle save ─────────────────────────────────────────────────────
     val performSave: () -> Unit = {
@@ -147,7 +148,7 @@ fun SaveCaptureScreen(
                     format = cat.defaultFormat,
                     captureData = persistedData
                 )
-                runCatching { repo.save(entry) }
+                runCatching { CurioRepositoryHolder.repo.save(entry) }
                     .onSuccess {
                         savedEntryId = entry.id
                         StreakTracker.recordActivity(context)
@@ -167,6 +168,7 @@ fun SaveCaptureScreen(
             savedEntryId?.let { id ->
                 navController.navigate(CurioRoutes.entryDetail(id)) {
                     popUpTo(CurioRoutes.HOME)
+                    launchSingleTop = true
                 }
             }
         }

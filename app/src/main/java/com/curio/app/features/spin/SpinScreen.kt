@@ -372,7 +372,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             poolCount = pool.size,
             filteredCount = filteredPool.size,
             modifier = Modifier.statusBarsPadding(),
-            onBack = { navController.popBackStack() }
+            onBack = {
+                // Edge case — Spin can be a root destination (deep link or
+                // restored tab) with nothing to pop; fall back to Home.
+                if (!navController.popBackStack()) {
+                    navController.navigate(CurioRoutes.HOME) { launchSingleTop = true }
+                }
+            }
         )
 
         // ── 2. Carousel (interactive cards) ─────────────────────────

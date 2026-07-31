@@ -158,7 +158,9 @@ fun CabinetScreen(navController: NavController) {
                         subtext = "Everything you save will live here. Shuffle to find your first one.",
                         tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
                         ctaLabel = "Discover something",
-                        onCtaClick = { navController.navigate(CurioRoutes.SPIN) }
+                        onCtaClick = {
+                            navController.navigate(CurioRoutes.SPIN) { launchSingleTop = true }
+                        }
                     )
                 } else {
                     val filterId = selectedFilter ?: CategoryId.WILDCARD
@@ -172,7 +174,7 @@ fun CabinetScreen(navController: NavController) {
                         onCtaClick = {
                             navController.navigate(
                                 CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                            )
+                            ) { launchSingleTop = true }
                         }
                     )
                 }
@@ -192,7 +194,7 @@ fun CabinetScreen(navController: NavController) {
                         onClick = {
                             navController.navigate(
                                 CurioRoutes.entryDetail(entry.id)
-                            )
+                            ) { launchSingleTop = true }
                         }
                     )
                 }

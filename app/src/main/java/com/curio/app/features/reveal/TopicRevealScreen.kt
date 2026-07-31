@@ -112,7 +112,9 @@ fun TopicRevealScreen(
             return@produceState
         }
         val pool = TopicJsonLoader.load(cat.id)
-        value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
+        // Graceful fallback: an unknown topic stays null so the screen
+        // shows the neutral category fallback instead of a wrong topic.
+        value = pool.firstOrNull { it.name == topicName }
     }
 
     // v5.8 — saveable so a rotation mid-celebration doesn't drop the confetti burst.
@@ -238,7 +240,9 @@ fun TopicRevealScreen(
                 Button(
                     onClick = {
                         val name = resolved?.name ?: return@Button
-                        navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, name))
+                        navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, name)) {
+                            launchSingleTop = true
+                        }
                     },
                     enabled = resolved != null,
                     shape = RoundedCornerShape(50),
