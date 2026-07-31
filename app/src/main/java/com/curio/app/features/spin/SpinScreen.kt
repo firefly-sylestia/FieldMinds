@@ -429,7 +429,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         // ── Breathing room — keeps the header off the deck ────────────
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(44.dp))
 
         // ── 2. Carousel (interactive cards) ─────────────────────────
         // Tapping the center card opens a landed topic only; the bottom
@@ -462,7 +462,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 44.dp, bottom = 16.dp),
+                .padding(top = 32.dp, bottom = 20.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
