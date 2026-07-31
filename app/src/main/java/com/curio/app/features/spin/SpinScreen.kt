@@ -330,9 +330,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // Sharper sinusoidal ease-out: squaring progress inside the sine
             // keeps the ticks fast through most of the spin, then the
             // deceleration kicks in hard at the tail — a snappy whip instead
-            // of a long drawn-out slowdown. Intervals ~40ms -> ~400ms.
+            // of a long drawn-out slowdown. The 90ms floor keeps the very
+            // first ticks readable instead of an unreadable 40ms blur.
+            // Intervals ~90ms -> ~400ms.
             val eased = sin(progress * progress * Math.PI.toFloat() / 2f)
-            val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
+            val interval = (90L + (310L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
             // Slot-machine ratchet: haptic intensity escalates as the wheel
             // decelerates — a light tick while blurring fast (fast ticks
@@ -425,7 +427,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         // ── Breathing room — keeps the header off the deck ────────────
-        Spacer(Modifier.height(14.dp))
+        Spacer(Modifier.height(20.dp))
 
         // ── 2. Carousel (interactive cards) ─────────────────────────
         // Tapping the center card opens a landed topic only; the bottom
@@ -458,7 +460,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 26.dp, bottom = 12.dp),
+                .padding(top = 44.dp, bottom = 16.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
