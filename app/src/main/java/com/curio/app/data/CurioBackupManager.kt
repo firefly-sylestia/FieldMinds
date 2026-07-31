@@ -4,9 +4,12 @@ import android.content.Context
 import android.net.Uri
 import androidx.room.withTransaction
 import com.google.gson.Gson
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Curio's in-app backup & restore.
@@ -19,13 +22,15 @@ import java.util.Locale
  *
  * **What is backed up:**
  *  - all [CaptureEntity] rows (topic, format, notes, timestamps)
+ *  - SoundBite audio recordings, embedded base64 in the JSON keyed by
+ *    capture id (v2). Restore writes them back to `filesDir/audio/{id}.m4a`
+ *    and rewrites each capture's `audioFilePath` to the restored location.
  *  - the user-facing prefs: [AppPreferences], [AudioQualitySettings],
  *    [StreakTracker] and the onboarding-completed flag
  *
- * **What is not backed up:** audio recordings (they live in internal
- * `filesDir/audio/` and can be large — out of scope for the JSON file; the
- * cloud Auto Backup also excludes them via `data_extraction_rules.xml` so
- * the 25 MB quota stays safe) and crash-log prefs (device noise).
+ * **What is not backed up:** crash-log prefs (device noise). Cloud Auto
+ * Backup still excludes audio via `data_extraction_rules.xml` to protect
+ * the 25 MB quota — the in-app file backup is the complete archive.
  *
  * Pref values are stored as typed [PrefEntry]s (boolean/int/long/float/
  * string/stringset) because SharedPreferences is type-strict: a value
@@ -40,7 +45,7 @@ import java.util.Locale
 object CurioBackupManager {
 
     /** Bump when the payload shape changes. Restore accepts version <= this. */
-    const val FORMAT_VERSION = 1
+    const val FORMAT_VERSION = 2
 
     /** MIME type used by the file pickers. */
     const val MIME_TYPE = "application/json"
@@ -93,17 +98,42 @@ object CurioBackupManager {
                 .all
                 .mapValues { (_, v) -> v.toTypedEntry() }
         }
+        // Bundle SoundBite audio (v2): read each capture's bytes, keyed by
+        // capture id. Missing/unreadable files are skipped — the capture
+        // still backs up, just without its recording. File reads can be
+        // multi-MB, so this runs off the main thread (v2.1).
+        val audioFiles = withContext(Dispatchers.IO) {
+            val files = mutableMapOf<String, ByteArray>()
+            captures.forEach { capture ->
+                val path = runCatching {
+                    CaptureConverters.deserializeCaptureData(capture.formatDataJson)
+                }.getOrNull()?.audioPathOrNull()
+                if (!path.isNullOrBlank()) {
+                    runCatching {
+                        val file = File(path)
+                        if (file.isFile && file.length() > 0L) file.readBytes()
+                    }.getOrNull()?.let { files[capture.id] = it }
+                }
+            }
+            files
+        }
+
         val payload = BackupPayload(
             format = FORMAT_NAME,
             version = FORMAT_VERSION,
             exportedAtMillis = System.currentTimeMillis(),
             captures = captures,
-            preferences = prefs
+            preferences = prefs,
+            audioFiles = audioFiles
         )
-        val json = Gson().toJson(payload)
-        context.contentResolver.openOutputStream(uri)?.use { out ->
-            out.write(json.toByteArray(Charsets.UTF_8))
-        } ?: throw IllegalStateException("Could not open the chosen location for writing")
+        // With audio bundled, the base64 JSON can be tens of MB — serialize
+        // and write off the main thread (v2.1).
+        withContext(Dispatchers.IO) {
+            val json = Gson().toJson(payload)
+            context.contentResolver.openOutputStream(uri)?.use { out ->
+                out.write(json.toByteArray(Charsets.UTF_8))
+            } ?: throw IllegalStateException("Could not open the chosen location for writing")
+        }
 
         // Remember the last successful backup so Settings can show it.
         context.getSharedPreferences(META_PREFS, Context.MODE_PRIVATE)
@@ -124,9 +154,11 @@ object CurioBackupManager {
      * maps it back to the exact Int/Long/Float the app's getters expect.
      */
     suspend fun restore(context: Context, uri: Uri): RestoreResult {
-        val json = context.contentResolver.openInputStream(uri)?.use { input ->
-            input.bufferedReader(Charsets.UTF_8).use { it.readText() }
-        } ?: throw IllegalStateException("Could not open the backup file")
+        val json = withContext(Dispatchers.IO) {
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                input.bufferedReader(Charsets.UTF_8).use { it.readText() }
+            } ?: throw IllegalStateException("Could not open the backup file")
+        }
 
         val payload = Gson().fromJson(json, BackupPayload::class.java)
         require(payload.format == FORMAT_NAME) { "That file isn't a Curio backup" }
@@ -134,11 +166,34 @@ object CurioBackupManager {
             "This backup was made by a newer version of Curio"
         }
 
+        // Restore audio (v2): wipe current recordings, then write each
+        // bundled one to filesDir/audio/{id}.m4a and rewrite the capture's
+        // audioFilePath so the restored file resolves on this device.
+        // Audio writes can be multi-MB, so this runs off the main thread
+        // (v2.1). A single failed write only drops that one recording — the
+        // capture itself still restores (missing audio degrades gracefully
+        // in EntryDetail).
+        val audioFiles = payload.audioFiles.orEmpty()
+        val restoredCaptures = withContext(Dispatchers.IO) {
+            AudioStorageManager.deleteAllAudio(context)
+            payload.captures.map { capture ->
+                val bytes = audioFiles[capture.id] ?: return@map capture
+                val newPath = runCatching {
+                    AudioStorageManager.restoreAudio(context, capture.id, bytes)
+                }.getOrNull() ?: return@map capture
+                val updatedData = runCatching {
+                    CaptureConverters.deserializeCaptureData(capture.formatDataJson)
+                        .withAudioPath(newPath)
+                }.getOrNull() ?: return@map capture
+                capture.copy(formatDataJson = Gson().toJson(updatedData))
+            }
+        }
+
         val db = CurioDatabase.getInstance(context)
         val dao = db.captureDao()
         db.withTransaction {
             dao.clearAll()
-            payload.captures.forEach { dao.insert(it) }
+            restoredCaptures.forEach { dao.insert(it) }
         }
 
         payload.preferences.forEach { (name, entries) ->
@@ -205,5 +260,27 @@ data class BackupPayload(
     val version: Int,
     val exportedAtMillis: Long,
     val captures: List<CaptureEntity>,
-    val preferences: Map<String, Map<String, PrefEntry>>
+    val preferences: Map<String, Map<String, PrefEntry>>,
+    /** SoundBite audio bytes keyed by capture id (v2). Gson encodes ByteArray as base64. */
+    val audioFiles: Map<String, ByteArray> = emptyMap()
 )
+
+/**
+ * Returns the SoundBite audio file path carried by [this] capture data,
+ * recursing through OpenNotebook wrappers. Null for non-audio formats.
+ */
+private fun CaptureData.audioPathOrNull(): String? = when (this) {
+    is CaptureData.SoundBite -> audioFilePath
+    is CaptureData.OpenNotebook -> subData.audioPathOrNull()
+    else -> null
+}
+
+/**
+ * Returns a copy of [this] capture data with every SoundBite audio path
+ * pointed at [newPath] (used after restore re-homes the file).
+ */
+private fun CaptureData.withAudioPath(newPath: String): CaptureData = when (this) {
+    is CaptureData.SoundBite -> copy(audioFilePath = newPath)
+    is CaptureData.OpenNotebook -> copy(subData = subData.withAudioPath(newPath))
+    else -> this
+}

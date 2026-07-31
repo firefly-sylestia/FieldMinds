@@ -83,7 +83,7 @@ fun SettingsScreen(navController: NavController) {
                     val result = CurioBackupManager.export(context, uri)
                     lastBackupAt = CurioBackupManager.lastBackupAtMillis(context)
                     backupStatus = true to
-                        "Backed up ${result.captureCount} capture(s) and your settings.\n" +
+                        "Backed up ${result.captureCount} capture(s), your settings and sound recordings.\n" +
                         "Keep the file somewhere safe — it brings everything back on a new device."
                 } catch (e: Exception) {
                     backupStatus = false to "Backup failed: ${e.message ?: "unknown error"}"
@@ -101,7 +101,7 @@ fun SettingsScreen(navController: NavController) {
                 try {
                     val result = CurioBackupManager.restore(context, uri)
                     backupStatus = true to
-                        "Restored ${result.captureCount} capture(s) and your settings.\n" +
+                        "Restored ${result.captureCount} capture(s), your settings and sound recordings.\n" +
                         "Restart the app to pick up restored theme and reminder choices."
                 } catch (e: Exception) {
                     backupStatus = false to "Restore failed: ${e.message ?: "unknown error"}"
@@ -296,7 +296,7 @@ fun SettingsScreen(navController: NavController) {
                 // Backup & restore
                 item { SectionHeader("Backup & restore") }
                 item {
-                    SettingsItem(CurioIcons.Backup, "Back up now", "Save captures + settings to a file") {
+                    SettingsItem(CurioIcons.Backup, "Back up now", "Save captures, settings + recordings") {
                         backupLauncher.launch(CurioBackupManager.suggestedFileName())
                     }
                 }
