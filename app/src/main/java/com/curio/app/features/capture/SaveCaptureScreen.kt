@@ -62,6 +62,7 @@ import com.curio.app.features.capture.formats.OpenNotebookFormat
 import com.curio.app.features.capture.formats.ReelNotesFormat
 import com.curio.app.features.capture.formats.SoundBiteFormat
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.EmberBurst
 import com.curio.app.ui.theme.CurioColors
@@ -188,22 +189,12 @@ fun SaveCaptureScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Surface(
+            CurioBackButton(
                 onClick = {
                     if (canSave) showDiscardDialog = true
                     else navController.popBackStack()
-                },
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceVariant
-            ) {
-                CurioIcon(
-                    name = CurioIcons.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 24.dp,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+                }
+            )
             Text(
                 text = "Save your take",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),

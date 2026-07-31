@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.WaveformExtractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -159,19 +160,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Surface(
-                    onClick = { navController.popBackStack() },
-                    shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 24.dp,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+                CurioBackButton(onClick = { navController.popBackStack() })
                 Box {
                     Surface(
                         onClick = { menuExpanded = true },

@@ -24,8 +24,9 @@ import com.curio.app.ui.theme.CurioIcons
  */
 
 /**
- * The canonical "← Back" button. Circular Surface in surfaceVariant
- * containing the ArrowBack Material Symbol. Sized at 40dp total (24dp
+ * The canonical "‹ Back" button. Circular Surface in surfaceVariant
+ * containing the ChevronLeft Material Symbol — the unified back arrow
+ * that mirrors [CurioForwardArrow]'s chevron. Sized at 40dp total (24dp
  * glyph + 8dp padding on each side) to match the standard Android
  * touch-target minimum.
  */
@@ -42,7 +43,7 @@ fun CurioBackButton(
         modifier = modifier
     ) {
         CurioIcon(
-            name = CurioIcons.ArrowBack,
+            name = CurioIcons.ChevronLeft,
             contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onSurface,
             size = 24.dp,

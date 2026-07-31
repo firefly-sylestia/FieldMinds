@@ -44,6 +44,7 @@ import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -73,19 +74,7 @@ fun CategoryPickerScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Surface(
-                onClick = { navController.popBackStack() },
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceVariant
-            ) {
-                CurioIcon(
-                    name = CurioIcons.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 24.dp,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+            CurioBackButton(onClick = { navController.popBackStack() })
             Text(
                 text = "What are we exploring?",
                 style = MaterialTheme.typography.headlineSmall,
