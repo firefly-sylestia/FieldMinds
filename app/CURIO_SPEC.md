@@ -11,6 +11,7 @@ Style system: Material Design 3, customized with the Midnight Signal identity: d
 | v | Date | Change |
 |---|---|---|
 | v1 | (user's original paste) | Initial spec with Category Picker as bottom sheet + Exploration Hub in the Spin→Capture flow + emoji-based category totem icons. |
+| **v7** | 2026-07-31 | Profile preferences and activity cards receive a Material Expressive polish pass with stronger card containers, dark-safe edit actions, and inline daily reminder time chips. Category Picker removes the extra Choose a lane hero card and uses compact guidance plus expressive deck tiles. |
 | **v2** | today | **Category Picker → full-screen page** (own back-stack entry). **Exploration Hub removed** from the flow (Topic Reveal goes straight to Record/Capture; scratchpad state preserved for future). **No emoji anywhere** — Material Symbols (inherited from `app-legacy/`) for category glyphs, `geom.ttf` (inherited from `app-legacy/`) for display/headline typography. "Recently explored" carousel confirmed on Home + Cabinet stays as separate bottom-nav tab. New §13 (Missing/Additional Screens) + §14 (Open Decisions). |
 | **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. Shuffle screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
 | **v4** | 2026-07-31 | Home, Shuffle, and Topic Reveal use an opaque paper-card visual language: warm solid surfaces, crisp category-color edges, and layered elevation for depth. Ambient background gradients, glassy sheens, translucent card shells, and accent halos are intentionally excluded. |
@@ -219,8 +220,10 @@ LAYOUT SKELETON
   ┌─────────────────────────────┐
   │ ←  What are we exploring?  │  ← own back-stack entry, top-left back arrow
   │                             │     returns to Home (no action taken)
+  │  [Focused decks] [Surprise] │  ← compact guidance chips, no large pre-grid lane card
+  │  Pick a mood...             │
   │  ┌─────────┐ ┌─────────┐    │
-  │  │  Music  │ │ Movies  │    │  ← 2-column grid, full-width cards
+  │  │  Music  │ │ Movies  │    │  ← 2-column expressive deck cards
   │  └─────────┘ └─────────┘    │     (96dp min height each)
   │  ┌─────────┐ ┌─────────┐    │
   │  │  Books  │ │  Art    │    │
@@ -229,14 +232,14 @@ LAYOUT SKELETON
   │  │ Science │ │ Wildcard│    │
   │  └─────────┘ └─────────┘    │
   │                             │
-  │  [ Manage categories ]      │  ← text button, opens §13.4
+  │  [ Manage categories ]      │  ← filled tonal button, opens §13.4
   └─────────────────────────────┘
 
 INTERACTIONS
   - **Own back-stack entry**: navigating here pushes onto the Home screen's back stack. Back arrow pops back to Home with no action taken. This is distinct from a bottom sheet (which would be a transient overlay).
-  - Each tile: large tap target (min 96dp height), category accent color at 20% opacity as background tint, full-opacity Material Symbols glyph + label in geom. On tap: tile briefly scales to 96% then springs back to 100% (haptic tick), screen auto-pops after ~150ms, and the app navigates straight into Shuffle pre-loaded with that category.
+  - Each tile: large tap target (min 96dp height), opaque category gradient, rounded 30dp expressive shape, top icon chip, bottom-aligned deck title/action pill, and a soft watermark glyph. On tap: tile briefly scales to 96% then springs back to 100% (haptic tick), screen auto-pops after ~150ms, and the app navigates straight into Shuffle pre-loaded with that category.
   - The Wildcard tile uses the rainbow gradient background instead of a flat tint — reinforces that it's the "anything goes" option.
-  - "Manage categories" is a low-emphasis text link at the bottom for users who want to hide categories they don't care about — routes to Settings → Manage Categories (§13.4).
+  - "Manage categories" is a low-emphasis filled tonal button at the bottom for users who want to hide categories they don't care about — routes to Settings → Manage Categories (§13.4).
 
 ---
 
@@ -425,7 +428,7 @@ LAYOUT SKELETON
   │  ▸ Theme (Light/Dark/System) │
   │                              │
   │  Notifications                │
-  │  ▸ Daily spin reminder  [on] │  ← toggle switch
+  │  ▸ Daily shuffle reminder[on]│  ← toggle switch
   │                              │
   │  About                       │
   │  ▸ Replay intro               │  ← replays Onboarding (§2)
@@ -434,7 +437,7 @@ LAYOUT SKELETON
 
 NOTES
   - "Manage categories" opens a reorderable list with visibility toggles per category — see §13.4 for full spec.
-  - "Daily spin reminder" toggle, when turned on, reveals an inline time picker beneath it.
+  - "Daily shuffle reminder" toggle, when turned on, reveals inline rounded time chips beneath it; selecting a chip updates the reminder immediately without opening a dialog.
   - Settings is intentionally the LEAST "playful" screen in the app.
 
 ---
