@@ -56,6 +56,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -132,7 +135,35 @@ import kotlin.random.Random
  *     navigate with `launchSingleTop`, so whichever fires first wins and
  *     nothing double-pushes — and tap-to-open keeps working after coming
  *     back from Reveal.
+ *
+ * v5.3 changes:
+ *  9. **Saveable state** — active category, filter chips (tags + subtypes)
+ *     and recent-topic history now persist via `rememberSaveable` across
+ *     navigation (Spin → Reveal → back), rotation and process death.
+ *     The landed topic stays transient on purpose: restoring it would
+ *     re-trigger auto-open when popping back from Reveal.
  */
+// ═══════════════════════════════════════════════════════════════════════════
+// Saveable-state savers — category persisted by enum name, filter sets as
+// lists (Set<String> has no built-in Bundle saver).
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Saves the active category by its enum name; falls back to Wildcard. */
+private val CategorySaver = Saver<CurioCategory, String>(
+    save = { it.id.name },
+    restore = { name ->
+        CategoryId.values().firstOrNull { it.name == name }
+            ?.let { CurioCategories.byId(it) }
+            ?: CurioCategories.byId(CategoryId.WILDCARD)
+    }
+)
+
+/** Serializes a Set<String> (filter chips, recent ids) as a saveable list. */
+private val StringSetSaver = listSaver<Set<String>, String>(
+    save = { it.toList() },
+    restore = { it.toSet() }
+)
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
@@ -143,14 +174,22 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
 
-    var activeCategory by remember { mutableStateOf(initialCat) }
+    // ── Saveable screen state — survives nav away/back, rotation and ──
+    //    process death (v5.3). activeCategory persists across all of them;
+    //    filters + recent history are keyed per category so switching
+    //    categories still resets them to fresh.
+    var activeCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf(initialCat) }
     val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), activeCategory.id) {
         value = TopicJsonLoader.load(activeCategory.id)
     }
 
-    // ── Multi-select filter state ─────────────────────────────────────
-    var activeFilters by remember(activeCategory.id, pool) { mutableStateOf(setOf<String>()) }
-    var activeSubtypes by remember(activeCategory.id, pool) { mutableStateOf(setOf<String>()) }
+    // ── Multi-select filter state (per-category, saveable) ────────────
+    var activeFilters by rememberSaveable(activeCategory.id, stateSaver = StringSetSaver) {
+        mutableStateOf(setOf<String>())
+    }
+    var activeSubtypes by rememberSaveable(activeCategory.id, stateSaver = StringSetSaver) {
+        mutableStateOf(setOf<String>())
+    }
     var showFilters by remember { mutableStateOf(false) }
     var showCategoryPicker by remember { mutableStateOf(false) }
 
@@ -177,7 +216,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
     var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
-    var recentTopicIds by remember(activeCategory.id) { mutableStateOf(setOf<String>()) }
+    var recentTopicIds by rememberSaveable(activeCategory.id, stateSaver = StringSetSaver) {
+        mutableStateOf(setOf<String>())
+    }
 
     val displayPool = remember(filteredPool) {
         if (filteredPool.isEmpty()) emptyList()
@@ -189,11 +230,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
     val cat = activeCategory
 
+    // Category switch resets transient landing state. Filter chips reset
+    // implicitly via rememberSaveable's per-category input key — they must
+    // NOT be cleared here, or restored state would be wiped on the first
+    // composition after process death.
     LaunchedEffect(activeCategory.id) {
         landedTopic = null
         shuffling = false
-        activeFilters = emptySet()
-        activeSubtypes = emptySet()
     }
 
     // ── Improved shuffle logic — sinusoidal ease-out deceleration ─────
