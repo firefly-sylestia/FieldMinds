@@ -23,6 +23,7 @@ object AppPreferences {
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
+    private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
 
     // ── Display name ─────────────────────────────────────────────────
     fun getDisplayName(context: Context): String =
@@ -64,6 +65,19 @@ object AppPreferences {
 
     fun setReminderHour(context: Context, hour: Int) =
         prefs(context).edit().putInt(KEY_REMINDER_HOUR, hour).apply()
+
+    // ── Last-used Spin category — persisted so the Spin tab opens where ─
+    //    the user left off, even across app launches (v5.5). Falls back
+    //    to WILDCARD when unset or when a stored name no longer exists.
+    fun getLastSpinCategory(context: Context): CategoryId {
+        val name = prefs(context).getString(KEY_LAST_SPIN_CATEGORY, null)
+        return name?.let { n ->
+            CategoryId.values().firstOrNull { it.name == n }
+        } ?: CategoryId.WILDCARD
+    }
+
+    fun setLastSpinCategory(context: Context, id: CategoryId) =
+        prefs(context).edit().putString(KEY_LAST_SPIN_CATEGORY, id.name).apply()
 
     // ── Internal ─────────────────────────────────────────────────────
     private fun prefs(context: Context) =

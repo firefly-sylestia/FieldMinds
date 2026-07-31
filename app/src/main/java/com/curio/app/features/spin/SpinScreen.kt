@@ -82,6 +82,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
@@ -150,6 +151,12 @@ import kotlin.random.Random
  *     moment. The auto-open pause now flags `isOpening`, swapping the
  *     landed ticket's hint to a pulsing "Opening…" before it transitions
  *     into Reveal.
+ *
+ * v5.5 changes:
+ * 11. **Last-used category persists across launches** — the category the
+ *     user spins in (chosen in-screen or opened via a category slug) is
+ *     stored in [AppPreferences]; opening the plain Spin tab without a
+ *     slug picks up where they left off instead of defaulting to Surprise.
  */
 // ═══════════════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -179,7 +186,15 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     val haptics = LocalHapticFeedback.current
     val initialCat = remember(categorySlug) {
         categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: CurioCategories.byId(CategoryId.WILDCARD)
+            ?: AppPreferences.getLastSpinCategory(context)
+    }
+
+    // v5.5 — remember which category this session opened in, so the plain
+    // Spin tab opens where the user left off on the next launch.
+    LaunchedEffect(Unit) {
+        categorySlug?.let { slug ->
+            AppPreferences.setLastSpinCategory(context, CurioCategories.byRouteSlug(slug).id)
+        }
     }
 
     // ── Saveable screen state — survives nav away/back, rotation and ──
@@ -415,6 +430,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             onDismiss = { showCategoryPicker = false },
             onCategorySelected = { c ->
                 activeCategory = c
+                // v5.5 — persist so the Spin tab reopens on this category
+                // after the app is killed and relaunched.
+                AppPreferences.setLastSpinCategory(context, c.id)
                 showCategoryPicker = false
             },
             onBrowseAll = {
