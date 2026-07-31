@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.LocalMinimumInteractiveComponentSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,9 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.provides
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -99,7 +96,6 @@ import kotlin.math.sin
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.item
 import androidx.compose.foundation.lazy.grid.items
 import com.curio.app.ui.components.MorphEntrance
 import kotlin.random.Random
@@ -438,9 +434,6 @@ private fun FilterSheet(
         dragHandle = { BottomSheetDefaults.DragHandle() },
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
-        // Compact everything — drop the 48dp minimum touch target so filter
-        // chips sit tight instead of spreading out.
-        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -607,7 +600,6 @@ private fun FilterSheet(
                 )
             }
         }
-        }
     }
 }
 
@@ -634,9 +626,9 @@ private fun ActiveFilterChip(
                 color = Color.White
             )
             Surface(
-                onClick = onRemove,
                 shape = CircleShape,
-                color = Color.White.copy(alpha = 0.25f)
+                color = Color.White.copy(alpha = 0.25f),
+                modifier = Modifier.clickable(onClick = onRemove)
             ) {
                 CurioIcon(
                     CurioIcons.Close, null,
@@ -669,12 +661,16 @@ private fun CompactChip(
     accent: Color,
     onClick: () -> Unit
 ) {
+    // Plain Surface + clickable (no M3 minimum touch-target inflation) keeps
+    // the chips compact even with 100+ tags in the sheet.
     Surface(
-        onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerHigh,
         border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(50))
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = label,
