@@ -62,7 +62,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -87,6 +89,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -111,8 +114,16 @@ import kotlin.random.Random
  *  3. **Filter moved to bottom** — "Filter" pill button next to Categories.
  *  4. **Compact filter sheet** — redesigned with tighter spacing, toggle
  *     chips, and a clean apply button.
- *  5. **Unified bottom bar** — Categories · Filter · Shuffle/Explore all in
+ *  5. **Unified bottom bar** — Categories · Filter · Shuffle all in
  *     one row for quick one-thumb access.
+ *
+ * v5.1 changes:
+ *  6. **Fan-deck carousel** — redesigned shuffle cards: a tall gradient
+ *     "ticket" hero card (watermark glyph, subtype badge, name, tags,
+ *     teaser, tap hint) with slim prev/next pill cards fanned above and
+ *     below like a slot window.
+ *  7. **Tap-to-open** — the landed card opens the topic directly (no
+ *     Explore button); the bottom CTA becomes "Spin again".
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -243,6 +254,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         // ── 2. Carousel (interactive cards) ─────────────────────────
+        // Tapping the center card spins while idle; once a topic has landed
+        // the card opens the topic directly (no separate Explore button).
         Carousel(
             cat = cat,
             displayPool = displayPool,
@@ -252,7 +265,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             landScale = landScale,
             enabled = filteredPool.isNotEmpty() && !shuffling,
             onCardTap = {
-                if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++
+                if (shuffling || filteredPool.isEmpty()) return@Carousel
+                val landed = landedTopic
+                if (landed != null) {
+                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name))
+                } else {
+                    shuffleCount++
+                }
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -279,6 +298,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Spacer(Modifier.weight(1f))
 
         // ── 5. Bottom bar — Categories · Filter · CTA ──────────────
+        // No Explore button: the landed card itself opens the topic, so
+        // the primary CTA becomes "Spin again" after landing.
         BottomCta(
             cat = cat,
             landedTopic = landedTopic,
@@ -286,10 +307,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             canSpin = filteredPool.isNotEmpty(),
             filterActiveCount = activeFilters.size + activeSubtypes.size,
             onSpin = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
-            onExplore = {
-                val name = landedTopic?.name ?: return@BottomCta
-                navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, name))
-            },
             onCategories = { showCategoryPicker = true },
             onFilter = { showFilters = true }
         )
@@ -800,7 +817,7 @@ private fun CompactChip(
 
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 3-card vertical carousel with interactive cards + proper clipping
+// Fan-deck carousel — hero "ticket" card + slim prev/next peek cards
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -817,7 +834,7 @@ private fun Carousel(
 ) {
     val poolSize = displayPool.size
     Box(
-        modifier = modifier.height(360.dp),
+        modifier = modifier.height(396.dp),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -832,17 +849,26 @@ private fun Carousel(
                     shuffling = shuffling,
                     landedTopic = landedTopic
                 )
-                CarouselCard(
-                    slot = slot,
-                    accent = cat.accent,
-                    glyph = cat.iconGlyph,
-                    topic = topic,
-                    landedTopic = landedTopic,
-                    landScale = landScale,
-                    cat = cat,
-                    enabled = enabled,
-                    onTap = onCardTap
-                )
+                if (slot == 0) {
+                    HeroTicketCard(
+                        accent = cat.accent,
+                        glyph = cat.iconGlyph,
+                        topic = topic,
+                        cat = cat,
+                        landed = landedTopic != null,
+                        landScale = landScale,
+                        enabled = enabled,
+                        onTap = onCardTap
+                    )
+                } else {
+                    PeekCard(
+                        slot = slot,
+                        accent = cat.accent,
+                        glyph = cat.iconGlyph,
+                        topic = topic,
+                        landed = landedTopic != null
+                    )
+                }
             }
         }
     }
@@ -891,48 +917,45 @@ private fun EmptyPoolHint(cat: CurioCategory) {
 }
 
 @Composable
-private fun CarouselCard(
-    slot: Int,
+private fun HeroTicketCard(
     accent: Color,
     glyph: String,
     topic: CurioTopic?,
-    landedTopic: CurioTopic?,
-    landScale: Float,
     cat: CurioCategory,
+    landed: Boolean,
+    landScale: Float,
     enabled: Boolean,
     onTap: () -> Unit
 ) {
-    val isDark = isSystemInDarkTheme()
-    val isCenter = slot == 0
-    val w = if (isCenter) 250.dp else 210.dp
-    val h = if (isCenter) 230.dp else 140.dp
-    val yOff: Float = when (slot) {
-        -1 -> -108f
-        0 -> 0f
-        else -> 108f
+    val w = 270.dp
+    val h = 292.dp
+
+    // Ticket gradient — white text sits on the top half, so every stop is
+    // deepened toward DeepPlum (category accents are pastels and would make
+    // white-on-pastel unreadable). Wildcard keeps its rainbow identity,
+    // just saturated for contrast.
+    val ticketBrush = if (cat.id == CategoryId.WILDCARD) {
+        Brush.verticalGradient(
+            CurioGradients.WildcardGradientStops.map { lerp(it, CurioColors.DeepPlum, 0.35f) }
+        )
+    } else {
+        Brush.verticalGradient(
+            listOf(lerp(accent, CurioColors.DeepPlum, 0.45f), CurioColors.DeepPlum)
+        )
     }
-    val s = if (isCenter) 1f else 0.78f
-    // Side cards: 0.55 in light, 0.68 in dark — keeps them visible against dark backgrounds.
-    val alpha = if (isCenter) 1f else if (isDark) 0.68f else 0.55f
-    val corner = if (isCenter) 28.dp else 22.dp
-    val isLanded = landedTopic != null && isCenter
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
-    // Inner Box clipped to rounded corners preserves edges during animation.
-    val boxW = w + if (isCenter) 24.dp else 0.dp
-    val boxH = h + if (isCenter) 24.dp else 0.dp
+    // Inner clip layer keeps rounded corners crisp during scale.
     Box(
         modifier = Modifier
-            .size(boxW, boxH)
+            .size(w + 24.dp, h + 24.dp)
             .graphicsLayer {
-                scaleX = if (isLanded) landScale else s
-                scaleY = if (isLanded) landScale else s
-                this.alpha = alpha
-                translationY = yOff.dp.toPx()
+                scaleX = if (landed) landScale else 1f
+                scaleY = if (landed) landScale else 1f
             }
-            .zIndex(if (isCenter) 10f else 5f)
+            .zIndex(10f)
             .then(
-                if (enabled || isCenter) Modifier.clickable(
+                if (enabled) Modifier.clickable(
                     indication = null,
                     interactionSource = null,
                     onClick = onTap
@@ -944,66 +967,125 @@ private fun CarouselCard(
             modifier = Modifier
                 .size(w, h)
                 .align(Alignment.Center)
-                .clip(RoundedCornerShape(corner))
+                .clip(RoundedCornerShape(30.dp))
         ) {
-            AnimatedContent(
-                targetState = topic,
-                transitionSpec = {
-                    slideInVertically { height -> height } +
-                    fadeIn(animationSpec = tween(160)) togetherWith
-                    slideOutVertically { height -> -height } +
-                    fadeOut(animationSpec = tween(120))
-                },
-                label = "carouselSlot_$slot"
-            ) { currentTopic ->
-                Surface(
-                    shape = RoundedCornerShape(corner),
-                    color = if (isCenter) {
-                        MaterialTheme.colorScheme.surfaceContainerHighest
-                    } else {
-                        MaterialTheme.colorScheme.surfaceContainer
-                    },
-                    border = if (isCenter) {
-                        BorderStroke(1.5.dp, accent.copy(alpha = 0.45f))
-                    } else {
-                        // Subtle border on side cards for definition in both modes.
-                        BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-                    },
-                    shadowElevation = if (isCenter) 12.dp else 2.dp,
-                    tonalElevation = if (isCenter) 4.dp else 0.dp,
-                    modifier = Modifier.fillMaxSize()
+            Surface(
+                shape = RoundedCornerShape(30.dp),
+                color = accent,
+                border = if (landed) BorderStroke(2.dp, Color.White.copy(alpha = 0.7f)) else null,
+                shadowElevation = if (landed) 14.dp else 10.dp,
+                tonalElevation = 4.dp,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(ticketBrush)
                 ) {
-                    if (currentTopic != null) {
-                        CarouselCardContent(
-                            topic = currentTopic,
-                            accent = accent,
-                            isCenter = isCenter,
-                            landed = isLanded
-                        )
-                    } else if (isCenter) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                    // ── Watermark glyph — large, decorative ────────────
+                    CurioIcon(
+                        name = glyph,
+                        contentDescription = null,
+                        tint = Color.White.copy(alpha = 0.16f),
+                        size = 150.dp,
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 6.dp)
+                    )
+
+                    // ── Content column ─────────────────────────────────
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        // Subtype badge + landed check
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = Color.White.copy(alpha = 0.22f)
                             ) {
-                                CurioIcon(glyph, null, tint = accent.copy(alpha = 0.5f), size = 38.dp)
                                 Text(
-                                    text = "Tap spin to draw a topic",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    textAlign = TextAlign.Center
+                                    text = topic?.subtype ?: "…",
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                                    color = Color.White,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                                )
+                            }
+                            if (landed) {
+                                Surface(shape = CircleShape, color = Color.White) {
+                                    CurioIcon(
+                                        CurioIcons.Check, null,
+                                        tint = accent,
+                                        size = 16.dp,
+                                        modifier = Modifier.padding(3.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        // Name + tags + teaser
+                        Column {
+                            Text(
+                                text = topic?.name ?: "Ready when you are",
+                                style = MaterialTheme.typography.headlineMedium.copy(
+                                    fontWeight = FontWeight.ExtraBold,
+                                    lineHeight = 34.sp
+                                ),
+                                color = Color.White,
+                                maxLines = 3,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            if (topic != null && topic.tags.isNotEmpty()) {
+                                Spacer(Modifier.height(10.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    topic.tags.take(2).forEach { tag ->
+                                        Surface(
+                                            shape = RoundedCornerShape(50),
+                                            color = Color.White.copy(alpha = 0.18f)
+                                        ) {
+                                            Text(
+                                                text = tag,
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = Color.White,
+                                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            if (landed && topic != null) {
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    text = topic.teaser,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color.White.copy(alpha = 0.85f),
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
                                 )
                             }
                         }
-                    } else {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+
+                        // Tap hint — flips to "tap to open" once landed
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            CurioIcon(glyph, null, tint = accent.copy(alpha = 0.2f), size = 22.dp)
+                            CurioIcon(
+                                if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
+                                tint = Color.White.copy(alpha = 0.9f),
+                                size = 16.dp
+                            )
+                            Text(
+                                text = if (landed) "Tap to open" else "Tap to spin",
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                color = Color.White.copy(alpha = 0.9f)
+                            )
                         }
                     }
                 }
@@ -1012,82 +1094,81 @@ private fun CarouselCard(
     }
 }
 
+/**
+ * Slim "deck" peek card fanned behind the hero ticket — hints at the
+ * neighboring topic from the visible edge (top peek = next up, bottom
+ * peek = previous).
+ */
 @Composable
-private fun CarouselCardContent(
-    topic: CurioTopic,
+private fun PeekCard(
+    slot: Int,
     accent: Color,
-    isCenter: Boolean,
+    glyph: String,
+    topic: CurioTopic?,
     landed: Boolean
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(if (isCenter) 22.dp else 14.dp),
-        verticalArrangement = Arrangement.Center
+    val isDark = isSystemInDarkTheme()
+    val isTop = slot == -1
+    val yOff = if (isTop) -150f else 150f
+    val w = 300.dp
+    val h = 96.dp
+
+    Box(
+        modifier = Modifier
+            .size(w, h)
+            .graphicsLayer {
+                translationY = yOff.dp.toPx()
+            }
+            .zIndex(5f)
     ) {
-        // Small accent dot + subtype badge
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .clip(CircleShape)
-                    .background(accent)
-            )
-            Text(
-                text = topic.subtype,
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.4.sp
-                ),
-                color = accent
-            )
-        }
-        Spacer(Modifier.height(if (isCenter) 12.dp else 4.dp))
-        // Topic name — large and bold
-        Text(
-            text = topic.name,
-            style = if (isCenter)
-                MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 28.sp
-                )
-            else
-                MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = if (isCenter) 3 else 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        // Tags row below name
-        if (isCenter && topic.tags.isNotEmpty()) {
-            Spacer(Modifier.height(10.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+        AnimatedContent(
+            targetState = topic,
+            transitionSpec = {
+                slideInVertically { height -> if (isTop) -height else height } +
+                fadeIn(animationSpec = tween(160)) togetherWith
+                slideOutVertically { height -> if (isTop) height else -height } +
+                fadeOut(animationSpec = tween(120))
+            },
+            label = "peekSlot_$slot"
+        ) { currentTopic ->
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = if (isDark) {
+                    MaterialTheme.colorScheme.surfaceContainerHigh
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                },
+                border = BorderStroke(1.dp, accent.copy(alpha = 0.30f)),
+                shadowElevation = if (landed) 4.dp else 2.dp,
+                tonalElevation = 1.dp,
+                modifier = Modifier.fillMaxSize()
             ) {
-                topic.tags.take(2).forEach { tag ->
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = accent.copy(alpha = 0.12f)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalArrangement = if (isTop) Arrangement.Top else Arrangement.Bottom
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        CurioIcon(
+                            name = glyph,
+                            contentDescription = null,
+                            tint = accent.copy(alpha = 0.55f),
+                            size = 20.dp
+                        )
                         Text(
-                            text = tag,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = accent,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                            text = currentTopic?.name ?: "…",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
             }
-        }
-        if (landed && isCenter) {
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = topic.teaser,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
         }
     }
 }
@@ -1247,11 +1328,10 @@ private fun BottomCta(
     canSpin: Boolean,
     filterActiveCount: Int,
     onSpin: () -> Unit,
-    onExplore: () -> Unit,
     onCategories: () -> Unit,
     onFilter: () -> Unit
 ) {
-    val showExplore = landedTopic != null
+    val showAgain = landedTopic != null
     val hasFilters = filterActiveCount > 0
 
     // Anchored bottom bar — a subtle elevated surface + hairline divider
@@ -1275,54 +1355,39 @@ private fun BottomCta(
                     .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
             )
 
-            // ── Main CTA — Shuffle or Explore, centered ───────────
+            // ── Main CTA — Spin again (after landing) or Shuffle ──
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if (showExplore) {
-                    Button(
-                        onClick = onExplore,
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = cat.accent,
-                            contentColor = Color.White
-                        ),
-                        contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
-                    ) {
-                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 18.dp)
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = "Explore",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                        )
-                    }
-                } else {
-                    Button(
-                        onClick = onSpin,
-                        enabled = canSpin,
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = cat.accent,
-                            contentColor = Color.White,
-                            disabledContainerColor = cat.tint,
-                            disabledContentColor = Color.White.copy(alpha = 0.6f)
-                        ),
-                        contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
-                    ) {
-                        CurioIcon(
-                            CurioIcons.Casino, null,
-                            tint = Color.White,
-                            size = 18.dp
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = if (shuffling) "Spinning…" else "Shuffle",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                        )
-                    }
+                Button(
+                    onClick = onSpin,
+                    enabled = canSpin,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = cat.accent,
+                        contentColor = Color.White,
+                        disabledContainerColor = cat.tint,
+                        disabledContentColor = Color.White.copy(alpha = 0.6f)
+                    ),
+                    contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
+                ) {
+                    CurioIcon(
+                        if (showAgain) CurioIcons.Refresh else CurioIcons.Casino, null,
+                        tint = Color.White,
+                        size = 18.dp
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = when {
+                            shuffling -> "Spinning…"
+                            showAgain -> "Spin again"
+                            else -> "Shuffle"
+                        },
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    )
                 }
             }
 
