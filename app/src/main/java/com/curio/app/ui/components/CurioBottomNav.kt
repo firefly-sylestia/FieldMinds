@@ -41,7 +41,7 @@ import com.curio.app.ui.theme.CurioIcons
  * Curio's persistent bottom navigation — see CURIO_SPEC.md §1 + §3.
  *
  * Three destinations:
- *   [ Home ]   [ The Spin ]   [ Cabinet ]
+ *   [ Home ]   [ Shuffle ]   [ Cabinet ]
  *
  * Tapping a tab uses the standard Compose pattern: navigate with
  * popUpTo(startDestination) + saveState=true + restoreState=true +
@@ -64,9 +64,9 @@ object CurioBottomNavItems {
         label = "Home",
         icon = CurioIcons.Home
     )
-    val Spin = CurioBottomDestination(
+    val Shuffle = CurioBottomDestination(
         route = CurioRoutes.SPIN,
-        label = "Spin",
+        label = "Shuffle",
         icon = CurioIcons.AutoAwesome,
         selectedIcon = CurioIcons.AutoAwesome
     )
@@ -77,7 +77,7 @@ object CurioBottomNavItems {
         selectedIcon = CurioIcons.Inventory2
     )
 
-    val all: List<CurioBottomDestination> = listOf(Home, Spin, Cabinet)
+    val all: List<CurioBottomDestination> = listOf(Home, Shuffle, Cabinet)
 }
 
 @Composable

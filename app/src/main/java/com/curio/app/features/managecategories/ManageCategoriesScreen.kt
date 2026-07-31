@@ -112,7 +112,7 @@ fun ManageCategoriesScreen(navController: NavController) {
 
         // ── Helper text ───────────────────────────────────────────────────
         Text(
-            text = "Hidden categories won't show in Spin, Category Picker, or Cabinet. " +
+            text = "Hidden categories won't show in Shuffle, Category Picker, or Cabinet. " +
                   "Past entries in hidden categories are kept and reappear when you re-enable them.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

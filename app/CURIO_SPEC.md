@@ -12,12 +12,12 @@ Style system: Material Design 3, customized with the Midnight Signal identity: d
 |---|---|---|
 | v1 | (user's original paste) | Initial spec with Category Picker as bottom sheet + Exploration Hub in the Spin→Capture flow + emoji-based category totem icons. |
 | **v2** | today | **Category Picker → full-screen page** (own back-stack entry). **Exploration Hub removed** from the flow (Topic Reveal goes straight to Record/Capture; scratchpad state preserved for future). **No emoji anywhere** — Material Symbols (inherited from `app-legacy/`) for category glyphs, `geom.ttf` (inherited from `app-legacy/`) for display/headline typography. "Recently explored" carousel confirmed on Home + Cabinet stays as separate bottom-nav tab. New §13 (Missing/Additional Screens) + §14 (Open Decisions). |
-| **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. The Spin screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
+| **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. Shuffle screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
 | **v4** | 2026-07-31 | Home, Spin, and Topic Reveal use an opaque paper-card visual language: warm solid surfaces, crisp category-color edges, and layered elevation for depth. Ambient background gradients, glassy sheens, translucent card shells, and accent halos are intentionally excluded. |
 | **v5** | 2026-07-31 | Replaced the pastel discovery wheel with the Midnight Signal angular portal/beacon mark. Replaced the palette across Android, splash, launcher, themed icon, website, and category accents with navy, electric blue, orange, mint, cyan, and cobalt tokens. |
 
 Working name for the app: **CURIO**
-Working name for the roulette feature: **THE SPIN**
+Working name for the roulette feature: **SHUFFLE**
 Working name for the saved-items library: **THE CABINET**
 
 (All names are placeholders — swap freely, everything below still applies.)
@@ -29,7 +29,7 @@ Working name for the saved-items library: **THE CABINET**
 ### 0.1 PHILOSOPHY
 Curio's whole point is "delighted curiosity." Every screen should feel like opening a little box you didn't know you wanted opened. M3 gives us the structural bones (dynamic color, elevation tiers, shape system, motion tokens) — the custom layer sits on top as personality: rounder corners than stock M3, a mascot-like spin dial, hand-drawn-feeling icons, and soft "paper confetti" micro-animations on rewards.
 
-**Surface direction (v4):** Home, The Spin, and Topic Reveal are tactile paper interfaces, not glass interfaces. Cards and trays must use opaque theme surfaces, visible category-color rules/edges, and elevation or offset layering to create depth. Do not add ambient background gradients, translucent card shells, blur, glossy sheens, or accent halos to these screens. Alpha is reserved for decorative ink, icon/text hierarchy, and subtle borders.
+**Surface direction (v4):** Home, Shuffle, and Topic Reveal are tactile paper interfaces, not glass interfaces. Cards and trays must use opaque theme surfaces, visible category-color rules/edges, and elevation or offset layering to create depth. Do not add ambient background gradients, translucent card shells, blur, glossy sheens, or accent halos to these screens. Alpha is reserved for decorative ink, icon/text hierarchy, and subtle borders.
 
 ### 0.2 COLOR SYSTEM — MIDNIGHT SIGNAL
 The brand is intentionally not a recolor of the former wheel. Midnight Signal uses a cool, high-contrast foundation with a geometric signal language: midnight ink for focus, electric blue for discovery, orange for energy, mint for the aperture, and cyan/cobalt for category distinction.
@@ -68,7 +68,7 @@ splash screen, web SVG, and download presentation.
     Small components (chips, small buttons) ..... 16dp corner radius
     Medium components (cards) ................... 24dp corner radius
     Large components (sheets, dialogs) .......... 32dp corner radius top
-    The Spin dial itself ......................... perfect circle
+    Shuffle dial itself ......................... perfect circle
   Nothing in the app should have a hard 90° corner except dividers/rules.
 
 ### 0.4 TYPOGRAPHY **(v2)**
@@ -80,7 +80,7 @@ splash screen, web SVG, and download presentation.
 
 ### 0.5 MOTION PRINCIPLES
   - Spring-based easing everywhere (M3 "expressive" motion spec), never linear. Things should overshoot slightly and settle — like a gummy bounce, not a rigid slide.
-  - The Spin screen is the one place we allow a longer, showier animation (2.5–4s). Everywhere else, keep transitions under 400ms so the app never feels like it's making you wait to be delighted.
+  - Shuffle screen is the one place we allow a longer, showier animation (2.5–4s). Everywhere else, keep transitions under 400ms so the app never feels like it's making you wait to be delighted.
   - Rewarding moments (topic revealed, entry saved) get a small confetti / sparkle burst — a scatter of 6–10 tiny shapes in the category's accent color, fading and falling with slight rotation, ~600ms total.
 
 ### 0.6 ICONOGRAPHY **(v2 — no emoji, Material Symbols from legacy)**
@@ -108,7 +108,7 @@ splash screen, web SVG, and download presentation.
   HOME  ──────────────► CATEGORY PICKER (full-screen page, own back-stack entry)
       │                        │
       │                        ▼
-      │                  THE SPIN (roulette)
+      │                  SHUFFLE (roulette)
       │                        │
       │                        ▼
       │                  TOPIC REVEAL
@@ -128,7 +128,7 @@ splash screen, web SVG, and download presentation.
   SETTINGS (from Home overflow / top-right avatar)
 
   Bottom navigation (persistent, 3 destinations):
-    [ Home ]     [ The Spin ]     [ Cabinet ]
+    [ Home ]     [ Shuffle ]     [ Cabinet ]
   Settings lives in Home's top-right avatar/menu, not in bottom nav — it's
   not a "destination" you explore, so it shouldn't compete for a nav slot.
 ```
@@ -202,7 +202,7 @@ LAYOUT SKELETON
 COMPONENTS & BEHAVIOR
   - Greeting: "Good morning / afternoon / evening, {name}" — falls back to "Welcome back" if no name is set.
   - Streak pill: only rendered if the user has explored on consecutive days; tapping it opens a small info popover that dismisses on outside tap.
-  - Hero Spin card: the single largest tap target on the screen (~40% vertical). Tapping with NO chip selected → Category Picker full-screen page. Tapping WHILE a chip is selected → skips picker, goes straight to The Spin pre-loaded with that category.
+  - Hero Spin card: the single largest tap target on the screen (~40% vertical). Tapping with NO chip selected → Category Picker full-screen page. Tapping WHILE a chip is selected → skips picker, goes straight to Shuffle pre-loaded with that category.
   - Category chip row: filter chips (M3 style, pill), one per category plus a "Surprise me" chip pinned at the far left with the `casino` wildcard glyph. Tapping a chip selects it (fills with that category's accent color, checkmark fades in) and updates the hero card's subtext to "Spin for {Category}". Only one selectable at a time. Tapping the already-selected chip deselects it.
   - **(v2) Recently explored carousel**: horizontally scrolling cards, each a thumbnail of a saved capture (waveform glyph for voice notes, first line of text for essays, image collage thumbnail for moodboards). Mirrors The Cabinet's most-recent saves — same data source, same card rendering component. Tapping a card → Entry Detail. Long-press → quick-action popover [Reopen] [Share] [Delete] (same popover as Cabinet §9).
   - Empty state (brand new user, nothing explored yet): carousel section replaced by a soft illustration + text: "Nothing here yet — give the wheel a spin!" with a small arrow pointing up toward the hero card.
@@ -233,13 +233,13 @@ LAYOUT SKELETON
 
 INTERACTIONS
   - **Own back-stack entry**: navigating here pushes onto the Home screen's back stack. Back arrow pops back to Home with no action taken. This is distinct from a bottom sheet (which would be a transient overlay).
-  - Each tile: large tap target (min 96dp height), category accent color at 20% opacity as background tint, full-opacity Material Symbols glyph + label in geom. On tap: tile briefly scales to 96% then springs back to 100% (haptic tick), screen auto-pops after ~150ms, and the app navigates straight into The Spin pre-loaded with that category.
+  - Each tile: large tap target (min 96dp height), category accent color at 20% opacity as background tint, full-opacity Material Symbols glyph + label in geom. On tap: tile briefly scales to 96% then springs back to 100% (haptic tick), screen auto-pops after ~150ms, and the app navigates straight into Shuffle pre-loaded with that category.
   - The Wildcard tile uses the rainbow gradient background instead of a flat tint — reinforces that it's the "anything goes" option.
   - "Manage categories" is a low-emphasis text link at the bottom for users who want to hide categories they don't care about — routes to Settings → Manage Categories (§13.4).
 
 ---
 
-## 5. SCREEN: THE SPIN (roulette) — the signature moment
+## 5. SCREEN: SHUFFLE (roulette) — the signature moment
 
 **Unchanged from v1.**
 
@@ -304,7 +304,7 @@ LAYOUT SKELETON
 
 INTERACTIONS
   - **(v2) "Start exploring →"**: navigates directly to Save/Capture (§8), passing the topic along. The Exploration Hub from v1 is skipped — scratchpad state is preserved for a future iteration but not surfaced in this flow.
-  - "Spin again instead": no confirmation dialog (nothing committed yet) — returns straight to The Spin, same category pre-loaded, ready to spin immediately.
+  - "Spin again instead": no confirmation dialog (nothing committed yet) — returns straight to Shuffle, same category pre-loaded, ready to spin immediately.
   - "✕" top-right: same as "Spin again" but exits all the way back to Home instead of re-spinning.
   - **(v2) Topic image**: tap opens the Image Lightbox (§13.2) — full-screen, pinch-zoom, swipe down to dismiss.
   - This screen is NOT saved anywhere yet — if the user backs out, the topic is gone for good.
@@ -608,9 +608,9 @@ Screens with empty states:
 
 | Screen | Glyph | Headline | Subtext | CTA |
 |---|---|---|---|---|
-| Home (no captures yet) | `auto_awesome` | "Nothing here yet" | "Give the wheel a spin — your first discovery is one tap away." | "Spin the wheel" → The Spin |
-| Cabinet (no entries at all) | `inventory_2` | "Your Cabinet is empty" | "Everything you save will live here." | "Discover something" → The Spin |
-| Cabinet (filtered to empty) | `search_off` | "No {Category} captures yet" | "Spin for {Category} to find your first one." | "Spin for {Category}" → The Spin (pre-loaded) |
+| Home (no captures yet) | `auto_awesome` | "Nothing here yet" | "Give the wheel a spin — your first discovery is one tap away." | "Spin the wheel" → Shuffle |
+| Cabinet (no entries at all) | `inventory_2` | "Your Cabinet is empty" | "Everything you save will live here." | "Discover something" → Shuffle |
+| Cabinet (filtered to empty) | `search_off` | "No {Category} captures yet" | "Spin for {Category} to find your first one." | "Spin for {Category}" → Shuffle (pre-loaded) |
 | Topic History (no topics) | `history` | "No spins yet" | "Your first topic will appear here the moment you spin." | (none — Home CTA already covers it) |
 | Search in Cabinet (no results) | `search_off` | "Nothing matches" | "Try a different word, or clear the filter." | "Clear search" |
 

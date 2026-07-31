@@ -91,7 +91,7 @@ import com.curio.app.ui.theme.CurioMotion
  *   24 dp      gap
  *   ~56 dp     Start exploring CTA button
  *    8 dp      gap
- *   ~auto     "Spin again instead" text button
+ *   ~auto     "Shuffle again instead" text button
  *   24 dp      bottom inset + navigation bars
  */
 @Composable
@@ -278,7 +278,7 @@ fun TopicRevealScreen(
                     ) {
                         CurioIcon(CurioIcons.Refresh, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
                         Text(
-                            text = "Spin again instead",
+                            text = "Shuffle again instead",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

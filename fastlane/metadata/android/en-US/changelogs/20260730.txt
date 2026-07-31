@@ -1,1 +1,1 @@
-Replaced the pastel wheel with an angular Midnight Signal portal mark and fully refreshed the palette. Redesigned all cards with solid category-specific gradients, no borders or transparency — just shadow elevation for depth across Home, Spin, Reveal, and Picker screens.
+Renamed Spin to Shuffle and refreshed Curio with Material Expressive-style layouts, stronger midnight dark mode, redesigned save/detail presentation, real pinch-zoom image lightbox support for mood boards and field notes, and more reliable capture saves.

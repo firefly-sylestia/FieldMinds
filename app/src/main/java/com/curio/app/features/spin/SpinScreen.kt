@@ -108,7 +108,7 @@ import com.curio.app.ui.components.MorphEntrance
 import kotlin.random.Random
 
 /**
- * The Spin — see CURIO_SPEC.md §5 (v5 redesign).
+ * Shuffle — see CURIO_SPEC.md §5 (v5 redesign).
  *
  * v5 changes:
  *  1. **Simplified top bar** — back button, category name, topic count only.
@@ -127,7 +127,7 @@ import kotlin.random.Random
  *     teaser, tap hint) with slim prev/next pill cards fanned above and
  *     below like a slot window.
  *  7. **Tap-to-open** — the landed card opens the topic directly (no
- *     Explore button); the bottom CTA becomes "Spin again".
+ *     Explore button); the bottom CTA becomes "Shuffle again".
  *
  * v5.2 changes:
  *  8. **Auto-open** — after the spin settles the topic auto-transitions
@@ -140,7 +140,7 @@ import kotlin.random.Random
  * v5.3 changes:
  *  9. **Saveable state** — active category, filter chips (tags + subtypes)
  *     and recent-topic history now persist via `rememberSaveable` across
- *     navigation (Spin → Reveal → back), rotation and process death.
+ *     navigation (Shuffle → Reveal → back), rotation and process death.
  *     The landed topic stays transient on purpose: restoring it would
  *     re-trigger auto-open when popping back from Reveal.
  *
@@ -155,14 +155,14 @@ import kotlin.random.Random
  * v5.5 changes:
  * 11. **Last-used category persists across launches** — the category the
  *     user spins in (chosen in-screen or opened via a category slug) is
- *     stored in [AppPreferences]; opening the plain Spin tab without a
+ *     stored in [AppPreferences]; opening the plain Shuffle tab without a
  *     slug picks up where they left off instead of defaulting to Surprise.
  *
  * v5.6 changes:
  * 12. **Landed topic survives closing Reveal** — auto-open still fires on
  *     a fresh landing, but if the user closes Topic Reveal without saving
  *     the topic, it stays on the card with "Tap to open" active until
- *     they explore (capture) it or tap Spin again. A `landingAlreadyOpened`
+ *     they explore (capture) it or tap Shuffle again. A `landingAlreadyOpened`
  *     guard stops auto-open from re-firing when returning from Reveal.
  *
  * v5.7–v5.8 changes:
@@ -194,7 +194,7 @@ private val StringSetSaver = listSaver<Set<String>, String>(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SpinScreen(categorySlug: String?, navController: NavController) {
+fun ShuffleScreen(categorySlug: String?, navController: NavController) {
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
     // v5.7.1 — the slug branch is CurioCategory?; the prefs fallback returns
@@ -203,16 +203,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // vs the saver's MutableState<CurioCategory> → CI compile failure).
     val initialCat = remember(categorySlug) {
         categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: CurioCategories.byId(AppPreferences.getLastSpinCategory(context))
+            ?: CurioCategories.byId(AppPreferences.getLastShuffleCategory(context))
     }
 
     // v5.5 — remember which category this session opened in, so the plain
-    // Spin tab opens where the user left off on the next launch. byRouteSlug
+    // Shuffle tab opens where the user left off on the next launch. byRouteSlug
     // is nullable — only persist when the slug actually resolves (v5.7.1).
     LaunchedEffect(Unit) {
         categorySlug?.let { slug ->
             CurioCategories.byRouteSlug(slug)?.let { resolved ->
-                AppPreferences.setLastSpinCategory(context, resolved.id)
+                AppPreferences.setLastShuffleCategory(context, resolved.id)
             }
         }
     }
@@ -254,7 +254,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // instead of dumping every raw tag (albums alone has 256 unique tags).
     val filterGroups = remember(pool) { buildFilterGroups(pool) }
 
-    // ── Spin state ────────────────────────────────────────────────────
+    // ── Shuffle state ────────────────────────────────────────────────────
     var shuffling by remember { mutableStateOf(false) }
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
@@ -437,7 +437,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 .padding(vertical = 6.dp),
             contentAlignment = Alignment.Center
         ) {
-            SpinButton(
+            ShuffleButton(
                 tint = cat.accent,
                 isShuffling = shuffling,
                 landedTopic = landedTopic,
@@ -453,14 +453,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
         // ── 5. Bottom bar — Categories · Filter · CTA ──────────────
         // No Explore button: the landed card itself opens the topic, so
-        // the primary CTA becomes "Spin again" after landing.
+        // the primary CTA becomes "Shuffle again" after landing.
         BottomCta(
             cat = cat,
             landedTopic = landedTopic,
             shuffling = shuffling,
-            canSpin = filteredPool.isNotEmpty(),
+            canShuffle = filteredPool.isNotEmpty(),
             filterActiveCount = activeFilters.size + activeSubtypes.size,
-            onSpin = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
+            onShuffle = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
             onCategories = { showCategoryPicker = true },
             onFilter = { showFilters = true }
         )
@@ -476,9 +476,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             onDismiss = { showCategoryPicker = false },
             onCategorySelected = { c ->
                 activeCategory = c
-                // v5.5 — persist so the Spin tab reopens on this category
+                // v5.5 — persist so the Shuffle tab reopens on this category
                 // after the app is killed and relaunched.
-                AppPreferences.setLastSpinCategory(context, c.id)
+                AppPreferences.setLastShuffleCategory(context, c.id)
                 showCategoryPicker = false
             },
             onBrowseAll = {
@@ -1068,7 +1068,7 @@ private fun EmptyPoolHint(cat: CurioCategory) {
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Spin the wheel once topics land.",
+                    text = "Shuffle the deck once topics land.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -1342,7 +1342,7 @@ private fun PeekCard(
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun SpinButton(
+private fun ShuffleButton(
     tint: Color,
     isShuffling: Boolean,
     landedTopic: CurioTopic?,
@@ -1494,9 +1494,9 @@ private fun BottomCta(
     cat: CurioCategory,
     landedTopic: CurioTopic?,
     shuffling: Boolean,
-    canSpin: Boolean,
+    canShuffle: Boolean,
     filterActiveCount: Int,
-    onSpin: () -> Unit,
+    onShuffle: () -> Unit,
     onCategories: () -> Unit,
     onFilter: () -> Unit
 ) {
@@ -1517,7 +1517,7 @@ private fun BottomCta(
                 .padding(vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // ── Main CTA — Spin again (after landing) or Shuffle ──
+            // ── Main CTA — Shuffle again (after landing) or Shuffle ──
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1525,8 +1525,8 @@ private fun BottomCta(
                 contentAlignment = Alignment.Center
             ) {
                 Button(
-                    onClick = onSpin,
-                    enabled = canSpin,
+                    onClick = onShuffle,
+                    enabled = canShuffle,
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
@@ -1544,8 +1544,8 @@ private fun BottomCta(
                     Spacer(Modifier.width(6.dp))
                     Text(
                         text = when {
-                            shuffling -> "Spinning…"
-                            showAgain -> "Spin again"
+                            shuffling -> "Shuffling…"
+                            showAgain -> "Shuffle again"
                             else -> "Shuffle"
                         },
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)

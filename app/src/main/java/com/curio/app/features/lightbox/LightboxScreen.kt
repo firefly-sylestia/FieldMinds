@@ -2,6 +2,7 @@ package com.curio.app.features.lightbox
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -11,10 +12,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,15 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.curio.app.ui.theme.CurioGradients
+import coil.compose.rememberAsyncImagePainter
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
@@ -44,11 +42,9 @@ import com.curio.app.ui.theme.CurioIcons
  * image tap opens a full-screen viewer with pinch-zoom. Per §13.2:
  * swipe-down or tap to dismiss.
  *
- * Phase 0 placeholder: instead of a real image loader (Coil / Glide land
- * with the asset pipeline in the data layer phase), the lightbox renders
- * a branded gradient placeholder with the [imageUrl] rendered as the
- * label. The pinch-to-zoom + pan gesture still works over the
- * placeholder so the interaction is full-featured.
+ * Renders the real image URI with Coil. Pinch-to-zoom and pan work over
+ * gallery, field-note, and future remote images so mood boards never feel
+ * cropped or locked.
  *
  * The close button (top-right) is the only tap-to-dismiss target to
  * avoid Compose gesture conflict between `detectTransformGestures` and
@@ -174,9 +170,7 @@ private fun PlaceholderImageCard(
     }
     Box(
         modifier = Modifier
-            .size(width = 320.dp, height = 360.dp)
-            .clip(RoundedCornerShape(28.dp))
-            .background(Brush.verticalGradient(CurioGradients.WildcardGradientStops))
+            .fillMaxSize()
             .graphicsLayer(
                 scaleX = scale,
                 scaleY = scale,
@@ -185,27 +179,11 @@ private fun PlaceholderImageCard(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CurioIcon(
-                name = CurioIcons.AutoAwesome,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.85f),
-                size = 96.dp
-            )
-            Text(
-                text = derivedTitle.replaceFirstChar(Char::uppercase),
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Color.White,
-                modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
-            )
-            Text(
-                text = "Image placeholder",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.80f),
-                modifier = Modifier.padding(top = 6.dp)
-            )
-        }
+        Image(
+            painter = rememberAsyncImagePainter(imageUrl),
+            contentDescription = derivedTitle,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

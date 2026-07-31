@@ -98,7 +98,7 @@ sealed class CaptureData {
     /** Returns full multi-line content for EntryDetail rendering. */
     fun toFullContent(): String = when (this) {
         is SoundBite -> buildString {
-            appendLine("🎙 Voice note · ${durationSeconds}s")
+            appendLine("Voice note · ${durationSeconds}s")
             if (title.isNotBlank()) appendLine("\"$title\"")
             if (note.isNotBlank()) appendLine(note)
         }
@@ -122,17 +122,17 @@ sealed class CaptureData {
         }
         is FieldNotes -> buildString {
             if (observed.isNotBlank()) {
-                appendLine("🔍 Observed:")
+                appendLine("Observed:")
                 appendLine(observed)
             }
             if (surprised.isNotBlank()) {
                 if (observed.isNotBlank()) appendLine()
-                appendLine("✨ Surprised me:")
+                appendLine("Surprised me:")
                 appendLine(surprised)
             }
             if (learnNext.isNotBlank()) {
                 if (observed.isNotBlank() || surprised.isNotBlank()) appendLine()
-                appendLine("📖 Want to learn next:")
+                appendLine("Want to learn next:")
                 appendLine(learnNext)
             }
             if (imageUris.isNotEmpty()) {

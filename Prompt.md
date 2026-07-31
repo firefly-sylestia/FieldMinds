@@ -1,35 +1,23 @@
-# Solid Gradient Card Redesign + Card Icon Rebrand
+# Curio Material Expressive Redesign
 
 ## Request
 
-Redesign the entire app with a "material solid gradient card style" — then update the app icon to match the Spin screen card hierarchy. — fully opaque category-specific gradients on all cards, no borders/outlines, no transparency, no glowing/shimmer effects. Shadow elevation only for depth. Category chip icons directly on background, no inner containers.
+User asked to work only in `app/` Curio and fully redo UI/UX with Material Expressive / Android 17-style visual language, rename Spin to Shuffle, redesign Shuffle positions/layout/animation while keeping a stacked-card center/top hierarchy, redesign entry pages/profile/what-are-we-exploring, improve mood board detail zoom/cropping, fix save-entry reliability, polish dark mode colors, and avoid glass effects.
 
-## Design rules
+## Completed
 
-- **100% opaque** — no `.copy(alpha = ...)` on card surfaces
-- **Solid gradients** — `CurioGradients.cardGradient(accent)` and `wildcardCardGradient()` produce 3-6 stop fully opaque gradients
-- **No borders** — removed from quest cards, spin tickets, hero cards, category tiles
-- **No glowing** — removed shimmer overlay, breathing animation from hero card
-- **Shadow elevation** — `shadowElevation = 10.dp` for soft blurry depth on cards
-- **Category chips** — icons rendered directly in chip Row, no inner container Surface
-
-## Completed implementation
-
-- `CurioColors.kt` — Replaced alpha tints with opaque `lerp()` variants; added `cardGradient()` and `wildcardCardGradient()` helpers; removed unused `ticketStops()` and `wildcardTicketStops()`.
-- `CurioHeroCard.kt` — Solid vertical gradient background; removed shimmer and breathing animations; all text now white.
-- `HomeScreen.kt` — Quest card uses solid gradient instead of paper+border+tint; category chips lost inner icon containers, gradient on selected state.
-- `SpinScreen.kt` — HeroTicketCard uses solid vertical gradient, removed border, side rule, and tonalElevation orphan; all text white on gradient; added `Brush` and `CurioGradients` imports.
-- `TopicRevealScreen.kt` — HeroCard uses solid gradient with white text and white pill badges (verb/duration, subtype).
-- `CategoryPickerScreen.kt` — All category tiles use solid gradients (category-specific or wildcard spectrum), no flat/accent colors.
+- Renamed user-facing Spin labels to Shuffle across Curio navigation, Home, Picker, Cabinet empty states, Reveal, onboarding copy, and Shuffle controls while keeping route/class names stable for compatibility.
+- Redesigned the Category Picker / "What are we exploring?" page with a Material Expressive hero card, stronger hierarchy, and clearer Surprise/Shuffle guidance.
+- Improved saved entry detail presentation with an expressive gradient hero, solid elevated mood-board canvas, larger mood-board detail area, uncropped image rendering, and tap-to-open image lightbox support for mood-board and field-note images.
+- Replaced the lightbox placeholder with real Coil image rendering plus pinch-to-zoom/pan support.
+- Fixed a save reliability edge case where a null topic could leave the Save screen stuck in progress, and made Gallery Wall data updates react to tile position/layout changes instead of only tile count.
+- Improved dark mode by switching to deeper midnight Android 17-style surface layers while leaving light-mode colors intact.
+- Removed remaining user-facing emoji strings from capture/detail text paths touched by this request.
+- Updated `app/CURIO_SPEC.md` and the Fastlane changelog for versionCode `20260730`.
 
 ## Validation
 
-- Python brace check passes cleanly.
-- Code reviewer identified and fixed: CategoryChip gradient Box sizing bug, tonalElevation orphan on transparent Surface.
-- Gradle compilation/build/lint/test are not run locally because repository instructions forbid Android build commands; CI remains the compiler check.
-
-## Remaining
-
-- ProfileScreen still has some alpha-background sections (subtle supporting elements, not primary cards).
-- `rememberShimmerBrush` in CurioAnimations.kt is dead code (only defined, never called).
-- SpinScreen's SpinButton still uses paper/border style — could be updated to gradient in a follow-up.
+- `git diff --check` passed.
+- Static ripgrep checks found no user-facing quoted Spin labels remaining in Curio Kotlin sources.
+- Static ripgrep checks found no accidental Shuffle duration/API renames.
+- Gradle build/compile/lint/test commands were not run because root DOX forbids Android build commands in this environment.

@@ -93,7 +93,7 @@ fun TopicHistoryScreen(navController: NavController) {
             CurioEmptyState(
                 glyph = CurioIcons.History,
                 headline = "No spins yet",
-                subtext = "Spin the wheel and your picks will appear here, grouped by day.",
+                subtext = "Shuffle the deck and your picks will appear here, grouped by day.",
                 tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
             )
             return
