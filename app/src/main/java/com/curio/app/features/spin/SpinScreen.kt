@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -241,7 +240,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             cat = cat,
             poolCount = pool.size,
             filteredCount = filteredPool.size,
-            modifier = Modifier.statusBarsPadding().offset(y = (-6).dp),
+            modifier = Modifier.statusBarsPadding(),
             onBack = { navController.popBackStack() }
         )
 
@@ -257,16 +256,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             onCardTap = {
                 if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 0.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
-        // ── 4. Center spin button ───────────────────────────────────
+        // ── 3. Center spin button ───────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 0.dp),
+                .padding(vertical = 6.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
@@ -279,7 +276,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
-        // ── 4. Bottom bar — Categories · Filter · CTA ──────────────
+        // ── 4. Breathing room — keeps the bottom bar pinned to the
+        //    screen edge instead of leaving dead space below it ─────
+        Spacer(Modifier.weight(1f))
+
+        // ── 5. Bottom bar — Categories · Filter · CTA ──────────────
         BottomCta(
             cat = cat,
             landedTopic = landedTopic,
@@ -358,7 +359,7 @@ private fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 0.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CurioBackButton(onClick = onBack)
@@ -995,9 +996,9 @@ private fun SpinButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val size = if (landedTopic != null) 64.dp else 76.dp
+    val size = if (landedTopic != null) 68.dp else 80.dp
     Box(
-        modifier = Modifier.size(120.dp),
+        modifier = Modifier.size(128.dp),
         contentAlignment = Alignment.Center
     ) {
         OrbitRing(active = isShuffling, color = tint, modifier = Modifier.fillMaxSize())
@@ -1145,75 +1146,93 @@ private fun BottomCta(
     val showExplore = landedTopic != null
     val hasFilters = filterActiveCount > 0
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    // Anchored bottom bar — a subtle elevated surface + hairline divider
+    // so the controls read as one cohesive unit pinned to the screen edge.
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        // ── Main CTA — Shuffle or Explore, centered at its level ──
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            if (showExplore) {
-                Button(
-                    onClick = onExplore,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cat.accent,
-                        contentColor = Color.White
-                    ),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-                ) {
-                    CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 18.dp)
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = "Explore",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                    )
-                }
-            } else {
-                Button(
-                    onClick = onSpin,
-                    enabled = canSpin,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cat.accent,
-                        contentColor = Color.White,
-                        disabledContainerColor = cat.tint,
-                        disabledContentColor = Color.White.copy(alpha = 0.6f)
-                    ),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-                ) {
-                    CurioIcon(
-                        CurioIcons.Casino, null,
-                        tint = Color.White,
-                        size = 18.dp
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = if (shuffling) "Spinning…" else "Shuffle",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                    )
+            // ── Hairline divider — defines the bar's top edge ─────
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
+            )
+
+            // ── Main CTA — Shuffle or Explore, centered ───────────
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (showExplore) {
+                    Button(
+                        onClick = onExplore,
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = cat.accent,
+                            contentColor = Color.White
+                        ),
+                        contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
+                    ) {
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 18.dp)
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            text = "Explore",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                        )
+                    }
+                } else {
+                    Button(
+                        onClick = onSpin,
+                        enabled = canSpin,
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = cat.accent,
+                            contentColor = Color.White,
+                            disabledContainerColor = cat.tint,
+                            disabledContentColor = Color.White.copy(alpha = 0.6f)
+                        ),
+                        contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
+                    ) {
+                        CurioIcon(
+                            CurioIcons.Casino, null,
+                            tint = Color.White,
+                            size = 18.dp
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            text = if (shuffling) "Spinning…" else "Shuffle",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                        )
+                    }
                 }
             }
-        }
 
-        // ── Categories · Filter — Material buttons below the CTA ──
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            // ── Categories button ──────────────────────────────────
-            OutlinedButton(
-                onClick = onCategories,
-                shape = RoundedCornerShape(50),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
-                modifier = Modifier.weight(1f)
+            // ── Categories · Filter — Material buttons below the CTA ──
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                // ── Categories button ──────────────────────────────
+                OutlinedButton(
+                    onClick = onCategories,
+                    shape = RoundedCornerShape(50),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
                 CurioIcon(
                     cat.iconGlyph, null,
                     tint = cat.accent,
@@ -1253,7 +1272,7 @@ private fun BottomCta(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 CurioIcon(
@@ -1284,6 +1303,7 @@ private fun BottomCta(
                         )
                     }
                 }
+            }
             }
         }
     }
