@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,11 +17,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.curio.app.ui.theme.CurioColors
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
@@ -90,53 +93,31 @@ fun CategoryPickerScreen(navController: NavController) {
             )
         }
 
-        Spacer(Modifier.height(14.dp))
-
-        Surface(
-            shape = RoundedCornerShape(32.dp),
-            color = Color.Transparent,
-            shadowElevation = 10.dp,
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .background(Brush.horizontalGradient(CurioGradients.wildcardCardGradient()))
-                    .padding(18.dp)
-            ) {
-                CurioIcon(
-                    name = CurioIcons.Casino,
-                    contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.16f),
-                    size = 112.dp,
-                    modifier = Modifier.align(Alignment.CenterEnd)
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth(0.76f),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text(
-                        text = "Choose a lane",
-                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
-                        color = Color.White
-                    )
-                    Text(
-                        text = "Pick one focused deck or let Surprise mix everything into a fresh Shuffle.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(alpha = 0.86f)
-                    )
-                }
-            }
+            ExpressivePill(CurioIcons.AutoAwesome, "Focused decks")
+            ExpressivePill(CurioIcons.Casino, "Surprise mix")
         }
 
-        Spacer(Modifier.height(16.dp))
+        Text(
+            text = "Pick a mood for your next Shuffle. Every card is a complete deck with its own rhythm, color, and prompts.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
 
         MorphEntrance {
             LazyVerticalGrid(
                 state = gridState,
                 columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(top = 4.dp, bottom = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 items(categories) { cat ->
@@ -152,18 +133,22 @@ fun CategoryPickerScreen(navController: NavController) {
             }
         }
 
-        Spacer(Modifier.height(8.dp))
-
-        TextButton(
+        FilledTonalButton(
             onClick = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
+            shape = RoundedCornerShape(24.dp),
+            colors = ButtonDefaults.filledTonalButtonColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
+            CurioIcon(CurioIcons.Settings, null, size = 18.dp)
             Text(
                 text = "Manage categories",
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
     }
@@ -189,76 +174,76 @@ private fun CategoryTile(
 
     Surface(
         onClick = { onClick() },
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(30.dp),
         color = Color.Transparent,
-        shadowElevation = 8.dp,
+        shadowElevation = 9.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .height(156.dp)
+            .height(164.dp)
             .scale(scale)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(tileGradient),
-                    RoundedCornerShape(28.dp)
-                ),
-            contentAlignment = Alignment.Center
+                .background(Brush.verticalGradient(tileGradient), RoundedCornerShape(30.dp))
+                .padding(14.dp)
         ) {
-            // Subtle centred watermark icon — decorative backdrop
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.14f),
-                size = 130.dp
+                tint = Color.White.copy(alpha = 0.16f),
+                size = 118.dp,
+                modifier = Modifier.align(Alignment.BottomEnd)
             )
-            // Name — centred, bold, the hero of the card
+            Surface(
+                shape = CircleShape,
+                color = Color.White.copy(alpha = 0.22f),
+                modifier = Modifier.size(42.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(category.iconGlyph, null, tint = Color.White, size = 22.dp)
+                }
+            }
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                modifier = Modifier.align(Alignment.BottomStart),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
                 Text(
                     text = category.displayName,
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 26.sp,
-                        lineHeight = 30.sp
+                        fontSize = 25.sp,
+                        lineHeight = 28.sp
                     ),
                     color = Color.White
                 )
-                if (isWildcard) {
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = Color.White.copy(alpha = 0.18f)
-                    ) {
-                        Text(
-                            text = "Surprise",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.8.sp
-                            ),
-                            color = Color.White.copy(alpha = 0.85f),
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 5.dp)
-                        )
-                    }
-                } else {
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = Color.White.copy(alpha = 0.18f)
-                    ) {
-                        Text(
-                            text = "Explore",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.8.sp
-                            ),
-                            color = Color.White.copy(alpha = 0.85f),
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 5.dp)
-                        )
-                    }
+                Surface(shape = RoundedCornerShape(50), color = Color.White.copy(alpha = 0.20f)) {
+                    Text(
+                        text = if (isWildcard) "Surprise Shuffle" else "Start deck",
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp),
+                        color = Color.White.copy(alpha = 0.92f),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun ExpressivePill(icon: String, label: String) {
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = CurioColors.CoralBlush.copy(alpha = 0.13f),
+        border = BorderStroke(1.dp, CurioColors.CoralBlush.copy(alpha = 0.22f))
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            CurioIcon(icon, null, tint = CurioColors.CoralBlush, size = 17.dp)
+            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }

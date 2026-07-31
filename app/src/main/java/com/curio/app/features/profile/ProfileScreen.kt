@@ -28,8 +28,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -102,7 +100,6 @@ fun ProfileScreen(navController: NavController) {
     var reminderHour by remember { mutableIntStateOf(AppPreferences.getReminderHour(context)) }
     var showNameDialog by remember { mutableStateOf(false) }
     var showQualityDialog by remember { mutableStateOf(false) }
-    var showReminderDialog by remember { mutableStateOf(false) }
     var showVersionDialog by remember { mutableStateOf(false) }
     var nameInput by remember(displayName) { mutableStateOf(displayName) }
     var crashCount by remember { mutableIntStateOf(0) }
@@ -183,13 +180,6 @@ fun ProfileScreen(navController: NavController) {
             audioQuality = it
             AudioQualitySettings.set(context, it)
             showQualityDialog = false
-        },
-        showReminderDialog = showReminderDialog,
-        reminderHour = reminderHour,
-        onReminderHourSelected = {
-            reminderHour = it
-            AppPreferences.setReminderHour(context, it)
-            showReminderDialog = false
         },
         showVersionDialog = showVersionDialog,
         versionName = versionName,
@@ -274,7 +264,10 @@ fun ProfileScreen(navController: NavController) {
                     reminderEnabled = reminderEnabled,
                     reminderHour = reminderHour,
                     onReminderToggle = ::setReminder,
-                    onReminderTimeClick = { if (reminderEnabled) showReminderDialog = true },
+                    onReminderHourSelected = { hour ->
+                        reminderHour = hour
+                        AppPreferences.setReminderHour(context, hour)
+                    },
                     onManageCategories = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) }
                 )
             }
@@ -324,9 +317,6 @@ private fun ProfileDialogs(
     showQualityDialog: Boolean,
     currentQuality: AudioQuality,
     onQualitySelected: (AudioQuality) -> Unit,
-    showReminderDialog: Boolean,
-    reminderHour: Int,
-    onReminderHourSelected: (Int) -> Unit,
     showVersionDialog: Boolean,
     versionName: String,
     onDismissVersion: () -> Unit
@@ -393,47 +383,6 @@ private fun ProfileDialogs(
                 }
             },
             confirmButton = { TextButton(onClick = { onQualitySelected(currentQuality) }) { Text("Close") } }
-        )
-    }
-
-    if (showReminderDialog) {
-        val hours = listOf(9, 12, 15, 18, 21)
-        AlertDialog(
-            onDismissRequest = { onReminderHourSelected(reminderHour) },
-            shape = RoundedCornerShape(28.dp),
-            title = { Text("Reminder time", fontWeight = FontWeight.ExtraBold) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Choose when Curio should send your daily nudge.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    hours.forEach { hour ->
-                        val selected = hour == reminderHour
-                        Surface(
-                            onClick = { onReminderHourSelected(hour) },
-                            shape = RoundedCornerShape(16.dp),
-                            color = if (selected) CurioColors.ButterYellow.copy(alpha = 0.22f) else Color.Transparent,
-                            border = BorderStroke(
-                                1.dp,
-                                if (selected) CurioColors.ButterYellow else MaterialTheme.colorScheme.outlineVariant
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 20.dp)
-                                Text(formatHour(hour), fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
-                                if (selected) {
-                                    Spacer(Modifier.weight(1f))
-                                    CurioIcon(CurioIcons.Check, null, tint = CurioColors.CoralBlush, size = 18.dp)
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = { TextButton(onClick = { onReminderHourSelected(reminderHour) }) { Text("Done") } }
         )
     }
 
@@ -521,16 +470,17 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                     Surface(
                         onClick = onEditName,
                         shape = RoundedCornerShape(50),
-                        color = Color.White.copy(alpha = 0.92f),
-                        border = null
+                        color = CurioColors.DeepPlum,
+                        contentColor = Color.White,
+                        shadowElevation = 4.dp
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            CurioIcon(CurioIcons.Edit, null, tint = CurioColors.CoralBlush, size = 16.dp)
-                            Text("Edit profile", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                            CurioIcon(CurioIcons.Edit, null, tint = Color.White, size = 16.dp)
+                            Text("Edit profile", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                     if (streakDays > 0) {
@@ -637,7 +587,7 @@ private fun PreferencesCard(
     reminderEnabled: Boolean,
     reminderHour: Int,
     onReminderToggle: (Boolean) -> Unit,
-    onReminderTimeClick: () -> Unit,
+    onReminderHourSelected: (Int) -> Unit,
     onManageCategories: () -> Unit
 ) {
     ProfileCard {
@@ -683,26 +633,60 @@ private fun PreferencesCard(
             Switch(checked = reminderEnabled, onCheckedChange = onReminderToggle)
         }
         if (reminderEnabled) {
-            Surface(
-                onClick = onReminderTimeClick,
-                shape = RoundedCornerShape(14.dp),
-                color = CurioColors.ButterYellow.copy(alpha = 0.14f),
-                shadowElevation = 1.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 18.dp)
-                    Text("Change reminder time", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
-                    Text(formatHour(reminderHour), style = MaterialTheme.typography.labelLarge, color = CurioColors.CoralBlush, fontWeight = FontWeight.Bold)
-                }
-            }
+            InlineReminderSelector(
+                selectedHour = reminderHour,
+                onHourSelected = onReminderHourSelected
+            )
         }
         ProfileDivider()
         ProfileSettingRow(CurioIcons.Palette, "Manage categories", "${CurioCategories.visible.size} lanes visible", onManageCategories)
+    }
+}
+
+@Composable
+private fun InlineReminderSelector(selectedHour: Int, onHourSelected: (Int) -> Unit) {
+    val hours = listOf(9, 12, 15, 18, 21)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 18.dp)
+            Text(
+                "Reminder time",
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                formatHour(selectedHour),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(hours) { hour ->
+                val selected = hour == selectedHour
+                Surface(
+                    onClick = { onHourSelected(hour) },
+                    shape = RoundedCornerShape(50),
+                    color = if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.surfaceContainerHighest,
+                    contentColor = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+                    border = BorderStroke(1.dp, if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant),
+                    shadowElevation = if (selected) 5.dp else 0.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        if (selected) CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 15.dp)
+                        Text(formatHour(hour), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -807,18 +791,20 @@ private fun DeveloperCard(
 @Composable
 private fun ProfileCard(content: @Composable ColumnScope.() -> Unit) {
     Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 1.dp,
+        shape = RoundedCornerShape(28.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 3.dp,
+        shadowElevation = 2.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.38f)),
         modifier = Modifier.fillMaxWidth()
-    ) { Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp), content = content) }
+    ) { Column(modifier = Modifier.padding(horizontal = 17.dp, vertical = 16.dp), content = content) }
 }
 
 @Composable
 private fun CardHeader(icon: String, title: String, subtitle: String, modifier: Modifier = Modifier) {
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Surface(shape = RoundedCornerShape(11.dp), color = CurioColors.CoralBlush.copy(alpha = 0.12f), modifier = Modifier.size(34.dp)) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) { CurioIcon(icon, null, tint = CurioColors.CoralBlush, size = 18.dp) }
+        Surface(shape = RoundedCornerShape(14.dp), color = CurioColors.CoralBlush.copy(alpha = 0.16f), modifier = Modifier.size(38.dp)) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) { CurioIcon(icon, null, tint = CurioColors.CoralBlush, size = 20.dp) }
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
@@ -829,8 +815,8 @@ private fun CardHeader(icon: String, title: String, subtitle: String, modifier: 
 
 @Composable
 private fun ProfileSettingRow(icon: String, title: String, subtitle: String, onClick: () -> Unit) {
-    Surface(onClick = onClick, color = Color.Transparent, modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(vertical = 13.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    Surface(onClick = onClick, color = Color.Transparent, shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(horizontal = 4.dp, vertical = 13.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 21.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.bodyLarge)
