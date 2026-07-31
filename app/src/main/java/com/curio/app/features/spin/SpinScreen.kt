@@ -165,7 +165,7 @@ import kotlin.random.Random
  *     elevation. The top-bar and bottom controls use solid paper containers;
  *     no ambient halo or glossy surface treatment is used on this screen.
  */
-// ═══════════════════════════════════════════════════════════════════════════
+// ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
 // lists (Set<String> has no built-in Bundle saver).
 // ═══════════════════════════════════════════════════════════════════════════
@@ -960,7 +960,6 @@ private fun Carousel(
     cycleIndex: Int,
     shuffling: Boolean,
     landedTopic: CurioTopic?,
-    shuffling: Boolean,
     opening: Boolean,
     landScale: Float,
     enabled: Boolean,
@@ -1601,11 +1600,11 @@ private fun DeckControlButton(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-                listOf(-6.dp to 4.dp, 5.dp to (-3).dp).forEachIndexed { index, offset ->
+                listOf(-6.dp to 4.dp, 5.dp to (-3).dp).forEachIndexed { index, offsetPair ->
                     Surface(
                         shape = RoundedCornerShape(12.dp),
                         color = accent.copy(alpha = if (index == 0) 0.18f else 0.30f),
-                        modifier = Modifier.size(28.dp).offset(x = offset.first, y = offset.second)
+                        modifier = Modifier.size(28.dp).offset(x = offsetPair.first, y = offsetPair.second)
                     ) {}
                 }
                 Surface(shape = RoundedCornerShape(14.dp), color = accent) {
