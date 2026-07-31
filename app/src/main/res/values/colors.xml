@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-        XML color resources used at the activity-scaffold level before Compose
-        takes over. The actual color palette lives in
-        `com.curio.app.ui.theme.CurioColors.kt` (Compose-side, see
-        CURIO_SPEC.md §0.2). These mirror just the bits the OS needs to
-        render the splash background and system bars.
-    -->
-    <color name="curio_cream_white">#FFFBF5</color>
-    <color name="curio_coral_blush">#FF8FA3</color>
-    <color name="curio_deep_plum">#3B0A17</color>
+    <!-- Bootstrap colors mirror the Midnight Signal Compose palette. -->
+    <color name="curio_cream_white">#F8FBFF</color>
+    <color name="curio_coral_blush">#1264C5</color>
+    <color name="curio_deep_plum">#081B33</color>
 </resources>

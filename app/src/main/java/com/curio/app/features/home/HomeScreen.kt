@@ -49,7 +49,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -66,6 +68,7 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -193,13 +196,13 @@ fun HomeScreen(navController: NavController) {
                     onClick = { navController.navigate(CurioRoutes.PROFILE) },
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    border = BorderStroke(2.dp, CurioColors.CoralBlush),
+                    shadowElevation = 2.dp,
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         CurioIcon(
                             CurioIcons.Person, "Profile",
-                            tint = CurioColors.CoralBlush,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             size = 22.dp
                         )
                     }
@@ -238,6 +241,10 @@ fun HomeScreen(navController: NavController) {
             val chosen = selectedCategory
             val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
             val accent = if (isWildcard) CurioColors.CoralBlush else chosen?.accent ?: CurioColors.CoralBlush
+            val questGradient = remember(isWildcard, accent) {
+                if (isWildcard) CurioGradients.wildcardCardGradient()
+                else CurioGradients.cardGradient(accent)
+            }
             Surface(
                     onClick = {
                         if (chosen == null || chosen.id == CategoryId.WILDCARD) {
@@ -247,30 +254,28 @@ fun HomeScreen(navController: NavController) {
                         }
                     },
                     shape = RoundedCornerShape(28.dp),
-                    // Opaque paper card: depth comes from a crisp edge and
-                    // shadow, never from transparency or a background wash.
-                    color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(2.dp, accent),
-                    shadowElevation = 8.dp,
-                    tonalElevation = 2.dp,
+                    color = Color.Transparent,
+                    shadowElevation = 10.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .height(168.dp)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // A quiet category tint keeps the paper surface
-                        // tactile without turning it into a translucent overlay.
+                        // Solid gradient background
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(accent.copy(alpha = 0.08f))
+                                .background(
+                                    Brush.verticalGradient(questGradient),
+                                    RoundedCornerShape(28.dp)
+                                )
                         )
                         // Watermark glyph
                         CurioIcon(
                             name = if (chosen != null) chosen.iconGlyph else CurioIcons.Casino,
                             contentDescription = null,
-                            tint = accent.copy(alpha = 0.18f),
+                            tint = Color.White.copy(alpha = 0.20f),
                             size = 140.dp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
@@ -291,7 +296,7 @@ fun HomeScreen(navController: NavController) {
                                     modifier = Modifier
                                         .width(3.dp)
                                         .height(16.dp)
-                                        .background(accent, RoundedCornerShape(2.dp))
+                                        .background(Color.White.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
                                 )
                                 Text(
                                     text = "TODAY'S QUEST",
@@ -299,7 +304,7 @@ fun HomeScreen(navController: NavController) {
                                         fontWeight = FontWeight.ExtraBold,
                                         letterSpacing = 1.2.sp
                                     ),
-                                    color = accent
+                                    color = Color.White.copy(alpha = 0.88f)
                                 )
                             }
                             Column {
@@ -307,7 +312,7 @@ fun HomeScreen(navController: NavController) {
                                 Text(
                                     text = chosen?.displayName ?: "Spin the wheel",
                                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                                    color = MaterialTheme.colorScheme.onBackground,
+                                    color = Color.White,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -319,7 +324,7 @@ fun HomeScreen(navController: NavController) {
                             ) {
                                 Surface(
                                     shape = RoundedCornerShape(50),
-                                    color = accent
+                                    color = Color.White.copy(alpha = 0.22f)
                                 ) {
                                     Row(
                                         modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
@@ -520,13 +525,12 @@ private fun StatPill(
     value: String,
     tint: Color
 ) {
-    // Opaque paper tile with a defined edge and modest elevation.
+    // Color accent on the icon, readable onSurface text, solid theme surface.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, tint.copy(alpha = 0.45f)),
-        tonalElevation = 2.dp
+        shadowElevation = 3.dp
     ) {
             Row(
                 modifier = Modifier
@@ -535,12 +539,12 @@ private fun StatPill(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                CurioIcon(glyph, null, tint = tint, size = 16.dp)
+                CurioIcon(glyph, null, tint = tint, size = 17.dp)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     value,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                    color = tint,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
             }
@@ -560,45 +564,53 @@ private fun CategoryChip(
     onClick: () -> Unit
 ) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.04f else 1f,
+        targetValue = if (selected) 1.06f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
         label = "catChipScale"
     )
+    // Selected = solid accent (clean & full).  Inactive = desaturated gradient wash.
+    val chipGradient = remember(accent) {
+        listOf(accent, lerp(accent, Color.White, 0.35f))
+    }
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
-        color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, if (selected) accent else accent.copy(alpha = 0.45f)),
-        shadowElevation = if (selected) 4.dp else 1.dp,
+        color = if (selected) accent else Color.Transparent,
+        shadowElevation = if (selected) 8.dp else 5.dp,
         modifier = Modifier.scale(scale)
     ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
-            // Opaque paper tile for the category glyph
-            Surface(
-                shape = RoundedCornerShape(10.dp),
-                color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainerHigh,
-                border = BorderStroke(1.dp, if (selected) Color.White.copy(alpha = 0.35f) else accent.copy(alpha = 0.30f)),
-                modifier = Modifier.size(34.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(
-                        glyph, null,
-                        tint = if (selected) Color.White else accent,
-                        size = 18.dp
+                // Gradient wash only for inactive; selected uses the Surface's solid accent.
+                if (!selected) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(chipGradient),
+                                RoundedCornerShape(22.dp)
+                            )
                     )
                 }
-            }
-            Text(
-                text = name,
-                style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
-                ),
-                color = if (selected) Color.White else accent
-            )
+                Row(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CurioIcon(
+                        glyph, null,
+                        tint = Color.White,
+                        size = 20.dp
+                    )
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
+                        ),
+                        color = Color.White
+                    )
+                }
             }
         }
 }
@@ -614,9 +626,8 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
-        shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
+        shadowElevation = 2.dp,
+        tonalElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -626,12 +637,12 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Color swatch with category glyph
+            // Color swatch with category glyph — bolder accent
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(46.dp)
                     .clip(RoundedCornerShape(14.dp))
-                    .background(cat.accent.copy(alpha = 0.18f)),
+                    .background(cat.accent.copy(alpha = 0.32f)),
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(
@@ -678,8 +689,9 @@ private fun FirstTimeEmpty(
     onSpinSurprise: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(24.dp),                    color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -720,11 +732,11 @@ private fun FirstTimeEmpty(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        CurioIcon(CurioIcons.Casino, null, tint = Color.White, size = 16.dp)
+                        CurioIcon(CurioIcons.Casino, null, tint = CurioColors.DeepPlum, size = 16.dp)
                         Text(
                             "Surprise me",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White
+                            color = CurioColors.DeepPlum
                         )
                     }
                 }
@@ -757,8 +769,7 @@ private fun ReminderNudgeCard(onTap: () -> Unit) {
         onClick = onTap,
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, CurioColors.ButterYellow),
-        shadowElevation = 2.dp,
+        shadowElevation = 3.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -834,8 +845,7 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
                 ) {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = MaterialTheme.colorScheme.surface,
-                        border = BorderStroke(2.dp, CurioColors.CoralBlush),
+                        color = CurioColors.CoralBlush.copy(alpha = 0.18f),
                         modifier = Modifier.size(48.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -956,7 +966,7 @@ private fun DrawerNavItem(
         ) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = iconTint.copy(alpha = 0.15f),
+                color = iconTint.copy(alpha = 0.24f),
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {

@@ -1,26 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Curio launcher icon — background layer.
-    Solid Coral Blush (#FF8FA3 — CurioColors.CoralBlush, the primary seed).
-    The adaptive-icon launcher crops this rectangle to the launcher's mask
-    shape (circle / squircle / teardrop); the visible portion is whatever
-    the launcher mask leaves.
-
-    Why a coral background (changed from cream in commit ac9a0742): the
-    previous cream-on-pastel-wedges design had too little contrast against
-    the home-screen wallpaper in light mode. Pushing the primary palette
-    (coral) to the background gives every launcher shape — circle, squircle,
-    teardrop, rounded-square — a recognizable, warm, on-brand silhouette.
-    The foreground wheel then pops as a cream "stage" for the colored wedges.
-
-    See CURIO_SPEC.md §13.1 + §0.2 for the palette rationale.
--->
+<!-- Pastel launcher background: deep maroon. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path
-        android:fillColor="#FF8FA3"
-        android:pathData="M 0,0 L 108,0 L 108,108 L 0,108 Z" />
+        android:fillColor="#3B0A17"
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z" />
 </vector>

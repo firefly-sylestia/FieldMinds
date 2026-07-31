@@ -16,7 +16,7 @@ Marketing and landing website for FieldMinds, built with Next.js and deployed on
 
 - `web/app/` — Next.js App Router pages (`page.tsx`, `layout.tsx`, `globals.css`)
 - `web/assets/` — Static images (hero, banner, feature screenshots, icons, update screens, help page graphics)
-  - Key files: `hero.png`, `Banner.png`, `Features.png`, `icon.png`, `icon_full.png`, `light.jpg`, `dark.jpg`, `update.jpg`, `updates.png`, `updates2.png`, `help.png`
+  - Key files: `hero.png`, `Banner.png`, `Features.png`, `icon.svg`, `icon.png`, `icon_full.png`, `light.jpg`, `dark.jpg`, `update.jpg`, `updates.png`, `updates2.png`, `help.png`
   - Subdirectories: `ScreenShots/`, `Posts/`
 - Root-level static pages: `index.html`, `help.html`, `privacy.html`, `updates.html`, `style.css`, `script.js`
 - `web/package.json` — Dependencies and build scripts
@@ -44,7 +44,7 @@ Marketing and landing website for FieldMinds, built with Next.js and deployed on
 - React functional components with TypeScript
 - Tailwind utility classes for styling
 - CSS modules or global CSS in `globals.css`
-- Static assets in `assets/` directory
+- Static assets in `assets/` directory. `assets/icon.svg` is the canonical Midnight Signal angular portal mark used by page metadata, headers, footers, fallback images, and the download panel.
 
 ## Work Guidance
 

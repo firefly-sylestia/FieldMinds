@@ -1,6 +1,5 @@
 package com.curio.app.features.reveal
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +54,7 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -201,13 +202,13 @@ fun TopicRevealScreen(
                         resolved.tags.take(4).forEach { tag ->
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surfaceContainerLow,
-                                border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f))
+                                color = cat.accent.copy(alpha = 0.18f),
+                                shadowElevation = 1.dp
                             ) {
                                 Text(
                                     text = tag,
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = cat.accent,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
@@ -245,9 +246,9 @@ fun TopicRevealScreen(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
-                        contentColor = Color.White,
-                        disabledContainerColor = cat.tint,
-                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
+                        contentColor = CurioColors.DeepPlum,
+                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
+                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
                     modifier = Modifier
@@ -258,7 +259,7 @@ fun TopicRevealScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.DeepPlum, size = 20.dp)
                         Text(
                             text = "Start exploring",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
@@ -312,40 +313,42 @@ private fun HeroCard(
     modifier: Modifier = Modifier
 ) {
     val action = resolved?.exploreAction
-
-    // Opaque paper hero: category color is an inked edge, while the sheet
-    // itself stays warm and readable in both light and dark themes.
+    val heroGradient = remember(cat.id) {
+        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
+        else CurioGradients.cardGradient(cat.accent)
+    }
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(2.dp, cat.accent),
-        shadowElevation = 10.dp,
-        tonalElevation = 2.dp
+        color = Color.Transparent,
+        shadowElevation = 10.dp
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(
+                    Brush.verticalGradient(heroGradient),
+                    RoundedCornerShape(32.dp)
+                )
         ) {
             // ── Watermark glyph (category icon) ─────────────────────────
             CurioIcon(
                 name = cat.iconGlyph,
                 contentDescription = null,
-                tint = cat.accent.copy(alpha = 0.16f),
+                tint = Color.White.copy(alpha = 0.16f),
                 size = 190.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(end = 0.dp)
             )
-            // ── Action badge (verb + duration) — white pill on ticket ───
+            // ── Action badge (verb + duration) — white pill on gradient ───
             if (action != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = Color.White.copy(alpha = 0.22f),
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -365,16 +368,16 @@ private fun HeroCard(
                         Text(
                             text = "${action.verb} for ~${action.durationMinutes} min",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = Color.White
                         )
                     }
                 }
             }
-            // ── Subtype pill — white pill on ticket ────────────────────
+            // ── Subtype pill ────────────────────
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = Color.White.copy(alpha = 0.22f),
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -383,7 +386,7 @@ private fun HeroCard(
                     Text(
                         text = resolved.subtype,
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = Color.White,
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                     )
                 }
@@ -422,7 +425,7 @@ private fun TeaserCard(
                 Text(
                     text = "One quirky fact to get you curious",
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = cat.accent
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
             Spacer(Modifier.height(10.dp))
@@ -451,7 +454,6 @@ private fun ActionPromptCard(
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
         shadowElevation = 3.dp,
         modifier = modifier.fillMaxWidth()
     ) {
@@ -468,7 +470,7 @@ private fun ActionPromptCard(
                     CurioIcon(
                         name = verbIcon(action.verb),
                         contentDescription = null,
-                        tint = cat.accent,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         size = 18.dp,
                         modifier = Modifier.padding(8.dp)
                     )
@@ -477,7 +479,7 @@ private fun ActionPromptCard(
                     Text(
                         text = "${action.verb} ${action.targetName}",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = cat.accent,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 2,
                         softWrap = true,
                         overflow = TextOverflow.Ellipsis

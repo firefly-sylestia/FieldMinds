@@ -125,7 +125,7 @@ fun CurioEntryCard(
                     Text(
                         text = formatTimeAgo(entry.capturedAtDaysAgo),
                         style = MaterialTheme.typography.labelSmall,
-                        color = cat.accent
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     CurioIcon(
                         name = formatGlyph(entry.format),

@@ -4,84 +4,68 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 
 /**
- * Curio's color palette — see CURIO_SPEC.md §0.2.
+ * Curio's pastel color palette — soft, warm, inviting.
  *
- * Base on M3's tonal palette generator, but seed from a warm coral instead of
- * a cold blue so default M3 doesn't feel corporate.
- *
- * Each of the 6 categories also has its OWN accent color layered on top of the
- * base palette (used for chips, category headers, spin-segment fills).
+ * White + soft pink coral foundation with buttery yellow, mint, lavender,
+ * and peachy category accents. All colors are opaque; card surfaces use
+ * solid category gradients with shadow elevation for depth.
  */
 object CurioColors {
 
-    // ── Base palette (warm coral seed) ─────────────────────────────────────
-    val CoralBlush       = Color(0xFFFF8FA3)  // Primary, tone 60
-    val ButterYellow     = Color(0xFFFFD97D)  // Secondary
-    val SkyMint          = Color(0xFF8FE3CF)  // Tertiary
-    val CreamWhite       = Color(0xFFFFFBF5)  // Surface
-    val SoftSand         = Color(0xFFF6EFE4)  // Surface Container
-    val WarmCoralRed     = Color(0xFFE4626F)  // Error
-    val DeepPlum         = Color(0xFF3B0A17)  // On-Primary
+    // ── Warm pastel foundation ─────────────────────────────────────────
+    val CoralBlush       = Color(0xFFFF8FA3)  // Soft pink — primary
+    val ButterYellow     = Color(0xFFFFD97D)  // Warm butter — secondary
+    val SkyMint          = Color(0xFF8FE3CF)  // Soft mint — tertiary
+    val CreamWhite       = Color(0xFFFFFBF5)  // Warm white — surface
+    val SoftSand         = Color(0xFFF6EFE4)  // Warm sand — surface container
+    val WarmCoralRed     = Color(0xFFE4626F)  // Soft coral-red — error
+    val DeepPlum         = Color(0xFF3B0A17)  // Deep maroon — on-primary
 
-    // ── Category accent colors ─────────────────────────────────────────────
-    val Lilac            = Color(0xFFC9A6F2)  // Music / Artists
-    val DustyBlue        = Color(0xFF9BB8E8)  // Movies / Directors
-    val Sage             = Color(0xFFA8C99A)  // Books / Authors
-    val Peach            = Color(0xFFFFB585)  // Visual Art / Painters
-    val Teal             = Color(0xFF6FC7BE)  // Science & Nature
-    // Wildcard uses a rainbow gradient (see CurioGradients.WildcardGradient)
+    // ── Category pastel accents ────────────────────────────────────────
+    val Lilac            = Color(0xFFC9A6F2)  // Music / Artists — soft purple
+    val DustyBlue        = Color(0xFF9BB8E8)  // Movies / Directors — soft blue
+    val Sage             = Color(0xFFA8C99A)  // Books / Authors — soft green
+    val Peach            = Color(0xFFFFB585)  // Visual Art / Painters — soft orange
+    val Teal             = Color(0xFF6FC7BE)  // Science & Nature — soft teal
 
     /** Tinted (20% alpha) versions of category accents for backgrounds. */
-    val LilacTint    = Lilac.copy(alpha = 0.20f)
+    val LilacTint     = Lilac.copy(alpha = 0.20f)
     val DustyBlueTint = DustyBlue.copy(alpha = 0.20f)
-    val SageTint     = Sage.copy(alpha = 0.20f)
-    val PeachTint    = Peach.copy(alpha = 0.20f)
-    val TealTint     = Teal.copy(alpha = 0.20f)
+    val SageTint      = Sage.copy(alpha = 0.20f)
+    val PeachTint     = Peach.copy(alpha = 0.20f)
+    val TealTint      = Teal.copy(alpha = 0.20f)
 }
 
 /**
- * Rainbow gradient used ONLY by the Wildcard category — see CURIO_SPEC.md §0.2.
- * This is the one place in the app where a gradient appears, so it stays special.
+ * Solid gradient definitions for card surfaces.
+ * Wildcard spans the full pastel rainbow; named categories use a
+ * deep-maroon → accent → warm-white progression.
  */
 object CurioGradients {
+    /** Warm sunset spectrum for the Wildcard — cohesive with the brand palette. */
     val WildcardGradientStops = listOf(
-        CurioColors.Lilac,
-        CurioColors.DustyBlue,
-        CurioColors.Sage,
+        CurioColors.CoralBlush,
         CurioColors.Peach,
-        CurioColors.Teal
+        CurioColors.ButterYellow
     )
 
     /**
-     * Hue-preserving ticket stops for a named category (Spin + Reveal hero).
-     *
-     * Every stop deepens toward **Black** — never toward [CurioColors.DeepPlum]
-     * — so the accent's hue stays alive: deep lilac reads as lilac, deep teal
-     * as teal, instead of collapsing into muddy maroon. Dark mode lifts the
-     * crown (lightens the top stop) and keeps more hue in the base so the
-     * ticket glows against the plum background instead of melting into it.
-     * The stops are still dark enough for white text on the top half.
+     * Solid category card gradient: accent → accent → warm white.
+     * No black — pure pastel warmth from top to bottom.
      */
-    fun ticketStops(accent: Color, isDark: Boolean): List<Color> = listOf(
-        // Crown — the corner where the subtype badge sits; only a whisper
-        // of darkening so the ticket catches light without hurting the
-        // white-text contrast on the name band below it.
-        lerp(accent, Color.Black, if (isDark) 0.06f else 0.10f),
-        // True accent body — dark enough for bold white text.
-        lerp(accent, Color.Black, if (isDark) 0.18f else 0.26f),
-        // Deepened accent — hue intact, solid white-text band.
-        lerp(accent, Color.Black, if (isDark) 0.34f else 0.44f),
-        // Base — keeps a whisper of accent hue instead of fading to neutral.
-        lerp(accent, Color.Black, if (isDark) 0.52f else 0.62f)
+    fun cardGradient(accent: Color): List<Color> = listOf(
+        accent,
+        lerp(accent, CurioColors.CreamWhite, 0.42f)
     )
 
     /**
-     * Wildcard rainbow stops — deepened toward Black (hue-preserving) so the
-     * rainbow stays readable under white text. Dark mode keeps the rainbow
-     * luminous (less black) so it glows against the plum background.
+     * Solid wildcard card gradient — pure pastel warmth, no black or plum.
      */
-    fun wildcardTicketStops(isDark: Boolean): List<Color> =
-        WildcardGradientStops.map {
-            lerp(it, Color.Black, if (isDark) 0.18f else 0.36f)
-        }
+    fun wildcardCardGradient(): List<Color> = listOf(
+        CurioColors.CoralBlush,
+        lerp(CurioColors.CoralBlush, CurioColors.Peach, 0.55f),
+        CurioColors.Peach,
+        CurioColors.ButterYellow,
+        lerp(CurioColors.ButterYellow, CurioColors.CreamWhite, 0.45f)
+    )
 }

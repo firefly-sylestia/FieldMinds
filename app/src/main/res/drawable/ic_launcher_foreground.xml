@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio launcher icon — centered discovery wheel foreground.
+    Curio gradient-card launcher mark — warm pastel palette.
 
-    The artwork is intentionally contained inside the adaptive-icon safe zone:
-    the wheel spans 44..84 in the 108dp viewport, leaving comfortable space
-    for launcher masks, parallax, and small app-icon rendering. The coral
-    background supplies the brand field; this layer supplies the cream wheel,
-    six category colors, and deep-plum center mark.
-
-    Keep this composition flat and vector-only so it remains crisp at launcher
-    size and can be mirrored by the website icon asset.
+    A rounded-rectangle card with a gradient from deep maroon through
+    soft pink, peach, and butter yellow.  A subtle centre-line divide
+    hints at the "card" shape.  Everything stays inside the adaptive
+    safe zone (y=28..80).
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -17,36 +13,36 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Cream wheel frame: centered at (54,54), radius 32dp. -->
+    <!-- Rounded-rect card outline — soft white stroke for definition -->
     <path
-        android:fillColor="#FFFBF5"
-        android:pathData="M54,22 A32,32 0,1 1,53.99,22 Z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5"
+        android:pathData="M38,28 L70,28 A12,12 0 0,1 82,40 L82,72 A12,12 0 0,1 70,84 L38,84 A12,12 0 0,1 26,72 L26,40 A12,12 0 0,1 38,28 Z" />
 
-    <!-- Six category wedges, inset from the cream frame for a clear rim. -->
+    <!-- Top third — deep maroon / warm plum -->
     <path
-        android:fillColor="#C9A6F2"
-        android:pathData="M54,54 L54,29 A25,25 0,0 1,75.65,41.5 Z" />
+        android:fillColor="#4B1522"
+        android:pathData="M26,40 L26,52 L82,52 L82,40 A12,12 0 0,0 70,28 L38,28 A12,12 0 0,0 26,40 Z" />
+
+    <!-- Middle band — soft pink coral -->
     <path
-        android:fillColor="#9BB8E8"
-        android:pathData="M54,54 L75.65,41.5 A25,25 0,0 1,75.65,66.5 Z" />
-    <path
-        android:fillColor="#A8C99A"
-        android:pathData="M54,54 L75.65,66.5 A25,25 0,0 1,54,79 Z" />
-    <path
-        android:fillColor="#FFB585"
-        android:pathData="M54,54 L54,79 A25,25 0,0 1,32.35,66.5 Z" />
-    <path
-        android:fillColor="#6FC7BE"
-        android:pathData="M54,54 L32.35,66.5 A25,25 0,0 1,32.35,41.5 Z" />
+        android:fillColor="#FF8FA3"
+        android:pathData="M26,52 L82,52 L82,64 L26,64 Z" />
+
+    <!-- Bottom third — warm peach / butter blend -->
     <path
         android:fillColor="#FFD97D"
-        android:pathData="M54,54 L32.35,41.5 A25,25 0,0 1,54,29 Z" />
+        android:pathData="M26,64 L82,64 L82,72 A12,12 0 0,1 70,84 L38,84 A12,12 0 0,1 26,72 Z" />
 
-    <!-- Deep-plum center: a compact, high-contrast identity at icon size. -->
+    <!-- Tiny sparkle dot — mint aperture accent -->
     <path
-        android:fillColor="#3B0A17"
-        android:pathData="M54,43 A11,11 0,1 1,53.99,43 Z" />
+        android:fillColor="#8FE3CF"
+        android:pathData="M50,38 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 Z" />
+
+    <!-- Small sparkle dot 2 -->
     <path
-        android:fillColor="#FFFBF5"
-        android:pathData="M54,48 A6,6 0,1 1,53.99,48 Z" />
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.6"
+        android:pathData="M62,46 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0 Z" />
 </vector>

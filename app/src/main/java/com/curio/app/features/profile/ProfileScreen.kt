@@ -454,8 +454,7 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        border = BorderStroke(1.dp, CurioColors.CoralBlush.copy(alpha = 0.28f)),
-        shadowElevation = 2.dp,
+        shadowElevation = 3.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -567,11 +566,12 @@ private fun StatsStrip(streak: Int, saved: Int, recent: Int, lanes: Int) {
 
 @Composable
 private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: String, tint: Color) {
+    // Coloured container — accent-tinted background, readable onSurface text.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        color = tint.copy(alpha = 0.12f),
-        border = BorderStroke(1.dp, tint.copy(alpha = 0.22f))
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = 3.dp
     ) {
         Column(
             modifier = Modifier.padding(vertical = 12.dp),
@@ -682,7 +682,7 @@ private fun PreferencesCard(
                 onClick = onReminderTimeClick,
                 shape = RoundedCornerShape(14.dp),
                 color = CurioColors.ButterYellow.copy(alpha = 0.14f),
-                border = BorderStroke(1.dp, CurioColors.ButterYellow.copy(alpha = 0.45f)),
+                shadowElevation = 1.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -714,9 +714,9 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onManage: () -> Unit, o
                 val category = CurioCategories.byId(categoryId)
                 Surface(shape = RoundedCornerShape(16.dp), color = category.accent.copy(alpha = 0.14f)) {
                     Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                        CurioIcon(category.iconGlyph, null, tint = category.accent, size = 20.dp)
+                        CurioIcon(category.iconGlyph, null, tint = MaterialTheme.colorScheme.onSurface, size = 20.dp)
                         Spacer(Modifier.height(4.dp))
-                        Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = category.accent, maxLines = 1)
+                        Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1)
                         Text("$count saved", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -804,7 +804,6 @@ private fun ProfileCard(content: @Composable ColumnScope.() -> Unit) {
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)),
         tonalElevation = 1.dp,
         modifier = Modifier.fillMaxWidth()
     ) { Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp), content = content) }

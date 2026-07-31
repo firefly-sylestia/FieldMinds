@@ -64,6 +64,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -92,6 +93,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -364,24 +366,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         }
     }
 
-    // ── v5.6 — once the topic has been explored, drop the landing ─────
-    // Runs when the screen (re)enters composition (e.g. returning from
-    // Reveal). If the landed topic was saved to the Cabinet, it counts as
-    // explored: the card returns to idle. Otherwise it stays on the card,
-    // tappable, until the user explores it or spins again.
-    LaunchedEffect(Unit) {
-        val name = landedTopicName ?: return@LaunchedEffect
-        val topicId = landedTopic?.id
-        val explored = runCatching {
-            CurioRepositoryHolder.repo.getAll().any { entry ->
-                entry.topic.id == topicId || entry.topic.name == name
-            }
-        }.getOrDefault(false)
-        if (explored) {
-            landedTopicName = null
-            landingAlreadyOpened = false
-        }
-    }
+    // ── v5.9 — landed card stays tappable until the user explicitly
+    //    spins/shuffles again.  No longer auto-clears when explored.
 
     // ── Animations ────────────────────────────────────────────────────
     val landScale by animateFloatAsState(
@@ -394,7 +380,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         animationSpec = CurioMotion.Springs.Snappy,
         label = "buttonPulse"
     )
-
     // ── Overall layout ─────────────────────────────────────────────────
     // Paper surfaces sit directly on the quiet theme background. All depth
     // comes from opaque cards, crisp rules, and elevation—not ambient washes.
@@ -429,13 +414,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             enabled = filteredPool.isNotEmpty() && !shuffling,
             onCardTap = {
                 if (shuffling || filteredPool.isEmpty()) return@Carousel
-                val landed = landedTopic
-                if (landed != null) {
-                    // Manual tap — opens instantly and marks this landing as
-                    // opened (cancels any pending auto-open). launchSingleTop
-                    // makes it a no-op if the auto-open already pushed Reveal.
+                val resolved = landedTopic
+                    ?: landedTopicName?.let { name ->
+                        TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
+                    }
+                if (resolved != null) {
                     landingAlreadyOpened = true
-                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
+                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
                         launchSingleTop = true
                     }
                 } else {
@@ -558,7 +543,7 @@ private fun TopBar(
         Surface(
             shape = RoundedCornerShape(50),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
-            border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.55f))
+            shadowElevation = 1.dp
         ) {
             Row(
                 modifier = Modifier.padding(start = 10.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
@@ -567,13 +552,13 @@ private fun TopBar(
             ) {
                 CurioIcon(
                     cat.iconGlyph, null,
-                    tint = cat.accent,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     size = 16.dp
                 )
                 Text(
                     text = cat.displayName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = cat.accent,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
             }
@@ -590,7 +575,7 @@ private fun TopBar(
                 Text(
                     text = "$filteredCount / $poolCount",
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = cat.accent,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                 )
             }
@@ -889,14 +874,14 @@ private fun FilterSheet(
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = cat.accent,
-                    contentColor = Color.White
+                    contentColor = CurioColors.DeepPlum
                 ),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 18.dp)
+                CurioIcon(CurioIcons.Check, null, tint = CurioColors.DeepPlum, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
@@ -927,7 +912,7 @@ private fun ActiveFilterChip(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = Color.White
+                color = CurioColors.DeepPlum
             )
             Surface(
                 shape = CircleShape,
@@ -936,7 +921,7 @@ private fun ActiveFilterChip(
             ) {
                 CurioIcon(
                     CurioIcons.Close, null,
-                    tint = Color.White,
+                    tint = CurioColors.DeepPlum,
                     size = 14.dp,
                     modifier = Modifier.padding(2.dp)
                 )
@@ -976,18 +961,18 @@ private fun CompactChip(
             .clip(RoundedCornerShape(50))
             .clickable(onClick = onClick)
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
-            ),
-            color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-        )
-    }
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
+                ),
+                color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+            )
+        }
 }
 
 
@@ -1107,8 +1092,10 @@ private fun HeroTicketCard(
 ) {
     val w = 270.dp
     val h = 292.dp
-    // The ticket is an opaque sheet of paper. Category identity lives in the
-    // bold edge and small ink details; depth comes from elevation and scale.
+    val ticketGradient = remember(cat.id) {
+        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
+        else CurioGradients.cardGradient(accent)
+    }
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
     // Inner clip layer keeps rounded corners crisp during scale.
@@ -1137,28 +1124,24 @@ private fun HeroTicketCard(
         ) {
             Surface(
                 shape = RoundedCornerShape(30.dp),
-                color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(2.dp, accent),
+                color = Color.Transparent,
                 shadowElevation = if (landed) 16.dp else 10.dp,
-                tonalElevation = 2.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(
+                            Brush.verticalGradient(ticketGradient),
+                            RoundedCornerShape(30.dp)
+                        )
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(8.dp)
-                            .background(accent)
-                    )
+                    // Gradient card — no side rule needed
                     // ── Watermark glyph — large, decorative ────────────
                     CurioIcon(
                         name = glyph,
                         contentDescription = null,
-                        tint = accent.copy(alpha = 0.16f),
+                        tint = Color.White.copy(alpha = 0.16f),
                         size = 150.dp,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
@@ -1180,12 +1163,12 @@ private fun HeroTicketCard(
                         ) {
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh
+                                color = Color.White.copy(alpha = 0.22f)
                             ) {
                                 Text(
                                     text = topic?.subtype ?: "…",
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    color = Color.White,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
@@ -1209,7 +1192,7 @@ private fun HeroTicketCard(
                                     fontWeight = FontWeight.ExtraBold,
                                     lineHeight = 34.sp
                                 ),
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = Color.White,
 
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
@@ -1220,12 +1203,12 @@ private fun HeroTicketCard(
                                     topic.tags.take(2).forEach { tag ->
                                         Surface(
                                             shape = RoundedCornerShape(50),
-                                            color = MaterialTheme.colorScheme.surfaceContainerHigh
-                                        ) {
-                                            Text(
-                                                text = tag,
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = MaterialTheme.colorScheme.onSurface,
+                                color = Color.White.copy(alpha = 0.22f)
+                            ) {
+                                Text(
+                                    text = tag,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.White,
                                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                             )
                                         }
@@ -1237,7 +1220,7 @@ private fun HeroTicketCard(
                                 Text(
                                     text = topic.teaser,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = Color.White.copy(alpha = 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -1256,18 +1239,18 @@ private fun HeroTicketCard(
                                 Text(
                                     text = "Opening…",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = Color.White.copy(alpha = 0.88f)
                                 )
                             } else {
                                 CurioIcon(
                                     if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
-                                    tint = accent,
+                                    tint = Color.White,
                                     size = 16.dp
                                 )
                                 Text(
                                     text = if (landed) "Tap to open" else "Tap to spin",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = Color.White.copy(alpha = 0.88f)
                                 )
                             }
                         }
@@ -1307,17 +1290,20 @@ private fun PeekCard(
         AnimatedContent(
             targetState = topic,
             transitionSpec = {
-                slideInVertically { height -> if (isTop) -height else height } +
-                fadeIn(animationSpec = tween(160)) togetherWith
-                slideOutVertically { height -> if (isTop) height else -height } +
-                fadeOut(animationSpec = tween(120))
+                slideInVertically(
+                    animationSpec = tween(240, easing = FastOutSlowInEasing)
+                ) { height -> if (isTop) -height / 3 else height / 3 } +
+                fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
+                slideOutVertically(
+                    animationSpec = tween(200, easing = FastOutSlowInEasing)
+                ) { height -> if (isTop) height / 3 else -height / 3 } +
+                fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
             },
             label = "peekSlot_$slot"
         ) { currentTopic ->
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                border = BorderStroke(1.dp, accent.copy(alpha = 0.55f)),
                 shadowElevation = if (landed) 6.dp else 3.dp,
                 tonalElevation = 1.dp,
                 modifier = Modifier.fillMaxSize()
@@ -1376,7 +1362,6 @@ private fun SpinButton(
             shape = CircleShape,
             // Opaque paper button with a strong ink edge and elevation.
             color = if (landedTopic != null) MaterialTheme.colorScheme.surfaceContainerHigh else tint,
-            border = BorderStroke(2.dp, tint),
             shadowElevation = if (isShuffling) 3.dp else 8.dp,
             modifier = Modifier
                 .size(buttonSize)
@@ -1518,7 +1503,8 @@ private fun BottomCta(
     val showAgain = landedTopic != null
     val hasFilters = filterActiveCount > 0
 
-    // Anchored paper tray: opaque, elevated, and separated by a crisp rule.
+    // Anchored paper tray: opaque, elevated.  No dividing rule — the
+    // surface elevation alone separates it from the content above.
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 3.dp,
@@ -1531,13 +1517,6 @@ private fun BottomCta(
                 .padding(vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(cat.accent)
-            )
-
             // ── Main CTA — Spin again (after landing) or Shuffle ──
             Box(
                 modifier = Modifier
@@ -1551,15 +1530,15 @@ private fun BottomCta(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
-                        contentColor = Color.White,
-                        disabledContainerColor = cat.tint,
-                        disabledContentColor = Color.White.copy(alpha = 0.6f)
+                        contentColor = CurioColors.DeepPlum,
+                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
+                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
                 ) {
                     CurioIcon(
                         if (showAgain) CurioIcons.Refresh else CurioIcons.Casino, null,
-                        tint = Color.White,
+                        tint = CurioColors.DeepPlum,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
@@ -1574,90 +1553,82 @@ private fun BottomCta(
                 }
             }
 
-            // ── Categories · Filter — Material buttons below the CTA ──
+            // ── Categories · Filter — buttons below the CTA ──
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // ── Categories button — accent-tinted to match Filter ──
                 OutlinedButton(
                     onClick = onCategories,
                     shape = RoundedCornerShape(50),
-                    border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        contentColor = cat.accent
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                     modifier = Modifier.weight(1f)
                 ) {
                     CurioIcon(
                         cat.iconGlyph, null,
-                        tint = cat.accent,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(
                         text = cat.displayName,
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                        color = cat.accent,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
                     CurioIcon(
                         CurioIcons.KeyboardArrowDown, null,
-                        tint = cat.accent.copy(alpha = 0.7f),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         size = 16.dp
                     )
-                }                // ── Filter button — the solid paper fill stays quiet while
-                //    the count badge + stronger border carry the active signal ─
-
-            OutlinedButton(
-                onClick = onFilter,
-                shape = RoundedCornerShape(50),
-                border = if (hasFilters)
-                    BorderStroke(1.5.dp, cat.accent.copy(alpha = 0.6f))
-                else
-                    BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    contentColor = cat.accent
-                ),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                CurioIcon(
-                    CurioIcons.Search, null,
-                    tint = cat.accent,
-                    size = 18.dp
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "Filter",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
+                }
+                OutlinedButton(
+                    onClick = onFilter,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    color = cat.accent,
-                    maxLines = 1
-                )
-                if (hasFilters) {
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CurioIcon(
+                        CurioIcons.Search, null,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        size = 18.dp
+                    )
                     Spacer(Modifier.width(6.dp))
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = cat.accent
-                    ) {
-                        Text(
-                            text = "$filterActiveCount",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = Color.White,
-                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
-                        )
+                    Text(
+                        text = "Filter",
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1
+                    )
+                    if (hasFilters) {
+                        Spacer(Modifier.width(6.dp))
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = cat.accent
+                        ) {
+                            Text(
+                                text = "$filterActiveCount",
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                                color = CurioColors.DeepPlum,
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                            )
+                        }
                     }
                 }
-            }
             }
         }
     }

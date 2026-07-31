@@ -1,58 +1,58 @@
 @import url('https://fonts.googleapis.com/css2?family=Geom:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Material 3 Inspired Color Palette */
-  --primary: #552ebe;
-  --on-primary: #FFFFFF;
-  --primary-container: #EADDFF;
-  --on-primary-container: #21005D;
-  --secondary: #6721ff;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #E8DEF8;
-  --on-secondary-container: #1D192B;
-  --tertiary: #ffb9d0;
-  --on-tertiary: #864848;
-  --tertiary-container: #FFD8E4;
-  --on-tertiary-container: #31111D;
-  --error: #B3261E;
+  /* Midnight Signal palette — shared with the Curio Android app. */
+  --primary: #1264C5;
+  --on-primary: #F8FBFF;
+  --primary-container: #D6E8FF;
+  --on-primary-container: #081B33;
+  --secondary: #E6652F;
+  --on-secondary: #081B33;
+  --secondary-container: #FFE0D2;
+  --on-secondary-container: #55200F;
+  --tertiary: #009E83;
+  --on-tertiary: #F8FBFF;
+  --tertiary-container: #C8F2E9;
+  --on-tertiary-container: #00382D;
+  --error: #BA3A4B;
   --on-error: #FFFFFF;
-  --error-container: #F9DEDC;
-  --on-error-container: #410E0B;
-  --background: #efeef1;
-  --on-background: #1C1B1F;
-  --surface: #FFFBFE;
-  --on-surface: #1C1B1F;
-  --surface-variant: #E7E0EE;
-  --on-surface-variant: #49454F;
-  --outline: #79747E;
+  --error-container: #FFD9DE;
+  --on-error-container: #4A0713;
+  --background: #F3F7FC;
+  --on-background: #081B33;
+  --surface: #F8FBFF;
+  --on-surface: #081B33;
+  --surface-variant: #E7EEF6;
+  --on-surface-variant: #3D536B;
+  --outline: #7089A3;
   --shadow: #000000;
-  --inverse-surface: #313033;
-  --inverse-on-surface: #F4EFF4;
-  --inverse-primary: #D0BCFF;
-  --surface-tint: #6750A4;
-  --ripple: rgba(103, 80, 164, 0.1);
-  --surface-hsl: 290, 100%, 99%; /* HSL representation of #FFFBFE */
+  --inverse-surface: #102B49;
+  --inverse-on-surface: #EAF3FF;
+  --inverse-primary: #8EC1FF;
+  --surface-tint: #1264C5;
+  --ripple: rgba(18, 100, 197, 0.12);
+  --surface-hsl: 214, 67%, 98%; /* HSL representation of #F8FBFF */
 
-  /* Custom variables mapped to Material 3 */
+  /* Custom variables mapped to Midnight Signal. */
   --primary-light: var(--primary-container);
-  --primary-dark: #6a00ff;
-  --on-primary-dark: #ddcaff;
+  --primary-dark: #0B478F;
+  --on-primary-dark: #C6E0FF;
   --accent: var(--secondary);
 
-  /* Existing variables adjusted for Material 3 */
+  /* Existing variables adjusted for the new identity. */
   --dark: var(--on-background);
   --dark-light: var(--on-surface-variant);
   --light: var(--background);
   --text-dark: var(--on-background);
   --text-light: var(--on-primary);
-  --success: #06d6a0;
-  --warning: #ffbe0b;
-  --danger: #ef476f;
+  --success: #16B89A;
+  --warning: #F2A900;
+  --danger: #BA3A4B;
   --gray: var(--surface-variant);
   --gray-dark: var(--outline);
-  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.07);
-  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 16px 30px rgba(27, 32, 50, 0.12);
+  --shadow-sm: 0 2px 12px rgba(8, 27, 51, 0.10);
+  --shadow-md: 0 8px 20px rgba(8, 27, 51, 0.14);
+  --shadow-lg: 0 16px 30px rgba(8, 27, 51, 0.18);
   --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -157,7 +157,7 @@ a:hover {
   background-color: var(--tertiary);
   color: var(--on-tertiary-container);
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(72, 0, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(18, 100, 197, 0.22);
 }
 
 .btn-outline {
@@ -172,7 +172,7 @@ a:hover {
   color: var(--text-light);
   border: 4px solid transparent;
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(72, 0, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(18, 100, 197, 0.22);
 }
 
 .btn i {
@@ -479,7 +479,7 @@ nav ul li a:hover::after {
   color: var(--on-primary-container);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 80px rgba(51, 0, 255, 0.15);
+  box-shadow: 0 20px 80px rgba(18, 100, 197, 0.18);
 }
 
 .hero::before {
@@ -890,7 +890,7 @@ nav ul li a:hover::after {
 .page-search:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(85, 46, 190, 0.1);
+  box-shadow: 0 0 0 3px rgba(18, 100, 197, 0.12);
 }
 
 .page-search::placeholder {
@@ -1484,7 +1484,7 @@ nav ul li a:hover::after {
   margin-left: 5%;
   margin-right: 5%;
   margin-bottom: 5%;
-  box-shadow: 0 20px 80px rgba(98, 0, 255, 0.2);
+  box-shadow: 0 20px 80px rgba(18, 100, 197, 0.22);
 }
 
 .cta::before,
@@ -2095,7 +2095,7 @@ footer {
     margin: 0 auto 18px;
     object-fit: contain;
     border-radius: 20px;
-    filter: drop-shadow(0 8px 14px rgba(59, 10, 23, 0.14));
+    filter: drop-shadow(0 8px 14px rgba(8, 27, 51, 0.18));
 }
 
 .download-options-content h2 {
@@ -3493,51 +3493,49 @@ footer {
 }
 
 .dark-mode {
-  /* Material 3 Dark Theme Inspired Color Palette */
-  --primary: #D0BCFF;
-  --on-primary: #381E72;
-  --primary-container: #4F378B;
-  --on-primary-container: #EADDFF;
-  --secondary: #CCC2DC;
-  --on-secondary: #332D41;
-  --secondary-container: #4A4458;
-  --on-secondary-container: #E8DEF8;
-  --tertiary: #EFB8C8;
-  --on-tertiary: #492532;
-  --tertiary-container: #ffbed2;
-  --on-tertiary-container: #6a3f4c;
-  --error: #F2B8B5;
-  --on-error: #601410;
-  --error-container: #8C1D18;
-  --on-error-container: #F9DEDC;
-  --background: #1C1B1F;
-  --on-background: #e3e1e6;
-  --surface: #1C1B1F;
-  --on-surface: #E6E1E5;
-  --surface-variant: #49454F;
-  --on-surface-variant: #CAC4D0;
-  --outline: #938F99;
+  /* Midnight Signal dark palette. */
+  --primary: #8EC1FF;
+  --on-primary: #06234A;
+  --primary-container: #0D4F9E;
+  --on-primary-container: #D6E8FF;
+  --secondary: #FF9A6B;
+  --on-secondary: #421A0A;
+  --secondary-container: #8F3D1F;
+  --on-secondary-container: #FFE0D2;
+  --tertiary: #59D8C0;
+  --on-tertiary: #00382D;
+  --tertiary-container: #006B59;
+  --on-tertiary-container: #C8F2E9;
+  --error: #FFB3BD;
+  --on-error: #650D1A;
+  --error-container: #8B293A;
+  --on-error-container: #FFD9DE;
+  --background: #061326;
+  --on-background: #EAF3FF;
+  --surface: #081B33;
+  --on-surface: #EAF3FF;
+  --surface-variant: #102B49;
+  --on-surface-variant: #B5C9DF;
+  --outline: #7895B4;
   --shadow: #000000;
-  --inverse-surface: #E6E1E5;
-  --inverse-on-surface: #313033;
-  --inverse-primary: #6750A4;
-  --surface-tint: #D0BCFF;
-  --ripple: rgba(208, 188, 255, 0.1);
-  --surface-hsl: 270, 10%, 10%; /* HSL representation of #1C1B1F */
+  --inverse-surface: #EAF3FF;
+  --inverse-on-surface: #102B49;
+  --inverse-primary: #1264C5;
+  --surface-tint: #8EC1FF;
+  --ripple: rgba(142, 193, 255, 0.14);
+  --surface-hsl: 214, 67%, 9%; /* HSL representation of #061326 */
 
-  /* Material 3 Dark Theme Surface Tones */
-  --surface-container-lowest: #0F0D13;
-  --surface-container-low: #1C1B1F;
-  --surface-container: #211F26;
-  --surface-container-high: #2B2930;
-  --surface-container-highest: #36343B;
+  /* Midnight Signal dark surface tones. */
+  --surface-container-lowest: #061326;
+  --surface-container-low: #081B33;
+  --surface-container: #102B49;
+  --surface-container-high: #17385B;
+  --surface-container-highest: #20466E;
 
-  /* Custom variables mapped to Material 3 Dark Theme */
   --primary-light: var(--primary-container);
   --primary-dark: var(--on-primary);
   --accent: var(--secondary);
 
-  /* Existing variables adjusted for Material 3 Dark Theme */
   --dark: var(--on-background);
   --dark-light: var(--on-surface-variant);
   --light: var(--background);

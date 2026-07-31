@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Adaptive-icon declaration for Curio (API 26+).
-    Background = solid coral (#FF8FA3), foreground = the centered discovery
-    wheel composition in ic_launcher_foreground.xml. The
+    Background = midnight ink (#081B33), foreground = the centered angular
+    signal-portal composition in ic_launcher_foreground.xml. The
     adaptive-icon framework composites these two layers per the launcher's
     chosen mask shape (circle/squircle/teardrop/etc.) and handles
     foreground parallax for Pixel-style launchers.
