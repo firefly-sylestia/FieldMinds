@@ -6,6 +6,7 @@ import com.curio.app.data.CaptureData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -46,6 +49,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
@@ -93,6 +98,7 @@ fun GalleryWallFormat(
     var caption by remember { mutableStateOf("") }
     var canvasWPx by remember { mutableStateOf(0f) }
     val canvasHPx = with(density) { 420.dp.toPx() }
+    var expandedImageUri by remember { mutableStateOf<String?>(null) }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -233,12 +239,15 @@ fun GalleryWallFormat(
                                     }
                                     .zIndex(i.toFloat())
                                     .pointerInput(tile.id) {
-                                        detectTapGestures {
-                                            val idx = tiles.indexOfFirst { it.id == tile.id }
-                                            if (idx >= 0 && idx != tiles.lastIndex) {
-                                                tiles.add(tiles.removeAt(idx))
-                                            }
-                                        }
+                                        detectTapGestures(
+                                            onTap = {
+                                                val idx = tiles.indexOfFirst { it.id == tile.id }
+                                                if (idx >= 0 && idx != tiles.lastIndex) {
+                                                    tiles.add(tiles.removeAt(idx))
+                                                }
+                                            },
+                                            onDoubleTap = { expandedImageUri = tile.uri }
+                                        )
                                     }
                                     .pointerInput(tile.id) {
                                         detectDragGestures { change, dragAmount ->
@@ -248,9 +257,9 @@ fun GalleryWallFormat(
                                                 val t = tiles[idx]
                                                 tiles[idx] = t.copy(
                                                     offsetXPx = (t.offsetXPx + dragAmount.x)
-                                                        .coerceIn(0f, canvasWPx - t.widthPx),
+                                                        .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
                                                     offsetYPx = (t.offsetYPx + dragAmount.y)
-                                                        .coerceIn(0f, canvasHPx - t.heightPx)
+                                                        .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
                                                 )
                                             }
                                         }
@@ -276,6 +285,24 @@ fun GalleryWallFormat(
                                                 .fillMaxSize()
                                                 .clip(RoundedCornerShape(14.dp))
                                         )
+                                        Surface(
+                                            onClick = { expandedImageUri = tile.uri },
+                                            shape = CircleShape,
+                                            color = Color.Black.copy(alpha = 0.48f),
+                                            modifier = Modifier
+                                                .align(Alignment.BottomEnd)
+                                                .padding(7.dp)
+                                                .size(26.dp)
+                                        ) {
+                                            Box(contentAlignment = Alignment.Center) {
+                                                CurioIcon(
+                                                    name = CurioIcons.Search,
+                                                    contentDescription = "Open image",
+                                                    tint = Color.White,
+                                                    size = 14.dp
+                                                )
+                                            }
+                                        }
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxSize()
@@ -346,6 +373,13 @@ fun GalleryWallFormat(
         }
 
         // ── Caption field ─────────────────────────────────────────────
+        expandedImageUri?.let { uri ->
+            MoodBoardImageDialog(
+                imageUri = uri,
+                onDismiss = { expandedImageUri = null }
+            )
+        }
+
         OutlinedTextField(
             value = caption,
             onValueChange = { caption = it },
@@ -355,5 +389,84 @@ fun GalleryWallFormat(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+
+@Composable
+private fun MoodBoardImageDialog(
+    imageUri: String,
+    onDismiss: () -> Unit
+) {
+    var scale by remember(imageUri) { mutableFloatStateOf(1f) }
+    var offsetX by remember(imageUri) { mutableFloatStateOf(0f) }
+    var offsetY by remember(imageUri) { mutableFloatStateOf(0f) }
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .pointerInput(imageUri) {
+                    detectTransformGestures { _, pan, zoom, _ ->
+                        val nextScale = (scale * zoom).coerceIn(1f, 5f)
+                        scale = nextScale
+                        offsetX = if (nextScale == 1f) 0f else (offsetX + pan.x).coerceIn(-900f, 900f)
+                        offsetY = if (nextScale == 1f) 0f else (offsetY + pan.y).coerceIn(-900f, 900f)
+                    }
+                }
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(imageUri),
+                contentDescription = "Expanded mood board image",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(18.dp)
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale,
+                        translationX = offsetX,
+                        translationY = offsetY
+                    )
+            )
+
+            Surface(
+                onClick = onDismiss,
+                shape = CircleShape,
+                color = Color.Black.copy(alpha = 0.58f),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .size(44.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    CurioIcon(
+                        name = CurioIcons.Close,
+                        contentDescription = "Close image",
+                        tint = Color.White,
+                        size = 22.dp
+                    )
+                }
+            }
+
+            Surface(
+                shape = RoundedCornerShape(50),
+                color = Color.Black.copy(alpha = 0.45f),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = "Pinch to zoom · Drag to pan",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = Color.White.copy(alpha = 0.86f),
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                )
+            }
+        }
     }
 }

@@ -1,1 +1,1 @@
-Profile preferences now use richer Material Expressive cards, a dark-safe Edit profile button, and inline daily reminder time chips. The What are we exploring page drops the extra lane card and uses cleaner guidance with expressive category deck tiles.
+Polished Shuffle navigation and motion. Home category shuffles now behave like the bottom-nav Shuffle tab, Shuffle cards/buttons animate more smoothly, card taps open landed topics, and mood-board images can expand full screen with pinch zoom and pan.

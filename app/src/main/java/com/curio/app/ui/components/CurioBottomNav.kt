@@ -99,7 +99,10 @@ fun CurioBottomBar(
         CurioBottomNavItems.all.forEach { destination ->
             // The hierarchy walk handles nested-graph destinations; today all routes are flat
             // so the hierarchy contains exactly the current route + start destination.
-            val selected = navBackStackEntry?.destination?.hierarchy?.any { it.route == destination.route } == true
+            val selected = navBackStackEntry?.destination?.hierarchy?.any { routeEntry ->
+                routeEntry.route == destination.route ||
+                    routeEntry.route?.substringBefore("/") == destination.route
+            } == true
 
             NavigationBarItem(
                 selected = selected,
