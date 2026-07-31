@@ -1011,27 +1011,17 @@ private fun Carousel(
                     landedTopic = landedTopic
                 )
                 if (slot == 0) {
-                    // v5.9 — smooth crossfade while cycling topics
-                    AnimatedContent(
-                        targetState = topic,
-                        transitionSpec = {
-                            fadeIn(tween(180)) + slideInVertically(tween(180)) { it / 4 } togetherWith
-                                fadeOut(tween(120)) + slideOutVertically(tween(120)) { -it / 4 }
-                        },
-                        label = "heroTicket"
-                    ) { currentTopic ->
-                        HeroTicketCard(
-                            accent = cat.accent,
-                            glyph = cat.iconGlyph,
-                            topic = currentTopic,
-                            cat = cat,
-                            landed = landedTopic != null,
-                            opening = opening,
-                            landScale = landScale,
-                            enabled = enabled,
-                            onTap = onCardTap
-                        )
-                    }
+                    HeroTicketCard(
+                        accent = cat.accent,
+                        glyph = cat.iconGlyph,
+                        topic = topic,
+                        cat = cat,
+                        landed = landedTopic != null,
+                        opening = opening,
+                        landScale = landScale,
+                        enabled = enabled,
+                        onTap = onCardTap
+                    )
                 } else {
                     PeekCard(
                         slot = slot,
