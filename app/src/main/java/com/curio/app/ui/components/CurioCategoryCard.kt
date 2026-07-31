@@ -3,14 +3,12 @@ package com.curio.app.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,9 +37,9 @@ import com.curio.app.ui.theme.CurioMotion
 
 /**
  * Compact category card shared by the standalone category picker and the
- * Spin page picker sheet — icon badge, category name, live topic count,
- * and an optional selected state (white outline + check). One component so
- * the two pickers can never drift apart visually.
+ * Spin page picker sheet — just the category name, live topic count, and an
+ * optional selected state (white outline + check). Text-only by design. One
+ * component so the two pickers can never drift apart visually.
  */
 @Composable
 fun CurioCategoryCard(
@@ -57,7 +56,13 @@ fun CurioCategoryCard(
     )
 
     val isWildcard = category.id == CategoryId.WILDCARD
-    val cardColor = if (isWildcard) CurioColors.CoralBlush else category.accent
+    // Muted fill — the raw accent is too loud for a full-width card, so it's
+    // deepened a step toward black: same hue, noticeably softer brightness.
+    val cardColor = if (isWildcard) {
+        lerp(CurioColors.CoralBlush, Color.Black, 0.18f)
+    } else {
+        lerp(category.accent, Color.Black, 0.22f)
+    }
     val topicCount = remember(category.id) { TopicJsonLoader.cached(category.id)?.size ?: 0 }
 
     Surface(
@@ -75,67 +80,42 @@ fun CurioCategoryCard(
             .height(104.dp)
             .scale(scale)
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            // Ghost icon — decorative
-            CurioIcon(
-                name = category.iconGlyph,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.14f),
-                size = 84.dp,
-                modifier = Modifier.align(Alignment.CenterEnd)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 12.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                // Icon badge
+                Text(
+                    text = category.displayName,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = if (isWildcard) "Surprise mix" else "$topicCount topics",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color.White.copy(alpha = 0.85f),
+                    maxLines = 1
+                )
+            }
+            if (isSelected) {
                 Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    modifier = Modifier.size(38.dp)
+                    shape = CircleShape,
+                    color = Color.White
                 ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        CurioIcon(
-                            name = category.iconGlyph,
-                            contentDescription = null,
-                            tint = Color.White,
-                            size = 20.dp
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    Text(
-                        text = category.displayName,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                        color = Color.White,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                    CurioIcon(
+                        CurioIcons.Check, null,
+                        tint = cardColor,
+                        size = 16.dp,
+                        modifier = Modifier.padding(3.dp)
                     )
-                    Text(
-                        text = if (isWildcard) "Surprise mix" else "$topicCount topics",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.85f),
-                        maxLines = 1
-                    )
-                }
-                if (isSelected) {
-                    Surface(
-                        shape = CircleShape,
-                        color = Color.White
-                    ) {
-                        CurioIcon(
-                            CurioIcons.Check, null,
-                            tint = cardColor,
-                            size = 16.dp,
-                            modifier = Modifier.padding(3.dp)
-                        )
-                    }
                 }
             }
         }
