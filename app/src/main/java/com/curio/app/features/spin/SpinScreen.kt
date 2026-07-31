@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -44,7 +45,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -66,6 +66,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -130,27 +131,23 @@ import kotlin.random.Random
  *     Explore button); the bottom CTA becomes "Spin again".
  *
  * v5.2 changes:
- *  8. **Auto-open** — after the spin settles the topic auto-transitions
- *     to Topic Reveal (CURIO_SPEC §5: ~400ms RevealHold pause, no tap
- *     needed). Tapping the card still opens it instantly. Both paths
- *     navigate with `launchSingleTop`, so whichever fires first wins and
- *     nothing double-pushes — and tap-to-open keeps working after coming
- *     back from Reveal.
+ *  8. **Tap-open landing** — after the shuffle settles the landed card
+ *     stays in place until the user taps it to open Topic Reveal. The
+ *     Shuffle CTA owns all spin starts so accidental card taps never spin.
  *
  * v5.3 changes:
  *  9. **Saveable state** — active category, filter chips (tags + subtypes)
  *     and recent-topic history now persist via `rememberSaveable` across
  *     navigation (Spin → Reveal → back), rotation and process death.
- *     The landed topic stays transient on purpose: restoring it would
- *     re-trigger auto-open when popping back from Reveal.
+ *     The landed topic stays transient on purpose so the deck opens cleanly
+ *     after process restore.
  *
  * v5.4 changes:
  * 10. **Spec-timed spin window** — the shuffle duration is now randomized
  *     inside [CurioMotion.Durations.SpinMin]..[SpinMax] (3.5–4.8s) instead
  *     of a fixed loop, so every spin settles at a slightly different
- *     moment. The auto-open pause now flags `isOpening`, swapping the
- *     landed ticket's hint to a pulsing "Opening…" before it transitions
- *     into Reveal.
+ *     moment. The landed ticket swaps its helper copy while shuffling and
+ *     then returns to the intentional "Tap to open" state.
  *
  * v5.5 changes:
  * 11. **Last-used category persists across launches** — the category the
@@ -159,11 +156,9 @@ import kotlin.random.Random
  *     slug picks up where they left off instead of defaulting to Surprise.
  *
  * v5.6 changes:
- * 12. **Landed topic survives closing Reveal** — auto-open still fires on
- *     a fresh landing, but if the user closes Topic Reveal without saving
- *     the topic, it stays on the card with "Tap to open" active until
- *     they explore (capture) it or tap Spin again. A `landingAlreadyOpened`
- *     guard stops auto-open from re-firing when returning from Reveal.
+ * 12. **Landed topic survives closing Reveal** — if the user closes Topic
+ *     Reveal without saving, the topic stays on the card with "Tap to open"
+ *     active until they explore (capture) it or tap Spin again.
  *
  * v5.7–v5.8 changes:
  * 13. The former gradient/glass ticket treatment was replaced by an opaque
@@ -171,7 +166,7 @@ import kotlin.random.Random
  *     elevation. The top-bar and bottom controls use solid paper containers;
  *     no ambient halo or glossy surface treatment is used on this screen.
  */
-// ═══════════════════════════════════════════════════════════════════════════
+// ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
 // lists (Set<String> has no built-in Bundle saver).
 // ═══════════════════════════════════════════════════════════════════════════
@@ -262,8 +257,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     //    saving keeps it on the card, tappable, until explored or spun
     //    again. The full CurioTopic is re-derived from the pool below.
     var landedTopicName by rememberSaveable(activeCategory.id) { mutableStateOf<String?>(null) }
-    // v5.6 — true once THIS landing has already opened (auto or tap). Stops
-    // auto-open re-firing when the user returns from Reveal; reset per spin.
+    // v5.6 — true once THIS landing has already opened by tap; reset per spin.
     var landingAlreadyOpened by rememberSaveable(activeCategory.id) { mutableStateOf(false) }
     val landedTopic: CurioTopic? = remember(landedTopicName, filteredPool) {
         landedTopicName?.let { name ->
@@ -271,8 +265,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 ?: TopicJsonLoader.cached(activeCategory.id)?.firstOrNull { it.name == name }
         }
     }
-    // v5.4 — true only during the brief auto-open pause before navigating
-    // to Reveal; the landed ticket swaps its hint to a pulsing "Opening…".
+    // True only during an explicit opening handoff; keeps copy flexible if
+    // a future shared-element transition delays navigation.
     var isOpening by remember { mutableStateOf(false) }
     var recentTopicIds by rememberSaveable(activeCategory.id, stateSaver = StringSetSaver) {
         mutableStateOf(setOf<String>())
@@ -344,27 +338,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         confettiTrigger++
     }
 
-    // ── Auto-open once the spin settles (CURIO_SPEC §5) ──────────────
-    // After the ~400ms RevealHold pause the landed topic transitions to
-    // Topic Reveal on its own. launchSingleTop makes it a no-op if the
-    // user already tapped the card open.
-    LaunchedEffect(landedTopicName) {
-        val landed = landedTopic ?: return@LaunchedEffect
-        // v5.6 — only auto-open the FIRST presentation of a landing. If the
-        // user closes Reveal without saving, landingAlreadyOpened stays true
-        // and the topic remains on the card with tap-to-open active until
-        // explored or spun again.
-        if (landingAlreadyOpened) return@LaunchedEffect
-        // v5.4 — flag the RevealHold pause so the ticket shows a pulsing
-        // "Opening…" hint; cleared just before navigation fires.
-        isOpening = true
-        delay(CurioMotion.Durations.RevealHold.toLong())
-        isOpening = false
-        landingAlreadyOpened = true
-        navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
-            launchSingleTop = true
-        }
-    }
+    // ── Landed topics open only by user intent ───────────────────────
+    // The center card is no longer a spin trigger: it opens an already
+    // landed topic, while the Shuffle CTA owns all spin/shuffle starts.
 
     // ── v5.9 — landed card stays tappable until the user explicitly
     //    spins/shuffles again.  No longer auto-clears when explored.
@@ -401,8 +377,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         // ── 2. Carousel (interactive cards) ─────────────────────────
-        // Tapping the center card spins while idle; once a topic has landed
-        // the card opens the topic directly (no separate Explore button).
+        // Tapping the center card opens a landed topic only; the bottom
+        // Shuffle CTA owns starting or re-starting the shuffle.
         Carousel(
             cat = cat,
             displayPool = displayPool,
@@ -423,8 +399,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
                         launchSingleTop = true
                     }
-                } else {
-                    shuffleCount++
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -1001,7 +975,7 @@ private fun Carousel(
         if (poolSize == 0) {
             EmptyPoolHint(cat)
         } else {
-            val slots = listOf(-1, 0, 1)
+            val slots = listOf(-2, 2, -1, 1, 0)
             slots.forEach { slot ->
                 val topic = resolveTopicForSlot(
                     slot = slot,
@@ -1017,9 +991,10 @@ private fun Carousel(
                         topic = topic,
                         cat = cat,
                         landed = landedTopic != null,
+                        shuffling = shuffling,
                         opening = opening,
                         landScale = landScale,
-                        enabled = enabled,
+                        enabled = enabled && landedTopic != null,
                         onTap = onCardTap
                     )
                 } else {
@@ -1028,7 +1003,8 @@ private fun Carousel(
                         accent = cat.accent,
                         glyph = cat.iconGlyph,
                         topic = topic,
-                        landed = landedTopic != null
+                        landed = landedTopic != null,
+                        shuffling = shuffling
                     )
                 }
             }
@@ -1085,6 +1061,7 @@ private fun HeroTicketCard(
     topic: CurioTopic?,
     cat: CurioCategory,
     landed: Boolean,
+    shuffling: Boolean,
     opening: Boolean,
     landScale: Float,
     enabled: Boolean,
@@ -1105,6 +1082,8 @@ private fun HeroTicketCard(
             .graphicsLayer {
                 scaleX = if (landed) landScale else 1f
                 scaleY = if (landed) landScale else 1f
+                rotationZ = if (shuffling) ((cycleIndexPulse(glyph, topic?.id) - 0.5f) * 3.5f) else 0f
+                translationY = if (shuffling) -6f else 0f
             }
             .zIndex(10f)
             .then(
@@ -1229,7 +1208,7 @@ private fun HeroTicketCard(
 
                         // Tap hint — "tap to spin" idle, "tap to open" once
                         // landed, and a pulsing "Opening…" during the brief
-                        // auto-open pause (v5.4).
+                        // opening handoff.
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -1248,7 +1227,11 @@ private fun HeroTicketCard(
                                     size = 16.dp
                                 )
                                 Text(
-                                    text = if (landed) "Tap to open" else "Tap to spin",
+                                    text = when {
+                                        landed -> "Tap to open"
+                                        shuffling -> "Shuffling…"
+                                        else -> "Press Shuffle"
+                                    },
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
                                     color = Color.White.copy(alpha = 0.88f)
                                 )
@@ -1272,20 +1255,31 @@ private fun PeekCard(
     accent: Color,
     glyph: String,
     topic: CurioTopic?,
-    landed: Boolean
+    landed: Boolean,
+    shuffling: Boolean
 ) {
-    val isTop = slot == -1
-    val yOff = if (isTop) -150f else 150f
-    val w = 300.dp
-    val h = 96.dp
+    val isTop = slot < 0
+    val far = kotlin.math.abs(slot) == 2
+    val yOff = when (slot) {
+        -2 -> -178f
+        -1 -> -136f
+        1 -> 136f
+        else -> 178f
+    }
+    val w = if (far) 272.dp else 300.dp
+    val h = if (far) 78.dp else 96.dp
 
     Box(
         modifier = Modifier
             .size(w, h)
             .graphicsLayer {
                 translationY = yOff.dp.toPx()
+                rotationZ = when (slot) { -2 -> -3.5f; -1 -> -1.4f; 1 -> 1.4f; else -> 3.5f }
+                scaleX = if (far) 0.92f else 0.98f
+                scaleY = if (far) 0.92f else 0.98f
+                alpha = if (far) 0.48f else 0.82f
             }
-            .zIndex(5f)
+            .zIndex(if (far) 2f else 5f)
     ) {
         AnimatedContent(
             targetState = topic,
@@ -1303,9 +1297,10 @@ private fun PeekCard(
         ) { currentTopic ->
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerLow,
-                shadowElevation = if (landed) 6.dp else 3.dp,
-                tonalElevation = 1.dp,
+                color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (shuffling) 0.16f else 0.08f),
+                shadowElevation = if (landed) 8.dp else if (far) 1.dp else 4.dp,
+                tonalElevation = if (far) 0.dp else 1.dp,
+                border = BorderStroke(1.dp, accent.copy(alpha = if (far) 0.10f else 0.20f)),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
@@ -1373,7 +1368,7 @@ private fun SpinButton(
                 contentAlignment = Alignment.Center
             ) {
                 if (isShuffling) {
-                    ShuffleGlyph(tint = Color.White, modifier = Modifier.size(46.dp))
+                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(48.dp))
                 } else if (landedTopic != null) {
                     CurioIcon(
                         CurioIcons.Refresh, null,
@@ -1435,7 +1430,8 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(700, easing = LinearEasing)
+            animation = tween(980, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
         ),
         label = "shuffleAngle"
     )
@@ -1457,7 +1453,7 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
 }
 
 /**
- * Small pulsing dot shown on the landed ticket during the auto-open
+ * Small pulsing dot shown on the landed ticket during the opening
  * pause — the subtle heartbeat that says the reveal is about to happen.
  */
 @Composable
@@ -1553,86 +1549,82 @@ private fun BottomCta(
                 }
             }
 
-            // ── Categories · Filter — buttons below the CTA ──
+            // ── Categories · Filter — image-led deck buttons below the CTA ──
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedButton(
+                DeckControlButton(
+                    label = cat.displayName,
+                    icon = cat.iconGlyph,
+                    accent = cat.accent,
+                    selected = true,
                     onClick = onCategories,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                     modifier = Modifier.weight(1f)
-                ) {
-                    CurioIcon(
-                        cat.iconGlyph, null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 18.dp
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = cat.displayName,
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
-                    )
-                    CurioIcon(
-                        CurioIcons.KeyboardArrowDown, null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        size = 16.dp
-                    )
-                }
-                OutlinedButton(
+                )
+                DeckControlButton(
+                    label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
+                    icon = CurioIcons.Search,
+                    accent = cat.accent,
+                    selected = hasFilters,
                     onClick = onFilter,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                     modifier = Modifier.weight(1f)
-                ) {
-                    CurioIcon(
-                        CurioIcons.Search, null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 18.dp
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = "Filter",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1
-                    )
-                    if (hasFilters) {
-                        Spacer(Modifier.width(6.dp))
-                        Surface(
-                            shape = RoundedCornerShape(50),
-                            color = cat.accent
-                        ) {
-                            Text(
-                                text = "$filterActiveCount",
-                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                                color = CurioColors.DeepPlum,
-                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
-                            )
-                        }
-                    }
-                }
+                )
             }
         }
     }
 }
+
+
+@Composable
+private fun DeckControlButton(
+    label: String,
+    icon: String,
+    accent: Color,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(24.dp),
+        color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (selected) 0.18f else 0.08f),
+        border = BorderStroke(1.dp, accent.copy(alpha = if (selected) 0.34f else 0.18f)),
+        shadowElevation = if (selected) 4.dp else 2.dp,
+        modifier = modifier.height(62.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                listOf(-6.dp to 4.dp, 5.dp to (-3).dp).forEachIndexed { index, offsetPair ->
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = accent.copy(alpha = if (index == 0) 0.18f else 0.30f),
+                        modifier = Modifier.size(28.dp).offset(x = offsetPair.first, y = offsetPair.second)
+                    ) {}
+                }
+                Surface(shape = RoundedCornerShape(14.dp), color = accent) {
+                    CurioIcon(icon, null, tint = CurioColors.DeepPlum, size = 20.dp, modifier = Modifier.padding(7.dp))
+                }
+            }
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+private fun cycleIndexPulse(glyph: String, topicId: String?): Float =
+    kotlin.math.abs((glyph + topicId.orEmpty()).hashCode() % 100) / 100f
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1835,18 +1827,11 @@ private fun CategoryPickerTile(
                     )
                 }
 
-                // Name + selected check
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Text(
-                        text = category.displayName,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        color = Color.White,
-                        modifier = Modifier.weight(1f)
-                    )
                     if (isSelected) {
                         Surface(
                             shape = CircleShape,
@@ -1886,9 +1871,11 @@ private fun resolveTopicForSlot(
             else -> pool[idxOf(1)]
         }
         else -> when (slot) {
+            -2 -> pool[idxOf(cycleIndex - 2)]
             -1 -> pool[idxOf(cycleIndex - 1)]
             0 -> pool[idxOf(cycleIndex)]
-            else -> pool[idxOf(cycleIndex + 1)]
+            1 -> pool[idxOf(cycleIndex + 1)]
+            else -> pool[idxOf(cycleIndex + 2)]
         }
     }
 }

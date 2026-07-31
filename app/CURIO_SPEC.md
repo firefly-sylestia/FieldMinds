@@ -11,6 +11,7 @@ Style system: Material Design 3, customized with the Midnight Signal identity: d
 | v | Date | Change |
 |---|---|---|
 | v1 | (user's original paste) | Initial spec with Category Picker as bottom sheet + Exploration Hub in the Spin→Capture flow + emoji-based category totem icons. |
+| **v8** | 2026-07-31 | Home-to-Shuffle category launches preserve the bottom-nav Shuffle context. Shuffle keeps the same deck design but upgrades category/filter controls, behind-card depth, smoother dice motion, and card-tap behavior so landed cards open topics while the Shuffle CTA owns spinning. Mood-board images can expand full screen with pinch zoom and pan. |
 | **v7** | 2026-07-31 | Profile preferences and activity cards receive a Material Expressive polish pass with stronger card containers, dark-safe edit actions, and inline daily reminder time chips. Category Picker removes the extra Choose a lane hero card and uses compact guidance plus expressive deck tiles. |
 | **v2** | today | **Category Picker → full-screen page** (own back-stack entry). **Exploration Hub removed** from the flow (Topic Reveal goes straight to Record/Capture; scratchpad state preserved for future). **No emoji anywhere** — Material Symbols (inherited from `app-legacy/`) for category glyphs, `geom.ttf` (inherited from `app-legacy/`) for display/headline typography. "Recently explored" carousel confirmed on Home + Cabinet stays as separate bottom-nav tab. New §13 (Missing/Additional Screens) + §14 (Open Decisions). |
 | **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. Shuffle screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
@@ -261,23 +262,22 @@ LAYOUT SKELETON
   │        ╰─────────╯          │     category's accent color family
   │             ▲                │  ← pointer/needle at top
   │                             │
-  │      "Tap to spin"          │  ← helper text, fades once spinning
+  │      "Press Shuffle"        │  ← helper text; landed cards say Tap to open
   │                             │
   │   ╭───────────────────╮     │
-  │   │      S P I N       │     │  ← big pill CTA button, sits BELOW
-  │   ╰───────────────────╯     │     the dial (not the dial itself,
-  │                             │     to keep dial purely visual/tap-
-  │                             │     anywhere-on-dial also works)
+  │   │    S H U F F L E   │     │  ← big pill CTA button, sits BELOW
+  │   ╰───────────────────╯     │     the deck remains presentational
+  │                             │     until a landed card can open)
   └─────────────────────────────┘
 
 INTERACTIONS
-  - Tapping either the dial itself OR the "SPIN" button below it triggers a spin (redundant tap targets).
+  - Tapping the main card does not start a spin. Before landing it is presentational; after landing it opens Topic Reveal for the landed topic. The Shuffle CTA below the deck is the only spin trigger.
   - Spin animation: dial rotates 3–5 full rotations with spring-based deceleration (ease-out-back), total duration 2.5–3.5s, landing on a random segment. A soft ratcheting "tick tick tick" haptic plays as segments pass the pointer, slowing as it settles — like a real prize wheel.
-  - While spinning: the "SPIN" button disables and its label swaps to "Spinning…" with a subtle shimmer; the dial cannot be tapped again mid-spin.
-  - On landing: the winning segment pulses/glows once, a confetti burst fires from the pointer tip in the category's accent color, and after ~400ms the screen auto-transitions (slide + fade) into Topic Reveal. No manual "confirm" tap needed.
+  - While shuffling: the Shuffle button remains the only spin trigger, disables repeat taps, and its label swaps to "Spinning…" with smooth dice motion; the main card shows shuffling state but does not start a spin from card taps.
+  - On landing: the winning card pulses/lifts once, a confetti burst fires in the category's accent color, and the card remains ready for an intentional tap-to-open into Topic Reveal.
   - Segments for named categories (Music, Movies, Books, Art, Science) are pre-defined weighted pools (e.g. genres/eras) that narrow down to a specific topic server-side/algorithmically after landing — the dial doesn't need one segment per possible topic, just enough visual segments (6–8) to feel substantial.
   - Wildcard dial: segments are the OTHER five category icons themselves (Music/Movies/Books/Art/Science) rendered in rainbow-swept color — landing on one silently picks a topic from that category behind the scenes, then reveal still says "Your wildcard pick:".
-  - Back arrow (top-left): returns to Home, category selection is discarded.
+  - Back arrow (top-left): returns to Home when Shuffle was opened from Home/picker; bottom-nav Shuffle remains selected for category-loaded Shuffle routes.
 
 ---
 
@@ -310,7 +310,7 @@ INTERACTIONS
   - **(v2) "Start exploring →"**: navigates directly to Save/Capture (§8), passing the topic along. The Exploration Hub from v1 is skipped — scratchpad state is preserved for a future iteration but not surfaced in this flow.
   - "Spin again instead": no confirmation dialog (nothing committed yet) — returns straight to Shuffle, same category pre-loaded, ready to spin immediately.
   - "✕" top-right: same as "Spin again" but exits all the way back to Home instead of re-spinning.
-  - **(v2) Topic image**: tap opens the Image Lightbox (§13.2) — full-screen, pinch-zoom, swipe down to dismiss.
+  - **(v8) Topic and mood-board images**: tap opens a full-screen image view with pinch zoom and pan; mood-board tiles also expose an inline expand affordance so images never fail into a blank/black-only viewer.
   - This screen is NOT saved anywhere yet — if the user backs out, the topic is gone for good.
 
 ---
