@@ -977,18 +977,19 @@ private fun CompactChip(
             .fillMaxWidth()
             .clip(RoundedCornerShape(50))
             .clickable(onClick = onClick)
-    ) {            Text(
+    ) {
+            Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
                 ),
                 color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-        )
-    }
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+            )
+        }
 }
 
 
@@ -1571,80 +1572,82 @@ private fun BottomCta(
                 }
             }
 
-            // ── Categories · Filter — Material buttons below the CTA ──
+            // ── Categories · Filter — buttons below the CTA ──
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {                OutlinedButton(
+            ) {
+                OutlinedButton(
                     onClick = onCategories,
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
                         contentColor = CurioColors.DeepPlum
                     ),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                CurioIcon(
-                    cat.iconGlyph, null,
-                    tint = CurioColors.DeepPlum,
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CurioIcon(
+                        cat.iconGlyph, null,
+                        tint = CurioColors.DeepPlum,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(
                         text = cat.displayName,
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                        color = cat.accent,
+                        color = CurioColors.DeepPlum,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
                     CurioIcon(
                         CurioIcons.KeyboardArrowDown, null,
-                        tint = cat.accent.copy(alpha = 0.7f),
+                        tint = CurioColors.DeepPlum.copy(alpha = 0.5f),
                         size = 16.dp
                     )
-                }            OutlinedButton(
-                onClick = onFilter,
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    contentColor = CurioColors.DeepPlum
-                ),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                CurioIcon(
-                    CurioIcons.Search, null,
-                    tint = CurioColors.DeepPlum,
-                    size = 18.dp
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "Filter",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
+                }
+                OutlinedButton(
+                    onClick = onFilter,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        contentColor = CurioColors.DeepPlum
                     ),
-                    color = cat.accent,
-                    maxLines = 1
-                )
-                if (hasFilters) {
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CurioIcon(
+                        CurioIcons.Search, null,
+                        tint = CurioColors.DeepPlum,
+                        size = 18.dp
+                    )
                     Spacer(Modifier.width(6.dp))
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = cat.accent
-                    ) {
-                        Text(
-                            text = "$filterActiveCount",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = Color.White,
-                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
-                        )
+                    Text(
+                        text = "Filter",
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
+                        ),
+                        color = CurioColors.DeepPlum,
+                        maxLines = 1
+                    )
+                    if (hasFilters) {
+                        Spacer(Modifier.width(6.dp))
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = cat.accent
+                        ) {
+                            Text(
+                                text = "$filterActiveCount",
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                                color = CurioColors.DeepPlum,
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                            )
+                        }
                     }
                 }
-            }
             }
         }
     }
