@@ -148,8 +148,10 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         }
         r
     }
-    val allSubtypes = remember(pool) { pool.map { it.subtype }.distinct().sorted() }
-    val allTags = remember(pool) { pool.flatMap { it.tags }.distinct().sorted() }
+    // Smart filter groups — buckets raw tags into Type · Genre · Era ·
+    // Origin sections and caps each, so the sheet stays ~10-15 chips
+    // instead of dumping every raw tag (albums alone has 256 unique tags).
+    val filterGroups = remember(pool) { buildFilterGroups(pool) }
 
     // ── Spin state ────────────────────────────────────────────────────
     var shuffling by remember { mutableStateOf(false) }
@@ -315,8 +317,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     if (showFilters) {
         FilterSheet(
             cat = cat,
-            subtypes = allSubtypes,
-            tags = allTags,
+            groups = filterGroups,
             initialSubtypes = activeSubtypes,
             initialFilters = activeFilters,
             onDismiss = { showFilters = false },
@@ -408,6 +409,83 @@ private fun TopBar(
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
+// Smart filter grouping — buckets a category's raw tags into compact
+// Type · Genre · Era · Origin sections so the sheet stays ~10-15 chips
+// instead of dumping every raw tag (albums alone has 256 unique tags).
+// ═══════════════════════════════════════════════════════════════════════════
+
+private data class FilterGroups(
+    val types: List<String>,
+    val genres: List<String>,
+    val eras: List<String>,
+    val origins: List<String>
+)
+
+/** Common nationality/origin tags — anything else is treated as a genre. */
+private val NationalityTags = setOf(
+    "American", "British", "French", "German", "Italian", "Japanese", "Chinese",
+    "Nigerian", "Jamaican", "Canadian", "Swedish", "Norwegian", "Danish", "Finnish",
+    "Icelandic", "Cuban", "Brazilian", "Indian", "Korean", "Australian", "Irish",
+    "Scottish", "Welsh", "Russian", "Polish", "Spanish", "Portuguese", "Greek",
+    "Turkish", "Mexican", "Argentine", "Argentinian", "Colombian", "Chilean", "Dutch",
+    "Belgian", "Swiss", "Austrian", "Hungarian", "Czech", "Romanian", "Ukrainian",
+    "Ghanaian", "Senegalese", "Ethiopian", "Kenyan", "South African", "Egyptian",
+    "Moroccan", "Algerian", "Iranian", "Israeli", "Pakistani", "Filipino", "Indonesian",
+    "Thai", "Vietnamese", "Malaysian", "Congolese", "Malian", "Lebanese", "Syrian",
+    "Iraqi", "Afghan", "Armenian", "Georgian", "Kazakh", "Mongolian", "Nepali",
+    "Sri Lankan", "Bangladeshi", "Haitian", "Puerto Rican", "Dominican", "Venezuelan",
+    "Ecuadorian", "Bolivian", "Uruguayan", "Croatian", "Serbian", "Bulgarian", "Slovak",
+    "Estonian", "Lithuanian", "New Zealand", "New Zealander", "Taiwanese", "Hong Kong",
+    "Cape Verdean", "Barbadian", "Beninese", "African", "European", "Soviet", "Tuareg",
+    "Congolese", "Panamanian", "Chilean", "Argentine", "Puerto Rican",
+    "American-British", "British-Nigerian", "American-Canadian", "French-Algerian",
+    "Italian-American", "British-Irish", "African-American", "British-Canadian",
+    "Brazilian-American", "Brazilian-British", "Ghanaian-British", "French-Spanish",
+    "Irish-British", "British-American", "Canadian-American", "Greek-American",
+    "Russian-French", "British-German", "Czech-Austrian", "Latvian-American",
+    "French-American", "Swiss-American", "Japanese-American", "Hellenistic-Egyptian",
+    "Roman-Egyptian", "Egyptian-Greek", "Polish-French", "New Zealand-British",
+    "Welsh-British", "Scottish-British", "Hungarian-American", "British-Dutch",
+    "American-French", "Austrian-Czech", "British-Welsh", "Indian-Bengali"
+)
+
+/**
+ * Derives compact, meaningful filter chips from a category's pool.
+ * Eras are the most frequent decades/centuries present, genres and origins
+ * are the most-used tags, each capped so the sheet stays tidy.
+ */
+private fun buildFilterGroups(pool: List<CurioTopic>): FilterGroups {
+    if (pool.isEmpty()) return FilterGroups(emptyList(), emptyList(), emptyList(), emptyList())
+    val types = pool.map { it.subtype }.distinct().sorted()
+    val counts = pool.flatMap { it.tags }.groupingBy { it }.eachCount()
+    // Era chips: pick whichever family is more prevalent in this category —
+    // decades (1970s…) for music/film, centuries (20th Century…) for books,
+    // science and art. Comparing total frequency instead of mere presence
+    // keeps the row coherent when a category mixes both (e.g. books has a
+    // lone '2000s' tag but is dominated by '20th Century').
+    val decadeRe = Regex("""\d{4}s""")
+    val centuryRe = Regex("""^\d{1,2}(st|nd|rd|th) Century$|^Ancient$""")
+    val decades = counts.keys.filter { decadeRe.matches(it) }
+    val centuries = counts.keys.filter { centuryRe.matches(it) }
+    val decadesTotal = decades.sumOf { counts[it] ?: 0 }
+    val centuriesTotal = centuries.sumOf { counts[it] ?: 0 }
+    val eras = (if (decadesTotal >= centuriesTotal) decades else centuries)
+        .sortedByDescending { counts[it] ?: 0 }
+        .take(4)
+        .sorted()
+    val origins = counts.keys
+        .filter { it in NationalityTags }
+        .sortedByDescending { counts[it] ?: 0 }
+        .take(3)
+    val genres = counts.keys
+        .filter { !decadeRe.matches(it) && !centuryRe.matches(it) && it !in NationalityTags }
+        .sortedByDescending { counts[it] ?: 0 }
+        .take(4)
+    return FilterGroups(types = types, genres = genres, eras = eras, origins = origins)
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
 // Compact filter bottom sheet with visible selected-filter chips
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -415,13 +493,13 @@ private fun TopBar(
 @Composable
 private fun FilterSheet(
     cat: CurioCategory,
-    subtypes: List<String>,
-    tags: List<String>,
+    groups: FilterGroups,
     initialSubtypes: Set<String>,
     initialFilters: Set<String>,
     onDismiss: () -> Unit,
     onApply: (tags: Set<String>, subtypes: Set<String>) -> Unit
 ) {
+    val subtypes = groups.types
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var draftFilters by remember(initialFilters) { mutableStateOf(initialFilters) }
     var draftSubtypes by remember(initialSubtypes) { mutableStateOf(initialSubtypes) }
@@ -511,7 +589,11 @@ private fun FilterSheet(
                 Spacer(Modifier.height(14.dp))
             }
 
-            if (subtypes.size <= 1 && tags.isEmpty()) {
+            val hasAny = subtypes.size > 1 ||
+                groups.genres.isNotEmpty() ||
+                groups.eras.isNotEmpty() ||
+                groups.origins.isNotEmpty()
+            if (!hasAny) {
                 Text(
                     text = "No filters for this category yet.",
                     style = MaterialTheme.typography.bodyMedium,
@@ -531,9 +613,9 @@ private fun FilterSheet(
                         .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 )
 
-                // ── Compact lazy chip grid — scrolls inside the sheet so
-                //    the Apply button stays visible, and stays smooth even
-                //    with 100+ tags. ──────────────────────────────────
+                // ── Compact lazy chip grid — grouped Type · Genre · Era ·
+                //    Origin sections, each capped to a handful of chips so
+                //    the sheet stays tidy instead of 100+ raw tags. ─────
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 112.dp),
                     modifier = Modifier.weight(1f),
@@ -556,20 +638,50 @@ private fun FilterSheet(
                             )
                         }
                     }
-                    if (tags.isNotEmpty()) {
+                    if (groups.genres.isNotEmpty()) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             SectionLabel(
                                 "Genres",
                                 Modifier.padding(top = if (subtypes.size > 1) 6.dp else 0.dp, bottom = 2.dp)
                             )
                         }
-                        items(tags) { tag ->
+                        items(groups.genres) { tag ->
                             CompactChip(
                                 label = tag,
                                 selected = tag in draftFilters,
                                 accent = cat.accent,
                                 onClick = {
                                     draftFilters = if (tag in draftFilters) draftFilters - tag else draftFilters + tag
+                                }
+                            )
+                        }
+                    }
+                    if (groups.eras.isNotEmpty()) {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            SectionLabel("Era", Modifier.padding(top = 6.dp, bottom = 2.dp))
+                        }
+                        items(groups.eras) { era ->
+                            CompactChip(
+                                label = era,
+                                selected = era in draftFilters,
+                                accent = cat.accent,
+                                onClick = {
+                                    draftFilters = if (era in draftFilters) draftFilters - era else draftFilters + era
+                                }
+                            )
+                        }
+                    }
+                    if (groups.origins.isNotEmpty()) {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            SectionLabel("Origin", Modifier.padding(top = 6.dp, bottom = 2.dp))
+                        }
+                        items(groups.origins) { origin ->
+                            CompactChip(
+                                label = origin,
+                                selected = origin in draftFilters,
+                                accent = cat.accent,
+                                onClick = {
+                                    draftFilters = if (origin in draftFilters) draftFilters - origin else draftFilters + origin
                                 }
                             )
                         }
