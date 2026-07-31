@@ -40,6 +40,9 @@ class CaptureRepository(private val dao: CaptureDao) {
     /** Count total captures. */
     suspend fun count(): Int = dao.count()
 
+    /** Wipe every capture (restore-from-backup). Returns deleted count. */
+    suspend fun clearAll(): Int = dao.clearAll()
+
     companion object {
         fun createId(): String = UUID.randomUUID().toString()
     }

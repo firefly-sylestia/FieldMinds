@@ -102,6 +102,22 @@ private val CurioDarkColorScheme = darkColorScheme(
 )
 
 /**
+ * App-theme-aware dark check. Reads the current theme mode reactively from
+ * [AppPreferences.themeModeState] so that toggling Light/Dark/System in
+ * settings takes effect immediately without restarting the app.
+ *
+ * Screens that branch on dark mode (gradients, glows, surface tints) must
+ * use this instead of raw [isSystemInDarkTheme], which ignores the in-app
+ * override and can render the wrong variant when the user forces a theme.
+ */
+@Composable
+fun isCurioDarkTheme(): Boolean = when (AppPreferences.themeModeState) {
+    "light"  -> false
+    "dark"   -> true
+    else     -> isSystemInDarkTheme()  // "system" or unknown
+}
+
+/**
  * Reads the current theme mode reactively from [AppPreferences.themeModeState]
  * so that toggling Light/Dark/System in settings takes effect immediately
  * without restarting the app.
@@ -110,12 +126,7 @@ private val CurioDarkColorScheme = darkColorScheme(
 fun CurioTheme(
     content: @Composable () -> Unit
 ) {
-    val effectiveMode = AppPreferences.themeModeState
-    val isDark = when (effectiveMode) {
-        "light"  -> false
-        "dark"   -> true
-        else     -> isSystemInDarkTheme()  // "system" or unknown
-    }
+    val isDark = isCurioDarkTheme()
     val colorScheme = if (isDark) CurioDarkColorScheme else CurioLightColorScheme
 
     val view = LocalView.current

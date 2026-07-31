@@ -12,7 +12,7 @@ Asserts (per the fixed Gradle task):
   - every topic has id (unique cross-file) + categoryId (matches filename)
   - every topic has subtype/name/teaser/imageUrl/exploreAction
   - every exploreAction has verb/targetName/durationMinutes/instruction
-  - every instruction <= 280 chars
+  - every instruction <= 450 chars
   - tier, if present, is in 1..3
 
 Exit 0 = all OK; exit 1 = at least one failure (print first 10).

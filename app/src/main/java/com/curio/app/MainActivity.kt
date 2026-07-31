@@ -44,6 +44,12 @@ class MainActivity : ComponentActivity() {
         CurioRepositoryHolder.init(db.captureDao())
 
         AppPreferences.initThemeMode(this)
+        if (AppPreferences.isReminderEnabled(this)) {
+            com.curio.app.data.DailyReminderScheduler.schedule(
+                this,
+                AppPreferences.getReminderHour(this)
+            )
+        }
         setContent {
             CurioTheme {
                 CurioNavHost()

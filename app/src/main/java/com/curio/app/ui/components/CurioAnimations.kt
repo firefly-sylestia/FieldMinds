@@ -70,19 +70,13 @@ fun ScreenEntrance(content: @Composable () -> Unit) {
  * Dramatic screen entrance — scale up from 0.85 + fade in, with an elastic
  * spring for that premium "morph into view" feel. Use for hero screens:
  * Topic Reveal, Spin landing, Splash → Home.
- *
- * @param delayMs Optional delay before the animation starts.
  */
 @Composable
 fun MorphEntrance(
-    delayMs: Int = 0,
     content: @Composable () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        if (delayMs > 0) kotlinx.coroutines.delay(delayMs.toLong())
-        visible = true
-    }
+    LaunchedEffect(Unit) { visible = true }
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(
@@ -131,71 +125,6 @@ fun MorphingContainer(
         },
         label = "morph"
     ) { content() }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Staggered entrance for lists and grids
-// ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Staggered entrance for lists/grids — each child fades + slides up with
- * an increasing delay based on its index. Children must call
- * [StaggeredItem] to participate.
- *
- * Usage:
- * ```
- * StaggeredEntrance {
- *     items.forEachIndexed { index, item ->
- *         StaggeredItem(index = index) {
- *             MyCard(item)
- *         }
- *     }
- * }
- * ```
- *
- * @param staggerDelayMs Delay per child index (default 50ms from CurioMotion.Stagger.Base).
- */
-@Composable
-fun StaggeredEntrance(
-    staggerDelayMs: Int = CurioMotion.Stagger.Base,
-    content: @Composable () -> Unit
-) {
-    content()
-}
-
-/**
- * A single child within a [StaggeredEntrance]. Delays its appearance by
- * [index] * [staggerDelayMs] then fades + slides in.
- *
- * Pass the same [staggerDelayMs] as the parent [StaggeredEntrance].
- */
-@Composable
-fun StaggeredItem(
-    index: Int,
-    staggerDelayMs: Int = CurioMotion.Stagger.Base,
-    content: @Composable () -> Unit
-) {
-    var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(index) {
-        kotlinx.coroutines.delay((index * staggerDelayMs).toLong())
-        visible = true
-    }
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(
-            animationSpec = tween(
-                durationMillis = CurioMotion.Durations.Standard,
-                easing = FastOutSlowInEasing
-            )
-        ) + slideInVertically(
-            initialOffsetY = { it / 4 },
-            animationSpec = tween(
-                durationMillis = CurioMotion.Durations.Standard,
-                easing = FastOutSlowInEasing
-            )
-        ),
-        content = { content() }
-    )
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

@@ -64,7 +64,6 @@ import com.curio.app.features.capture.formats.SoundBiteFormat
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.EmberBurst
-import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -79,7 +78,7 @@ import kotlinx.coroutines.launch
  *  - Structured data collection via [CaptureData] callbacks from each format
  *  - Room database persistence via [CaptureRepository]
  *  - Dual confetti + ember burst on save success
- *  - MorphEntrance for format body
+ *  - Format body renders instantly (no entrance delay)
  *  - Proper back-navigation with discard confirmation
  */
 @Composable
@@ -250,19 +249,17 @@ fun SaveCaptureScreen(
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
-            MorphEntrance(delayMs = 150) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                     FormatBodyForCategory(
                         category = cat,
                         onCanSaveChange = { canSave = it },
                         onDataChanged = { currentCaptureData = it }
                     )
-                }
             }
         }
 

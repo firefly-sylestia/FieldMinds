@@ -1,87 +1,153 @@
 package com.curio.app.features.profile
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioQuality
 import com.curio.app.data.AudioQualitySettings
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
+import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
-import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Profile — modern Material 3 theme (v2).
+ * Profile and personal settings hub.
  *
- * Layout, top → bottom on a 360×800 dp phone:
- *  24-44 dp   statusBarsPadding()
- *   48 dp     Top bar (`←  Profile`)
- *   12 dp     gap
- *  ~180 dp    **Hero profile card** — 96dp avatar, name (titleLarge),
- *             subtitle, edit-name pill, all on coral-tinted surface.
- *  16 dp     gap
- *  ~120 dp    **Stats grid** — 4 stat cards (Streak · Saved · Recent · Lanes).
- *  16 dp     gap
- *  ~110 dp    **Level / curiosity card** — title + progress strip
- *             (X of 25 topics → next badge).
- *  16 dp     gap
- *  ~330 dp    **Preferences card** — grouped rows: Display name, Theme
- *             (segmented Light/Dark/System), Audio quality, Notifications.
- *  16 dp     gap
- *  ~110 dp    **Your categories** — top 3 active category chips with
- *             capture counts; "Manage" trailing link.
- *  16 dp     gap
- *  ~260 dp    **Recent activity** — up to 5 entry rows.
- *  16 dp     gap
- *  ~180 dp    **Developer & about card** — Test crash, Crash logs (cond.),
- *             Report a bug, Replay intro, Version. All grouped.
- *  24 dp     Bottom + nav-bar inset padding.
+ * The screen intentionally uses a calm hierarchy: a compact identity hero,
+ * four glanceable stats, then settings and activity cards. Every row that
+ * looks interactive either opens a dialog or navigates; informational values
+ * are rendered as text instead of dead buttons.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController) {
     val context = LocalContext.current
-    val displayName = remember { mutableStateOf(AppPreferences.getDisplayName(context)) }
-    val streakDays = StreakTracker.getStreak(context)
-    val audioQuality = remember { mutableStateOf(AudioQualitySettings.get(context)) }
-    val themeMode = remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
-    val reminderEnabled = remember { mutableStateOf(AppPreferences.isReminderEnabled(context)) }
-    val showNameDialog = remember { mutableStateOf(false) }
-    val showQualityDialog = remember { mutableStateOf(false) }
-    val nameInput = remember(displayName.value) { mutableStateOf(displayName.value) }
-    val crashCount = remember { mutableIntStateOf(0) }
-
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var displayName by remember { mutableStateOf(AppPreferences.getDisplayName(context)) }
+    var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
+    var audioQuality by remember { mutableStateOf(AudioQualitySettings.get(context)) }
+    val reminderEnabled = AppPreferences.reminderEnabledState
+    var reminderHour by remember { mutableIntStateOf(AppPreferences.getReminderHour(context)) }
+    var showNameDialog by remember { mutableStateOf(false) }
+    var showQualityDialog by remember { mutableStateOf(false) }
+    var showReminderDialog by remember { mutableStateOf(false) }
+    var showVersionDialog by remember { mutableStateOf(false) }
+    var nameInput by remember(displayName) { mutableStateOf(displayName) }
+    var crashCount by remember { mutableIntStateOf(0) }
     var totalSaved by remember { mutableIntStateOf(0) }
     var recentEntries by remember { mutableStateOf<List<CurioEntry>>(emptyList()) }
     var categoryCounts by remember { mutableStateOf<Map<CategoryId, Int>>(emptyMap()) }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                displayName = AppPreferences.getDisplayName(context)
+                themeMode = AppPreferences.getThemeMode(context)
+                audioQuality = AudioQualitySettings.get(context)
+                reminderHour = AppPreferences.getReminderHour(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    val requestNotifications = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            AppPreferences.setReminderEnabled(context, true)
+        }
+    }
+
+    fun enableReminder() {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            AppPreferences.setReminderEnabled(context, true)
+        }
+    }
+
+    fun setReminder(enabled: Boolean) {
+        if (enabled) enableReminder()
+        else {
+            AppPreferences.setReminderEnabled(context, false)
+        }
+    }
 
     LaunchedEffect(Unit) {
         runCatching {
@@ -90,337 +156,396 @@ fun ProfileScreen(navController: NavController) {
             recentEntries = entries.take(5)
             categoryCounts = entries.groupingBy { it.topic.categoryId }.eachCount()
         }.onFailure { android.util.Log.e("ProfileScreen", "Failed to load entries", it) }
-        crashCount.intValue = CurioCrashReporter.getCrashHistory(context).size
+        crashCount = CurioCrashReporter.getCrashHistory(context).size
     }
 
-    // Level logic: tiers at 1, 5, 15, 30, 60, 100, 250, 500
-    val level = remember(totalSaved) { levelFor(totalSaved) }
-    val nextLevelProgress = remember(totalSaved) { progressTowardsNextLevel(totalSaved) }
+    val streakDays = StreakTracker.getStreak(context)
+    val level = levelFor(totalSaved)
+    val progress = progressTowardsNextLevel(totalSaved)
+    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
+    val themeLabels = listOf("Light", "Dark", "System")
+    val themeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
+    val versionName = com.curio.app.BuildConfig.VERSION_NAME
 
-    if (showNameDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showNameDialog.value = false },
-            shape = RoundedCornerShape(28.dp),
-            title = {
-                Text(
-                    "Display name",
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            },
-            text = {
-                Column {
-                    Text(
-                        "How should we greet you?",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    OutlinedTextField(
-                        value = nameInput.value,
-                        onValueChange = { nameInput.value = it },
-                        singleLine = true,
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        val n = nameInput.value.ifBlank { "Curious Explorer" }
-                        displayName.value = n
-                        AppPreferences.setDisplayName(context, n)
-                        showNameDialog.value = false
-                    }
-                ) {
-                    Text(
-                        "Save",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showNameDialog.value = false }) {
-                    Text(
-                        "Cancel",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        )
-    }
-
-    // ── Audio quality picker dialog ─────────────────────────────────
-    if (showQualityDialog.value) {
-        val currentQuality = audioQuality.value
-        AlertDialog(
-            onDismissRequest = { showQualityDialog.value = false },
-            shape = RoundedCornerShape(28.dp),
-            title = {
-                Text(
-                    "Recording quality",
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        "Higher quality = clearer audio, bigger files.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    AudioQuality.entries.forEach { q ->
-                        val isSelected = q == currentQuality
-                        Surface(
-                            onClick = {
-                                audioQuality.value = q
-                                AudioQualitySettings.set(context, q)
-                                showQualityDialog.value = false
-                            },
-                            shape = RoundedCornerShape(16.dp),
-                            color = if (isSelected) CurioColors.CoralBlush.copy(alpha = 0.12f)
-                            else Color.Transparent,
-                            border = if (isSelected)
-                                androidx.compose.foundation.BorderStroke(1.5.dp, CurioColors.CoralBlush.copy(alpha = 0.5f))
-                            else
-                                androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(14.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                RadioButton(
-                                    selected = isSelected,
-                                    onClick = null,
-                                    colors = RadioButtonDefaults.colors(
-                                        selectedColor = CurioColors.CoralBlush
-                                    )
-                                )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        q.label,
-                                        style = MaterialTheme.typography.bodyLarge.copy(
-                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
-                                        ),
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                    Text(
-                                        q.description,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showQualityDialog.value = false }) {
-                    Text(
-                        "Close",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
-            }
-        )
-    }
+    ProfileDialogs(
+        showNameDialog = showNameDialog,
+        nameInput = nameInput,
+        onNameInputChange = { nameInput = it },
+        onDismissName = { showNameDialog = false },
+        onSaveName = {
+            displayName = nameInput.trim().ifBlank { "Curious Explorer" }
+            AppPreferences.setDisplayName(context, displayName)
+            showNameDialog = false
+        },
+        showQualityDialog = showQualityDialog,
+        currentQuality = audioQuality,
+        onQualitySelected = {
+            audioQuality = it
+            AudioQualitySettings.set(context, it)
+            showQualityDialog = false
+        },
+        showReminderDialog = showReminderDialog,
+        reminderHour = reminderHour,
+        onReminderHourSelected = {
+            reminderHour = it
+            AppPreferences.setReminderHour(context, it)
+            showReminderDialog = false
+        },
+        showVersionDialog = showVersionDialog,
+        versionName = versionName,
+        onDismissVersion = { showVersionDialog = false }
+    )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
     ) {
-        // ── Top bar ──────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 12.dp, vertical = 0.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             CurioBackButton(onClick = { navController.popBackStack() })
-            Text(
-                "Profile",
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Profile",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    "Your curiosity, in one place",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // ── 1. Hero profile card ─────────────────────────────────────
-            item { HeroProfileCard(name = displayName.value, streakDays = streakDays) }
-
-            // ── 2. Stats grid ────────────────────────────────────────────
             item {
-                StatsGrid(
+                ProfileHero(
+                    name = displayName,
+                    streakDays = streakDays,
+                    onEditName = {
+                        nameInput = displayName
+                        showNameDialog = true
+                    }
+                )
+            }
+            item {
+                StatsStrip(
                     streak = streakDays,
                     saved = totalSaved,
                     recent = recentEntries.size,
                     lanes = CurioCategories.visible.size
                 )
             }
-
-            // ── 3. Level / curiosity card ────────────────────────────────
             item {
                 LevelCard(
                     level = level,
                     saved = totalSaved,
-                    progressFraction = nextLevelProgress.first,
-                    nextThreshold = nextLevelProgress.second,
-                    isMaxLevel = nextLevelProgress.first >= 1f && level == 8
+                    progress = progress.first,
+                    nextThreshold = progress.second,
+                    isMaxLevel = level >= 9
                 )
             }
-
-            // ── 4. Preferences card (single M3 card; rows inside) ───────
             item {
                 PreferencesCard(
-                    displayName = displayName.value,
-                    onEditName = { nameInput.value = displayName.value; showNameDialog.value = true },
-                    themeMode = themeMode.value,
+                    displayName = displayName,
+                    themeIndex = themeIndex,
+                    themeLabels = themeLabels,
+                    onEditName = {
+                        nameInput = displayName
+                        showNameDialog = true
+                    },
                     onThemeChange = {
-                        themeMode.value = it
-                        AppPreferences.setThemeMode(context, it)
+                        themeMode = themes[it]
+                        AppPreferences.setThemeMode(context, themes[it])
                     },
-                    audioQuality = audioQuality.value,
-                    onAudioQualityClick = { showQualityDialog.value = true },
-                    reminderEnabled = reminderEnabled.value,
-                    onReminderToggle = {
-                        reminderEnabled.value = it
-                        AppPreferences.setReminderEnabled(context, it)
-                    },
+                    audioQuality = audioQuality,
+                    onAudioQualityClick = { showQualityDialog = true },
+                    reminderEnabled = reminderEnabled,
+                    reminderHour = reminderHour,
+                    onReminderToggle = ::setReminder,
+                    onReminderTimeClick = { if (reminderEnabled) showReminderDialog = true },
                     onManageCategories = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) }
                 )
             }
-
-            // ── 5. Your categories ──────────────────────────────────────
             if (categoryCounts.isNotEmpty()) {
                 item {
-                    CategoriesPreviewCard(
+                    CategoriesCard(
                         counts = categoryCounts,
-                        onSeeAll = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
-                        onOpenCabinet = { navController.navigate(CurioRoutes.CABINET) }
+                        onManage = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
+                        onCabinet = { navController.navigate(CurioRoutes.CABINET) }
                     )
                 }
             }
-
-            // ── 6. Recent activity ──────────────────────────────────────
             if (recentEntries.isNotEmpty()) {
-                item { RecentActivityCard(entries = recentEntries) }
+                item {
+                    RecentActivityCard(
+                        entries = recentEntries,
+                        onEntryClick = { navController.navigate(CurioRoutes.entryDetail(it)) }
+                    )
+                }
             }
-
-            // ── 7. Dev & about card ─────────────────────────────────────
             item {
-                DevAboutCard(
-                    crashCount = crashCount.intValue,
+                DeveloperCard(
+                    crashCount = crashCount,
                     onTestCrash = { CurioCrashReporter.testCrash() },
                     onCrashLogs = { navController.navigate(CurioRoutes.CRASH) },
                     onReportBug = { navController.navigate(CurioRoutes.BUG_REPORT) },
                     onReplayIntro = {
-                        com.curio.app.features.onboarding.CurioOnboardingState.reset(context)
+                        CurioOnboardingState.reset(context)
                         navController.navigate(CurioRoutes.ONBOARDING)
-                    }
+                    },
+                    versionName = versionName,
+                    onVersion = { showVersionDialog = true }
                 )
             }
-
-            item { Spacer(Modifier.height(16.dp)) }
+            item { Spacer(Modifier.navigationBarsPadding().height(4.dp)) }
         }
     }
 }
 
-// ═══════════════════════════════════════════════════════════════════════
-// Hero profile card
-// ═══════════════════════════════════════════════════════════════════════
+@Composable
+private fun ProfileDialogs(
+    showNameDialog: Boolean,
+    nameInput: String,
+    onNameInputChange: (String) -> Unit,
+    onDismissName: () -> Unit,
+    onSaveName: () -> Unit,
+    showQualityDialog: Boolean,
+    currentQuality: AudioQuality,
+    onQualitySelected: (AudioQuality) -> Unit,
+    showReminderDialog: Boolean,
+    reminderHour: Int,
+    onReminderHourSelected: (Int) -> Unit,
+    showVersionDialog: Boolean,
+    versionName: String,
+    onDismissVersion: () -> Unit
+) {
+    if (showNameDialog) {
+        AlertDialog(
+            onDismissRequest = onDismissName,
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Display name", fontWeight = FontWeight.ExtraBold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("This is how Curio greets you.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    OutlinedTextField(
+                        value = nameInput,
+                        onValueChange = onNameInputChange,
+                        singleLine = true,
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = { TextButton(onClick = onSaveName) { Text("Save", fontWeight = FontWeight.Bold) } },
+            dismissButton = { TextButton(onClick = onDismissName) { Text("Cancel") } }
+        )
+    }
+
+    if (showQualityDialog) {
+        AlertDialog(
+            onDismissRequest = { onQualitySelected(currentQuality) },
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Recording quality", fontWeight = FontWeight.ExtraBold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Choose the balance that feels right for your voice notes.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    AudioQuality.entries.forEach { quality ->
+                        val selected = quality == currentQuality
+                        Surface(
+                            onClick = { onQualitySelected(quality) },
+                            shape = RoundedCornerShape(16.dp),
+                            color = if (selected) CurioColors.CoralBlush.copy(alpha = 0.12f) else Color.Transparent,
+                            border = BorderStroke(
+                                1.dp,
+                                if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                RadioButton(
+                                    selected = selected,
+                                    onClick = null,
+                                    colors = RadioButtonDefaults.colors(selectedColor = CurioColors.CoralBlush)
+                                )
+                                Column {
+                                    Text(quality.label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
+                                    Text(quality.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { onQualitySelected(currentQuality) }) { Text("Close") } }
+        )
+    }
+
+    if (showReminderDialog) {
+        val hours = listOf(9, 12, 15, 18, 21)
+        AlertDialog(
+            onDismissRequest = { onReminderHourSelected(reminderHour) },
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Reminder time", fontWeight = FontWeight.ExtraBold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Choose when Curio should send your daily nudge.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    hours.forEach { hour ->
+                        val selected = hour == reminderHour
+                        Surface(
+                            onClick = { onReminderHourSelected(hour) },
+                            shape = RoundedCornerShape(16.dp),
+                            color = if (selected) CurioColors.ButterYellow.copy(alpha = 0.22f) else Color.Transparent,
+                            border = BorderStroke(
+                                1.dp,
+                                if (selected) CurioColors.ButterYellow else MaterialTheme.colorScheme.outlineVariant
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 20.dp)
+                                Text(formatHour(hour), fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
+                                if (selected) {
+                                    Spacer(Modifier.weight(1f))
+                                    CurioIcon(CurioIcons.Check, null, tint = CurioColors.CoralBlush, size = 18.dp)
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { onReminderHourSelected(reminderHour) }) { Text("Done") } }
+        )
+    }
+
+    if (showVersionDialog) {
+        AlertDialog(
+            onDismissRequest = onDismissVersion,
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Curio", fontWeight = FontWeight.ExtraBold) },
+            text = { Text("Version $versionName\n\nA small place for big curiosity.") },
+            confirmButton = { TextButton(onClick = onDismissVersion) { Text("Close") } }
+        )
+    }
+}
 
 @Composable
-private fun HeroProfileCard(name: String, streakDays: Int) {
-    MorphEntrance(delayMs = 60) {
-        Surface(
-            shape = RoundedCornerShape(28.dp),
-            color = CurioColors.CoralBlush.copy(alpha = 0.14f),
-            shadowElevation = 0.dp,
-            tonalElevation = 1.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                // Decorative watermark glyph (logomark)
-                CurioIcon(
-                    CurioIcons.AutoAwesome, null,
-                    tint = CurioColors.CoralBlush.copy(alpha = 0.18f),
-                    size = 160.dp,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 8.dp)
+private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
+    val initial = name.firstOrNull()?.uppercase().orEmpty()
+    Surface(
+        shape = RoundedCornerShape(28.dp),
+        color = Color.Transparent,
+        border = BorderStroke(1.dp, CurioColors.CoralBlush.copy(alpha = 0.28f)),
+        shadowElevation = 2.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            CurioColors.CoralBlush.copy(alpha = 0.24f),
+                            CurioColors.Lilac.copy(alpha = 0.12f),
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
+                        )
+                    )
                 )
+                .padding(18.dp)
+        ) {
+            CurioIcon(
+                CurioIcons.AutoAwesome,
+                null,
+                tint = CurioColors.CoralBlush.copy(alpha = 0.16f),
+                size = 116.dp,
+                modifier = Modifier.align(Alignment.BottomEnd)
+            )
+            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 Row(
-                    modifier = Modifier.padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    // Avatar bubble
                     Box(
                         modifier = Modifier
-                            .size(80.dp)
+                            .size(72.dp)
                             .clip(CircleShape)
-                            .background(Brush.linearGradient(listOf(CurioColors.CoralBlush, CurioGradients.WildcardGradientStops[2]))),
+                            .background(Brush.linearGradient(listOf(CurioColors.CoralBlush, CurioColors.Peach))),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = name.firstOrNull()?.uppercase().orEmpty(),
-                            style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.ExtraBold),
+                            initial,
+                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
                             color = CurioColors.DeepPlum
                         )
                     }
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = name,
+                            name,
                             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
-                            text = taglineForStreak(streakDays),
+                            taglineForStreak(streakDays),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = CurioColors.DeepPlum.copy(alpha = 0.78f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Spacer(Modifier.height(8.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            if (streakDays > 0) {
-                                Surface(
-                                    shape = RoundedCornerShape(50),
-                                    color = CurioColors.ButterYellow.copy(alpha = 0.45f)
-                                ) {
-                                    Row(
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        CurioIcon(
-                                            "local_fire_department", null,
-                                            tint = CurioColors.DeepPlum,
-                                            size = 14.dp
-                                        )
-                                        Text(
-                                            "$streakDays-day streak",
-                                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                            color = CurioColors.DeepPlum
-                                        )
-                                    }
-                                }
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Surface(
+                        onClick = onEditName,
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CurioIcon(CurioIcons.Edit, null, tint = CurioColors.CoralBlush, size = 16.dp)
+                            Text("Edit profile", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    if (streakDays > 0) {
+                        Surface(
+                            shape = RoundedCornerShape(50.dp),
+                            color = CurioColors.ButterYellow.copy(alpha = 0.32f)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
+                                CurioIcon(CurioIcons.LocalFire, null, tint = CurioColors.DeepPlum, size = 16.dp)
+                                Text("$streakDays-day streak", style = MaterialTheme.typography.labelMedium, color = CurioColors.DeepPlum, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -430,153 +555,327 @@ private fun HeroProfileCard(name: String, streakDays: Int) {
     }
 }
 
-private fun taglineForStreak(streakDays: Int): String = when {
-    streakDays >= 30 -> "Marathoner · you've been wonderfully consistent."
-    streakDays >= 7 -> "Curious streak ahead of you."
-    streakDays >= 1 -> "Keep the streak going."
-    else -> "Stay curious."
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Stats grid
-// ═══════════════════════════════════════════════════════════════════════
-
 @Composable
-private fun StatsGrid(streak: Int, saved: Int, recent: Int, lanes: Int) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
-        shadowElevation = 0.dp,
-        tonalElevation = 1.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        // 2-row × 2-col grid
-        Column(modifier = Modifier.padding(18.dp)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                StatCell(Modifier.weight(1f), CurioIcons.AutoAwesome, "$streak", "Day streak", CurioColors.CoralBlush)
-                StatCell(Modifier.weight(1f), CurioIcons.Inventory2, "$saved", "Captured", CurioColors.Sage)
-            }
-            Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                StatCell(Modifier.weight(1f), CurioIcons.History, "$recent", "Recent", CurioColors.Lilac)
-                StatCell(Modifier.weight(1f), CurioIcons.Palette, "$lanes", "Lanes open", CurioColors.Teal)
-            }
-        }
+private fun StatsStrip(streak: Int, saved: Int, recent: Int, lanes: Int) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        ProfileStat(Modifier.weight(1f), CurioIcons.LocalFire, "$streak", "Streak", CurioColors.CoralBlush)
+        ProfileStat(Modifier.weight(1f), CurioIcons.Inventory2, "$saved", "Saved", CurioColors.Sage)
+        ProfileStat(Modifier.weight(1f), CurioIcons.History, "$recent", "Recent", CurioColors.Lilac)
+        ProfileStat(Modifier.weight(1f), CurioIcons.Palette, "$lanes", "Lanes", CurioColors.Teal)
     }
 }
 
 @Composable
-private fun StatCell(
-    modifier: Modifier = Modifier,
-    glyph: String,
-    value: String,
-    label: String,
-    tint: Color
-) {
+private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: String, tint: Color) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        color = tint.copy(alpha = 0.12f)
+        color = tint.copy(alpha = 0.12f),
+        border = BorderStroke(1.dp, tint.copy(alpha = 0.22f))
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 12.dp),
+            modifier = Modifier.padding(vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
+            CurioIcon(icon, null, tint = tint, size = 17.dp)
+            Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = tint)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun LevelCard(level: Int, saved: Int, progress: Float, nextThreshold: Int, isMaxLevel: Boolean) {
+    ProfileCard {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Box(
                 modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(tint.copy(alpha = 0.18f)),
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(Brush.linearGradient(CurioGradients.WildcardGradientStops.take(3))),
                 contentAlignment = Alignment.Center
             ) {
-                CurioIcon(glyph, null, tint = tint, size = 18.dp)
+                Text("$level", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)
             }
-            Text(
-                value,
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = tint
-            )
-            Text(
-                label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Level $level · ${levelTitle(level)}", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                Text(
+                    if (isMaxLevel) "Your curiosity has no ceiling."
+                    else "$saved / $nextThreshold saved · ${nextThreshold - saved} to next level",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        if (!isMaxLevel) {
+            Spacer(Modifier.height(12.dp))
+            LinearProgressIndicator(
+                progress = { progress.coerceIn(0f, 1f) },
+                modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(50)),
+                color = CurioColors.CoralBlush,
+                trackColor = CurioColors.CoralBlush.copy(alpha = 0.14f)
             )
         }
     }
 }
 
-// ═══════════════════════════════════════════════════════════════════════
-// Level / curiosity card
-// ═══════════════════════════════════════════════════════════════════════
-
 @Composable
-private fun LevelCard(
-    level: Int,
-    saved: Int,
-    progressFraction: Float,
-    nextThreshold: Int,
-    isMaxLevel: Boolean
+private fun PreferencesCard(
+    displayName: String,
+    themeIndex: Int,
+    themeLabels: List<String>,
+    onEditName: () -> Unit,
+    onThemeChange: (Int) -> Unit,
+    audioQuality: AudioQuality,
+    onAudioQualityClick: () -> Unit,
+    reminderEnabled: Boolean,
+    reminderHour: Int,
+    onReminderToggle: (Boolean) -> Unit,
+    onReminderTimeClick: () -> Unit,
+    onManageCategories: () -> Unit
 ) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(18.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .background(Brush.linearGradient(CurioGradients.WildcardGradientStops.take(3))),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "$level",
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        color = Color.White
-                    )
-                }
+    ProfileCard {
+        CardHeader(CurioIcons.Settings, "Preferences", "Personalize how Curio feels")
+        ProfileSettingRow(CurioIcons.Person, "Display name", displayName, onEditName)
+        ProfileDivider()
+        Column(modifier = Modifier.padding(vertical = 10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                CurioIcon(CurioIcons.DarkMode, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        "Level $level · ${levelTitle(level)}",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        if (isMaxLevel) "You've discovered it all. Beautiful work."
-                        else "$saved / ${nextThreshold} captures · ${nextThreshold - saved} to next badge",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Text("Theme", style = MaterialTheme.typography.bodyLarge)
+                    Text(themeLabels[themeIndex], style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            if (!isMaxLevel) {
-                Spacer(Modifier.height(12.dp))
-                LinearProgressIndicator(
-                    progress = { progressFraction.coerceIn(0f, 1f) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(50)),
-                    color = CurioColors.CoralBlush,
-                    trackColor = CurioColors.CoralBlush.copy(alpha = 0.15f),
-                    strokeCap = ProgressIndicatorDefaults.LinearStrokeCap
+            Spacer(Modifier.height(10.dp))
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                themeLabels.forEachIndexed { index, label ->
+                    SegmentedButton(
+                        selected = index == themeIndex,
+                        onClick = { onThemeChange(index) },
+                        shape = SegmentedButtonDefaults.itemShape(index, themeLabels.size)
+                    ) { Text(label, style = MaterialTheme.typography.labelSmall) }
+                }
+            }
+        }
+        ProfileDivider()
+        ProfileSettingRow(CurioIcons.Mic, "Audio quality", audioQuality.label, onAudioQualityClick)
+        ProfileDivider()
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(CurioIcons.Notifications, null, tint = CurioColors.CoralBlush, size = 22.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Daily spin reminder", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    if (reminderEnabled) "Every day at ${formatHour(reminderHour)}" else "Off · tap the switch to enable",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+            Switch(checked = reminderEnabled, onCheckedChange = onReminderToggle)
+        }
+        if (reminderEnabled) {
+            Surface(
+                onClick = onReminderTimeClick,
+                shape = RoundedCornerShape(14.dp),
+                color = CurioColors.ButterYellow.copy(alpha = 0.14f),
+                border = BorderStroke(1.dp, CurioColors.ButterYellow.copy(alpha = 0.45f)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 18.dp)
+                    Text("Change reminder time", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+                    Text(formatHour(reminderHour), style = MaterialTheme.typography.labelLarge, color = CurioColors.CoralBlush, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+        ProfileDivider()
+        ProfileSettingRow(CurioIcons.Palette, "Manage categories", "${CurioCategories.visible.size} lanes visible", onManageCategories)
+    }
+}
+
+@Composable
+private fun CategoriesCard(counts: Map<CategoryId, Int>, onManage: () -> Unit, onCabinet: () -> Unit) {
+    ProfileCard {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring", Modifier.weight(1f))
+            TextButton(onClick = onManage) { Text("Manage") }
+        }
+        Spacer(Modifier.height(8.dp))
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(counts.entries.sortedByDescending { it.value }.take(4)) { (categoryId, count) ->
+                val category = CurioCategories.byId(categoryId)
+                Surface(shape = RoundedCornerShape(16.dp), color = category.accent.copy(alpha = 0.14f)) {
+                    Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+                        CurioIcon(category.iconGlyph, null, tint = category.accent, size = 20.dp)
+                        Spacer(Modifier.height(4.dp))
+                        Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = category.accent, maxLines = 1)
+                        Text("$count saved", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+        Surface(
+            onClick = onCabinet,
+            shape = RoundedCornerShape(14.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                CurioIcon(CurioIcons.Inventory2, null, size = 18.dp)
+                Spacer(Modifier.width(8.dp))
+                Text("Open the Cabinet", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+                CurioIcon(CurioIcons.ArrowForward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
             }
         }
     }
+}
+
+@Composable
+private fun RecentActivityCard(entries: List<CurioEntry>, onEntryClick: (String) -> Unit) {
+    ProfileCard {
+        CardHeader(CurioIcons.History, "Recent activity", "Your latest captures")
+        Spacer(Modifier.height(4.dp))
+        entries.forEachIndexed { index, entry ->
+            RecentEntryRow(entry, { onEntryClick(entry.id) })
+            if (index < entries.lastIndex) ProfileDivider()
+        }
+    }
+}
+
+@Composable
+private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
+    val category = CurioCategories.byId(entry.topic.categoryId)
+    Surface(onClick = onClick, color = Color.Transparent, modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Box(
+                modifier = Modifier.size(40.dp).clip(RoundedCornerShape(13.dp)).background(category.accent.copy(alpha = 0.16f)),
+                contentAlignment = Alignment.Center
+            ) { CurioIcon(category.iconGlyph, null, tint = category.accent, size = 20.dp) }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(entry.topic.name, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("${category.displayName} · ${capturedLabel(entry)}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            CurioIcon(CurioIcons.ArrowForward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 17.dp)
+        }
+    }
+}
+
+@Composable
+private fun DeveloperCard(
+    crashCount: Int,
+    onTestCrash: () -> Unit,
+    onCrashLogs: () -> Unit,
+    onReportBug: () -> Unit,
+    onReplayIntro: () -> Unit,
+    versionName: String,
+    onVersion: () -> Unit
+) {
+    ProfileCard {
+        CardHeader(CurioIcons.Info, "About Curio", "Help, diagnostics, and app details")
+        ProfileSettingRow(CurioIcons.BugReport, "Report a bug", "Send feedback or an issue", onReportBug)
+        ProfileDivider()
+        ProfileSettingRow(CurioIcons.Replay, "Replay intro", "See the welcome screens again", onReplayIntro)
+        if (crashCount > 0) {
+            ProfileDivider()
+            ProfileSettingRow(CurioIcons.History, "Crash logs", "$crashCount saved report${if (crashCount == 1) "" else "s"}", onCrashLogs)
+        }
+        ProfileDivider()
+        ProfileSettingRow(CurioIcons.ErrorOutline, "Test crash", "Diagnostic tool", onTestCrash)
+        ProfileDivider()
+        ProfileSettingRow(CurioIcons.Info, "Version", versionName, onVersion)
+    }
+}
+
+@Composable
+private fun ProfileCard(content: @Composable ColumnScope.() -> Unit) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)),
+        tonalElevation = 1.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) { Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp), content = content) }
+}
+
+@Composable
+private fun CardHeader(icon: String, title: String, subtitle: String, modifier: Modifier = Modifier) {
+    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Surface(shape = RoundedCornerShape(11.dp), color = CurioColors.CoralBlush.copy(alpha = 0.12f), modifier = Modifier.size(34.dp)) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) { CurioIcon(icon, null, tint = CurioColors.CoralBlush, size = 18.dp) }
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+    }
+}
+
+@Composable
+private fun ProfileSettingRow(icon: String, title: String, subtitle: String, onClick: () -> Unit) {
+    Surface(onClick = onClick, color = Color.Transparent, modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(vertical = 13.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 21.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.bodyLarge)
+                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            CurioIcon(CurioIcons.ArrowForward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f), size = 17.dp)
+        }
+    }
+}
+
+@Composable
+private fun ProfileDivider() {
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f), modifier = Modifier.padding(start = 33.dp))
+}
+
+private fun taglineForStreak(streakDays: Int): String = when {
+    streakDays >= 30 -> "Marathon explorer · beautifully consistent."
+    streakDays >= 7 -> "A strong curiosity streak is underway."
+    streakDays > 0 -> "Keep the spark going today."
+    else -> "Stay curious. There is always more to find."
+}
+
+private fun capturedLabel(entry: CurioEntry): String = when (entry.capturedAtDaysAgo) {
+    0 -> "today"
+    1 -> "yesterday"
+    else -> "${entry.capturedAtDaysAgo}d ago"
+}
+
+private fun formatHour(hour: Int): String {
+    val normalized = hour.coerceIn(0, 23)
+    val suffix = if (normalized < 12) "AM" else "PM"
+    val display = when (val h = normalized % 12) { 0 -> 12 else -> h }
+    return "$display:00 $suffix"
+}
+
+private val levelThresholds = listOf(0, 1, 5, 15, 30, 60, 100, 250, 500)
+
+private fun levelFor(saved: Int): Int {
+    var level = 1
+    levelThresholds.forEachIndexed { index, threshold -> if (saved >= threshold) level = index + 1 }
+    return level.coerceIn(1, 9)
+}
+
+private fun progressTowardsNextLevel(saved: Int): Pair<Float, Int> {
+    val level = levelFor(saved)
+    if (level >= 8) return 1f to 500
+    val from = levelThresholds[level - 1]
+    val to = levelThresholds[level]
+    return ((saved - from).toFloat() / (to - from).coerceAtLeast(1)) to to
 }
 
 private fun levelTitle(level: Int): String = when (level) {
@@ -587,534 +886,6 @@ private fun levelTitle(level: Int): String = when (level) {
     5 -> "Comparator"
     6 -> "Synthesizer"
     7 -> "Curator"
+    8 -> "Master curator"
     else -> "Master explorer"
-}
-
-private val levelThresholds = listOf(0, 1, 5, 15, 30, 60, 100, 250, 500)
-
-private fun levelFor(saved: Int): Int {
-    var lvl = 1
-    for (i in levelThresholds.indices) {
-        if (saved >= levelThresholds[i]) lvl = i + 1
-    }
-    return lvl.coerceIn(1, 8)
-}
-
-private fun progressTowardsNextLevel(saved: Int): Pair<Float, Int> {
-    val currentLevel = levelFor(saved)
-    if (currentLevel >= 8) return 1f to 500
-    val from = levelThresholds[currentLevel - 1]
-    val to = levelThresholds[currentLevel]
-    val span = (to - from).coerceAtLeast(1)
-    return (saved - from).toFloat() / span to to
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Preferences card — single M3 card with grouped rows
-// ═══════════════════════════════════════════════════════════════════════
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PreferencesCard(
-    displayName: String,
-    onEditName: () -> Unit,
-    themeMode: String,
-    onThemeChange: (String) -> Unit,
-    audioQuality: AudioQuality,
-    onAudioQualityClick: () -> Unit,
-    reminderEnabled: Boolean,
-    onReminderToggle: (Boolean) -> Unit,
-    onManageCategories: () -> Unit
-) {
-    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
-    val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
-
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(vertical = 6.dp)) {
-            // Header
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 18.dp, end = 18.dp, top = 12.dp, bottom = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CurioIcon(CurioIcons.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
-                Text(
-                    "Preferences",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Display name
-            SettingRow(
-                icon = CurioIcons.Person,
-                title = "Display name",
-                supporting = displayName,
-                onClick = onEditName
-            )
-            ThinDivider()
-
-            // Theme segmented
-            Column(modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    CurioIcon(CurioIcons.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            "Theme",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            listOf("Light", "Dark", "System")[currentThemeIndex],
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                Spacer(Modifier.height(8.dp))
-                SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp)) {
-                    listOf("Light", "Dark", "System").forEachIndexed { index, label ->
-                        SegmentedButton(
-                            selected = index == currentThemeIndex,
-                            onClick = { onThemeChange(themes[index]) },
-                            shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
-                        ) {
-                            Text(label, style = MaterialTheme.typography.labelMedium)
-                        }
-                    }
-                }
-            }
-            ThinDivider()
-
-            // Audio quality
-            SettingRow(
-                icon = CurioIcons.Mic,
-                title = "Audio quality",
-                supporting = audioQuality.label + " · " + audioQuality.description,
-                onClick = onAudioQualityClick
-            )
-            ThinDivider()
-
-            // Notifications toggle row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                CurioIcon(CurioIcons.Notifications, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        "Daily spin reminder",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        if (reminderEnabled) "On — you'll be nudged each day" else "Off — turn on to never miss a spin",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Switch(
-                    checked = reminderEnabled,
-                    onCheckedChange = onReminderToggle
-                )
-            }
-            ThinDivider()
-
-            // Manage categories
-            SettingRow(
-                icon = CurioIcons.Palette,
-                title = "Manage categories",
-                supporting = "${CurioCategories.visible.size} lanes visible",
-                onClick = onManageCategories
-            )
-        }
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Categories preview card
-// ═══════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun CategoriesPreviewCard(
-    counts: Map<CategoryId, Int>,
-    onSeeAll: () -> Unit,
-    onOpenCabinet: () -> Unit
-) {
-    val top = counts.entries.sortedByDescending { it.value }.take(3)
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(18.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
-                    Text(
-                        "Your lanes",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Surface(
-                    onClick = onSeeAll,
-                    shape = RoundedCornerShape(50),
-                    color = Color.Transparent
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        Text(
-                            "Manage",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        CurioIcon(
-                            CurioIcons.ArrowForward, null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            size = 14.dp
-                        )
-                    }
-                }
-            }
-            Spacer(Modifier.height(10.dp))
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(top) { (catId, count) ->
-                    val cat = CurioCategories.byId(catId)
-                    Surface(
-                        shape = RoundedCornerShape(18.dp),
-                        color = cat.accent.copy(alpha = 0.14f)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(28.dp)
-                                    .clip(CircleShape)
-                                    .background(cat.accent.copy(alpha = 0.85f)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CurioIcon(cat.iconGlyph, null, tint = Color.White, size = 16.dp)
-                            }
-                            Column {
-                                Text(
-                                    cat.displayName,
-                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                                    color = cat.accent
-                                )
-                                Text(
-                                    "$count captured",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            Spacer(Modifier.height(10.dp))
-            Surface(
-                onClick = onOpenCabinet,
-                shape = RoundedCornerShape(14.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp, horizontal = 14.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    CurioIcon(
-                        CurioIcons.Inventory2, null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 18.dp
-                    )
-                    Text(
-                        "Open the Cabinet",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(Modifier.weight(1f))
-                    CurioIcon(
-                        CurioIcons.ArrowForward, null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        size = 16.dp
-                    )
-                }
-            }
-        }
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Recent activity card
-// ═══════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun RecentActivityCard(entries: List<CurioEntry>) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(vertical = 6.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 18.dp, end = 18.dp, top = 12.dp, bottom = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CurioIcon(CurioIcons.History, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
-                Text(
-                    "Recent activity",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            entries.forEachIndexed { idx, entry ->
-                RecentEntryInline(
-                    entry = entry,
-                    onClick = { /* handled in row with surface click */ }
-                )
-                if (idx < entries.lastIndex) ThinDivider()
-            }
-        }
-    }
-}
-
-@Composable
-private fun RecentEntryInline(entry: CurioEntry, onClick: () -> Unit) {
-    val cat = CurioCategories.byId(entry.topic.categoryId)
-    Surface(
-        onClick = onClick,
-        color = Color.Transparent,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(cat.accent.copy(alpha = 0.18f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(cat.iconGlyph, null, tint = cat.accent, size = 18.dp)
-            }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    entry.topic.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    "${cat.displayName} · ${entry.capturedAtDaysAgoLabel()}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
-                )
-            }
-            CurioIcon(
-                CurioIcons.ArrowForward, null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                size = 16.dp
-            )
-        }
-    }
-}
-
-private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = capturedAtDaysAgo) {
-    0 -> "today"
-    1 -> "yesterday"
-    else -> "${d}d ago"
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Developer & about card
-// ═══════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun DevAboutCard(
-    crashCount: Int,
-    onTestCrash: () -> Unit,
-    onCrashLogs: () -> Unit,
-    onReportBug: () -> Unit,
-    onReplayIntro: () -> Unit
-) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 0.dp,
-        tonalElevation = 1.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(vertical = 6.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 18.dp, end = 18.dp, top = 12.dp, bottom = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CurioIcon(CurioIcons.BugReport, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
-                Text(
-                    "Developer",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                if (crashCount > 0) {
-                    Spacer(Modifier.weight(1f))
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = CurioColors.WarmCoralRed.copy(alpha = 0.15f)
-                    ) {
-                        Text(
-                            "$crashCount crash${if (crashCount != 1) "es" else ""}",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = CurioColors.WarmCoralRed,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                        )
-                    }
-                }
-            }
-
-            SettingRow(
-                icon = CurioIcons.BugReport,
-                title = "Report a bug",
-                supporting = "Send feedback or report an issue",
-                onClick = onReportBug
-            )
-            ThinDivider()
-
-            SettingRow(
-                icon = CurioIcons.ErrorOutline,
-                title = "Test crash",
-                supporting = "Simulate a crash for diagnostics",
-                onClick = onTestCrash
-            )
-            if (crashCount > 0) {
-                ThinDivider()
-                SettingRow(
-                    icon = CurioIcons.History,
-                    title = "Crash logs",
-                    supporting = "$crashCount log(s) saved",
-                    onClick = onCrashLogs
-                )
-            }
-            ThinDivider()
-
-            SettingRow(
-                icon = CurioIcons.Replay,
-                title = "Replay intro",
-                supporting = "See the welcome screens again",
-                onClick = onReplayIntro
-            )
-            ThinDivider()
-            SettingRow(
-                icon = CurioIcons.Info,
-                title = "Version",
-                supporting = "1.0.0",
-                onClick = { }
-            )
-        }
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Row primitives
-// ═══════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun SettingRow(
-    icon: String,
-    title: String,
-    supporting: String,
-    onClick: () -> Unit
-) {
-    Surface(
-        onClick = onClick,
-        color = Color.Transparent,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                if (supporting.isNotBlank()) {
-                    Text(
-                        supporting,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-            CurioIcon(
-                CurioIcons.ArrowForward, null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                size = 16.dp
-            )
-        }
-    }
-}
-
-@Composable
-private fun ThinDivider() {
-    HorizontalDivider(
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-        modifier = Modifier.padding(start = 54.dp, end = 16.dp)
-    )
 }

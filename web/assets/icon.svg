@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Rhythm app icon</title>
+  <desc id="desc">A coral app icon with a cream discovery wheel divided into six colorful sections.</desc>
+  <rect width="512" height="512" rx="112" fill="#FF8FA3"/>
+  <circle cx="256" cy="256" r="151" fill="#FFFBF5"/>
+  <path d="M256 256V138A118 118 0 0 1 358.2 197Z" fill="#C9A6F2"/>
+  <path d="M256 256 358.2 197A118 118 0 0 1 358.2 315Z" fill="#9BB8E8"/>
+  <path d="M256 256 358.2 315A118 118 0 0 1 256 374Z" fill="#A8C99A"/>
+  <path d="M256 256v118a118 118 0 0 1-102.2-59Z" fill="#FFB585"/>
+  <path d="M256 256 153.8 315A118 118 0 0 1 153.8 197Z" fill="#6FC7BE"/>
+  <path d="M256 256 153.8 197A118 118 0 0 1 256 138Z" fill="#FFD97D"/>
+  <circle cx="256" cy="256" r="52" fill="#3B0A17"/>
+  <circle cx="256" cy="256" r="27" fill="#FFFBF5"/>
+</svg>

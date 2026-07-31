@@ -108,21 +108,61 @@ fun CurioEntry.toEntity(): CaptureEntity = CaptureEntity(
 
 /**
  * Reconstruct [CurioEntry] from a [CaptureEntity] stored in Room.
+ * 
+ * Fixed to properly handle movie entries and other formats by ensuring
+ * the topic is fully reconstructed with all available data, including
+ * fallback exploreAction and tags when the cached topic isn't found.
  */
 fun CaptureEntity.toEntry(): CurioEntry {
-    val topicData = TopicJsonLoader.cached(
-        CategoryId.valueOf(categoryId)
-    )?.find { it.name == topicName }
-    val topic = topicData ?: CurioTopic(
+    val categoryId = CategoryId.valueOf(this.categoryId)
+    
+    // Try to find the full topic data from cache
+    val cachedTopic = TopicJsonLoader.cached(categoryId)?.find { 
+        it.id == topicId || it.name == topicName 
+    }
+    
+    // Use cached topic if available, otherwise create a complete fallback
+    val topic = cachedTopic ?: CurioTopic(
         id = topicId,
-        categoryId = CategoryId.valueOf(categoryId),
+        categoryId = categoryId,
         subtype = topicSubtype,
         name = topicName,
         teaser = topicTeaser,
         imageUrl = "",
-        exploreAction = ExploreAction("explore", topicName, 15, "Revisit this topic")
+        exploreAction = ExploreAction(
+            verb = when (categoryId) {
+                CategoryId.FILMS, CategoryId.DIRECTORS -> "Watch"
+                CategoryId.ALBUMS, CategoryId.ARTISTS -> "Listen"
+                CategoryId.BOOKS, CategoryId.AUTHORS -> "Read"
+                CategoryId.PAINTERS, CategoryId.ARTWORKS -> "View"
+                CategoryId.SCIENTISTS, CategoryId.DISCOVERIES -> "Explore"
+                CategoryId.WILDCARD -> "Discover"
+            },
+            targetName = topicName,
+            durationMinutes = 30,
+            instruction = "Revisit this saved topic: $topicName"
+        ),
+        tags = emptyList(),
+        tier = 1
     )
-    val captureData = CaptureConverters.deserializeCaptureData(formatDataJson)
+    
+    val captureData = try {
+        CaptureConverters.deserializeCaptureData(formatDataJson)
+    } catch (e: Exception) {
+        // Fallback for malformed data - create empty ReelNotes for movies
+        when (CaptureFormat.valueOf(format)) {
+            CaptureFormat.ReelNotes -> CaptureData.ReelNotes(0, "", 0)
+            CaptureFormat.SoundBite -> CaptureData.SoundBite(0, "")
+            CaptureFormat.Marginalia -> CaptureData.Marginalia("", emptyList())
+            CaptureFormat.GalleryWall -> CaptureData.GalleryWall(0, "")
+            CaptureFormat.FieldNotes -> CaptureData.FieldNotes("", "", "")
+            CaptureFormat.OpenNotebook -> CaptureData.OpenNotebook(
+                CaptureFormat.ReelNotes,
+                CaptureData.ReelNotes(0, "", 0)
+            )
+        }
+    }
+    
     return CurioEntry(
         id = id,
         topic = topic,

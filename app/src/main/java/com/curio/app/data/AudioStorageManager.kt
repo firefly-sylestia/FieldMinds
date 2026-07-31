@@ -45,6 +45,24 @@ object AudioStorageManager {
     }
 
     /**
+     * Restore an audio file bundled in a backup into persistent storage.
+     *
+     * Writes the exact bytes to `filesDir/audio/{entryId}.m4a` — the same
+     * name convention as [persistAudio] — so the restored capture's
+     * `audioFilePath` resolves immediately.
+     *
+     * @param entryId The capture entry ID (used as the persistent filename).
+     * @param bytes   The audio bytes from the backup payload.
+     * @return The absolute path the file was written to.
+     */
+    fun restoreAudio(context: Context, entryId: String, bytes: ByteArray): String {
+        val audioDir = File(context.filesDir, AUDIO_DIR).apply { mkdirs() }
+        val destFile = File(audioDir, "${entryId}.m4a")
+        destFile.writeBytes(bytes)
+        return destFile.absolutePath
+    }
+
+    /**
      * Delete an audio file at [audioFilePath] if it's within the app's
      * internal storage audio directory. Safe to call with any path — only
      * deletes if the file exists under `filesDir/audio/`.

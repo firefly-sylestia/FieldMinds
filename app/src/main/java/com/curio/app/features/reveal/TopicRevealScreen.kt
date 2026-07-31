@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,9 +53,6 @@ import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
-import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -64,12 +62,12 @@ import com.curio.app.ui.theme.CurioMotion
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
  *
  * Upgraded from the previous §6 design:
- *  - Beautiful hero header card (260dp) with the category accent color
- *    as a soft tint + the family's glyph as a watermark + a small
- *    "verb + duration" badge in the top-right.
- *  - Brand-new top section: a circular Topic-Type glyph hero with a
- *    "How to start" prompt underneath, so you see the action you need
- *    to take immediately, not buried under the body copy.
+ *  - Gradient-ticket hero header card (260dp) matching the Spin screen:
+ *    accent → DeepPlum vertical gradient (rainbow for wildcard), white
+ *    watermark glyph, white pill badges ("verb + duration" top-left,
+ *    subtype bottom-right).
+ *  - Hero shows the action you need to take immediately — the verb +
+ *    duration badge sits on the ticket, not buried under the body copy.
  *  - Bigger, eye-catching topic name (uses the geom typography).
  *  - Tags row immediately under the title — gives instant context for
  *    genres / eras (e.g. "1970s · British · Art Rock").
@@ -80,7 +78,7 @@ import com.curio.app.ui.theme.CurioMotion
  *   24-44 dp   statusBarsPadding()
  *   40 dp      Top bar (close ✕ → Pop to Home)
  *    8 dp      gap
- *   ~260 dp    Hero card (watermark glyph + action badge)
+ *   ~260 dp    Hero card (gradient ticket: watermark glyph + badges)
  *   24 dp      gap
  *   ~84 dp     Topic name (geom displaySmall, multi-line)
  *    8 dp      gap
@@ -116,7 +114,8 @@ fun TopicRevealScreen(
         value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
     }
 
-    var confettiTrigger by remember { mutableIntStateOf(0) }
+    // v5.8 — saveable so a rotation mid-celebration doesn't drop the confetti burst.
+    var confettiTrigger by rememberSaveable { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(300)
         confettiTrigger++
@@ -160,148 +159,133 @@ fun TopicRevealScreen(
             }
         }
 
-        MorphEntrance(delayMs = 100) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
                 // ── 2. Hero card — category watermark + verb/duration badge ──
-                StaggeredItem(index = 0) {
-                    HeroCard(
-                        cat = cat,
-                        resolved = resolved,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
+                HeroCard(
+                    cat = cat,
+                    resolved = resolved,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
 
                 // ── 3. Topic name ───────────────────────────────────────────
-                StaggeredItem(index = 1) {
-                    Text(
-                        text = resolved?.name ?: cat.displayName,
-                        style = MaterialTheme.typography.displaySmall.copy(
-                            lineHeight = 40.sp,
-                            letterSpacing = (-0.5).sp
-                        ),
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp)
-                    )
-                }
+                Text(
+                    text = resolved?.name ?: cat.displayName,
+                    style = MaterialTheme.typography.displaySmall.copy(
+                        lineHeight = 40.sp,
+                        letterSpacing = (-0.5).sp
+                    ),
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp)
+                )
 
                 // ── 4. Tags chip row (genre / era context) ─────────────────
-                StaggeredItem(index = 2) {
-                    if (!resolved?.tags.isNullOrEmpty()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            resolved.tags.take(4).forEach { tag ->
-                                Surface(
-                                    shape = RoundedCornerShape(50),
-                                    color = cat.accent.copy(alpha = 0.12f)
-                                ) {
-                                    Text(
-                                        text = tag,
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = cat.accent,
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                                    )
-                                }
+                if (!resolved?.tags.isNullOrEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        resolved.tags.take(4).forEach { tag ->
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f))
+                            ) {
+                                Text(
+                                    text = tag,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = cat.accent,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                                )
                             }
                         }
-                    } else {
-                        // Spacer so subsequent sections don't crowd up.
-                        Spacer(Modifier.height(10.dp))
                     }
+                } else {
+                    // Spacer so subsequent sections don't crowd up.
+                    Spacer(Modifier.height(10.dp))
                 }
 
                 // ── 5. Teaser card ──────────────────────────────────────────
-                StaggeredItem(index = 3) {
-                    TeaserCard(
+                TeaserCard(
+                    cat = cat,
+                    teaser = resolved?.teaser,
+                    modifier = Modifier.padding(top = 20.dp)
+                )
+
+                // ── 6. Action prompt card ──────────────────────────────────
+                if (resolved != null) {
+                    ActionPromptCard(
                         cat = cat,
-                        teaser = resolved?.teaser,
-                        modifier = Modifier.padding(top = 20.dp)
+                        action = resolved.exploreAction,
+                        subtype = resolved.subtype,
+                        modifier = Modifier.padding(top = 14.dp)
                     )
                 }
 
-                // ── 6. Action prompt card ──────────────────────────────────
-                StaggeredItem(index = 4) {
-                    if (resolved != null) {
-                        ActionPromptCard(
-                            cat = cat,
-                            action = resolved.exploreAction,
-                            subtype = resolved.subtype,
-                            modifier = Modifier.padding(top = 14.dp)
+                // ── 7. Primary CTA ─────────────────────────────────────────
+                Button(
+                    onClick = {
+                        val name = resolved?.name ?: return@Button
+                        navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, name))
+                    },
+                    enabled = resolved != null,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = cat.accent,
+                        contentColor = Color.White,
+                        disabledContainerColor = cat.tint,
+                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
+                    ),
+                    contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
+                        Text(
+                            text = "Start exploring",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                         )
                     }
                 }
 
-                // ── 7. Primary CTA ─────────────────────────────────────────
-                StaggeredItem(index = 5) {
-                    Button(
-                        onClick = {
-                            val name = resolved?.name ?: return@Button
-                            navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, name))
-                        },
-                        enabled = resolved != null,
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = cat.accent,
-                            contentColor = Color.White,
-                            disabledContainerColor = cat.tint,
-                            disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
-                        ),
-                        contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
-                            Text(
-                                text = "Start exploring",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
-                            )
-                        }
-                    }
-                }
-
                 // ── 8. Secondary action text button ────────────────────────
-                StaggeredItem(index = 6) {
-                    TextButton(
-                        onClick = { navController.popBackStack() },
-                        modifier = Modifier.fillMaxWidth()
+                TextButton(
+                    onClick = { navController.popBackStack() },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            CurioIcon(CurioIcons.Refresh, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
-                            Text(
-                                text = "Spin again instead",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        CurioIcon(CurioIcons.Refresh, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                        Text(
+                            text = "Spin again instead",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
 
                 Spacer(Modifier.height(20.dp))
             }
-        }
 
         Spacer(Modifier.height(navInsets.calculateBottomPadding()))
     }
@@ -328,32 +312,40 @@ private fun HeroCard(
     modifier: Modifier = Modifier
 ) {
     val action = resolved?.exploreAction
+
+    // Opaque paper hero: category color is an inked edge, while the sheet
+    // itself stays warm and readable in both light and dark themes.
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.18f)),
-        shadowElevation = 2.dp,
-        tonalElevation = 1.dp
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(2.dp, cat.accent),
+        shadowElevation = 10.dp,
+        tonalElevation = 2.dp
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
             // ── Watermark glyph (category icon) ─────────────────────────
             CurioIcon(
                 name = cat.iconGlyph,
                 contentDescription = null,
-                tint = cat.accent.copy(alpha = 0.30f),
-                size = 180.dp,
+                tint = cat.accent.copy(alpha = 0.16f),
+                size = 190.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(end = 0.dp)
             )
-            // ── Action badge (verb + duration) ───────────────────────────
-            if (action != null && resolved != null) {
+            // ── Action badge (verb + duration) — white pill on ticket ───
+            if (action != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -368,21 +360,21 @@ private fun HeroCard(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(cat.accent)
+                                .background(Color.White)
                         )
                         Text(
                             text = "${action.verb} for ~${action.durationMinutes} min",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = CurioColors.DeepPlum
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
             }
-            // ── Subtype pill ─────────────────────────────────────────────
+            // ── Subtype pill — white pill on ticket ────────────────────
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -390,8 +382,8 @@ private fun HeroCard(
                 ) {
                     Text(
                         text = resolved.subtype,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = cat.accent,
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                     )
                 }
@@ -458,7 +450,9 @@ private fun ActionPromptCard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = cat.accent.copy(alpha = 0.08f),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
+        shadowElevation = 3.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
@@ -469,7 +463,7 @@ private fun ActionPromptCard(
             ) {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = Color.White.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     CurioIcon(
                         name = verbIcon(action.verb),

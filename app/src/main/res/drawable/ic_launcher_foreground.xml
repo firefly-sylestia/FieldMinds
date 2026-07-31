@@ -1,99 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio launcher icon — foreground layer (polished).
+    Curio launcher icon — centered discovery wheel foreground.
 
-    Polish iteration on commit f68af31a. Three refinements for better color
-    cohesion and brand consistency:
+    The artwork is intentionally contained inside the adaptive-icon safe zone:
+    the wheel spans 44..84 in the 108dp viewport, leaving comfortable space
+    for launcher masks, parallax, and small app-icon rendering. The coral
+    background supplies the brand field; this layer supplies the cream wheel,
+    six category colors, and deep-plum center mark.
 
-      1. BRAND TITLE BAR: title bar swapped from Soft Sand #F6EFE4 (low
-         contrast) to Coral Blush #FF8FA3 (the brand primary, also used
-         as the background). Coral-on-cream reads as a deliberate
-         brand accent + ties the deck to the background visually. At
-         24dp launcher size the title bar disappears but the brand
-         presence is felt at every other size.
-
-      2. HIGH-CONTRAST SUBTITLE: subtitle bar swapped from Soft Sand
-         (almost identical to the front card's Cream White) to Deep
-         Plum #3B0A17. At 24dp the subtitle disappears entirely; at
-         48dp+ it's the only "ink" on the front card and Deep Plum
-         gives much better definition than the previous Sand-on-Cream.
-
-      3. (SVG only, deferred from VectorDrawable) Gradient depth on
-         the two back cards (Dusty Blue → Lilac on Card 1, Lilac →
-         Sage on Card 2) plus a soft drop shadow under Card 3. See
-         curio-icon.svg for the portable polished design. The
-         VectorDrawable stays solid-color for compile-tool
-         compatibility (gradients/shadows aren't natively supported
-         without <aapt:attr> wrappers).
-
-    Composition (same shuffle metaphor as f68af31a):
-      1. Card 1 (back, peeks top+left):   Dusty Blue #9BB8E8 (Movies)
-      2. Card 2 (middle, peeks top+left): Lilac      #C9A6F2 (Music)
-      3. Card 3 (front, focal point):     Cream White #FFFBF5
-         Inside the front card:
-         - Image placeholder: Butter Yellow #FFD97D rounded rect
-         - Title bar:         Coral Blush  #FF8FA3 (5dp thick) NEW
-         - Subtitle bar:      Deep Plum    #3B0A17 (4dp thick) NEW
-         - Sparkle:           Deep Plum 4-point star on image area
-
-    Palette (6 distinct hues, all from CURIO_SPEC.md section 0.2):
-      - Coral Blush   #FF8FA3 (background + title bar)  — brand
-      - Dusty Blue    #9BB8E8 (Card 1)                  — Movies
-      - Lilac         #C9A6F2 (Card 2)                  — Music
-      - Cream White   #FFFBF5 (Card 3)                  — surface
-      - Butter Yellow #FFD97D (image placeholder)       — secondary
-      - Deep Plum     #3B0A17 (subtitle + sparkle)      — on-primary
-
-    No gradients, no emoji, no third-party assets per CURIO_SPEC.md
-    sections 0.2 (palette) and 0.6 (iconography).
-
-    Geometry unchanged from f68af31a: each card is 56w x 64h with 6dp
-    rounded corners. Card 1 edges extend slightly outside the 33dp
-    safe zone after rotation; launcher masks crop them, which is
-    intentional (the deck "spills out" the back-left corner).
---><vector xmlns:android="http://schemas.android.com/apk/res/android"
+    Keep this composition flat and vector-only so it remains crisp at launcher
+    size and can be mirrored by the website icon asset.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- ── Card 1 (back): Dusty Blue (Movies), rotated -6 deg ──────── -->
-    <group android:pivotX="32" android:pivotY="48" android:rotation="-6">
-        <path android:fillColor="#9BB8E8"
-              android:pathData="M 10,16 L 54,16 A 6,6 0 0,1 60,22 L 60,74 A 6,6 0 0,1 54,80 L 10,80 A 6,6 0 0,1 4,74 L 4,22 A 6,6 0 0,1 10,16 Z" />
-    </group>
+    <!-- Cream wheel frame: centered at (54,54), radius 32dp. -->
+    <path
+        android:fillColor="#FFFBF5"
+        android:pathData="M54,22 A32,32 0,1 1,53.99,22 Z" />
 
-    <!-- ── Card 2 (middle): Lilac (Music), rotated +4 deg ──────────── -->
-    <group android:pivotX="44" android:pivotY="52" android:rotation="4">
-        <path android:fillColor="#C9A6F2"
-              android:pathData="M 22,20 L 66,20 A 6,6 0 0,1 72,26 L 72,78 A 6,6 0 0,1 66,84 L 22,84 A 6,6 0 0,1 16,78 L 16,26 A 6,6 0 0,1 22,20 Z" />
-    </group>
+    <!-- Six category wedges, inset from the cream frame for a clear rim. -->
+    <path
+        android:fillColor="#C9A6F2"
+        android:pathData="M54,54 L54,29 A25,25 0,0 1,75.65,41.5 Z" />
+    <path
+        android:fillColor="#9BB8E8"
+        android:pathData="M54,54 L75.65,41.5 A25,25 0,0 1,75.65,66.5 Z" />
+    <path
+        android:fillColor="#A8C99A"
+        android:pathData="M54,54 L75.65,66.5 A25,25 0,0 1,54,79 Z" />
+    <path
+        android:fillColor="#FFB585"
+        android:pathData="M54,54 L54,79 A25,25 0,0 1,32.35,66.5 Z" />
+    <path
+        android:fillColor="#6FC7BE"
+        android:pathData="M54,54 L32.35,66.5 A25,25 0,0 1,32.35,41.5 Z" />
+    <path
+        android:fillColor="#FFD97D"
+        android:pathData="M54,54 L32.35,41.5 A25,25 0,0 1,54,29 Z" />
 
-    <!-- ── Card 3 (front): Cream, the "current topic" (no rotation) ─── -->
-    <path android:fillColor="#FFFBF5"
-          android:pathData="M 32,24 L 76,24 A 6,6 0 0,1 82,30 L 82,82 A 6,6 0 0,1 76,88 L 32,88 A 6,6 0 0,1 26,82 L 26,30 A 6,6 0 0,1 32,24 Z" />
-
-    <!-- ── Image placeholder (butter yellow, rounded) ─────────────── -->
-    <path android:fillColor="#FFD97D"
-          android:pathData="M 42,32 L 66,32 A 4,4 0 0,1 70,36 L 70,56 A 4,4 0 0,1 66,60 L 42,60 A 4,4 0 0,1 38,56 L 38,36 A 4,4 0 0,1 42,32 Z" />
-
-    <!-- ── Title bar halo (Cream White, 1dp frame) — reviewer NIT #1:
-         insulates the Coral Blush title bar from the warm-pink-to-purple
-         Lilac Card 2 backdrop so the two don't visually merge at small
-         adaptive-icon sizes (48dp). Halo drawn FIRST so coral paints over
-         it; 1-unit cream border remains visible on all 4 sides. ──── -->
-    <path android:fillColor="#FFFBF5"
-          android:pathData="M 37,64 L 63,64 L 63,71 L 37,71 Z" />
-
-    <!-- ── Title bar (Coral Blush — BRAND accent, 5dp thick) ──────── -->
-    <path android:fillColor="#FF8FA3"
-          android:pathData="M 38,65 L 62,65 L 62,70 L 38,70 Z" />
-
-    <!-- ── Subtitle bar (Deep Plum, 4dp thick — high contrast) ─────── -->
-    <path android:fillColor="#3B0A17"
-          android:pathData="M 38,73 L 54,73 L 54,77 L 38,77 Z" />
-
-    <!-- ── Sparkle (4-point star, deep plum, on image area) ─────────── -->
-    <path android:fillColor="#3B0A17"
-          android:pathData="M 74,26 L 76,28 L 78,30 L 76,32 L 74,34 L 72,32 L 70,30 L 72,28 Z" />
+    <!-- Deep-plum center: a compact, high-contrast identity at icon size. -->
+    <path
+        android:fillColor="#3B0A17"
+        android:pathData="M54,43 A11,11 0,1 1,53.99,43 Z" />
+    <path
+        android:fillColor="#FFFBF5"
+        android:pathData="M54,48 A6,6 0,1 1,53.99,48 Z" />
 </vector>

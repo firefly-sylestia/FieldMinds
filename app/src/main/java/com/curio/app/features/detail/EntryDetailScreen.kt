@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,8 +80,6 @@ import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.shareComposableCard
-import com.curio.app.ui.components.StaggeredEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import coil.compose.rememberAsyncImagePainter
@@ -94,7 +93,7 @@ import kotlinx.coroutines.launch
  * Upgraded with:
  *  - Room database persistence (loads from CaptureRepository)
  *  - Structured CaptureData rendering per format
- *  - MorphEntrance for hero image + StaggeredEntrance for metadata
+ *  - MorphEntrance for hero image; topic meta + format body render at once
  *  - Delete functionality with Room
  */
 @Composable
@@ -116,8 +115,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
     val resolvedEntry = entry ?: return
     val cat = CurioCategories.byId(resolvedEntry.topic.categoryId)
-    var menuExpanded by remember { mutableStateOf(false) }
-    var deleteDialogVisible by remember { mutableStateOf(false) }
+    // v5.8 — saveable so rotation doesn't close the menu/dialog unexpectedly.
+    var menuExpanded by rememberSaveable { mutableStateOf(false) }
+    var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -250,12 +250,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
 
         // ── Format body ────────────────────────────────────────────────
-        StaggeredEntrance {
-            StaggeredItem(index = 0) {
-                Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
-                    FormatBody(entry = resolvedEntry, category = cat)
-                }
-            }
+        Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+            FormatBody(entry = resolvedEntry, category = cat)
         }
 
         Spacer(Modifier.height(32.dp))
@@ -387,10 +383,12 @@ private fun AudioPlayerBar(
     tint: Color
 ) {
     val context = LocalContext.current
-    var isPlaying by remember { mutableStateOf(false) }
-    var currentPosition by remember { mutableLongStateOf(0L) }
-    var duration by remember { mutableLongStateOf(0L) }
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
+    // v5.8 — saveable so rotation keeps the playback position + playing
+    // state; the recreated player below re-seeks/resumes from them.
+    var isPlaying by rememberSaveable { mutableStateOf(false) }
+    var currentPosition by rememberSaveable { mutableLongStateOf(0L) }
+    var duration by rememberSaveable { mutableLongStateOf(0L) }
+    var sliderPosition by rememberSaveable { mutableFloatStateOf(0f) }
 
     // Extract waveform samples off the main thread
     val waveformSamples by produceState<FloatArray>(
@@ -408,6 +406,13 @@ private fun AudioPlayerBar(
             prepare()
             playWhenReady = false
         }
+    }
+
+    // v5.8 — after rotation the player is recreated fresh; resume from the
+    // saveable position/state so a voice note keeps its place.
+    LaunchedEffect(player) {
+        if (currentPosition > 0L) player.seekTo(currentPosition)
+        if (isPlaying) player.play()
     }
 
     // ── Observe player state ────────────────────────────────────────────
@@ -592,19 +597,122 @@ private fun formatFileSize(bytes: Long): String {
 
 @Composable
 private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
-    val data = entry.captureData as? CaptureData.ReelNotes ?: return
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        if (data.rating > 0) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                repeat(data.rating) { CurioIcon(CurioIcons.Star, null, tint = category.accent, size = 22.dp) }
-                repeat(5 - data.rating) { CurioIcon(CurioIcons.StarOutline, null, tint = MaterialTheme.colorScheme.outline, size = 22.dp) }
+    val data = entry.captureData as? CaptureData.ReelNotes
+    
+    // Handle null or malformed data gracefully
+    if (data == null) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = category.tint.copy(alpha = 0.5f),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CurioIcon(
+                    CurioIcons.Movie, null,
+                    tint = category.accent.copy(alpha = 0.5f),
+                    size = 48.dp
+                )
+                Text(
+                    "No review data available",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
             }
         }
-        if (data.imageCount > 0) {
-            Text("${data.imageCount} image${if (data.imageCount != 1) "s" else ""} attached", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        return
+    }
+    
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Rating section with better visual design
+        if (data.rating > 0) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = category.accent.copy(alpha = 0.08f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    repeat(data.rating.coerceIn(0, 5)) { 
+                        CurioIcon(
+                            CurioIcons.Star, null, 
+                            tint = category.accent, 
+                            size = 24.dp
+                        ) 
+                    }
+                    repeat((5 - data.rating).coerceIn(0, 5)) { 
+                        CurioIcon(
+                            CurioIcons.StarOutline, null, 
+                            tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), 
+                            size = 24.dp
+                        ) 
+                    }
+                }
+            }
         }
+        
+        // Image count badge
+        if (data.imageCount > 0) {
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = category.tint,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CurioIcon(
+                        CurioIcons.Image, null,
+                        tint = category.accent,
+                        size = 18.dp
+                    )
+                    Text(
+                        "${data.imageCount} image${if (data.imageCount != 1) "s" else ""} attached",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+        
+        // Review text with better styling
         if (data.reviewText.isNotBlank()) {
-            Text(data.reviewText, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                shadowElevation = 1.dp,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    data.reviewText,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(20.dp)
+                )
+            }
+        } else {
+            // Fallback when no review text
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = category.tint.copy(alpha = 0.3f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    "No review written yet",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(20.dp)
+                )
+            }
         }
     }
 }
