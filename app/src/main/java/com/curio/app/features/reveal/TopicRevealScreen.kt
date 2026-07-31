@@ -38,7 +38,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,6 +55,7 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -61,12 +64,12 @@ import com.curio.app.ui.theme.CurioMotion
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
  *
  * Upgraded from the previous §6 design:
- *  - Beautiful hero header card (260dp) with the category accent color
- *    as a soft tint + the family's glyph as a watermark + a small
- *    "verb + duration" badge in the top-right.
- *  - Brand-new top section: a circular Topic-Type glyph hero with a
- *    "How to start" prompt underneath, so you see the action you need
- *    to take immediately, not buried under the body copy.
+ *  - Gradient-ticket hero header card (260dp) matching the Spin screen:
+ *    accent → DeepPlum vertical gradient (rainbow for wildcard), white
+ *    watermark glyph, white pill badges ("verb + duration" top-left,
+ *    subtype bottom-right).
+ *  - Hero shows the action you need to take immediately — the verb +
+ *    duration badge sits on the ticket, not buried under the body copy.
  *  - Bigger, eye-catching topic name (uses the geom typography).
  *  - Tags row immediately under the title — gives instant context for
  *    genres / eras (e.g. "1970s · British · Art Rock").
@@ -77,7 +80,7 @@ import com.curio.app.ui.theme.CurioMotion
  *   24-44 dp   statusBarsPadding()
  *   40 dp      Top bar (close ✕ → Pop to Home)
  *    8 dp      gap
- *   ~260 dp    Hero card (watermark glyph + action badge)
+ *   ~260 dp    Hero card (gradient ticket: watermark glyph + badges)
  *   24 dp      gap
  *   ~84 dp     Topic name (geom displaySmall, multi-line)
  *    8 dp      gap
@@ -309,32 +312,51 @@ private fun HeroCard(
     modifier: Modifier = Modifier
 ) {
     val action = resolved?.exploreAction
+
+    // Same gradient "ticket" language as the Spin screen's hero card —
+    // every stop is deepened toward DeepPlum so white text stays readable
+    // (category accents are pastels). Wildcard keeps its rainbow identity,
+    // just saturated for contrast.
+    val ticketBrush = if (cat.id == CategoryId.WILDCARD) {
+        Brush.verticalGradient(
+            CurioGradients.WildcardGradientStops.map { lerp(it, CurioColors.DeepPlum, 0.35f) }
+        )
+    } else {
+        Brush.verticalGradient(
+            listOf(lerp(cat.accent, CurioColors.DeepPlum, 0.45f), CurioColors.DeepPlum)
+        )
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.18f)),
-        shadowElevation = 2.dp,
-        tonalElevation = 1.dp
+        color = cat.accent,
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.25f)),
+        shadowElevation = 6.dp,
+        tonalElevation = 2.dp
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ticketBrush)
+        ) {
             // ── Watermark glyph (category icon) ─────────────────────────
             CurioIcon(
                 name = cat.iconGlyph,
                 contentDescription = null,
-                tint = cat.accent.copy(alpha = 0.30f),
-                size = 180.dp,
+                tint = Color.White.copy(alpha = 0.16f),
+                size = 190.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(end = 0.dp)
             )
-            // ── Action badge (verb + duration) ───────────────────────────
+            // ── Action badge (verb + duration) — white pill on ticket ───
             if (action != null && resolved != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    color = Color.White.copy(alpha = 0.22f),
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -349,21 +371,21 @@ private fun HeroCard(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(cat.accent)
+                                .background(Color.White)
                         )
                         Text(
                             text = "${action.verb} for ~${action.durationMinutes} min",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = CurioColors.DeepPlum
+                            color = Color.White
                         )
                     }
                 }
             }
-            // ── Subtype pill ─────────────────────────────────────────────
+            // ── Subtype pill — white pill on ticket ────────────────────
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    color = Color.White.copy(alpha = 0.22f),
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -371,8 +393,8 @@ private fun HeroCard(
                 ) {
                     Text(
                         text = resolved.subtype,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = cat.accent,
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = Color.White,
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                     )
                 }
