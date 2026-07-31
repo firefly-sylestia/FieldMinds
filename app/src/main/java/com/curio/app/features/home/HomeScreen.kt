@@ -63,7 +63,6 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -193,18 +192,16 @@ fun HomeScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 4.dp)
             ) {
-                MorphEntrance(delayMs = 60) {
-                    Text(
-                        text = greetingForNow(displayName),
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            lineHeight = 36.sp
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
+                Text(
+                    text = greetingForNow(displayName),
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 36.sp
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
                 if (streakDays > 0) {
                     Spacer(Modifier.height(2.dp))
                     Text(
@@ -218,11 +215,10 @@ fun HomeScreen(navController: NavController) {
             Spacer(Modifier.height(12.dp))
 
             // ── 3. Quest card ───────────────────────────────────────────
-            MorphEntrance(delayMs = 140) {
-                val chosen = selectedCategory
-                val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
-                val accent = if (isWildcard) CurioColors.CoralBlush else chosen!!.accent
-                Surface(
+            val chosen = selectedCategory
+            val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
+            val accent = if (isWildcard) CurioColors.CoralBlush else chosen!!.accent
+            Surface(
                     onClick = {
                         if (chosen == null || chosen.id == CategoryId.WILDCARD) {
                             navController.navigate(CurioRoutes.SPIN)
@@ -317,7 +313,6 @@ fun HomeScreen(navController: NavController) {
                         }
                     }
                 }
-            }
 
             Spacer(Modifier.height(14.dp))
 
