@@ -86,9 +86,14 @@ definition file**. Do not assume parameter names from memory.
     `DevFullAppTestRunner` in Developer Settings can verify constructors,
     settings toggles, and database operations without a full Gradle build.
 
-### ✅ DO COMMIT AND PUSH CHANGES PROPERLY
+### ✅ DO COMMIT AND PUSH AFTER EVERY FIX
 
-Always commit and push changes using proper git workflow:
+After **every completed fix or change**, agents MUST commit and push before
+ending the task — including Kotlin fixes, documentation updates, and changes
+to agent instructions. Do not leave a completed fix uncommitted or wait for
+another request to ask for the commit.
+
+Use this git workflow:
 
 1. **Stage changes:** `git add -A` (or specific files)
 2. **Commit with descriptive message:** `git commit -m "type: concise description of changes"`

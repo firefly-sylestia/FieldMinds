@@ -29,7 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshot.SnapshotStateList
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -68,7 +68,7 @@ private val CategoryListSaver = listSaver<SnapshotStateList<CurioCategory>, Stri
             val parts = token.split(':')
             if (parts.size != 2) return@mapNotNull null
             val id = CategoryId.values().firstOrNull { it.name == parts[0] }
-            byId[id]?.copy(isHidden = parts[1] == "true")
+            id?.let { byId[it] }?.copy(isHidden = parts[1] == "true")
         }
         // Keep the saved order, then append any categories the token list
         // predates (e.g. a category added in a newer app version).

@@ -1479,7 +1479,7 @@ private fun SpinButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val size = if (landedTopic != null) 68.dp else 80.dp
+    val buttonSize = if (landedTopic != null) 68.dp else 80.dp
     Box(
         modifier = Modifier.size(128.dp),
         contentAlignment = Alignment.Center
@@ -1496,7 +1496,7 @@ private fun SpinButton(
             color = Color.Transparent,
             shadowElevation = if (isShuffling) 2.dp else 8.dp,
             modifier = Modifier
-                .size(size)
+                .size(buttonSize)
                 .scale(pulseScale.coerceIn(0.9f, 1.10f))
         ) {
             Box(

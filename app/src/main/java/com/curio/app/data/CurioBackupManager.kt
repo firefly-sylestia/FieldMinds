@@ -111,7 +111,7 @@ object CurioBackupManager {
                 if (!path.isNullOrBlank()) {
                     runCatching {
                         val file = File(path)
-                        if (file.isFile && file.length() > 0L) file.readBytes()
+                        if (file.isFile && file.length() > 0L) file.readBytes() else null
                     }.getOrNull()?.let { files[capture.id] = it }
                 }
             }
