@@ -257,7 +257,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── Landed topic — persisted by NAME (v5.6) so closing Reveal without
     //    saving keeps it on the card, tappable, until explored or spun
     //    again. The full CurioTopic is re-derived from the pool below.
-    var landedTopicName by rememberSaveable(activeCategory.id) { mutableStateOf<String?>(null) }
+    var landedTopicName by rememberSaveable(activeCategory.id) {
+        // Seeded from AppPreferences (v6): rememberSaveable survives tab
+        // switches (saveState/restoreState) but dies when the Spin entry is
+        // popped — e.g. the top-bar back arrow to Home. The prefs mirror
+        // restores the landed card the next time Spin is composed.
+        mutableStateOf(AppPreferences.getLandedTopic(context, activeCategory.id))
+    }
     // v5.6 — true once THIS landing has already opened by tap; reset per spin.
     var landingAlreadyOpened by rememberSaveable(activeCategory.id) { mutableStateOf(false) }
     val landedTopic: CurioTopic? = remember(landedTopicName, filteredPool) {
@@ -265,6 +271,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             filteredPool.firstOrNull { it.name == name }
                 ?: TopicJsonLoader.cached(activeCategory.id)?.firstOrNull { it.name == name }
         }
+    }
+    // v6 — mirror the landed topic to AppPreferences whenever it changes
+    // (landed on spin end, cleared on the next spin start), so it survives
+    // ANY navigation — including popping the Spin back-stack entry.
+    LaunchedEffect(activeCategory.id, landedTopicName) {
+        AppPreferences.setLandedTopic(context, activeCategory.id, landedTopicName)
     }
     // True only during an explicit opening handoff; keeps copy flexible if
     // a future shared-element transition delays navigation.

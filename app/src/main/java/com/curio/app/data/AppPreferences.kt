@@ -24,6 +24,7 @@ object AppPreferences {
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
+    private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
 
     // ── Display name ─────────────────────────────────────────────────
     fun getDisplayName(context: Context): String =
@@ -94,6 +95,20 @@ object AppPreferences {
 
     fun setLastSpinCategory(context: Context, id: CategoryId) =
         prefs(context).edit().putString(KEY_LAST_SPIN_CATEGORY, id.name).apply()
+
+    // ── Landed Spin topic (per category) — persisted so the landed card ──
+    //    survives ANY navigation. rememberSaveable alone dies when the
+    //    Spin back-stack entry is popped (e.g. top-bar back arrow to
+    //    Home); mirroring the topic name here lets Spin restore it the
+    //    next time it's composed. Cleared when a new spin starts.
+    fun getLandedTopic(context: Context, categoryId: CategoryId): String? =
+        prefs(context).getString(KEY_LANDED_TOPIC_PREFIX + categoryId.name, null)
+
+    fun setLandedTopic(context: Context, categoryId: CategoryId, topicName: String?) {
+        prefs(context).edit()
+            .putString(KEY_LANDED_TOPIC_PREFIX + categoryId.name, topicName)
+            .apply()
+    }
 
     // ── Internal ─────────────────────────────────────────────────────
     private fun prefs(context: Context) =
