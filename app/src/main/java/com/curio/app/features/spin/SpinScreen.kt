@@ -64,6 +64,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -92,6 +93,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -1107,8 +1109,10 @@ private fun HeroTicketCard(
 ) {
     val w = 270.dp
     val h = 292.dp
-    // The ticket is an opaque sheet of paper. Category identity lives in the
-    // bold edge and small ink details; depth comes from elevation and scale.
+    val ticketGradient = remember(cat.id) {
+        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
+        else CurioGradients.cardGradient(accent)
+    }
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
     // Inner clip layer keeps rounded corners crisp during scale.
@@ -1137,28 +1141,24 @@ private fun HeroTicketCard(
         ) {
             Surface(
                 shape = RoundedCornerShape(30.dp),
-                color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(2.dp, accent),
+                color = Color.Transparent,
                 shadowElevation = if (landed) 16.dp else 10.dp,
-                tonalElevation = 2.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(
+                            Brush.verticalGradient(ticketGradient),
+                            RoundedCornerShape(30.dp)
+                        )
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(8.dp)
-                            .background(accent)
-                    )
+                    // Gradient card — no side rule needed
                     // ── Watermark glyph — large, decorative ────────────
                     CurioIcon(
                         name = glyph,
                         contentDescription = null,
-                        tint = accent.copy(alpha = 0.16f),
+                        tint = Color.White.copy(alpha = 0.16f),
                         size = 150.dp,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
@@ -1180,12 +1180,12 @@ private fun HeroTicketCard(
                         ) {
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh
+                                color = Color.White.copy(alpha = 0.22f)
                             ) {
                                 Text(
                                     text = topic?.subtype ?: "…",
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    color = Color.White,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
@@ -1209,7 +1209,7 @@ private fun HeroTicketCard(
                                     fontWeight = FontWeight.ExtraBold,
                                     lineHeight = 34.sp
                                 ),
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = Color.White,
 
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
@@ -1220,12 +1220,12 @@ private fun HeroTicketCard(
                                     topic.tags.take(2).forEach { tag ->
                                         Surface(
                                             shape = RoundedCornerShape(50),
-                                            color = MaterialTheme.colorScheme.surfaceContainerHigh
-                                        ) {
-                                            Text(
-                                                text = tag,
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = MaterialTheme.colorScheme.onSurface,
+                                color = Color.White.copy(alpha = 0.22f)
+                            ) {
+                                Text(
+                                    text = tag,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.White,
                                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                             )
                                         }
@@ -1237,7 +1237,7 @@ private fun HeroTicketCard(
                                 Text(
                                     text = topic.teaser,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = Color.White.copy(alpha = 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -1256,18 +1256,18 @@ private fun HeroTicketCard(
                                 Text(
                                     text = "Opening…",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = Color.White.copy(alpha = 0.88f)
                                 )
                             } else {
                                 CurioIcon(
                                     if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
-                                    tint = accent,
+                                    tint = Color.White,
                                     size = 16.dp
                                 )
                                 Text(
                                     text = if (landed) "Tap to open" else "Tap to spin",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = Color.White.copy(alpha = 0.88f)
                                 )
                             }
                         }

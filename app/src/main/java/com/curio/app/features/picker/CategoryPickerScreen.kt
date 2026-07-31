@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -151,10 +153,9 @@ private fun CategoryTile(
     )
 
     val isWildcard = category.id == CategoryId.WILDCARD
-    val cardColor = if (isWildcard) {
-        CurioColors.CoralBlush.copy(alpha = 0.85f)
-    } else {
-        category.accent
+    val tileGradient = remember(isWildcard, category.accent) {
+        if (isWildcard) CurioGradients.wildcardCardGradient()
+        else CurioGradients.cardGradient(category.accent)
     }
 
     Surface(
@@ -163,9 +164,8 @@ private fun CategoryTile(
             onClick()
         },
         shape = RoundedCornerShape(28.dp),
-        color = cardColor,
+        color = Color.Transparent,
         shadowElevation = 8.dp,
-        tonalElevation = 4.dp,
         modifier = Modifier
             .fillMaxWidth()
             .height(156.dp)
@@ -174,6 +174,10 @@ private fun CategoryTile(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(tileGradient),
+                    RoundedCornerShape(28.dp)
+                )
         ) {
             CurioIcon(
                 name = category.iconGlyph,

@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +55,7 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -312,40 +314,42 @@ private fun HeroCard(
     modifier: Modifier = Modifier
 ) {
     val action = resolved?.exploreAction
-
-    // Opaque paper hero: category color is an inked edge, while the sheet
-    // itself stays warm and readable in both light and dark themes.
+    val heroGradient = remember(cat.id) {
+        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
+        else CurioGradients.cardGradient(cat.accent)
+    }
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(2.dp, cat.accent),
-        shadowElevation = 10.dp,
-        tonalElevation = 2.dp
+        color = Color.Transparent,
+        shadowElevation = 10.dp
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(
+                    Brush.verticalGradient(heroGradient),
+                    RoundedCornerShape(32.dp)
+                )
         ) {
             // ── Watermark glyph (category icon) ─────────────────────────
             CurioIcon(
                 name = cat.iconGlyph,
                 contentDescription = null,
-                tint = cat.accent.copy(alpha = 0.16f),
+                tint = Color.White.copy(alpha = 0.16f),
                 size = 190.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(end = 0.dp)
             )
-            // ── Action badge (verb + duration) — white pill on ticket ───
+            // ── Action badge (verb + duration) — white pill on gradient ───
             if (action != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = Color.White.copy(alpha = 0.22f),
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -365,16 +369,16 @@ private fun HeroCard(
                         Text(
                             text = "${action.verb} for ~${action.durationMinutes} min",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = Color.White
                         )
                     }
                 }
             }
-            // ── Subtype pill — white pill on ticket ────────────────────
+            // ── Subtype pill ────────────────────
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    color = Color.White.copy(alpha = 0.22f),
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -383,7 +387,7 @@ private fun HeroCard(
                     Text(
                         text = resolved.subtype,
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = Color.White,
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                     )
                 }

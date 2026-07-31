@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -66,6 +67,7 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -238,6 +240,10 @@ fun HomeScreen(navController: NavController) {
             val chosen = selectedCategory
             val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
             val accent = if (isWildcard) CurioColors.CoralBlush else chosen?.accent ?: CurioColors.CoralBlush
+            val questGradient = remember(isWildcard, accent) {
+                if (isWildcard) CurioGradients.wildcardCardGradient()
+                else CurioGradients.cardGradient(accent)
+            }
             Surface(
                     onClick = {
                         if (chosen == null || chosen.id == CategoryId.WILDCARD) {
@@ -247,30 +253,28 @@ fun HomeScreen(navController: NavController) {
                         }
                     },
                     shape = RoundedCornerShape(28.dp),
-                    // Opaque paper card: depth comes from a crisp edge and
-                    // shadow, never from transparency or a background wash.
-                    color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(2.dp, accent),
-                    shadowElevation = 8.dp,
-                    tonalElevation = 2.dp,
+                    color = Color.Transparent,
+                    shadowElevation = 10.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .height(168.dp)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // A quiet category tint keeps the paper surface
-                        // tactile without turning it into a translucent overlay.
+                        // Solid gradient background
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(accent.copy(alpha = 0.08f))
+                                .background(
+                                    Brush.verticalGradient(questGradient),
+                                    RoundedCornerShape(28.dp)
+                                )
                         )
                         // Watermark glyph
                         CurioIcon(
                             name = if (chosen != null) chosen.iconGlyph else CurioIcons.Casino,
                             contentDescription = null,
-                            tint = accent.copy(alpha = 0.18f),
+                            tint = Color.White.copy(alpha = 0.20f),
                             size = 140.dp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
@@ -291,7 +295,7 @@ fun HomeScreen(navController: NavController) {
                                     modifier = Modifier
                                         .width(3.dp)
                                         .height(16.dp)
-                                        .background(accent, RoundedCornerShape(2.dp))
+                                        .background(Color.White.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
                                 )
                                 Text(
                                     text = "TODAY'S QUEST",
@@ -299,7 +303,7 @@ fun HomeScreen(navController: NavController) {
                                         fontWeight = FontWeight.ExtraBold,
                                         letterSpacing = 1.2.sp
                                     ),
-                                    color = accent
+                                    color = Color.White.copy(alpha = 0.88f)
                                 )
                             }
                             Column {
@@ -307,7 +311,7 @@ fun HomeScreen(navController: NavController) {
                                 Text(
                                     text = chosen?.displayName ?: "Spin the wheel",
                                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                                    color = MaterialTheme.colorScheme.onBackground,
+                                    color = Color.White,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -319,7 +323,7 @@ fun HomeScreen(navController: NavController) {
                             ) {
                                 Surface(
                                     shape = RoundedCornerShape(50),
-                                    color = accent
+                                    color = Color.White.copy(alpha = 0.22f)
                                 ) {
                                     Row(
                                         modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
@@ -564,41 +568,47 @@ private fun CategoryChip(
         animationSpec = CurioMotion.Springs.Snappy,
         label = "catChipScale"
     )
+    val chipGradient = remember(selected, accent) {
+        if (selected) CurioGradients.cardGradient(accent) else emptyList()
+    }
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
-        color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, if (selected) accent else accent.copy(alpha = 0.45f)),
-        shadowElevation = if (selected) 4.dp else 1.dp,
+        color = if (selected) Color.Transparent else MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = if (selected) 6.dp else 1.dp,
         modifier = Modifier.scale(scale)
     ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
-            // Opaque paper tile for the category glyph
-            Surface(
-                shape = RoundedCornerShape(10.dp),
-                color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainerHigh,
-                border = BorderStroke(1.dp, if (selected) Color.White.copy(alpha = 0.35f) else accent.copy(alpha = 0.30f)),
-                modifier = Modifier.size(34.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                if (selected) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(chipGradient),
+                                RoundedCornerShape(22.dp)
+                            )
+                    )
+                }
+                Row(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     CurioIcon(
                         glyph, null,
                         tint = if (selected) Color.White else accent,
-                        size = 18.dp
+                        size = 20.dp
+                    )
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
+                        ),
+                        color = if (selected) Color.White else accent
                     )
                 }
-            }
-            Text(
-                text = name,
-                style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
-                ),
-                color = if (selected) Color.White else accent
-            )
             }
         }
 }

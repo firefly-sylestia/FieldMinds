@@ -1,27 +1,35 @@
-# Midnight Signal icon and palette rebrand
+# Solid Gradient Card Redesign
 
 ## Request
 
-The user rejected the pastel discovery-wheel icon and requested a completely new icon design and fully changed palette—not a recolor.
+Redesign the entire app with a "material solid gradient card style" — fully opaque category-specific gradients on all cards, no borders/outlines, no transparency, no glowing/shimmer effects. Shadow elevation only for depth. Category chip icons directly on background, no inner containers.
 
-## Decision
+## Design rules
 
-User selected **Midnight Signal**: deep navy/ink foundations, electric blue primary signal, orange energy accent, mint aperture highlight, and a genuinely new angular portal/beacon mark.
+- **100% opaque** — no `.copy(alpha = ...)` on card surfaces
+- **Solid gradients** — `CurioGradients.cardGradient(accent)` and `wildcardCardGradient()` produce 3-6 stop fully opaque gradients
+- **No borders** — removed from quest cards, spin tickets, hero cards, category tiles
+- **No glowing** — removed shimmer overlay, breathing animation from hero card
+- **Shadow elevation** — `shadowElevation = 10.dp` for soft blurry depth on cards
+- **Category chips** — icons rendered directly in chip Row, no inner container Surface
 
 ## Completed implementation
 
-- Replaced Android adaptive launcher background/foreground with an angular open portal, mint aperture, orange spark, and dedicated monochrome themed-icon mask.
-- Replaced the web SVG with matching angular geometry and updated the web CSS/Tailwind palettes, dark mode, shadows, and documentation.
-- Replaced Compose palette tokens and dark surfaces while preserving source-compatible token names across existing screens.
-- Replaced the splash auto-awesome glyph with the native multi-color launcher vector.
-- Updated XML bootstrap resources, CURIO_SPEC, CURIO_DATA_PLAN, app/web ownership docs, and the store changelog.
-- Corrected Material primary text contrast for the new signal-blue controls.
+- `CurioColors.kt` — Replaced alpha tints with opaque `lerp()` variants; added `cardGradient()` and `wildcardCardGradient()` helpers; removed unused `ticketStops()` and `wildcardTicketStops()`.
+- `CurioHeroCard.kt` — Solid vertical gradient background; removed shimmer and breathing animations; all text now white.
+- `HomeScreen.kt` — Quest card uses solid gradient instead of paper+border+tint; category chips lost inner icon containers, gradient on selected state.
+- `SpinScreen.kt` — HeroTicketCard uses solid vertical gradient, removed border, side rule, and tonalElevation orphan; all text white on gradient; added `Brush` and `CurioGradients` imports.
+- `TopicRevealScreen.kt` — HeroCard uses solid gradient with white text and white pill badges (verb/duration, subtype).
+- `CategoryPickerScreen.kt` — All category tiles use solid gradients (category-specific or wildcard spectrum), no flat/accent colors.
 
 ## Validation
 
-- XML/SVG parsing, source assertions, brace checks, CSS balance, stale-reference scan, and `git diff --check` are planned.
-- Gradle compilation/build/lint/test are not run locally because the repository explicitly forbids Android build commands; CI remains the compiler check.
+- Python brace check passes cleanly.
+- Code reviewer identified and fixed: CategoryChip gradient Box sizing bug, tonalElevation orphan on transparent Surface.
+- Gradle compilation/build/lint/test are not run locally because repository instructions forbid Android build commands; CI remains the compiler check.
 
-## Status
+## Remaining
 
-- Implementation complete; final review and static validation in progress.
+- ProfileScreen still has some alpha-background sections (subtle supporting elements, not primary cards).
+- `rememberShimmerBrush` in CurioAnimations.kt is dead code (only defined, never called).
+- SpinScreen's SpinButton still uses paper/border style — could be updated to gradient in a follow-up.

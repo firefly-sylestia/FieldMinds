@@ -1,1 +1,1 @@
-Replaced the pastel discovery wheel with a new angular Midnight Signal portal mark and fully refreshed the palette across the launcher, themed icon, splash, Android UI, website, and category accents. Also retained the paper-card visual language, polished Profile, and reliable daily reminders.
+Replaced the pastel wheel with an angular Midnight Signal portal mark and fully refreshed the palette. Redesigned all cards with solid category-specific gradients, no borders or transparency — just shadow elevation for depth across Home, Spin, Reveal, and Picker screens.

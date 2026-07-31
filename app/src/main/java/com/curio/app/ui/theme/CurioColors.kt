@@ -7,9 +7,10 @@ import androidx.compose.ui.graphics.lerp
  * Curio's Midnight Signal color system — see CURIO_SPEC.md §0.2.
  *
  * The identity is built around a deep navigation-night foundation, an electric
- * blue signal, a warm orange energy accent, and a mint aperture highlight. The
- * category tokens remain named for source compatibility, but their values now
- * belong to the new brand rather than the retired pastel palette.
+ * blue signal, a warm orange energy accent, and a mint aperture highlight.
+ *
+ * All colors are 100 % opaque. Card surfaces use solid category gradients
+ * with shadow elevation for depth — no alpha tricks, no borders, no glow.
  */
 object CurioColors {
 
@@ -28,21 +29,22 @@ object CurioColors {
     val Sage             = Color(0xFF16B89A)  // Books / Authors — mint
     val Peach            = Color(0xFFE6652F)  // Visual Art / Painters — orange
     val Teal             = Color(0xFF079DB8)  // Science & Nature — cyan
-    // Wildcard uses a signal-spectrum gradient (see CurioGradients).
 
-    /** Restrained signal washes for category backgrounds. */
-    val LilacTint     = Lilac.copy(alpha = 0.16f)
-    val DustyBlueTint = DustyBlue.copy(alpha = 0.16f)
-    val SageTint      = Sage.copy(alpha = 0.16f)
-    val PeachTint     = Peach.copy(alpha = 0.16f)
-    val TealTint      = Teal.copy(alpha = 0.16f)
+    // ── Opaque lighter variants (lerp toward white, no alpha) ─────────────
+    val LilacTint     = lerp(Lilac,     Color.White, 0.45f)
+    val DustyBlueTint = lerp(DustyBlue, Color.White, 0.45f)
+    val SageTint      = lerp(Sage,      Color.White, 0.45f)
+    val PeachTint     = lerp(Peach,     Color.White, 0.45f)
+    val TealTint      = lerp(Teal,      Color.White, 0.45f)
 }
 
 /**
- * Signal-spectrum gradients used for wildcard and hero depth.
- * Gradients are decorative; core cards still use opaque theme surfaces.
+ * Solid, fully-opaque gradient definitions used across all card surfaces.
+ * No alpha tricks — every stop is a real, opaque color.  Shadow elevation
+ * provides depth instead of borders or transparency.
  */
 object CurioGradients {
+    /** Wildcard rainbow spectrum — spans the full signal palette. */
     val WildcardGradientStops = listOf(
         CurioColors.Lilac,
         CurioColors.Teal,
@@ -51,17 +53,27 @@ object CurioGradients {
         CurioColors.DustyBlue
     )
 
-    /** Hue-preserving signal stops for named-category hero treatments. */
-    fun ticketStops(accent: Color, isDark: Boolean): List<Color> = listOf(
-        lerp(accent, Color.Black, if (isDark) 0.04f else 0.10f),
-        lerp(accent, Color.Black, if (isDark) 0.16f else 0.24f),
-        lerp(accent, Color.Black, if (isDark) 0.32f else 0.42f),
-        lerp(accent, Color.Black, if (isDark) 0.50f else 0.60f)
+    /**
+     * Solid category card gradient — deep → accent → light.
+     * Every stop is 100 % opaque so the card always reads as a solid
+     * block of color regardless of theme background.
+     */
+    fun cardGradient(accent: Color): List<Color> = listOf(
+        lerp(accent, CurioColors.DeepPlum, 0.42f),
+        accent,
+        lerp(accent, Color.White, 0.42f)
     )
 
-    /** Signal-spectrum stops deepened enough for white text and small UI. */
-    fun wildcardTicketStops(isDark: Boolean): List<Color> =
-        WildcardGradientStops.map {
-            lerp(it, Color.Black, if (isDark) 0.16f else 0.34f)
-        }
+    /**
+     * Solid wildcard card gradient — the rainbow spectrum, deepened
+     * at the ends so white text stays readable.
+     */
+    fun wildcardCardGradient(): List<Color> = listOf(
+        lerp(CurioColors.Lilac,     CurioColors.DeepPlum, 0.35f),
+        CurioColors.Lilac,
+        CurioColors.Teal,
+        CurioColors.ButterYellow,
+        CurioColors.DustyBlue,
+        lerp(CurioColors.DustyBlue, Color.White, 0.30f)
+    )
 }

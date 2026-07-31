@@ -2,20 +2,17 @@ package com.curio.app.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -28,13 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.curio.app.data.CategoryId
 import com.curio.app.ui.theme.CurioColors
@@ -72,21 +66,16 @@ fun CurioHeroSpinCard(
         selectedCategory != null -> selectedCategory.accent
         else -> CurioColors.CoralBlush
     }
+    val cardGradient = remember(isWildcard, activeAccent) {
+        if (isWildcard) CurioGradients.wildcardCardGradient()
+        else CurioGradients.cardGradient(activeAccent)
+    }
 
     // ── Press scale animation ─────────────────────────────────────────────
     val pressScale by animateFloatAsState(
         targetValue = if (pressed) 0.96f else 1f,
         animationSpec = CurioMotion.Springs.Press,
         label = "heroPress"
-    )
-
-    // ── Breathing background glyph ────────────────────────────────────────
-    val breatheScale = rememberBreathingScale(active = true, amplitude = 0.04f)
-
-    // ── Shimmer sweep ─────────────────────────────────────────────────────
-    val shimmerBrush = rememberShimmerBrush(
-        shimmerColor = Color.White.copy(alpha = 0.12f),
-        baseColor = Color.Transparent
     )
 
     Surface(
@@ -99,30 +88,32 @@ fun CurioHeroSpinCard(
             .height(220.dp)
             .scale(pressScale),
         shape = RoundedCornerShape(28.dp),
-        color = activeAccent,
-        shadowElevation = 8.dp
+        color = Color.Transparent,
+        shadowElevation = 10.dp
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // ── Background wheel glyph — large, breathes, suggests the dial ─
+            // ── Solid gradient background ─────────────────────────────────
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(cardGradient),
+                        RoundedCornerShape(28.dp)
+                    )
+            )
+
+            // ── Background wheel glyph — still, decorative ──────────────
             CurioIcon(
                 name = CurioIcons.AutoAwesome,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.18f),
+                tint = Color.White.copy(alpha = 0.16f),
                 size = 180.dp,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .padding(end = 12.dp)
-                    .scale(breatheScale)
             )
 
-            // ── Shimmer overlay ──────────────────────────────────────────────
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(shimmerBrush)
-            )
-
-            // ── Content ──────────────────────────────────────────────────────
+            // ── Content ────────────────────────────────────────────────
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -137,15 +128,14 @@ fun CurioHeroSpinCard(
                     Text(
                         text = "SPIN",
                         style = MaterialTheme.typography.displayLarge.copy(
-                            color = CurioColors.DeepPlum,
+                            color = Color.White,
                             fontWeight = FontWeight.ExtraBold
                         )
                     )
-                    // ── Decorative orbiting sparkle ─────────────────────────
                     CurioIcon(
                         name = CurioIcons.AutoAwesome,
                         contentDescription = null,
-                        tint = CurioColors.DeepPlum.copy(alpha = 0.35f),
+                        tint = Color.White.copy(alpha = 0.45f),
                         size = 20.dp
                     )
                 }
@@ -153,7 +143,7 @@ fun CurioHeroSpinCard(
                     Text(
                         text = "the wheel",
                         style = MaterialTheme.typography.headlineMedium.copy(
-                            color = CurioColors.DeepPlum
+                            color = Color.White
                         )
                     )
                     Spacer(Modifier.height(4.dp))
@@ -165,7 +155,7 @@ fun CurioHeroSpinCard(
                                 ?: if (wildcardSelected) "Surprise me"
                                 else "Tap to discover something new",
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                color = CurioColors.DeepPlum.copy(alpha = 0.80f)
+                                color = Color.White.copy(alpha = 0.92f)
                             )
                         )
                     }
