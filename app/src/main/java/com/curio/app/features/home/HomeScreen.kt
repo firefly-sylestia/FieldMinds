@@ -564,23 +564,27 @@ private fun CategoryChip(
     onClick: () -> Unit
 ) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.04f else 1f,
+        targetValue = if (selected) 1.06f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
         label = "catChipScale"
     )
-    val chipGradient = remember(selected, accent) {
-        if (selected) listOf(accent, accent, lerp(accent, Color.White, 0.55f)) else emptyList()
+    // Every chip shows its accent colour.  Selected gets a vibrant gradient;
+    // inactive is a solid tint.  Both have shadow for depth.
+    val chipGradient = remember(accent) {
+        listOf(accent, accent, lerp(accent, Color.White, 0.48f))
     }
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
-        color = if (selected) Color.Transparent else MaterialTheme.colorScheme.surfaceContainerLow,
-        shadowElevation = if (selected) 6.dp else 1.dp,
+        color = if (selected) Color.Transparent else accent,
+        shadowElevation = if (selected) 8.dp else 5.dp,
         modifier = Modifier.scale(scale)
     ) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
+                // Gradient background only for selected; inactive uses the
+                // Surface's solid accent colour.
                 if (selected) {
                     Box(
                         modifier = Modifier
@@ -598,7 +602,7 @@ private fun CategoryChip(
                 ) {
                     CurioIcon(
                         glyph, null,
-                        tint = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
+                        tint = CurioColors.DeepPlum,
                         size = 20.dp
                     )
                     Text(
@@ -606,7 +610,7 @@ private fun CategoryChip(
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
                         ),
-                        color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface
+                        color = CurioColors.DeepPlum
                     )
                 }
             }
