@@ -220,6 +220,14 @@ object CurioBackupManager {
             }
             editor.apply()
         }
+        // Restore the in-memory preference state too; otherwise the UI keeps
+        // showing the pre-restore theme/reminder values until process restart.
+        AppPreferences.initThemeMode(context)
+        if (AppPreferences.isReminderEnabled(context)) {
+            DailyReminderScheduler.schedule(context, AppPreferences.getReminderHour(context))
+        } else {
+            DailyReminderScheduler.cancel(context)
+        }
         return RestoreResult(payload.captures.size, payload.preferences.size)
     }
 

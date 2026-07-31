@@ -40,8 +40,12 @@ object AppPreferences {
     var themeModeState by mutableStateOf(THEME_SYSTEM)
         private set
 
+    var reminderEnabledState by mutableStateOf(false)
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
+        reminderEnabledState = isReminderEnabled(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -57,14 +61,26 @@ object AppPreferences {
     fun isReminderEnabled(context: Context): Boolean =
         prefs(context).getBoolean(KEY_REMINDER_ENABLED, false)
 
-    fun setReminderEnabled(context: Context, enabled: Boolean) =
+    fun setReminderEnabled(context: Context, enabled: Boolean) {
+        reminderEnabledState = enabled
         prefs(context).edit().putBoolean(KEY_REMINDER_ENABLED, enabled).apply()
+        if (enabled) {
+            DailyReminderScheduler.schedule(context, getReminderHour(context))
+        } else {
+            DailyReminderScheduler.cancel(context)
+        }
+    }
 
     fun getReminderHour(context: Context): Int =
         prefs(context).getInt(KEY_REMINDER_HOUR, 18)   // default 6 PM
 
-    fun setReminderHour(context: Context, hour: Int) =
-        prefs(context).edit().putInt(KEY_REMINDER_HOUR, hour).apply()
+    fun setReminderHour(context: Context, hour: Int) {
+        val safeHour = hour.coerceIn(0, 23)
+        prefs(context).edit().putInt(KEY_REMINDER_HOUR, safeHour).apply()
+        if (isReminderEnabled(context)) {
+            DailyReminderScheduler.schedule(context, safeHour)
+        }
+    }
 
     // ── Last-used Spin category — persisted so the Spin tab opens where ─
     //    the user left off, even across app launches (v5.5). Falls back

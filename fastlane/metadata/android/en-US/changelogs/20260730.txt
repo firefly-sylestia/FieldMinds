@@ -1,0 +1,1 @@
+Redesigned Profile with a polished hero, clearer stats, grouped preferences, working dialogs and activity links. Fixed daily reminders with notification permission handling, reliable local-time scheduling, reboot/timezone recovery, and immediate state updates across the app. Improved backup restore refresh, recording-quality controls, and settings clarity.

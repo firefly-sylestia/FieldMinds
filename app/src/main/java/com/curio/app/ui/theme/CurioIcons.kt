@@ -94,6 +94,9 @@ object CurioIcons {
     const val BugReport     = "bug_report"
     const val Warning       = "warning"
     const val Notifications = "notifications"
+    const val Schedule      = "schedule"
+    const val LocalFire     = "local_fire_department"
+    const val DarkMode      = "dark_mode"
 }
 
 /**

@@ -127,7 +127,7 @@ fun HomeScreen(navController: NavController) {
     val displayName = remember { AppPreferences.getDisplayName(context) }
     var selectedCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf<CurioCategory?>(null) }
     val streakDays = StreakTracker.getStreak(context)
-    val reminderEnabled = remember { AppPreferences.isReminderEnabled(context) }
+    val reminderEnabled by AppPreferences.reminderEnabledState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
