@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -404,11 +403,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        // ── 3. Center spin button ───────────────────────────────────
+        // ── 3. Center spin button — the ONLY shuffle CTA (v6) ──────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 6.dp),
+                .padding(vertical = 12.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
@@ -426,15 +425,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Spacer(Modifier.weight(1f))
 
         // ── 5. Bottom bar — Categories · Filter · CTA ──────────────
-        // No Explore button: the landed card itself opens the topic, so
-        // the primary CTA becomes "Spin again" after landing.
+        // No duplicate shuffle button: the big center SpinButton above
+        // owns all spin starts, so the bottom bar is controls only.
         BottomCta(
             cat = cat,
-            landedTopic = landedTopic,
-            shuffling = shuffling,
-            canSpin = filteredPool.isNotEmpty(),
             filterActiveCount = activeFilters.size + activeSubtypes.size,
-            onSpin = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
             onCategories = { showCategoryPicker = true },
             onFilter = { showFilters = true }
         )
@@ -512,47 +507,33 @@ private fun TopBar(
 
         Spacer(Modifier.width(10.dp))
 
-        // ── Category label — accent chip (v5.7; switching moves to the
-        //    bottom bar Categories button) ────────────────────────────
-        Surface(
-            shape = RoundedCornerShape(50),
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
-            shadowElevation = 0.dp
+        // ── Category label — plain title text, no pill container ────
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(start = 10.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(7.dp)
-            ) {
-                CurioIcon(
-                    cat.iconGlyph, null,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 16.dp
-                )
-                Text(
-                    text = cat.displayName,
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1
-                )
-            }
+            CurioIcon(
+                cat.iconGlyph, null,
+                tint = cat.accent,
+                size = 18.dp
+            )
+            Text(
+                text = cat.displayName,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1
+            )
         }
 
         Spacer(Modifier.weight(1f))
 
-        // ── Right-side topic count pill ─────────────────────────────
+        // ── Right-side topic count — plain text, no pill ────────────
         if (poolCount > 0) {
-            Surface(
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh
-            ) {
-                Text(
-                    text = "$filteredCount / $poolCount",
-                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-            }
+            Text(
+                text = "$filteredCount / $poolCount",
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -1345,9 +1326,9 @@ private fun SpinButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val buttonSize = if (landedTopic != null) 68.dp else 80.dp
+    val buttonSize = if (landedTopic != null) 84.dp else 100.dp
     Box(
-        modifier = Modifier.size(128.dp),
+        modifier = Modifier.size(152.dp),
         contentAlignment = Alignment.Center
     ) {
         OrbitRing(active = isShuffling, color = tint, modifier = Modifier.fillMaxSize())
@@ -1368,18 +1349,18 @@ private fun SpinButton(
                 contentAlignment = Alignment.Center
             ) {
                 if (isShuffling) {
-                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(48.dp))
+                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(56.dp))
                 } else if (landedTopic != null) {
                     CurioIcon(
                         CurioIcons.Refresh, null,
                         tint = tint,
-                        size = 28.dp
+                        size = 36.dp
                     )
                 } else {
                     CurioIcon(
                         CurioIcons.Casino, null,
                         tint = Color.White,
-                        size = 32.dp
+                        size = 44.dp
                     )
                 }
             }
@@ -1488,15 +1469,10 @@ private fun OpeningPulseDot() {
 @Composable
 private fun BottomCta(
     cat: CurioCategory,
-    landedTopic: CurioTopic?,
-    shuffling: Boolean,
-    canSpin: Boolean,
     filterActiveCount: Int,
-    onSpin: () -> Unit,
     onCategories: () -> Unit,
     onFilter: () -> Unit
 ) {
-    val showAgain = landedTopic != null
     val hasFilters = filterActiveCount > 0
 
     // Anchored paper tray: opaque, elevated.  No dividing rule — the
@@ -1513,43 +1489,7 @@ private fun BottomCta(
                 .padding(vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // ── Main CTA — Spin again (after landing) or Shuffle ──
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Button(
-                    onClick = onSpin,
-                    enabled = canSpin,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cat.accent,
-                        contentColor = CurioColors.DeepPlum,
-                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
-                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
-                    ),
-                    contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
-                ) {
-                    CurioIcon(
-                        if (showAgain) CurioIcons.Refresh else CurioIcons.Casino, null,
-                        tint = CurioColors.DeepPlum,
-                        size = 18.dp
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = when {
-                            shuffling -> "Spinning…"
-                            showAgain -> "Spin again"
-                            else -> "Shuffle"
-                        },
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
-                    )
-                }
-            }
-
-            // ── Categories · Filter — image-led deck buttons below the CTA ──
+            // ── Categories · Filter — image-led deck buttons ────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1600,18 +1540,11 @@ private fun DeckControlButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-                listOf(-6.dp to 4.dp, 5.dp to (-3).dp).forEachIndexed { index, offsetPair ->
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = accent.copy(alpha = if (index == 0) 0.18f else 0.30f),
-                        modifier = Modifier.size(28.dp).offset(x = offsetPair.first, y = offsetPair.second)
-                    ) {}
-                }
-                Surface(shape = RoundedCornerShape(14.dp), color = accent) {
-                    CurioIcon(icon, null, tint = CurioColors.DeepPlum, size = 20.dp, modifier = Modifier.padding(7.dp))
-                }
-            }
+            CurioIcon(
+                icon, null,
+                tint = accent,
+                size = 24.dp
+            )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
