@@ -165,6 +165,16 @@ import kotlin.random.Random
  *     the topic, it stays on the card with "Tap to open" active until
  *     they explore (capture) it or tap Spin again. A `landingAlreadyOpened`
  *     guard stops auto-open from re-firing when returning from Reveal.
+ *
+ * v5.7 changes:
+ * 13. **Premium gradient ticket + dark-mode tuning** — the hero ticket's
+ *     flat 2-stop vertical gradient became a 4-stop diagonal sweep with a
+ *     glassy top sheen (named categories) and a more luminous diagonal
+ *     rainbow (wildcard). Dark mode lifts the crown, keeps the accent hue
+ *     alive in the base, and adds a hairline edge + soft landing glow, so
+ *     the ticket pops off the plum background instead of melting into it.
+ *     The top-bar category label is now an accent chip and the bottom-bar
+ *     Categories/Filter buttons share one accent-tinted visual language.
  */
 // ═══════════════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -537,28 +547,29 @@ private fun TopBar(
 
         Spacer(Modifier.width(10.dp))
 
-        // ── Category label (read-only — switching moves to bottom bar) ──
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // ── Category label — accent chip (v5.7; switching moves to the
+        //    bottom bar Categories button) ────────────────────────────
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = cat.accent.copy(alpha = 0.12f)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .clip(CircleShape)
-                    .background(cat.accent)
-            )
-            CurioIcon(
-                cat.iconGlyph, null,
-                tint = cat.accent,
-                size = 18.dp
-            )
-            Text(
-                text = cat.displayName,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = cat.accent,
-                maxLines = 1
-            )
+            Row(
+                modifier = Modifier.padding(start = 10.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(7.dp)
+            ) {
+                CurioIcon(
+                    cat.iconGlyph, null,
+                    tint = cat.accent,
+                    size = 16.dp
+                )
+                Text(
+                    text = cat.displayName,
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    color = cat.accent,
+                    maxLines = 1
+                )
+            }
         }
 
         Spacer(Modifier.weight(1f))
@@ -1089,20 +1100,60 @@ private fun HeroTicketCard(
 ) {
     val w = 270.dp
     val h = 292.dp
+    val isDark = isSystemInDarkTheme()
 
-    // Ticket gradient — white text sits on the top half, so every stop is
-    // deepened toward DeepPlum (category accents are pastels and would make
-    // white-on-pastel unreadable). Wildcard keeps its rainbow identity,
-    // just saturated for contrast.
+    // Ticket gradient (v5.7) — white text sits on the top half, so every
+    // stop is deepened toward DeepPlum (pastel accents would make white
+    // unreadable). The old flat 2-stop vertical read cheap; this is a
+    // 4-stop DIAGONAL sweep: luminous accent crown → true accent → deepened
+    // accent → plum base. Dark mode lifts the crown and keeps the accent
+    // hue alive in the base so the ticket pops off the plum background
+    // instead of melting into it. Wildcard keeps its rainbow identity,
+    // saturated for contrast (more luminous in dark mode).
     val ticketBrush = if (cat.id == CategoryId.WILDCARD) {
-        Brush.verticalGradient(
+        val stops = if (isDark) {
+            CurioGradients.WildcardGradientStops.map { lerp(it, CurioColors.DeepPlum, 0.22f) }
+        } else {
             CurioGradients.WildcardGradientStops.map { lerp(it, CurioColors.DeepPlum, 0.35f) }
+        }
+        Brush.linearGradient(
+            colors = stops,
+            start = Offset.Zero,
+            end = Offset(560f, 560f)
         )
     } else {
-        Brush.verticalGradient(
-            listOf(lerp(accent, CurioColors.DeepPlum, 0.45f), CurioColors.DeepPlum)
+        // Brightest stop at the very top edge (only the subtype badge sits
+        // there), deepening quickly so the white name/tags stay readable —
+        // the luminous peak stays OUT of the text band.
+        val crown = if (isDark) {
+            lerp(accent, CurioColors.DeepPlum, 0.25f)
+        } else {
+            lerp(accent, CurioColors.DeepPlum, 0.24f)
+        }
+        val base = if (isDark) {
+            lerp(accent, CurioColors.DeepPlum, 0.82f)
+        } else {
+            CurioColors.DeepPlum
+        }
+        Brush.linearGradient(
+            colors = listOf(
+                crown,
+                lerp(accent, CurioColors.DeepPlum, if (isDark) 0.42f else 0.45f),
+                lerp(accent, CurioColors.DeepPlum, 0.62f),
+                base
+            ),
+            start = Offset.Zero,
+            end = Offset(560f, 560f)
         )
     }
+
+    // Soft accent glow behind the ticket once landed — fades in with the
+    // landing so the card feels lit from within (v5.7).
+    val glowAlpha by animateFloatAsState(
+        targetValue = if (landed) 0.30f else 0f,
+        animationSpec = CurioMotion.Springs.Snappy,
+        label = "landGlow"
+    )
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
     // Inner clip layer keeps rounded corners crisp during scale.
@@ -1122,6 +1173,19 @@ private fun HeroTicketCard(
                 ) else Modifier
             )
     ) {
+        // Soft accent glow behind the ticket — fades in when landed (v5.7).
+        Box(
+            modifier = Modifier
+                .size(w + 60.dp, h + 60.dp)
+                .align(Alignment.Center)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(accent.copy(alpha = glowAlpha), Color.Transparent),
+                        center = Offset(0.5f, 0.5f),
+                        radius = 0.55f
+                    )
+                )
+        )
         // Inner clip layer centered in outer box — prevents sharp edges during scale
         Box(
             modifier = Modifier
@@ -1132,7 +1196,13 @@ private fun HeroTicketCard(
             Surface(
                 shape = RoundedCornerShape(30.dp),
                 color = accent,
-                border = if (landed) BorderStroke(2.dp, Color.White.copy(alpha = 0.7f)) else null,
+                // v5.7 — dark mode gets a hairline white edge so the ticket
+                // stays defined against the plum background before landing.
+                border = when {
+                    landed -> BorderStroke(2.dp, Color.White.copy(alpha = 0.7f))
+                    isDark -> BorderStroke(1.dp, Color.White.copy(alpha = 0.12f))
+                    else -> null
+                },
                 shadowElevation = if (landed) 14.dp else 10.dp,
                 tonalElevation = 4.dp,
                 modifier = Modifier.fillMaxSize()
@@ -1142,6 +1212,22 @@ private fun HeroTicketCard(
                         .fillMaxSize()
                         .background(ticketBrush)
                 ) {
+                    // ── Glassy top sheen — diagonal light wash so the ──
+                    //    gradient reads dimensional instead of flat (v5.7).
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.linearGradient(
+                                    colors = listOf(
+                                        Color.White.copy(alpha = if (isDark) 0.05f else 0.10f),
+                                        Color.Transparent
+                                    ),
+                                    start = Offset.Zero,
+                                    end = Offset(420f, 360f)
+                                )
+                            )
+                    )
                     // ── Watermark glyph — large, decorative ────────────
                     CurioIcon(
                         name = glyph,
@@ -1309,7 +1395,7 @@ private fun PeekCard(
                 } else {
                     MaterialTheme.colorScheme.surfaceContainer
                 },
-                border = BorderStroke(1.dp, accent.copy(alpha = 0.30f)),
+                border = BorderStroke(1.dp, accent.copy(alpha = if (isDark) 0.45f else 0.30f)),
                 shadowElevation = if (landed) 4.dp else 2.dp,
                 tonalElevation = 1.dp,
                 modifier = Modifier.fillMaxSize()
@@ -1598,59 +1684,58 @@ private fun BottomCta(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // ── Categories button ──────────────────────────────
+                // ── Categories button — accent-tinted to match Filter ──
                 OutlinedButton(
                     onClick = onCategories,
                     shape = RoundedCornerShape(50),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = cat.accent.copy(alpha = 0.10f),
+                        contentColor = cat.accent
+                    ),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                CurioIcon(
-                    cat.iconGlyph, null,
-                    tint = cat.accent,
-                    size = 18.dp
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = cat.displayName,
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f, fill = false)
-                )
-                CurioIcon(
-                    CurioIcons.KeyboardArrowDown, null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    size = 16.dp
-                )
-            }
+                    CurioIcon(
+                        cat.iconGlyph, null,
+                        tint = cat.accent,
+                        size = 18.dp
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = cat.displayName,
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = cat.accent,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    CurioIcon(
+                        CurioIcons.KeyboardArrowDown, null,
+                        tint = cat.accent.copy(alpha = 0.7f),
+                        size = 16.dp
+                    )
+                }
 
-            // ── Filter button — highlights when filters are active ─
+            // ── Filter button — same accent-tinted language as Categories;
+            //    the count badge + stronger border carry the active signal ─
             OutlinedButton(
                 onClick = onFilter,
                 shape = RoundedCornerShape(50),
                 border = if (hasFilters)
                     BorderStroke(1.5.dp, cat.accent.copy(alpha = 0.6f))
                 else
-                    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                colors = if (hasFilters)
-                    ButtonDefaults.outlinedButtonColors(
-                        containerColor = cat.accent.copy(alpha = 0.12f),
-                        contentColor = cat.accent
-                    )
-                else
-                    ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
+                    BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = cat.accent.copy(alpha = 0.10f),
+                    contentColor = cat.accent
+                ),
                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 CurioIcon(
                     CurioIcons.Search, null,
-                    tint = if (hasFilters) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = cat.accent,
                     size = 18.dp
                 )
                 Spacer(Modifier.width(6.dp))
@@ -1659,7 +1744,7 @@ private fun BottomCta(
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
                     ),
-                    color = if (hasFilters) cat.accent else MaterialTheme.colorScheme.onSurface,
+                    color = cat.accent,
                     maxLines = 1
                 )
                 if (hasFilters) {
