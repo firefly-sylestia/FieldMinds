@@ -435,7 +435,6 @@ fun HomeScreen(navController: NavController) {
                     item(key = "wildcard") {
                         CategoryChip(
                             name = "Surprise",
-                            glyph = CurioIcons.Casino,
                             accent = CurioColors.CoralBlush,
                             selected = selectedCategory == null,
                             onClick = { selectedCategory = null }
@@ -445,7 +444,6 @@ fun HomeScreen(navController: NavController) {
                         if (cat.id != CategoryId.WILDCARD) {
                             CategoryChip(
                                 name = cat.displayName,
-                                glyph = cat.iconGlyph,
                                 accent = cat.accent,
                                 selected = selectedCategory?.id == cat.id,
                                 onClick = {
@@ -561,13 +559,12 @@ private fun StatPill(
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// Category chip — pill with leading icon + label
+// Category chip — text-only pill (matches the picker cards: no boxed icon)
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
 private fun CategoryChip(
     name: String,
-    glyph: String,
     accent: Color,
     selected: Boolean,
     onClick: () -> Unit
@@ -578,27 +575,21 @@ private fun CategoryChip(
         label = "catChipScale"
     )
     val inactiveContainer = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, 0.10f)
+    // Muted selected fill — same treatment as the picker cards: the raw
+    // accent is too loud, so it's deepened a step toward black.
+    val selectedContainer = lerp(accent, Color.Black, 0.22f)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
-        color = if (selected) accent else inactiveContainer,
+        color = if (selected) selectedContainer else inactiveContainer,
         border = if (selected) null else BorderStroke(1.dp, accent.copy(alpha = 0.24f)),
         shadowElevation = 0.dp,
         modifier = Modifier.scale(scale)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Surface(shape = CircleShape, color = if (selected) Color.White.copy(alpha = 0.22f) else accent.copy(alpha = 0.16f)) {
-                CurioIcon(
-                    glyph, null,
-                    tint = if (selected) Color.White else accent,
-                    size = 18.dp,
-                    modifier = Modifier.padding(4.dp)
-                )
-            }
             Text(
                 text = name,
                 style = MaterialTheme.typography.labelLarge.copy(
