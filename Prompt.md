@@ -1,29 +1,29 @@
-# App icon and download presentation redesign — completion summary
+# CI compile repair — HomeScreen and SpinScreen — completion summary
 
 ## Request
 
-Redesign the app icon and fix the icon appearing too zoomed in around the website's download-app presentation.
+Fix CI `compileDebugKotlin` errors:
 
-## Changes
+- `HomeScreen.kt:421` and `:431`: unresolved `CategoryChip`
+- `HomeScreen.kt:554`: `private` not applicable to local function
+- `SpinScreen.kt:1152`: unresolved `fillMaxHeight`
 
-- Replaced the oversized rotated card-stack Android foreground with a centered six-section discovery wheel using the Curio palette and generous adaptive-icon safe-zone padding.
-- Added a dedicated monochrome launcher foreground for Android themed icons and wired it into both adaptive launcher declarations.
-- Added `web/assets/icon.svg` as the scalable web counterpart of the launcher mark.
-- Updated landing, help, privacy, and updates pages plus JavaScript fallbacks, favicons, and social metadata to use the new SVG asset consistently.
-- Added a compact download-panel icon treatment and tightened download-panel spacing, button sizing, and mobile behavior so the app mark no longer dominates the download area.
-- Preserved all existing download links and responsive interactions.
+## Diagnosis and fixes
+
+- `HomeScreen.kt`'s `StatPill` helper was missing a closing brace, causing the following file-level `CategoryChip` declaration to be parsed as a local function. Added the missing scope closure and corrected the adjacent brace count so `CategoryChip` is file-scoped again.
+- Added `androidx.compose.foundation.layout.fillMaxHeight` to `SpinScreen.kt` imports for the existing modifier call.
+- No behavior or public symbol changes were needed.
 
 ## Verification
 
-- Parsed all changed Android XML and SVG files successfully with Python ElementTree.
-- Confirmed the SVG viewBox and web asset references resolve.
-- Confirmed no active web references to the old `assets/icon.png` remain.
-- Confirmed CSS braces are balanced.
+- `scripts/check_braces.py` reports `HomeScreen.kt BALANCED`.
+- `scripts/check_braces.py` reports `SpinScreen.kt BALANCED`.
+- Static assertions confirm exactly one file-level `CategoryChip` declaration, balanced `StatPill` through `CategoryChip` scope, and the `fillMaxHeight` import.
 - `git diff --check` passes.
-- Code review found no actionable blockers.
+- Code review reports no actionable blockers.
 - No Gradle compile/build/test/lint command was run because the repository's AGENTS.md explicitly forbids local Android build validation; CI remains the source of truth.
 
 ## Closeout
 
-- Changed files are ready to commit and push on branch `revamp`.
-- No app What's New entry was added because this request affects launcher/marketing assets and the active Curio module has no changelog screen matching the legacy root instruction path.
+- Changes are ready to commit and push on branch `revamp`.
+- No What's New entry was added because this is a targeted CI compile repair with no user-facing feature change.
