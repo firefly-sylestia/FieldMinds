@@ -42,6 +42,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,11 +102,25 @@ import java.util.Calendar
  *  bar, `vertical = 6dp` between sections — keeps the "no empty top"
  *  guarantee we established in Spin/TopicReveal.
  */
+/**
+ * Saves Home's selected category chip by enum name. The wildcard "Surprise"
+ * state is `null` and round-trips through an empty-string sentinel, so
+ * rotating the device or navigating away/back keeps the chip selection.
+ */
+private val CategorySaver = Saver<CurioCategory?, String>(
+    save = { it?.id?.name ?: "" },
+    restore = { name ->
+        name.takeIf { it.isNotEmpty() }
+            ?.let { n -> CategoryId.values().firstOrNull { it.name == n } }
+            ?.let { CurioCategories.byId(it) }
+    }
+)
+
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
     val displayName = remember { AppPreferences.getDisplayName(context) }
-    var selectedCategory by remember { mutableStateOf<CurioCategory?>(null) }
+    var selectedCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf<CurioCategory?>(null) }
     val streakDays = StreakTracker.getStreak(context)
     val reminderEnabled = remember { AppPreferences.isReminderEnabled(context) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

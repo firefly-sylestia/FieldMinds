@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,9 +53,23 @@ import com.curio.app.ui.theme.CurioIcons
  *  - Entry cards render at once (no per-item stagger)
  *  - MorphEntrance for empty state content
  */
+/**
+ * Saves the active Cabinet filter chip by enum name; "All" (null) stays
+ * null through an empty-string sentinel, surviving rotation and navigation.
+ */
+private val CategoryIdSaver = Saver<CategoryId?, String>(
+    save = { it?.name ?: "" },
+    restore = { name ->
+        name.takeIf { it.isNotEmpty() }
+            ?.let { n -> CategoryId.values().firstOrNull { it.name == n } }
+    }
+)
+
 @Composable
 fun CabinetScreen(navController: NavController) {
-    var selectedFilter by remember { mutableStateOf<CategoryId?>(null) }
+    var selectedFilter by rememberSaveable(stateSaver = CategoryIdSaver) { mutableStateOf<CategoryId?>(null) }
+    // Saveable-backed scroll state — the grid keeps its position on rotation.
+    val gridState = rememberLazyGridState()
 
     val entries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
         try {
@@ -162,6 +179,7 @@ fun CabinetScreen(navController: NavController) {
             }
         } else {
             LazyVerticalGrid(
+                state = gridState,
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),

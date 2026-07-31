@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -56,6 +57,8 @@ import com.curio.app.ui.theme.CurioMotion
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
     val categories = remember { CurioCategories.visible }
+    // Saveable-backed scroll state — the grid keeps its position on rotation.
+    val gridState = rememberLazyGridState()
 
     Column(
         modifier = Modifier
@@ -97,6 +100,7 @@ fun CategoryPickerScreen(navController: NavController) {
         // ── Tile grid (all tiles load at once) ───────────────────────────────
         MorphEntrance {
             LazyVerticalGrid(
+                state = gridState,
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
