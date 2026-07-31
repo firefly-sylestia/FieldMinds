@@ -48,12 +48,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -73,7 +69,6 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
-import com.curio.app.ui.theme.isCurioDarkTheme
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -159,28 +154,10 @@ fun HomeScreen(navController: NavController) {
         },
         gesturesEnabled = drawerState.isOpen || drawerState.isAnimationRunning
     ) {
-        // v5.8 — the screen no longer sits on a dead flat background. A soft
-        // ambient halo in the active accent (CoralBlush for wildcard) glows
-        // behind the content, matching the Spin screen's breathing backdrop.
-        // Dark mode carries more hue so the card stack pops off the plum bg.
-        val homeIsDark = isCurioDarkTheme()
-        val haloAccent = selectedCategory?.accent ?: CurioColors.CoralBlush
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .drawBehind {
-                    drawRect(
-                        brush = Brush.radialGradient(
-                            colors = listOf(
-                                haloAccent.copy(alpha = if (homeIsDark) 0.18f else 0.08f),
-                                Color.Transparent
-                            ),
-                            center = Offset(size.width * 0.5f, size.height * 0.22f),
-                            radius = size.width * 0.85f
-                        )
-                    )
-                }
         ) {
             Column(
                 modifier = Modifier
@@ -200,7 +177,7 @@ fun HomeScreen(navController: NavController) {
                 Surface(
                     onClick = { scope.launch { drawerState.open() } },
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -215,8 +192,8 @@ fun HomeScreen(navController: NavController) {
                 Surface(
                     onClick = { navController.navigate(CurioRoutes.PROFILE) },
                     shape = CircleShape,
-                    color = CurioColors.CoralBlush.copy(alpha = 0.20f),
-                    border = BorderStroke(1.5.dp, CurioColors.CoralBlush.copy(alpha = 0.3f)),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    border = BorderStroke(2.dp, CurioColors.CoralBlush),
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -270,31 +247,24 @@ fun HomeScreen(navController: NavController) {
                         }
                     },
                     shape = RoundedCornerShape(28.dp),
-                    // v5.8 — lit panel: gradient wash + hairline + soft shadow
-                    // instead of a flat tint, so the quest card reads as the
-                    // hero in both modes (dark mode carries more hue).
-                    color = Color.Transparent,
-                    border = BorderStroke(1.dp, accent.copy(alpha = if (homeIsDark) 0.40f else 0.25f)),
-                    shadowElevation = 2.dp,
-                    tonalElevation = 1.dp,
+                    // Opaque paper card: depth comes from a crisp edge and
+                    // shadow, never from transparency or a background wash.
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(2.dp, accent),
+                    shadowElevation = 8.dp,
+                    tonalElevation = 2.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .height(168.dp)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // ── Accent gradient wash (v5.8) ─────────────────
+                        // A quiet category tint keeps the paper surface
+                        // tactile without turning it into a translucent overlay.
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(
-                                            accent.copy(alpha = if (homeIsDark) 0.26f else 0.16f),
-                                            accent.copy(alpha = if (homeIsDark) 0.06f else 0.03f)
-                                        )
-                                    )
-                                )
+                                .background(accent.copy(alpha = 0.08f))
                         )
                         // Watermark glyph
                         CurioIcon(
@@ -419,8 +389,8 @@ fun HomeScreen(navController: NavController) {
                     )
                     Surface(
                         onClick = { navController.navigate(CurioRoutes.PICKER) },
-                        shape = RoundedCornerShape(50),
-                        color = Color.Transparent
+                        shape = RoundedCornerShape(50),                            color = MaterialTheme.colorScheme.surfaceContainerLow
+
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
@@ -491,7 +461,7 @@ fun HomeScreen(navController: NavController) {
                         Surface(
                             onClick = { navController.navigate(CurioRoutes.CABINET) },
                             shape = RoundedCornerShape(50),
-                            color = Color.Transparent
+                            color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
                             CurioIcon(
                                 CurioIcons.ArrowForward, "Open Cabinet",
@@ -550,28 +520,14 @@ private fun StatPill(
     value: String,
     tint: Color
 ) {
-    // v5.8 — gradient wash + hairline so pills stay defined on the cream
-    // and plum backgrounds instead of flat low-alpha slabs.
-    val isDark = isCurioDarkTheme()
+    // Opaque paper tile with a defined edge and modest elevation.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        color = Color.Transparent,
-        border = BorderStroke(1.dp, tint.copy(alpha = if (isDark) 0.35f else 0.22f)),
-        tonalElevation = 1.dp
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, tint.copy(alpha = 0.45f)),
+        tonalElevation = 2.dp
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            tint.copy(alpha = if (isDark) 0.18f else 0.12f),
-                            tint.copy(alpha = if (isDark) 0.04f else 0.02f)
-                        )
-                    )
-                )
-        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -587,8 +543,6 @@ private fun StatPill(
                     color = tint,
                     maxLines = 1
                 )
-            }
-        }
     }
 }
 
@@ -609,51 +563,24 @@ private fun CategoryChip(
         animationSpec = CurioMotion.Springs.Snappy,
         label = "catChipScale"
     )
-    val isDark = isCurioDarkTheme()
-    // v5.8 — selected chips get a hue-preserving gradient pill (accent →
-    // deepened) so they read as luminous against both backgrounds; hairline
-    // borders keep unselected chips defined instead of flat tints.
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
-        color = Color.Transparent,
-        border = if (selected)
-            BorderStroke(1.dp, accent.copy(alpha = if (isDark) 0.65f else 0.50f))
-        else
-            BorderStroke(1.dp, accent.copy(alpha = if (isDark) 0.30f else 0.18f)),
-        shadowElevation = if (selected) 4.dp else 0.dp,
+        color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, if (selected) accent else accent.copy(alpha = 0.45f)),
+        shadowElevation = if (selected) 4.dp else 1.dp,
         modifier = Modifier.scale(scale)
     ) {
-        Box(
-            modifier = Modifier.background(
-                if (selected) {
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            lerp(accent, Color.White, 0.18f),
-                            accent,
-                            lerp(accent, Color.Black, 0.22f)
-                        )
-                    )
-                } else {
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            accent.copy(alpha = if (isDark) 0.16f else 0.10f),
-                            accent.copy(alpha = if (isDark) 0.04f else 0.02f)
-                        )
-                    )
-                }
-            )
-        ) {
             Row(
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-            // Glassy icon container
+            // Opaque paper tile for the category glyph
             Surface(
                 shape = RoundedCornerShape(10.dp),
-                color = Color.White.copy(alpha = 0.18f),
-                border = BorderStroke(0.5.dp, Color.White.copy(alpha = 0.25f)),
+                color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainerHigh,
+                border = BorderStroke(1.dp, if (selected) Color.White.copy(alpha = 0.35f) else accent.copy(alpha = 0.30f)),
                 modifier = Modifier.size(34.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -751,8 +678,7 @@ private fun FirstTimeEmpty(
     onSpinSurprise: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+        shape = RoundedCornerShape(24.dp),                    color = MaterialTheme.colorScheme.surfaceContainerLow,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -805,7 +731,7 @@ private fun FirstTimeEmpty(
                 Surface(
                     onClick = onPickCategory,
                     shape = RoundedCornerShape(50),
-                    color = Color.Transparent,
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
                     border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Text(
@@ -826,32 +752,18 @@ private fun FirstTimeEmpty(
 
 @Composable
 private fun ReminderNudgeCard(onTap: () -> Unit) {
-    // v5.8 — dark-mode contrast fix: plum text was unreadable on the dark
-    // plum background, so text flips to cream; the card gets a yellow
-    // gradient wash + hairline instead of a flat tint.
-    val isDark = isCurioDarkTheme()
-    val fg = if (isDark) CurioColors.CreamWhite else CurioColors.DeepPlum
+    val fg = MaterialTheme.colorScheme.onSurface
     Surface(
         onClick = onTap,
         shape = RoundedCornerShape(20.dp),
-        color = Color.Transparent,
-        border = BorderStroke(1.dp, CurioColors.ButterYellow.copy(alpha = if (isDark) 0.45f else 0.30f)),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, CurioColors.ButterYellow),
+        shadowElevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            CurioColors.ButterYellow.copy(alpha = if (isDark) 0.24f else 0.16f),
-                            CurioColors.ButterYellow.copy(alpha = if (isDark) 0.06f else 0.03f)
-                        )
-                    )
-                )
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -908,18 +820,11 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
         drawerContainerColor = MaterialTheme.colorScheme.surface,
         drawerContentColor = MaterialTheme.colorScheme.onSurface
     ) {
-        // ── Redesigned header with gradient accent ──────────────────────
+        // ── Opaque paper header with a clear category edge ──────────────
         Box(
             Modifier
                 .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            CurioColors.CoralBlush.copy(alpha = if (isCurioDarkTheme()) 0.24f else 0.15f),
-                            CurioColors.CoralBlush.copy(alpha = if (isCurioDarkTheme()) 0.07f else 0.05f)
-                        )
-                    )
-                )
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
                 .padding(horizontal = 24.dp, vertical = 28.dp)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -929,8 +834,8 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
                 ) {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = CurioColors.CoralBlush.copy(alpha = if (isCurioDarkTheme()) 0.30f else 0.2f),
-                        border = BorderStroke(1.dp, CurioColors.CoralBlush.copy(alpha = 0.35f)),
+                        color = MaterialTheme.colorScheme.surface,
+                        border = BorderStroke(2.dp, CurioColors.CoralBlush),
                         modifier = Modifier.size(48.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -956,21 +861,11 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
                 }
             }
         }
-        // v5.8 — accent hairline under the drawer header so the gradient
-        // edge reads as a deliberate divider in both modes.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(1.dp)
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            CurioColors.CoralBlush.copy(alpha = if (isCurioDarkTheme()) 0.5f else 0.35f),
-                            Color.Transparent
-                        )
-                    )
-                )
+                .height(2.dp)
+                .background(CurioColors.CoralBlush)
         )
         
         Spacer(Modifier.height(16.dp))
@@ -1049,7 +944,7 @@ private fun DrawerNavItem(
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
-        color = Color.Transparent,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(

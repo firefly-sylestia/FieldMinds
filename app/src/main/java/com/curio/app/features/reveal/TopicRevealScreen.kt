@@ -39,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,11 +54,9 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
-import com.curio.app.ui.theme.isCurioDarkTheme
 
 /**
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
@@ -204,7 +201,8 @@ fun TopicRevealScreen(
                         resolved.tags.take(4).forEach { tag ->
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = cat.accent.copy(alpha = 0.12f)
+                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f))
                             ) {
                                 Text(
                                     text = tag,
@@ -315,37 +313,29 @@ private fun HeroCard(
 ) {
     val action = resolved?.exploreAction
 
-    // Same hue-preserving "ticket" gradient as the Spin screen's hero card
-    // (v5.8) — stops deepen toward Black (not DeepPlum) so the accent hue
-    // stays alive instead of muddying into maroon. Dark mode keeps more
-    // hue in the base so the card glows off the plum background.
-    val isDark = isCurioDarkTheme()
-    val ticketBrush = if (cat.id == CategoryId.WILDCARD) {
-        Brush.verticalGradient(CurioGradients.wildcardTicketStops(isDark))
-    } else {
-        Brush.verticalGradient(CurioGradients.ticketStops(cat.accent, isDark))
-    }
+    // Opaque paper hero: category color is an inked edge, while the sheet
+    // itself stays warm and readable in both light and dark themes.
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
-        color = cat.accent,
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.25f)),
-        shadowElevation = 6.dp,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(2.dp, cat.accent),
+        shadowElevation = 10.dp,
         tonalElevation = 2.dp
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(ticketBrush)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             // ── Watermark glyph (category icon) ─────────────────────────
             CurioIcon(
                 name = cat.iconGlyph,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.16f),
+                tint = cat.accent.copy(alpha = 0.16f),
                 size = 190.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -355,7 +345,7 @@ private fun HeroCard(
             if (action != null && resolved != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.22f),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -375,7 +365,7 @@ private fun HeroCard(
                         Text(
                             text = "${action.verb} for ~${action.durationMinutes} min",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -384,7 +374,7 @@ private fun HeroCard(
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.22f),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     shadowElevation = 4.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -393,7 +383,7 @@ private fun HeroCard(
                     Text(
                         text = resolved.subtype,
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                     )
                 }
@@ -460,7 +450,9 @@ private fun ActionPromptCard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = cat.accent.copy(alpha = 0.08f),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
+        shadowElevation = 3.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
@@ -471,7 +463,7 @@ private fun ActionPromptCard(
             ) {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = Color.White.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     CurioIcon(
                         name = verbIcon(action.verb),

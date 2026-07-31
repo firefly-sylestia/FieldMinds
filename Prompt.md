@@ -1,25 +1,29 @@
-# Profile redesign + daily reminder — completion summary
+# Paper-style Home, Spin, and Topic Reveal redesign — completion summary
 
 ## Request
 
-Redesign the Curio Profile screen so it is polished and consistent, repair the hero-card spacing, make dialog/actions functional, and fix daily reminders and related settings behavior.
+Replace the transparent glass-style visual treatment on Home, The Spin, and Topic Reveal with an opaque paper style featuring tactile depth, and remove the background gradients.
 
 ## Changes
 
-- Rebuilt `ProfileScreen` around a compact identity hero, balanced stats strip, level progress card, grouped preferences, category activity, recent captures, and an About/diagnostics card.
-- Fixed hero-card spacing and visual hierarchy with a constrained avatar/content row, aligned action pills, gradient surface, and responsive text truncation.
-- Replaced inert Profile actions with working display-name, recording-quality, reminder-time, version, capture-detail, cabinet, category-management, crash-report, crash-log, bug-report, and onboarding actions.
-- Added Android daily reminder scheduling with notification permission handling, a dedicated notification icon/channel, reboot/clock/timezone rescheduling, and one-shot local-time alarms that re-anchor after delivery.
-- Wired reminder preferences to reactive Compose state across Home, Profile, and Settings; changing the reminder time reschedules the alarm immediately.
-- Made Settings use an explicit recording-quality dialog, informational rows for Last backup/Version, complete reminder time choices, and restore-state refresh without requiring an app restart.
-- Re-applied restored theme/reminder state after backup restore and kept the reminder alarm synchronized.
-- Added lifecycle refresh for remembered Profile/Settings values and sourced displayed version text from `BuildConfig.VERSION_NAME`.
-- Added the lifecycle-runtime-compose dependency and fixed the level card's max-level threshold.
+- Removed Home's ambient radial background halo and replaced translucent hero/stat/chip/reminder surfaces with opaque paper containers.
+- Reworked Home's hero card, stats, category chips, empty state, reminder card, drawer header, and controls with solid surfaces, crisp category edges, and restrained elevation.
+- Removed Spin's ambient accent backdrop, gradient ticket brush, landing glow, glassy sheen, radial orb rendering, and animated idle halo.
+- Rebuilt Spin's hero ticket as an opaque paper sheet with a category-color side rule, strong edge, layered elevation, ink-style watermark, solid peek cards, and an opaque bottom tray.
+- Updated Spin top-bar/category controls, topic-count pill, filter controls, empty state, and picker surfaces to use paper containers instead of translucent accent washes.
+- Reworked Topic Reveal's hero, teaser, action prompt, and tag surfaces to use opaque paper cards with category-color edges and readable ink hierarchy.
+- Preserved all existing navigation, spinning, filtering, auto-open, confetti, and capture behavior.
+- Updated `CURIO_SPEC.md` with the durable paper-surface rule and updated the store changelog.
 
 ## Verification
 
-- `scripts/check_braces.py` reports all changed Kotlin/XML files as `BALANCED`.
-- Targeted static checks pass: `git diff --check`, delegated-state assignment check, lifecycle dependency/import check, and Curio icon declaration check.
-- `code-reviewer-luna` found no blocking implementation issues in the final review.
+- `scripts/check_braces.py` reports HomeScreen, SpinScreen, and TopicRevealScreen as `BALANCED`.
+- `git diff --check` passes.
+- Targeted source scans confirm no runtime `Brush`, `drawBehind`, `Color.Transparent`, removed glass-theme imports, animated idle halo, or the reviewed translucent paper fills remain in the three requested screens.
+- `code-reviewer-luna` completed a final review with no actionable blockers.
 - No Gradle compile/build/test/lint task was run because the repository's AGENTS.md explicitly forbids local Gradle validation; CI remains the compilation source of truth.
-- The active Curio module has no in-app changelog screen; the frozen legacy FieldMind changelog was intentionally not modified.
+
+## Closeout
+
+- Final Home category-chip glyph tiles were changed to opaque paper surfaces while retaining accent borders and icon colors.
+- Changes are ready to commit and push on branch `revamp`.

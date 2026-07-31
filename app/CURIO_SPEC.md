@@ -13,6 +13,7 @@ Style system: Material Design 3, customized with a pastel + playful skin.
 | v1 | (user's original paste) | Initial spec with Category Picker as bottom sheet + Exploration Hub in the Spin→Capture flow + emoji-based category totem icons. |
 | **v2** | today | **Category Picker → full-screen page** (own back-stack entry). **Exploration Hub removed** from the flow (Topic Reveal goes straight to Record/Capture; scratchpad state preserved for future). **No emoji anywhere** — Material Symbols (inherited from `app-legacy/`) for category glyphs, `geom.ttf` (inherited from `app-legacy/`) for display/headline typography. "Recently explored" carousel confirmed on Home + Cabinet stays as separate bottom-nav tab. New §13 (Missing/Additional Screens) + §14 (Open Decisions). |
 | **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. The Spin screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
+| **v4** | 2026-07-31 | Home, Spin, and Topic Reveal use an opaque paper-card visual language: warm solid surfaces, crisp category-color edges, and layered elevation for depth. Ambient background gradients, glassy sheens, translucent card shells, and accent halos are intentionally excluded. |
 
 Working name for the app: **CURIO**
 Working name for the roulette feature: **THE SPIN**
@@ -26,6 +27,8 @@ Working name for the saved-items library: **THE CABINET**
 
 ### 0.1 PHILOSOPHY
 Curio's whole point is "delighted curiosity." Every screen should feel like opening a little box you didn't know you wanted opened. M3 gives us the structural bones (dynamic color, elevation tiers, shape system, motion tokens) — the custom layer sits on top as personality: rounder corners than stock M3, a mascot-like spin dial, hand-drawn-feeling icons, and soft "paper confetti" micro-animations on rewards.
+
+**Surface direction (v4):** Home, The Spin, and Topic Reveal are tactile paper interfaces, not glass interfaces. Cards and trays must use opaque theme surfaces, visible category-color rules/edges, and elevation or offset layering to create depth. Do not add ambient background gradients, translucent card shells, blur, glossy sheens, or accent halos to these screens. Alpha is reserved for decorative ink, icon/text hierarchy, and subtle borders.
 
 ### 0.2 COLOR SYSTEM (pastel & playful)
 Base on M3's tonal palette generator, but seed it from a warm coral instead of a cold blue so default M3 doesn't feel corporate.
