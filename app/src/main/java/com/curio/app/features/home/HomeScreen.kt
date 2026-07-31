@@ -64,8 +64,6 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -422,59 +420,53 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(Modifier.height(20.dp))
 
-            // ── 6. Recently explored ──────────────────────────────────
-            StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Base) {
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    StaggeredItem(index = 0) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+            // ── 6. Recently explored — renders all at once (no stagger) ──
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Recently explored",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    if (recentEntries.isNotEmpty()) {
+                        Surface(
+                            onClick = { navController.navigate(CurioRoutes.CABINET) },
+                            shape = RoundedCornerShape(50),
+                            color = Color.Transparent
                         ) {
-                            Text(
-                                "Recently explored",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                                color = MaterialTheme.colorScheme.onBackground
+                            CurioIcon(
+                                CurioIcons.ArrowForward, "Open Cabinet",
+                                tint = MaterialTheme.colorScheme.primary,
+                                size = 18.dp,
+                                modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
                             )
-                            if (recentEntries.isNotEmpty()) {
-                                Surface(
-                                    onClick = { navController.navigate(CurioRoutes.CABINET) },
-                                    shape = RoundedCornerShape(50),
-                                    color = Color.Transparent
-                                ) {                                        CurioIcon(
-                                            CurioIcons.ArrowForward, "Open Cabinet",
-                                            tint = MaterialTheme.colorScheme.primary,
-                                            size = 18.dp,
-                                            modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
-                                        )
-                                }
-                            }
                         }
-                        Spacer(Modifier.height(10.dp))
-                    }
-                    StaggeredItem(index = 1) {
-                        if (recentEntries.isEmpty()) {
-                            FirstTimeEmpty(
-                                onPickCategory = { navController.navigate(CurioRoutes.PICKER) },
-                                onSpinSurprise = { navController.navigate(CurioRoutes.SPIN) }
-                            )
-                        } else {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                recentEntries.forEach { entry ->
-                                    RecentEntryRow(
-                                        entry = entry,
-                                        onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) }
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    // Add breathing room before the bottom card / nav bar
-                    StaggeredItem(index = 2) {
-                        Spacer(Modifier.height(12.dp))
                     }
                 }
+                Spacer(Modifier.height(10.dp))
+
+                if (recentEntries.isEmpty()) {
+                    FirstTimeEmpty(
+                        onPickCategory = { navController.navigate(CurioRoutes.PICKER) },
+                        onSpinSurprise = { navController.navigate(CurioRoutes.SPIN) }
+                    )
+                } else {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        recentEntries.forEach { entry ->
+                            RecentEntryRow(
+                                entry = entry,
+                                onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) }
+                            )
+                        }
+                    }
+                }
+
+                // Add breathing room before the bottom card / nav bar
+                Spacer(Modifier.height(12.dp))
             }
 
             // ── 7. Reminder nudge (when reminders off) ─────────────────
