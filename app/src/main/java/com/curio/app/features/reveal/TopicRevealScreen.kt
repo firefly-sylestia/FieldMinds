@@ -41,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -60,6 +59,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.isCurioDarkTheme
 
 /**
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
@@ -315,18 +315,15 @@ private fun HeroCard(
 ) {
     val action = resolved?.exploreAction
 
-    // Same gradient "ticket" language as the Spin screen's hero card —
-    // every stop is deepened toward DeepPlum so white text stays readable
-    // (category accents are pastels). Wildcard keeps its rainbow identity,
-    // just saturated for contrast.
+    // Same hue-preserving "ticket" gradient as the Spin screen's hero card
+    // (v5.8) — stops deepen toward Black (not DeepPlum) so the accent hue
+    // stays alive instead of muddying into maroon. Dark mode keeps more
+    // hue in the base so the card glows off the plum background.
+    val isDark = isCurioDarkTheme()
     val ticketBrush = if (cat.id == CategoryId.WILDCARD) {
-        Brush.verticalGradient(
-            CurioGradients.WildcardGradientStops.map { lerp(it, CurioColors.DeepPlum, 0.35f) }
-        )
+        Brush.verticalGradient(CurioGradients.wildcardTicketStops(isDark))
     } else {
-        Brush.verticalGradient(
-            listOf(lerp(cat.accent, CurioColors.DeepPlum, 0.45f), CurioColors.DeepPlum)
-        )
+        Brush.verticalGradient(CurioGradients.ticketStops(cat.accent, isDark))
     }
 
     Surface(

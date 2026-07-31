@@ -1,6 +1,7 @@
 package com.curio.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 
 /**
  * Curio's color palette — see CURIO_SPEC.md §0.2.
@@ -50,4 +51,37 @@ object CurioGradients {
         CurioColors.Peach,
         CurioColors.Teal
     )
+
+    /**
+     * Hue-preserving ticket stops for a named category (Spin + Reveal hero).
+     *
+     * Every stop deepens toward **Black** — never toward [CurioColors.DeepPlum]
+     * — so the accent's hue stays alive: deep lilac reads as lilac, deep teal
+     * as teal, instead of collapsing into muddy maroon. Dark mode lifts the
+     * crown (lightens the top stop) and keeps more hue in the base so the
+     * ticket glows against the plum background instead of melting into it.
+     * The stops are still dark enough for white text on the top half.
+     */
+    fun ticketStops(accent: Color, isDark: Boolean): List<Color> = listOf(
+        // Crown — the corner where the subtype badge sits; only a whisper
+        // of darkening so the ticket catches light without hurting the
+        // white-text contrast on the name band below it.
+        lerp(accent, Color.Black, if (isDark) 0.06f else 0.10f),
+        // True accent body — dark enough for bold white text.
+        lerp(accent, Color.Black, if (isDark) 0.18f else 0.26f),
+        // Deepened accent — hue intact, solid white-text band.
+        lerp(accent, Color.Black, if (isDark) 0.34f else 0.44f),
+        // Base — keeps a whisper of accent hue instead of fading to neutral.
+        lerp(accent, Color.Black, if (isDark) 0.52f else 0.62f)
+    )
+
+    /**
+     * Wildcard rainbow stops — deepened toward Black (hue-preserving) so the
+     * rainbow stays readable under white text. Dark mode keeps the rainbow
+     * luminous (less black) so it glows against the plum background.
+     */
+    fun wildcardTicketStops(isDark: Boolean): List<Color> =
+        WildcardGradientStops.map {
+            lerp(it, Color.Black, if (isDark) 0.18f else 0.36f)
+        }
 }
