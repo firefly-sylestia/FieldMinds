@@ -50,22 +50,18 @@ object CurioGradients {
     )
 
     /**
-     * Solid category card gradient: deepened accent → accent → warm white.
-     * Uses a neutral black blend for the deep end so every accent — warm
-     * or cool — stays in its own colour family without muddying.
+     * Solid category card gradient: accent → accent → warm white.
+     * No black — pure pastel warmth from top to bottom.
      */
     fun cardGradient(accent: Color): List<Color> = listOf(
-        lerp(accent, Color.Black, 0.28f),
         accent,
         lerp(accent, CurioColors.CreamWhite, 0.42f)
     )
 
     /**
-     * Solid wildcard card gradient — a warm sunset sweep from deep
-     * pink-maroon through coral, peach, and butter to warm white.
+     * Solid wildcard card gradient — pure pastel warmth, no black or plum.
      */
     fun wildcardCardGradient(): List<Color> = listOf(
-        lerp(CurioColors.CoralBlush, CurioColors.DeepPlum, 0.40f),
         CurioColors.CoralBlush,
         lerp(CurioColors.CoralBlush, CurioColors.Peach, 0.55f),
         CurioColors.Peach,
