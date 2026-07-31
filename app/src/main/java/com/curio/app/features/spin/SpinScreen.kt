@@ -93,6 +93,7 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -1726,13 +1727,13 @@ private fun CategoryPickerSheet(
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(14.dp),
-                            verticalArrangement = Arrangement.spacedBy(14.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier.weight(1f)
                         ) {
                             // All tiles render at once — no per-tile stagger.
                             items(categories) { cat ->
-                                CategoryPickerTile(
+                                CurioCategoryCard(
                                     category = cat,
                                     isSelected = cat.id == currentCat.id,
                                     onClick = { onCategorySelected(cat) }
@@ -1770,93 +1771,6 @@ private fun CategoryPickerSheet(
         if (!visible) {
             delay(260)
             onDismiss()
-        }
-    }
-}
-
-/** Full-height category tile matching the Explore page style with press animation. */
-@Composable
-private fun CategoryPickerTile(
-    category: CurioCategory,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    var pressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.92f else 1f,
-        animationSpec = CurioMotion.Springs.Press,
-        label = "catTileScale"
-    )
-
-    val isWildcard = category.id == CategoryId.WILDCARD
-    val cardColor = if (isWildcard) CurioColors.CoralBlush else category.accent
-
-    Surface(
-        onClick = {
-            pressed = true
-            onClick()
-        },
-        shape = RoundedCornerShape(28.dp),
-        color = cardColor,
-        shadowElevation = 0.dp,
-        tonalElevation = if (isSelected) 6.dp else 2.dp,
-        border = if (isSelected) BorderStroke(2.5.dp, Color.White.copy(alpha = 0.7f)) else null,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(156.dp)
-            .scale(scale)
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            // Large ghost icon — decorative
-            CurioIcon(
-                name = category.iconGlyph,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.16f),
-                size = 104.dp,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 8.dp, end = 4.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(18.dp),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Icon badge
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh
-                ) {
-                    CurioIcon(
-                        name = category.iconGlyph,
-                        contentDescription = null,
-                        tint = Color.White,
-                        size = 34.dp,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    if (isSelected) {
-                        Surface(
-                            shape = CircleShape,
-                            color = Color.White
-                        ) {
-                            CurioIcon(
-                                CurioIcons.Check, null,
-                                tint = cardColor,
-                                size = 20.dp,
-                                modifier = Modifier.padding(4.dp)
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
 }
