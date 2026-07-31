@@ -798,6 +798,668 @@ ARTISTS = [
         "Listen to 'Goodie Bag' — the song that made him a star from a bedroom. Then 'Habit' — the one about being unable to let go. 'Wolfcat' — the fuzzy, weird one. He plays every instrument, recording vocals in his closet for the right sound.",
         ["Bedroom Pop", "Indie Pop", "Funk", "American", "2010s"], 3
     ),
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # BATCH 3 — Hip-Hop, Electronic, Jazz, World, Metal, Country, Blues, Classical, 2020s Pop
+    # ═══════════════════════════════════════════════════════════════════════
+
+    # ── HIP-HOP ──
+    (
+        "artist-nas", "Artist",
+        "Nas",
+        "Released 'Illmatic' at 19 — ten tracks, five producers, no filler — and it's been called the greatest hip-hop album ever. His father, jazz trumpeter Olu Dara, played on 'Life's a Bitch.' He was briefly a graffiti artist before rapping.",
+        "Nas — Illmatic (1994) end-to-end", 39,
+        "Listen to 'N.Y. State of Mind' — Nas wrote it in a single take after hearing the beat. Then 'The World Is Yours' — the track that made everyone believe a 19-year-old could be the king of New York. His voice is calm even when the stories are violent.",
+        ["Hip-Hop", "East Coast", "American", "1990s"], 1
+    ),
+    (
+        "artist-tupac", "Artist",
+        "Tupac Shakur",
+        "Named after Túpac Amaru II, an 18th-century Peruvian revolutionary, and raised by a Black Panther mother. He trained as a ballet dancer and studied theater as a teen. The 'Thug Life' tattoo spelled out a warning about how the system treats Black youth.",
+        "Tupac — Me Against the World (1995) end-to-end", 66,
+        "Listen to 'Dear Mama' — a love letter to his mother, written while he was in jail. Then 'Changes' — built on Bruce Hornsby's 'The Way It Is.' Tupac released two #1 albums in the same week while serving a prison sentence.",
+        ["Hip-Hop", "West Coast", "Conscious Rap", "American", "1990s"], 1
+    ),
+    (
+        "artist-biggie", "Artist",
+        "The Notorious B.I.G.",
+        "Christopher Wallace was a 6'3\", 300-lb former drug dealer from Brooklyn who became the greatest storyteller in rap. He didn't write lyrics down — he composed whole songs in his head. His debut 'Ready to Die' is the only album he released while alive.",
+        "The Notorious B.I.G. — Ready to Die (1994) end-to-end", 70,
+        "Listen to 'Juicy' — the rags-to-riches anthem written while he was still on welfare. Then 'Suicidal Thoughts' — the album's closer where he imagines his own death, recorded just days before he was killed. 'Big Poppa' — the smooth one everyone knows.",
+        ["Hip-Hop", "East Coast", "Gangsta Rap", "American", "1990s"], 1
+    ),
+    (
+        "artist-jay-z", "Artist",
+        "Jay-Z",
+        "Shawn Carter grew up in Brooklyn's Marcy Houses and turned street hustling into a billion-dollar empire. He never writes lyrics down — he freestyles in the booth. His debut 'Reasonable Doubt' initially flopped before becoming a classic. He has 50+ top-10 albums.",
+        "Jay-Z — Reasonable Doubt (1996) end-to-end", 58,
+        "Listen to 'Dead Presidents' — the opener that declared his intent. Then '99 Problems' — the second verse is legally accurate about search-and-seizure law. Jay-Z famously said 'I'm not a businessman, I'm a business, man.'",
+        ["Hip-Hop", "East Coast", "American", "1990s"], 1
+    ),
+    (
+        "artist-eminem", "Artist",
+        "Eminem",
+        "Marshall Mathers from Detroit, a battle rapper who became the best-selling artist of the 2000s. 'Rap God' holds a Guinness record for most words in a hit single — 1,560 words in six minutes. 'Lose Yourself' won an Oscar; he didn't attend the ceremony.",
+        "Eminem — The Marshall Mathers LP (2000) end-to-end", 72,
+        "Listen to 'Stan' — the story of an obsessed fan that inspired the Oxford English Dictionary to add the word 'stan.' Then 'Lose Yourself' — written on set while filming 8 Mile. 'The Real Slim Shady' — the satire that took over the radio.",
+        ["Hip-Hop", "Midwest", "American", "2000s"], 1
+    ),
+    (
+        "artist-drake", "Artist",
+        "Drake",
+        "Aubrey Graham was a child actor on Degrassi for seven years before music — his stage name is literally his middle name. He's the most-streamed artist in Spotify history, and his 2011 hit 'The Motto' invented the phrase 'YOLO.' He's from Toronto.",
+        "Drake — Take Care (2011) end-to-end", 81,
+        "Listen to 'Marvin's Room' — the drunk-dial anthem recorded in one emotional take. Then 'Started From the Bottom' — the song about his rise. 'Hotline Bling' — the video's dance moves broke the internet. Drake turned rap into a place for feelings.",
+        ["Hip-Hop", "Canadian", "2010s"], 1
+    ),
+    (
+        "artist-kanye-west", "Artist",
+        "Kanye West",
+        "A producer first — he made beats for Jay-Z before anyone believed he could rap. A 2002 car crash left his jaw wired shut; he recorded 'Through the Wire' anyway, rapping through clenched teeth. He was rejected by two labels before 'The College Dropout.'",
+        "Kanye West — The College Dropout (2004) end-to-end", 76,
+        "Listen to 'Through the Wire' — recorded three weeks after the crash, still recovering in the video. Then 'Jesus Walks' — the gospel rap single labels called career suicide. 'Graduation' — the album that beat 50 Cent in a famous release-date showdown.",
+        ["Hip-Hop", "Chicago", "American", "2000s"], 1
+    ),
+    (
+        "artist-tribe-called-quest", "Artist",
+        "A Tribe Called Quest",
+        "Q-Tip and Phife Dawg grew up two doors apart in Queens and met at age two. Their jazzy, Afrocentric sound defined the Native Tongues era. The group's name came from a recommendation on a Nation of Islam radio show. Phife's verses sharpened as his health worsened.",
+        "A Tribe Called Quest — The Low End Theory (1991) end-to-end", 48,
+        "Listen to 'Can I Kick It?' — the rap song built on Lou Reed's 'Walk on the Wild Side' bassline. Then 'Electric Relaxation' — the smoothest track ever made. 'Scenario' — the posse cut where Busta Rhymes stole the show with one verse.",
+        ["Hip-Hop", "Jazz Rap", "Alternative Hip-Hop", "American", "1990s"], 2
+    ),
+    (
+        "artist-wu-tang-clan", "Artist",
+        "Wu-Tang Clan",
+        "Nine members from Staten Island named after a martial-arts film. Their debut 'Enter the Wu-Tang (36 Chambers)' was recorded for about $40,000. RZA produced everything, and each member negotiated solo-deal freedom — a contract clause that changed the industry forever.",
+        "Wu-Tang Clan — Enter the Wu-Tang (36 Chambers) (1993) end-to-end", 61,
+        "Listen to 'C.R.E.A.M.' — the song about money with the immortal Raekwon and Inspectah Deck verses. Then 'Protect Ya Neck' — the first single. Ol' Dirty Bastard crashed the 1998 Grammys on stage to complain about losing.",
+        ["Hip-Hop", "East Coast", "Hardcore Hip-Hop", "American", "1990s"], 1
+    ),
+    (
+        "artist-run-dmc", "Artist",
+        "Run-DMC",
+        "The first rap group to go gold, get on MTV, and appear on American Bandstand. 'Walk This Way' with Aerosmith — the first rap-rock crossover — introduced rap to rock radio. Their Adidas endorsement made sneakers a hip-hop thing. Jam Master Jay was murdered in 2002.",
+        "Run-DMC — Raising Hell (1986) end-to-end", 40,
+        "Listen to 'Walk This Way' — the song that built a bridge between rock and rap. Then 'It's Tricky' — the beat borrowed from the Knack's 'My Sharona.' 'Down with the King' — the later anthem. Run and DMC's matching leather made hip-hop a uniform.",
+        ["Hip-Hop", "Old School Hip-Hop", "American", "1980s"], 2
+    ),
+    (
+        "artist-public-enemy", "Artist",
+        "Public Enemy",
+        "Chuck D's booming voice called rap 'the black CNN,' and producer team the Bomb Squad built beats from walls of noise. Flavor Flav wore a giant clock around his neck — the group's visual symbol. 'Fight the Power' was commissioned by Spike Lee for Do the Right Thing.",
+        "Public Enemy — It Takes a Nation of Millions to Hold Us Back (1988) end-to-end", 58,
+        "Listen to 'Fight the Power' — the anthem that opens Do the Right Thing. Then '911 Is a Joke' — Flavor Flav's sarcastic takedown of emergency services. 'Bring the Noise' — the song that proved samples could be weaponized.",
+        ["Hip-Hop", "Political Rap", "East Coast", "American", "1980s"], 2
+    ),
+    (
+        "artist-snoop-dogg", "Artist",
+        "Snoop Dogg",
+        "Calvin Cordozar Broadus Jr. got the nickname 'Snoopy' from his mother, who thought he looked like the Peanuts character. Dr. Dre heard a cassette of him rapping and signed him in 1992. His debut 'Doggystyle' was the first debut album to enter the Billboard 200 at #1.",
+        "Snoop Dogg — Doggystyle (1993) end-to-end", 44,
+        "Listen to 'Gin and Juice' — the laid-back classic with the unforgettable hook. Then 'Nuthin' but a 'G' Thang' — the Dr. Dre collab that made him a star. Snoop's smooth flow invented the West Coast sound's cool.",
+        ["Hip-Hop", "West Coast", "G-Funk", "American", "1990s"], 1
+    ),
+    (
+        "artist-dr-dre", "Artist",
+        "Dr. Dre",
+        "A founding member of N.W.A, then the architect of G-funk with 'The Chronic,' then the mentor behind Eminem, 50 Cent, and Kendrick Lamar. He has an honorary doctorate from USC — he wore cap and gown on stage. His Beats headphones sold to Apple for $3 billion.",
+        "Dr. Dre — The Chronic (1992) end-to-end", 63,
+        "Listen to 'Nuthin' but a 'G' Thang' — the G-funk groove that defined 90s West Coast. Then 'Still D.R.E.' — the comeback single with Snoop. Dre is a perfectionist: Eminem says he had him re-record verses 20 times.",
+        ["Hip-Hop", "West Coast", "G-Funk", "American", "1990s"], 1
+    ),
+    (
+        "artist-tyler-the-creator", "Artist",
+        "Tyler, the Creator",
+        "Founded Odd Future from a message-board posse and produced his early beats in his bedroom. He was banned from the UK over lyrics he later disowned. 'IGOR' — his fifth album — won Best Rap Album at the Grammys. He also runs the Golf Wang clothing brand.",
+        "Tyler, the Creator — IGOR (2019) end-to-end", 40,
+        "Listen to 'EARFQUAKE' — the love song with Charlie Wilson and Playboi Carti. Then 'Yonkers' — the $2,000 video that made him famous overnight. 'See You Again' — the vulnerable gem. Tyler went from shock rapper to Grammy-winning artist.",
+        ["Hip-Hop", "Alternative Hip-Hop", "American", "2010s"], 2
+    ),
+    (
+        "artist-j-cole", "Artist",
+        "J. Cole",
+        "From Fayetteville, North Carolina, he got a basketball scholarship to St. John's University before choosing rap. His debut '2014 Forest Hills Drive' — named after his childhood home — went platinum with no features. He's one of the few rappers with no ghostwriters.",
+        "J. Cole — 2014 Forest Hills Drive (2014) end-to-end", 65,
+        "Listen to 'Wet Dreamz' — the hilarious, honest story of losing his virginity. Then 'No Role Modelz' — the hit that samples a Will Smith speech. 'Love Yourz' — the album's closing message that money isn't the point.",
+        ["Hip-Hop", "Conscious Rap", "American", "2010s"], 2
+    ),
+    (
+        "artist-childish-gambino", "Artist",
+        "Childish Gambino",
+        "Donald Glover was a writer on 30 Rock at 23 before rapping as Childish Gambino. His 2018 single 'This Is America' won Song and Record of the Year at the Grammys, with a video packed with symbolic details. He also created the series Atlanta.",
+        "Childish Gambino — Because the Internet (2013) end-to-end", 57,
+        "Watch 'This Is America' twice — the video is a choreography of cultural references. Then 'Redbone' — the funk slow jam that became a meme and a protest anthem. 'Sober' — the song that proved he could sing. Glover does everything: writer, actor, rapper.",
+        ["Hip-Hop", "Alternative Hip-Hop", "American", "2010s"], 2
+    ),
+    (
+        "artist-frank-ocean", "Artist",
+        "Frank Ocean",
+        "Wrote songs for Justin Bieber and Beyoncé before releasing his own debut. 'Channel Orange' — released the day he came out in an open letter — redefined R&B. His second album 'Blonde' took four years to make. He was born in New Orleans and moved to LA for film school.",
+        "Frank Ocean — Blonde (2016) end-to-end", 60,
+        "Listen to 'Thinkin Bout You' — the song that proved R&B could be this vulnerable. Then 'Nights' — the two-in-one song that flips halfway. 'Pink + White' — produced with Pharrell. Frank turned heartbreak into high art.",
+        ["R&B", "Hip-Hop Soul", "American", "2010s"], 1
+    ),
+
+    # ── ELECTRONIC ──
+    (
+        "artist-burial", "Artist",
+        "Burial",
+        "The anonymous South London producer behind 'Untrue' — one of the most influential albums of the 2000s. His real name, William Bevan, stayed secret for years; he gave one famously awkward radio interview and vanished. He makes music on a laptop in his bedroom.",
+        "Burial — Untrue (2007) end-to-end", 50,
+        "Listen to 'Archangel' — the track that sounds like a memory of a song. Then 'Untrue' — the title track built from a 1960s soul sample. Burial's music is the sound of London at night — lonely, warm, and lit by streetlights. It won the Mercury Prize in 2008.",
+        ["Electronic", "UK Garage", "Ambient", "British", "2000s"], 2
+    ),
+    (
+        "artist-four-tet", "Artist",
+        "Four Tet",
+        "Kieran Hebden studied literature at university, then became one of electronic music's most beloved figures. He's known for ecstatic festival DJ sets and intricate sampling — he, Fred again.., and Skrillex released a joint live album. His 'Rounds' is a laptop-built classic.",
+        "Four Tet — Rounds (2003) end-to-end", 53,
+        "Listen to 'She Moves She' — the opener built from a guitar sample that never repeats the same way. Then 'Two Thousand and Seventeen' — the breakthrough single. Four Tet treats samples like instruments, not loops — every listen reveals new details.",
+        ["Electronic", "IDM", "British", "2000s"], 2
+    ),
+    (
+        "artist-boards-of-canada", "Artist",
+        "Boards of Canada",
+        "Brothers-in-law Michael Sandison and Marcus Eoin record in a secluded Scottish studio. Their music sounds like 1970s educational films — warm tape hiss, forgotten melodies. 'Music Has the Right to Children' made nostalgia a genre, inspired by a National Film Board documentary.",
+        "Boards of Canada — Music Has the Right to Children (1998) end-to-end", 68,
+        "Listen to 'Roygbiv' — the beloved track named after the colors of the rainbow. Then 'Dayvan Cowboy' — the track with the famous skydiver video. Boards of Canada bury melodies in tape noise; headphones reveal new layers on every listen.",
+        ["Electronic", "Ambient", "IDM", "Scottish", "1990s"], 2
+    ),
+    (
+        "artist-brian-eno", "Artist",
+        "Brian Eno",
+        "The man who coined 'ambient music.' He played keyboards in Roxy Music, produced albums for U2, David Bowie, and Talking Heads, and invented the Oblique Strategies card deck to break creative block. He also created the Microsoft Windows startup sound.",
+        "Brian Eno — Music for Airports (1978) end-to-end", 48,
+        "Listen to 'Music for Airports' — music designed to be as ignorable as it is interesting. Then 'An Ending (Ascent)' — the piece used in a hundred documentaries. Eno once said 'the studio is an instrument' — he treated the mixing desk as a musical tool.",
+        ["Electronic", "Ambient", "British", "1970s"], 1
+    ),
+    (
+        "artist-massive-attack", "Artist",
+        "Massive Attack",
+        "The Bristol trio who invented trip-hop. 'Unfinished Sympathy' — with its famous continuous walking-shot video — made them icons. 'Teardrop' became the theme for the TV show House. Their 1991 debut 'Blue Lines' mixed hip-hop, dub, and soul into a new sound.",
+        "Massive Attack — Blue Lines (1991) end-to-end", 45,
+        "Watch 'Unfinished Sympathy' — one continuous shot of singer Shara Nelson walking down a street. Then 'Teardrop' — the song whose video is a fetus in a womb. 'Blue Lines' took two years to record; the band nearly didn't finish it.",
+        ["Electronic", "Trip-Hop", "British", "1990s"], 1
+    ),
+    (
+        "artist-portishead", "Artist",
+        "Portishead",
+        "The Bristol trio whose 1994 debut 'Dummy' sold millions and won the Mercury Prize. Beth Gibbons' voice is unmistakable — 'Glory Box' became an instant classic. Their follow-up took three years and pushed the band to the edge, using live strings and dusty samples.",
+        "Portishead — Dummy (1994) end-to-end", 48,
+        "Listen to 'Glory Box' — the song that samples Isaac Hayes and turns it into heartbreak. Then 'Sour Times' — the haunted single. 'Wandering Star' — built on a Lalo Schifrin sample. Portishead's music sounds like a record being dragged through a haunted house.",
+        ["Electronic", "Trip-Hop", "British", "1990s"], 2
+    ),
+    (
+        "artist-chemical-brothers", "Artist",
+        "The Chemical Brothers",
+        "Tom Rowlands and Ed Simons met at university in Manchester. Their 'big beat' sound filled dance floors and arenas. 'Block Rockin' Beats' won a Grammy, and 'Galvanize' — with Q-Tip — did too. They've made albums for over 25 years and still headline festivals.",
+        "The Chemical Brothers — Dig Your Own Hole (1997) end-to-end", 63,
+        "Listen to 'Galvanize' — the Q-Tip collab that opens with a firework sound. Then 'Block Rockin' Beats' — built from a breakbeat sampled a hundred times before. 'Hey Boy Hey Girl' — the rave anthem. Their live shows are legendary for a reason.",
+        ["Electronic", "Big Beat", "British", "1990s"], 2
+    ),
+    (
+        "artist-prodigy", "Artist",
+        "The Prodigy",
+        "Liam Howlett formed the band; Keith Flint's shaved head and mohawk made him its face. 'Firestarter' — with its famous tunnel video — became a global hit. 'Smack My Bitch Up' sparked a censorship debate. Keith Flint died in 2019.",
+        "The Prodigy — The Fat of the Land (1997) end-to-end", 57,
+        "Listen to 'Firestarter' — the electronic punk anthem that scared parents. Then 'Breathe' — the darker follow-up. 'Smack My Bitch Up' — the controversial banger. The Prodigy proved dance music could be dangerous and loud.",
+        ["Electronic", "Big Beat", "Rave", "British", "1990s"], 2
+    ),
+    (
+        "artist-fatboy-slim", "Artist",
+        "Fatboy Slim",
+        "Norman Cook — a former member of indie band the Housemartins — reinvented himself as Fatboy Slim. 'Praise You' — with its guerrilla-style video shot without permits — won MTV awards. 'Weapon of Choice' featured Christopher Walken dancing. He's a Brighton legend.",
+        "Fatboy Slim — You've Come a Long Way, Baby (1998) end-to-end", 47,
+        "Watch 'Weapon of Choice' — Christopher Walken floating through a hotel lobby, one of the greatest music videos ever. Then 'Praise You' — filmed outside a cinema without permission. 'The Rockafeller Skank' — the sample that made every club bounce.",
+        ["Electronic", "Big Beat", "British", "1990s"], 2
+    ),
+    (
+        "artist-moby", "Artist",
+        "Moby",
+        "Richard Melville Hall's stage name comes from his family connection to Herman Melville — the author of Moby-Dick. His 1999 album 'Play' was the first album whose every track was licensed for ads and films, and it sold 12 million copies. He's a vegan activist.",
+        "Moby — Play (1999) end-to-end", 65,
+        "Listen to 'Porcelain' — the dreamy track that became a soundtrack staple. Then 'Why Does My Heart Feel So Bad?' — built from a 1950s gospel sample. 'Natural Blues' — the aching centerpiece. Moby licensed every song on 'Play' to advertisers — a move that changed the industry.",
+        ["Electronic", "Ambient", "American", "1990s"], 2
+    ),
+    (
+        "artist-justice", "Artist",
+        "Justice",
+        "The French duo of Gaspard Augé and Xavier de Rosnay — two friends who made electronic music that rocks. Their debut '†' spawned 'D.A.N.C.E.' — with its t-shirt animation video. 'We Are Your Friends' and 'Safe and Sound' became festival anthems.",
+        "Justice — † (2007) end-to-end", 48,
+        "Listen to 'D.A.N.C.E.' — the joyful song with the famous T-shirt video. Then 'Genesis' — the pounding opener of their debut. 'Safe and Sound' — the head-nodder. Justice's glowing cross and arena shows made them icons of the 2000s electro sound.",
+        ["Electronic", "House", "French", "2000s"], 2
+    ),
+    (
+        "artist-caribou", "Artist",
+        "Caribou",
+        "Dan Snaith — a mathematician with a PhD from Imperial College — makes dance music with a scientist's precision. 'Swim' and 'Our Love' are modern classics. He also records as Daphni. 'Can't Do Without You' is his most beloved song.",
+        "Caribou — Our Love (2014) end-to-end", 49,
+        "Listen to 'Can't Do Without You' — the love song built on a simple vocal loop that builds and builds. Then 'Odessa' — the synth-funk single. 'Sun' — the shimmering closer. Snaith's PhD is in mathematics, but he says music is the harder math.",
+        ["Electronic", "House", "Canadian", "2010s"], 2
+    ),
+    (
+        "artist-jon-hopkins", "Artist",
+        "Jon Hopkins",
+        "Classically trained and raised on raves, Jon Hopkins worked as a keyboard tech for Imogen Heap before going solo. 'Immunity' — his 2013 album — is a modern electronic masterpiece. He also composed the film score for 'Monsters.' His live sets are famously intense.",
+        "Jon Hopkins — Immunity (2013) end-to-end", 64,
+        "Listen to 'Open Eye Signal' — the 12-minute centerpiece of 'Immunity' that never sits still. Then 'Singularity' — the title track that builds to a crushing climax. 'Abandon Window' — the piano piece that shows his classical side. Hopkins blurs dance and art music.",
+        ["Electronic", "Techno", "Ambient", "British", "2010s"], 2
+    ),
+
+    # ── JAZZ ──
+    (
+        "artist-charlie-parker", "Artist",
+        "Charlie Parker",
+        "The saxophonist who invented bebop — jazz's revolution. His nickname 'Bird' came from his love of fried chicken, 'yardbird.' He was from Kansas City, where he soaked up the blues. Parker played so fast and so new that musicians had to relearn jazz to follow him. He died at 34.",
+        "Charlie Parker — The Savoy Recordings (1945) end-to-end", 50,
+        "Listen to 'Ko-Ko' — the bebop landmark that rewrote 'Cherokee.' Then 'Ornithology' — the tune built on 'How High the Moon.' Parker once said 'music is your own experience, your thoughts, your wisdom.' The man could make a saxophone sound like laughing.",
+        ["Jazz", "Bebop", "American", "1940s"], 1
+    ),
+    (
+        "artist-duke-ellington", "Artist",
+        "Duke Ellington",
+        "Edward Kennedy Ellington got the nickname 'Duke' as a kid for his elegant manners. He led one of jazz's greatest orchestras for 50 years and wrote over 1,000 compositions — many with collaborator Billy Strayhorn. He considered his orchestra his real instrument.",
+        "Duke Ellington — Ellington at Newport (1956) end-to-end", 53,
+        "Listen to 'Take the A Train' — the band's theme, written by Billy Strayhorn about the subway line to Harlem. Then 'It Don't Mean a Thing (If It Ain't Got That Swing)' — the song that named an era. 'Mood Indigo' — the haunting signature tune.",
+        ["Jazz", "Big Band", "American", "1930s"], 1
+    ),
+    (
+        "artist-louis-armstrong", "Artist",
+        "Louis Armstrong",
+        "Born in New Orleans' poorest neighborhood, he sang on street corners for coins as a kid. He got his first cornet at 13 from a pawn shop. Satchmo made the solo and scat singing what they are. 'What a Wonderful World' flopped in the US — and became a hit in the UK.",
+        "Louis Armstrong — The Complete Hot Five Recordings (1928) end-to-end", 60,
+        "Listen to 'What a Wonderful World' — the song that became his signature decades after it flopped at home. Then 'West End Blues' — the 1928 solo that changed jazz forever. 'Hello, Dolly!' — his biggest hit, which knocked the Beatles off the #1 spot.",
+        ["Jazz", "Traditional Jazz", "American", "1920s"], 1
+    ),
+    (
+        "artist-thelonious-monk", "Artist",
+        "Thelonious Monk",
+        "The pianist who played 'the wrong notes' — until everyone realized they were right. He wore odd hats and would get up and dance during his own songs. His tune 'Round Midnight' is the most-recorded jazz standard. He composed angular, catchy melodies now in the canon.",
+        "Thelonious Monk — Brilliant Corners (1957) end-to-end", 42,
+        "Listen to 'Round Midnight' — the moody standard that became his calling card. Then 'Blue Monk' — the blues tune with the unmistakable melody. 'Straight, No Chaser' — the tune with the famous dissonant intro. Monk's playing was percussive and strange — and genius.",
+        ["Jazz", "Bebop", "American", "1950s"], 2
+    ),
+    (
+        "artist-charles-mingus", "Artist",
+        "Charles Mingus",
+        "A bassist and composer of ferocious energy, he wrote 'Goodbye Pork Pie Hat' as a tribute to Lester Young. His bands were workshops where musicians argued and improvised. He taught himself bass as a teen in LA. His music swings hard and then flies off the rails — on purpose.",
+        "Charles Mingus — Mingus Ah Um (1959) end-to-end", 46,
+        "Listen to 'Goodbye Pork Pie Hat' — the tender elegy for Lester Young. Then 'Haitian Fight Song' — the roaring, gospel-tinged epic. 'Better Git Hit in Your Soul' — the opening that feels like a revival meeting. Mingus called his music 'spontaneous composition.'",
+        ["Jazz", "Hard Bop", "American", "1950s"], 2
+    ),
+    (
+        "artist-herbie-hancock", "Artist",
+        "Herbie Hancock",
+        "A piano prodigy who played with the Chicago Symphony at 11, then joined Miles Davis' second great quintet at 23. 'Cantaloupe Island' became one of the most-sampled jazz tunes ever. He won an Oscar for the Round Midnight score. In the 80s, 'Rockit' made him a pop star.",
+        "Herbie Hancock — Maiden Voyage (1965) end-to-end", 42,
+        "Listen to 'Maiden Voyage' — the modal classic about a ship's first journey. Then 'Cantaloupe Island' — the funky tune sampled by US3 for 'Cantaloop.' 'Rockit' — the synth hit with the famous robot video. Hancock reinvents himself every decade.",
+        ["Jazz", "Jazz Fusion", "American", "1960s"], 1
+    ),
+    (
+        "artist-nina-simone", "Artist",
+        "Nina Simone",
+        "Born Eunice Waymon, she trained as a classical pianist, dreaming of being the first Black concert pianist. She changed her name to hide it from her family. 'Mississippi Goddam' — her civil rights anthem — was banned in the South.",
+        "Nina Simone — Pastel Blues (1965) end-to-end", 40,
+        "Listen to 'Mississippi Goddam' — the furious, sarcastic anthem she wrote in an hour after a church bombing. Then 'Feeling Good' — the song that became an anthem decades later. 'Sinnerman' — the 10-minute gospel tour de force. Nina did everything her way.",
+        ["Jazz", "Vocal Jazz", "Soul", "American", "1960s"], 1
+    ),
+    (
+        "artist-ella-fitzgerald", "Artist",
+        "Ella Fitzgerald",
+        "The 'First Lady of Song' — she won 13 Grammys and could scat faster than any horn player. She entered Apollo's Amateur Night planning to dance — she sang instead and won. Her Songbook albums are jazz landmarks. She had perfect pitch and a three-octave range.",
+        "Ella Fitzgerald — Ella Sings the Gershwin Songbook (1959) end-to-end", 55,
+        "Listen to 'Mack the Knife' — her famous live version where she forgets the lyrics and improvises the rest. Then 'How High the Moon' — the scat showcase. 'Summertime' — the timeless reading. Ella turned her voice into an instrument; no one has matched her since.",
+        ["Jazz", "Vocal Jazz", "American", "1940s"], 1
+    ),
+    (
+        "artist-chet-baker", "Artist",
+        "Chet Baker",
+        "The 'James Dean of jazz' — a handsome trumpeter who sang in a fragile, whispery voice. 'My Funny Valentine' made him a heartthrob. His life was shadowed by heroin addiction; he lost his teeth at 30 and learned to play again. He fell from an Amsterdam hotel window in 1988.",
+        "Chet Baker — Chet Baker Sings (1954) end-to-end", 42,
+        "Listen to 'My Funny Valentine' — the version that made him famous. Then 'Let's Get Lost' — the title of both his hit and his documentary. 'Almost Blue' — the aching ballad. Baker's voice and trumpet sound like one instrument — vulnerable and achingly cool.",
+        ["Jazz", "Cool Jazz", "American", "1950s"], 2
+    ),
+    (
+        "artist-bill-evans", "Artist",
+        "Bill Evans",
+        "The pianist whose chord voicings changed jazz harmony forever. He played on Miles Davis' 'Kind of Blue.' His trio with Scott LaFaro and Paul Motian redefined the jazz trio — LaFaro died in a car crash ten days after their Village Vanguard recordings.",
+        "Bill Evans — Sunday at the Village Vanguard (1961) end-to-end", 55,
+        "Listen to 'Waltz for Debby' — written for his niece, recorded live at the Village Vanguard. Then 'Peace Piece' — the meditative improvisation. 'Blue in Green' — the Kind of Blue track he co-wrote with Miles. Evans' music is intimate, like thinking out loud.",
+        ["Jazz", "Cool Jazz", "Modal Jazz", "American", "1960s"], 2
+    ),
+    (
+        "artist-wes-montgomery", "Artist",
+        "Wes Montgomery",
+        "The guitarist who played every note with his thumb — no pick — and never learned to read music. He worked factory jobs and gigged at night until his 40s. 'The Incredible Jazz Guitar' made him a star overnight. His octave technique is still studied by guitarists everywhere.",
+        "Wes Montgomery — The Incredible Jazz Guitar (1960) end-to-end", 40,
+        "Listen to 'Four on Six' — the bluesy original that became a standard. Then 'A Day in the Life' — the Beatles cover that won him a Grammy. 'Round Midnight' — his reading of the Monk classic. Montgomery's thumb was so fast that guitarists assumed he used two players.",
+        ["Jazz", "Hard Bop", "American", "1960s"], 2
+    ),
+
+    # ── WORLD ──
+    (
+        "artist-ravi-shankar", "Artist",
+        "Ravi Shankar",
+        "The sitar master who brought Indian classical music to the West. He taught George Harrison to play sitar — 'Norwegian Wood' was the first pop song with it. He played Monterey Pop and Woodstock. His daughter is Norah Jones. He spent his life proving Indian music is universal.",
+        "Ravi Shankar — Three Ragas (1956) end-to-end", 48,
+        "Listen to 'Raga Jog' — the live sitar masterpiece that hypnotized Woodstock. Then the recordings he made with George Harrison, where sitar met rock. Shankar said the sitar's buzzing strings sound like 'a thousand birds.' His music is meditation with rhythm.",
+        ["World", "Indian Classical", "Indian", "1960s"], 1
+    ),
+    (
+        "artist-ali-farka-toure", "Artist",
+        "Ali Farka Touré",
+        "The Malian guitarist known as 'the African John Lee Hooker' for his hypnotic desert blues. He was also a farmer and a village chief who refused to tour. His album 'Talking Timbuktu' with Ry Cooder won a Grammy. He said 'music is the food of the soul.'",
+        "Ali Farka Touré — Talking Timbuktu (1994) end-to-end", 61,
+        "Listen to 'Ai Du' — the track that sounds like the desert itself. Then 'Talking Timbuktu' — the album that won the Grammy. Ali Farka's guitar is played like a drum and a voice at once — hypnotic, earthy, and completely original.",
+        ["World", "Malian Blues", "Malian", "1990s"], 2
+    ),
+    (
+        "artist-youssou-ndour", "Artist",
+        "Youssou N'Dour",
+        "The Senegalese singer called 'the Voice of Africa.' His song '7 Seconds' with Neneh Cherry was a global hit. He fused traditional mbalax rhythms with modern pop. He later became Senegal's minister of culture. He has released over 25 albums and filled stadiums on three continents.",
+        "Youssou N'Dour — Egypt (2004) end-to-end", 55,
+        "Listen to '7 Seconds' — the duet about a child's first moments that became an anthem. Then 'Egypt' — the album that celebrates Sufi traditions. N'Dour's voice can be tender or thunderous. He once said 'I sing for the whole world, but my roots are in Dakar.'",
+        ["World", "Mbalax", "Senegalese", "1990s"], 2
+    ),
+    (
+        "artist-cesaria-evora", "Artist",
+        "Cesária Évora",
+        "The 'Barefoot Diva' of Cape Verde, who sang morna — the islands' melancholy blues — in bare feet as a tribute to the poor. She was a domestic worker who sang in bars for decades before being discovered at 47. 'Sodade' made her world-famous. She never wore shoes on stage.",
+        "Cesária Évora — Miss Perfumado (1992) end-to-end", 50,
+        "Listen to 'Sodade' — the longing-filled song about emigration that became her anthem. Then 'Besame Mucho' — her reading of the classic. Évora's voice is smoky and gentle, the sound of the Atlantic. She performed barefoot at every venue, from bars to the Opera House.",
+        ["World", "Morna", "Cape Verdean", "1980s"], 2
+    ),
+    (
+        "artist-peter-tosh", "Artist",
+        "Peter Tosh",
+        "The third Wailer alongside Bob Marley — and the militant one. He was arrested for marijuana possession, which inspired his solo album 'Legalize It.' He was killed in 1987 during a home invasion. He preached 'equal rights and justice' in military-style clothes.",
+        "Peter Tosh — Legalize It (1976) end-to-end", 38,
+        "Listen to 'Legalize It' — the reggae anthem that campaigned for marijuana law reform. Then 'Equal Rights' — the title track demanding justice. 'Get Up, Stand Up' — the song he co-wrote with Marley. Tosh was the hardest voice in reggae — his lyrics were declarations.",
+        ["Reggae", "Roots Reggae", "Jamaican", "1970s"], 2
+    ),
+    (
+        "artist-lee-scratch-perry", "Artist",
+        "Lee \"Scratch\" Perry",
+        "The eccentric genius who invented dub — the art of remixing a song into a new one. At his Black Ark studio in Jamaica he recorded Bob Marley and the Congos. He once burned the studio down, saying it was haunted. He wore foil and crystals and claimed to talk to spirits.",
+        "Lee \"Scratch\" Perry — Super Ape (1976) end-to-end", 32,
+        "Listen to 'Super Ape' — the dub masterpiece where instruments become ghosts. Then 'Roast Fish & Cornbread' — his strange solo album. Perry's production is full of echoes, sirens, and mad laughter. He called himself 'the Upsetter' — the man who upset music's rules.",
+        ["Dub", "Reggae", "Jamaican", "1970s"], 3
+    ),
+    (
+        "artist-mulatu-astatke", "Artist",
+        "Mulatu Astatke",
+        "The Ethiopian composer called 'the father of Ethio-jazz.' He studied in London and New York in the 1950s, then fused jazz with Ethiopian scales. His music lay forgotten until the Éthiopiques series revived it — and Jim Jarmusch used it in 'Broken Flowers.'",
+        "Mulatu Astatke — Éthiopiques Vol. 4 (1998) end-to-end", 44,
+        "Listen to 'Yèkèrmo Sèw' — the Ethio-jazz classic with the haunting vibraphone line. Then 'Tezeta' — the 'nostalgia' melody. Astatke's music sounds like jazz from another planet — Ethiopian pentatonic scales over 60s American grooves.",
+        ["World", "Ethio-Jazz", "Ethiopian", "1970s"], 3
+    ),
+    (
+        "artist-oumou-sangare", "Artist",
+        "Oumou Sangaré",
+        "The Malian singer known as 'the Songbird of Wassoulou.' Her debut 'Moussolou' — meaning 'Women' — sold hundreds of thousands of copies, a record in Africa. She sings about women's rights in a culture that doesn't always want to hear it. She also runs a successful car business.",
+        "Oumou Sangaré — Moussolou (1991) end-to-end", 40,
+        "Listen to 'Moussolou' — the album that made her a star across West Africa. Then 'Saa Magni' — the powerful follow-up. Sangaré's voice is warm and commanding, backed by the hunting rhythms of Wassoulou. She built her success on her own terms.",
+        ["World", "Wassoulou", "Malian", "1990s"], 3
+    ),
+    (
+        "artist-jorge-ben", "Artist",
+        "Jorge Ben",
+        "The Brazilian musician behind 'Mas que Nada' — one of the most famous songs in the world, covered by Sergio Mendes. He blends samba, funk, and soul into a joyful stew. He sued Rod Stewart over 'Do Ya Think I'm Sexy?' — and won, because it sampled his 'Taj Mahal.'",
+        "Jorge Ben — África Brasil (1976) end-to-end", 43,
+        "Listen to 'Mas que Nada' — the samba-funk classic everyone knows. Then 'Taj Mahal' — the song whose melody Rod Stewart borrowed. 'Oba, Lá Vem Ela' — the sunshine anthem. Ben's guitar is tuned like a cavaquinho and his songs are pure joy.",
+        ["World", "Samba", "Brazilian", "1960s"], 2
+    ),
+    (
+        "artist-milton-nascimento", "Artist",
+        "Milton Nascimento",
+        "The Brazilian singer with the angelic voice, adopted and raised in a small town. 'Clube da Esquina' — his 1972 album with Lô Borges — is a masterpiece of MPB. He has collaborated with everyone from Wayne Shorter to Björk. His voice sounds like a choir in one person.",
+        "Milton Nascimento — Clube da Esquina (1972) end-to-end", 66,
+        "Listen to 'Clube da Esquina No. 2' — the dreamlike title track. Then 'Travessia' — the song that made his name. 'Coração de Estudante' — the beloved classic. Nascimento's voice climbs and soars; Brazilians call him 'Bituca,' a childhood nickname.",
+        ["World", "MPB", "Brazilian", "1970s"], 2
+    ),
+
+    # ── METAL ──
+    (
+        "artist-iron-maiden", "Artist",
+        "Iron Maiden",
+        "The band with mascot Eddie, a monster on every album cover. Singer Bruce Dickinson is a commercial airline pilot and a fencing champion. 'The Number of the Beast' got them accused of Satanism. They've sold over 100 million albums and fly their own plane, 'Ed Force One.'",
+        "Iron Maiden — The Number of the Beast (1982) end-to-end", 40,
+        "Listen to 'The Trooper' — the galloping anthem about the Charge of the Light Brigade. Then 'Run to the Hills' — the song about colonization. 'Fear of the Dark' — the crowd-pleaser that makes arenas sing. Maiden's galloping bass and Dickinson's operatic wail are iconic.",
+        ["Metal", "Heavy Metal", "British", "1980s"], 1
+    ),
+    (
+        "artist-slayer", "Artist",
+        "Slayer",
+        "The thrash band whose 1986 album 'Reign in Blood' — all 29 minutes of it — remains a landmark of extremity. 'Angel of Death' — about Nazi doctor Josef Mengele — caused outrage. Drummer Dave Lombardo is considered one of metal's greatest. They played at 200 miles per hour.",
+        "Slayer — Reign in Blood (1986) end-to-end", 29,
+        "Listen to 'Raining Blood' — the album's closer, ending in rain and thunder. Then 'Angel of Death' — the controversial opener. 'South of Heaven' — the slower, more menacing follow-up. Slayer's riffs sound like a chainsaw cutting through the walls of rock.",
+        ["Metal", "Thrash Metal", "American", "1980s"], 2
+    ),
+    (
+        "artist-megadeth", "Artist",
+        "Megadeth",
+        "Dave Mustaine was kicked out of Metallica a day before they recorded their debut — so he started Megadeth to prove them wrong. 'Rust in Peace' — with its legendary lineup — is a thrash masterpiece. The title track is about a nuclear war that never ends.",
+        "Megadeth — Rust in Peace (1990) end-to-end", 47,
+        "Listen to 'Holy Wars... The Punishment Due' — the opening epic of 'Rust in Peace.' Then 'Hangar 18' — the song about Area 51. 'Symphony of Destruction' — the radio hit with the piano riff. Megadeth is thrash with a technical edge.",
+        ["Metal", "Thrash Metal", "American", "1980s"], 2
+    ),
+    (
+        "artist-pantera", "Artist",
+        "Pantera",
+        "The Texas band that made groove metal — 'Cowboys from Hell' reinvented the genre. Guitarist Dimebag Darrell was murdered on stage in 2004 by a deranged fan, one of music's darkest nights. Phil Anselmo's roar and Dimebag's riffs made them stadium metal gods.",
+        "Pantera — Vulgar Display of Power (1992) end-to-end", 49,
+        "Listen to 'Walk' — the stomping riff every metal fan knows. Then 'Cowboys from Hell' — the title track that announced the new sound. 'Cemetery Gates' — the ballad that shows their range. Pantera were a glam band first — they invented themselves twice.",
+        ["Metal", "Groove Metal", "American", "1990s"], 2
+    ),
+    (
+        "artist-tool", "Artist",
+        "Tool",
+        "The art-rock metal band fronted by Maynard James Keenan, who also makes wine in Arizona. 'Lateralus' is structured around the Fibonacci sequence. Fans waited 13 years between '10,000 Days' and 'Fear Inoculum.' Their music is dense, mathematical, and hypnotic.",
+        "Tool — Lateralus (2001) end-to-end", 79,
+        "Listen to 'Schism' — the Grammy-winning single in shifting time signatures. Then 'Lateralus' — the title track where the syllables follow the Fibonacci numbers. 'Pneuma' — the modern epic. Tool's music rewards patience; every listen reveals new layers.",
+        ["Metal", "Progressive Metal", "American", "1990s"], 1
+    ),
+    (
+        "artist-opeth", "Artist",
+        "Opeth",
+        "The Swedish band who mixed death metal growls with beautiful acoustic passages — 'progressive death metal.' Mikael Åkerfeldt's vocals switch between demonic and angelic. 'Blackwater Park' — produced with Steven Wilson — is their masterpiece.",
+        "Opeth — Blackwater Park (2001) end-to-end", 67,
+        "Listen to 'The Drapery Falls' — the centerpiece that swings between metal and folk. Then 'Harvest' — the acoustic song with the soaring chorus. 'Windowpane' — the haunting cut. Opeth proved heavy music could be elegant; their transitions are the real show.",
+        ["Metal", "Progressive Death Metal", "Swedish", "2000s"], 2
+    ),
+    (
+        "artist-judas-priest", "Artist",
+        "Judas Priest",
+        "The band that defined heavy metal's leather-and-bikes look. Rob Halford — 'the Metal God' — has one of the most powerful voices in rock. He came out as gay in 1998, the first major metal frontman to do so. They influenced everyone from Metallica to Slipknot.",
+        "Judas Priest — British Steel (1980) end-to-end", 36,
+        "Listen to 'Breaking the Law' — the anthem about frustration and rebellion. Then 'Painkiller' — the opening scream is one of metal's greatest moments. 'Turbo Lover' — the synth-metal hit. Halford rides a motorcycle on stage — the leather icon of metal.",
+        ["Metal", "Heavy Metal", "British", "1970s"], 2
+    ),
+    (
+        "artist-system-of-a-down", "Artist",
+        "System of a Down",
+        "The Armenian-American band who mixed metal with absurdist, political lyrics. 'Toxicity' — their breakthrough — went to #1. They use their platform to advocate for recognition of the Armenian genocide. 'Chop Suey!' became a meme decades after release. They reunited in 2010.",
+        "System of a Down — Toxicity (2001) end-to-end", 44,
+        "Listen to 'Chop Suey!' — the song that refused to follow song structure. Then 'Toxicity' — the title track about mental illness. 'B.Y.O.B.' — the anti-war anthem that won a Grammy. SOAD's sound is part metal, part circus, part revolution.",
+        ["Metal", "Alternative Metal", "American", "2000s"], 2
+    ),
+
+    # ── COUNTRY ──
+    (
+        "artist-willie-nelson", "Artist",
+        "Willie Nelson",
+        "The outlaw who grew a beard, broke Nashville's rules, and released 'Red Headed Stranger' — a concept album the label hated — that became a #1. His guitar 'Trigger' has a hole worn through it. He wrote 'Crazy' for Patsy Cline.",
+        "Willie Nelson — Red Headed Stranger (1975) end-to-end", 33,
+        "Listen to 'On the Road Again' — the anthem about life on tour. Then 'Blue Eyes Crying in the Rain' — the stripped-down hit. 'Always on My Mind' — the cover that became his. Willie's voice is weathered and warm; at 90 he still tours and releases albums.",
+        ["Country", "Outlaw Country", "American", "1970s"], 1
+    ),
+    (
+        "artist-hank-williams", "Artist",
+        "Hank Williams",
+        "The hillbilly Shakespeare — he wrote songs in 10 minutes that people still sing. He died at 29 in the back of his Cadillac, on the way to a show he'd been fired from for drinking. 'Your Cheatin' Heart' — written during a hangover — is one of the most covered songs ever.",
+        "Hank Williams — 40 Greatest Hits (compilation) end-to-end", 55,
+        "Listen to 'Your Cheatin' Heart' — the hurt-soaked classic. Then 'I'm So Lonesome I Could Cry' — the song Bob Dylan called 'the saddest song.' 'Hey Good Lookin'' — the joyful one. Hank was the first country superstar; his son Hank Jr. and grandson carry the name.",
+        ["Country", "Honky-Tonk", "American", "1940s"], 1
+    ),
+    (
+        "artist-patsy-cline", "Artist",
+        "Patsy Cline",
+        "The voice that brought country to the pop charts. 'Crazy' — written by a young Willie Nelson — was her signature. She died in a plane crash at 30, weeks after her final recording session. She was the first woman inducted into the Country Music Hall of Fame.",
+        "Patsy Cline — Showcase with the Jordanaires (1961) end-to-end", 33,
+        "Listen to 'Crazy' — the song Willie Nelson wrote that became hers. Then 'I Fall to Pieces' — the follow-up hit. 'Sweet Dreams' — her last recording, released after she died. 'Walking After Midnight' — the crossover that started it.",
+        ["Country", "Nashville Sound", "American", "1960s"], 2
+    ),
+    (
+        "artist-loretta-lynn", "Artist",
+        "Loretta Lynn",
+        "The 'Coal Miner's Daughter' — she was married at 15 and had four kids by 21. Her song 'The Pill' — about birth control — was banned by many radio stations. She wrote 'Coal Miner's Daughter' about her Kentucky childhood; it became a book and a movie.",
+        "Loretta Lynn — Coal Miner's Daughter (1970) end-to-end", 30,
+        "Listen to 'Coal Miner's Daughter' — the autobiographical classic. Then 'The Pill' — the scandalous hit about birth control. 'You Ain't Woman Enough' — the song that told a rival to back off. Loretta was the first woman named Entertainer of the Year at the CMAs.",
+        ["Country", "American", "1970s"], 2
+    ),
+    (
+        "artist-merle-haggard", "Artist",
+        "Merle Haggard",
+        "The 'Poet of the Common Man' — he spent time in San Quentin Prison, where he saw Johnny Cash perform. That concert inspired him to go straight and become a country star. 'Okie from Muskogee' — about hippie-hating rednecks — divided the country.",
+        "Merle Haggard — Mama Tried (1968) end-to-end", 29,
+        "Listen to 'Mama Tried' — the song about a mother's failed attempts to save her son. Then 'Okie from Muskogee' — the anthem that divided the country. 'The Fightin' Side of Me' — the defiant one. Haggard's prison years shaped the outlaw in his music.",
+        ["Country", "Bakersfield Sound", "American", "1960s"], 2
+    ),
+    (
+        "artist-kacey-musgraves", "Artist",
+        "Kacey Musgraves",
+        "The Texas singer who brought progressive themes to country. 'Follow Your Arrow' — about acceptance — won Song of the Year at the CMAs. 'Golden Hour' won Album of the Year at the Grammys, crossing over to pop. 'Same Trailer Different Park' was her celebrated debut.",
+        "Kacey Musgraves — Golden Hour (2018) end-to-end", 46,
+        "Listen to 'Follow Your Arrow' — the song that tells you to live your truth. Then 'Space Cowboy' — the psychedelic breakup song. 'Slow Burn' — the opener that sets the mood. Musgraves makes country that sounds like a dream; her voice is pure Texas honey.",
+        ["Country", "American", "2010s"], 2
+    ),
+
+    # ── BLUES ──
+    (
+        "artist-bb-king", "Artist",
+        "B.B. King",
+        "The King of the Blues, who named his guitar 'Lucille' after a woman in a club fire — he ran back into the burning building to save it. He recorded over 40 albums and played 15,000 concerts. 'The Thrill Is Gone' is his most famous song. He was born on a Mississippi plantation.",
+        "B.B. King — Live at the Regal (1965) end-to-end", 35,
+        "Listen to 'The Thrill Is Gone' — the song that won him his first Grammy. Then 'Lucille' — the instrumental tribute to his guitar. 'Sweet Little Angel' — the live favorite. B.B.'s style — single notes bent with vibrato — defined electric blues guitar.",
+        ["Blues", "Electric Blues", "American", "1950s"], 1
+    ),
+    (
+        "artist-howlin-wolf", "Artist",
+        "Howlin' Wolf",
+        "Born Chester Burnett — 6'3\" and 300 pounds, with a voice like gravel and thunder. He learned guitar from Charley Patton, the father of Delta blues. 'Smokestack Lightning' is his signature. The Rolling Stones covered him — he was their favorite bluesman.",
+        "Howlin' Wolf — Moanin' in the Moonlight (1959) end-to-end", 38,
+        "Listen to 'Smokestack Lightning' — the hypnotic one-chord epic. Then 'Spoonful' — the song about desire. 'Killing Floor' — the track Led Zeppelin borrowed for 'The Lemon Song.' Wolf's band shook the stage; he called his style 'the howling blues.'",
+        ["Blues", "Chicago Blues", "American", "1950s"], 1
+    ),
+    (
+        "artist-john-lee-hooker", "Artist",
+        "John Lee Hooker",
+        "The 'Hook' — he played a boogie so personal that no band could follow him. 'Boogie Chillen' — recorded alone in 1948 — was his first hit and one of the first million-selling blues records. 'Boom Boom' became a barroom anthem. He sometimes recorded in hotel rooms.",
+        "John Lee Hooker — The Healer (1989) end-to-end", 44,
+        "Listen to 'Boogie Chillen' — the one-man boogie that started it all. Then 'Boom Boom' — the song that took over bars. 'One Bourbon, One Scotch, One Beer' — the spoken-word epic. Hooker's voice talks over his guitar like a late-night conversation.",
+        ["Blues", "Boogie", "American", "1940s"], 2
+    ),
+    (
+        "artist-etta-james", "Artist",
+        "Etta James",
+        "The singer behind 'At Last' — the wedding song that became a standard. Her voice could be a whisper or a roar. She struggled with addiction and was inducted into the Rock and Roll Hall of Fame in 1993. 'I'd Rather Go Blind' is her rawest song.",
+        "Etta James — At Last! (1960) end-to-end", 37,
+        "Listen to 'At Last' — the song that defined her. Then 'I'd Rather Go Blind' — the song she recorded while heartbroken. 'Tell Mama' — the gritty soul favorite. Etta's voice was gospel, blues, and soul in one body — she lived every lyric.",
+        ["Blues", "Soul", "American", "1960s"], 2
+    ),
+    (
+        "artist-buddy-guy", "Artist",
+        "Buddy Guy",
+        "The Chicago blues guitarist who played with his teeth and walked through audiences on tables. He was mentored by Muddy Waters and in turn inspired Jimi Hendrix and Eric Clapton — Clapton called him 'the greatest guitarist alive.' 'Damn Right, I've Got the Blues' won him a Grammy.",
+        "Buddy Guy — Damn Right, I've Got the Blues (1991) end-to-end", 46,
+        "Listen to 'Damn Right, I've Got the Blues' — the comeback album that won him a Grammy. Then 'Stone Crazy' — the frantic showpiece. 'Feels Like Rain' — the soulful one. Buddy's solos are conversations — they start quiet and shout by the end. He's still playing at 80+.",
+        ["Blues", "Chicago Blues", "American", "1990s"], 2
+    ),
+
+    # ── CLASSICAL ──
+    (
+        "artist-mozart", "Artist",
+        "Wolfgang Amadeus Mozart",
+        "The child prodigy who composed his first symphony at 8 and wrote over 600 works before dying at 35. His unfinished 'Requiem' — which he believed was for his own funeral — was completed by a student. The Salieri murder legend is a myth.",
+        "Mozart — Requiem in D minor (1791)", 55,
+        "Listen to the 'Requiem' — the masterpiece he never finished, and his final artistic statement. Then 'Eine kleine Nachtmusik' — the serenade everyone knows. 'The Magic Flute' — the opera with the famous Queen of the Night aria. Mozart's music is joyful even when it's sad.",
+        ["Classical", "Classical Period", "Austrian", "1780s"], 1
+    ),
+    (
+        "artist-chopin", "Artist",
+        "Frédéric Chopin",
+        "The Polish pianist who wrote almost exclusively for the piano. He fled Warsaw during the Russian uprising at 20 and spent his life in Paris, giving only about 30 public concerts — he preferred salons. He was frail and died at 39; his heart is buried in Poland.",
+        "Chopin — Nocturnes (1830s-1840s)", 60,
+        "Listen to 'Nocturne Op. 9 No. 2' — the piece everyone recognizes. Then the 'Revolutionary Étude' — written when he heard Warsaw had fallen. 'Ballade No. 1' — the emotional tour de force. Chopin's music is the piano's greatest literature.",
+        ["Classical", "Romantic", "Polish", "1830s"], 1
+    ),
+    (
+        "artist-debussy", "Artist",
+        "Claude Debussy",
+        "The French composer who painted with sound — 'Clair de Lune' is his moonlit masterpiece. He hated being called an impressionist, preferring 'symbolist.' 'La Mer' — his orchestral seascape — took years to finish. He once said 'music is the space between the notes.'",
+        "Debussy — Suite Bergamasque (1890) end-to-end", 20,
+        "Listen to 'Clair de Lune' — the third movement of 'Suite Bergamasque,' the piano piece everyone knows. Then 'La Mer' — the orchestral ocean. 'Prélude à l'après-midi d'un faune' — the revolutionary tone poem. Debussy's harmonies dissolve like watercolors.",
+        ["Classical", "Impressionist", "French", "1890s"], 2
+    ),
+    (
+        "artist-stravinsky", "Artist",
+        "Igor Stravinsky",
+        "The composer whose 'Rite of Spring' caused a riot at its 1913 premiere — the audience fought in the aisles over the ballet's dissonance. He reinvented himself repeatedly: Russian ballets, neoclassicism, serialism. He moved to the US and became a citizen. He lived to 88.",
+        "Stravinsky — The Rite of Spring (1913)", 35,
+        "Listen to 'The Rite of Spring' — the opening bassoon solo is a high note no one expected. Then 'The Firebird' — the ballet that made his name. 'Petrushka' — the puppet drama. Stravinsky said his music 'survived the scandal' — it now fills concert halls.",
+        ["Classical", "20th Century", "Russian", "1910s"], 2
+    ),
+    (
+        "artist-philip-glass", "Artist",
+        "Philip Glass",
+        "The father of minimalism — he drove a taxi and worked as a plumber before his music caught on. 'Einstein on the Beach' — his five-hour opera with no intermission — made him famous. He has scored films including 'Koyaanisqatsi' and 'The Hours.'",
+        "Philip Glass — Glassworks (1982) end-to-end", 50,
+        "Listen to 'Glassworks' — the album that introduced minimalism to the public. Then 'Koyaanisqatsi' — the hypnotic film score. 'Einstein on the Beach' — the opera where time stands still. Glass's repeating patterns build like machines; critics hated it in the 70s, now it's canon.",
+        ["Classical", "Minimalism", "American", "1970s"], 2
+    ),
+
+    # ── 2020s POP / INDIE ──
+    (
+        "artist-olivia-rodrigo", "Artist",
+        "Olivia Rodrigo",
+        "The Disney star whose 'drivers license' broke Spotify's record for most streams in a week. She wrote her debut 'Sour' with producer Dan Nigro while still a teenager. 'Good 4 U' and 'Vampire' followed. Her albums turn heartbreak into chart-topping confessions.",
+        "Olivia Rodrigo — Sour (2021) end-to-end", 35,
+        "Listen to 'drivers license' — the song that made everyone cry in 2021. Then 'Vampire' — the piano ballad that became her second #1. 'get him back!' — the chaotic rocker. Rodrigo writes with brutal honesty — her diary entries are hits.",
+        ["Pop", "Alternative Pop", "American", "2020s"], 1
+    ),
+    (
+        "artist-charli-xcx", "Artist",
+        "Charli XCX",
+        "The hyperpop queen who turned 'Brat' into the summer of 2024 — its lime-green aesthetic dominated everything. She started performing at illegal London raves as a teen. 'Boom Clap' was her first big hit; '360' defined a moment. She also writes hits for other stars.",
+        "Charli XCX — Brat (2024) end-to-end", 41,
+        "Listen to 'Von dutch' — the brat-era banger. Then '360' — the anthem about being that girl. 'Boys' — the video full of famous men. Charli is the most collaborative artist in pop — her remixes and features are events.",
+        ["Pop", "Hyperpop", "Electropop", "British", "2020s"], 1
+    ),
+    (
+        "artist-rosalia", "Artist",
+        "Rosalía",
+        "The Catalan singer who rebuilt flamenco for the 21st century — 'El Mal Querer' won a Latin Grammy and a Grammy. 'Motomami' — her third album — is a genre-defying masterpiece. She collaborates with everyone from Bad Bunny to The Weeknd and still sings in Spanish.",
+        "Rosalía — Motomami (2022) end-to-end", 42,
+        "Listen to 'Malamente' — the flamenco-trap fusion that announced her. Then 'Despechá' — the summer anthem. 'Con Altura' — the reggaeton hit with J Balvin. Rosalía's voice is pure flamenco, her production is pure future.",
+        ["Pop", "Flamenco", "Latin Pop", "Spanish", "2010s"], 2
+    ),
+    (
+        "artist-bad-bunny", "Artist",
+        "Bad Bunny",
+        "The Puerto Rican superstar who has been Spotify's most-streamed artist multiple years in a row. He started as a supermarket bagger who posted songs to SoundCloud. 'YHLQMDLG' — his 2020 album — became the highest-charting all-Spanish album in US history.",
+        "Bad Bunny — YHLQMDLG (2020) end-to-end", 66,
+        "Listen to 'Yo Perreo Sola' — the feminist anthem with the drag video. Then 'Dákiti' — the global smash. 'Tití Me Preguntó' — the banger about being asked about marriage. Bad Bunny turned reggaeton into the world's most-played music.",
+        ["Pop", "Reggaeton", "Puerto Rican", "2020s"], 1
+    ),
+    (
+        "artist-chappell-roan", "Artist",
+        "Chappell Roan",
+        "The Midwest Princess — her drag-inspired, hyper-theatrical pop made her 2024's breakout star. 'Good Luck, Babe!' was her first top-10 hit. She developed her persona after moving to LA and dropping out of music school. Her shows are pop operas with full choreography.",
+        "Chappell Roan — The Rise and Fall of a Midwest Princess (2023) end-to-end", 55,
+        "Listen to 'Good Luck, Babe!' — the song about doomed love that became a phenomenon. Then 'Pink Pony Club' — the anthem about finding yourself. 'Femininomenom' — the rallying cry. Roan's rise took years — she was dropped by her first label and rebuilt herself.",
+        ["Pop", "Synth-Pop", "American", "2020s"], 1
+    ),
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
