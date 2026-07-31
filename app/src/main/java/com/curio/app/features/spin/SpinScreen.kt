@@ -414,13 +414,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             enabled = filteredPool.isNotEmpty() && !shuffling,
             onCardTap = {
                 if (shuffling || filteredPool.isEmpty()) return@Carousel
-                val landed = landedTopic
-                if (landed != null) {
-                    // Manual tap — opens instantly and marks this landing as
-                    // opened (cancels any pending auto-open). launchSingleTop
-                    // makes it a no-op if the auto-open already pushed Reveal.
+                val resolved = landedTopic
+                    ?: landedTopicName?.let { name ->
+                        TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
+                    }
+                if (resolved != null) {
                     landingAlreadyOpened = true
-                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
+                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
                         launchSingleTop = true
                     }
                 } else {
