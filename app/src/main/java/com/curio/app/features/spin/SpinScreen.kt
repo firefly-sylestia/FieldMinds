@@ -1268,7 +1268,10 @@ private fun PeekCard(
                 rotationZ = when (slot) { -2 -> -3.5f; -1 -> -1.4f; 1 -> 1.4f; else -> 3.5f }
                 scaleX = if (far) 0.92f else 0.98f
                 scaleY = if (far) 0.92f else 0.98f
-                alpha = if (far) 0.48f else 0.82f
+                // Fully opaque — translucent layers blend badly with the tilt
+                // and render the card as soft/pixelated. Depth comes from
+                // scale + rotation + zIndex instead of transparency.
+                alpha = 1f
             }
             .zIndex(if (far) 2f else 5f)
     ) {
@@ -1291,7 +1294,8 @@ private fun PeekCard(
                 color = cardColor,
                 shadowElevation = 0.dp,
                 tonalElevation = 0.dp,
-                border = BorderStroke(1.dp, Color.White.copy(alpha = if (far) 0.12f else 0.22f)),
+                // No border — a thin stroke on a rotated rounded card aliases
+                // into jagged/pixelated edges. Solid fill keeps it crisp.
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
