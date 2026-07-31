@@ -566,11 +566,12 @@ private fun StatsStrip(streak: Int, saved: Int, recent: Int, lanes: Int) {
 
 @Composable
 private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: String, tint: Color) {
+    // Coloured container — accent-tinted background, readable onSurface text.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        color = CurioColors.DeepPlum.copy(alpha = 0.08f),
-        shadowElevation = 1.dp
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = 3.dp
     ) {
         Column(
             modifier = Modifier.padding(vertical = 12.dp),
