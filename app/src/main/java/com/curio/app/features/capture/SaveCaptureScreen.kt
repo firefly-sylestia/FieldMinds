@@ -135,18 +135,26 @@ fun SaveCaptureScreen(
                     data
                 }
 
+                val resolvedTopic = topic
+                if (resolvedTopic == null) {
+                    saveInProgress = false
+                    return@launch
+                }
+
                 val entry = CurioEntry(
                     id = entryId,
-                    topic = topic ?: return@launch,
+                    topic = resolvedTopic,
                     format = cat.defaultFormat,
                     captureData = persistedData
                 )
-                repo.save(entry)
-                savedEntryId = entry.id
-                StreakTracker.recordActivity(context)
-                delay(400)
-                confettiTrigger++
-                emberTrigger++
+                runCatching { repo.save(entry) }
+                    .onSuccess {
+                        savedEntryId = entry.id
+                        StreakTracker.recordActivity(context)
+                        delay(400)
+                        confettiTrigger++
+                        emberTrigger++
+                    }
                 saveInProgress = false
             }
         }

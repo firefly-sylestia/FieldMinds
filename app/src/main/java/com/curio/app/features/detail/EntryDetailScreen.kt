@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
@@ -81,6 +82,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import coil.compose.rememberAsyncImagePainter
 import com.curio.app.ui.theme.CurioIcons
@@ -125,12 +127,17 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
-        // ── Hero image placeholder ──────────────────────────────────────
+        // ── Expressive hero banner ─────────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(260.dp)
-                .background(cat.accent.copy(alpha = 0.85f)),
+                .height(292.dp)
+                .background(
+                    Brush.verticalGradient(
+                        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
+                        else CurioGradients.cardGradient(cat.accent)
+                    )
+                ),
             contentAlignment = Alignment.Center
         ) {
             CurioIcon(
@@ -151,12 +158,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 Surface(
                     onClick = { navController.popBackStack() },
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.25f)
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
                 ) {
                     CurioIcon(
                         name = CurioIcons.ArrowBack,
                         contentDescription = "Back",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         size = 24.dp,
                         modifier = Modifier.padding(8.dp)
                     )
@@ -165,12 +172,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     Surface(
                         onClick = { menuExpanded = true },
                         shape = RoundedCornerShape(50),
-                        color = Color.White.copy(alpha = 0.25f)
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
                     ) {
                         CurioIcon(
                             name = CurioIcons.MoreVert,
                             contentDescription = "More",
-                            tint = Color.White,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             size = 24.dp,
                             modifier = Modifier.padding(8.dp)
                         )
@@ -251,7 +258,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
         // ── Format body ────────────────────────────────────────────────
         Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
-            FormatBody(entry = resolvedEntry, category = cat)
+            FormatBody(entry = resolvedEntry, category = cat, navController = navController)
         }
 
         Spacer(Modifier.height(32.dp))
@@ -281,14 +288,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 }
 
 @Composable
-private fun FormatBody(entry: CurioEntry, category: CurioCategory) {
+private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     when (entry.format) {
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
-        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category)
-        CaptureFormat.FieldNotes -> FieldNotesRender(entry, category)
-        CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category)
+        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
+        CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
+        CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category, navController)
     }
 }
 
@@ -739,21 +746,21 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
+private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Mood board canvas with tile positions ──────────────────────
         Surface(
-            shape = RoundedCornerShape(24.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-            tonalElevation = 1.dp,
-            modifier = Modifier.fillMaxWidth().height(320.dp)
+            shape = RoundedCornerShape(28.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            shadowElevation = 8.dp,
+            modifier = Modifier.fillMaxWidth().height(460.dp)
         ) {
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val canvasW = with(density) { maxWidth.toPx() }
-                val canvasH = with(density) { 320.dp.toPx() }
+                val canvasH = with(density) { 460.dp.toPx() }
 
                 if (data.tileLayouts.isNotEmpty()) {
                     data.tileLayouts.forEachIndexed { i, tile ->
@@ -768,9 +775,10 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
                                 .zIndex(i.toFloat())
                         ) {
                             Surface(
-                                shape = RoundedCornerShape(14.dp),
-                                color = Color.White,
-                                shadowElevation = 4.dp,
+                                onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) },
+                                shape = RoundedCornerShape(18.dp),
+                                color = MaterialTheme.colorScheme.surface,
+                                shadowElevation = 8.dp,
                                 modifier = Modifier
                                     .size(
                                         width = with(density) { tile.widthPx.toDp() },
@@ -780,10 +788,11 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
                             ) {
                                 Image(
                                     painter = rememberAsyncImagePainter(tile.uri),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
+                                    contentDescription = "Open image",
+                                    contentScale = ContentScale.Fit,
                                     modifier = Modifier
                                         .fillMaxSize()
+                                        .padding(6.dp)
                                         .clip(RoundedCornerShape(14.dp))
                                 )
                             }
@@ -826,39 +835,43 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory) {
+private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.FieldNotes ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("\uD83D\uDD0D Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
         data.surprised.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("\u2728 Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
         data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("\uD83D\uDCD6 Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
         if (data.imageUris.isNotEmpty()) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                 data.imageUris.take(3).forEach { uri ->
-                    Image(
-                        painter = rememberAsyncImagePainter(uri),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(96.dp)
-                            .clip(RoundedCornerShape(14.dp))
-                    )
+                    Surface(
+                        onClick = { navController.navigate(CurioRoutes.lightbox(uri)) },
+                        shape = RoundedCornerShape(16.dp),
+                        shadowElevation = 4.dp,
+                        modifier = Modifier.weight(1f).height(120.dp)
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(uri),
+                            contentDescription = "Open image",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxSize().padding(4.dp)
+                        )
+                    }
                 }
             }
         }
@@ -866,7 +879,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory) {
+private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.OpenNotebook ?: return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("Format: ${data.subFormat.name}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -877,7 +890,7 @@ private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory) {
             format = data.subFormat,
             captureData = data.subData
         )
-        FormatBody(entry = subEntry, category = category)
+        FormatBody(entry = subEntry, category = category, navController = navController)
     }
 }
 

@@ -155,7 +155,7 @@ fun CabinetScreen(navController: NavController) {
                     CurioEmptyState(
                         glyph = CurioIcons.Inventory2,
                         headline = "Your Cabinet is empty",
-                        subtext = "Everything you save will live here. Spin to find your first one.",
+                        subtext = "Everything you save will live here. Shuffle to find your first one.",
                         tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
                         ctaLabel = "Discover something",
                         onCtaClick = { navController.navigate(CurioRoutes.SPIN) }
@@ -166,9 +166,9 @@ fun CabinetScreen(navController: NavController) {
                     CurioEmptyState(
                         glyph = CurioIcons.SearchOff,
                         headline = "No ${cat.displayName} captures yet",
-                        subtext = "Spin for ${cat.displayName} to find your first one.",
+                        subtext = "Shuffle for ${cat.displayName} to find your first one.",
                         tint = cat.accent.copy(alpha = 0.4f),
-                        ctaLabel = "Spin for ${cat.displayName}",
+                        ctaLabel = "Shuffle for ${cat.displayName}",
                         onCtaClick = {
                             navController.navigate(
                                 CurioRoutes.spinWithCategory(cat.id.routeSlug)

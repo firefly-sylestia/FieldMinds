@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -89,6 +90,44 @@ fun CategoryPickerScreen(navController: NavController) {
             )
         }
 
+        Spacer(Modifier.height(14.dp))
+
+        Surface(
+            shape = RoundedCornerShape(32.dp),
+            color = Color.Transparent,
+            shadowElevation = 10.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Brush.horizontalGradient(CurioGradients.wildcardCardGradient()))
+                    .padding(18.dp)
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Casino,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.16f),
+                    size = 112.dp,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(0.76f),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = "Choose a lane",
+                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = Color.White
+                    )
+                    Text(
+                        text = "Pick one focused deck or let Surprise mix everything into a fresh Shuffle.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.86f)
+                    )
+                }
+            }
+        }
+
         Spacer(Modifier.height(16.dp))
 
         MorphEntrance {
@@ -137,7 +176,7 @@ private fun CategoryTile(
 ) {
     var pressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.92f else 1f,
+        targetValue = if (pressed) 0.96f else 1f,
         animationSpec = CurioMotion.Springs.Press,
         label = "tileScale"
     )
@@ -149,10 +188,7 @@ private fun CategoryTile(
     }
 
     Surface(
-        onClick = {
-            pressed = true
-            onClick()
-        },
+        onClick = { onClick() },
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
         shadowElevation = 8.dp,

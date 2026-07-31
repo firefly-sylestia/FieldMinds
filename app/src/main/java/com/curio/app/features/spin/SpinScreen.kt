@@ -1915,4 +1915,3 @@ private fun pickFrom(pool: List<CurioTopic>, recentIds: Set<String>): CurioTopic
     }
     return candidates.random()
 }
-

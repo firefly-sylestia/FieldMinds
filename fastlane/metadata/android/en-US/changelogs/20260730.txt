@@ -1,1 +1,1 @@
-Replaced the pastel wheel with an angular Midnight Signal portal mark and fully refreshed the palette. Redesigned all cards with solid category-specific gradients, no borders or transparency — just shadow elevation for depth across Home, Spin, Reveal, and Picker screens.
+Renamed Spin to Shuffle and expanded the Material Expressive redesign with stacked Shuffle deck cards, animated shuffle motion, refreshed Profile cards, stronger midnight dark mode, real pinch-zoom image lightbox support, and more reliable capture saves.

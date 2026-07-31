@@ -38,7 +38,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 
 /**
- * Home screen's hero \"Spin the Wheel\" card — see CURIO_SPEC.md §3.
+ * Home screen's hero \"Shuffle the Deck\" card — see CURIO_SPEC.md §3.
  *
  * The single largest tap target on the home screen (~40% vertical space).
  *
@@ -53,7 +53,7 @@ import com.curio.app.ui.theme.CurioMotion
  * accent color so the user feels their chip selection propagate visually.
  */
 @Composable
-fun CurioHeroSpinCard(
+fun CurioHeroShuffleCard(
     selectedCategory: com.curio.app.data.CurioCategory?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -126,7 +126,7 @@ fun CurioHeroSpinCard(
                     verticalAlignment = Alignment.Top
                 ) {
                     Text(
-                        text = "SPIN",
+                        text = "SHUFFLE",
                         style = MaterialTheme.typography.displayLarge.copy(
                             color = Color.White,
                             fontWeight = FontWeight.ExtraBold
@@ -151,7 +151,7 @@ fun CurioHeroSpinCard(
                         trigger = selectedCategory?.displayName ?: if (wildcardSelected) "surprise" else "default"
                     ) {
                         Text(
-                            text = selectedCategory?.let { "Spin for ${it.displayName}" }
+                            text = selectedCategory?.let { "Shuffle for ${it.displayName}" }
                                 ?: if (wildcardSelected) "Surprise me"
                                 else "Tap to discover something new",
                             style = MaterialTheme.typography.bodyLarge.copy(

@@ -85,8 +85,8 @@ import java.util.Calendar
  *      display name (e.g. "Good afternoon, Alex"). Subtitle row with a
  *      small streak badge if active.
  *   3. **Quest card** — a flatter, more legible hero card. When a category
- *      is selected it shows the chosen category's accent + CTA "Spin for
- *      $name". Otherwise it shows the wildcard + a "Spin" CTA. Re-uses
+ *      is selected it shows the chosen category's accent + CTA "Shuffle for
+ *      $name". Otherwise it shows the wildcard + a "Shuffle" CTA. Re-uses
  *   4. **Stats strip** — four compact stat pills: Streak · Saved · Recent
  *      · Categories.
  *   5. **Categories chip row** — horizontally-scrollable color chips.
@@ -95,7 +95,7 @@ import java.util.Calendar
  *   6. **Recently explored** — header row + 2-col grid of recent entry
  *      cards, or a beautiful empty-state card prompting the first spin.
  *   7. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
- *      card suggesting the user try a daily spin reminder, navigating to
+ *      card suggesting the user try a daily shuffle reminder, navigating to
  *      Settings.
  *
  *  The screen still hosts the `ModalNavigationDrawer` for secondary
@@ -103,7 +103,7 @@ import java.util.Calendar
  *
  *  Top paddings tightened: `statusBarsPadding()` + `vertical = 4dp` for the
  *  bar, `vertical = 6dp` between sections — keeps the "no empty top"
- *  guarantee we established in Spin/TopicReveal.
+ *  guarantee we established in Shuffle/TopicReveal.
  */
 /**
  * Saves Home's selected category chip by enum name. The wildcard "Surprise"
@@ -310,7 +310,7 @@ fun HomeScreen(navController: NavController) {
                             Column {
                                 Spacer(Modifier.height(6.dp))
                                 Text(
-                                    text = chosen?.displayName ?: "Spin the wheel",
+                                    text = chosen?.displayName ?: "Shuffle the deck",
                                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
                                     color = Color.White,
                                     maxLines = 2,
@@ -337,7 +337,7 @@ fun HomeScreen(navController: NavController) {
                                             size = 16.dp
                                         )
                                         Text(
-                                            text = if (isWildcard) "Shuffle" else "Spin",
+                                            text = if (isWildcard) "Shuffle" else "Shuffle",
                                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                                             color = Color.White
                                         )
@@ -482,7 +482,7 @@ fun HomeScreen(navController: NavController) {
                 if (recentEntries.isEmpty()) {
                     FirstTimeEmpty(
                         onPickCategory = { navController.navigate(CurioRoutes.PICKER) },
-                        onSpinSurprise = { navController.navigate(CurioRoutes.SPIN) }
+                        onShuffleSurprise = { navController.navigate(CurioRoutes.SPIN) }
                     )
                 } else {
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -686,7 +686,7 @@ private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = captured
 @Composable
 private fun FirstTimeEmpty(
     onPickCategory: () -> Unit,
-    onSpinSurprise: () -> Unit
+    onShuffleSurprise: () -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
@@ -713,7 +713,7 @@ private fun FirstTimeEmpty(
                 textAlign = TextAlign.Center
             )
             Text(
-                "Spin the wheel to discover your first topic. Capture what you find and it'll land here.",
+                "Shuffle the deck to discover your first topic. Capture what you find and it'll land here.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -723,7 +723,7 @@ private fun FirstTimeEmpty(
                 modifier = Modifier.padding(top = 4.dp)
             ) {
                 Surface(
-                    onClick = onSpinSurprise,
+                    onClick = onShuffleSurprise,
                     shape = RoundedCornerShape(50),
                     color = CurioColors.CoralBlush
                 ) {
@@ -797,7 +797,7 @@ private fun ReminderNudgeCard(onTap: () -> Unit) {
                 }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        "Try a daily spin reminder",
+                        "Try a daily shuffle reminder",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = fg
                     )

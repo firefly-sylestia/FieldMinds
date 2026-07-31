@@ -73,20 +73,20 @@ private val CurioDarkColorScheme = darkColorScheme(
     tertiaryContainer  = CurioColors.SkyMint.copy(alpha = 0.18f),
     onTertiaryContainer = Color.White,
 
-    // Warm charcoal palette — clean hierarchy with clear surface steps.
-    // No muddy maroon tones; pastel accents pop against neutral dark.
-    background = Color(0xFF1A1518),
-    onBackground = Color.White,
+    // Android 17-style midnight layers: darker, cleaner, and more
+    // dimensional while preserving the light palette untouched.
+    background = Color(0xFF0B1018),
+    onBackground = Color(0xFFF7F2FA),
 
-    surface                  = Color(0xFF242024),
-    onSurface                = Color.White,
-    surfaceVariant           = Color(0xFF302A30),
-    onSurfaceVariant         = Color(0xFFC8C0C8),
-    surfaceContainerLowest   = Color(0xFF1A1518),
-    surfaceContainerLow      = Color(0xFF201C20),
-    surfaceContainer         = Color(0xFF2A262A),
-    surfaceContainerHigh     = Color(0xFF353035),
-    surfaceContainerHighest  = Color(0xFF423C42),
+    surface                  = Color(0xFF111722),
+    onSurface                = Color(0xFFF7F2FA),
+    surfaceVariant           = Color(0xFF1C2432),
+    onSurfaceVariant         = Color(0xFFD4CAD3),
+    surfaceContainerLowest   = Color(0xFF070B11),
+    surfaceContainerLow      = Color(0xFF0E141E),
+    surfaceContainer         = Color(0xFF141B27),
+    surfaceContainerHigh     = Color(0xFF1D2634),
+    surfaceContainerHighest  = Color(0xFF283244),
 
     error             = CurioColors.WarmCoralRed,
     onError           = Color.White,

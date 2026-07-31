@@ -217,7 +217,7 @@ private data class OnboardingSlideData(
 private val OnboardingSlides = listOf(
     OnboardingSlideData(
         glyph = CurioIcons.Casino,
-        headline = "Spin into something new",
+        headline = "Shuffle into something new",
         subtext = "Curio hands you a topic you didn't know you wanted opened."
     ),
     OnboardingSlideData(

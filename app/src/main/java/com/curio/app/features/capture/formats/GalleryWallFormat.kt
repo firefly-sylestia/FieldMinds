@@ -125,7 +125,7 @@ fun GalleryWallFormat(
     }
 
     val canSave = tiles.isNotEmpty()
-    LaunchedEffect(canSave, caption, tiles.size) {
+    LaunchedEffect(canSave, caption, tiles.toList()) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.GalleryWall(

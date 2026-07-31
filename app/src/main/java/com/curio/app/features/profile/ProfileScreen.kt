@@ -463,9 +463,9 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                 .background(
                     Brush.linearGradient(
                         listOf(
-                            CurioColors.CoralBlush.copy(alpha = 0.24f),
-                            CurioColors.Lilac.copy(alpha = 0.12f),
-                            MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
+                            CurioColors.CoralBlush,
+                            CurioColors.Peach,
+                            CurioColors.ButterYellow
                         )
                     )
                 )
@@ -474,7 +474,7 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
             CurioIcon(
                 CurioIcons.AutoAwesome,
                 null,
-                tint = CurioColors.CoralBlush.copy(alpha = 0.16f),
+                tint = Color.White.copy(alpha = 0.20f),
                 size = 116.dp,
                 modifier = Modifier.align(Alignment.BottomEnd)
             )
@@ -500,14 +500,14 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                         Text(
                             name,
                             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = CurioColors.DeepPlum,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             taglineForStreak(streakDays),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = CurioColors.DeepPlum.copy(alpha = 0.76f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -521,8 +521,8 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                     Surface(
                         onClick = onEditName,
                         shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                        color = Color.White.copy(alpha = 0.92f),
+                        border = null
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
@@ -566,21 +566,26 @@ private fun StatsStrip(streak: Int, saved: Int, recent: Int, lanes: Int) {
 
 @Composable
 private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: String, tint: Color) {
-    // Coloured container — accent-tinted background, readable onSurface text.
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shadowElevation = 3.dp
+        shape = RoundedCornerShape(22.dp),
+        color = Color.Transparent,
+        shadowElevation = 6.dp
     ) {
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(3.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Brush.verticalGradient(CurioGradients.cardGradient(tint)))
         ) {
-            CurioIcon(icon, null, tint = tint, size = 17.dp)
-            Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = tint)
-            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                CurioIcon(icon, null, tint = CurioColors.DeepPlum.copy(alpha = 0.82f), size = 18.dp)
+                Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = CurioColors.DeepPlum)
+                Text(label, style = MaterialTheme.typography.labelSmall, color = CurioColors.DeepPlum.copy(alpha = 0.72f))
+            }
         }
     }
 }
@@ -668,7 +673,7 @@ private fun PreferencesCard(
         ) {
             CurioIcon(CurioIcons.Notifications, null, tint = CurioColors.CoralBlush, size = 22.dp)
             Column(modifier = Modifier.weight(1f)) {
-                Text("Daily spin reminder", style = MaterialTheme.typography.bodyLarge)
+                Text("Daily shuffle reminder", style = MaterialTheme.typography.bodyLarge)
                 Text(
                     if (reminderEnabled) "Every day at ${formatHour(reminderHour)}" else "Off · tap the switch to enable",
                     style = MaterialTheme.typography.bodySmall,
