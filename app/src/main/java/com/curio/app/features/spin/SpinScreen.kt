@@ -124,6 +124,14 @@ import kotlin.random.Random
  *     below like a slot window.
  *  7. **Tap-to-open** — the landed card opens the topic directly (no
  *     Explore button); the bottom CTA becomes "Spin again".
+ *
+ * v5.2 changes:
+ *  8. **Auto-open** — after the spin settles the topic auto-transitions
+ *     to Topic Reveal (CURIO_SPEC §5: ~400ms RevealHold pause, no tap
+ *     needed). Tapping the card still opens it instantly. Both paths
+ *     navigate with `launchSingleTop`, so whichever fires first wins and
+ *     nothing double-pushes — and tap-to-open keeps working after coming
+ *     back from Reveal.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -226,6 +234,20 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         confettiTrigger++
     }
 
+    // ── Auto-open once the spin settles (CURIO_SPEC §5) ──────────────
+    // After the ~400ms RevealHold pause the landed topic transitions to
+    // Topic Reveal on its own. Keyed on the landed topic so it fires once
+    // per landing; popping back from Reveal leaves landedTopic unchanged
+    // so the effect does NOT re-fire (no navigation loop). launchSingleTop
+    // makes this a no-op if the user already tapped the card open.
+    LaunchedEffect(landedTopic) {
+        val landed = landedTopic ?: return@LaunchedEffect
+        delay(CurioMotion.Durations.RevealHold.toLong())
+        navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
+            launchSingleTop = true
+        }
+    }
+
     // ── Animations ────────────────────────────────────────────────────
     val landScale by animateFloatAsState(
         targetValue = if (landedTopic != null) 1.04f else 1f,
@@ -268,7 +290,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 if (shuffling || filteredPool.isEmpty()) return@Carousel
                 val landed = landedTopic
                 if (landed != null) {
-                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name))
+                    // Manual tap — opens instantly. launchSingleTop makes it
+                    // a no-op if the auto-open already pushed Reveal.
+                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
+                        launchSingleTop = true
+                    }
                 } else {
                     shuffleCount++
                 }
