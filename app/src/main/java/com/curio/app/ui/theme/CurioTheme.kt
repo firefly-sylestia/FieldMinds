@@ -61,37 +61,38 @@ private val CurioDarkColorScheme = darkColorScheme(
     primary           = CurioColors.CoralBlush,
     onPrimary         = CurioColors.DeepPlum,
     primaryContainer  = CurioColors.CoralBlush.copy(alpha = 0.25f),
-    onPrimaryContainer = CurioColors.CreamWhite,
+    onPrimaryContainer = Color.White,
 
     secondary           = CurioColors.ButterYellow,
     onSecondary         = CurioColors.DeepPlum,
     secondaryContainer  = CurioColors.ButterYellow.copy(alpha = 0.18f),
-    onSecondaryContainer = CurioColors.CreamWhite,
+    onSecondaryContainer = Color.White,
 
     tertiary           = CurioColors.SkyMint,
     onTertiary         = CurioColors.DeepPlum,
     tertiaryContainer  = CurioColors.SkyMint.copy(alpha = 0.18f),
-    onTertiaryContainer = CurioColors.CreamWhite,
+    onTertiaryContainer = Color.White,
 
-    // Warm maroon family — no blue
-    background = Color(0xFF160510),
-    onBackground = CurioColors.CreamWhite,
+    // Warm charcoal palette — clean hierarchy with clear surface steps.
+    // No muddy maroon tones; pastel accents pop against neutral dark.
+    background = Color(0xFF1A1518),
+    onBackground = Color.White,
 
-    surface                  = Color(0xFF200A18),
-    onSurface                = CurioColors.CreamWhite,
-    surfaceVariant           = Color(0xFF2D1424),
-    onSurfaceVariant         = Color(0xFFD4C4CE),
-    surfaceContainerLowest   = Color(0xFF160510),
-    surfaceContainerLow      = Color(0xFF200A18),
-    surfaceContainer         = Color(0xFF2D1424),
-    surfaceContainerHigh     = Color(0xFF3A1E30),
-    surfaceContainerHighest  = Color(0xFF4A2A3E),
+    surface                  = Color(0xFF242024),
+    onSurface                = Color.White,
+    surfaceVariant           = Color(0xFF302A30),
+    onSurfaceVariant         = Color(0xFFC8C0C8),
+    surfaceContainerLowest   = Color(0xFF1A1518),
+    surfaceContainerLow      = Color(0xFF201C20),
+    surfaceContainer         = Color(0xFF2A262A),
+    surfaceContainerHigh     = Color(0xFF353035),
+    surfaceContainerHighest  = Color(0xFF423C42),
 
     error             = CurioColors.WarmCoralRed,
-    onError           = CurioColors.CreamWhite,
+    onError           = Color.White,
 
-    outline           = CurioColors.CreamWhite.copy(alpha = 0.15f),
-    outlineVariant    = CurioColors.CreamWhite.copy(alpha = 0.08f)
+    outline           = Color.White.copy(alpha = 0.15f),
+    outlineVariant    = Color.White.copy(alpha = 0.08f)
 )
 
 /**
