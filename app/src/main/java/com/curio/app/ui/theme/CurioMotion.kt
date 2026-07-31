@@ -39,8 +39,8 @@ import androidx.compose.animation.core.spring
  *  - [Durations.Deliberate]   — 500ms (larger movements)
  *  - [Durations.Morph]        — 700ms (shape morphing transitions)
  *  - [Durations.Reveal]       — 900ms (dramatic reveal moments)
- *  - [Durations.SpinMin]      — 3500ms (low end of The Spin rotation)
- *  - [Durations.SpinMax]      — 4800ms (high end of The Spin rotation)
+ *  - [Durations.SpinMin]      — 2400ms (low end of The Spin rotation)
+ *  - [Durations.SpinMax]      — 3200ms (high end of The Spin rotation)
  *  - [Durations.Confetti]     — 600ms (reward burst lifetime)
  *  - [Durations.ConfettiLong] — 1200ms (extended burst for save success)
  *  - [Durations.RevealHold]   — 400ms (pause after landing before nav to Reveal)
@@ -114,9 +114,11 @@ object CurioMotion {
         /** Dramatic reveal moments (splash → home, topic landing). */
         const val Reveal: Int = 900
 
-        /** The Spin rotation window — deliberate, premium feel. */
-        const val SpinMin: Int = 3500
-        const val SpinMax: Int = 4800
+        /** The Spin rotation window — snappy but premium: ~30% shorter than
+         *  the original 3.5–4.8s window, paired with a sharper deceleration
+         *  curve so it whips fast then settles quickly. */
+        const val SpinMin: Int = 2400
+        const val SpinMax: Int = 3200
 
         /** Confetti / sparkle burst lifetime (per section 0.5: ~600ms total). */
         const val Confetti: Int = 600

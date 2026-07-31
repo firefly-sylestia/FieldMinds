@@ -145,7 +145,7 @@ import kotlin.random.Random
  *
  * v5.4 changes:
  * 10. **Spec-timed spin window** — the shuffle duration is now randomized
- *     inside [CurioMotion.Durations.SpinMin]..[SpinMax] (3.5–4.8s) instead
+ *     inside [CurioMotion.Durations.SpinMin]..[SpinMax] (2.4–3.2s) instead
  *     of a fixed loop, so every spin settles at a slightly different
  *     moment. The landed ticket swaps its helper copy while shuffling and
  *     then returns to the intentional "Tap to open" state.
@@ -315,10 +315,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val elapsed = System.currentTimeMillis() - start
             if (elapsed >= durationMs) break
             val progress = (elapsed.toFloat() / durationMs).coerceIn(0f, 1f)
-            // Sinusoidal ease-out: fast start that decelerates toward the
-            // end — intervals grow from ~40ms to ~400ms as it settles.
-            // (The previous curve was inverted and sped up at the end.)
-            val eased = sin(progress * Math.PI.toFloat() / 2f)
+            // Sharper sinusoidal ease-out: squaring progress inside the sine
+            // keeps the ticks fast through most of the spin, then the
+            // deceleration kicks in hard at the tail — a snappy whip instead
+            // of a long drawn-out slowdown. Intervals ~40ms -> ~400ms.
+            val eased = sin(progress * progress * Math.PI.toFloat() / 2f)
             val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
             // Soft ratcheting tick — light haptic on each card cycle.
