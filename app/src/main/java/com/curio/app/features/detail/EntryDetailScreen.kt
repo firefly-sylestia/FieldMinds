@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -114,8 +115,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
     val resolvedEntry = entry ?: return
     val cat = CurioCategories.byId(resolvedEntry.topic.categoryId)
-    var menuExpanded by remember { mutableStateOf(false) }
-    var deleteDialogVisible by remember { mutableStateOf(false) }
+    // v5.8 — saveable so rotation doesn't close the menu/dialog unexpectedly.
+    var menuExpanded by rememberSaveable { mutableStateOf(false) }
+    var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -381,10 +383,12 @@ private fun AudioPlayerBar(
     tint: Color
 ) {
     val context = LocalContext.current
-    var isPlaying by remember { mutableStateOf(false) }
-    var currentPosition by remember { mutableLongStateOf(0L) }
-    var duration by remember { mutableLongStateOf(0L) }
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
+    // v5.8 — saveable so rotation keeps the playback position + playing
+    // state; the recreated player below re-seeks/resumes from them.
+    var isPlaying by rememberSaveable { mutableStateOf(false) }
+    var currentPosition by rememberSaveable { mutableLongStateOf(0L) }
+    var duration by rememberSaveable { mutableLongStateOf(0L) }
+    var sliderPosition by rememberSaveable { mutableFloatStateOf(0f) }
 
     // Extract waveform samples off the main thread
     val waveformSamples by produceState<FloatArray>(
@@ -402,6 +406,13 @@ private fun AudioPlayerBar(
             prepare()
             playWhenReady = false
         }
+    }
+
+    // v5.8 — after rotation the player is recreated fresh; resume from the
+    // saveable position/state so a voice note keeps its place.
+    LaunchedEffect(player) {
+        if (currentPosition > 0L) player.seekTo(currentPosition)
+        if (isPlaying) player.play()
     }
 
     // ── Observe player state ────────────────────────────────────────────

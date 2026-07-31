@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -62,6 +63,9 @@ fun TopicHistoryScreen(navController: NavController) {
     }
     val entries = entriesState.value
     val grouped = remember(entries) { entries.groupBy { it.dayLabel } }
+    // v5.8 — saveable-backed: the history list keeps its scroll position
+    // across rotation and nav-away/back.
+    val listState = rememberLazyListState()
 
     Column(
         modifier = Modifier
@@ -97,6 +101,7 @@ fun TopicHistoryScreen(navController: NavController) {
 
         ScreenEntrance {
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f),

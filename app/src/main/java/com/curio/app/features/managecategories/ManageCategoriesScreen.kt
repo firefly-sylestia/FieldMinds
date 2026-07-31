@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshot.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -54,11 +57,36 @@ import com.curio.app.ui.theme.CurioIcons
  * toggling visibility is reactive in the UI without mutating the source
  * list directly.
  */
+
+// v5.8 — saveable: persists category order + visibility toggles as
+// "id.name:hidden" tokens so rotation doesn't wipe the user's edits.
+private val CategoryListSaver = listSaver<SnapshotStateList<CurioCategory>, String>(
+    save = { list -> list.map { "${it.id.name}:${it.isHidden}" } },
+    restore = { tokens ->
+        val byId = CurioCategories.all.associateBy { it.id }
+        val restored = tokens.mapNotNull { token ->
+            val parts = token.split(':')
+            if (parts.size != 2) return@mapNotNull null
+            val id = CategoryId.values().firstOrNull { it.name == parts[0] }
+            byId[id]?.copy(isHidden = parts[1] == "true")
+        }
+        // Keep the saved order, then append any categories the token list
+        // predates (e.g. a category added in a newer app version).
+        val savedIds = restored.map { it.id }.toSet()
+        mutableStateListOf<CurioCategory>().apply {
+            addAll(restored)
+            addAll(CurioCategories.all.filter { it.id !in savedIds })
+        }
+    }
+)
+
 @Composable
 fun ManageCategoriesScreen(navController: NavController) {
-    val items = remember {
+    val items = rememberSaveable(saver = CategoryListSaver) {
         mutableStateListOf<CurioCategory>().apply { addAll(CurioCategories.all) }
     }
+    // v5.8 — saveable-backed: keep the list's scroll position on rotation.
+    val listState = rememberLazyListState()
 
     Column(
         modifier = Modifier
@@ -94,6 +122,7 @@ fun ManageCategoriesScreen(navController: NavController) {
         // ── List ──────────────────────────────────────────────────────────
         ScreenEntrance {
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f),

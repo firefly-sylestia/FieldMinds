@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,7 +117,8 @@ fun TopicRevealScreen(
         value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
     }
 
-    var confettiTrigger by remember { mutableIntStateOf(0) }
+    // v5.8 — saveable so a rotation mid-celebration doesn't drop the confetti burst.
+    var confettiTrigger by rememberSaveable { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(300)
         confettiTrigger++
