@@ -714,9 +714,9 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onManage: () -> Unit, o
                 val category = CurioCategories.byId(categoryId)
                 Surface(shape = RoundedCornerShape(16.dp), color = category.accent.copy(alpha = 0.14f)) {
                     Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                        CurioIcon(category.iconGlyph, null, tint = category.accent, size = 20.dp)
+                        CurioIcon(category.iconGlyph, null, tint = CurioColors.DeepPlum, size = 20.dp)
                         Spacer(Modifier.height(4.dp))
-                        Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = category.accent, maxLines = 1)
+                        Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = CurioColors.DeepPlum, maxLines = 1)
                         Text("$count saved", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }

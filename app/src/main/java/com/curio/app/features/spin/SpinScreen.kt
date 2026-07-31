@@ -569,13 +569,13 @@ private fun TopBar(
             ) {
                 CurioIcon(
                     cat.iconGlyph, null,
-                    tint = cat.accent,
+                    tint = CurioColors.DeepPlum,
                     size = 16.dp
                 )
                 Text(
                     text = cat.displayName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = cat.accent,
+                    color = CurioColors.DeepPlum,
                     maxLines = 1
                 )
             }
@@ -592,7 +592,7 @@ private fun TopBar(
                 Text(
                     text = "$filteredCount / $poolCount",
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = cat.accent,
+                    color = CurioColors.DeepPlum,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                 )
             }
@@ -891,14 +891,14 @@ private fun FilterSheet(
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = cat.accent,
-                    contentColor = Color.White
+                    contentColor = CurioColors.DeepPlum
                 ),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 18.dp)
+                CurioIcon(CurioIcons.Check, null, tint = CurioColors.DeepPlum, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
@@ -929,7 +929,7 @@ private fun ActiveFilterChip(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = Color.White
+                color = CurioColors.DeepPlum
             )
             Surface(
                 shape = CircleShape,
@@ -938,7 +938,7 @@ private fun ActiveFilterChip(
             ) {
                 CurioIcon(
                     CurioIcons.Close, null,
-                    tint = Color.White,
+                    tint = CurioColors.DeepPlum,
                     size = 14.dp,
                     modifier = Modifier.padding(2.dp)
                 )
@@ -977,13 +977,12 @@ private fun CompactChip(
             .fillMaxWidth()
             .clip(RoundedCornerShape(50))
             .clickable(onClick = onClick)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
-            ),
-            color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+    ) {            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
+                ),
+                color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -1551,15 +1550,15 @@ private fun BottomCta(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
-                        contentColor = Color.White,
-                        disabledContainerColor = cat.tint,
-                        disabledContentColor = Color.White.copy(alpha = 0.6f)
+                        contentColor = CurioColors.DeepPlum,
+                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
+                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
                 ) {
                     CurioIcon(
                         if (showAgain) CurioIcons.Refresh else CurioIcons.Casino, null,
-                        tint = Color.White,
+                        tint = CurioColors.DeepPlum,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
@@ -1586,16 +1585,16 @@ private fun BottomCta(
                     onClick = onCategories,
                     shape = RoundedCornerShape(50),
                     border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        contentColor = cat.accent
-                    ),
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    CurioIcon(
-                        cat.iconGlyph, null,
-                        tint = cat.accent,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    contentColor = CurioColors.DeepPlum
+                ),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                CurioIcon(
+                    cat.iconGlyph, null,
+                    tint = CurioColors.DeepPlum,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
@@ -1624,14 +1623,14 @@ private fun BottomCta(
                     BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    contentColor = cat.accent
+                    contentColor = CurioColors.DeepPlum
                 ),
                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 CurioIcon(
                     CurioIcons.Search, null,
-                    tint = cat.accent,
+                    tint = CurioColors.DeepPlum,
                     size = 18.dp
                 )
                 Spacer(Modifier.width(6.dp))

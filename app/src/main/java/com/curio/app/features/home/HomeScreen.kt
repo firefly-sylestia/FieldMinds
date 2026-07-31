@@ -524,7 +524,7 @@ private fun StatPill(
     value: String,
     tint: Color
 ) {
-    // Opaque paper tile with a defined edge and modest elevation.
+    // Solid card tile with accent edge and DeepPlum text for contrast.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
@@ -539,12 +539,12 @@ private fun StatPill(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                CurioIcon(glyph, null, tint = tint, size = 16.dp)
+                CurioIcon(glyph, null, tint = CurioColors.DeepPlum, size = 16.dp)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     value,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                    color = tint,
+                    color = CurioColors.DeepPlum,
                     maxLines = 1
                 )
             }

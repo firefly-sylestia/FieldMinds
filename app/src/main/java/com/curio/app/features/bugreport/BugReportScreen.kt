@@ -158,7 +158,7 @@ fun BugReportScreen(navController: NavController) {
                 shape = RoundedCornerShape(28.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = CurioColors.CoralBlush,
-                    contentColor = Color.White
+                    contentColor = CurioColors.DeepPlum
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(vertical = 16.dp)

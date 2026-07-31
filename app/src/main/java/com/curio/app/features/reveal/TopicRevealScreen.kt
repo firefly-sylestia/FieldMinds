@@ -203,13 +203,13 @@ fun TopicRevealScreen(
                         resolved.tags.take(4).forEach { tag ->
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surfaceContainerLow,
-                                border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f))
+                                color = cat.accent.copy(alpha = 0.18f),
+                                shadowElevation = 1.dp
                             ) {
                                 Text(
                                     text = tag,
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = cat.accent,
+                                    color = CurioColors.DeepPlum,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
@@ -247,9 +247,9 @@ fun TopicRevealScreen(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
-                        contentColor = Color.White,
-                        disabledContainerColor = cat.tint,
-                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
+                        contentColor = CurioColors.DeepPlum,
+                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
+                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
                     modifier = Modifier
@@ -426,7 +426,7 @@ private fun TeaserCard(
                 Text(
                     text = "One quirky fact to get you curious",
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = cat.accent
+                    color = CurioColors.DeepPlum
                 )
             }
             Spacer(Modifier.height(10.dp))
@@ -472,7 +472,7 @@ private fun ActionPromptCard(
                     CurioIcon(
                         name = verbIcon(action.verb),
                         contentDescription = null,
-                        tint = cat.accent,
+                        tint = CurioColors.DeepPlum,
                         size = 18.dp,
                         modifier = Modifier.padding(8.dp)
                     )
@@ -481,7 +481,7 @@ private fun ActionPromptCard(
                     Text(
                         text = "${action.verb} ${action.targetName}",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = cat.accent,
+                        color = CurioColors.DeepPlum,
                         maxLines = 2,
                         softWrap = true,
                         overflow = TextOverflow.Ellipsis
