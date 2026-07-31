@@ -70,7 +70,7 @@ fun SettingsScreen(navController: NavController) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val locale = LocalLocale.current.platformLocale
     var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
-    val reminderEnabled by AppPreferences.reminderEnabledState
+    val reminderEnabled = AppPreferences.reminderEnabledState
     var reminderHour by remember { mutableStateOf(AppPreferences.getReminderHour(context)) }
     var audioQuality by remember { mutableStateOf(AudioQualitySettings.get(context)) }
     var displayName by remember { mutableStateOf(AppPreferences.getDisplayName(context)) }

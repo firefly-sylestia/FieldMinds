@@ -50,3 +50,24 @@ The CI debug build compiled successfully but failed `lintDebug` on `SettingsScre
 - Targeted static assertions confirm the old locale call, redundant assertion, and always-true condition are gone.
 - Code review reports no actionable blockers.
 - Local Gradle commands were not run because repository instructions forbid local Android builds; CI remains the source of truth.
+
+---
+
+# CI compile repair — reminder state and BuildConfig
+
+## Failure
+
+The next CI build passed topic validation and resource processing but failed `compileDebugKotlin` because Home, Profile, and Settings used `by AppPreferences.reminderEnabledState` even though the preference exposes a Boolean property, and Profile/Settings referenced `com.curio.app.BuildConfig.VERSION_NAME` while generated BuildConfig was disabled.
+
+## Fixes
+
+- Changed Home, Profile, and Settings to read `AppPreferences.reminderEnabledState` directly as a Boolean.
+- Enabled `buildConfig = true` in the active `app` module so `com.curio.app.BuildConfig.VERSION_NAME` is generated.
+
+## Verification
+
+- `scripts/check_braces.py` passes for HomeScreen, ProfileScreen, and SettingsScreen.
+- `git diff --check` passes.
+- Static assertions confirm no delegated reminder reads remain and BuildConfig generation is enabled.
+- Code review reports no actionable blockers.
+- Local Gradle commands were not run because repository instructions forbid local Android builds; CI remains the source of truth.

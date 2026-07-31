@@ -98,7 +98,7 @@ fun ProfileScreen(navController: NavController) {
     var displayName by remember { mutableStateOf(AppPreferences.getDisplayName(context)) }
     var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
     var audioQuality by remember { mutableStateOf(AudioQualitySettings.get(context)) }
-    val reminderEnabled by AppPreferences.reminderEnabledState
+    val reminderEnabled = AppPreferences.reminderEnabledState
     var reminderHour by remember { mutableIntStateOf(AppPreferences.getReminderHour(context)) }
     var showNameDialog by remember { mutableStateOf(false) }
     var showQualityDialog by remember { mutableStateOf(false) }
