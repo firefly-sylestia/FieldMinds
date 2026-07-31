@@ -1290,10 +1290,14 @@ private fun PeekCard(
         AnimatedContent(
             targetState = topic,
             transitionSpec = {
-                slideInVertically { height -> if (isTop) -height else height } +
-                fadeIn(animationSpec = tween(160)) togetherWith
-                slideOutVertically { height -> if (isTop) height else -height } +
-                fadeOut(animationSpec = tween(120))
+                slideInVertically(
+                    animationSpec = tween(240, easing = FastOutSlowInEasing)
+                ) { height -> if (isTop) -height / 3 else height / 3 } +
+                fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
+                slideOutVertically(
+                    animationSpec = tween(200, easing = FastOutSlowInEasing)
+                ) { height -> if (isTop) height / 3 else -height / 3 } +
+                fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
             },
             label = "peekSlot_$slot"
         ) { currentTopic ->
