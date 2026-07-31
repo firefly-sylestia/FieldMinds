@@ -381,6 +381,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         )
 
+        // ── Breathing room — keeps the header off the deck ────────────
+        Spacer(Modifier.height(14.dp))
+
         // ── 2. Carousel (interactive cards) ─────────────────────────
         // Tapping the center card opens a landed topic only; the bottom
         // Shuffle CTA owns starting or re-starting the shuffle.
@@ -506,7 +509,7 @@ private fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CurioBackButton(onClick = onBack)
