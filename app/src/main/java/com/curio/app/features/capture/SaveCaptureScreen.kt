@@ -267,7 +267,7 @@ fun SaveCaptureScreen(
             ) {
                     FormatBodyForCategory(
                         category = cat,
-                        onCanSaveChange = { canSave = it },
+                        onCanSaveChange = { canSave = it && topic != null },
                         onDataChanged = { currentCaptureData = it }
                     )
             }

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
@@ -55,9 +56,12 @@ import com.curio.app.ui.theme.CurioIcons
  */
 @Composable
 fun LightboxScreen(imageUrl: String, navController: NavController) {
-    // Edge case — blank/empty image URL: nothing to view, return silently.
+    // Edge case — blank/empty image URL: nothing to view, pop back
+    // silently; if Lightbox is somehow the root, fall back to Home.
     LaunchedEffect(imageUrl) {
-        if (imageUrl.isBlank()) navController.popBackStack()
+        if (imageUrl.isBlank() && !navController.popBackStack()) {
+            navController.navigate(CurioRoutes.HOME) { launchSingleTop = true }
+        }
     }
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
