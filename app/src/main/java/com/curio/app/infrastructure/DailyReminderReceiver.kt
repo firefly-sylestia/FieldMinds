@@ -16,7 +16,7 @@ import com.curio.app.R
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.DailyReminderScheduler
 
-/** Delivers the user's daily spin reminder alarm. */
+/** Delivers the user's daily shuffle reminder alarm. */
 class DailyReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (AppPreferences.isReminderEnabled(context)) {
@@ -41,7 +41,7 @@ class DailyReminderReceiver : BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("A little curiosity awaits")
-            .setContentText("Take a moment to spin into something new.")
+            .setContentText("Take a moment to shuffle into something new.")
             .setContentIntent(openAppIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -55,7 +55,7 @@ class DailyReminderReceiver : BroadcastReceiver() {
         manager.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_ID,
-                "Daily spin reminders",
+                "Daily shuffle reminders",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "A gentle daily nudge to discover a new topic."

@@ -95,7 +95,7 @@ import java.util.Calendar
  *   6. **Recently explored** — header row + 2-col grid of recent entry
  *      cards, or a beautiful empty-state card prompting the first spin.
  *   7. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
- *      card suggesting the user try a daily spin reminder, navigating to
+ *      card suggesting the user try a daily shuffle reminder, navigating to
  *      Settings.
  *
  *  The screen still hosts the `ModalNavigationDrawer` for secondary
@@ -797,7 +797,7 @@ private fun ReminderNudgeCard(onTap: () -> Unit) {
                 }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        "Try a daily spin reminder",
+                        "Try a daily shuffle reminder",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = fg
                     )

@@ -194,7 +194,7 @@ private val StringSetSaver = listSaver<Set<String>, String>(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ShuffleScreen(categorySlug: String?, navController: NavController) {
+fun SpinScreen(categorySlug: String?, navController: NavController) {
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
     // v5.7.1 — the slug branch is CurioCategory?; the prefs fallback returns
@@ -203,7 +203,7 @@ fun ShuffleScreen(categorySlug: String?, navController: NavController) {
     // vs the saver's MutableState<CurioCategory> → CI compile failure).
     val initialCat = remember(categorySlug) {
         categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: CurioCategories.byId(AppPreferences.getLastShuffleCategory(context))
+            ?: CurioCategories.byId(AppPreferences.getLastSpinCategory(context))
     }
 
     // v5.5 — remember which category this session opened in, so the plain
@@ -212,7 +212,7 @@ fun ShuffleScreen(categorySlug: String?, navController: NavController) {
     LaunchedEffect(Unit) {
         categorySlug?.let { slug ->
             CurioCategories.byRouteSlug(slug)?.let { resolved ->
-                AppPreferences.setLastShuffleCategory(context, resolved.id)
+                AppPreferences.setLastSpinCategory(context, resolved.id)
             }
         }
     }
@@ -478,7 +478,7 @@ fun ShuffleScreen(categorySlug: String?, navController: NavController) {
                 activeCategory = c
                 // v5.5 — persist so the Shuffle tab reopens on this category
                 // after the app is killed and relaunched.
-                AppPreferences.setLastShuffleCategory(context, c.id)
+                AppPreferences.setLastSpinCategory(context, c.id)
                 showCategoryPicker = false
             },
             onBrowseAll = {
@@ -995,7 +995,7 @@ private fun Carousel(
 ) {
     val poolSize = displayPool.size
     Box(
-        modifier = modifier.height(396.dp),
+        modifier = modifier.height(430.dp),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -1018,6 +1018,7 @@ private fun Carousel(
                         cat = cat,
                         landed = landedTopic != null,
                         opening = opening,
+                        shuffling = shuffling,
                         landScale = landScale,
                         enabled = enabled,
                         onTap = onCardTap
@@ -1086,16 +1087,27 @@ private fun HeroTicketCard(
     cat: CurioCategory,
     landed: Boolean,
     opening: Boolean,
+    shuffling: Boolean,
     landScale: Float,
     enabled: Boolean,
     onTap: () -> Unit
 ) {
-    val w = 270.dp
-    val h = 292.dp
+    val w = 292.dp
+    val h = 326.dp
     val ticketGradient = remember(cat.id) {
         if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
         else CurioGradients.cardGradient(accent)
     }
+
+    val shuffleTilt by rememberInfiniteTransition(label = "heroShuffleTilt").animateFloat(
+        initialValue = -2.8f,
+        targetValue = 2.8f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(180, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "heroShuffleTiltValue"
+    )
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
     // Inner clip layer keeps rounded corners crisp during scale.
@@ -1103,8 +1115,10 @@ private fun HeroTicketCard(
         modifier = Modifier
             .size(w + 24.dp, h + 24.dp)
             .graphicsLayer {
-                scaleX = if (landed) landScale else 1f
-                scaleY = if (landed) landScale else 1f
+                scaleX = if (landed) landScale else if (shuffling) 1.03f else 1f
+                scaleY = if (landed) landScale else if (shuffling) 1.03f else 1f
+                rotationZ = if (shuffling) shuffleTilt else 0f
+                translationY = if (shuffling) -8.dp.toPx() else 0f
             }
             .zIndex(10f)
             .then(
@@ -1125,7 +1139,7 @@ private fun HeroTicketCard(
             Surface(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
-                shadowElevation = if (landed) 16.dp else 10.dp,
+                shadowElevation = if (landed || shuffling) 22.dp else 12.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
@@ -1155,7 +1169,7 @@ private fun HeroTicketCard(
                             .padding(20.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        // Subtype badge + landed check
+                        // Deck status badge + landed check
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -1166,7 +1180,11 @@ private fun HeroTicketCard(
                                 color = Color.White.copy(alpha = 0.22f)
                             ) {
                                 Text(
-                                    text = topic?.subtype ?: "…",
+                                    text = when {
+                                        shuffling -> "Shuffling deck"
+                                        topic != null -> topic.subtype
+                                        else -> "Ready"
+                                    },
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
                                     color = Color.White,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
@@ -1248,7 +1266,7 @@ private fun HeroTicketCard(
                                     size = 16.dp
                                 )
                                 Text(
-                                    text = if (landed) "Tap to open" else "Tap to spin",
+                                    text = if (landed) "Tap to open" else "Tap to shuffle",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
                                     color = Color.White.copy(alpha = 0.88f)
                                 )
@@ -1274,45 +1292,52 @@ private fun PeekCard(
     topic: CurioTopic?,
     landed: Boolean
 ) {
-    val isTop = slot == -1
-    val yOff = if (isTop) -150f else 150f
-    val w = 300.dp
-    val h = 96.dp
+    val isLeft = slot == -1
+    val xOff = if (isLeft) -42f else 42f
+    val yOff = 54f
+    val w = 252.dp
+    val h = 278.dp
 
     Box(
         modifier = Modifier
             .size(w, h)
             .graphicsLayer {
+                translationX = xOff.dp.toPx()
                 translationY = yOff.dp.toPx()
+                rotationZ = if (isLeft) -8f else 8f
+                scaleX = 0.92f
+                scaleY = 0.92f
+                alpha = 0.82f
             }
-            .zIndex(5f)
+            .zIndex(3f)
     ) {
         AnimatedContent(
             targetState = topic,
             transitionSpec = {
                 slideInVertically(
                     animationSpec = tween(240, easing = FastOutSlowInEasing)
-                ) { height -> if (isTop) -height / 3 else height / 3 } +
+                ) { height -> if (isLeft) -height / 3 else height / 3 } +
                 fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
                 slideOutVertically(
                     animationSpec = tween(200, easing = FastOutSlowInEasing)
-                ) { height -> if (isTop) height / 3 else -height / 3 } +
+                ) { height -> if (isLeft) height / 3 else -height / 3 } +
                 fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
             },
             label = "peekSlot_$slot"
         ) { currentTopic ->
             Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerLow,
-                shadowElevation = if (landed) 6.dp else 3.dp,
-                tonalElevation = 1.dp,
+                shape = RoundedCornerShape(30.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                shadowElevation = if (landed) 12.dp else 8.dp,
+                tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 14.dp, vertical = 10.dp),
-                    verticalArrangement = if (isTop) Arrangement.Top else Arrangement.Bottom
+                        .background(Brush.verticalGradient(CurioGradients.cardGradient(accent)))
+                        .padding(18.dp),
+                    verticalArrangement = Arrangement.Bottom
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -1321,13 +1346,13 @@ private fun PeekCard(
                         CurioIcon(
                             name = glyph,
                             contentDescription = null,
-                            tint = accent.copy(alpha = 0.55f),
+                            tint = Color.White.copy(alpha = 0.72f),
                             size = 20.dp
                         )
                         Text(
                             text = currentTopic?.name ?: "…",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = Color.White,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -1563,8 +1588,9 @@ private fun BottomCta(
                 OutlinedButton(
                     onClick = onCategories,
                     shape = RoundedCornerShape(50),
+                    border = null,
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
@@ -1593,8 +1619,9 @@ private fun BottomCta(
                 OutlinedButton(
                     onClick = onFilter,
                     shape = RoundedCornerShape(50),
+                    border = null,
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),

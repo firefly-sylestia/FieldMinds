@@ -309,7 +309,7 @@ fun SettingsScreen(navController: NavController) {
                 item { SectionHeader("Notifications") }
                 item {
                     SettingsToggle(
-                        CurioIcons.Notifications, "Daily spin reminder",
+                        CurioIcons.Notifications, "Daily shuffle reminder",
                         if (reminderEnabled) "Reminder at ${String.format("%02d:00", reminderHour)}" else "Off",
                         reminderEnabled,
                         onToggle = ::setReminder

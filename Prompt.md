@@ -21,3 +21,10 @@ User asked to work only in `app/` Curio and fully redo UI/UX with Material Expre
 - Static ripgrep checks found no user-facing quoted Spin labels remaining in Curio Kotlin sources.
 - Static ripgrep checks found no accidental Shuffle duration/API renames.
 - Gradle build/compile/lint/test commands were not run because root DOX forbids Android build commands in this environment.
+
+
+## Follow-up Fix
+
+- Fixed CI compile errors introduced by the first Shuffle rename pass: restored the public `SpinScreen` composable name for NavHost compatibility, restored `AppPreferences.get/setLastSpinCategory`, re-added `detectTapGestures`, and re-added the Lightbox `size` import.
+- Expanded the Shuffle page redesign: hero card is larger and sits visually on top of two full card backs, shuffle motion now tilts/lifts the active card, bottom actions use filled expressive controls, and idle copy says tap to shuffle.
+- Further polished Profile with opaque expressive gradient hero/stat cards and changed reminder copy to Shuffle.

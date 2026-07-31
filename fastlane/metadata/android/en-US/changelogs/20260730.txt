@@ -1,1 +1,1 @@
-Renamed Spin to Shuffle and refreshed Curio with Material Expressive-style layouts, stronger midnight dark mode, redesigned save/detail presentation, real pinch-zoom image lightbox support for mood boards and field notes, and more reliable capture saves.
+Renamed Spin to Shuffle and expanded the Material Expressive redesign with stacked Shuffle deck cards, animated shuffle motion, refreshed Profile cards, stronger midnight dark mode, real pinch-zoom image lightbox support, and more reliable capture saves.
