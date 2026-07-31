@@ -142,6 +142,14 @@ import kotlin.random.Random
  *     navigation (Spin → Reveal → back), rotation and process death.
  *     The landed topic stays transient on purpose: restoring it would
  *     re-trigger auto-open when popping back from Reveal.
+ *
+ * v5.4 changes:
+ * 10. **Spec-timed spin window** — the shuffle duration is now randomized
+ *     inside [CurioMotion.Durations.SpinMin]..[SpinMax] (3.5–4.8s) instead
+ *     of a fixed loop, so every spin settles at a slightly different
+ *     moment. The auto-open pause now flags `isOpening`, swapping the
+ *     landed ticket's hint to a pulsing "Opening…" before it transitions
+ *     into Reveal.
  */
 // ═══════════════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -216,6 +224,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
     var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
+    // v5.4 — true only during the brief auto-open pause before navigating
+    // to Reveal; the landed ticket swaps its hint to a pulsing "Opening…".
+    var isOpening by remember { mutableStateOf(false) }
     var recentTopicIds by rememberSaveable(activeCategory.id, stateSaver = StringSetSaver) {
         mutableStateOf(setOf<String>())
     }
@@ -237,6 +248,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     LaunchedEffect(activeCategory.id) {
         landedTopic = null
         shuffling = false
+        isOpening = false
     }
 
     // ── Improved shuffle logic — sinusoidal ease-out deceleration ─────
@@ -244,7 +256,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         if (shuffleCount == 0 || filteredPool.isEmpty()) return@LaunchedEffect
         shuffling = true
         landedTopic = null
-        val durationMs = 2800L
+        isOpening = false
+        // v5.4 — randomized within the spec's spin window; every spin
+        // settles at a slightly different moment like a real wheel.
+        val durationMs = Random.nextLong(
+            CurioMotion.Durations.SpinMin.toLong(),
+            CurioMotion.Durations.SpinMax.toLong() + 1
+        )
         val start = System.currentTimeMillis()
         var tick = 0
         while (true) {
@@ -285,7 +303,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // makes this a no-op if the user already tapped the card open.
     LaunchedEffect(landedTopic) {
         val landed = landedTopic ?: return@LaunchedEffect
+        // v5.4 — flag the RevealHold pause so the ticket shows a pulsing
+        // "Opening…" hint; cleared just before navigation fires.
+        // launchSingleTop makes this a no-op if the user already tapped
+        // the card open, and popping back from Reveal doesn't re-fire.
+        isOpening = true
         delay(CurioMotion.Durations.RevealHold.toLong())
+        isOpening = false
         navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, landed.name)) {
             launchSingleTop = true
         }
@@ -327,6 +351,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             cycleIndex = cycleIndex,
             shuffling = shuffling,
             landedTopic = landedTopic,
+            opening = isOpening,
             landScale = landScale,
             enabled = filteredPool.isNotEmpty() && !shuffling,
             onCardTap = {
@@ -896,6 +921,7 @@ private fun Carousel(
     cycleIndex: Int,
     shuffling: Boolean,
     landedTopic: CurioTopic?,
+    opening: Boolean,
     landScale: Float,
     enabled: Boolean,
     onCardTap: () -> Unit,
@@ -925,6 +951,7 @@ private fun Carousel(
                         topic = topic,
                         cat = cat,
                         landed = landedTopic != null,
+                        opening = opening,
                         landScale = landScale,
                         enabled = enabled,
                         onTap = onCardTap
@@ -992,6 +1019,7 @@ private fun HeroTicketCard(
     topic: CurioTopic?,
     cat: CurioCategory,
     landed: Boolean,
+    opening: Boolean,
     landScale: Float,
     enabled: Boolean,
     onTap: () -> Unit
@@ -1140,21 +1168,32 @@ private fun HeroTicketCard(
                             }
                         }
 
-                        // Tap hint — flips to "tap to open" once landed
+                        // Tap hint — "tap to spin" idle, "tap to open" once
+                        // landed, and a pulsing "Opening…" during the brief
+                        // auto-open pause (v5.4).
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            CurioIcon(
-                                if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
-                                tint = Color.White.copy(alpha = 0.9f),
-                                size = 16.dp
-                            )
-                            Text(
-                                text = if (landed) "Tap to open" else "Tap to spin",
-                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                color = Color.White.copy(alpha = 0.9f)
-                            )
+                            if (opening) {
+                                OpeningPulseDot()
+                                Text(
+                                    text = "Opening…",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = Color.White.copy(alpha = 0.9f)
+                                )
+                            } else {
+                                CurioIcon(
+                                    if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
+                                    tint = Color.White.copy(alpha = 0.9f),
+                                    size = 16.dp
+                                )
+                                Text(
+                                    text = if (landed) "Tap to open" else "Tap to spin",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = Color.White.copy(alpha = 0.9f)
+                                )
+                            }
                         }
                     }
                 }
@@ -1383,6 +1422,35 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+/**
+ * Small pulsing dot shown on the landed ticket during the auto-open
+ * pause — the subtle heartbeat that says the reveal is about to happen.
+ */
+@Composable
+private fun OpeningPulseDot() {
+    val infinite = rememberInfiniteTransition(label = "openingPulse")
+    val pulse by infinite.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(320, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "openingPulseScale"
+    )
+    Box(
+        modifier = Modifier
+            .size(7.dp)
+            .graphicsLayer {
+                scaleX = 1f + pulse * 0.5f
+                scaleY = 1f + pulse * 0.5f
+                this.alpha = 1f - pulse * 0.4f
+            }
+            .clip(CircleShape)
+            .background(Color.White.copy(alpha = 0.9f))
+    )
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
