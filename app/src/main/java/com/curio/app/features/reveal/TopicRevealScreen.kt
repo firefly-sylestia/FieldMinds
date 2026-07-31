@@ -342,7 +342,7 @@ private fun HeroCard(
                     .padding(end = 0.dp)
             )
             // ── Action badge (verb + duration) — white pill on ticket ───
-            if (action != null && resolved != null) {
+            if (action != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,

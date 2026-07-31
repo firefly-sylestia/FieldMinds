@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.text.font.FontWeight
@@ -61,13 +62,13 @@ import com.curio.app.ui.theme.CurioIcons
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(navController: NavController) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val locale = LocalLocale.current.platformLocale
     var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
     val reminderEnabled by AppPreferences.reminderEnabledState
     var reminderHour by remember { mutableStateOf(AppPreferences.getReminderHour(context)) }
@@ -358,7 +359,7 @@ fun SettingsScreen(navController: NavController) {
                 }
                 item {
                     val whenLast = if (lastBackupAt > 0L) {
-                        SimpleDateFormat("MMM d, yyyy · h:mm a", Locale.getDefault())
+                        SimpleDateFormat("MMM d, yyyy · h:mm a", locale)
                             .format(Date(lastBackupAt))
                     } else "Never"
                     SettingsInfo(CurioIcons.History, "Last backup", whenLast)

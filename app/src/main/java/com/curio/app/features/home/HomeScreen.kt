@@ -237,7 +237,7 @@ fun HomeScreen(navController: NavController) {
             // ── 3. Quest card ───────────────────────────────────────────
             val chosen = selectedCategory
             val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
-            val accent = if (isWildcard) CurioColors.CoralBlush else chosen!!.accent
+            val accent = if (isWildcard) CurioColors.CoralBlush else chosen?.accent ?: CurioColors.CoralBlush
             Surface(
                     onClick = {
                         if (chosen == null || chosen.id == CategoryId.WILDCARD) {

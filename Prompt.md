@@ -27,3 +27,26 @@ Replace the transparent glass-style visual treatment on Home, The Spin, and Topi
 
 - Final Home category-chip glyph tiles were changed to opaque paper surfaces while retaining accent borders and icon colors.
 - Changes are ready to commit and push on branch `revamp`.
+
+---
+
+# CI lint repair — completion summary
+
+## Failure
+
+The CI debug build compiled successfully but failed `lintDebug` on `SettingsScreen.kt` because `Locale.getDefault()` was read inside a composable (`NonObservableLocale`). CI also reported an unnecessary Home non-null assertion and an always-true Topic Reveal condition.
+
+## Fixes
+
+- Replaced `Locale.getDefault()` with observable `LocalLocale.current.platformLocale` in SettingsScreen date formatting.
+- Removed the unused `java.util.Locale` import.
+- Replaced Home's redundant `chosen!!` accent access with a nullable-safe fallback.
+- Simplified Topic Reveal's action badge condition from `action != null && resolved != null` to `action != null`.
+
+## Verification
+
+- `scripts/check_braces.py` passes for SettingsScreen, HomeScreen, and TopicRevealScreen.
+- `git diff --check` passes.
+- Targeted static assertions confirm the old locale call, redundant assertion, and always-true condition are gone.
+- Code review reports no actionable blockers.
+- Local Gradle commands were not run because repository instructions forbid local Android builds; CI remains the source of truth.
