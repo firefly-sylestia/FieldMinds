@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio pastel gradient-card launcher mark.
+    Curio gradient-card launcher mark — warm pastel palette.
 
-    A solid rounded-rectangle card split into two bands — deep maroon
-    on top and soft pink coral below.  No glyph — the card itself is
-    the mark.  Card sits within the adaptive safe zone (y=30).
+    A rounded-rectangle card with a gradient from deep maroon through
+    soft pink, peach, and butter yellow.  A subtle centre-line divide
+    hints at the "card" shape.  Everything stays inside the adaptive
+    safe zone (y=28..80).
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -12,13 +13,36 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Top band: deep maroon, slightly lighter than the background. -->
+    <!-- Rounded-rect card outline — soft white stroke for definition -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5"
+        android:pathData="M38,28 L70,28 A12,12 0 0,1 82,40 L82,72 A12,12 0 0,1 70,84 L38,84 A12,12 0 0,1 26,72 L26,40 A12,12 0 0,1 38,28 Z" />
+
+    <!-- Top third — deep maroon / warm plum -->
     <path
         android:fillColor="#4B1522"
-        android:pathData="M42,30 L66,30 A10,10 0 0,1 76,40 L76,56 L32,56 L32,40 A10,10 0 0,1 42,30 Z" />
+        android:pathData="M26,40 L26,52 L82,52 L82,40 A12,12 0 0,0 70,28 L38,28 A12,12 0 0,0 26,40 Z" />
 
-    <!-- Bottom band: soft pink coral — the signature warm pastel. -->
+    <!-- Middle band — soft pink coral -->
     <path
         android:fillColor="#FF8FA3"
-        android:pathData="M32,56 L76,56 L76,72 A10,10 0 0,1 66,82 L42,82 A10,10 0 0,1 32,72 Z" />
+        android:pathData="M26,52 L82,52 L82,64 L26,64 Z" />
+
+    <!-- Bottom third — warm peach / butter blend -->
+    <path
+        android:fillColor="#FFD97D"
+        android:pathData="M26,64 L82,64 L82,72 A12,12 0 0,1 70,84 L38,84 A12,12 0 0,1 26,72 Z" />
+
+    <!-- Tiny sparkle dot — mint aperture accent -->
+    <path
+        android:fillColor="#8FE3CF"
+        android:pathData="M50,38 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 Z" />
+
+    <!-- Small sparkle dot 2 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.6"
+        android:pathData="M62,46 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0 Z" />
 </vector>

@@ -47,8 +47,8 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 
 /**
- * Full-screen Category Picker — solid gradient tiles with a large
- * watermark icon and bold title text.  No small icon container.
+ * Full-screen Category Picker — gradient tiles with a large watermark
+ * icon tucked into the bottom-right corner and bold coloured title text.
  */
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
@@ -169,17 +169,17 @@ private fun CategoryTile(
                     RoundedCornerShape(28.dp)
                 )
         ) {
-            // Large watermark icon — the only icon on the tile
+            // Watermark icon — tucked into the bottom-right corner
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.25f),
-                size = 130.dp,
+                tint = Color.White.copy(alpha = 0.22f),
+                size = 100.dp,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 4.dp)
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 12.dp, bottom = 40.dp)
             )
-            // Title — bold, larger, centred
+            // Title — bold, larger, coloured with category accent
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -190,8 +190,8 @@ private fun CategoryTile(
                     text = category.displayName,
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 24.sp,
-                        lineHeight = 28.sp
+                        fontSize = 28.sp,
+                        lineHeight = 32.sp
                     ),
                     color = Color.White
                 )

@@ -51,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -524,7 +525,7 @@ private fun StatPill(
     value: String,
     tint: Color
 ) {
-    // Solid card tile with accent edge and DeepPlum text for contrast.
+    // Color accent on the icon, readable onSurface text, solid theme surface.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
@@ -538,7 +539,7 @@ private fun StatPill(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                CurioIcon(glyph, null, tint = MaterialTheme.colorScheme.onSurface, size = 16.dp)
+                CurioIcon(glyph, null, tint = tint, size = 17.dp)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     value,
@@ -568,7 +569,7 @@ private fun CategoryChip(
         label = "catChipScale"
     )
     val chipGradient = remember(selected, accent) {
-        if (selected) CurioGradients.cardGradient(accent) else emptyList()
+        if (selected) listOf(accent, accent, lerp(accent, Color.White, 0.55f)) else emptyList()
     }
     Surface(
         onClick = onClick,
@@ -635,12 +636,12 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Color swatch with category glyph
+            // Color swatch with category glyph — bolder accent
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(46.dp)
                     .clip(RoundedCornerShape(14.dp))
-                    .background(cat.accent.copy(alpha = 0.18f)),
+                    .background(cat.accent.copy(alpha = 0.32f)),
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(
@@ -963,7 +964,7 @@ private fun DrawerNavItem(
         ) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = iconTint.copy(alpha = 0.15f),
+                color = iconTint.copy(alpha = 0.24f),
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio themed-icon foreground: white outlined gradient card.
-    Matches the Spin screen card hierarchy in monochrome.
-    Card sits within the adaptive safe zone (y=30).
+    Curio themed-icon (monochrome): white gradient-card outline.
+    Matches the new pastel banded-card design in a clean silhouette.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -10,17 +9,29 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- White rounded-rectangle card outline. -->
+    <!-- Card outline -->
     <path
         android:fillColor="#00000000"
         android:strokeColor="#FFFFFFFF"
-        android:strokeWidth="2"
-        android:pathData="M42,30 L66,30 A10,10 0 0,1 76,40 L76,72 A10,10 0 0,1 66,82 L42,82 A10,10 0 0,1 32,72 L32,40 A10,10 0 0,1 42,30 Z" />
+        android:strokeWidth="2.5"
+        android:pathData="M38,28 L70,28 A12,12 0 0,1 82,40 L82,72 A12,12 0 0,1 70,84 L38,84 A12,12 0 0,1 26,72 L26,40 A12,12 0 0,1 38,28 Z" />
 
-    <!-- Subtle horizontal rule at the card midpoint suggesting the band split. -->
+    <!-- Upper band divider -->
     <path
         android:fillColor="#00000000"
         android:strokeColor="#FFFFFFFF"
-        android:strokeWidth="1"
-        android:pathData="M34,56 L74,56" />
+        android:strokeWidth="1.2"
+        android:pathData="M28,52 L80,52" />
+
+    <!-- Lower band divider -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="1.2"
+        android:pathData="M28,64 L80,64" />
+
+    <!-- Sparkle dot -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M50,38 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 Z" />
 </vector>
