@@ -322,10 +322,18 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val eased = sin(progress * progress * Math.PI.toFloat() / 2f)
             val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
-            // Soft ratcheting tick — light haptic on each card cycle.
-            // As intervals lengthen, ticks naturally space out like a
-            // prize wheel settling.
-            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            // Slot-machine ratchet: haptic intensity escalates as the wheel
+            // decelerates — a light tick while blurring fast (fast ticks
+            // coalesce anyway), a firmer clock tick through the slowdown,
+            // and a solid keypress click in the final settle phase. As
+            // intervals lengthen, ticks naturally space out like a prize
+            // wheel locking in.
+            val ratchet = when {
+                progress < 0.5f -> HapticFeedbackType.TextHandleMove
+                progress < 0.85f -> HapticFeedbackType.ClockTick
+                else -> HapticFeedbackType.Keypress
+            }
+            haptics.performHapticFeedback(ratchet)
             delay(interval)
             if (System.currentTimeMillis() - start >= durationMs) break
         }
@@ -339,6 +347,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             if (idx >= 0) cycleIndex = idx
             recentTopicIds = (recentTopicIds + primary.id).toList().takeLast(20).toSet()
             StreakTracker.recordActivity(context)
+            // Final reel clunk — strong confirmation the wheel locked in.
+            haptics.performHapticFeedback(HapticFeedbackType.Confirm)
         }
         confettiTrigger++
 
