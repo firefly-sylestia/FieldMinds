@@ -26,8 +26,8 @@ import com.curio.app.ui.theme.CurioIcon
 /**
  * Curio's universal empty-state skeleton — see CURIO_SPEC.md §13.7.
  *
- * Upgraded with staggered entrance and gentle breathing scale on the glyph
- * for a living, breathing feel even on empty screens.
+ * Upgraded with a gentle breathing scale on the glyph for a living,
+ * breathing feel even on empty screens. Content renders all at once.
  *
  * Layout (centered column):
  *  ```
@@ -56,63 +56,53 @@ fun CurioEmptyState(
             .padding(32.dp),
         contentAlignment = Alignment.Center
     ) {
-        StaggeredEntrance(staggerDelayMs = 60) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .scale(breatheScale),
+                contentAlignment = Alignment.Center
             ) {
-                StaggeredItem(index = 0) {
-                    Box(
-                        modifier = Modifier
-                            .size(120.dp)
-                            .scale(breatheScale),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CurioIcon(
-                            name = glyph,
-                            contentDescription = null,
-                            tint = tint ?: MaterialTheme.colorScheme.onSurfaceVariant,
-                            size = 96.dp
-                        )
-                    }
-                }
+                CurioIcon(
+                    name = glyph,
+                    contentDescription = null,
+                    tint = tint ?: MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 96.dp
+                )
+            }
 
-                StaggeredItem(index = 1) {
+            Text(
+                text = headline,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                text = subtext,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+
+            if (ctaLabel != null) {
+                Spacer(Modifier.height(8.dp))
+                Button(
+                    onClick = onCtaClick,
+                    shape = RoundedCornerShape(24.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                ) {
                     Text(
-                        text = headline,
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center
+                        text = ctaLabel,
+                        style = MaterialTheme.typography.labelLarge
                     )
-                }
-
-                StaggeredItem(index = 2) {
-                    Text(
-                        text = subtext,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-                if (ctaLabel != null) {
-                    StaggeredItem(index = 3) {
-                        Spacer(Modifier.height(8.dp))
-                        Button(
-                            onClick = onCtaClick,
-                            shape = RoundedCornerShape(24.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            ),
-                            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-                        ) {
-                            Text(
-                                text = ctaLabel,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        }
-                    }
                 }
             }
         }

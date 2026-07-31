@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -40,17 +40,14 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.CurioMotion
 
 /**
  * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
  *
  * Upgraded with:
- *  - StaggeredEntrance for entry cards in the grid
+ *  - Entry cards render at once (no per-item stagger)
  *  - MorphEntrance for empty state content
  */
 @Composable
@@ -171,17 +168,15 @@ fun CabinetScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                itemsIndexed(visibleEntries, key = { _, entry -> entry.id }) { index, entry ->
-                    StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
-                        CurioEntryCard(
-                            entry = entry,
-                            onClick = {
-                                navController.navigate(
-                                    CurioRoutes.entryDetail(entry.id)
-                                )
-                            }
-                        )
-                    }
+                items(visibleEntries, key = { it.id }) { entry ->
+                    CurioEntryCard(
+                        entry = entry,
+                        onClick = {
+                            navController.navigate(
+                                CurioRoutes.entryDetail(entry.id)
+                            )
+                        }
+                    )
                 }
             }
         }

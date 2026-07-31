@@ -79,8 +79,6 @@ import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.shareComposableCard
-import com.curio.app.ui.components.StaggeredEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import coil.compose.rememberAsyncImagePainter
@@ -94,7 +92,7 @@ import kotlinx.coroutines.launch
  * Upgraded with:
  *  - Room database persistence (loads from CaptureRepository)
  *  - Structured CaptureData rendering per format
- *  - MorphEntrance for hero image + StaggeredEntrance for metadata
+ *  - MorphEntrance for hero image; topic meta + format body render at once
  *  - Delete functionality with Room
  */
 @Composable
@@ -250,12 +248,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
 
         // ── Format body ────────────────────────────────────────────────
-        StaggeredEntrance {
-            StaggeredItem(index = 0) {
-                Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
-                    FormatBody(entry = resolvedEntry, category = cat)
-                }
-            }
+        Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+            FormatBody(entry = resolvedEntry, category = cat)
         }
 
         Spacer(Modifier.height(32.dp))

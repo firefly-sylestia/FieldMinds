@@ -38,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -50,7 +48,7 @@ import kotlinx.coroutines.launch
  *
  * Upgraded with:
  *  - MorphEntrance for each slide content on page change
- *  - Staggered entrance for headline + subtext within each slide
+ *  - Headline + subtext render at once within each slide (no stagger)
  *  - Enhanced illustration block with breathing gradient
  */
 @Composable
@@ -167,27 +165,21 @@ private fun OnboardingSlide(slide: OnboardingSlideData) {
 
         Spacer(Modifier.height(32.dp))
 
-        StaggeredEntrance(staggerDelayMs = 60) {
-            StaggeredItem(index = 0) {
-                Text(
-                    text = slide.headline,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center
-                )
-            }
+        Text(
+            text = slide.headline,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
 
-            Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(12.dp))
 
-            StaggeredItem(index = 1) {
-                Text(
-                    text = slide.subtext,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
+        Text(
+            text = slide.subtext,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
     }
 }
 

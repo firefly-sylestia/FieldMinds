@@ -44,11 +44,6 @@ import androidx.compose.animation.core.spring
  *  - [Durations.Confetti]     — 600ms (reward burst lifetime)
  *  - [Durations.ConfettiLong] — 1200ms (extended burst for save success)
  *  - [Durations.RevealHold]   — 400ms (pause after landing before nav to Reveal)
- *
- * Stagger delays for list/group entrances:
- *  - [Stagger.Base]           — 50ms per-child delay
- *  - [Stagger.Fast]           — 30ms per-child delay (quick lists)
- *  - [Stagger.Slow]           — 80ms per-child delay (dramatic reveals)
  */
 object CurioMotion {
 
@@ -140,19 +135,6 @@ object CurioMotion {
 
         /** Breathing / ambient pulse cycle. */
         const val Breathe: Int = 3200
-    }
-
-    /**
-     * Staggered entrance delays — applied per-child-index.
-     * Multiplied by index to give each child its own start time.
-     */
-    object Stagger {
-        /** Default per-child delay (50ms) — good for most lists. */
-        const val Base: Int = 50
-        /** Quick per-child delay (30ms) — tight lists, chips, tags. */
-        const val Fast: Int = 30
-        /** Slow per-child delay (80ms) — dramatic reveals. */
-        const val Slow: Int = 80
     }
 
     /** Particle count for the confetti burst (per section 0.5: 6 to 10 tiny shapes). */
