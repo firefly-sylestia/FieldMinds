@@ -568,24 +568,22 @@ private fun CategoryChip(
         animationSpec = CurioMotion.Springs.Snappy,
         label = "catChipScale"
     )
-    // Every chip shows its accent colour.  Selected gets a vibrant gradient;
-    // inactive is a solid tint.  Both have shadow for depth.
+    // Selected = solid accent (clean & full).  Inactive = desaturated gradient wash.
     val chipGradient = remember(accent) {
-        listOf(accent, accent, lerp(accent, Color.White, 0.48f))
+        listOf(accent, lerp(accent, Color.White, 0.35f))
     }
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
-        color = if (selected) Color.Transparent else accent,
+        color = if (selected) accent else Color.Transparent,
         shadowElevation = if (selected) 8.dp else 5.dp,
         modifier = Modifier.scale(scale)
     ) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Gradient background only for selected; inactive uses the
-                // Surface's solid accent colour.
-                if (selected) {
+                // Gradient wash only for inactive; selected uses the Surface's solid accent.
+                if (!selected) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
