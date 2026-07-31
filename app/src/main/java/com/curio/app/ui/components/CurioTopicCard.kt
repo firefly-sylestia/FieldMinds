@@ -31,7 +31,6 @@ import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
-import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -126,7 +125,7 @@ fun CurioEntryCard(
                     Text(
                         text = formatTimeAgo(entry.capturedAtDaysAgo),
                         style = MaterialTheme.typography.labelSmall,
-                        color = CurioColors.DeepPlum
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     CurioIcon(
                         name = formatGlyph(entry.format),

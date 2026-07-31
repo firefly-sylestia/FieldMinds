@@ -201,7 +201,7 @@ fun HomeScreen(navController: NavController) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         CurioIcon(
                             CurioIcons.Person, "Profile",
-                            tint = CurioColors.DeepPlum,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             size = 22.dp
                         )
                     }
@@ -538,12 +538,12 @@ private fun StatPill(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                CurioIcon(glyph, null, tint = CurioColors.DeepPlum, size = 16.dp)
+                CurioIcon(glyph, null, tint = MaterialTheme.colorScheme.onSurface, size = 16.dp)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     value,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                    color = CurioColors.DeepPlum,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
             }
@@ -597,7 +597,7 @@ private fun CategoryChip(
                 ) {
                     CurioIcon(
                         glyph, null,
-                        tint = if (selected) CurioColors.DeepPlum else CurioColors.DeepPlum,
+                        tint = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
                         size = 20.dp
                     )
                     Text(
@@ -605,7 +605,7 @@ private fun CategoryChip(
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
                         ),
-                        color = if (selected) CurioColors.DeepPlum else CurioColors.DeepPlum
+                        color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

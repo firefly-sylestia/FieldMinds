@@ -209,7 +209,7 @@ fun TopicRevealScreen(
                                 Text(
                                     text = tag,
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = CurioColors.DeepPlum,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
@@ -260,7 +260,7 @@ fun TopicRevealScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.DeepPlum, size = 20.dp)
                         Text(
                             text = "Start exploring",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
@@ -426,7 +426,7 @@ private fun TeaserCard(
                 Text(
                     text = "One quirky fact to get you curious",
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = CurioColors.DeepPlum
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
             Spacer(Modifier.height(10.dp))
@@ -471,7 +471,7 @@ private fun ActionPromptCard(
                     CurioIcon(
                         name = verbIcon(action.verb),
                         contentDescription = null,
-                        tint = CurioColors.DeepPlum,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         size = 18.dp,
                         modifier = Modifier.padding(8.dp)
                     )
@@ -480,7 +480,7 @@ private fun ActionPromptCard(
                     Text(
                         text = "${action.verb} ${action.targetName}",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = CurioColors.DeepPlum,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 2,
                         softWrap = true,
                         overflow = TextOverflow.Ellipsis

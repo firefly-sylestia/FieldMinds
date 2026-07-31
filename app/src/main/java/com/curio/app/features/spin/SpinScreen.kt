@@ -569,13 +569,13 @@ private fun TopBar(
             ) {
                 CurioIcon(
                     cat.iconGlyph, null,
-                    tint = CurioColors.DeepPlum,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     size = 16.dp
                 )
                 Text(
                     text = cat.displayName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = CurioColors.DeepPlum,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
             }
@@ -592,7 +592,7 @@ private fun TopBar(
                 Text(
                     text = "$filteredCount / $poolCount",
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = CurioColors.DeepPlum,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                 )
             }
@@ -1584,28 +1584,28 @@ private fun BottomCta(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        contentColor = CurioColors.DeepPlum
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                     modifier = Modifier.weight(1f)
                 ) {
                     CurioIcon(
                         cat.iconGlyph, null,
-                        tint = CurioColors.DeepPlum,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(
                         text = cat.displayName,
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                        color = CurioColors.DeepPlum,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
                     CurioIcon(
                         CurioIcons.KeyboardArrowDown, null,
-                        tint = CurioColors.DeepPlum.copy(alpha = 0.5f),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         size = 16.dp
                     )
                 }
@@ -1614,14 +1614,14 @@ private fun BottomCta(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        contentColor = CurioColors.DeepPlum
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                     modifier = Modifier.weight(1f)
                 ) {
                     CurioIcon(
                         CurioIcons.Search, null,
-                        tint = CurioColors.DeepPlum,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         size = 18.dp
                     )
                     Spacer(Modifier.width(6.dp))
@@ -1630,7 +1630,7 @@ private fun BottomCta(
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
                         ),
-                        color = CurioColors.DeepPlum,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1
                     )
                     if (hasFilters) {
