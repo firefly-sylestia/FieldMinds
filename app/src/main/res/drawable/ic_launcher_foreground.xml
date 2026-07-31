@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Curio Midnight Signal launcher mark.
+    Curio gradient-card launcher mark.
 
-    This is a new geometric identity, not a recolor of the former wheel:
-    an angular open portal with a bright signal spark. Everything stays inside
-    the adaptive safe zone (29..79 in the 108dp viewport) for clean launcher
-    masks and small-size rendering.
+    Matches the Spin screen card hierarchy: a solid rounded-rectangle card
+    split into two bands — a slightly differentiated DeepPlum-deep on top
+    and Lilac below.  Card is centered within the adaptive safe zone (y=30).
+    No glyph — the card itself is the mark.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -13,24 +13,14 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Electric-blue hexagonal portal frame with a navy cutout. -->
+    <!-- Top band: DeepPlum-deep (#0F2345) — slightly lighter than
+         the background (#081B33) so the card shape reads as a whole. -->
+    <path
+        android:fillColor="#0F2345"
+        android:pathData="M42,30 L66,30 A10,10 0 0,1 76,40 L76,56 L32,56 L32,40 A10,10 0 0,1 42,30 Z" />
+
+    <!-- Bottom band: Lilac — the electric signal half of the card. -->
     <path
         android:fillColor="#3D8CFF"
-        android:fillType="evenOdd"
-        android:pathData="M54,25 L79,39 L79,69 L54,83 L29,69 L29,39 Z M54,36 L68,44 L68,64 L54,72 L40,64 L40,44 Z" />
-
-    <!-- Mint aperture: the open path through the portal. -->
-    <path
-        android:fillColor="#009E83"
-        android:pathData="M54,41 L64,47 L64,61 L54,67 L44,61 L44,47 Z" />
-
-    <!-- Orange signal spark, offset so the mark has forward motion. -->
-    <path
-        android:fillColor="#E6652F"
-        android:pathData="M78,25 L81,30 L86,33 L81,36 L78,41 L75,36 L70,33 L75,30 Z" />
-
-    <!-- Small cream calibration notch. -->
-    <path
-        android:fillColor="#F8FBFF"
-        android:pathData="M51,47 L57,47 L57,61 L51,61 Z" />
+        android:pathData="M32,56 L76,56 L76,72 A10,10 0 0,1 66,82 L42,82 A10,10 0 0,1 32,72 Z" />
 </vector>

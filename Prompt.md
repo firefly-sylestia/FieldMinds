@@ -1,8 +1,8 @@
-# Solid Gradient Card Redesign
+# Solid Gradient Card Redesign + Card Icon Rebrand
 
 ## Request
 
-Redesign the entire app with a "material solid gradient card style" — fully opaque category-specific gradients on all cards, no borders/outlines, no transparency, no glowing/shimmer effects. Shadow elevation only for depth. Category chip icons directly on background, no inner containers.
+Redesign the entire app with a "material solid gradient card style" — then update the app icon to match the Spin screen card hierarchy. — fully opaque category-specific gradients on all cards, no borders/outlines, no transparency, no glowing/shimmer effects. Shadow elevation only for depth. Category chip icons directly on background, no inner containers.
 
 ## Design rules
 
