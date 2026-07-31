@@ -1060,16 +1060,39 @@ private fun HeroTicketCard(
         else CurioGradients.cardGradient(accent)
     }
 
+    // ── Fluid shuffle bounce — smooth 0→1→0 sine wave drives a gentle
+    //    scale pulse + vertical bob on the front card while shuffling.
+    //    sin() smooths the sawtooth restart so the bounce never snaps.
+    val heroPulse by rememberInfiniteTransition(label = "heroBounce")
+        .animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1200, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart
+            ),
+            label = "heroPulse"
+        )
+    val bounceWave = sin(heroPulse * kotlin.math.PI.toFloat()) // 0→1→0
+
     // Outer Box padded 12dp beyond card for shadow breathing room.
     // Inner clip layer keeps rounded corners crisp during scale.
     Box(
         modifier = Modifier
             .size(w + 24.dp, h + 24.dp)
             .graphicsLayer {
-                scaleX = if (landed) landScale else 1f
-                scaleY = if (landed) landScale else 1f
+                scaleX = when {
+                    landed -> landScale
+                    shuffling -> 1f + bounceWave * 0.035f
+                    else -> 1f
+                }
+                scaleY = when {
+                    landed -> landScale
+                    shuffling -> 1f + bounceWave * 0.035f
+                    else -> 1f
+                }
                 rotationZ = if (shuffling) ((cycleIndexPulse(glyph, topic?.id) - 0.5f) * 3.5f) else 0f
-                translationY = if (shuffling) -6f else 0f
+                translationY = if (shuffling) -6f - bounceWave * 8f else 0f
             }
             .zIndex(10f)
             .then(
