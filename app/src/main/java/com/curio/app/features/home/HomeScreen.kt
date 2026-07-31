@@ -602,7 +602,7 @@ private fun CategoryChip(
                 ) {
                     CurioIcon(
                         glyph, null,
-                        tint = CurioColors.DeepPlum,
+                        tint = Color.White,
                         size = 20.dp
                     )
                     Text(
@@ -610,7 +610,7 @@ private fun CategoryChip(
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
                         ),
-                        color = CurioColors.DeepPlum
+                        color = Color.White
                     )
                 }
             }
