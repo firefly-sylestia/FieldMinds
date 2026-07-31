@@ -12,13 +12,20 @@ plugins {
 // base64-encoded keystore to ./release.keystore and exports KEYSTORE_PATH etc.
 // as env vars at build time, which we read here.
 //
+// ⚠️  Naming: the local vals below are PREFIXED (envKeyStorePath, envKeyAlias, …)
+// on purpose. Inside `create("release") { ... }` the SigningConfig is the implicit
+// receiver and its members `keyAlias` / `keyPassword` SHADOW any outer top-level
+// vals with the same names. Writing `keyAlias = keyAlias` there is a silent
+// self-assignment of null and fails at package time with "SigningConfig 'release'
+// is missing required property keyPassword". The env* prefix sidesteps that.
+//
 // Local dev (no env vars set): falls back to the default debug signing config,
 // so `gradlew assembleRelease` still produces an installable-but-debug-keyed
 // APK. CI: produces a properly-signed release APK.
-val keyStorePath: String? = System.getenv("KEYSTORE_PATH")?.trim()?.takeIf { it.isNotEmpty() }
-val keyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")?.trim()?.takeIf { it.isNotEmpty() }
-val keyAlias: String? = System.getenv("KEY_ALIAS")?.trim()?.takeIf { it.isNotEmpty() }
-val keyPassword: String? = System.getenv("KEY_PASSWORD")?.trim()?.takeIf { it.isNotEmpty() }
+val envKeyStorePath: String? = System.getenv("KEYSTORE_PATH")?.trim()?.takeIf { it.isNotEmpty() }
+val envKeyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")?.trim()?.takeIf { it.isNotEmpty() }
+val envKeyAlias: String? = System.getenv("KEY_ALIAS")?.trim()?.takeIf { it.isNotEmpty() }
+val envKeyPassword: String? = System.getenv("KEY_PASSWORD")?.trim()?.takeIf { it.isNotEmpty() }
 
 // Only create release signing if ALL four secrets are present and non-empty.
 // GitHub Actions exports missing secrets as empty strings, so .takeIf { it.isNotEmpty() }
@@ -27,10 +34,10 @@ val keyPassword: String? = System.getenv("KEY_PASSWORD")?.trim()?.takeIf { it.is
 // lets builds succeed locally; to get a signed release APK, populate all 4 KEYSTORE_*
 // secrets in repo Settings > Secrets and variables > Actions.
 val hasReleaseSigningMaterial: Boolean =
-    keyStorePath != null &&
-    keyStorePassword != null &&
-    keyAlias != null &&
-    keyPassword != null
+    envKeyStorePath != null &&
+    envKeyStorePassword != null &&
+    envKeyAlias != null &&
+    envKeyPassword != null
 
 android {
     namespace = "com.curio.app"
@@ -54,12 +61,12 @@ android {
         // present and non-empty. When any are missing (e.g. local dev), we skip — the
         // release buildType falls back to the default debug signing below so
         // local `gradlew assembleRelease` still works for testing.
-        if (hasReleaseSigningMaterial && keyStorePath != null && keyStorePassword != null && keyAlias != null && keyPassword != null) {
+        if (hasReleaseSigningMaterial && envKeyStorePath != null && envKeyStorePassword != null && envKeyAlias != null && envKeyPassword != null) {
             create("release") {
-                storeFile = file(keyStorePath)
-                storePassword = keyStorePassword
-                this.keyAlias = keyAlias
-                this.keyPassword = keyPassword
+                storeFile = file(envKeyStorePath)
+                storePassword = envKeyStorePassword
+                this.keyAlias = envKeyAlias
+                this.keyPassword = envKeyPassword
             }
         }
     }
@@ -68,7 +75,7 @@ android {
         release {
             isMinifyEnabled = false
             signingConfig = if (hasReleaseSigningMaterial) {
-                logger.lifecycle("✓ Release APK signed with custom keystore (${keyStorePath})")
+                logger.lifecycle("✓ Release APK signed with custom keystore (${envKeyStorePath})")
                 signingConfigs.getByName("release")
             } else {
                 logger.warn(
