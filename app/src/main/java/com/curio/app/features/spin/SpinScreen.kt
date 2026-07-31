@@ -202,16 +202,23 @@ private val StringSetSaver = listSaver<Set<String>, String>(
 fun SpinScreen(categorySlug: String?, navController: NavController) {
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
+    // v5.7.1 — the slug branch is CurioCategory?; the prefs fallback returns
+    // a CategoryId, so resolve it through byId(...) to keep BOTH elvis
+    // branches CurioCategory (mixing them inferred Any → MutableState<Any>
+    // vs the saver's MutableState<CurioCategory> → CI compile failure).
     val initialCat = remember(categorySlug) {
         categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: AppPreferences.getLastSpinCategory(context)
+            ?: CurioCategories.byId(AppPreferences.getLastSpinCategory(context))
     }
 
     // v5.5 — remember which category this session opened in, so the plain
-    // Spin tab opens where the user left off on the next launch.
+    // Spin tab opens where the user left off on the next launch. byRouteSlug
+    // is nullable — only persist when the slug actually resolves (v5.7.1).
     LaunchedEffect(Unit) {
         categorySlug?.let { slug ->
-            AppPreferences.setLastSpinCategory(context, CurioCategories.byRouteSlug(slug).id)
+            CurioCategories.byRouteSlug(slug)?.let { resolved ->
+                AppPreferences.setLastSpinCategory(context, resolved.id)
+            }
         }
     }
 
@@ -1220,7 +1227,7 @@ private fun HeroTicketCard(
                             .background(
                                 Brush.linearGradient(
                                     colors = listOf(
-                                        Color.White.copy(alpha = if (isDark) 0.05f else 0.10f),
+                                        Color.White.copy(alpha = if (isDark) 0.05f else 0.06f),
                                         Color.Transparent
                                     ),
                                     start = Offset.Zero,
