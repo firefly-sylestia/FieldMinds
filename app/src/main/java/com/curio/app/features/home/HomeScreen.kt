@@ -195,13 +195,13 @@ fun HomeScreen(navController: NavController) {
                     onClick = { navController.navigate(CurioRoutes.PROFILE) },
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    border = BorderStroke(2.dp, CurioColors.CoralBlush),
+                    shadowElevation = 2.dp,
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         CurioIcon(
                             CurioIcons.Person, "Profile",
-                            tint = CurioColors.CoralBlush,
+                            tint = CurioColors.DeepPlum,
                             size = 22.dp
                         )
                     }
@@ -529,8 +529,7 @@ private fun StatPill(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, tint.copy(alpha = 0.45f)),
-        tonalElevation = 2.dp
+        shadowElevation = 3.dp
     ) {
             Row(
                 modifier = Modifier
@@ -598,7 +597,7 @@ private fun CategoryChip(
                 ) {
                     CurioIcon(
                         glyph, null,
-                        tint = if (selected) Color.White else accent,
+                        tint = if (selected) CurioColors.DeepPlum else CurioColors.DeepPlum,
                         size = 20.dp
                     )
                     Text(
@@ -606,7 +605,7 @@ private fun CategoryChip(
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
                         ),
-                        color = if (selected) Color.White else accent
+                        color = if (selected) CurioColors.DeepPlum else CurioColors.DeepPlum
                     )
                 }
             }
@@ -730,11 +729,11 @@ private fun FirstTimeEmpty(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        CurioIcon(CurioIcons.Casino, null, tint = Color.White, size = 16.dp)
+                        CurioIcon(CurioIcons.Casino, null, tint = CurioColors.DeepPlum, size = 16.dp)
                         Text(
                             "Surprise me",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White
+                            color = CurioColors.DeepPlum
                         )
                     }
                 }
@@ -767,8 +766,7 @@ private fun ReminderNudgeCard(onTap: () -> Unit) {
         onClick = onTap,
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, CurioColors.ButterYellow),
-        shadowElevation = 2.dp,
+        shadowElevation = 3.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -844,8 +842,7 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
                 ) {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = MaterialTheme.colorScheme.surface,
-                        border = BorderStroke(2.dp, CurioColors.CoralBlush),
+                        color = CurioColors.CoralBlush.copy(alpha = 0.18f),
                         modifier = Modifier.size(48.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {

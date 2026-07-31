@@ -454,8 +454,7 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        border = BorderStroke(1.dp, CurioColors.CoralBlush.copy(alpha = 0.28f)),
-        shadowElevation = 2.dp,
+        shadowElevation = 3.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -570,8 +569,8 @@ private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: 
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        color = tint.copy(alpha = 0.12f),
-        border = BorderStroke(1.dp, tint.copy(alpha = 0.22f))
+        color = CurioColors.DeepPlum.copy(alpha = 0.08f),
+        shadowElevation = 1.dp
     ) {
         Column(
             modifier = Modifier.padding(vertical = 12.dp),
@@ -682,7 +681,7 @@ private fun PreferencesCard(
                 onClick = onReminderTimeClick,
                 shape = RoundedCornerShape(14.dp),
                 color = CurioColors.ButterYellow.copy(alpha = 0.14f),
-                border = BorderStroke(1.dp, CurioColors.ButterYellow.copy(alpha = 0.45f)),
+                shadowElevation = 1.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(

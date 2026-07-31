@@ -34,32 +34,25 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 
 /**
- * Full-screen Category Picker — see CURIO_SPEC.md §4 (v2).
- *
- * Upgraded with:
- *  - All tiles load at once (no per-tile stagger)
- *  - Press morph: tile scales down with bouncy spring on tap
- *  - Breathing wildcard gradient: the wildcard tile's gradient gently
- *    shifts hue over time
- *  - MorphEntrance wrapper for the whole grid
+ * Full-screen Category Picker — solid gradient tiles with a large
+ * watermark icon and bold title text.  No small icon container.
  */
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
     val categories = remember { CurioCategories.visible }
-    // Saveable-backed scroll state — the grid keeps its position on rotation.
     val gridState = rememberLazyGridState()
 
     Column(
@@ -69,7 +62,6 @@ fun CategoryPickerScreen(navController: NavController) {
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
-        // ── Top bar ────────────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,7 +91,6 @@ fun CategoryPickerScreen(navController: NavController) {
 
         Spacer(Modifier.height(16.dp))
 
-        // ── Tile grid (all tiles load at once) ───────────────────────────────
         MorphEntrance {
             LazyVerticalGrid(
                 state = gridState,
@@ -124,7 +115,6 @@ fun CategoryPickerScreen(navController: NavController) {
 
         Spacer(Modifier.height(8.dp))
 
-        // ── Manage categories ──────────────────────────────────────────────
         TextButton(
             onClick = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
             modifier = Modifier
@@ -179,49 +169,33 @@ private fun CategoryTile(
                     RoundedCornerShape(28.dp)
                 )
         ) {
+            // Large watermark icon — the only icon on the tile
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.16f),
-                size = 104.dp,
+                tint = Color.White.copy(alpha = 0.25f),
+                size = 130.dp,
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 8.dp, end = 4.dp)
+                    .align(Alignment.Center)
+                    .padding(top = 4.dp)
             )
-            TileContent(category = category)
-        }
-    }
-}
-
-@Composable
-private fun TileContent(category: CurioCategory) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(18.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Surface(
-            shape = RoundedCornerShape(18.dp),
-            color = CurioColors.CreamWhite.copy(alpha = 0.22f)
-        ) {
-            CurioIcon(
-                name = category.iconGlyph,
-                contentDescription = null,
-                tint = Color.White,
-                size = 34.dp,
-                modifier = Modifier.padding(10.dp)
-            )
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                text = category.displayName,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.ExtraBold
-                ),
-                color = Color.White
-            )
-
+            // Title — bold, larger, centred
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 18.dp, vertical = 24.dp),
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                Text(
+                    text = category.displayName,
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 24.sp,
+                        lineHeight = 28.sp
+                    ),
+                    color = Color.White
+                )
+            }
         }
     }
 }

@@ -14,25 +14,17 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 /**
- * Curio's M3 theme wrapper — see CURIO_SPEC.md §0.
+ * Curio's M3 theme wrapper.
  *
- * Combines:
- * - CurioColors (light + dark Midnight Signal variants)
- * - CurioTypography (geom for display, M3 default for body)
- * - CurioShapes (rounder than M3 default per §0.3)
- *
- * Usage:
- * ```kotlin
- * CurioTheme {
- *     // your composables
- * }
- * ```
+ * Pastel-warm palette: soft pink primary, warm butter secondary, mint tertiary.
+ * No blue tones — dark mode uses deep maroon family, light mode uses warm
+ * cream/sand surfaces.
  */
 
 private val CurioLightColorScheme = lightColorScheme(
     primary           = CurioColors.CoralBlush,
     onPrimary         = CurioColors.CreamWhite,
-    primaryContainer  = Color(0xFFD6E8FF),            // signal-blue wash
+    primaryContainer  = CurioColors.CoralBlush.copy(alpha = 0.18f),
     onPrimaryContainer = CurioColors.DeepPlum,
 
     secondary           = CurioColors.ButterYellow,
@@ -54,74 +46,66 @@ private val CurioLightColorScheme = lightColorScheme(
     onSurfaceVariant         = CurioColors.DeepPlum.copy(alpha = 0.75f),
     surfaceContainerLowest   = CurioColors.CreamWhite,
     surfaceContainerLow      = CurioColors.SoftSand,
-    surfaceContainer         = Color(0xFFDCE8F5),
-    surfaceContainerHigh     = Color(0xFFD3E1F1),
-    surfaceContainerHighest  = Color(0xFFC9D9EC),
+    surfaceContainer         = CurioColors.SoftSand,
+    surfaceContainerHigh     = Color(0xFFEDE4D6),
+    surfaceContainerHighest  = Color(0xFFE3D9C8),
 
     error             = CurioColors.WarmCoralRed,
     onError           = CurioColors.CreamWhite,
 
-    outline           = CurioColors.DeepPlum.copy(alpha = 0.20f),
-    outlineVariant    = CurioColors.DeepPlum.copy(alpha = 0.10f)
+    outline           = CurioColors.DeepPlum.copy(alpha = 0.15f),
+    outlineVariant    = CurioColors.DeepPlum.copy(alpha = 0.08f)
 )
 
 private val CurioDarkColorScheme = darkColorScheme(
     primary           = CurioColors.CoralBlush,
-    onPrimary         = CurioColors.CreamWhite,
-    primaryContainer  = CurioColors.CoralBlush.copy(alpha = 0.30f),
+    onPrimary         = CurioColors.DeepPlum,
+    primaryContainer  = CurioColors.CoralBlush.copy(alpha = 0.25f),
     onPrimaryContainer = CurioColors.CreamWhite,
 
     secondary           = CurioColors.ButterYellow,
     onSecondary         = CurioColors.DeepPlum,
-    secondaryContainer  = CurioColors.ButterYellow.copy(alpha = 0.20f),
+    secondaryContainer  = CurioColors.ButterYellow.copy(alpha = 0.18f),
     onSecondaryContainer = CurioColors.CreamWhite,
 
     tertiary           = CurioColors.SkyMint,
     onTertiary         = CurioColors.DeepPlum,
-    tertiaryContainer  = CurioColors.SkyMint.copy(alpha = 0.20f),
+    tertiaryContainer  = CurioColors.SkyMint.copy(alpha = 0.18f),
     onTertiaryContainer = CurioColors.CreamWhite,
 
-    background = Color(0xFF061326),  // midnight ink, lifted for readable dark mode
+    // Warm maroon family — no blue
+    background = Color(0xFF160510),
     onBackground = CurioColors.CreamWhite,
 
-    surface                  = Color(0xFF081B33),
+    surface                  = Color(0xFF200A18),
     onSurface                = CurioColors.CreamWhite,
-    surfaceVariant           = Color(0xFF102B49),
-    onSurfaceVariant         = Color(0xFFB5C9DF),
-    surfaceContainerLowest   = Color(0xFF061326),
-    surfaceContainerLow      = Color(0xFF081B33),
-    surfaceContainer         = Color(0xFF102B49),
-    surfaceContainerHigh     = Color(0xFF17385B),
-    surfaceContainerHighest  = Color(0xFF20466E),
+    surfaceVariant           = Color(0xFF2D1424),
+    onSurfaceVariant         = Color(0xFFD4C4CE),
+    surfaceContainerLowest   = Color(0xFF160510),
+    surfaceContainerLow      = Color(0xFF200A18),
+    surfaceContainer         = Color(0xFF2D1424),
+    surfaceContainerHigh     = Color(0xFF3A1E30),
+    surfaceContainerHighest  = Color(0xFF4A2A3E),
 
     error             = CurioColors.WarmCoralRed,
     onError           = CurioColors.CreamWhite,
 
-    outline           = CurioColors.CreamWhite.copy(alpha = 0.20f),
-    outlineVariant    = CurioColors.CreamWhite.copy(alpha = 0.10f)
+    outline           = CurioColors.CreamWhite.copy(alpha = 0.15f),
+    outlineVariant    = CurioColors.CreamWhite.copy(alpha = 0.08f)
 )
 
 /**
  * App-theme-aware dark check. Reads the current theme mode reactively from
  * [AppPreferences.themeModeState] so that toggling Light/Dark/System in
  * settings takes effect immediately without restarting the app.
- *
- * Screens that branch on dark mode (gradients, glows, surface tints) must
- * use this instead of raw [isSystemInDarkTheme], which ignores the in-app
- * override and can render the wrong variant when the user forces a theme.
  */
 @Composable
 fun isCurioDarkTheme(): Boolean = when (AppPreferences.themeModeState) {
     "light"  -> false
     "dark"   -> true
-    else     -> isSystemInDarkTheme()  // "system" or unknown
+    else     -> isSystemInDarkTheme()
 }
 
-/**
- * Reads the current theme mode reactively from [AppPreferences.themeModeState]
- * so that toggling Light/Dark/System in settings takes effect immediately
- * without restarting the app.
- */
 @Composable
 fun CurioTheme(
     content: @Composable () -> Unit

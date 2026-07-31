@@ -560,7 +560,7 @@ private fun TopBar(
         Surface(
             shape = RoundedCornerShape(50),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
-            border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.55f))
+            shadowElevation = 1.dp
         ) {
             Row(
                 modifier = Modifier.padding(start = 10.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
@@ -1316,7 +1316,6 @@ private fun PeekCard(
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                border = BorderStroke(1.dp, accent.copy(alpha = 0.55f)),
                 shadowElevation = if (landed) 6.dp else 3.dp,
                 tonalElevation = 1.dp,
                 modifier = Modifier.fillMaxSize()
@@ -1375,7 +1374,6 @@ private fun SpinButton(
             shape = CircleShape,
             // Opaque paper button with a strong ink edge and elevation.
             color = if (landedTopic != null) MaterialTheme.colorScheme.surfaceContainerHigh else tint,
-            border = BorderStroke(2.dp, tint),
             shadowElevation = if (isShuffling) 3.dp else 8.dp,
             modifier = Modifier
                 .size(buttonSize)
@@ -1579,16 +1577,13 @@ private fun BottomCta(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                // ── Categories button — accent-tinted to match Filter ──
-                OutlinedButton(
+            ) {                OutlinedButton(
                     onClick = onCategories,
                     shape = RoundedCornerShape(50),
-                    border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    contentColor = CurioColors.DeepPlum
-                ),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        contentColor = CurioColors.DeepPlum
+                    ),
                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                 modifier = Modifier.weight(1f)
             ) {
@@ -1611,16 +1606,9 @@ private fun BottomCta(
                         tint = cat.accent.copy(alpha = 0.7f),
                         size = 16.dp
                     )
-                }                // ── Filter button — the solid paper fill stays quiet while
-                //    the count badge + stronger border carry the active signal ─
-
-            OutlinedButton(
+                }            OutlinedButton(
                 onClick = onFilter,
                 shape = RoundedCornerShape(50),
-                border = if (hasFilters)
-                    BorderStroke(1.5.dp, cat.accent.copy(alpha = 0.6f))
-                else
-                    BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
                     contentColor = CurioColors.DeepPlum

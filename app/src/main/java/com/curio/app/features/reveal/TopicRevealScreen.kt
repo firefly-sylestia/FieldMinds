@@ -455,7 +455,6 @@ private fun ActionPromptCard(
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.45f)),
         shadowElevation = 3.dp,
         modifier = modifier.fillMaxWidth()
     ) {
