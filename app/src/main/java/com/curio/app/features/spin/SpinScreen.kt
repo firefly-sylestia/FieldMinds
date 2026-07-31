@@ -424,7 +424,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         //    screen edge instead of leaving dead space below it ─────
         Spacer(Modifier.weight(1f))
 
-        // ── 5. Bottom bar — Categories · Filter · CTA ──────────────
+        // ── 5. Bottom bar — Categories · Filter (controls only) ────
         // No duplicate shuffle button: the big center SpinButton above
         // owns all spin starts, so the bottom bar is controls only.
         BottomCta(
