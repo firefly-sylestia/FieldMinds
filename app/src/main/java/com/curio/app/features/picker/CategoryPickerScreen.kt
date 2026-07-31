@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,7 +38,6 @@ import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -48,7 +47,7 @@ import com.curio.app.ui.theme.CurioMotion
  * Full-screen Category Picker — see CURIO_SPEC.md §4 (v2).
  *
  * Upgraded with:
- *  - Staggered tile entrance: each tile fades + slides in with delay
+ *  - All tiles load at once (no per-tile stagger)
  *  - Press morph: tile scales down with bouncy spring on tap
  *  - Breathing wildcard gradient: the wildcard tile's gradient gently
  *    shifts hue over time
@@ -95,7 +94,7 @@ fun CategoryPickerScreen(navController: NavController) {
 
         Spacer(Modifier.height(16.dp))
 
-        // ── Tile grid (staggered entrance) ──────────────────────────────────
+        // ── Tile grid (all tiles load at once) ───────────────────────────────
         MorphEntrance {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -104,17 +103,15 @@ fun CategoryPickerScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                itemsIndexed(categories) { index, cat ->
-                    StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
-                        CategoryTile(
-                            category = cat,
-                            onClick = {
-                                navController.navigate(
-                                    CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                                )
-                            }
-                        )
-                    }
+                items(categories) { cat ->
+                    CategoryTile(
+                        category = cat,
+                        onClick = {
+                            navController.navigate(
+                                CurioRoutes.spinWithCategory(cat.id.routeSlug)
+                            )
+                        }
+                    )
                 }
             }
         }

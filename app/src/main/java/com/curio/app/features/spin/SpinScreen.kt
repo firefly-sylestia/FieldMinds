@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.LocalMinimumInteractiveComponentSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,7 +52,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.provides
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -95,10 +98,11 @@ import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.item
+import androidx.compose.foundation.lazy.grid.items
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredItem
 import kotlin.random.Random
 
 /**
@@ -433,6 +437,9 @@ private fun FilterSheet(
         dragHandle = { BottomSheetDefaults.DragHandle() },
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
+        // Compact everything — drop the 48dp minimum touch target so filter
+        // chips sit tight instead of spreading out.
+        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -529,19 +536,22 @@ private fun FilterSheet(
                         .height(1.dp)
                         .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 )
-                Spacer(Modifier.height(10.dp))
 
-                // ── Subtype chips ────────────────────────────────────
-                if (subtypes.size > 1) {
-                    SectionLabel("Type", Modifier.padding(horizontal = 20.dp, vertical = 2.dp))
-                    FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        subtypes.forEach { st ->
+                // ── Compact lazy chip grid — scrolls inside the sheet so
+                //    the Apply button stays visible, and stays smooth even
+                //    with 100+ tags. ──────────────────────────────────
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 112.dp),
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 10.dp, bottom = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (subtypes.size > 1) {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            SectionLabel("Type", Modifier.padding(bottom = 2.dp))
+                        }
+                        items(subtypes) { st ->
                             CompactChip(
                                 label = st,
                                 selected = st in draftSubtypes,
@@ -552,20 +562,14 @@ private fun FilterSheet(
                             )
                         }
                     }
-                }
-
-                // ── Tag chips ────────────────────────────────────────
-                if (tags.isNotEmpty()) {
-                    if (subtypes.size > 1) Spacer(Modifier.height(10.dp))
-                    SectionLabel("Genres", Modifier.padding(horizontal = 20.dp, vertical = 2.dp))
-                    FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        tags.forEach { tag ->
+                    if (tags.isNotEmpty()) {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            SectionLabel(
+                                "Genres",
+                                Modifier.padding(top = if (subtypes.size > 1) 6.dp else 0.dp, bottom = 2.dp)
+                            )
+                        }
+                        items(tags) { tag ->
                             CompactChip(
                                 label = tag,
                                 selected = tag in draftFilters,
@@ -601,6 +605,7 @@ private fun FilterSheet(
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
                 )
             }
+        }
         }
     }
 }
@@ -667,7 +672,8 @@ private fun CompactChip(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = label,
@@ -675,7 +681,10 @@ private fun CompactChip(
                 fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
             ),
             color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
         )
     }
 }
@@ -1374,14 +1383,13 @@ private fun CategoryPickerSheet(
                             verticalArrangement = Arrangement.spacedBy(14.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            itemsIndexed(categories) { index, cat ->
-                                StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
-                                    CategoryPickerTile(
-                                        category = cat,
-                                        isSelected = cat.id == currentCat.id,
-                                        onClick = { onCategorySelected(cat) }
-                                    )
-                                }
+                            // All tiles render at once — no per-tile stagger.
+                            items(categories) { cat ->
+                                CategoryPickerTile(
+                                    category = cat,
+                                    isSelected = cat.id == currentCat.id,
+                                    onClick = { onCategorySelected(cat) }
+                                )
                             }
                         }
                     }
