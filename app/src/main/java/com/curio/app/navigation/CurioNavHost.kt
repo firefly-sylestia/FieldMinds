@@ -9,7 +9,9 @@ import androidx.compose.animation.slideInHorizontally
 import android.net.Uri
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -87,6 +89,13 @@ fun CurioNavHost(
                 CurioBottomBar(navController = navController)
             }
         },
+        // Every screen applies its own statusBarsPadding().  This Scaffold
+        // has no topBar, so without pinning the insets to the bottom only
+        // M3 would add the status-bar inset to innerPadding AND the screens
+        // would add it again — a double top gap (huge empty space above the
+        // status bar).  Screens without a bottom bar still get the nav-bar
+        // inset from here.
+        contentWindowInsets = WindowInsets.navigationBars,
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         NavHost(
