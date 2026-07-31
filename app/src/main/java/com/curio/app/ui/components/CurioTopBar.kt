@@ -6,6 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -47,4 +49,27 @@ fun CurioBackButton(
             modifier = Modifier.padding(8.dp)
         )
     }
+}
+
+/**
+ * The canonical "forward" disclosure arrow (› chevron). Used everywhere a
+ * row/card leads deeper — Home sections, Profile rows, Settings items, the
+ * Spin "Tap to open" hint. One component keeps the arrow language unified
+ * (consistent glyph, weight, and default tint) instead of ad-hoc ArrowForward
+ * glyphs at random sizes and alphas.
+ */
+@Composable
+fun CurioForwardArrow(
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    tint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    size: Dp = 18.dp
+) {
+    CurioIcon(
+        name = CurioIcons.ChevronRight,
+        contentDescription = contentDescription,
+        tint = tint,
+        size = size,
+        modifier = modifier
+    )
 }

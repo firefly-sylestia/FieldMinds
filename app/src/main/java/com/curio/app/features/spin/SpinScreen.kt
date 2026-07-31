@@ -668,7 +668,7 @@ private fun FilterSheet(
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = cat.displayName,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
                 )
@@ -682,7 +682,7 @@ private fun FilterSheet(
                     ) {
                         Text(
                             "Clear all",
-                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -698,7 +698,7 @@ private fun FilterSheet(
                 ) {
                     Text(
                         text = "Active filters",
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.5.sp
                         ),
@@ -736,7 +736,7 @@ private fun FilterSheet(
             if (!hasAny) {
                 Text(
                     text = "No filters for this category yet.",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -848,7 +848,7 @@ private fun FilterSheet(
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                 )
             }
         }
@@ -874,7 +874,7 @@ private fun ActiveFilterChip(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
                 color = CurioColors.DeepPlum
             )
             Surface(
@@ -897,7 +897,7 @@ private fun ActiveFilterChip(
 private fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium.copy(
+        style = MaterialTheme.typography.titleSmall.copy(
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.2.sp
         ),
@@ -926,7 +926,7 @@ private fun CompactChip(
     ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(
+                style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
                 ),
                 color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
@@ -1231,7 +1231,7 @@ private fun HeroTicketCard(
                                 )
                             } else {
                                 CurioIcon(
-                                    if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
+                                    if (landed) CurioIcons.ChevronRight else CurioIcons.Casino, null,
                                     tint = Color.White,
                                     size = 16.dp
                                 )
@@ -1665,7 +1665,7 @@ private fun CategoryPickerSheet(
                         Spacer(Modifier.width(10.dp))
                         Text(
                             text = "What are we exploring?",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
                         )
@@ -1676,9 +1676,9 @@ private fun CategoryPickerSheet(
                         ) {
                             Text(
                                 text = currentCat.displayName,
-                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
                                 color = currentCat.accent,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
                             )
                         }
                     }
@@ -1716,7 +1716,7 @@ private fun CategoryPickerSheet(
                         Spacer(Modifier.width(6.dp))
                         Text(
                             text = "Browse all categories",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.primary
                         )
                     }

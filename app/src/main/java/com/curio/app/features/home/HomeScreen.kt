@@ -68,6 +68,7 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.components.CurioForwardArrow
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -415,8 +416,7 @@ fun HomeScreen(navController: NavController) {
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)) {
-                                CurioIcon(
-                                    CurioIcons.ArrowForward, null,
+                                CurioForwardArrow(
                                     tint = MaterialTheme.colorScheme.primary,
                                     size = 14.dp,
                                     modifier = Modifier.padding(3.dp)
@@ -478,10 +478,9 @@ fun HomeScreen(navController: NavController) {
                             shape = RoundedCornerShape(50),
                             color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
-                            CurioIcon(
-                                CurioIcons.ArrowForward, "Open Cabinet",
+                            CurioForwardArrow(
+                                "Open Cabinet",
                                 tint = MaterialTheme.colorScheme.primary,
-                                size = 18.dp,
                                 modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
                             )
                         }
@@ -660,10 +659,9 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
                     maxLines = 1
                 )
             }
-            CurioIcon(
-                CurioIcons.ArrowForward, "Open capture",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                size = 18.dp
+            CurioForwardArrow(
+                "Open capture",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
         }
     }
@@ -805,10 +803,9 @@ private fun ReminderNudgeCard(onTap: () -> Unit) {
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                CurioIcon(
-                    CurioIcons.ArrowForward, "Open settings",
-                    tint = fg.copy(alpha = 0.7f),
-                    size = 18.dp
+                CurioForwardArrow(
+                    "Open settings",
+                    tint = fg.copy(alpha = 0.7f)
                 )
             }
         }

@@ -55,6 +55,7 @@ import com.curio.app.data.CurioBackupManager
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioForwardArrow
 import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
@@ -471,7 +472,7 @@ private fun SettingsItem(icon: String, label: String, value: String, onClick: ()
                 Text(label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
                 Text(value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            CurioIcon(CurioIcons.ArrowForward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f), size = 18.dp)
+            CurioForwardArrow(tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
         }
     }
 }

@@ -54,6 +54,7 @@ object CurioIcons {
     const val Close       = "close"            // X
     const val ArrowBack   = "arrow_back"       // ← — top-left back arrow
     const val ArrowForward = "arrow_forward"
+    const val ChevronRight = "chevron_right"   // › — unified forward arrow
     const val Check       = "check"            // ✓
     const val Add         = "add"              // +
     const val AutoAwesome = "auto_awesome"     // sparkles / logomark
