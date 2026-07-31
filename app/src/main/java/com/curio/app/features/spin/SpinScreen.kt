@@ -366,24 +366,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         }
     }
 
-    // ── v5.6 — once the topic has been explored, drop the landing ─────
-    // Runs when the screen (re)enters composition (e.g. returning from
-    // Reveal). If the landed topic was saved to the Cabinet, it counts as
-    // explored: the card returns to idle. Otherwise it stays on the card,
-    // tappable, until the user explores it or spins again.
-    LaunchedEffect(Unit) {
-        val name = landedTopicName ?: return@LaunchedEffect
-        val topicId = landedTopic?.id
-        val explored = runCatching {
-            CurioRepositoryHolder.repo.getAll().any { entry ->
-                entry.topic.id == topicId || entry.topic.name == name
-            }
-        }.getOrDefault(false)
-        if (explored) {
-            landedTopicName = null
-            landingAlreadyOpened = false
-        }
-    }
+    // ── v5.9 — landed card stays tappable until the user explicitly
+    //    spins/shuffles again.  No longer auto-clears when explored.
 
     // ── Animations ────────────────────────────────────────────────────
     val landScale by animateFloatAsState(
@@ -396,7 +380,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         animationSpec = CurioMotion.Springs.Snappy,
         label = "buttonPulse"
     )
-
     // ── Overall layout ─────────────────────────────────────────────────
     // Paper surfaces sit directly on the quiet theme background. All depth
     // comes from opaque cards, crisp rules, and elevation—not ambient washes.
@@ -1028,17 +1011,27 @@ private fun Carousel(
                     landedTopic = landedTopic
                 )
                 if (slot == 0) {
-                    HeroTicketCard(
-                        accent = cat.accent,
-                        glyph = cat.iconGlyph,
-                        topic = topic,
-                        cat = cat,
-                        landed = landedTopic != null,
-                        opening = opening,
-                        landScale = landScale,
-                        enabled = enabled,
-                        onTap = onCardTap
-                    )
+                    // v5.9 — smooth crossfade while cycling topics
+                    AnimatedContent(
+                        targetState = topic,
+                        transitionSpec = {
+                            fadeIn(tween(180)) + slideInVertically(tween(180)) { it / 4 } togetherWith
+                                fadeOut(tween(120)) + slideOutVertically(tween(120)) { -it / 4 }
+                        },
+                        label = "heroTicket"
+                    ) { currentTopic ->
+                        HeroTicketCard(
+                            accent = cat.accent,
+                            glyph = cat.iconGlyph,
+                            topic = currentTopic,
+                            cat = cat,
+                            landed = landedTopic != null,
+                            opening = opening,
+                            landScale = landScale,
+                            enabled = enabled,
+                            onTap = onCardTap
+                        )
+                    }
                 } else {
                     PeekCard(
                         slot = slot,
@@ -1516,7 +1509,8 @@ private fun BottomCta(
     val showAgain = landedTopic != null
     val hasFilters = filterActiveCount > 0
 
-    // Anchored paper tray: opaque, elevated, and separated by a crisp rule.
+    // Anchored paper tray: opaque, elevated.  No dividing rule — the
+    // surface elevation alone separates it from the content above.
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 3.dp,
@@ -1529,13 +1523,6 @@ private fun BottomCta(
                 .padding(vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(cat.accent)
-            )
-
             // ── Main CTA — Spin again (after landing) or Shuffle ──
             Box(
                 modifier = Modifier
