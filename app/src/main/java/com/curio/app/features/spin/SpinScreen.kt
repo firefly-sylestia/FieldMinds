@@ -281,13 +281,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
     val cat = activeCategory
 
-    // Category switch resets transient landing state. Filter chips reset
-    // implicitly via rememberSaveable's per-category input key — they must
-    // NOT be cleared here, or restored state would be wiped on the first
-    // composition after process death.
+    // Category switch resets transient animation state. The landed card is
+    // deliberately NOT cleared here: landedTopicName is keyed by
+    // activeCategory.id in rememberSaveable, so switching categories resets
+    // it automatically — nulling it here would ALSO wipe the landed card on
+    // every return from Topic Reveal (v5.6: stays tappable until spun again
+    // or explored).
     LaunchedEffect(activeCategory.id) {
-        landedTopicName = null
-        landingAlreadyOpened = false
         shuffling = false
         isOpening = false
     }

@@ -77,7 +77,7 @@ import com.curio.app.ui.theme.CurioMotion
  *
  * Layout, top → bottom:
  *   24-44 dp   statusBarsPadding()
- *   40 dp      Top bar (close ✕ → Pop to Home)
+ *   40 dp      Top bar (close ✕ → Pop back to the Spin deck)
  *    8 dp      gap
  *   ~260 dp    Hero card (gradient ticket: watermark glyph + badges)
  *   24 dp      gap
@@ -141,18 +141,16 @@ fun TopicRevealScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                onClick = {
-                    navController.navigate(CurioRoutes.HOME) {
-                        popUpTo(navController.graph.id) { inclusive = true }
-                        launchSingleTop = true
-                    }
-                },
+                // Return to the Spin deck (not Home) — the landed card
+                // keeps its "Tap to open" state so it can be reopened
+                // until the user spins again or explores it (v5.6).
+                onClick = { navController.popBackStack() },
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 CurioIcon(
                     name = CurioIcons.Close,
-                    contentDescription = "Discard and back to Home",
+                    contentDescription = "Close and return to the deck",
                     tint = MaterialTheme.colorScheme.onSurface,
                     size = 22.dp,
                     modifier = Modifier.padding(8.dp)
