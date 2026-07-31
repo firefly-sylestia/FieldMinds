@@ -268,7 +268,7 @@ fun GalleryWallFormat(
                                 Surface(
                                     shape = RoundedCornerShape(14.dp),
                                     color = Color.White,
-                                    shadowElevation = 6.dp,
+                                    shadowElevation = 0.dp,
                                     modifier = Modifier
                                         .size(
                                             width = with(density) { tile.widthPx.toDp() },
@@ -345,7 +345,7 @@ fun GalleryWallFormat(
                         onClick = { imagePicker.launch(arrayOf("image/*")) },
                         shape = RoundedCornerShape(28.dp),
                         color = accent,
-                        shadowElevation = 8.dp,
+                        shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(16.dp)

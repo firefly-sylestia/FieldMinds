@@ -403,7 +403,7 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        shadowElevation = 3.dp,
+        shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -472,7 +472,7 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                         shape = RoundedCornerShape(50),
                         color = CurioColors.DeepPlum,
                         contentColor = Color.White,
-                        shadowElevation = 4.dp
+                        shadowElevation = 0.dp
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
@@ -520,7 +520,7 @@ private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: 
         modifier = modifier,
         shape = RoundedCornerShape(22.dp),
         color = Color.Transparent,
-        shadowElevation = 6.dp
+        shadowElevation = 0.dp
     ) {
         Box(
             modifier = Modifier
@@ -674,7 +674,7 @@ private fun InlineReminderSelector(selectedHour: Int, onHourSelected: (Int) -> U
                     color = if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.surfaceContainerHighest,
                     contentColor = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
                     border = BorderStroke(1.dp, if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant),
-                    shadowElevation = if (selected) 5.dp else 0.dp
+                    shadowElevation = 0.dp
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
@@ -794,7 +794,7 @@ private fun ProfileCard(content: @Composable ColumnScope.() -> Unit) {
         shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 3.dp,
-        shadowElevation = 2.dp,
+        shadowElevation = 0.dp,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.38f)),
         modifier = Modifier.fillMaxWidth()
     ) { Column(modifier = Modifier.padding(horizontal = 17.dp, vertical = 16.dp), content = content) }

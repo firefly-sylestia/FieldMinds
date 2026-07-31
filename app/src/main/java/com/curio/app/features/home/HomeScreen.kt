@@ -197,7 +197,7 @@ fun HomeScreen(navController: NavController) {
                     onClick = { navController.navigate(CurioRoutes.PROFILE) },
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    shadowElevation = 2.dp,
+                    shadowElevation = 0.dp,
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -260,7 +260,7 @@ fun HomeScreen(navController: NavController) {
                     },
                     shape = RoundedCornerShape(28.dp),
                     color = Color.Transparent,
-                    shadowElevation = 10.dp,
+                    shadowElevation = 0.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -402,7 +402,7 @@ fun HomeScreen(navController: NavController) {
                         shape = RoundedCornerShape(50),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
-                        shadowElevation = 2.dp
+                        shadowElevation = 0.dp
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
@@ -540,7 +540,7 @@ private fun StatPill(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shadowElevation = 3.dp
+        shadowElevation = 0.dp
     ) {
             Row(
                 modifier = Modifier
@@ -584,7 +584,7 @@ private fun CategoryChip(
         shape = RoundedCornerShape(22.dp),
         color = if (selected) accent else inactiveContainer,
         border = if (selected) null else BorderStroke(1.dp, accent.copy(alpha = 0.24f)),
-        shadowElevation = if (selected) 8.dp else 2.dp,
+        shadowElevation = 0.dp,
         modifier = Modifier.scale(scale)
     ) {
         Row(
@@ -622,7 +622,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 2.dp,
+        shadowElevation = 0.dp,
         tonalElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -687,7 +687,7 @@ private fun FirstTimeEmpty(
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shadowElevation = 2.dp,
+        shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -765,7 +765,7 @@ private fun ReminderNudgeCard(onTap: () -> Unit) {
         onClick = onTap,
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shadowElevation = 3.dp,
+        shadowElevation = 0.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)

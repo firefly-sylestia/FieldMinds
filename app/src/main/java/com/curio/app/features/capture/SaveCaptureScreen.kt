@@ -274,7 +274,7 @@ fun SaveCaptureScreen(
         // ── Sticky bottom Save CTA with gradient edge ────────────────────
         Surface(
             color = MaterialTheme.colorScheme.background,
-            shadowElevation = 16.dp,
+            shadowElevation = 0.dp,
             tonalElevation = 2.dp
         ) {
             Box {

@@ -203,7 +203,7 @@ fun TopicRevealScreen(
                             Surface(
                                 shape = RoundedCornerShape(50),
                                 color = cat.accent.copy(alpha = 0.18f),
-                                shadowElevation = 1.dp
+                                shadowElevation = 0.dp
                             ) {
                                 Text(
                                     text = tag,
@@ -324,7 +324,7 @@ private fun HeroCard(
             .height(260.dp),
         shape = RoundedCornerShape(32.dp),
         color = Color.Transparent,
-        shadowElevation = 10.dp
+        shadowElevation = 0.dp
     ) {
         Box(
             modifier = Modifier
@@ -349,7 +349,7 @@ private fun HeroCard(
                 Surface(
                     shape = RoundedCornerShape(50),
                     color = Color.White.copy(alpha = 0.22f),
-                    shadowElevation = 4.dp,
+                    shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(16.dp)
@@ -378,7 +378,7 @@ private fun HeroCard(
                 Surface(
                     shape = RoundedCornerShape(50),
                     color = Color.White.copy(alpha = 0.22f),
-                    shadowElevation = 4.dp,
+                    shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(16.dp)
@@ -408,7 +408,7 @@ private fun TeaserCard(
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 2.dp,
+        shadowElevation = 0.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
@@ -454,7 +454,7 @@ private fun ActionPromptCard(
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shadowElevation = 3.dp,
+        shadowElevation = 0.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(18.dp)) {

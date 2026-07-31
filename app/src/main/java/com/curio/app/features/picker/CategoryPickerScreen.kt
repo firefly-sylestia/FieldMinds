@@ -176,7 +176,7 @@ private fun CategoryTile(
         onClick = { onClick() },
         shape = RoundedCornerShape(30.dp),
         color = Color.Transparent,
-        shadowElevation = 9.dp,
+        shadowElevation = 0.dp,
         modifier = Modifier
             .fillMaxWidth()
             .height(164.dp)

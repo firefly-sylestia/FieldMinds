@@ -517,7 +517,7 @@ private fun TopBar(
         Surface(
             shape = RoundedCornerShape(50),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
-            shadowElevation = 1.dp
+            shadowElevation = 0.dp
         ) {
             Row(
                 modifier = Modifier.padding(start = 10.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
@@ -876,7 +876,7 @@ private fun ActiveFilterChip(
     Surface(
         shape = RoundedCornerShape(50),
         color = accent,
-        shadowElevation = 1.dp
+        shadowElevation = 0.dp
     ) {
         Row(
             modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
@@ -1104,7 +1104,7 @@ private fun HeroTicketCard(
             Surface(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
-                shadowElevation = if (landed) 16.dp else 10.dp,
+                shadowElevation = 0.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
@@ -1298,7 +1298,7 @@ private fun PeekCard(
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (shuffling) 0.16f else 0.08f),
-                shadowElevation = if (landed) 8.dp else if (far) 1.dp else 4.dp,
+                shadowElevation = 0.dp,
                 tonalElevation = if (far) 0.dp else 1.dp,
                 border = BorderStroke(1.dp, accent.copy(alpha = if (far) 0.10f else 0.20f)),
                 modifier = Modifier.fillMaxSize()
@@ -1357,7 +1357,7 @@ private fun SpinButton(
             shape = CircleShape,
             // Opaque paper button with a strong ink edge and elevation.
             color = if (landedTopic != null) MaterialTheme.colorScheme.surfaceContainerHigh else tint,
-            shadowElevation = if (isShuffling) 3.dp else 8.dp,
+            shadowElevation = 0.dp,
             modifier = Modifier
                 .size(buttonSize)
                 .scale(pulseScale.coerceIn(0.9f, 1.10f))
@@ -1592,7 +1592,7 @@ private fun DeckControlButton(
         shape = RoundedCornerShape(24.dp),
         color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (selected) 0.18f else 0.08f),
         border = BorderStroke(1.dp, accent.copy(alpha = if (selected) 0.34f else 0.18f)),
-        shadowElevation = if (selected) 4.dp else 2.dp,
+        shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {
         Row(
@@ -1788,7 +1788,7 @@ private fun CategoryPickerTile(
         },
         shape = RoundedCornerShape(28.dp),
         color = cardColor,
-        shadowElevation = if (isSelected) 10.dp else 6.dp,
+        shadowElevation = 0.dp,
         tonalElevation = if (isSelected) 6.dp else 2.dp,
         border = if (isSelected) BorderStroke(2.5.dp, Color.White.copy(alpha = 0.7f)) else null,
         modifier = Modifier

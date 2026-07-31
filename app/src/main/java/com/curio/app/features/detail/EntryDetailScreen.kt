@@ -696,7 +696,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.surface,
-                shadowElevation = 1.dp,
+                shadowElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -755,7 +755,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         Surface(
             shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shadowElevation = 8.dp,
+            shadowElevation = 0.dp,
             modifier = Modifier.fillMaxWidth().height(460.dp)
         ) {
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -778,7 +778,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                                 onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) },
                                 shape = RoundedCornerShape(18.dp),
                                 color = MaterialTheme.colorScheme.surface,
-                                shadowElevation = 8.dp,
+                                shadowElevation = 0.dp,
                                 modifier = Modifier
                                     .size(
                                         width = with(density) { tile.widthPx.toDp() },
@@ -862,7 +862,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     Surface(
                         onClick = { navController.navigate(CurioRoutes.lightbox(uri)) },
                         shape = RoundedCornerShape(16.dp),
-                        shadowElevation = 4.dp,
+                        shadowElevation = 0.dp,
                         modifier = Modifier.weight(1f).height(120.dp)
                     ) {
                         Image(

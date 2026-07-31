@@ -89,7 +89,7 @@ fun CurioHeroShuffleCard(
             .scale(pressScale),
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        shadowElevation = 10.dp
+        shadowElevation = 0.dp
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             // ── Solid gradient background ─────────────────────────────────
