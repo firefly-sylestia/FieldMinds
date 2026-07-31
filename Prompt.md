@@ -1,73 +1,29 @@
-# Paper-style Home, Spin, and Topic Reveal redesign — completion summary
+# App icon and download presentation redesign — completion summary
 
 ## Request
 
-Replace the transparent glass-style visual treatment on Home, The Spin, and Topic Reveal with an opaque paper style featuring tactile depth, and remove the background gradients.
+Redesign the app icon and fix the icon appearing too zoomed in around the website's download-app presentation.
 
 ## Changes
 
-- Removed Home's ambient radial background halo and replaced translucent hero/stat/chip/reminder surfaces with opaque paper containers.
-- Reworked Home's hero card, stats, category chips, empty state, reminder card, drawer header, and controls with solid surfaces, crisp category edges, and restrained elevation.
-- Removed Spin's ambient accent backdrop, gradient ticket brush, landing glow, glassy sheen, radial orb rendering, and animated idle halo.
-- Rebuilt Spin's hero ticket as an opaque paper sheet with a category-color side rule, strong edge, layered elevation, ink-style watermark, solid peek cards, and an opaque bottom tray.
-- Updated Spin top-bar/category controls, topic-count pill, filter controls, empty state, and picker surfaces to use paper containers instead of translucent accent washes.
-- Reworked Topic Reveal's hero, teaser, action prompt, and tag surfaces to use opaque paper cards with category-color edges and readable ink hierarchy.
-- Preserved all existing navigation, spinning, filtering, auto-open, confetti, and capture behavior.
-- Updated `CURIO_SPEC.md` with the durable paper-surface rule and updated the store changelog.
+- Replaced the oversized rotated card-stack Android foreground with a centered six-section discovery wheel using the Curio palette and generous adaptive-icon safe-zone padding.
+- Added a dedicated monochrome launcher foreground for Android themed icons and wired it into both adaptive launcher declarations.
+- Added `web/assets/icon.svg` as the scalable web counterpart of the launcher mark.
+- Updated landing, help, privacy, and updates pages plus JavaScript fallbacks, favicons, and social metadata to use the new SVG asset consistently.
+- Added a compact download-panel icon treatment and tightened download-panel spacing, button sizing, and mobile behavior so the app mark no longer dominates the download area.
+- Preserved all existing download links and responsive interactions.
 
 ## Verification
 
-- `scripts/check_braces.py` reports HomeScreen, SpinScreen, and TopicRevealScreen as `BALANCED`.
+- Parsed all changed Android XML and SVG files successfully with Python ElementTree.
+- Confirmed the SVG viewBox and web asset references resolve.
+- Confirmed no active web references to the old `assets/icon.png` remain.
+- Confirmed CSS braces are balanced.
 - `git diff --check` passes.
-- Targeted source scans confirm no runtime `Brush`, `drawBehind`, `Color.Transparent`, removed glass-theme imports, animated idle halo, or the reviewed translucent paper fills remain in the three requested screens.
-- `code-reviewer-luna` completed a final review with no actionable blockers.
-- No Gradle compile/build/test/lint task was run because the repository's AGENTS.md explicitly forbids local Gradle validation; CI remains the compilation source of truth.
+- Code review found no actionable blockers.
+- No Gradle compile/build/test/lint command was run because the repository's AGENTS.md explicitly forbids local Android build validation; CI remains the source of truth.
 
 ## Closeout
 
-- Final Home category-chip glyph tiles were changed to opaque paper surfaces while retaining accent borders and icon colors.
-- Changes are ready to commit and push on branch `revamp`.
-
----
-
-# CI lint repair — completion summary
-
-## Failure
-
-The CI debug build compiled successfully but failed `lintDebug` on `SettingsScreen.kt` because `Locale.getDefault()` was read inside a composable (`NonObservableLocale`). CI also reported an unnecessary Home non-null assertion and an always-true Topic Reveal condition.
-
-## Fixes
-
-- Replaced `Locale.getDefault()` with observable `LocalLocale.current.platformLocale` in SettingsScreen date formatting.
-- Removed the unused `java.util.Locale` import.
-- Replaced Home's redundant `chosen!!` accent access with a nullable-safe fallback.
-- Simplified Topic Reveal's action badge condition from `action != null && resolved != null` to `action != null`.
-
-## Verification
-
-- `scripts/check_braces.py` passes for SettingsScreen, HomeScreen, and TopicRevealScreen.
-- `git diff --check` passes.
-- Targeted static assertions confirm the old locale call, redundant assertion, and always-true condition are gone.
-- Code review reports no actionable blockers.
-- Local Gradle commands were not run because repository instructions forbid local Android builds; CI remains the source of truth.
-
----
-
-# CI compile repair — reminder state and BuildConfig
-
-## Failure
-
-The next CI build passed topic validation and resource processing but failed `compileDebugKotlin` because Home, Profile, and Settings used `by AppPreferences.reminderEnabledState` even though the preference exposes a Boolean property, and Profile/Settings referenced `com.curio.app.BuildConfig.VERSION_NAME` while generated BuildConfig was disabled.
-
-## Fixes
-
-- Changed Home, Profile, and Settings to read `AppPreferences.reminderEnabledState` directly as a Boolean.
-- Enabled `buildConfig = true` in the active `app` module so `com.curio.app.BuildConfig.VERSION_NAME` is generated.
-
-## Verification
-
-- `scripts/check_braces.py` passes for HomeScreen, ProfileScreen, and SettingsScreen.
-- `git diff --check` passes.
-- Static assertions confirm no delegated reminder reads remain and BuildConfig generation is enabled.
-- Code review reports no actionable blockers.
-- Local Gradle commands were not run because repository instructions forbid local Android builds; CI remains the source of truth.
+- Changed files are ready to commit and push on branch `revamp`.
+- No app What's New entry was added because this request affects launcher/marketing assets and the active Curio module has no changelog screen matching the legacy root instruction path.
