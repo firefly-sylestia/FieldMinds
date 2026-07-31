@@ -65,7 +65,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -1474,7 +1473,7 @@ private fun OpeningPulseDot() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Bottom bar — Categories · Filter · Shuffle/Explore
+// Bottom bar — Categories · Filter (solid control buttons)
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -1538,11 +1537,13 @@ private fun DeckControlButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Solid fills — no translucent tint, no border. Selected buttons get the
+    // full accent color (DeepPlum content, matching the center SpinButton),
+    // unselected buttons get a solid surface fill with accent icon + text.
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (selected) 0.18f else 0.08f),
-        border = BorderStroke(1.dp, accent.copy(alpha = if (selected) 0.34f else 0.18f)),
+        color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {
@@ -1553,13 +1554,13 @@ private fun DeckControlButton(
         ) {
             CurioIcon(
                 icon, null,
-                tint = accent,
+                tint = if (selected) CurioColors.DeepPlum else accent,
                 size = 24.dp
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
