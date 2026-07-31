@@ -167,34 +167,61 @@ private fun CategoryTile(
                 .background(
                     Brush.verticalGradient(tileGradient),
                     RoundedCornerShape(28.dp)
-                )
+                ),
+            contentAlignment = Alignment.Center
         ) {
-            // Watermark icon — tucked into the bottom-right corner
+            // Subtle centred watermark icon — decorative backdrop
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.22f),
-                size = 100.dp,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 12.dp, bottom = 40.dp)
+                tint = Color.White.copy(alpha = 0.14f),
+                size = 130.dp
             )
-            // Title — bold, larger, coloured with category accent
+            // Name — centred, bold, the hero of the card
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 18.dp, vertical = 24.dp),
-                verticalArrangement = Arrangement.Bottom
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
                     text = category.displayName,
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 28.sp,
-                        lineHeight = 32.sp
+                        fontSize = 26.sp,
+                        lineHeight = 30.sp
                     ),
                     color = Color.White
                 )
+                if (isWildcard) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = Color.White.copy(alpha = 0.18f)
+                    ) {
+                        Text(
+                            text = "Surprise",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.8.sp
+                            ),
+                            color = Color.White.copy(alpha = 0.85f),
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 5.dp)
+                        )
+                    }
+                } else {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = Color.White.copy(alpha = 0.18f)
+                    ) {
+                        Text(
+                            text = "Explore",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.8.sp
+                            ),
+                            color = Color.White.copy(alpha = 0.85f),
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 5.dp)
+                        )
+                    }
+                }
             }
         }
     }
