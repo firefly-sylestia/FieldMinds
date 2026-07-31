@@ -70,19 +70,13 @@ fun ScreenEntrance(content: @Composable () -> Unit) {
  * Dramatic screen entrance — scale up from 0.85 + fade in, with an elastic
  * spring for that premium "morph into view" feel. Use for hero screens:
  * Topic Reveal, Spin landing, Splash → Home.
- *
- * @param delayMs Optional delay before the animation starts.
  */
 @Composable
 fun MorphEntrance(
-    delayMs: Int = 0,
     content: @Composable () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        if (delayMs > 0) kotlinx.coroutines.delay(delayMs.toLong())
-        visible = true
-    }
+    LaunchedEffect(Unit) { visible = true }
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(

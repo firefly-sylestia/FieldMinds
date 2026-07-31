@@ -52,7 +52,6 @@ import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
-import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -158,13 +157,12 @@ fun TopicRevealScreen(
             }
         }
 
-        MorphEntrance(delayMs = 100) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
                 // ── 2. Hero card — category watermark + verb/duration badge ──
                 HeroCard(
                     cat = cat,
@@ -285,7 +283,6 @@ fun TopicRevealScreen(
 
                 Spacer(Modifier.height(20.dp))
             }
-        }
 
         Spacer(Modifier.height(navInsets.calculateBottomPadding()))
     }

@@ -32,7 +32,6 @@ import com.curio.app.data.StreakTracker
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
-import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -345,9 +344,8 @@ fun ProfileScreen(navController: NavController) {
 
 @Composable
 private fun HeroProfileCard(name: String, streakDays: Int) {
-    MorphEntrance(delayMs = 60) {
-        Surface(
-            shape = RoundedCornerShape(28.dp),
+    Surface(
+        shape = RoundedCornerShape(28.dp),
             color = CurioColors.CoralBlush.copy(alpha = 0.14f),
             shadowElevation = 0.dp,
             tonalElevation = 1.dp,
@@ -427,7 +425,6 @@ private fun HeroProfileCard(name: String, streakDays: Int) {
                 }
             }
         }
-    }
 }
 
 private fun taglineForStreak(streakDays: Int): String = when {
