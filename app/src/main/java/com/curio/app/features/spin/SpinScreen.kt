@@ -66,7 +66,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -1393,9 +1392,12 @@ private fun PeekCard(
     val corner = if (far) 12.dp else 16.dp
     // Level-based shading — near cards step one shade down from the hero,
     // far cards step down again, so the deck fades into the background in
-    // distinct layers. White content stays readable on the dimmed fill.
+    // distinct layers. Each layer uses a cool, desaturated shade of the
+    // category accent (periwinkle-slate muted echo) instead of a raw
+    // saturated darkening, so the deck reads as a calm, cohesive palette
+    // behind the vivid hero ticket. White content stays readable.
     val cardColor = remember(cat.id, far) {
-        lerp(cat.accent, Color.Black, if (far) 0.42f else 0.28f)
+        CurioGradients.deckCardShade(cat.accent, if (far) 0.42f else 0.28f)
     }
 
     Box(

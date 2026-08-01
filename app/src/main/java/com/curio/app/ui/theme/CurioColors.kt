@@ -115,4 +115,21 @@ object CurioGradients {
         val start = categoryCardFill(accent)
         return listOf(start, lerp(start, end, 0.30f))
     }
+
+    /**
+     * Cool periwinkle slate used to desaturate + cool-shift category accents
+     * for the background deck cards behind the hero ticket.
+     */
+    private val CoolDeckSlate = Color(0xFF8FA3BC)
+
+    /**
+     * Muted "cool shade" of a category accent for the deck cards fanned
+     * behind the hero card. Pulls the accent toward a cool periwinkle slate
+     * (dropping saturation while keeping a whisper of the hue family — rose
+     * becomes muted mauve, teal becomes slate-teal, coral becomes dusty
+     * rose), then deepens by [depth] so the deck recedes in distinct layers.
+     * White content stays readable on every layer.
+     */
+    fun deckCardShade(accent: Color, depth: Float): Color =
+        lerp(lerp(accent, CoolDeckSlate, 0.55f), Color.Black, depth)
 }
