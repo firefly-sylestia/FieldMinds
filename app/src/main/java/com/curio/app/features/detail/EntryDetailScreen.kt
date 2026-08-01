@@ -1,5 +1,7 @@
 package com.curio.app.features.detail
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -82,7 +84,10 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.moodBoardPinch
+import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -309,7 +314,7 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
-        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
+        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
         CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category, navController)
     }
@@ -762,10 +767,29 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
+private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
     var boardExpanded by remember { mutableStateOf(false) }
+    // In-place tile zoom: tap/pinch magnifies the image over the board — no
+    // Lightbox page. Animated values live here so the spring interpolates
+    // from 1x on open and back on close.
+    val zoomState = rememberMoodBoardZoomState()
+    val animatedScale by animateFloatAsState(
+        targetValue = zoomState.scaleTarget,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "moodBoardZoomScale"
+    )
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = zoomState.offsetX,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "moodBoardZoomOffsetX"
+    )
+    val animatedOffsetY by animateFloatAsState(
+        targetValue = zoomState.offsetY,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "moodBoardZoomOffsetY"
+    )
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Mood board canvas with tile positions ──────────────────────
@@ -844,9 +868,15 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                                     )
                                 }
                                 .zIndex(i.toFloat())
+                                // Pinch (two fingers) or tap springs the tile
+                                // up in place — single-finger drags keep
+                                // scrolling the page.
+                                .moodBoardPinch(zoomState, tile.uri)
+                                .pointerInput(tile.uri) {
+                                    detectTapGestures(onTap = { zoomState.zoomIn(tile.uri) })
+                                }
                         ) {
                             Surface(
-                                onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) { launchSingleTop = true } },
                                 shape = RoundedCornerShape(18.dp),
                                 color = MaterialTheme.colorScheme.surface,
                                 shadowElevation = 0.dp,
@@ -859,7 +889,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                             ) {
                                 Image(
                                     painter = rememberAsyncImagePainter(tile.uri),
-                                    contentDescription = "Open image",
+                                    contentDescription = null,
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -885,6 +915,22 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         )
                     }
                 }
+
+                // ── In-place zoom overlay (pinch/tap, no separate page) ──
+                data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
+                    MoodBoardZoomOverlay(
+                        zoomState = zoomState,
+                        animatedScale = animatedScale,
+                        animatedOffsetX = animatedOffsetX,
+                        animatedOffsetY = animatedOffsetY,
+                        tileUri = tile.uri,
+                        offsetXPx = tile.offsetXPx,
+                        offsetYPx = tile.offsetYPx,
+                        widthPx = tile.widthPx,
+                        heightPx = tile.heightPx,
+                        rotationDeg = tile.rotationDeg
+                    )
+                }
             }
         }
 
@@ -908,7 +954,6 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 data = data,
                 seed = boardSeed,
                 accent = category.accent,
-                navController = navController,
                 onDismiss = { boardExpanded = false }
             )
         }
@@ -926,11 +971,27 @@ private fun ExpandedMoodBoardDialog(
     data: CaptureData.GalleryWall,
     seed: Int,
     accent: Color,
-    navController: NavController,
     onDismiss: () -> Unit
 ) {
     val density = LocalDensity.current
     val isDark = isCurioDarkTheme()
+    // In-place tile zoom inside the expanded board — pinch/tap, no Lightbox.
+    val zoomState = rememberMoodBoardZoomState()
+    val animatedScale by animateFloatAsState(
+        targetValue = zoomState.scaleTarget,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "expandedMoodZoomScale"
+    )
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = zoomState.offsetX,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "expandedMoodZoomOffsetX"
+    )
+    val animatedOffsetY by animateFloatAsState(
+        targetValue = zoomState.offsetY,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "expandedMoodZoomOffsetY"
+    )
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -981,9 +1042,14 @@ private fun ExpandedMoodBoardDialog(
                                         )
                                     }
                                     .zIndex(i.toFloat())
+                                    // Pinch (two fingers) or tap springs the
+                                    // tile up in place.
+                                    .moodBoardPinch(zoomState, tile.uri)
+                                    .pointerInput(tile.uri) {
+                                        detectTapGestures(onTap = { zoomState.zoomIn(tile.uri) })
+                                    }
                             ) {
                                 Surface(
-                                    onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) { launchSingleTop = true } },
                                     shape = RoundedCornerShape(18.dp),
                                     color = MaterialTheme.colorScheme.surface,
                                     shadowElevation = 0.dp,
@@ -996,7 +1062,7 @@ private fun ExpandedMoodBoardDialog(
                                 ) {
                                     Image(
                                         painter = rememberAsyncImagePainter(tile.uri),
-                                        contentDescription = "Open image",
+                                        contentDescription = null,
                                         contentScale = ContentScale.Fit,
                                         modifier = Modifier
                                             .fillMaxSize()
@@ -1005,6 +1071,22 @@ private fun ExpandedMoodBoardDialog(
                                     )
                                 }
                             }
+                        }
+
+                        // ── In-place zoom overlay (pinch/tap, no Lightbox) ──
+                        data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
+                            MoodBoardZoomOverlay(
+                                zoomState = zoomState,
+                                animatedScale = animatedScale,
+                                animatedOffsetX = animatedOffsetX,
+                                animatedOffsetY = animatedOffsetY,
+                                tileUri = tile.uri,
+                                offsetXPx = tile.offsetXPx * scale,
+                                offsetYPx = tile.offsetYPx * scale,
+                                widthPx = tile.widthPx * scale,
+                                heightPx = tile.heightPx * scale,
+                                rotationDeg = tile.rotationDeg
+                            )
                         }
                     }
                 }
@@ -1031,7 +1113,7 @@ private fun ExpandedMoodBoardDialog(
 
                 // ── Hint ─────────────────────────────────────────────────
                 Text(
-                    text = "Tap a tile to open it full screen",
+                    text = "Tap a tile to zoom · pinch to magnify",
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.55f),
                     modifier = Modifier

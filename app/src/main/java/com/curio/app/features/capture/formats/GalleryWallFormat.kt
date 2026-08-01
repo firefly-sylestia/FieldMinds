@@ -2,11 +2,12 @@ package com.curio.app.features.capture.formats
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +57,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardZoomOverlay
+import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import coil.compose.rememberAsyncImagePainter
@@ -246,10 +248,27 @@ private fun MoodBoardCanvas(
     val density = LocalDensity.current
     var canvasWPx by remember { mutableFloatStateOf(0f) }
     var canvasHPx by remember { mutableFloatStateOf(0f) }
-    var expandedImageUri by remember { mutableStateOf<String?>(null) }
     var draggingTileId by remember { mutableStateOf<Int?>(null) }
     var inPinZone by remember { mutableStateOf(false) }
     var showClearConfirm by remember { mutableStateOf(false) }
+    // In-place tile zoom: double-tap springs the image up over the canvas —
+    // no separate dialog page. Pinch/pan continue on the zoom overlay.
+    val zoomState = rememberMoodBoardZoomState()
+    val animatedScale by animateFloatAsState(
+        targetValue = zoomState.scaleTarget,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "editorMoodZoomScale"
+    )
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = zoomState.offsetX,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "editorMoodZoomOffsetX"
+    )
+    val animatedOffsetY by animateFloatAsState(
+        targetValue = zoomState.offsetY,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        label = "editorMoodZoomOffsetY"
+    )
     val pinZoneHeightPx = with(density) { 52.dp.toPx() }
 
     val imagePicker = rememberLauncherForActivityResult(
@@ -360,7 +379,9 @@ private fun MoodBoardCanvas(
                                                 tiles.add(tiles.removeAt(idx))
                                             }
                                         },
-                                        onDoubleTap = { expandedImageUri = tile.uri }
+                                        // Double-tap zooms the image in place
+                                        // instead of opening a full-screen page.
+                                        onDoubleTap = { zoomState.zoomIn(tile.uri) }
                                     )
                                 }
                                 .pointerInput(tile.id) {
@@ -422,7 +443,7 @@ private fun MoodBoardCanvas(
                                             .clip(RoundedCornerShape(14.dp))
                                     )
                                     Surface(
-                                        onClick = { expandedImageUri = tile.uri },
+                                        onClick = { zoomState.zoomIn(tile.uri) },
                                         shape = CircleShape,
                                         color = Color.Black.copy(alpha = 0.48f),
                                         modifier = Modifier
@@ -433,7 +454,7 @@ private fun MoodBoardCanvas(
                                         Box(contentAlignment = Alignment.Center) {
                                             CurioIcon(
                                                 name = CurioIcons.Search,
-                                                contentDescription = "Open image",
+                                                contentDescription = "Zoom image",
                                                 tint = Color.White,
                                                 size = 14.dp
                                             )
@@ -586,15 +607,25 @@ private fun MoodBoardCanvas(
                     )
                 }
             }
+
+            // ── In-place zoom overlay (double-tap / search button — no page) ──
+            tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
+                MoodBoardZoomOverlay(
+                    zoomState = zoomState,
+                    animatedScale = animatedScale,
+                    animatedOffsetX = animatedOffsetX,
+                    animatedOffsetY = animatedOffsetY,
+                    tileUri = tile.uri,
+                    offsetXPx = tile.offsetXPx,
+                    offsetYPx = tile.offsetYPx,
+                    widthPx = tile.widthPx,
+                    heightPx = tile.heightPx,
+                    rotationDeg = tile.rotationDeg
+                )
+            }
         }
     }
 
-    expandedImageUri?.let { uri ->
-        MoodBoardImageDialog(
-            imageUri = uri,
-            onDismiss = { expandedImageUri = null }
-        )
-    }
 
     if (showClearConfirm) {
         AlertDialog(
@@ -618,80 +649,3 @@ private fun MoodBoardCanvas(
     }
 }
 
-@Composable
-private fun MoodBoardImageDialog(
-    imageUri: String,
-    onDismiss: () -> Unit
-) {
-    var scale by remember(imageUri) { mutableFloatStateOf(1f) }
-    var offsetX by remember(imageUri) { mutableFloatStateOf(0f) }
-    var offsetY by remember(imageUri) { mutableFloatStateOf(0f) }
-
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .pointerInput(imageUri) {
-                    detectTransformGestures { _, pan, zoom, _ ->
-                        val nextScale = (scale * zoom).coerceIn(1f, 5f)
-                        scale = nextScale
-                        offsetX = if (nextScale == 1f) 0f else (offsetX + pan.x).coerceIn(-900f, 900f)
-                        offsetY = if (nextScale == 1f) 0f else (offsetY + pan.y).coerceIn(-900f, 900f)
-                    }
-                }
-        ) {
-            Image(
-                painter = rememberAsyncImagePainter(imageUri),
-                contentDescription = "Expanded mood board image",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(18.dp)
-                    .graphicsLayer(
-                        scaleX = scale,
-                        scaleY = scale,
-                        translationX = offsetX,
-                        translationY = offsetY
-                    )
-            )
-
-            Surface(
-                onClick = onDismiss,
-                shape = CircleShape,
-                color = Color.Black.copy(alpha = 0.58f),
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .size(44.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    CurioIcon(
-                        name = CurioIcons.Close,
-                        contentDescription = "Close image",
-                        tint = Color.White,
-                        size = 22.dp
-                    )
-                }
-            }
-
-            Surface(
-                shape = RoundedCornerShape(50),
-                color = Color.Black.copy(alpha = 0.45f),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(20.dp)
-            ) {
-                Text(
-                    text = "Pinch to zoom · Drag to pan",
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = Color.White.copy(alpha = 0.86f),
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
-                )
-            }
-        }
-    }
-}
