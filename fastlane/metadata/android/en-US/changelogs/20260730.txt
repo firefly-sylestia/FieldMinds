@@ -9,3 +9,4 @@
 • Removed the now-redundant Home tint toggle from Settings (Home is always plain now)
 • Multi-select category confirm button now says Mix (with count) instead of Done
 • Category picker: unselected cards now show soft category tints and pop bright when selected
+• Cabinet filter chips: neutral inactive color that never re-tints when you switch categories
