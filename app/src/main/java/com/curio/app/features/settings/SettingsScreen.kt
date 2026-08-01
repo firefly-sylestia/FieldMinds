@@ -346,42 +346,6 @@ fun SettingsScreen(navController: NavController) {
                     }
                 }
 
-                // Spin page — each feature is independently toggleable; turn
-                // one off to restore the previous design for that piece.
-                item { SectionHeader("Spin page") }
-                item {
-                    SettingsToggle(
-                        CurioIcons.Casino, "Roulette dial",
-                        "Segmented wheel with pointer",
-                        AppPreferences.spinDialState,
-                        onToggle = { AppPreferences.setSpinDialEnabled(context, it) }
-                    )
-                }
-                item {
-                    SettingsToggle(
-                        CurioIcons.AutoAwesome, "Ritual & anticipation",
-                        "Headline, deck counter, breathing button",
-                        AppPreferences.spinRitualState,
-                        onToggle = { AppPreferences.setSpinRitualEnabled(context, it) }
-                    )
-                }
-                item {
-                    SettingsToggle(
-                        CurioIcons.Album, "Deck enrichment",
-                        "Slot pointer, teaser, in-deck preview",
-                        AppPreferences.spinDeckEnrichState,
-                        onToggle = { AppPreferences.setSpinDeckEnrichEnabled(context, it) }
-                    )
-                }
-                item {
-                    SettingsToggle(
-                        CurioIcons.LocalFire, "Screen furniture",
-                        "Streak, quest chip, recently explored",
-                        AppPreferences.spinFurnitureState,
-                        onToggle = { AppPreferences.setSpinFurnitureEnabled(context, it) }
-                    )
-                }
-
                 // Backup & restore
                 item { SectionHeader("Backup & restore") }
                 item {

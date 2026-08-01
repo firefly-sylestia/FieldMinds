@@ -1,1 +1,1 @@
-Polished Shuffle navigation and motion. Home category shuffles now behave like the bottom-nav Shuffle tab, Shuffle cards/buttons animate more smoothly, card taps open landed topics, and mood-board images can expand full screen with pinch zoom and pan.
+Simplified the Shuffle page: removed the optional feature toggles (roulette dial, ritual header, deck enrichment, screen furniture) so the page always uses the clean fan-deck carousel. Added a subtle watermark backdrop of category icons in a muted shade behind the content.
