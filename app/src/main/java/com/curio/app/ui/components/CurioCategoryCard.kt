@@ -103,38 +103,38 @@ fun CurioCategoryCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(
-                    text = category.displayName,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                    color = Color.White,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = if (isWildcard) "Surprise mix" else "$topicCount topics",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.85f),
-                    maxLines = 1
-                )
-            }
-            if (isSelected) {
-                Surface(
-                    shape = CircleShape,
-                    color = Color.White
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    CurioIcon(
-                        CurioIcons.Check, null,
-                        tint = cardColor,
-                        size = 16.dp,
-                        modifier = Modifier.padding(3.dp)
+                    Text(
+                        text = category.displayName,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = Color.White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
+                    Text(
+                        text = if (isWildcard) "Surprise mix" else "$topicCount topics",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White.copy(alpha = 0.85f),
+                        maxLines = 1
+                    )
+                }
+                if (isSelected) {
+                    Surface(
+                        shape = CircleShape,
+                        color = Color.White
+                    ) {
+                        CurioIcon(
+                            CurioIcons.Check, null,
+                            tint = cardColor,
+                            size = 16.dp,
+                            modifier = Modifier.padding(3.dp)
+                        )
+                    }
                 }
             }
         }
     }
-}
 }
