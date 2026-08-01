@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -36,17 +37,17 @@ fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifi
     val neutral = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
     val highlight = activeCat.accent.copy(alpha = 0.11f)
     Box(modifier = modifier.fillMaxSize()) {
-        WatermarkGlyph("person", Alignment(-0.92f, -0.88f), 92.dp, -12f, neutral, activeCat, highlight)
-        WatermarkGlyph("album", Alignment(0.62f, -0.92f), 64.dp, 10f, neutral, activeCat, highlight)
-        WatermarkGlyph("videocam", Alignment(0.95f, -0.55f), 108.dp, -8f, neutral, activeCat, highlight)
-        WatermarkGlyph("movie", Alignment(0.82f, -0.15f), 56.dp, 16f, neutral, activeCat, highlight)
-        WatermarkGlyph("edit_note", Alignment(0.9f, 0.38f), 80.dp, -14f, neutral, activeCat, highlight)
-        WatermarkGlyph("menu_book", Alignment(-0.88f, -0.38f), 72.dp, 8f, neutral, activeCat, highlight)
-        WatermarkGlyph("brush", Alignment(-0.92f, 0.15f), 96.dp, -6f, neutral, activeCat, highlight)
-        WatermarkGlyph("palette", Alignment(-0.78f, 0.68f), 88.dp, 12f, neutral, activeCat, highlight)
-        WatermarkGlyph("science", Alignment(0.75f, 0.62f), 104.dp, -12f, neutral, activeCat, highlight)
-        WatermarkGlyph("lightbulb", Alignment(0.05f, 0.92f), 76.dp, 6f, neutral, activeCat, highlight)
-        WatermarkGlyph("casino", Alignment(0.3f, -0.2f), 92.dp, -4f, neutral, activeCat, highlight)
+        WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, neutral, activeCat, highlight)
+        WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, neutral, activeCat, highlight)
+        WatermarkGlyph("videocam", BiasAlignment(0.95f, -0.55f), 108.dp, -8f, neutral, activeCat, highlight)
+        WatermarkGlyph("movie", BiasAlignment(0.82f, -0.15f), 56.dp, 16f, neutral, activeCat, highlight)
+        WatermarkGlyph("edit_note", BiasAlignment(0.9f, 0.38f), 80.dp, -14f, neutral, activeCat, highlight)
+        WatermarkGlyph("menu_book", BiasAlignment(-0.88f, -0.38f), 72.dp, 8f, neutral, activeCat, highlight)
+        WatermarkGlyph("brush", BiasAlignment(-0.92f, 0.15f), 96.dp, -6f, neutral, activeCat, highlight)
+        WatermarkGlyph("palette", BiasAlignment(-0.78f, 0.68f), 88.dp, 12f, neutral, activeCat, highlight)
+        WatermarkGlyph("science", BiasAlignment(0.75f, 0.62f), 104.dp, -12f, neutral, activeCat, highlight)
+        WatermarkGlyph("lightbulb", BiasAlignment(0.05f, 0.92f), 76.dp, 6f, neutral, activeCat, highlight)
+        WatermarkGlyph("casino", BiasAlignment(0.3f, -0.2f), 92.dp, -4f, neutral, activeCat, highlight)
     }
 }
 

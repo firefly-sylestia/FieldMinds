@@ -40,3 +40,13 @@ User: add the same muted category-icon watermark backdrop to the Home screen so 
 - HomeScreen adds the backdrop inside its outer `Box` behind the scrollable content, with `activeCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)` so "Surprise" highlights the wildcard die.
 - Code review caught a latent compile bug (inherited from the original Spin private copy): `Modifier.align` is a `BoxScope` member extension, so `WatermarkGlyph` is now declared `private fun BoxScope.WatermarkGlyph(...)` — this would have failed CI once compiled.
 - Verified: braces balanced, no dangling refs to old private names, review clean. Gradle build/lint NOT run (forbidden here; CI validates on push).
+
+## Follow-up (CI compile fix)
+
+User: pasted a CI failure from `:app:compileDebugKotlin`.
+
+- Errors: `Argument type mismatch: actual type is 'Float', but '(IntSize, IntSize, LayoutDirection) -> IntOffset' was expected` + `Too many arguments for 'fun Alignment(...)'` on the watermark tile lines, plus `Unresolved reference 'align'` — all pointing at SpinScreen.kt (a stale pre-extraction run).
+- Root cause: `Alignment(horizontalBias, verticalBias)` is NOT a valid constructor in Compose BOM 2026.05.01 — `Alignment` only takes an alignment function (or none). The correct API is `BiasAlignment(horizontalBias, verticalBias)`.
+- Fix: in the shared `CurioWatermarkBackdrop.kt`, converted all 11 `Alignment(float, float)` calls to `BiasAlignment(float, float)` and added `import androidx.compose.ui.BiasAlignment`. The `WatermarkGlyph` param stays typed `Alignment` (BiasAlignment is a subclass); `Modifier.align(Alignment)` accepts it. The old `Unresolved reference 'align'` was already resolved by the BoxScope extension during extraction.
+- Audited the whole repo: no other float-arg `Alignment(` usages outside this file; braces balanced; review clean.
+- Committed + pushed: (see next commit).
