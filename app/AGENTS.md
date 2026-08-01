@@ -78,6 +78,7 @@ app/src/main/java/com/curio/app/
 - The two apps do not share DB names, schemas, or SharedPreferences namespaces — fully isolated.
 
 ### UI
+- **User design preferences (decided, durable):** light mode background/surface is **Soft Cream `#F7F0E4`** (deliberately less-white/creamy, not dark); the **Spin page alone** carries a faint wash of the active category's tint over the theme background (`.background(deckCat.tint)`) — other screens keep the plain background. Container steps are deepened so cards/sheets stay distinct on the cream surface. See `ui/theme/CurioColors.kt` + `CurioTheme.kt`.
 - All UI is 100% Jetpack Compose. No XML layouts for screens, ever.
 - `MainActivity` is the only entry point. It hosts `CurioNavHost` inside `CurioTheme`.
 - Edge-to-edge is enabled at the Activity level; the system bars are themed by `CurioTheme`'s `SideEffect` to match the current color scheme + light/dark mode.

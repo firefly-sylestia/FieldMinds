@@ -20,7 +20,8 @@ object CurioColors {
     val CoralBlush       = Color(0xFFFF8FA3)  // Soft pink — primary
     val ButterYellow     = Color(0xFFFFD97D)  // Warm butter — secondary
     val SkyMint          = Color(0xFF8FE3CF)  // Soft mint — tertiary
-    val CreamWhite       = Color(0xFFFFFBF5)  // Warm white — surface
+    val CreamWhite       = Color(0xFFFFFBF5)  // Warm white — ink on primary/error fills + decorative accents
+    val SoftCream        = Color(0xFFF7F0E4)  // Soft cream — light-mode background (user-preferred, less white)
     val SoftSand         = Color(0xFFF6EFE4)  // Warm sand — surface container
     val WarmCoralRed     = Color(0xFFE4626F)  // Soft coral-red — error
     val DeepPlum         = Color(0xFF3B0A17)  // Deep maroon — on-primary

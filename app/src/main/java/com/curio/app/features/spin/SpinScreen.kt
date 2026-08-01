@@ -520,6 +520,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            // Category tint wash — only the Spin page wears a faint wash of
+            // the active category's tint over the theme background, so the
+            // page feels tied to the deck being spun (20% alpha stays subtle
+            // on both cream light and midnight dark surfaces).
+            .background(deckCat.tint)
     ) {
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
