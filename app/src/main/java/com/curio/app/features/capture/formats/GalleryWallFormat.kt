@@ -26,9 +26,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -211,6 +213,7 @@ fun GalleryWallFormat(
         MoodBoardCanvas(
             tiles = tiles,
             accent = accent,
+            tint = tint,
             seed = seed,
             fullScreen = false,
             onExpand = { boardExpanded = true },
@@ -233,7 +236,13 @@ fun GalleryWallFormat(
     if (boardExpanded) {
         Dialog(
             onDismissRequest = { boardExpanded = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
+            // True full screen: the dialog draws behind the system bars so
+            // the board fills the whole display instead of floating like a
+            // dialog page. The controls below pad for the bars.
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false
+            )
         ) {
             Box(
                 modifier = Modifier
@@ -243,6 +252,7 @@ fun GalleryWallFormat(
                 MoodBoardCanvas(
                     tiles = tiles,
                     accent = accent,
+                    tint = tint,
                     seed = seed,
                     fullScreen = true,
                     onExpand = {},
@@ -264,6 +274,7 @@ fun GalleryWallFormat(
 private fun MoodBoardCanvas(
     tiles: SnapshotStateList<MoodTile>,
     accent: Color,
+    tint: Color,
     seed: Int,
     fullScreen: Boolean,
     onExpand: () -> Unit,
@@ -349,7 +360,9 @@ private fun MoodBoardCanvas(
         // RoundedCornerShape(0.dp) is a rectangle — RectangleShape isn't
         // available in the Compose BOM this project resolves.
         shape = if (fullScreen) RoundedCornerShape(0.dp) else RoundedCornerShape(24.dp),
-        color = Color.Transparent,
+        // The board background wears the category tint so the collage reads
+        // as a tinted surface (same wash language as the page around it).
+        color = tint,
         tonalElevation = 0.dp,
         // Faint accent rule — the board sits on the tinted page, so a slim
         // category-colored border keeps it from visually blending into the
@@ -476,6 +489,7 @@ private fun MoodBoardCanvas(
                     shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
+                        .then(if (fullScreen) Modifier.navigationBarsPadding() else Modifier)
                         .padding(16.dp)
                 ) {
                     Row(
@@ -502,6 +516,7 @@ private fun MoodBoardCanvas(
                     Box(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
+                            .then(if (fullScreen) Modifier.statusBarsPadding() else Modifier)
                             .fillMaxWidth()
                             .height(52.dp)
                             .background(
@@ -542,6 +557,7 @@ private fun MoodBoardCanvas(
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.BottomStart)
+                            .then(if (fullScreen) Modifier.navigationBarsPadding() else Modifier)
                             .padding(16.dp)
                             .zIndex(999f)
                     ) {
@@ -573,6 +589,7 @@ private fun MoodBoardCanvas(
                 shadowElevation = 0.dp,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
+                    .then(if (fullScreen) Modifier.statusBarsPadding() else Modifier)
                     .padding(10.dp)
                     .size(36.dp)
                     .zIndex(999f)

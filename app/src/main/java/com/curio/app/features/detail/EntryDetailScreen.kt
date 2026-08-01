@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -103,7 +104,6 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
-import com.curio.app.ui.theme.isCurioDarkTheme
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import kotlin.math.roundToInt
@@ -941,7 +941,9 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         val boardSeed = remember(entry.id) { entry.id.hashCode() }
         Surface(
             shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            // The saved board background wears the category tint (same wash
+            // language as the editor + the page around it).
+            color = category.tint,
             shadowElevation = 0.dp,
             // Faint category rule — the saved board sits on the tinted page,
             // so a slim theme-aware border (accent in light, light twin in
@@ -1079,6 +1081,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 data = data,
                 seed = boardSeed,
                 accent = category.accent,
+                wash = category.categoryBackgroundWash(),
                 onDismiss = { boardExpanded = false },
                 onEdit = {
                     navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true }
@@ -1099,11 +1102,11 @@ private fun ExpandedMoodBoardDialog(
     data: CaptureData.GalleryWall,
     seed: Int,
     accent: Color,
+    wash: Color,
     onDismiss: () -> Unit,
     onEdit: () -> Unit
 ) {
     val density = LocalDensity.current
-    val isDark = isCurioDarkTheme()
     // In-place tile zoom inside the expanded board — pinch/tap, no Lightbox.
     val zoomState = rememberMoodBoardZoomState()
     val animatedOffsetX by animateFloatAsState(
@@ -1118,15 +1121,18 @@ private fun ExpandedMoodBoardDialog(
     )
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        // True full screen: the dialog draws behind the system bars so the
+        // collage fills the whole display instead of floating like a dialog
+        // page. The controls below pad for the bars.
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
+        )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    if (isDark) MaterialTheme.colorScheme.background
-                    else MaterialTheme.colorScheme.surfaceContainerLow
-                )
+                .background(wash)
         ) {
             // ── Theme-aware watermark backdrop (matches inline board) ──
             CurioMoodBoardBackdrop(
@@ -1210,6 +1216,7 @@ private fun ExpandedMoodBoardDialog(
                     color = Color.Black.copy(alpha = 0.55f),
                     modifier = Modifier
                         .align(Alignment.TopStart)
+                        .statusBarsPadding()
                         .padding(16.dp)
                         .size(44.dp)
                 ) {
@@ -1230,6 +1237,7 @@ private fun ExpandedMoodBoardDialog(
                     color = Color.Black.copy(alpha = 0.55f),
                     modifier = Modifier
                         .align(Alignment.TopEnd)
+                        .statusBarsPadding()
                         .padding(16.dp)
                         .size(44.dp)
                 ) {
@@ -1250,6 +1258,7 @@ private fun ExpandedMoodBoardDialog(
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.55f),
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
+                        .navigationBarsPadding()
                         .padding(bottom = 24.dp)
                 )
             }

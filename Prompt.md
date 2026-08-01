@@ -1,18 +1,24 @@
-# Request: Mood board border + save button tint + lighter light-mode wash
+# Request: Mood board background tint + true full screen
 
 ## Request
-1. In mood board, add a faint border (it looks blended into the tinted page).
-2. Expand the tint to the save button background below too.
-3. In light mode, make the tint less dark / a little more whitish.
+1. Expand the tint to the mood board background too (the board surface itself should carry the category tint, not just the page around it).
+2. When the mood board is full screen, make it PROPER full screen — it currently looks like a dialog page, not full screen.
 
 ## Changes
-1. `GalleryWallFormat.kt` — editor MoodBoardCanvas Surface gets `border = if (fullScreen) null else BorderStroke(1.dp, accent.copy(alpha = 0.26f))` (faint accent rule so the board reads as a distinct surface on the tinted wash). Added `androidx.compose.foundation.BorderStroke` import.
-2. `EntryDetailScreen.kt` — saved GalleryWallRender board Surface gets `border = BorderStroke(1.dp, category.categoryInk().copy(alpha = 0.26f))` — theme-aware (accent in light, light twin in dark). Added BorderStroke import.
-3. `SaveCaptureScreen.kt` — sticky Save Button: containerColor `cat.accent` → `cat.tint`, contentColor/spinner/check icon `Color.White` → `cat.categoryInk()` so the whole bottom area stays in the page's color story.
-4. `CategoryInk.kt` — light-mode wash `lerp(background, accent, 0.20f)` → `lerp(background, lerp(accent, Color.White, 0.30f), 0.14f)` — lighter/whiter. Dark mode unchanged (mid-tone at 15%).
+
+### GalleryWallFormat.kt (editor)
+- `MoodBoardCanvas` gained a `tint: Color` param; both call sites (inline + full-screen) pass `tint = tint`. The board Surface color changed `Color.Transparent` → `tint` so the collage reads as a tinted surface.
+- Full-screen Dialog: `DialogProperties(usePlatformDefaultWidth = false)` → `(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)` so the dialog window draws behind the system bars — true full screen.
+- Controls gained conditional insets: expand/collapse button + pin-to-front drop zone get `Modifier.statusBarsPadding()` when fullScreen; Add-images + Clear-board buttons get `Modifier.navigationBarsPadding()` when fullScreen. New imports: `navigationBarsPadding`, `statusBarsPadding`.
+
+### EntryDetailScreen.kt (saved view)
+- Saved GalleryWallRender board Surface color: `surfaceContainerHigh` → `category.tint` (keeps the faint BorderStroke border).
+- `ExpandedMoodBoardDialog` gained a `wash: Color` param (call site passes `category.categoryBackgroundWash()`); removed the now-unused `val isDark = isCurioDarkTheme()` and its import (verified only 2 matches in file: import + isDark val).
+- DialogProperties also gets `decorFitsSystemWindows = false`; Box background `if (isDark) … else …` → `background(wash)`.
+- Edit + Close buttons get `.statusBarsPadding()`; hint text gets `.navigationBarsPadding()`. New import `navigationBarsPadding`.
 
 ## Validation
-- Code reviewer passed: Surface border params accept BorderStroke?, categoryInk() @Composable call valid in Surface params, cat/category in scope, imports ASCII-ordered, Color import still used (section tabs) so no dead import. Minor notes: editor border uses plain accent (low-contrast on dark wash vs saved view's light twin — acceptable since MoodBoardCanvas only gets accent); tinted button may blend with the light tray (matches user's explicit "expand the tint" ask).
+- Code reviewer passed: `decorFitsSystemWindows` available in Compose BOM (2026.05.01, added UI 1.4+), `tint`/`wash` in scope, imports alphabetical, `isDark`/`isCurioDarkTheme` removal safe, `Color`/`MaterialTheme` still used, no dead code. Minor non-blocking note: the editor full-screen outer Box still uses plain background, but the tint Surface fills it entirely so it's invisible.
 
 ## Completion summary
 - Committed & pushed.
