@@ -1,22 +1,22 @@
 # Prompt.md — Request Log
 
-## Current Request: Cabinet card preview — stacked badge for portfolio entries
+## Current Request: Fix CI compile failure
 
-**User request:** Update the Cabinet card preview for portfolio entries to show a small stacked badge of all section format icons instead of just the first one.
+**User request:** CI failed on `Task :app:compileDebugKotlin` — `GalleryWallFormat.kt:817:31 Unresolved reference 'rotationDegrees'. Fix this.`
 
-## Implementation (complete)
+## Root cause
+The mood-board EXIF-aware tile sizing (from the earlier editor-polish change) called `ExifInterface(stream).rotationDegrees`. The `rotationDegrees` property only exists on the **AndroidX** `androidx.exifinterface.media.ExifInterface`; the **framework** `android.media.ExifInterface` (what the file imports, and the only one available without adding a dependency) exposes the raw `TAG_ORIENTATION` attribute + `ORIENTATION_*` constants instead. CI was the only place this surfaced (local gradle builds are forbidden by AGENTS.md).
 
-### CurioTopicCard.kt (`CurioEntryCard` — the only Cabinet card component; sole user is CabinetScreen)
-- The card's bottom-right corner previously rendered a single `CurioIcon(formatGlyph(entry.format))` — for a Portfolio that's only the FIRST section's format.
-- Added `EntryFormatBadges(entry)`:
-  - Non-Portfolio entries (or an empty/malformed Portfolio) → unchanged single-glyph fallback (`formatGlyph(entry.format)`), byte-for-byte the old rendering.
-  - Portfolio entries → a small STACKED badge cluster: one 18dp circular badge per section's format glyph (`formatGlyph(section.format)`), overlapping like an avatar stack via `Arrangement.spacedBy((-6).dp)` (later circles draw on top), each separated by a 1dp `surface`-colored border. Capped at 3 badges; extra takes roll up into a "+N" overflow chip. The card's `bodyPreview` already lists every take's short name ("2 takes · Voice + Review").
-- New imports: `BorderStroke`, `size`, `CircleShape`, `FontWeight`, `CaptureData`.
+## Fix (GalleryWallFormat.kt `decodeImageBounds`)
+Replaced the property access with the framework API:
+- `ExifInterface(stream).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)`
+- Map `ORIENTATION_ROTATE_90/180/270` → degrees via a `when` (180 needs no swap; only 90/270 swap width/height).
+- All referenced members exist in `android.media.ExifInterface` at minSdk 26 (`ExifInterface(InputStream)` ctor is API 24+); the enclosing `runCatching` already absorbs the ctor's IOException.
 
 ## Validation
-- code-reviewer-deepseek-flash: clean — imports complete, negative-spacing stack renders correctly, non-portfolio behavior preserved via the `sections.isEmpty()` fallback, badge cluster fits the 2-col grid (~60dp vs ~134dp available). Only cosmetic nits (duplicated circle structure for "+N"; 1dp tonalElevation makes the pure-`surface` border read a hair off — imperceptible).
-- git diff scoped to 1 file (75 insertions, 5 deletions); confirmed `CurioEntryCard` has no other users.
-- No gradle build per AGENTS.md (CI owns compilation on push).
+- code-reviewer-deepseek-flash: clean — API verified against framework class, mapping correct, no ambiguity (explicit import), runCatching covers IOException. Minor non-blocking notes: EXIF transpose/transverse (5/7) orientations also swap aspect but are vanishingly rare; the ExifInterface read opens a second stream on the main thread (pre-existing pattern).
+- grep: `rotationDegrees` now appears only in a comment; `TAG_ORIENTATION`/`getAttributeInt`/`ORIENTATION_*` all present.
+- No local gradle build per AGENTS.md — CI on push is the compile gate.
 
 ## Status
-DONE — committed & pushed (feat: cabinet card stacked format badges for portfolios).
+DONE — committed & pushed (fix: use framework ExifInterface orientation API — resolves CI compile failure).

@@ -813,9 +813,20 @@ private fun decodeImageBounds(context: Context, uri: Uri): Pair<Int, Int>? = run
     // Photos shot sideways carry EXIF rotation; Coil renders them rotated, so
     // swap the raw sensor bounds to match the on-screen aspect. Without this,
     // tiles get sized to the wrong aspect and ContentScale.Fit letterboxes.
-    val rotationDeg = context.contentResolver.openInputStream(uri)?.use { stream ->
-        ExifInterface(stream).rotationDegrees
-    } ?: 0
+    // (Framework android.media.ExifInterface exposes the raw orientation tag —
+    // no `rotationDegrees` property — so map the ORIENTATION_* constants.)
+    val orientation = context.contentResolver.openInputStream(uri)?.use { stream ->
+        ExifInterface(stream).getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        )
+    } ?: ExifInterface.ORIENTATION_NORMAL
+    val rotationDeg = when (orientation) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> 90
+        ExifInterface.ORIENTATION_ROTATE_180 -> 180
+        ExifInterface.ORIENTATION_ROTATE_270 -> 270
+        else -> 0
+    }
     if (rotationDeg == 90 || rotationDeg == 270) {
         val swap = width
         width = height
