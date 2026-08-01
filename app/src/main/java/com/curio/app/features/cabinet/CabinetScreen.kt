@@ -40,6 +40,7 @@ import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
@@ -175,7 +176,12 @@ fun CabinetScreen(navController: NavController) {
                         tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
                         ctaLabel = "Discover something",
                         onCtaClick = {
-                            navController.navigate(CurioRoutes.SPIN) { launchSingleTop = true }
+                            // Tab switch (not a plain push): Cabinet is itself
+                            // a tab, so pushing spin on top of it would leave a
+                            // hybrid back stack — back would walk into Cabinet
+                            // and tab switches would pile up duplicates. Anchor
+                            // to HOME like every other Spin launch in the app.
+                            navController.navigateToTab(CurioRoutes.SPIN)
                         }
                     )
                 } else {
@@ -188,9 +194,13 @@ fun CabinetScreen(navController: NavController) {
                         tint = cat.categoryInk().copy(alpha = 0.4f),
                         ctaLabel = "Shuffle for ${cat.displayName}",
                         onCtaClick = {
-                            navController.navigate(
+                            // Same tab-switch contract as the "All" empty state
+                            // (and Home's quest cards): anchor to HOME so the
+                            // Shuffle tab replaces Cabinet instead of stacking
+                            // a spin/… entry on top of the Cabinet tab entry.
+                            navController.navigateToTab(
                                 CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                            ) { launchSingleTop = true }
+                            )
                         }
                     )
                 }

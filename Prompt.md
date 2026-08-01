@@ -4,44 +4,50 @@
 
 Two-part request:
 
-1. "similar to white mode tint, make the dark mode tint follow a similar way —
-   the dark should be more [visible], same way I implemented, but use the
-   proper current color shades for dark mode."
-2. "add a dialog in edit entry when I remove something by tapping the cross
-   if I've drafted changes."
+1. "make the button nav home button etc pick the tint too but only on the
+   screen tint applies not in home" — the bottom nav bar should wear the
+   category tint on tinted screens, but stay plain on Home.
+2. "when tapping shuffle for directors or any category from the empty state
+   cabinet it opens up the shuffle but also breaks the navigation or corrupts
+   them" — analyse and fix the navigation break.
 
-## Changes (2 files)
+## Changes (3 files)
 
-1. **`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`**
-   - `categorySurface()` dark branch: blend fraction raised from
-     `tuning.blendFraction + 0.10f` → `+ 0.30f`. Dark cards now wear the
-     proper dark mid-tone (the same per-family DARK_WASH_TUNING shades) at
-     0.45–0.54 strength, so tiles/chips visibly carry their category tint on
-     the midnight page — the same "cards = wash's stronger sibling"
-     relationship light mode already has (light stays 0.24, unchanged). The
-     page wash itself stays deep; only surfaces get the boost.
-   - KDoc updated to note the dark mode blends markedly stronger.
+1. **`app/src/main/java/com/curio/app/ui/components/CurioBottomNav.kt`**
+   - New `CurioNavTint` object (mutableStateOf<Color?> handoff — mirrors the
+     existing `LightboxTarget` out-of-band pattern) so the Scaffold-level
+     nav bar can read the Spin page wash without reaching into NavHost
+     content state.
+   - `CurioBottomBar` containerColor = `CurioNavTint.spinWash` when
+     `routePrefix == SPIN` (covers both the `spin` tab and `spin/{categorySlug}`
+     via the `/`-prefix), else plain `surface`. Home and Cabinet stay plain —
+     the bar only tints where the page actually tints.
 
-2. **`app/src/main/java/com/curio/app/features/capture/SaveCaptureScreen.kt`**
-   - The × on a take tab now confirms before removing when the take holds
-     drafted content (`canSave && data != null`) or a live recording is
-     running (`busy`) — in edit mode every take arrives prefilled, so the X
-     never silently throws away drafted changes. Empty takes (and no live
-     recording) still remove freely.
-   - New `pendingRemoveIndex` state + AlertDialog ("Remove this take?" with
-     **Remove** / **Keep editing**), mirroring the existing
-     `pendingFormatSwitch` confirmation pattern.
-   - Extracted shared `removeSection(i)` local fun (activeIndex fixup) used
-     by both the direct-remove path and the dialog confirm, so the two can
-     never drift apart.
+2. **`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
+   - Publishes `deckCat.categoryBackgroundWash()` to `CurioNavTint` via
+     `LaunchedEffect(spinPageWash)` — keyed on the resolved color so category
+     switches, dark-mode and the tint toggle republish automatically.
+   - `DisposableEffect(Unit)` onDispose clears the handoff (hygiene).
+
+3. **`app/src/main/java/com/curio/app/features/cabinet/CabinetScreen.kt`**
+   - **Navigation fix**: both empty-state CTAs ("Discover something" and
+     "Shuffle for {category}") changed from plain `navigate(...)` +
+     launchSingleTop to `navigateToTab(...)`. Cabinet is itself a tab, so a
+     plain push stacked `spin/{categorySlug}` ON TOP of the Cabinet entry
+     → hybrid back stack ([HOME, CABINET, spin/directors]) where back walked
+     through Cabinet and tab switches piled duplicates. `navigateToTab`
+     anchors `popUpTo(HOME){saveState}` + restoreState — the app-mandated
+     tab switch (AGENTS.md), matching Home's quest cards and the picker.
+   - The remaining plain `navigate(` (entry-card → entryDetail) is a genuine
+     push destination and stays.
 
 ## Review
-- code-reviewer-deepseek-flash: clean on both changes — dark blend values in
-  sane bounds (0.45–0.54), proper dark shades retained, contrast holds;
-  remove dialog logic matches the direct-remove path, reset paths complete,
-  no stale duplicated block (deduped per review). Noted (accepted): the
-  GalleryWall per-tile × in a single-board mood edit is outside this scope —
-  the request's "cross" is the take tab × in the edit-entry section strip.
+- code-reviewer-deepseek-flash: clean on both changes — route-gated tint
+  correct (spin only, first-frame `?: surface` fallback), LaunchedEffect /
+  onDispose lambdas non-composable safe, imports present, no dead code, no
+  leftover plain-navigate Spin CTAs in Cabinet, style consistent.
+- Behavior note (intended): back from Shuffle now lands on Home (tab
+  semantics) instead of returning to Cabinet — that's the fix.
 
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).

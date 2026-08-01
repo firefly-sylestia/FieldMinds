@@ -50,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -92,6 +93,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioCategoryCard
+import com.curio.app.ui.components.CurioNavTint
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
@@ -426,6 +428,21 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         } else {
             activeCategory
         }
+    }
+
+    // Publish the page wash so the bottom nav bar (rendered by the NavHost
+    // scaffold, outside this screen) can blend with the tinted Spin page. The
+    // bar gates on its own route (spin prefix only), so publishing here never
+    // tints Home or Cabinet. Keys on the resolved color so theme/dark-mode
+    // and category changes republish automatically.
+    val spinPageWash = deckCat.categoryBackgroundWash()
+    LaunchedEffect(spinPageWash) {
+        CurioNavTint.publishSpinWash(spinPageWash)
+    }
+    // Hygiene: clear the handoff when Spin leaves composition so a stale wash
+    // never lingers for a future route that might share the tint.
+    DisposableEffect(Unit) {
+        onDispose { CurioNavTint.publishSpinWash(null) }
     }
 
     // Category switch resets transient animation state. The landed card is

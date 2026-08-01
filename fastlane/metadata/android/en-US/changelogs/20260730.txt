@@ -14,3 +14,5 @@
 • Editing an entry: leaving with unsaved edits now offers Save and switch, Keep editing, or Discard
 • Editing an entry: removing a take with drafted content now asks for confirmation first
 • Dark mode: category cards and chips wear a clearer, more visible category tint (deep shades, same as light mode)
+• Bottom nav bar blends with the category tint on the Spin screen (Home and Cabinet stay plain)
+• Fixed navigation from the Cabinet empty state: Shuffle now switches tabs cleanly instead of corrupting the back stack
