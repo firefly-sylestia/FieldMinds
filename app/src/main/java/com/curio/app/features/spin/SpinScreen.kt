@@ -1639,7 +1639,7 @@ private fun SpinButton(
             shadowElevation = 0.dp,
             modifier = Modifier
                 .size(buttonSize)
-                .scale((pulseScale * breathingScale).coerceIn(0.9f, 1.10f))
+                .scale((pulseScale * idleBreath).coerceIn(0.9f, 1.10f))
         ) {
             Box(
                 modifier = Modifier
@@ -1845,6 +1845,9 @@ private fun RouletteDial(
             EmptyPoolHint(cat)
         } else {
             // ── The wheel ───────────────────────────────────────────
+            // Hoisted out of the Canvas — MaterialTheme.colorScheme is a
+            // @Composable read and Canvas draw lambdas are not composable.
+            val dialSurface = MaterialTheme.colorScheme.surface
             Canvas(modifier = Modifier.size(dialSize)) {
                 val c = Offset(size.width / 2f, size.height / 2f)
                 val radius = size.minDimension / 2f
@@ -1868,7 +1871,7 @@ private fun RouletteDial(
                 )
                 // Hub
                 drawCircle(
-                    color = MaterialTheme.colorScheme.surface,
+                    color = dialSurface,
                     radius = radius * 0.34f
                 )
                 drawCircle(
@@ -1883,7 +1886,7 @@ private fun RouletteDial(
                     lineTo(c.x + 13.dp.toPx(), 28.dp.toPx())
                     close()
                 }
-                drawPath(pointerPath, color = MaterialTheme.colorScheme.surface)
+                drawPath(pointerPath, color = dialSurface)
                 drawPath(pointerPath, color = cat.accent, style = Stroke(2.dp.toPx()))
             }
             // ── Center hub — glyph while idle, landed name once settled ─
@@ -2012,6 +2015,9 @@ private fun RitualHeader(cat: CurioCategory, deckCount: Int, modifier: Modifier 
 private fun SlotWindowPointer(accent: Color, modifier: Modifier = Modifier) {
     // zIndex above the deck (hero 10f, peeks 2f/5f) so the fully-opaque
     // peek cards never draw over the needle.
+    // Hoisted out of the Canvas — MaterialTheme.colorScheme is a
+    // @Composable read and Canvas draw lambdas are not composable.
+    val pointerSurface = MaterialTheme.colorScheme.surface
     Canvas(modifier = modifier.size(28.dp).zIndex(11f)) {
         val path = Path().apply {
             moveTo(size.width / 2f, size.height)
@@ -2019,7 +2025,7 @@ private fun SlotWindowPointer(accent: Color, modifier: Modifier = Modifier) {
             lineTo(size.width, 0f)
             close()
         }
-        drawPath(path, color = MaterialTheme.colorScheme.surface)
+        drawPath(path, color = pointerSurface)
         drawPath(path, color = accent, style = Stroke(2.dp.toPx()))
     }
 }
