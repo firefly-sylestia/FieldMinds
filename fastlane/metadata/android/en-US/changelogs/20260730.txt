@@ -6,7 +6,4 @@
 • Review stars get an outline (solid fill + crisp stroke)
 • Home tint removed (plain background); Cabinet keeps its chips but drops the page wash
 • Dark mode rose/coral tint deepened to a rich burgundy
-• Spin: bigger peek cards behind the shuffle card, and Categories/Filter back to filled pill buttons
-• Review stars get an outline (solid fill + crisp stroke)
-• Home tint removed (plain background); Cabinet keeps its chips but drops the page wash
-• Dark mode rose/coral tint deepened to a rich burgundy
+• Removed the now-redundant Home tint toggle from Settings (Home is always plain now)

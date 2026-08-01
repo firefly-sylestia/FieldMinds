@@ -26,7 +26,6 @@ object AppPreferences {
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
-    private const val KEY_HOME_TINT_ENABLED = "home_tint_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
@@ -59,14 +58,6 @@ object AppPreferences {
         private set
 
     /**
-     * Reactive HOME-screen-only tint state — independent of the global tint
-     * toggle. When off, the Home page keeps the plain theme background even
-     * while every other screen wears its category tint.
-     */
-    var homeTintEnabledState by mutableStateOf(true)
-        private set
-
-    /**
      * Reactive pinned-topics state — updated by [pinTopic] / [unpinTopic] so
      * the Topic Reveal pin button and the Topic History "Pinned" section
      * recompose instantly. Seeded from prefs in [initThemeMode].
@@ -78,7 +69,6 @@ object AppPreferences {
         themeModeState = getThemeMode(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
-        homeTintEnabledState = isHomeTintEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
     }
 
@@ -99,16 +89,6 @@ object AppPreferences {
     fun setTintWashEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_TINT_WASH_ENABLED, enabled).apply()
         tintWashEnabledState = enabled
-    }
-
-    // ── Home screen tint (separate from the global wash) ───────────────
-    /** Whether the Home page wears a category tint (default on). */
-    fun isHomeTintEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_HOME_TINT_ENABLED, true)
-
-    fun setHomeTintEnabled(context: Context, enabled: Boolean) {
-        prefs(context).edit().putBoolean(KEY_HOME_TINT_ENABLED, enabled).apply()
-        homeTintEnabledState = enabled
     }
 
     // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────

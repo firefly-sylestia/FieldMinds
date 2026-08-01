@@ -373,36 +373,6 @@ fun SettingsScreen(navController: NavController) {
                                 onCheckedChange = { AppPreferences.setTintWashEnabled(context, it) }
                             )
                         }
-                        CurioSettingsDivider()
-                        // ── Home screen tint — a separate toggle so the
-                        //    Home page can stay plain cream while the rest
-                        //    of the app keeps its category tint.
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            CurioIcon(
-                                CurioIcons.Home, null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 22.dp
-                            )
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Home screen tint", style = MaterialTheme.typography.bodyLarge)
-                                Text(
-                                    if (AppPreferences.homeTintEnabledState)
-                                        "Tint the Home page too"
-                                    else
-                                        "Plain Home background only",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Switch(
-                                checked = AppPreferences.homeTintEnabledState,
-                                onCheckedChange = { AppPreferences.setHomeTintEnabled(context, it) }
-                            )
-                        }
                     }
                 }
 
