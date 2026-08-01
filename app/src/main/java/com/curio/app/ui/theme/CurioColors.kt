@@ -116,3 +116,98 @@ object CurioGradients {
         return listOf(start, lerp(start, end, 0.30f))
     }
 }
+
+/**
+ * Mixed-deck color system for multi-category spins.
+ *
+ * When a user selects several categories in the picker, the deck no longer
+ * speaks with the first category's accent — it blends all the chosen accents
+ * into one premium color story:
+ *
+ *  - **Peek cards + spin button + confetti** use [mixedDeckAccent]: a curated
+ *    blend of every selected accent (deduped), so the deck visibly mixes the
+ *    user's picks.
+ *  - **Hero card** uses [mixedDeckGradient]: a multi-accent gradient across
+ *    the selected colors (Spotify/duotone-style), or the standard theme-aware
+ *    single-accent gradient when only one distinct category is active.
+ *
+ * The two-accent blends below were hand-curated from the researched category
+ * palette — computed as HSL midpoints along the SHORTEST hue path with a
+ * saturation boost (naive RGB/RGB-lerp midpoints pass through muddy gray,
+ * and teal↔amber / sky↔amber cross the olive-green dead zone, so those are
+ * deliberately steered to a richer jade/teal instead). Three+ accents fall
+ * back to sequential HSL blending through [hslBlend].
+ */
+object CurioMixedDeck {
+
+    /** Curated premium blends for every pair of the six researched accents. */
+    private val PairBlends: Map<Set<Color>, Color> = mapOf(
+        // Indigo family mixes — violet-magenta, azure, petrol
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryRose)  to Color(0xFFA72CD6),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryAmber) to Color(0xFFA926B5),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryTeal)  to Color(0xFF1F62A8),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategorySky)   to Color(0xFF1649C4),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryCoral) to Color(0xFFC44AD2),
+        // Rose family mixes — ember, violet, blush
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryAmber) to Color(0xFFBF1E14),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryTeal)  to Color(0xFF4A12A8),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategorySky)   to Color(0xFF6D0BB8),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryCoral) to Color(0xFFF02D59),
+        // Amber mixes — ember, jade (steered off the olive dead zone), flame
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryTeal)  to Color(0xFF158A5C),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategorySky)   to Color(0xFF0C8B8A),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryCoral) to Color(0xFFF03F22),
+        // Teal / Sky / Coral family mixes
+        setOf(CurioColors.CategoryTeal,   CurioColors.CategorySky)   to Color(0xFF067E94),
+        setOf(CurioColors.CategoryTeal,   CurioColors.CategoryCoral) to Color(0xFF6C18F5),
+        setOf(CurioColors.CategorySky,    CurioColors.CategoryCoral) to Color(0xFF9E1BFF)
+    )
+
+    /**
+     * The single blend color a mixed deck wears on peeks, the spin button and
+     * confetti. A single distinct accent returns itself unchanged; pairs use
+     * the curated table; three+ chain-blend in HSL (shortest hue path, boosted
+     * saturation) so the result stays vivid rather than muddy.
+     */
+    fun mixedDeckAccent(accents: List<Color>): Color {
+        val distinct = accents.map { it.toArgb() }.distinct().map { Color(it) }
+        return when (distinct.size) {
+            0 -> CurioColors.CategoryCoral
+            1 -> distinct.first()
+            2 -> PairBlends[distinct.toSet()] ?: hslBlend(distinct[0], distinct[1])
+            else -> distinct.reduce { acc, c -> hslBlend(acc, c) }
+        }
+    }
+
+    /**
+     * Hero-card gradient stops. Single accent → the standard theme-aware
+     * [CurioGradients.cardGradient]. Two+ accents → a multi-stop gradient
+     * across the selected accents (capped at three stops so a five-way mix
+     * doesn't slide into rainbow), which is what gives the mixed deck its
+     * signature blended look.
+     */
+    @Composable
+    fun mixedDeckGradient(accents: List<Color>): List<Color> {
+        val distinct = accents.map { it.toArgb() }.distinct().map { Color(it) }
+        if (distinct.size <= 1) {
+            return CurioGradients.cardGradient(mixedDeckAccent(distinct))
+        }
+        return distinct.take(3).map { CurioGradients.categoryCardFill(it) }
+    }
+
+    /**
+     * HSL midpoint blend along the shortest hue path with a small saturation
+     * boost — the premium way to mix two deep accents without a muddy middle.
+     */
+    private fun hslBlend(a: Color, b: Color): Color {
+        var dh = b.hue - a.hue
+        if (dh > 180f) dh -= 360f
+        if (dh < -180f) dh += 360f
+        val hue = ((a.hue + dh / 2f) + 360f) % 360f
+        // Boosted midpoint saturation keeps the blend vivid (naive averaging
+        // can drift toward gray when the endpoints differ in lightness).
+        val sat = ((a.saturation + b.saturation) / 2f + 0.05f).coerceIn(0f, 1f)
+        val light = (a.lightness + b.lightness) / 2f
+        return Color.hsl(hue, sat, light)
+    }
+}

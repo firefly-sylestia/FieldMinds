@@ -94,8 +94,8 @@ import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioMixedDeck
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryInk
@@ -335,6 +335,19 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
     val cat = activeCategory
 
+    // ── Mixed-deck colors (v5.12) ───────────────────────────────────────
+    // When several categories are selected, the deck wears a curated blend
+    // of every chosen accent instead of the first category's color alone:
+    // peek cards / spin button / confetti take the blended accent, and the
+    // hero ticket takes a multi-accent gradient (Spotify-style).
+    val deckAccents = remember(activeCatIds) {
+        activeCatIds.map { CurioCategories.byId(it).accent }
+    }
+    val deckAccent = remember(deckAccents) {
+        CurioMixedDeck.mixedDeckAccent(deckAccents)
+    }
+    val deckGradient = CurioMixedDeck.mixedDeckGradient(deckAccents)
+
     // Category switch resets transient animation state. The landed card is
     // deliberately NOT cleared here: landedTopicName is keyed by
     // activeCategory.id in rememberSaveable, so switching categories resets
@@ -481,6 +494,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         // Shuffle CTA owns starting or re-starting the shuffle.
         Carousel(
             cat = cat,
+            deckAccent = deckAccent,
+            deckGradient = deckGradient,
             displayPool = displayPool,
             cycleIndex = cycleIndex,
             shuffling = shuffling,
@@ -511,7 +526,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
-                tint = cat.accent,
+                tint = deckAccent,
                 isShuffling = shuffling,
                 landedTopic = landedTopic,
                 pulseScale = buttonPulse,
@@ -576,7 +591,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── Confetti on landing ────────────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
+            colors = listOf(deckAccent, cat.tint, CurioColors.ButterYellow),
             trigger = confettiTrigger,
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
@@ -1041,6 +1056,8 @@ private const val LandedRestScale = 1.04f
 @Composable
 private fun Carousel(
     cat: CurioCategory,
+    deckAccent: Color,
+    deckGradient: List<Color>,
     displayPool: List<CurioTopic>,
     cycleIndex: Int,
     shuffling: Boolean,
@@ -1069,7 +1086,8 @@ private fun Carousel(
                 )
                 if (slot == 0) {
                     HeroTicketCard(
-                        accent = cat.accent,
+                        accent = deckAccent,
+                        gradient = deckGradient,
                         glyph = cat.iconGlyph,
                         topic = topic,
                         cat = cat,
@@ -1082,6 +1100,7 @@ private fun Carousel(
                 } else {
                     PeekCard(
                         slot = slot,
+                        accent = deckAccent,
                         cat = cat,
                         topic = topic,
                         shuffling = shuffling
@@ -1137,6 +1156,7 @@ private fun EmptyPoolHint(cat: CurioCategory) {
 @Composable
 private fun HeroTicketCard(
     accent: Color,
+    gradient: List<Color>,
     glyph: String,
     topic: CurioTopic?,
     cat: CurioCategory,
@@ -1148,7 +1168,9 @@ private fun HeroTicketCard(
 ) {
     val w = 270.dp
     val h = 292.dp
-    val ticketGradient = CurioGradients.cardGradient(accent)
+    // Mixed decks pass a multi-accent gradient; single decks keep the
+    // standard theme-aware card gradient via CurioMixedDeck.mixedDeckGradient.
+    val ticketGradient = gradient
 
     // ── Per-tick shuffle pulse — the front card bounces in sync with the
     //    wheel: every time the displayed topic switches, the card kicks
@@ -1392,6 +1414,7 @@ private fun HeroTicketCard(
 @Composable
 private fun PeekCard(
     slot: Int,
+    accent: Color,
     cat: CurioCategory,
     topic: CurioTopic?,
     shuffling: Boolean
@@ -1415,8 +1438,9 @@ private fun PeekCard(
     // Level-based shading — near cards step one shade down from the hero,
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.
-    val cardColor = remember(cat.id, far) {
-        lerp(cat.accent, Color.Black, if (far) 0.42f else 0.28f)
+    // Mixed decks shade the blended accent so the whole deck reads mixed.
+    val cardColor = remember(accent, far) {
+        lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
     }
 
     Box(
