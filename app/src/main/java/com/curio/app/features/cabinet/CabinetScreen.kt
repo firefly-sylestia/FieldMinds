@@ -45,6 +45,7 @@ import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
 
 /**
@@ -87,17 +88,14 @@ fun CabinetScreen(navController: NavController) {
 
     // Category tint wash — the Cabinet wears the ACTIVE FILTER's tint over
     // the theme background (matching the Spin page), so browsing a category
-    // feels tied to it. "All" has no single category → plain background.
-    val filterTint = selectedFilter?.let { CurioCategories.byId(it).tint }
+    // feels tied to it. Theme-aware: deep accent over cream in light, pastel
+    // twin glow over midnight in dark. "All" has no single category → plain.
+    val filterWash = selectedFilter?.let { CurioCategories.byId(it).categoryBackgroundWash() }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .then(
-                if (filterTint != null) Modifier.background(filterTint)
-                else Modifier
-            )
+            .background(filterWash ?: MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
         // ── Top bar ────────────────────────────────────────────────────────

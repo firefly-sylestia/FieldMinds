@@ -58,6 +58,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
 
 /**
@@ -131,11 +132,12 @@ fun TopicRevealScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
             // Category tint wash — the reveal page wears a faint wash of the
             // topic's category over the theme background, matching the Spin
             // page so the whole explore flow feels tied to the deck.
-            .background(cat.tint)
+            // Theme-aware: deep accent over cream in light, pastel twin glow
+            // over midnight in dark (deep accents look muddy on dark).
+            .background(cat.categoryBackgroundWash())
             .verticalScroll(rememberScrollState())
     ) {
         // ── 1. Top bar (close ✕ only) ──────────────────────────────────

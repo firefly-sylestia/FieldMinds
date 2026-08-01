@@ -98,6 +98,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioMixedDeck
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
 import kotlinx.coroutines.delay
 import kotlin.math.cos
@@ -519,12 +520,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            // Category tint wash — only the Spin page wears a faint wash of
-            // the active category's tint over the theme background, so the
-            // page feels tied to the deck being spun (20% alpha stays subtle
-            // on both cream light and midnight dark surfaces).
-            .background(deckCat.tint)
+            // Category tint wash — the Spin page wears a faint wash of the
+            // active category's color over the theme background (same wash
+            // as Topic Reveal / Save / Cabinet), so the page feels tied to
+            // the deck being spun. Theme-aware: deep accent over cream in
+            // light, pastel twin glow over midnight in dark (deep accents
+            // look muddy on the dark surface).
+            .background(deckCat.categoryBackgroundWash())
     ) {
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
@@ -1783,11 +1785,11 @@ private fun BottomCta(
     val hasFilters = filterActiveCount > 0
 
     // Anchored paper tray. v6.2 — it wears the SAME category-tint wash as
-    // the page background (theme background blended with 20% of the deck
-    // accent), so the tray blends with the Spin page instead of reading as
-    // a separate odd-colored bar.
+    // the page background (theme-aware: deep accent over cream in light,
+    // pastel twin over midnight in dark), so the tray blends with the Spin
+    // page instead of reading as a separate odd-colored bar.
     Surface(
-        color = lerp(MaterialTheme.colorScheme.background, cat.accent, 0.20f),
+        color = cat.categoryBackgroundWash(),
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {

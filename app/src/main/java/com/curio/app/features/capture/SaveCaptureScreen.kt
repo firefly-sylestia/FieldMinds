@@ -78,6 +78,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -232,11 +233,12 @@ fun SaveCaptureScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
             // Category tint wash — the capture screen wears a faint wash of
             // the active category over the theme background, matching the
-            // Spin page so saving stays in the same color story.
-            .background(cat.tint)
+            // Spin page so saving stays in the same color story. Theme-aware:
+            // deep accent over cream in light, pastel twin glow over midnight
+            // in dark (deep accents look muddy on dark).
+            .background(cat.categoryBackgroundWash())
     ) {
         // ── Premium top bar ──────────────────────────────────────────────
         Row(

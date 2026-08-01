@@ -1,6 +1,41 @@
 # Prompt.md — Request Log
 
-## Current Request: Expand category-tint wash to Topic Reveal, Save/Capture, and Cabinet
+## Current Request: Tune the category-tint background in dark mode
+
+**User request (verbatim):** "tune the tink color of the background in dark mode some looks weird so tune it properly"
+
+## Root cause
+The category-tint background wash used the deep Tailwind-700 category accent at 20% alpha over the midnight dark background. Deep accents over near-black read muddy — amber-700 turns brownish, teal goes grey-green — so dark mode looked off.
+
+## Fix
+`ui/theme/CategoryInk.kt` — new theme-aware helper:
+```kotlin
+@Composable
+fun CurioCategory.categoryBackgroundWash(): Color {
+    val background = MaterialTheme.colorScheme.background
+    return if (isCurioDarkTheme()) lerp(background, lightAccent, 0.16f)
+           else                 lerp(background, accent, 0.20f)
+}
+```
+Light mode is pixel-identical to before (`lerp(background, accent, 0.20f)` == the old stacked `background + accent@20%` composite); dark mode now uses each category's light 300-level twin at a gentler 16% so it glows subtly instead of looking muddy.
+
+Call sites switched to the helper (import added in each):
+- `features/spin/SpinScreen.kt` — root Box `.background(deckCat.categoryBackgroundWash())` (replaces two stacked backgrounds); BottomCta surface `cat.categoryBackgroundWash()` (was `lerp(background, cat.accent, 0.20f)`).
+- `features/reveal/TopicRevealScreen.kt` — root Column `.background(cat.categoryBackgroundWash())`.
+- `features/capture/SaveCaptureScreen.kt` — root Column `.background(cat.categoryBackgroundWash())`.
+- `features/cabinet/CabinetScreen.kt` — `val filterWash = selectedFilter?.let { CurioCategories.byId(it).categoryBackgroundWash() }` then `.background(filterWash ?: MaterialTheme.colorScheme.background)` (cleaner than the old `.then()` conditional).
+- `app/AGENTS.md` — durable preference note updated to document the theme-aware dark wash.
+
+## Validation
+- code-reviewer-deepseek-flash: clean — light-mode identity verified (identical composite), lightAccent set for all 11 categories + mixed-deck copy, `lerp` still used elsewhere in SpinScreen (no dead imports), composable-in-`let` is valid (inline lambda), Cabinet elvis simplification correct. Critical feedback addressed: stale "only the Spin page" comment rewritten; AGENTS.md note refreshed; CategoryInk imports (MaterialTheme + lerp) verified present.
+- No local gradle per AGENTS.md — CI on push is the compile gate.
+
+## Status
+DONE — committed & pushed.
+
+---
+
+## Previous Request: Expand category-tint wash to Topic Reveal, Save/Capture, and Cabinet
 
 **User request (verbatim):** "also expand that category tint to topic and entry filling too and also the cabinet too"
 
