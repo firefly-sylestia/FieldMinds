@@ -66,6 +66,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -1202,6 +1203,10 @@ private fun HeroTicketCard(
                 scaleY = if (landed) settleScale.value else tickPulse.value
                 rotationZ = if (shuffling) (tickPulse.value - 1f) * 80f * tickDir else 0f
                 translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 30f
+                // Offscreen layer buffer renders the scaled/rotated card
+                // at its natural resolution, then samples it — reduces the
+                // aliased hairline-border look without touching animation.
+                compositingStrategy = CompositingStrategy.Offscreen
             }
             .zIndex(10f)
             .then(
@@ -1414,6 +1419,8 @@ private fun PeekCard(
                 // and render the card as soft/pixelated. Depth comes from
                 // scale + rotation + zIndex instead of transparency.
                 alpha = 1f
+                // Offscreen buffer keeps the tilted layer's borders crisp.
+                compositingStrategy = CompositingStrategy.Offscreen
             }
             .zIndex(if (far) 2f else 5f)
     ) {

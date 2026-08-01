@@ -34,3 +34,11 @@ CI (compileDebugKotlin) failed: `Unresolved reference 'RenderQuality'` at SpinSc
 - Verified `androidx.compose.ui.graphics.RenderQuality` does NOT exist in resolved Compose BOM 2026.05.01 (ui 1.11.2): scanned every transformed jar in the Gradle cache for the class (zero matches) + docs research corroborated (no such API in androidx.compose.ui.graphics).
 - Fix (behavior-neutral, user requested no functionality change): removed the import + both `renderQuality = RenderQuality.High` lines and their now-misleading comments. All animation logic (tickPulse pulse, settleScale/settleY landing, peek slide AnimatedContent, zIndex) untouched.
 - Validation: zero `RenderQuality` refs repo-wide; braces balanced (258/258, 803/803); code review clean. Pixelation polish may be revisited via `CompositingStrategy.Offscreen` (exists in ui 1.11.2) if desired later.
+
+## Follow-up: CompositingStrategy.Offscreen experiment (user-selected)
+
+User opted to try `compositingStrategy = CompositingStrategy.Offscreen` on the hero + peek card `graphicsLayer` blocks (rendering-preference only; animation logic untouched).
+
+- Added import `androidx.compose.ui.graphics.CompositingStrategy` (verified present in ui 1.11.2 jar scan) + the property in both graphicsLayer lambdas (hero after translationY, peek after alpha = 1f), with brief comments.
+- Validation: braces balanced (258/258, 803/803); diff = 7 insertions; no RenderQuality refs. Code review clean.
+- Reviewer flag (non-blocking): Offscreen forces an offscreen render pass per layer each tick — peek cards swap topics every ~105ms during the spin, so up to 4–6 layers re-rasterize per tick; if spin feels jankier, drop it from peek cards (keep hero) or revert to Auto. This is a visual A/B experiment awaiting the user's on-device judgment.
