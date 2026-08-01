@@ -13,7 +13,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.curio.app.data.CurioCategory
+import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.isCurioDarkTheme
 
 /**
  * Decorative backdrop pinned behind screen content: all eleven category
@@ -31,11 +33,23 @@ import com.curio.app.ui.theme.CurioIcon
  *
  * Glyphs mirror `CurioCategories.all` in data/Category.kt (11 categories,
  * verified 1:1 at startup) — if the catalog ever grows, add a tile here.
+ *
+ * Theme-aware ink: dark mode keeps the near-white `onSurface` ghosts (they
+ * read clean against the midnight surface); light mode swaps to a warm
+ * taupe-gray ink at slightly higher alpha — the raw maroon `onSurface` at
+ * 5% turns muddy and barely visible over the cream surface.
  */
 @Composable
 fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifier) {
-    val neutral = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
-    val highlight = activeCat.accent.copy(alpha = 0.11f)
+    val isDark = isCurioDarkTheme()
+    val neutral = if (isDark) {
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+    } else {
+        CurioColors.WarmWatermarkInk.copy(alpha = 0.16f)
+    }
+    // Light surfaces need a slightly stronger accent whisper than the dark
+    // surface for the active category to read.
+    val highlight = activeCat.accent.copy(alpha = if (isDark) 0.11f else 0.20f)
     Box(modifier = modifier.fillMaxSize()) {
         WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, neutral, activeCat, highlight)
         WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, neutral, activeCat, highlight)

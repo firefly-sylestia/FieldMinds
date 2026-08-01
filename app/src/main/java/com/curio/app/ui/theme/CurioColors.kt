@@ -28,6 +28,14 @@ object CurioColors {
     val Peach            = Color(0xFFFFB585)  // Visual Art / Painters — soft orange
     val Teal             = Color(0xFF6FC7BE)  // Science & Nature — soft teal
 
+    /**
+     * Warm taupe-gray watermark ink for the light surface. The onSurface
+     * maroon reads muddy at watermark sizes over cream, so the backdrop
+     * uses this instead in light mode (drawn at ~16% alpha). Dark mode
+     * keeps the near-white onSurface ghosts.
+     */
+    val WarmWatermarkInk = Color(0xFF8E8177)
+
     /** Tinted (20% alpha) versions of category accents for backgrounds. */
     val LilacTint     = Lilac.copy(alpha = 0.20f)
     val DustyBlueTint = DustyBlue.copy(alpha = 0.20f)

@@ -46,6 +46,12 @@ The brand is intentionally not a recolor of the former wheel. Midnight Signal us
   Light Container............. #E7EEF6
   Error....................... #BA3A4B
 
+  **Watermark ink (category-glyph backdrop)**: dark mode uses near-white
+  `onSurface` at 5% alpha (clean ghosts over the midnight surface); light
+  mode uses `WarmWatermarkInk` #8E8177 at ~16% alpha — the raw maroon
+  `onSurface` at 5% reads muddy/barely visible over the cream surface.
+  Active-category accent whisper: 11% alpha in dark, 20% in light.
+
 Each category keeps its existing source-compatible token name while adopting a
 signal color used for chips, category headers, spin segments, and hero rules:
     Music / Artists ........ Electric Blue #3D8CFF
