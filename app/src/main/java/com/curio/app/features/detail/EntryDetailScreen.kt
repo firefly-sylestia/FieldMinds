@@ -880,11 +880,6 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
     // Lightbox page. Animated values live here so the spring interpolates
     // from 1x on open and back on close.
     val zoomState = rememberMoodBoardZoomState()
-    val animatedScale by animateFloatAsState(
-        targetValue = zoomState.scaleTarget,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "moodBoardZoomScale"
-    )
     val animatedOffsetX by animateFloatAsState(
         targetValue = zoomState.offsetX,
         animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
@@ -997,7 +992,6 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 if (zoomState.boardZoomed) {
                     MoodBoardZoomCanvas(
                         zoomState = zoomState,
-                        animatedScale = animatedScale,
                         animatedOffsetX = animatedOffsetX,
                         animatedOffsetY = animatedOffsetY,
                         tiles = data.tileLayouts,
@@ -1008,7 +1002,6 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                     MoodBoardZoomOverlay(
                         zoomState = zoomState,
-                        animatedScale = animatedScale,
                         animatedOffsetX = animatedOffsetX,
                         animatedOffsetY = animatedOffsetY,
                         tileUri = tile.uri,
@@ -1066,11 +1059,6 @@ private fun ExpandedMoodBoardDialog(
     val isDark = isCurioDarkTheme()
     // In-place tile zoom inside the expanded board — pinch/tap, no Lightbox.
     val zoomState = rememberMoodBoardZoomState()
-    val animatedScale by animateFloatAsState(
-        targetValue = zoomState.scaleTarget,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "expandedMoodZoomScale"
-    )
     val animatedOffsetX by animateFloatAsState(
         targetValue = zoomState.offsetX,
         animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
@@ -1149,7 +1137,6 @@ private fun ExpandedMoodBoardDialog(
                     if (zoomState.boardZoomed) {
                         MoodBoardZoomCanvas(
                             zoomState = zoomState,
-                            animatedScale = animatedScale,
                             animatedOffsetX = animatedOffsetX,
                             animatedOffsetY = animatedOffsetY,
                             tiles = scaledTiles,
@@ -1160,7 +1147,6 @@ private fun ExpandedMoodBoardDialog(
                     data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                         MoodBoardZoomOverlay(
                             zoomState = zoomState,
-                            animatedScale = animatedScale,
                             animatedOffsetX = animatedOffsetX,
                             animatedOffsetY = animatedOffsetY,
                             tileUri = tile.uri,

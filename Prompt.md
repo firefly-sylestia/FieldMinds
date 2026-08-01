@@ -1,44 +1,34 @@
 # Prompt.md — Request Log
 
-## Current Request: Universal multi-section capture ("Save your take" redesign)
+## Current Request: Mood board editor polish (laggy drag · ugly box outline · zoom glitch)
 
-**User request:** Redesign the capture flow so the "How do you want to capture this one?" format picker is UNIVERSAL for every category (Wildcard's pick-any style), with the category's dedicated format pre-selected as the default. Users can add MULTIPLE different takes (sections) that all save into ONE entry, and the detail page shows a compact section switcher (never merged into a single page). Default stays pre-selected, picker must be compact.
+**User request:** "In moodboard editing the photo drag is laggy and the outline of the box around images looks bad and it glitches when I expand the image, continue this."
 
-**User clarifications (ask_user):**
-1. Storage: "one entry multiple sections" — a single entry holds several sections, with an option to switch between them on the detail page (not shown as one merged page).
-2. Picker: default format pre-selected; a compact picker/selector that doesn't take much space.
+**User clarification (ask_user):** Tile style — **Frameless float**: no box behind images; photos float on the board with rounded corners.
 
 ## Implementation (complete)
 
-### Data model
-- `CaptureData.kt`: added nested `CaptureSection(format, data, title?)` + `CaptureData.Portfolio(sections)` container. Added `toPreview()`/`toFullContent()` branches ("N takes · Voice + Journal") and `audioFilePaths()` recursion for delete/backup flows.
-- `CurioTopic.kt`: added top-level `val CaptureFormat.shortName` (Voice/Review/Journal/Moodboard/Field notes/Wildcard) used by picker chips + detail switcher + previews.
-- `CaptureEntity.kt`: `deserializeCaptureData` now detects the `sections` key and reconstructs Portfolio sections recursively (format via `CaptureFormat.valueOf`, nested data via recursive deserialize, optional title). Ordering safe: Portfolio (no `subFormat` key) is caught inside the `subFormat == null` branch before per-type field checks.
-- `CurioBackupManager.kt`: `audioPathOrNull()` + `withAudioPath()` recurse through Portfolio sections.
+### Laggy drag → commit-on-release preview (GalleryWallFormat.kt)
+- Root cause: every drag frame mutated the `SnapshotStateList`, restarting the top-level `LaunchedEffect(tiles.toList())` → rebuilt `CaptureData.GalleryWall` and re-fired `onDataChanged` on EVERY pointer move (and recomposed every tile).
+- Extracted `MoodBoardEditorTile`: the drag/pinch gesture accumulates into a per-tile `TileDragPreview` held in `remember(tile.id)` state, so per-frame writes recompose ONLY the dragged tile. The tile list is mutated once via `onCommit` when the finger lifts.
+- Render clamps mirror commit clamps exactly (incl. a pre-measure canvas-size fallback) so tiles never snap or collapse on release.
+- `currentTile by rememberUpdatedState(tile)` — keyed `pointerInput` never restarts, so gestures read the LIVE tile (fixed stale pin-zone base offset).
+- Pin-zone UI + pin-to-front gated to single-finger drags via a new `byDrag` flag (a pure pinch no longer flashes the zone or pins on release — parity with the original).
+- Dragged tile zIndex-boosts above siblings; `inPinZone` parent state written only on flip.
 
-### Editors (edit/section-switch preload)
-- `SoundBite/ReelNotes/Marginalia/FieldNotesFormat.kt`: added `initialData: CaptureData.X? = null`, seeded via `remember(initialData)` so re-saving an entry restores saved content (fixes the old "edit wipes content" class of bugs for non-moodboard formats).
-- `SoundBiteFormat.kt`: added `onBusyChange` so the picker can confirm before switching format on a LIVE recording; trimmer auto-open gated on `!restoredRecording`.
+### Ugly box outline → frameless tiles
+- Editor tiles no longer render on a hardcoded `Color.White` card — the photo itself is the tile: `size → rotate → clip(RoundedCornerShape(14.dp))` (rotate-before-clip so the rounded shape rotates intact).
+- `decodeImageBounds` now reads EXIF rotation (`android.media.ExifInterface`, minSdk 26) and swaps bounds for 90°/270° so tile aspect matches Coil's rotated rendering — no letterbox bars inside tiles.
 
-### Universal picker (SaveCaptureScreen.kt)
-- `FormatBodyForCategory` rewritten as universal multi-section body: compact chip row of the 5 concrete formats (category default pre-selected; Wildcard → Voice), section tab chips with add/remove, active section editor under `key(current.id)`, `snapshotActive()` preserves per-section content on switch.
-- Save aggregates: 1 section → bare data (backward compatible); 2+ → `CaptureData.Portfolio`.
-- `persistAudioDeep` (recursive audio persist through Portfolio/OpenNotebook) + `formatOf(data)` (first section's format for the entry column).
-- Format switch on a filled/live take → confirmation dialog.
-- Edit mode title generalized: "Edit entry".
-
-### Detail page (EntryDetailScreen.kt)
-- `FormatBody` dispatches Portfolio → new `PortfolioRender`: compact chip switcher (formatGlyph + shortName), `rememberSaveable` active index, renders the active section via recursive `FormatBody` on a sub-`CurioEntry`.
-- `isMoodBoardEntry` also true for Portfolio containing a GalleryWall section.
-- Delete flow uses `captureData.audioFilePaths()`.
-
-### Misc
-- `CurioTopicCard.kt`: `formatGlyph` private → internal for reuse.
+### Zoom glitch → internal spring + stacked painters (MoodBoardZoom.kt)
+- Open used to POP in at 2.4x: the call-site `animateFloatAsState` initializes to its target on first composition. Overlay/canvas now animate their own `overlayScale` via `animate(1f → target, spring)` keyed on `scaleTarget` — open AND close spring smoothly; pinch retargets mid-flight. Removed `animatedScale` param from `MoodBoardZoomOverlay`/`MoodBoardZoomCanvas`; call sites updated in GalleryWallFormat.kt + EntryDetailScreen.kt.
+- The overlay re-fetched the image at a bigger decode size → blank flash while it streamed in. Now stacks the board-size painter (already cached) UNDER the hi-res painter — no blank frame.
+- Zoom overlay is frameless too (no surface card, no 6dp padding gap).
 
 ## Validation
-- code-reviewer-deepseek-flash reviewed main change + busy-state delta (2 review rounds) — clean, 2 issues found & fixed (trimmer auto-open on preload; silent wipe on format switch → confirm dialog + busy guard).
-- code-searcher verified all imports/usages wired; no dangling refs.
+- code-reviewer-deepseek-flash: 2 rounds. Round 1 found 3 issues (stale tile capture in the pin-zone check; 2-finger gestures triggering drag UI + pin-on-release; pre-measure commit clamp collapsing tiles) — all fixed. Round 2: clean, only cosmetic nits.
+- grep confirmed no leftover `animatedScale` references; `git diff` scoped to 3 files.
 - No gradle build per AGENTS.md (CI owns compilation on push).
 
 ## Status
-DONE — committed & pushed (feat: universal multi-section capture).
+DONE — committed & pushed (fix: mood board editor polish).

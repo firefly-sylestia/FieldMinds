@@ -14,6 +14,7 @@ import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.media.ExifInterface
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -81,6 +83,22 @@ private data class MoodTile(
     val rotationDeg: Float,
     val widthPx: Float,
     val heightPx: Float
+)
+
+/**
+ * Transient drag/pinch preview for one tile while a finger gesture is in
+ * flight. Kept OUTSIDE the [MoodTile] list so per-frame gesture updates
+ * recompose only the dragged tile instead of mutating the list (which would
+ * re-run the whole save pipeline) on every pointer move. The final values are
+ * committed into the list once when the finger lifts.
+ */
+private data class TileDragPreview(
+    val dx: Float,
+    val dy: Float,
+    val scale: Float = 1f,
+    val rotation: Float = 0f,
+    /** True when a single-finger drag moved the tile (pin-zone eligible). */
+    val byDrag: Boolean = false
 )
 
 /**
@@ -260,11 +278,6 @@ private fun MoodBoardCanvas(
     // In-place tile zoom: double-tap springs the image up over the canvas —
     // no separate dialog page. Pinch/pan continue on the zoom overlay.
     val zoomState = rememberMoodBoardZoomState()
-    val animatedScale by animateFloatAsState(
-        targetValue = zoomState.scaleTarget,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "editorMoodZoomScale"
-    )
     val animatedOffsetX by animateFloatAsState(
         targetValue = zoomState.offsetX,
         animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
@@ -276,6 +289,9 @@ private fun MoodBoardCanvas(
         label = "editorMoodZoomOffsetY"
     )
     val pinZoneHeightPx = with(density) { 52.dp.toPx() }
+    // Smallest a tile can be pinched to — shared by the live drag preview
+    // and the commit so what you see while dragging is exactly what saves.
+    val minTilePx = with(density) { 60.dp.toPx() }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -393,175 +409,57 @@ private fun MoodBoardCanvas(
                     }
                 } else {
                     tiles.forEachIndexed { i, tile ->
-                        Box(
-                            modifier = Modifier
-                                .offset {
-                                    IntOffset(
-                                        tile.offsetXPx.roundToInt().coerceIn(0, canvasWPx.roundToInt()),
-                                        tile.offsetYPx.roundToInt().coerceIn(0, canvasHPx.roundToInt())
+                        MoodBoardEditorTile(
+                            tile = tile,
+                            index = i,
+                            isDragging = draggingTileId == tile.id,
+                            canvasWPx = canvasWPx,
+                            canvasHPx = canvasHPx,
+                            pinZoneHeightPx = pinZoneHeightPx,
+                            minTilePx = minTilePx,
+                            onBringToFront = { id ->
+                                val idx = tiles.indexOfFirst { it.id == id }
+                                if (idx >= 0 && idx != tiles.lastIndex) tiles.add(tiles.removeAt(idx))
+                            },
+                            onRemove = { id ->
+                                val idx = tiles.indexOfFirst { it.id == id }
+                                if (idx >= 0) tiles.removeAt(idx)
+                            },
+                            onZoomIn = { zoomState.zoomIn(it) },
+                            onDragStart = { draggingTileId = it },
+                            onPinZoneChange = { if (it != inPinZone) inPinZone = it },
+                            onCommit = { id, preview ->
+                                val idx = tiles.indexOfFirst { it.id == id }
+                                if (idx >= 0) {
+                                    val t = tiles[idx]
+                                    // Same clamps as the live preview (with the
+                                    // same pre-measure fallback), so the tile
+                                    // never snaps or collapses when released.
+                                    val cw = if (canvasWPx > 0f) canvasWPx else t.widthPx
+                                    val ch = if (canvasHPx > 0f) canvasHPx else t.heightPx
+                                    val newW = (t.widthPx * preview.scale).coerceIn(minTilePx, cw)
+                                    val newH = (t.heightPx * preview.scale).coerceIn(minTilePx, ch)
+                                    val newX = (t.offsetXPx + preview.dx)
+                                        .coerceIn(0f, (cw - newW).coerceAtLeast(0f))
+                                    val newY = (t.offsetYPx + preview.dy)
+                                        .coerceIn(0f, (ch - newH).coerceAtLeast(0f))
+                                    tiles[idx] = t.copy(
+                                        offsetXPx = newX,
+                                        offsetYPx = newY,
+                                        widthPx = newW,
+                                        heightPx = newH,
+                                        rotationDeg = (t.rotationDeg + preview.rotation) % 360f
                                     )
-                                }
-                                .zIndex(i.toFloat())
-                                .pointerInput(tile.id) {
-                                    detectTapGestures(
-                                        onTap = {
-                                            val idx = tiles.indexOfFirst { it.id == tile.id }
-                                            if (idx >= 0 && idx != tiles.lastIndex) {
-                                                tiles.add(tiles.removeAt(idx))
-                                            }
-                                        },
-                                        // Double-tap zooms the image in place
-                                        // instead of opening a full-screen page.
-                                        onDoubleTap = { zoomState.zoomIn(tile.uri) }
-                                    )
-                                }
-                                .pointerInput(tile.id) {
-                                    // v6.1 — one handler for every move: one
-                                    // finger drags the tile (with pin-to-front
-                                    // drop zone); two fingers pinch to resize
-                                    // and twist to rotate — replacing the old
-                                    // ⟲ / − / + buttons.
-                                    awaitEachGesture {
-                                        awaitFirstDown(requireUnconsumed = false)
-                                        // Only start a drag once the finger has
-                                        // actually moved past touch slop — a
-                                        // tiny jitter on an intended tap must
-                                        // not flash the pin-to-front zone.
-                                        val slop = viewConfiguration.touchSlop
-                                        var multiTouch = false
-                                        var moved = false
-                                        do {
-                                            val event = awaitPointerEvent()
-                                            val pressed = event.changes.filter { it.pressed }
-                                            if (pressed.size >= 2) {
-                                                multiTouch = true
-                                                val zoom = event.calculateZoom()
-                                                val rotation = event.calculateRotation()
-                                                val idx = tiles.indexOfFirst { it.id == tile.id }
-                                                if (idx >= 0) {
-                                                    val t = tiles[idx]
-                                                    val minPx = with(density) { 60.dp.toPx() }
-                                                    val newW = (t.widthPx * zoom)
-                                                        .coerceIn(minPx, (canvasWPx - t.offsetXPx).coerceAtLeast(minPx))
-                                                    val newH = (t.heightPx * zoom)
-                                                        .coerceIn(minPx, (canvasHPx - t.offsetYPx).coerceAtLeast(minPx))
-                                                    tiles[idx] = t.copy(
-                                                        widthPx = newW,
-                                                        heightPx = newH,
-                                                        rotationDeg = (t.rotationDeg + rotation) % 360f,
-                                                        offsetXPx = t.offsetXPx.coerceIn(0f, (canvasWPx - newW).coerceAtLeast(0f)),
-                                                        offsetYPx = t.offsetYPx.coerceIn(0f, (canvasHPx - newH).coerceAtLeast(0f))
-                                                    )
-                                                }
-                                                event.changes.forEach { it.consume() }
-                                            } else if (pressed.size == 1 && !multiTouch) {
-                                                val change = pressed.first()
-                                                val dragAmount = change.position - change.previousPosition
-                                                if (dragAmount.getDistance() >= slop) {
-                                                    if (!moved) {
-                                                        moved = true
-                                                        draggingTileId = tile.id
-                                                        inPinZone = false
-                                                    }
-                                                    change.consume()
-                                                    val idx = tiles.indexOfFirst { it.id == tile.id }
-                                                    if (idx >= 0) {
-                                                        val t = tiles[idx]
-                                                        tiles[idx] = t.copy(
-                                                            offsetXPx = (t.offsetXPx + dragAmount.x)
-                                                                .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
-                                                            offsetYPx = (t.offsetYPx + dragAmount.y)
-                                                                .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
-                                                        )
-                                                        inPinZone = tiles[idx].offsetYPx < pinZoneHeightPx
-                                                    }
-                                                }
-                                            }
-                                            if (pressed.isEmpty()) break
-                                        } while (true)
-                                        draggingTileId = null
-                                        if (inPinZone) {
-                                            val idx = tiles.indexOfFirst { it.id == tile.id }
-                                            if (idx >= 0 && idx != tiles.lastIndex) {
-                                                tiles.add(tiles.removeAt(idx))
-                                            }
-                                        }
-                                        inPinZone = false
+                                    // Pin-to-front drop zone: releasing near
+                                    // the top pins the tile to the front —
+                                    // single-finger drags only, not pinches.
+                                    if (preview.byDrag && newY < pinZoneHeightPx && idx != tiles.lastIndex) {
+                                        tiles.add(tiles.removeAt(idx))
                                     }
                                 }
-                        ) {
-                            Surface(
-                                shape = RoundedCornerShape(14.dp),
-                                color = Color.White,
-                                shadowElevation = 0.dp,
-                                modifier = Modifier
-                                    .size(
-                                        width = with(density) { tile.widthPx.toDp() },
-                                        height = with(density) { tile.heightPx.toDp() }
-                                    )
-                                    .rotate(tile.rotationDeg)
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Image(
-                                        painter = moodBoardPainter(tile.uri),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Fit,
-                                        // v6.1 — no inner padding: tiles are
-                                        // sized to the photo's aspect, so the
-                                        // image fills the rounded box edge-
-                                        // to-edge (no white frame).
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .clip(RoundedCornerShape(14.dp))
-                                    )
-                                    Surface(
-                                        onClick = { zoomState.zoomIn(tile.uri) },
-                                        shape = CircleShape,
-                                        color = Color.Black.copy(alpha = 0.48f),
-                                        modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .padding(7.dp)
-                                            .size(26.dp)
-                                    ) {
-                                        Box(contentAlignment = Alignment.Center) {
-                                            CurioIcon(
-                                                name = CurioIcons.Search,
-                                                contentDescription = "Zoom image",
-                                                tint = Color.White,
-                                                size = 14.dp
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            // × Remove button
-                            Surface(
-                                onClick = {
-                                    val idx = tiles.indexOfFirst { it.id == tile.id }
-                                    if (idx >= 0) tiles.removeAt(idx)
-                                },
-                                shape = CircleShape,
-                                color = Color.Black.copy(alpha = 0.55f),
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .offset(x = 4.dp, y = (-4).dp)
-                                    .size(22.dp)
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    CurioIcon(
-                                        name = CurioIcons.Close,
-                                        contentDescription = "Remove",
-                                        tint = Color.White,
-                                        size = 13.dp
-                                    )
-                                }
-                            }
-
-                            // v6.1 — rotate + resize moved to gestures:
-                            // two-finger twist rotates, two-finger pinch
-                            // resizes (see the tile's pointerInput above).
-                        }
+                            },
+                            onDragEnd = { draggingTileId = null }
+                        )
                     }
                 }
 
@@ -688,7 +586,6 @@ private fun MoodBoardCanvas(
             tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                 MoodBoardZoomOverlay(
                     zoomState = zoomState,
-                    animatedScale = animatedScale,
                     animatedOffsetX = animatedOffsetX,
                     animatedOffsetY = animatedOffsetY,
                     tileUri = tile.uri,
@@ -723,6 +620,183 @@ private fun MoodBoardCanvas(
 }
 
 /**
+ * One editable mood-board tile — the photo floats on the board with rounded
+ * corners (no card/box behind it). One finger drags it, two fingers pinch to
+ * resize + twist to rotate, a tap brings it to the front, and double-tap (or
+ * the search button) zooms it in place.
+ *
+ * The drag/pinch gesture accumulates into a [TileDragPreview] held in
+ * per-tile [remember] state — NOT into the [MoodTile] list — so a frame of
+ * dragging recomposes ONLY this tile instead of mutating the list (and
+ * re-firing the save pipeline) on every pointer move. The final values are
+ * committed once through [onCommit] when the finger lifts.
+ */
+@Composable
+private fun MoodBoardEditorTile(
+    tile: MoodTile,
+    index: Int,
+    isDragging: Boolean,
+    canvasWPx: Float,
+    canvasHPx: Float,
+    pinZoneHeightPx: Float,
+    minTilePx: Float,
+    onBringToFront: (Int) -> Unit,
+    onRemove: (Int) -> Unit,
+    onZoomIn: (String) -> Unit,
+    onDragStart: (Int) -> Unit,
+    onPinZoneChange: (Boolean) -> Unit,
+    onCommit: (Int, TileDragPreview) -> Unit,
+    onDragEnd: () -> Unit
+) {
+    val density = LocalDensity.current
+    // Preview lives INSIDE the tile so per-frame writes recompose only this
+    // tile (Compose scopes snapshot reads to the composable that reads them).
+    val dragPreview = remember(tile.id) { mutableStateOf<TileDragPreview?>(null) }
+    // pointerInput never restarts (its key is tile.id), so the gesture
+    // coroutine must read the LATEST tile — never the first composition's.
+    val currentTile by rememberUpdatedState(tile)
+
+    // Before the canvas size is measured (first frame), fall back to the
+    // tile's stored size so tiles never flash at 0x0 or drift to the corner.
+    val canvasW = if (canvasWPx > 0f) canvasWPx else tile.widthPx
+    val canvasH = if (canvasHPx > 0f) canvasHPx else tile.heightPx
+    val preview = dragPreview.value
+    val scale = preview?.scale ?: 1f
+    val renderW = (tile.widthPx * scale).coerceIn(minTilePx, canvasW)
+    val renderH = (tile.heightPx * scale).coerceIn(minTilePx, canvasH)
+    val renderX = (tile.offsetXPx + (preview?.dx ?: 0f))
+        .coerceIn(0f, (canvasW - renderW).coerceAtLeast(0f))
+    val renderY = (tile.offsetYPx + (preview?.dy ?: 0f))
+        .coerceIn(0f, (canvasH - renderH).coerceAtLeast(0f))
+    val renderRotation = tile.rotationDeg + (preview?.rotation ?: 0f)
+
+    Box(
+        modifier = Modifier
+            .offset {
+                IntOffset(renderX.roundToInt(), renderY.roundToInt())
+            }
+            .zIndex(if (isDragging) 400f else index.toFloat())
+            .pointerInput(tile.id) {
+                detectTapGestures(
+                    onTap = { onBringToFront(currentTile.id) },
+                    // Double-tap zooms the image in place instead of opening
+                    // a full-screen page.
+                    onDoubleTap = { onZoomIn(currentTile.uri) }
+                )
+            }
+            .pointerInput(tile.id) {
+                // One handler for every move: one finger drags the tile (with
+                // pin-to-front drop zone); two fingers pinch to resize and
+                // twist to rotate. Updates only the local preview state, so
+                // nothing above this tile recomposes mid-gesture.
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false)
+                    // Only start a drag once the finger has actually moved
+                    // past touch slop — a tiny jitter on an intended tap must
+                    // not flash the pin-to-front zone.
+                    val slop = viewConfiguration.touchSlop
+                    var multiTouch = false
+                    var dragged = false
+                    var dx = 0f
+                    var dy = 0f
+                    var gestureScale = 1f
+                    var gestureRotation = 0f
+                    do {
+                        val event = awaitPointerEvent()
+                        val pressed = event.changes.filter { it.pressed }
+                        if (pressed.size >= 2) {
+                            multiTouch = true
+                            gestureScale *= event.calculateZoom()
+                            gestureRotation += event.calculateRotation()
+                            dragPreview.value = TileDragPreview(dx, dy, gestureScale, gestureRotation, byDrag = dragged)
+                            event.changes.forEach { it.consume() }
+                        } else if (pressed.size == 1 && !multiTouch) {
+                            val change = pressed.first()
+                            val dragAmount = change.position - change.previousPosition
+                            if (dragAmount.getDistance() >= slop) {
+                                if (!dragged) {
+                                    dragged = true
+                                    onDragStart(tile.id)
+                                }
+                                change.consume()
+                                dx += dragAmount.x
+                                dy += dragAmount.y
+                                dragPreview.value = TileDragPreview(dx, dy, gestureScale, gestureRotation, byDrag = true)
+                                // Highlight the pin zone (the parent only
+                                // recomposes when the value actually flips).
+                                onPinZoneChange(currentTile.offsetYPx + dy < pinZoneHeightPx)
+                            }
+                        }
+                        if (pressed.isEmpty()) break
+                    } while (true)
+
+                    if (dragged || multiTouch) {
+                        onCommit(tile.id, TileDragPreview(dx, dy, gestureScale, gestureRotation, byDrag = dragged))
+                    }
+                    dragPreview.value = null
+                    onDragEnd()
+                }
+            }
+    ) {
+        // Frameless: the photo itself is the tile — rounded corners, no card.
+        // Rotate first, then clip, so the rounded shape rotates with the image
+        // (clip-after-rotate would slice the corners off).
+        Image(
+            painter = moodBoardPainter(tile.uri),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .size(
+                    width = with(density) { renderW.toDp() },
+                    height = with(density) { renderH.toDp() }
+                )
+                .rotate(renderRotation)
+                .clip(RoundedCornerShape(14.dp))
+        )
+
+        // ── Zoom-in-place button (bottom-end) ─────────────────────────
+        Surface(
+            onClick = { onZoomIn(tile.uri) },
+            shape = CircleShape,
+            color = Color.Black.copy(alpha = 0.48f),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(7.dp)
+                .size(26.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                CurioIcon(
+                    name = CurioIcons.Search,
+                    contentDescription = "Zoom image",
+                    tint = Color.White,
+                    size = 14.dp
+                )
+            }
+        }
+
+        // ── × Remove button ───────────────────────────────────────────
+        Surface(
+            onClick = { onRemove(tile.id) },
+            shape = CircleShape,
+            color = Color.Black.copy(alpha = 0.55f),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = 4.dp, y = (-4).dp)
+                .size(22.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                CurioIcon(
+                    name = CurioIcons.Close,
+                    contentDescription = "Remove",
+                    tint = Color.White,
+                    size = 13.dp
+                )
+            }
+        }
+    }
+}
+
+/**
  * Cheap header-only decode of a content-URI image's pixel bounds — used to
  * size each new mood-board tile to the photo's own aspect ratio so
  * [ContentScale.Fit] fills the rounded box with no bars or cropping.
@@ -733,6 +807,20 @@ private fun decodeImageBounds(context: Context, uri: Uri): Pair<Int, Int>? = run
     context.contentResolver.openInputStream(uri)?.use { stream ->
         BitmapFactory.decodeStream(stream, null, opts)
     }
-    if (opts.outWidth > 0 && opts.outHeight > 0) opts.outWidth to opts.outHeight else null
+    if (opts.outWidth <= 0 || opts.outHeight <= 0) return@runCatching null
+    var width = opts.outWidth
+    var height = opts.outHeight
+    // Photos shot sideways carry EXIF rotation; Coil renders them rotated, so
+    // swap the raw sensor bounds to match the on-screen aspect. Without this,
+    // tiles get sized to the wrong aspect and ContentScale.Fit letterboxes.
+    val rotationDeg = context.contentResolver.openInputStream(uri)?.use { stream ->
+        ExifInterface(stream).rotationDegrees
+    } ?: 0
+    if (rotationDeg == 90 || rotationDeg == 270) {
+        val swap = width
+        width = height
+        height = swap
+    }
+    width to height
 }.getOrNull()
 
