@@ -10,6 +10,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -65,6 +66,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RenderQuality
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -346,11 +348,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // Sharper sinusoidal ease-out: squaring progress inside the sine
             // keeps the ticks fast through most of the spin, then the
             // deceleration kicks in hard at the tail — a snappy whip instead
-            // of a long drawn-out slowdown. The 90ms floor keeps the very
-            // first ticks readable instead of an unreadable 40ms blur.
-            // Intervals ~90ms -> ~400ms.
+            // of a long drawn-out slowdown. The ~105ms floor matches the
+            // 90ms deck slide so even the fastest ticks complete their wipe
+            // (a pure 90ms blur was unreadable; slightly slower = smoother).
+            // Intervals ~105ms -> ~400ms.
             val eased = sin(progress * progress * Math.PI.toFloat() / 2f)
-            val interval = (90L + (310L * eased).toLong()).coerceAtMost(400L)
+            val interval = (105L + (295L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
             // Slot-machine ratchet: haptic intensity escalates as the wheel
             // decelerates — a light tick while blurring fast (fast ticks
@@ -1130,38 +1133,48 @@ private fun HeroTicketCard(
         else CurioGradients.cardGradient(accent)
     }
 
-    // ── Fluid shuffle bounce — smooth 0→1→0 sine wave drives a gentle
-    //    scale pulse + vertical bob on the front card while shuffling.
-    //    sin() smooths the sawtooth restart so the bounce never snaps.
-    val heroPulse by rememberInfiniteTransition(label = "heroBounce")
-        .animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(1200, easing = LinearEasing),
-                repeatMode = RepeatMode.Restart
-            ),
-            label = "heroPulse"
-        )
-    val bounceWave = sin(heroPulse * kotlin.math.PI.toFloat()) // 0→1→0
-    // Single source of truth for the wave values — the graphicsLayer and
-    // the landing snap must stay in sync or the handoff would jump.
-    val waveScale = 1f + bounceWave * 0.035f
-    val waveY = -6f - bounceWave * 8f
+    // ── Per-tick shuffle pulse — the front card bounces in sync with the
+    //    wheel: every time the displayed topic switches, the card kicks
+    //    instantly to peak scale then springs back down, rocking side to
+    //    side. Even the fastest early ticks visibly jump (rhythmic pulse);
+    //    the slower deceleration ticks ring out as full, readable bounces.
+    //    The tilt alternates direction each tick so the rock feels organic
+    //    instead of a one-way drift (the old per-topic hash rotation jumped
+    //    randomly, which read as jitter).
+    val tickPulse = remember { Animatable(1f) }
+    var tickDir by remember { mutableStateOf(1f) }
+    LaunchedEffect(topic?.id, shuffling) {
+        if (!shuffling || topic == null) return@LaunchedEffect
+        tickDir = -tickDir
+        // Instant kick to peak, then a medium spring back to rest — fast
+        // enough that a 105ms tick gets a full visible jump, bouncy enough
+        // that deceleration ticks settle with a small overshoot.
+        tickPulse.snapTo(1.065f)
+        tickPulse.animateTo(1f, spring(dampingRatio = 0.6f, stiffness = 1200f))
+    }
 
-    // ── Landing settle — seamless handoff from the shuffle bounce wave
-    //    to the elastic rest spring.  On landing, snap to wherever the
-    //    wave left off (zero visual jump) then spring down to the rest
-    //    scale + vertical position with the Elastic spring.
+    // ── Category switch — one welcoming bounce as the deck re-fans to the
+    //    new category's topics (also fires on first mount).
+    LaunchedEffect(cat.id) {
+        if (!shuffling && !landed) {
+            tickPulse.snapTo(1f)
+            tickPulse.animateTo(1.045f, CurioMotion.Springs.Bouncy)
+            tickPulse.animateTo(1f, CurioMotion.Springs.Elastic)
+        }
+    }
+
+    // ── Landing settle — seamless handoff from the shuffle tick pulse to
+    //    the elastic rest spring. On landing, snap to wherever the pulse
+    //    left off (zero visual jump) then spring down to rest scale.
     val settleScale = remember { Animatable(1f) }
     val settleY = remember { Animatable(0f) }
 
-    // Snap both to the wave's last position on landing (zero visual jump),
+    // Snap both to the pulse's last position on landing (zero visual jump),
     // reset to rest when a new shuffle begins.
     LaunchedEffect(landed) {
         if (landed) {
-            settleScale.snapTo(waveScale)
-            settleY.snapTo(waveY)
+            settleScale.snapTo(tickPulse.value)
+            settleY.snapTo(-(tickPulse.value - 1f) * 30f)
         } else {
             settleScale.snapTo(1f)
             settleY.snapTo(0f)
@@ -1183,22 +1196,17 @@ private fun HeroTicketCard(
         modifier = Modifier
             .size(w + 24.dp, h + 24.dp)
             .graphicsLayer {
-                scaleX = when {
-                    landed -> settleScale.value
-                    shuffling -> waveScale
-                    else -> 1f
-                }
-                scaleY = when {
-                    landed -> settleScale.value
-                    shuffling -> waveScale
-                    else -> 1f
-                }
-                rotationZ = if (shuffling) ((cycleIndexPulse(glyph, topic?.id) - 0.5f) * 3.5f) else 0f
-                translationY = when {
-                    landed -> settleY.value
-                    shuffling -> waveY
-                    else -> 0f
-                }
+                // Idle and shuffling both track tickPulse (rest = exactly 1f);
+                // the category-switch + per-tick bounces ride on it, and the
+                // landing handoff snaps to whatever value it left off at.
+                scaleX = if (landed) settleScale.value else tickPulse.value
+                scaleY = if (landed) settleScale.value else tickPulse.value
+                rotationZ = if (shuffling) (tickPulse.value - 1f) * 80f * tickDir else 0f
+                translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 30f
+                // Crisp borders + corners while the layer scales and rocks —
+                // forces the rasterizer to downsample instead of pixelating
+                // the hairline border + rounded corners.
+                renderQuality = RenderQuality.High
             }
             .zIndex(10f)
             .then(
@@ -1411,6 +1419,9 @@ private fun PeekCard(
                 // and render the card as soft/pixelated. Depth comes from
                 // scale + rotation + zIndex instead of transparency.
                 alpha = 1f
+                // High-quality downsampling keeps the rotated hairline
+                // borders + rounded corners crisp instead of aliased.
+                renderQuality = RenderQuality.High
             }
             .zIndex(if (far) 2f else 5f)
     ) {
@@ -1418,13 +1429,19 @@ private fun PeekCard(
             targetState = topic,
             transitionSpec = {
                 if (shuffling) {
-                    // Rapid cycling — fast pure crossfade with no slide so
-                    // the deck blurs past on every tick instead of janking
-                    // through 240ms slides at ~100ms intervals. Kept short
-                    // (~70ms) so the fade completes even on the fastest
-                    // early ticks instead of flickering mid-fade.
-                    fadeIn(animationSpec = tween(70, easing = LinearEasing)) togetherWith
-                        fadeOut(animationSpec = tween(60, easing = LinearEasing))
+                    // Rapid cycling — short directional slide + fade so the
+                    // deck visibly REELS past on every tick instead of a
+                    // blurry crossfade. ~90ms matches the fastest tick
+                    // cadence so the wipe completes even on early ticks;
+                    // the slower deceleration ticks read as clean slides.
+                    slideInVertically(
+                        animationSpec = tween(90, easing = LinearEasing)
+                    ) { height -> if (isTop) -height / 3 else height / 3 } +
+                    fadeIn(animationSpec = tween(90, easing = LinearEasing)) togetherWith
+                    slideOutVertically(
+                        animationSpec = tween(80, easing = LinearEasing)
+                    ) { height -> if (isTop) height / 3 else -height / 3 } +
+                    fadeOut(animationSpec = tween(80, easing = LinearEasing))
                 } else {
                     slideInVertically(
                         animationSpec = tween(240, easing = FastOutSlowInEasing)
@@ -1740,9 +1757,6 @@ private fun DeckControlButton(
         }
     }
 }
-
-private fun cycleIndexPulse(glyph: String, topicId: String?): Float =
-    kotlin.math.abs((glyph + topicId.orEmpty()).hashCode() % 100) / 100f
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
