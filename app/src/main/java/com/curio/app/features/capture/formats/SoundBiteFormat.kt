@@ -81,17 +81,27 @@ fun SoundBiteFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    onBusyChange: (Boolean) -> Unit = {},
+    initialData: CaptureData.SoundBite? = null
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val recorder = remember(context) { AudioRecorder(context) }
-    var recordingState by remember { mutableStateOf(AudioRecorder.State.IDLE) }
-    var recordingSeconds by remember { mutableIntStateOf(0) }
-    var title by remember { mutableStateOf("") }
-    var note by remember { mutableStateOf("") }
-    var savedFilePath by remember { mutableStateOf<String?>(null) }
+    // Edit mode: restore a saved recording as STOPPED with its file + title so
+    // re-saving preserves the original capture (no silent wipe). Keyed on
+    // initialData so a newly-loaded edit preloads once.
+    var recordingState by remember(initialData) {
+        mutableStateOf(if (initialData != null) AudioRecorder.State.STOPPED else AudioRecorder.State.IDLE)
+    }
+    var recordingSeconds by remember(initialData) { mutableIntStateOf(initialData?.durationSeconds ?: 0) }
+    var title by remember(initialData) { mutableStateOf(initialData?.title ?: "") }
+    var note by remember(initialData) { mutableStateOf(initialData?.note ?: "") }
+    var savedFilePath by remember(initialData) { mutableStateOf(initialData?.audioFilePath) }
     var permissionDenied by remember { mutableStateOf(false) }
+    // Edit-mode restore: a restored recording must NOT auto-open the trimmer —
+    // only freshly-recorded audio should. Cleared the moment the user (re)records.
+    var restoredRecording by remember { mutableStateOf(initialData != null) }
 
     // ── Trim state ───────────────────────────────────────────────────────
     var showTrimmer by remember { mutableStateOf(false) }
@@ -106,6 +116,7 @@ fun SoundBiteFormat(
         if (granted) {
             try {
                 recorder.start()
+                restoredRecording = false
                 recordingState = recorder.state
                 recordingSeconds = 0
                 permissionDenied = false
@@ -139,9 +150,11 @@ fun SoundBiteFormat(
         }
     }
 
-    // ── Show trimmer when first entering STOPPED ─────────────────────────
+    // ── Show trimmer when first entering STOPPED (fresh recordings only) ─
     LaunchedEffect(recordingState, savedFilePath) {
-        if (recordingState == AudioRecorder.State.STOPPED && savedFilePath != null) {
+        if (recordingState == AudioRecorder.State.STOPPED &&
+            savedFilePath != null && !restoredRecording
+        ) {
             showTrimmer = true
             startTrim = 0f
             endTrim = 1f
@@ -150,7 +163,21 @@ fun SoundBiteFormat(
 
     // ── Clean up recorder on dispose ─────────────────────────────────────
     DisposableEffect(Unit) {
-        onDispose { recorder.release() }
+        onDispose {
+            recorder.release()
+            // Tell the parent the take is no longer busy (live recording lost
+            // with this editor) so format-switch confirmation can't be skipped.
+            onBusyChange(false)
+        }
+    }
+
+    // ── Report busy state (recording in progress) so the universal picker
+    // can confirm before switching format on a live take ──────────────────
+    LaunchedEffect(recordingState) {
+        onBusyChange(
+            recordingState == AudioRecorder.State.RECORDING ||
+                recordingState == AudioRecorder.State.PAUSED
+        )
     }
 
     // ── Report can-save + capture data ───────────────────────────────────
@@ -192,6 +219,7 @@ fun SoundBiteFormat(
                     if (hasPermission) {
                         try {
                             recorder.start()
+                            restoredRecording = false
                             recordingState = recorder.state
                             recordingSeconds = 0
                         } catch (_: Exception) {
@@ -278,6 +306,7 @@ fun SoundBiteFormat(
                         seconds = recordingSeconds,
                         onReRecord = {
                             recorder.release()
+                            restoredRecording = false
                             recordingState = recorder.state
                             recordingSeconds = 0
                             savedFilePath = null

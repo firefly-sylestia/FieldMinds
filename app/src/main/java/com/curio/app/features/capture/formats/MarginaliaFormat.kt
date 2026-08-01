@@ -54,10 +54,15 @@ fun MarginaliaFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    initialData: CaptureData.Marginalia? = null
 ) {
-    var journalText by remember { mutableStateOf("") }
-    val quotes = remember { mutableStateListOf<String>() }
+    // Edit mode: restore journal text + quote cards so re-saving preserves
+    // the original capture instead of silently wiping it.
+    var journalText by remember(initialData) { mutableStateOf(initialData?.journalText ?: "") }
+    val quotes = remember(initialData) {
+        mutableStateListOf<String>().apply { addAll(initialData?.quotes.orEmpty()) }
+    }
 
     val canSave = journalText.isNotBlank() ||
                   quotes.any { it.isNotBlank() }

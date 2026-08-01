@@ -117,3 +117,18 @@ enum class CaptureFormat {
     FieldNotes,   // 3-section report
     OpenNotebook  // Wildcard: pick your own format
 }
+
+/**
+ * Short display name for a [CaptureFormat] — used by the universal format
+ * picker chips, the detail-page section switcher, and [CaptureData.toPreview].
+ * UI-safe (pure string, no icons).
+ */
+val CaptureFormat.shortName: String
+    get() = when (this) {
+        CaptureFormat.SoundBite -> "Voice"
+        CaptureFormat.ReelNotes -> "Review"
+        CaptureFormat.Marginalia -> "Journal"
+        CaptureFormat.GalleryWall -> "Moodboard"
+        CaptureFormat.FieldNotes -> "Field notes"
+        CaptureFormat.OpenNotebook -> "Wildcard"
+    }

@@ -63,6 +63,25 @@ class CaptureConverters {
             return when (map["subFormat"]) {
                 null -> {
                     when {
+                        // Multi-section Portfolio: each section carries its own
+                        // format + nested data — reconstruct recursively.
+                        map.containsKey("sections") -> {
+                            @Suppress("UNCHECKED_CAST")
+                            val rawSections = map["sections"] as List<Map<String, Any?>>
+                            val sections = rawSections.mapNotNull { raw ->
+                                runCatching {
+                                    val format = CaptureFormat.valueOf(raw["format"] as String)
+                                    val title = raw["title"] as? String
+                                    val dataJson = gson.toJson(raw["data"])
+                                    CaptureData.CaptureSection(
+                                        format = format,
+                                        data = deserializeCaptureData(dataJson),
+                                        title = title
+                                    )
+                                }.getOrNull()
+                            }
+                            CaptureData.Portfolio(sections)
+                        }
                         map.containsKey("durationSeconds") ->
                             gson.fromJson(json, CaptureData.SoundBite::class.java)
                         map.containsKey("rating") ->

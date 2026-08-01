@@ -280,6 +280,7 @@ data class BackupPayload(
 private fun CaptureData.audioPathOrNull(): String? = when (this) {
     is CaptureData.SoundBite -> audioFilePath
     is CaptureData.OpenNotebook -> subData.audioPathOrNull()
+    is CaptureData.Portfolio -> sections.firstNotNullOfOrNull { it.data.audioPathOrNull() }
     else -> null
 }
 
@@ -290,5 +291,6 @@ private fun CaptureData.audioPathOrNull(): String? = when (this) {
 private fun CaptureData.withAudioPath(newPath: String): CaptureData = when (this) {
     is CaptureData.SoundBite -> copy(audioFilePath = newPath)
     is CaptureData.OpenNotebook -> copy(subData = subData.withAudioPath(newPath))
+    is CaptureData.Portfolio -> copy(sections = sections.map { it.copy(data = it.data.withAudioPath(newPath)) })
     else -> this
 }

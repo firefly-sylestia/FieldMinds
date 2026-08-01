@@ -135,7 +135,7 @@ fun CurioEntryCard(
     }
 }
 
-private fun formatGlyph(format: CaptureFormat): String = when (format) {
+internal fun formatGlyph(format: CaptureFormat): String = when (format) {
     CaptureFormat.SoundBite -> CurioIcons.Mic
     CaptureFormat.ReelNotes -> CurioIcons.Edit
     CaptureFormat.Marginalia -> CurioIcons.MenuBook

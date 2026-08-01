@@ -74,6 +74,24 @@ sealed class CaptureData {
         val subData: CaptureData
     ) : CaptureData()
 
+    /** One capture section inside a multi-section [Portfolio] entry. */
+    data class CaptureSection(
+        val format: CaptureFormat,
+        val data: CaptureData,
+        val title: String? = null
+    )
+
+    /**
+     * Multi-section entry (universal capture): one saved entry that holds
+     * several format bodies, each in its own [CaptureSection]. The detail
+     * page shows a compact switcher to flip between sections. Single-section
+     * entries are still stored bare (no Portfolio wrapper) so every
+     * previously-saved entry keeps its shape.
+     */
+    data class Portfolio(
+        val sections: List<CaptureSection>
+    ) : CaptureData()
+
     /** Returns a human-readable one-line preview for Cabinet cards. */
     fun toPreview(): String = when (this) {
         is SoundBite -> "Voice note · ${durationSeconds}s" +
@@ -97,6 +115,13 @@ sealed class CaptureData {
             if (parts.size > 1) append(" +${parts.size - 1} more")
         }
         is OpenNotebook -> "Wildcard · ${subFormat.name} — ${subData.toPreview().take(60)}"
+        is Portfolio -> buildString {
+            append("${sections.size} take${if (sections.size != 1) "s" else ""}")
+            if (sections.isNotEmpty()) {
+                append(" · ")
+                append(sections.joinToString(" + ") { it.format.shortName })
+            }
+        }
     }
 
     /** Returns full multi-line content for EntryDetail rendering. */
@@ -149,5 +174,24 @@ sealed class CaptureData {
             appendLine("Format: ${subFormat.name}")
             append(subData.toFullContent())
         }
+        is Portfolio -> buildString {
+            sections.forEachIndexed { i, section ->
+                appendLine("— ${section.format.shortName} —")
+                append(section.data.toFullContent())
+                if (i != sections.lastIndex) appendLine()
+            }
+        }
+    }
+
+    /**
+     * Every SoundBite audio file path nested inside this data — recurses
+     * through OpenNotebook wrappers and Portfolio sections so delete / backup
+     * flows can clean up all recordings, not just top-level ones.
+     */
+    fun audioFilePaths(): List<String> = when (this) {
+        is SoundBite -> listOfNotNull(audioFilePath)
+        is OpenNotebook -> subData.audioFilePaths()
+        is Portfolio -> sections.flatMap { it.data.audioFilePaths() }
+        else -> emptyList()
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -36,6 +37,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -82,12 +84,14 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
+import com.curio.app.data.shortName
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.components.MoodBoardTiles
 import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.formatGlyph
 import com.curio.app.ui.components.moodBoardPinchZoom
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
@@ -287,8 +291,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 TextButton(onClick = {
                     deleteDialogVisible = false
                     scope.launch {
-                        val data = resolvedEntry.captureData as? CaptureData.SoundBite
-                        AudioStorageManager.deleteAudio(context, data?.audioFilePath)
+                        // Delete every SoundBite recording — recursing through
+                        // OpenNotebook wrappers and Portfolio sections.
+                        resolvedEntry.captureData.audioFilePaths().forEach { path ->
+                            AudioStorageManager.deleteAudio(context, path)
+                        }
                         runCatching { CurioRepositoryHolder.repo.deleteById(resolvedEntry.id) }
                         navController.popBackStack()
                     }
@@ -302,16 +309,24 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 }
 
 /**
- * True when an entry renders as a mood board — either a direct GalleryWall
- * or a Wildcard Open Notebook whose chosen sub-format is a GalleryWall. Both
- * cases can be re-edited in place via the Edit mood board flow.
+ * True when an entry renders as a mood board — either a direct GalleryWall,
+ * a Wildcard Open Notebook whose chosen sub-format is a GalleryWall, or a
+ * multi-section Portfolio containing a GalleryWall section. All cases can be
+ * re-edited via the Edit mood board flow.
  */
 private fun isMoodBoardEntry(entry: CurioEntry): Boolean =
     entry.format == CaptureFormat.GalleryWall ||
-        (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall
+        (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall ||
+        (entry.captureData as? CaptureData.Portfolio)?.sections?.any { it.format == CaptureFormat.GalleryWall } == true
 
 @Composable
 private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
+    // Multi-section entries render a compact section switcher that flips
+    // between the individual format bodies (never merged into one page).
+    if (entry.captureData is CaptureData.Portfolio) {
+        PortfolioRender(entry, category, navController)
+        return
+    }
     when (entry.format) {
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category, navController)
@@ -319,6 +334,68 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
         CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category, navController)
+    }
+}
+
+/**
+ * Multi-section render — a compact chip row switches between the entry's
+ * sections; the active section's own format body renders below. Each chip
+ * shows the section's format glyph + short name.
+ */
+@Composable
+private fun PortfolioRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
+    val data = entry.captureData as? CaptureData.Portfolio ?: return
+    var activeIndex by rememberSaveable(entry.id) { mutableIntStateOf(0) }
+    val section = data.sections.getOrNull(activeIndex) ?: return
+
+    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        // ── Section switcher chips ────────────────────────────────────
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            data.sections.forEachIndexed { i, s ->
+                val selected = i == activeIndex
+                Surface(
+                    onClick = { activeIndex = i },
+                    shape = RoundedCornerShape(50),
+                    color = if (selected) category.accent
+                            else MaterialTheme.colorScheme.surfaceVariant,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(
+                            name = formatGlyph(s.format),
+                            contentDescription = null,
+                            tint = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                            size = 14.dp
+                        )
+                        Text(
+                            text = s.format.shortName,
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                            color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
+        }
+
+        // ── Active section's format body ──────────────────────────────
+        val subEntry = CurioEntry(
+            id = entry.id,
+            topic = entry.topic,
+            format = section.format,
+            captureData = section.data,
+            title = section.title ?: entry.title,
+            capturedAtMillis = entry.capturedAtMillis
+        )
+        FormatBody(entry = subEntry, category = category, navController = navController)
     }
 }
 

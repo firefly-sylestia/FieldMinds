@@ -59,13 +59,16 @@ fun FieldNotesFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    initialData: CaptureData.FieldNotes? = null
 ) {
     val context = LocalContext.current
-    var observed by remember { mutableStateOf("") }
-    var surprised by remember { mutableStateOf("") }
-    var learnNext by remember { mutableStateOf("") }
-    var imageUris by remember { mutableStateOf<List<String>>(emptyList()) }
+    // Edit mode: restore the three sections + photos so re-saving preserves
+    // the original capture instead of silently wiping it.
+    var observed by remember(initialData) { mutableStateOf(initialData?.observed ?: "") }
+    var surprised by remember(initialData) { mutableStateOf(initialData?.surprised ?: "") }
+    var learnNext by remember(initialData) { mutableStateOf(initialData?.learnNext ?: "") }
+    var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->

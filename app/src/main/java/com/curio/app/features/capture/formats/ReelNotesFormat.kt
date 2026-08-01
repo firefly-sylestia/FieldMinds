@@ -45,12 +45,15 @@ fun ReelNotesFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    initialData: CaptureData.ReelNotes? = null
 ) {
     val context = LocalContext.current
-    var rating by remember { mutableStateOf(0) }
-    var reviewText by remember { mutableStateOf("") }
-    var imageUris by remember { mutableStateOf<List<String>>(emptyList()) }
+    // Edit mode: restore rating / review / images so re-saving an entry
+    // preserves the original capture instead of silently wiping it.
+    var rating by remember(initialData) { mutableStateOf(initialData?.rating ?: 0) }
+    var reviewText by remember(initialData) { mutableStateOf(initialData?.reviewText ?: "") }
+    var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->

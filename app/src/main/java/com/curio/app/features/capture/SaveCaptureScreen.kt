@@ -1,8 +1,11 @@
 package com.curio.app.features.capture
 
+import android.content.Context
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -28,7 +32,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -56,6 +62,7 @@ import com.curio.app.data.CurioTopic
 import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
+import com.curio.app.data.shortName
 import com.curio.app.features.capture.formats.FieldNotesFormat
 import com.curio.app.features.capture.formats.GalleryWallFormat
 import com.curio.app.features.capture.formats.MarginaliaFormat
@@ -66,6 +73,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.EmberBurst
+import com.curio.app.ui.components.formatGlyph
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -150,18 +158,10 @@ fun SaveCaptureScreen(
             scope.launch {
                 val entryId = editEntryId ?: CaptureRepository.createId()
 
-                // Persist audio file from cache to internal storage before saving
-                val persistedData = if (data is CaptureData.SoundBite && !data.audioFilePath.isNullOrBlank()) {
-                    val result = AudioStorageManager.persistAudio(
-                        context, data.audioFilePath, entryId
-                    )
-                    data.copy(
-                        audioFilePath = result.persistentPath,
-                        fileSizeBytes = result.fileSizeBytes
-                    )
-                } else {
-                    data
-                }
+                // Persist audio file from cache to internal storage before
+                // saving — recurses through Portfolio/OpenNotebook so every
+                // SoundBite section gets a stable path, not just top-level.
+                val persistedData = persistAudioDeep(context, data, entryId)
 
                 val resolvedTopic = topic
                 if (resolvedTopic == null) {
@@ -181,12 +181,18 @@ fun SaveCaptureScreen(
                 }
                 val entry = if (existingEntry != null) {
                     // Edit mode: keep id/topic/title/timestamp, swap the data.
-                    existingEntry.copy(captureData = persistedData)
+                    existingEntry.copy(
+                        format = formatOf(persistedData),
+                        captureData = persistedData
+                    )
                 } else {
                     CurioEntry(
                         id = entryId,
                         topic = resolvedTopic,
-                        format = cat.defaultFormat,
+                        // A single section stores its own format; a Portfolio
+                        // entry uses its first section's format so Cabinet glyph
+                        // and detail dispatch stay correct.
+                        format = formatOf(persistedData),
                         captureData = persistedData
                     )
                 }
@@ -243,7 +249,7 @@ fun SaveCaptureScreen(
                 }
             )
             Text(
-                text = if (editEntryId != null) "Edit mood board" else "Save your take",
+                text = if (editEntryId != null) "Edit entry" else "Save your take",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -443,18 +449,19 @@ fun SaveCaptureScreen(
 }
 
 /**
- * Dispatch the right format body. In edit mode ([entryFormat] present) the
- * body is chosen by the SAVED entry's format — a mood board saved as a
- * direct GalleryWall OR as a Wildcard OpenNotebook wrapper reopens with the
- * correct body regardless of the category's default. In create mode it
- * falls back to the active category's default format.
+ * Universal capture body — the redesigned "How do you want to capture this
+ * one?" picker, now offered for EVERY category (the Wildcard pick-any style
+ * became universal). A compact chip row pre-selects the category's dedicated
+ * format; users can add multiple different takes (sections) which all save
+ * into ONE entry. On save, a single section stores bare data (backward
+ * compatible) while 2+ sections store a [CaptureData.Portfolio] — the detail
+ * page then shows a section switcher.
  *
- * Each format now reports both [onCanSaveChange] and [onDataChanged].
- *
- * [initialData] (edit mode) is passed through to [GalleryWallFormat] so a
- * saved mood board can preload its tiles and caption; [boardSeed] (edit
- * mode only) is the saved entry's id hash so the editor's watermark pattern
- * matches the saved view.
+ * Section state (format + live data) is held here so switching sections
+ * never loses in-progress content: each editor emits its data continuously,
+ * and the outgoing section's data is snapshotted as the next activation's
+ * seed. [initialData] (edit mode) may be a Portfolio, a legacy
+ * OpenNotebook, or a bare format payload — all are unwrapped into sections.
  */
 @Composable
 private fun FormatBodyForCategory(
@@ -465,26 +472,367 @@ private fun FormatBodyForCategory(
     initialData: CaptureData? = null,
     boardSeed: Int? = null
 ) {
-    when (entryFormat ?: category.defaultFormat) {
-        CaptureFormat.SoundBite ->
-            SoundBiteFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
-        CaptureFormat.ReelNotes ->
-            ReelNotesFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
-        CaptureFormat.Marginalia ->
-            MarginaliaFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
-        CaptureFormat.GalleryWall ->
-            GalleryWallFormat(
-                category.accent, category.tint, onCanSaveChange, onDataChanged,
-                initialData = initialData as? CaptureData.GalleryWall,
-                boardSeed = boardSeed
-            )
-        CaptureFormat.FieldNotes ->
-            FieldNotesFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
-        CaptureFormat.OpenNotebook ->
-            OpenNotebookFormat(
-                category.accent, category.tint, onCanSaveChange, onDataChanged,
-                initialData = initialData as? CaptureData.OpenNotebook,
-                boardSeed = boardSeed
-            )
+    // Wildcard has no dedicated page — default its first take to Voice.
+    val defaultFormat = if (category.defaultFormat == CaptureFormat.OpenNotebook)
+        CaptureFormat.SoundBite else category.defaultFormat
+
+    val sections = remember(entryFormat, initialData) {
+        mutableStateListOf<CaptureSectionState>().apply {
+            when {
+                initialData is CaptureData.Portfolio && initialData.sections.isNotEmpty() ->
+                    initialData.sections.forEachIndexed { i, s ->
+                        add(CaptureSectionState(i, s.format).apply {
+                            seed = s.data
+                            data = s.data
+                            canSave = true
+                        })
+                    }
+                initialData is CaptureData.OpenNotebook ->
+                    add(CaptureSectionState(0, initialData.subFormat).apply {
+                        seed = initialData.subData
+                        data = initialData.subData
+                        canSave = true
+                    })
+                initialData != null ->
+                    add(CaptureSectionState(0, entryFormat ?: defaultFormat).apply {
+                        seed = initialData
+                        data = initialData
+                        canSave = true
+                    })
+                else -> add(CaptureSectionState(0, defaultFormat))
+            }
+        }
     }
+    // Mood-board edits reopen on their board section; everything else starts
+    // on the first take.
+    var activeIndex by remember(entryFormat, initialData) {
+        mutableIntStateOf(
+            (initialData as? CaptureData.Portfolio)
+                ?.sections?.indexOfFirst { it.format == CaptureFormat.GalleryWall }
+                ?.coerceAtLeast(0) ?: 0
+        )
+    }
+    var nextId by remember(entryFormat, initialData) {
+        mutableIntStateOf(sections.maxOfOrNull { it.id }?.plus(1) ?: 0)
+    }
+
+    // Snapshot the outgoing section's data so switching back restores it.
+    fun snapshotActive() {
+        sections.getOrNull(activeIndex)?.let { it.seed = it.data }
+    }
+
+    // Switching a FILLED section's format clears its content — confirm first
+    // so a fat-finger on the format chips never silently wipes a take.
+    var pendingFormatSwitch by remember { mutableStateOf<CaptureFormat?>(null) }
+    fun applyFormat(section: CaptureSectionState, fmt: CaptureFormat) {
+        section.format = fmt
+        section.canSave = false
+        section.data = null
+        section.seed = null
+        section.busy = false
+    }
+
+    // ── Aggregate: all sections must be filled to save ──────────────────
+    val allReady = sections.isNotEmpty() && sections.all { it.canSave && it.data != null }
+    val combinedData: CaptureData? = when {
+        !allReady -> null
+        sections.size == 1 -> sections[0].data
+        else -> CaptureData.Portfolio(
+            sections.map { CaptureData.CaptureSection(it.format, it.data!!) }
+        )
+    }
+    LaunchedEffect(allReady, combinedData) {
+        onCanSaveChange(allReady)
+        onDataChanged(combinedData)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "How do you want to capture this one?",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        // ── Compact format chips — control the ACTIVE section ────────────
+        val active = sections.getOrNull(activeIndex)
+        if (active != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CAPTURE_FORMATS.forEach { fmt ->
+                    Surface(
+                        onClick = {
+                            if (active.format != fmt) {
+                                // Confirm when this take has content OR a live
+                                // recording is in progress; an empty take (and
+                                // no active recording) switches freely.
+                                if ((active.canSave && active.data != null) || active.busy) {
+                                    pendingFormatSwitch = fmt
+                                } else {
+                                    applyFormat(active, fmt)
+                                }
+                            }
+                        },
+                        shape = RoundedCornerShape(50),
+                        color = if (active.format == fmt) category.tint else MaterialTheme.colorScheme.surface,
+                        border = BorderStroke(
+                            1.dp,
+                            if (active.format == fmt) category.accent.copy(alpha = 0.5f)
+                            else MaterialTheme.colorScheme.outline
+                        ),
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CurioIcon(
+                                name = formatGlyph(fmt),
+                                contentDescription = null,
+                                tint = if (active.format == fmt) category.accent
+                                       else MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 16.dp
+                            )
+                            Text(
+                                text = fmt.shortName,
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = if (active.format == fmt) FontWeight.SemiBold else FontWeight.Normal
+                                ),
+                                color = if (active.format == fmt) category.accent
+                                       else MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // ── Section tabs + add another take ──────────────────────────────
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            sections.forEachIndexed { i, s ->
+                Surface(
+                    onClick = { snapshotActive(); activeIndex = i },
+                    shape = RoundedCornerShape(50),
+                    color = if (i == activeIndex) category.accent
+                            else MaterialTheme.colorScheme.surfaceVariant,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = if (sections.size > 1) 4.dp else 12.dp,
+                            top = 8.dp,
+                            bottom = 8.dp
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(
+                            name = formatGlyph(s.format),
+                            contentDescription = null,
+                            tint = if (i == activeIndex) Color.White
+                                   else MaterialTheme.colorScheme.onSurfaceVariant,
+                            size = 14.dp
+                        )
+                        Text(
+                            text = "${i + 1} · ${s.format.shortName}",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                            color = if (i == activeIndex) Color.White else MaterialTheme.colorScheme.onSurface
+                        )
+                        if (sections.size > 1) {
+                            Surface(
+                                onClick = {
+                                    if (i < activeIndex) activeIndex--
+                                    sections.removeAt(i)
+                                    if (activeIndex >= sections.size) activeIndex = sections.size - 1
+                                },
+                                shape = CircleShape,
+                                color = Color.Transparent
+                            ) {
+                                CurioIcon(
+                                    name = CurioIcons.Close,
+                                    contentDescription = "Remove take",
+                                    tint = if (i == activeIndex) Color.White
+                                           else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    size = 16.dp,
+                                    modifier = Modifier.padding(4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            Surface(
+                onClick = {
+                    snapshotActive()
+                    sections.add(CaptureSectionState(nextId++, defaultFormat))
+                    activeIndex = sections.lastIndex
+                },
+                shape = RoundedCornerShape(50),
+                color = category.tint,
+                modifier = Modifier.padding(vertical = 2.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.Add,
+                        contentDescription = null,
+                        tint = category.accent,
+                        size = 16.dp
+                    )
+                    Text(
+                        text = "Add take",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                        color = category.accent
+                    )
+                }
+            }
+        }
+
+        // ── Active section's format body ─────────────────────────────────
+        val current = sections.getOrNull(activeIndex)
+        if (current != null) {
+            key(current.id) {
+                when (current.format) {
+                    CaptureFormat.SoundBite -> SoundBiteFormat(
+                        category.accent, category.tint,
+                        { current.canSave = it }, { current.data = it },
+                        onBusyChange = { current.busy = it },
+                        initialData = current.seed as? CaptureData.SoundBite
+                    )
+                    CaptureFormat.ReelNotes -> ReelNotesFormat(
+                        category.accent, category.tint,
+                        { current.canSave = it }, { current.data = it },
+                        initialData = current.seed as? CaptureData.ReelNotes
+                    )
+                    CaptureFormat.Marginalia -> MarginaliaFormat(
+                        category.accent, category.tint,
+                        { current.canSave = it }, { current.data = it },
+                        initialData = current.seed as? CaptureData.Marginalia
+                    )
+                    CaptureFormat.GalleryWall -> GalleryWallFormat(
+                        category.accent, category.tint,
+                        { current.canSave = it }, { current.data = it },
+                        initialData = current.seed as? CaptureData.GalleryWall,
+                        boardSeed = boardSeed
+                    )
+                    CaptureFormat.FieldNotes -> FieldNotesFormat(
+                        category.accent, category.tint,
+                        { current.canSave = it }, { current.data = it },
+                        initialData = current.seed as? CaptureData.FieldNotes
+                    )
+                    CaptureFormat.OpenNotebook -> OpenNotebookFormat(
+                        category.accent, category.tint,
+                        { current.canSave = it }, { current.data = it },
+                        initialData = current.seed as? CaptureData.OpenNotebook,
+                        boardSeed = boardSeed
+                    )
+                }
+            }
+        }
+    }
+
+    // ── Confirm before switching a filled take's format ──────────────────
+    pendingFormatSwitch?.let { fmt ->
+        AlertDialog(
+            onDismissRequest = { pendingFormatSwitch = null },
+            title = { Text("Switch format?") },
+            text = { Text("This will clear what you've added to this take (including any live recording) and switch to ${fmt.shortName}.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    val section = sections.getOrNull(activeIndex)
+                    if (section != null) applyFormat(section, fmt)
+                    pendingFormatSwitch = null
+                }) {
+                    Text("Switch")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingFormatSwitch = null }) {
+                    Text("Keep editing")
+                }
+            }
+        )
+    }
+}
+
+/** One take (section) inside the universal multi-section picker. */
+private class CaptureSectionState(val id: Int, initialFormat: CaptureFormat) {
+    var format by mutableStateOf(initialFormat)
+    var canSave by mutableStateOf(false)
+    var data by mutableStateOf<CaptureData?>(null)
+    var seed by mutableStateOf<CaptureData?>(null)
+    // True while a live recording is in progress — format-switch confirmation
+    // must also trigger here (data/canSave are null mid-recording).
+    var busy by mutableStateOf(false)
+}
+
+/** The 5 concrete format chips offered by the universal picker. */
+private val CAPTURE_FORMATS = listOf(
+    CaptureFormat.SoundBite,
+    CaptureFormat.ReelNotes,
+    CaptureFormat.Marginalia,
+    CaptureFormat.GalleryWall,
+    CaptureFormat.FieldNotes
+)
+
+/**
+ * Recursively persists every SoundBite audio file inside [data] (through
+ * OpenNotebook wrappers and Portfolio sections) so each recording gets a
+ * stable internal path before saving.
+ */
+private suspend fun persistAudioDeep(
+    context: Context,
+    data: CaptureData,
+    entryId: String
+): CaptureData = when (data) {
+    is CaptureData.SoundBite ->
+        if (data.audioFilePath.isNullOrBlank()) data
+        else {
+            val result = AudioStorageManager.persistAudio(
+                context, data.audioFilePath, entryId
+            )
+            data.copy(
+                audioFilePath = result.persistentPath,
+                fileSizeBytes = result.fileSizeBytes
+            )
+        }
+    is CaptureData.OpenNotebook ->
+        data.copy(subData = persistAudioDeep(context, data.subData, entryId))
+    is CaptureData.Portfolio ->
+        data.copy(
+            sections = data.sections.map {
+                it.copy(data = persistAudioDeep(context, it.data, entryId))
+            }
+        )
+    else -> data
+}
+
+/**
+ * The [CaptureFormat] that best represents [data] for the entry's format
+ * column — the first section's format for a Portfolio.
+ */
+private fun formatOf(data: CaptureData): CaptureFormat = when (data) {
+    is CaptureData.SoundBite -> CaptureFormat.SoundBite
+    is CaptureData.ReelNotes -> CaptureFormat.ReelNotes
+    is CaptureData.Marginalia -> CaptureFormat.Marginalia
+    is CaptureData.GalleryWall -> CaptureFormat.GalleryWall
+    is CaptureData.FieldNotes -> CaptureFormat.FieldNotes
+    is CaptureData.OpenNotebook -> data.subFormat
+    is CaptureData.Portfolio -> data.sections.firstOrNull()?.format ?: CaptureFormat.SoundBite
 }
