@@ -26,6 +26,15 @@ object AppPreferences {
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
 
+    // ── Spin page feature toggles (v5.9) — each is independent: turning
+    //    one off reverts that piece of the Spin screen to its previous
+    //    design. Seeded by [initThemeMode] at startup, reactive mirrors
+    //    below update instantly when toggled in Settings.
+    private const val KEY_SPIN_DIAL = "spin_dial_enabled"
+    private const val KEY_SPIN_RITUAL = "spin_ritual_enabled"
+    private const val KEY_SPIN_DECK_ENRICH = "spin_deck_enrich_enabled"
+    private const val KEY_SPIN_FURNITURE = "spin_furniture_enabled"
+
     // ── Display name ─────────────────────────────────────────────────
     fun getDisplayName(context: Context): String =
         prefs(context).getString(KEY_DISPLAY_NAME, null) ?: "Curious Explorer"
@@ -44,9 +53,24 @@ object AppPreferences {
     var reminderEnabledState by mutableStateOf(false)
         private set
 
+    // ── Reactive Spin page feature mirrors — updated by the setters so
+    //    toggling in Settings recomposes the Spin screen instantly.
+    var spinDialState by mutableStateOf(true)
+        private set
+    var spinRitualState by mutableStateOf(true)
+        private set
+    var spinDeckEnrichState by mutableStateOf(true)
+        private set
+    var spinFurnitureState by mutableStateOf(true)
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         reminderEnabledState = isReminderEnabled(context)
+        spinDialState = isSpinDialEnabled(context)
+        spinRitualState = isSpinRitualEnabled(context)
+        spinDeckEnrichState = isSpinDeckEnrichEnabled(context)
+        spinFurnitureState = isSpinFurnitureEnabled(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -108,6 +132,39 @@ object AppPreferences {
         prefs(context).edit()
             .putString(KEY_LANDED_TOPIC_PREFIX + categoryId.name, topicName)
             .apply()
+    }
+
+    // ── Spin page features (v5.9) ────────────────────────────────────
+    fun isSpinDialEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SPIN_DIAL, true)
+
+    fun setSpinDialEnabled(context: Context, enabled: Boolean) {
+        spinDialState = enabled
+        prefs(context).edit().putBoolean(KEY_SPIN_DIAL, enabled).apply()
+    }
+
+    fun isSpinRitualEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SPIN_RITUAL, true)
+
+    fun setSpinRitualEnabled(context: Context, enabled: Boolean) {
+        spinRitualState = enabled
+        prefs(context).edit().putBoolean(KEY_SPIN_RITUAL, enabled).apply()
+    }
+
+    fun isSpinDeckEnrichEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SPIN_DECK_ENRICH, true)
+
+    fun setSpinDeckEnrichEnabled(context: Context, enabled: Boolean) {
+        spinDeckEnrichState = enabled
+        prefs(context).edit().putBoolean(KEY_SPIN_DECK_ENRICH, enabled).apply()
+    }
+
+    fun isSpinFurnitureEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SPIN_FURNITURE, true)
+
+    fun setSpinFurnitureEnabled(context: Context, enabled: Boolean) {
+        spinFurnitureState = enabled
+        prefs(context).edit().putBoolean(KEY_SPIN_FURNITURE, enabled).apply()
     }
 
     // ── Internal ─────────────────────────────────────────────────────

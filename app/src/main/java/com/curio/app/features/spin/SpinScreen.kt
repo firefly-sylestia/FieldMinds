@@ -20,6 +20,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items as lazyItems
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +56,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -66,8 +71,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -86,6 +93,7 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
+import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.CurioTopic
 import com.curio.app.data.StreakTracker
@@ -101,6 +109,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import kotlinx.coroutines.delay
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -166,6 +175,23 @@ import kotlin.random.Random
  *     paper ticket with a category-color rule, crisp border, and layered
  *     elevation. The top-bar and bottom controls use solid paper containers;
  *     no ambient halo or glossy surface treatment is used on this screen.
+ *
+ * v5.9 changes:
+ * 14. **Optional Spin page features** — four independent toggles in
+ *     Settings → Spin page, each ON by default. Turning one off restores
+ *     the previous design for that piece of the screen:
+ *       - Roulette dial — a segmented wheel with a fixed pointer replaces
+ *         the fan-deck carousel (spec §5's signature moment).
+ *       - Ritual & anticipation — headline + deck counter + breathing
+ *         spin button fill the dead space above the deck.
+ *       - Deck enrichment — slot-window pointer, taller hero ticket,
+ *         pre-landing teaser, and an in-deck preview strip.
+ *       - Screen furniture — streak + today's-quest chips and a
+ *         recently-explored strip pinned above the bottom bar.
+ *
+ * 15. The middle section (furniture chips → spin button) is now
+ *     vertically scrollable so the extra feature content never overflows
+ *     small screens; the top bar and bottom bar both stay pinned.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -297,6 +323,22 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
     val cat = activeCategory
 
+    // ── v5.9 — Spin page feature toggles (Settings → Spin page). Each is
+    //    independent + reactive: turning one off restores the previous
+    //    design for that piece of the screen.
+    val useDial = AppPreferences.spinDialState
+    val useRitual = AppPreferences.spinRitualState
+    val useDeckEnrich = AppPreferences.spinDeckEnrichState
+    val useFurniture = AppPreferences.spinFurnitureState
+    val streakDays = StreakTracker.getStreak(context)
+    val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
+        try {
+            value = CurioRepositoryHolder.repo.getAll().take(4)
+        } catch (_: Exception) {
+            value = emptyList()
+        }
+    }
+
     // Category switch resets transient animation state. The landed card is
     // deliberately NOT cleared here: landedTopicName is keyed by
     // activeCategory.id in rememberSaveable, so switching categories resets
@@ -413,7 +455,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-        // ── 1. Top bar — back, category name, topic count ───────────
+        // ── 1. Top bar — back, category name, topic count (pinned) ──
         TopBar(
             cat = cat,
             poolCount = pool.size,
@@ -428,37 +470,91 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         )
 
-        // ── Breathing room — keeps the header off the deck ────────────
-        Spacer(Modifier.height(44.dp))
+        // ── Scrollable middle — everything above the pinned bottom bar ──
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+        // ── 1b. Screen furniture (v5.9 D) — streak + quest chips ──
+        if (useFurniture) {
+            FurnitureChips(
+                streakDays = streakDays,
+                onQuest = { navController.navigate(CurioRoutes.HOME) { launchSingleTop = true } }
+            )
+            Spacer(Modifier.height(10.dp))
+        }
 
-        // ── 2. Carousel (interactive cards) ─────────────────────────
-        // Tapping the center card opens a landed topic only; the bottom
-        // Shuffle CTA owns starting or re-starting the shuffle.
-        Carousel(
-            cat = cat,
-            displayPool = displayPool,
-            cycleIndex = cycleIndex,
-            shuffling = shuffling,
-            landedTopic = landedTopic,
-            opening = isOpening,
-            enabled = filteredPool.isNotEmpty() && !shuffling,
-            onCardTap = {
-                if (shuffling || filteredPool.isEmpty()) return@Carousel
-                val resolved = landedTopic
-                    ?: landedTopicName?.let { name ->
-                        TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
-                    }
-                if (resolved != null) {
-                    landingAlreadyOpened = true
-                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
-                        launchSingleTop = true
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+        // ── 2. Ritual & anticipation (v5.9 B) — headline + deck count ─
+        if (useRitual) {
+            RitualHeader(cat = cat, deckCount = displayPool.size)
+            Spacer(Modifier.height(12.dp))
+        } else {
+            // Breathing room — keeps the header off the deck
+            Spacer(Modifier.height(44.dp))
+        }
 
-        // ── 3. Center spin button — the ONLY shuffle CTA (v6) ──────
+        // ── 3. Deck visual — roulette dial (v5.9 A) or fan deck ────
+        if (useDial) {
+            RouletteDial(
+                cat = cat,
+                displayPool = displayPool,
+                cycleIndex = cycleIndex,
+                shuffling = shuffling,
+                landedTopic = landedTopic,
+                enabled = filteredPool.isNotEmpty() && !shuffling,
+                onTap = {
+                    if (shuffling || filteredPool.isEmpty()) return@RouletteDial
+                    val resolved = landedTopic
+                        ?: landedTopicName?.let { name ->
+                            TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
+                        }
+                    if (resolved != null) {
+                        landingAlreadyOpened = true
+                        navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            // Tapping the center card opens a landed topic only; the
+            // bottom Shuffle CTA owns starting or re-starting the shuffle.
+            Carousel(
+                cat = cat,
+                displayPool = displayPool,
+                cycleIndex = cycleIndex,
+                shuffling = shuffling,
+                landedTopic = landedTopic,
+                opening = isOpening,
+                enabled = filteredPool.isNotEmpty() && !shuffling,
+                enrich = useDeckEnrich,
+                onCardTap = {
+                    if (shuffling || filteredPool.isEmpty()) return@Carousel
+                    val resolved = landedTopic
+                        ?: landedTopicName?.let { name ->
+                            TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
+                        }
+                    if (resolved != null) {
+                        landingAlreadyOpened = true
+                        navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        // ── 3b. In-deck preview (v5.9 C) — what's waiting in the deck ──
+        if (useDeckEnrich && !useDial && displayPool.isNotEmpty()) {
+            Spacer(Modifier.height(10.dp))
+            InDeckStrip(cat = cat, topics = displayPool)
+        }
+
+        // ── 4. Center spin button — the ONLY shuffle CTA (v6) ──────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -470,14 +566,24 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 isShuffling = shuffling,
                 landedTopic = landedTopic,
                 pulseScale = buttonPulse,
+                idlePulse = useRitual,
                 enabled = filteredPool.isNotEmpty(),
                 onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ }
             )
         }
 
-        // ── 4. Breathing room — keeps the bottom bar pinned to the
-        //    screen edge instead of leaving dead space below it ─────
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.height(12.dp))
+        }
+
+        // ── 4b. Recently explored (v5.9 D) — pinned above the bottom bar ──
+        if (useFurniture && recentEntries.isNotEmpty()) {
+            RecentlyExploredStrip(
+                entries = recentEntries,
+                onOpen = { entry ->
+                    navController.navigate(CurioRoutes.entryDetail(entry.id)) { launchSingleTop = true }
+                }
+            )
+        }
 
         // ── 5. Bottom bar — Categories · Filter (controls only) ────
         // No duplicate shuffle button: the big center SpinButton above
@@ -1002,6 +1108,7 @@ private fun Carousel(
     landedTopic: CurioTopic?,
     opening: Boolean,
     enabled: Boolean,
+    enrich: Boolean = false,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -1013,6 +1120,14 @@ private fun Carousel(
         if (poolSize == 0) {
             EmptyPoolHint(cat)
         } else {
+            // v5.9 — slot-window pointer: a fixed needle at the top of the
+            // deck marks where the next card will land (Deck enrichment).
+            if (enrich) {
+                SlotWindowPointer(
+                    accent = cat.accent,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
+            }
             val slots = listOf(-2, 2, -1, 1, 0)
             slots.forEach { slot ->
                 val topic = resolveTopicForSlot(
@@ -1032,6 +1147,7 @@ private fun Carousel(
                         shuffling = shuffling,
                         opening = opening,
                         enabled = enabled && landedTopic != null,
+                        enrich = enrich,
                         onTap = onCardTap
                     )
                 } else {
@@ -1099,10 +1215,13 @@ private fun HeroTicketCard(
     shuffling: Boolean,
     opening: Boolean,
     enabled: Boolean,
+    enrich: Boolean = false,
     onTap: () -> Unit
 ) {
-    val w = 270.dp
-    val h = 292.dp
+    // v5.9 — Deck enrichment: a slightly taller ticket with the teaser
+    // always visible (pre-landing) instead of only after landing.
+    val w = if (enrich) 286.dp else 270.dp
+    val h = if (enrich) 310.dp else 292.dp
     val ticketGradient = remember(cat.id) {
         if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
         else CurioGradients.cardGradient(accent)
@@ -1291,7 +1410,7 @@ private fun HeroTicketCard(
                                     }
                                 }
                             }
-                            if (landed && topic != null) {
+                            if (topic != null && (enrich || landed)) {
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = topic.teaser,
@@ -1471,10 +1590,28 @@ private fun SpinButton(
     isShuffling: Boolean,
     landedTopic: CurioTopic?,
     pulseScale: Float,
+    idlePulse: Boolean,
     enabled: Boolean,
     onClick: () -> Unit
 ) {
     val buttonSize = if (landedTopic != null) 84.dp else 100.dp
+    // v5.9 — Ritual & anticipation: a gentle idle breathing scale so the
+    // button feels alive while the deck just sits there, drawing the eye
+    // to the one thing you can do: spin. Only created when the toggle is
+    // on AND the button is idle, so the animation never runs pointlessly.
+    val idleBreath = if (idlePulse && !isShuffling && landedTopic == null) {
+        val transition = rememberInfiniteTransition(label = "idleBreath")
+        val wave by transition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(CurioMotion.Durations.Breathe, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "idleBreathWave"
+        )
+        1f + wave * 0.04f
+    } else 1f
     Box(
         modifier = Modifier.size(152.dp),
         contentAlignment = Alignment.Center
@@ -1489,7 +1626,7 @@ private fun SpinButton(
             shadowElevation = 0.dp,
             modifier = Modifier
                 .size(buttonSize)
-                .scale(pulseScale.coerceIn(0.9f, 1.10f))
+                .scale((pulseScale * breathingScale).coerceIn(0.9f, 1.10f))
         ) {
             Box(
                 modifier = Modifier
@@ -1608,6 +1745,402 @@ private fun OpeningPulseDot() {
             .clip(CircleShape)
             .background(Color.White.copy(alpha = 0.9f))
     )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Roulette dial (v5.9 A) — segmented wheel + fixed pointer, spec §5
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * The signature moment: a large circular dial segmented in the category's
+ * accent family (rainbow for wildcard), spinning while shuffling and
+ * settling on a wedge when the wheel lands. The center hub shows the
+ * category glyph while idle and the landed topic's name once settled;
+ * tapping the hub opens the topic. Toggled by Settings → Spin page →
+ * Roulette dial; when off the fan-deck carousel is shown instead.
+ */
+@Composable
+private fun RouletteDial(
+    cat: CurioCategory,
+    displayPool: List<CurioTopic>,
+    cycleIndex: Int,
+    shuffling: Boolean,
+    landedTopic: CurioTopic?,
+    enabled: Boolean,
+    onTap: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val segmentCount = CurioMotion.DialWedgeCount
+    val segmentAngle = 360f / segmentCount
+    val dialSize = 268.dp
+
+    // Each shuffle tick advances the wheel by two wedges; while shuffling
+    // the ticks stream by fast (90ms+) so the dial reads as a continuous
+    // spin, decelerating as the ticks slow. On landing, ease to the
+    // nearest wedge boundary so a segment sits squarely under the pointer.
+    //
+    // NOTE: the spin logic reassigns `cycleIndex` to the landed slot index
+    // (0..5) right after the wheel stops, so the settle target MUST be
+    // derived from the last tick angle captured during the shuffle — using
+    // the post-landing cycleIndex would spring the dial backward ~8 turns.
+    val lastTickAngle = remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(cycleIndex) {
+        if (shuffling) lastTickAngle.floatValue = cycleIndex * segmentAngle * 2f
+    }
+    val settledAngle = when {
+        shuffling -> cycleIndex * segmentAngle * 2f
+        landedTopic != null -> {
+            val mod = ((lastTickAngle.floatValue % 360f) + 360f) % 360f
+            (mod / segmentAngle).roundToInt() * segmentAngle
+        }
+        else -> 0f
+    }
+    val rotation by animateFloatAsState(
+        targetValue = settledAngle,
+        animationSpec = if (shuffling) tween(120, easing = LinearEasing)
+                        else CurioMotion.Springs.WheelLanding,
+        label = "dialRotation"
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(308.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        if (displayPool.isEmpty()) {
+            EmptyPoolHint(cat)
+        } else {
+            // ── The wheel ───────────────────────────────────────────
+            Canvas(modifier = Modifier.size(dialSize)) {
+                val c = Offset(size.width / 2f, size.height / 2f)
+                val radius = size.minDimension / 2f
+                rotate(degrees = rotation, pivot = c) {
+                    for (i in 0 until segmentCount) {
+                        drawArc(
+                            color = dialSegmentColor(cat, i),
+                            startAngle = i * segmentAngle - 90f,
+                            sweepAngle = segmentAngle - 1.5f,
+                            useCenter = true,
+                            topLeft = Offset(0f, 0f),
+                            size = size
+                        )
+                    }
+                }
+                // Rim ring
+                drawCircle(
+                    color = Color.White.copy(alpha = 0.55f),
+                    radius = radius,
+                    style = Stroke(3.dp.toPx())
+                )
+                // Hub
+                drawCircle(
+                    color = MaterialTheme.colorScheme.surface,
+                    radius = radius * 0.34f
+                )
+                drawCircle(
+                    color = cat.accent.copy(alpha = 0.25f),
+                    radius = radius * 0.34f,
+                    style = Stroke(2.dp.toPx())
+                )
+                // Fixed pointer at top (not rotated)
+                val pointerPath = Path().apply {
+                    moveTo(c.x, 0f)
+                    lineTo(c.x - 13.dp.toPx(), 28.dp.toPx())
+                    lineTo(c.x + 13.dp.toPx(), 28.dp.toPx())
+                    close()
+                }
+                drawPath(pointerPath, color = MaterialTheme.colorScheme.surface)
+                drawPath(pointerPath, color = cat.accent, style = Stroke(2.dp.toPx()))
+            }
+            // ── Center hub — glyph while idle, landed name once settled ─
+            Box(
+                modifier = Modifier
+                    .size(dialSize * 0.68f)
+                    .then(
+                        if (enabled && landedTopic != null) Modifier.clickable(
+                            indication = null,
+                            interactionSource = null,
+                            onClick = onTap
+                        ) else Modifier
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                if (landedTopic != null) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = landedTopic.name,
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        if (!shuffling) {
+                            Text(
+                                text = "Tap to open",
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                                color = cat.accent
+                            )
+                        }
+                    }
+                } else {
+                    CurioIcon(
+                        cat.iconGlyph, null,
+                        tint = cat.accent,
+                        size = 44.dp
+                    )
+                }
+            }
+            // ── Helper copy under the dial ──────────────────────────
+            Text(
+                text = when {
+                    shuffling -> "Shuffling…"
+                    landedTopic != null -> "Tap to open"
+                    else -> "Press Shuffle"
+                },
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+    }
+}
+
+/** Wedge colors — accent-family shades for named categories, rainbow for wildcard. */
+private fun dialSegmentColor(cat: CurioCategory, index: Int): Color {
+    val accent = cat.accent
+    return if (cat.id == CategoryId.WILDCARD) {
+        val rainbow = listOf(
+            CurioColors.Lilac, CurioColors.DustyBlue, CurioColors.Sage,
+            CurioColors.Peach, CurioColors.Teal, CurioColors.CoralBlush
+        )
+        rainbow[index % rainbow.size]
+    } else {
+        when (index % 3) {
+            0 -> accent
+            1 -> lerp(accent, Color.White, 0.30f)
+            else -> lerp(accent, Color.Black, 0.18f)
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Ritual & anticipation (v5.9 B) — headline + deck counter
+// ═══════════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun RitualHeader(cat: CurioCategory, deckCount: Int, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Your next curiosity is one spin away",
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(6.dp))
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = cat.accent.copy(alpha = 0.14f)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                CurioIcon(cat.iconGlyph, null, tint = cat.accent, size = 14.dp)
+                Text(
+                    text = "$deckCount topics in the ${cat.displayName} deck",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = cat.accent,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Deck enrichment (v5.9 C) — slot pointer + in-deck preview strip
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Small fixed needle above the deck marking where the next card lands. */
+@Composable
+private fun SlotWindowPointer(accent: Color, modifier: Modifier = Modifier) {
+    // zIndex above the deck (hero 10f, peeks 2f/5f) so the fully-opaque
+    // peek cards never draw over the needle.
+    Canvas(modifier = modifier.size(28.dp).zIndex(11f)) {
+        val path = Path().apply {
+            moveTo(size.width / 2f, size.height)
+            lineTo(0f, 0f)
+            lineTo(size.width, 0f)
+            close()
+        }
+        drawPath(path, color = MaterialTheme.colorScheme.surface)
+        drawPath(path, color = accent, style = Stroke(2.dp.toPx()))
+    }
+}
+
+/** Horizontal chips of the current deck pool, shown under the carousel. */
+@Composable
+private fun InDeckStrip(cat: CurioCategory, topics: List<CurioTopic>, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = "In the deck",
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
+        Spacer(Modifier.height(8.dp))
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            lazyItems(topics) { topic ->
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    border = BorderStroke(1.dp, cat.accent.copy(alpha = 0.3f))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(cat.iconGlyph, null, tint = cat.accent, size = 14.dp)
+                        Text(
+                            text = topic.name,
+                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Screen furniture (v5.9 D) — streak/quest chips + recently explored
+// ═══════════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun FurnitureChips(streakDays: Int, onQuest: () -> Unit, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        if (streakDays > 0) {
+            Surface(
+                shape = RoundedCornerShape(50),
+                color = CurioColors.CoralBlush.copy(alpha = 0.15f)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    CurioIcon(CurioIcons.LocalFire, null, tint = CurioColors.CoralBlush, size = 14.dp)
+                    Text(
+                        text = "$streakDays-day streak",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = CurioColors.CoralBlush
+                    )
+                }
+            }
+        }
+        Surface(
+            onClick = onQuest,
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surfaceContainerLow
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                CurioIcon(CurioIcons.AutoAwesome, null, tint = MaterialTheme.colorScheme.primary, size = 14.dp)
+                Text(
+                    text = "Today's quest",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
+}
+
+/** Horizontal cards of the most recent captures, pinned above the bottom bar. */
+@Composable
+private fun RecentlyExploredStrip(entries: List<CurioEntry>, onOpen: (CurioEntry) -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = "Recently explored",
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
+        Spacer(Modifier.height(8.dp))
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            lazyItems(entries) { entry ->
+                val entryCat = CurioCategories.byId(entry.topic.categoryId)
+                Surface(
+                    onClick = { onOpen(entry) },
+                    shape = RoundedCornerShape(18.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    modifier = Modifier.width(220.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .clip(RoundedCornerShape(11.dp))
+                                .background(entryCat.accent.copy(alpha = 0.3f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CurioIcon(entryCat.iconGlyph, null, tint = entryCat.accent, size = 18.dp)
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = entry.topic.name,
+                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            Text(
+                                text = entryCat.displayName,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
