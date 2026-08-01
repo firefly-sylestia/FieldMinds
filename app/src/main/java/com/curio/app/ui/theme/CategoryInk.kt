@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CurioCategory
 
 /**
@@ -40,6 +41,10 @@ fun CurioCategory.categoryInk(): Color =
 @Composable
 fun CurioCategory.categoryBackgroundWash(): Color {
     val background = MaterialTheme.colorScheme.background
+    // Settings toggle (v6.4): when the category tint is turned off, pages use
+    // the plain theme background (cream in light, midnight in dark) exactly
+    // as they did before the wash rollout.
+    if (!AppPreferences.tintWashEnabledState) return background
     return if (isCurioDarkTheme()) {
         val midTone = lerp(accent, lightAccent, 0.5f)
         lerp(background, midTone, 0.15f)

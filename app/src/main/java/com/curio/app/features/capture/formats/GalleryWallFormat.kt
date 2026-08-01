@@ -67,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
+import com.curio.app.data.AppPreferences
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.moodBoardPainter
@@ -361,8 +362,9 @@ private fun MoodBoardCanvas(
         // available in the Compose BOM this project resolves.
         shape = if (fullScreen) RoundedCornerShape(0.dp) else RoundedCornerShape(24.dp),
         // The board background wears the category tint so the collage reads
-        // as a tinted surface (same wash language as the page around it).
-        color = tint,
+        // as a tinted surface (same wash language as the page around it);
+        // with the tint setting off it returns to a plain transparent board.
+        color = if (AppPreferences.tintWashEnabledState) tint else Color.Transparent,
         tonalElevation = 0.dp,
         // Faint accent rule — the board sits on the tinted page, so a slim
         // category-colored border keeps it from visually blending into the

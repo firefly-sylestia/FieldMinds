@@ -344,6 +344,35 @@ fun SettingsScreen(navController: NavController) {
                                 }
                             }
                         }
+                        CurioSettingsDivider()
+                        // ── Category tint toggle — off restores the plain
+                        //    theme background everywhere (cream/midnight).
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Palette, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Category tint", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    if (AppPreferences.tintWashEnabledState)
+                                        "Colorful page backgrounds"
+                                    else
+                                        "Plain theme background",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.tintWashEnabledState,
+                                onCheckedChange = { AppPreferences.setTintWashEnabled(context, it) }
+                            )
+                        }
                     }
                 }
 

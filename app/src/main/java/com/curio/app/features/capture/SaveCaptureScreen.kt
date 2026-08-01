@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
@@ -371,17 +372,17 @@ fun SaveCaptureScreen(
                         )
                 )
                 Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
-                    // The save button itself wears the category TINT (not the
-                    // full accent) with ink-colored content — the whole bottom
-                    // area stays in the page's color story instead of one
-                    // solid accent block.
+                    // The save button wears the category TINT with ink content
+                    // when the tint setting is on; with it off it reverts to
+                    // the plain accent fill + white content as before.
+                    val tintWash = AppPreferences.tintWashEnabledState
                     Button(
                         onClick = performSave,
                         enabled = canSave && !saveInProgress,
                         shape = RoundedCornerShape(32.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = cat.tint,
-                            contentColor = cat.categoryInk(),
+                            containerColor = if (tintWash) cat.tint else cat.accent,
+                            contentColor = if (tintWash) cat.categoryInk() else Color.White,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
@@ -392,7 +393,7 @@ fun SaveCaptureScreen(
                     ) {
                         if (saveInProgress) {
                             CircularProgressIndicator(
-                                color = cat.categoryInk(),
+                                color = if (tintWash) cat.categoryInk() else Color.White,
                                 strokeWidth = 2.dp,
                                 modifier = Modifier.size(22.dp)
                             )
@@ -405,7 +406,7 @@ fun SaveCaptureScreen(
                             CurioIcon(
                                 name = CurioIcons.Check,
                                 contentDescription = null,
-                                tint = cat.categoryInk(),
+                                tint = if (tintWash) cat.categoryInk() else Color.White,
                                 size = 20.dp
                             )
                             Spacer(Modifier.width(8.dp))

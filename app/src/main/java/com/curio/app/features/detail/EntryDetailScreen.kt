@@ -80,6 +80,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
@@ -942,8 +943,10 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         Surface(
             shape = RoundedCornerShape(28.dp),
             // The saved board background wears the category tint (same wash
-            // language as the editor + the page around it).
-            color = category.tint,
+            // language as the editor + the page around it); with the tint
+            // setting off it reverts to the plain elevated surface.
+            color = if (AppPreferences.tintWashEnabledState) category.tint
+                    else MaterialTheme.colorScheme.surfaceContainerHigh,
             shadowElevation = 0.dp,
             // Faint category rule — the saved board sits on the tinted page,
             // so a slim theme-aware border (accent in light, light twin in

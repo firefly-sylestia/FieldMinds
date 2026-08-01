@@ -23,6 +23,7 @@ object AppPreferences {
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
+    private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
@@ -45,9 +46,18 @@ object AppPreferences {
     var reminderEnabledState by mutableStateOf(false)
         private set
 
+    /**
+     * Reactive category-tint state — updated by [setTintWashEnabled] so page
+     * backgrounds (via categoryBackgroundWash) instantly revert to the plain
+     * theme background when the user toggles it in settings.
+     */
+    var tintWashEnabledState by mutableStateOf(true)
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         reminderEnabledState = isReminderEnabled(context)
+        tintWashEnabledState = isTintWashEnabled(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -57,6 +67,16 @@ object AppPreferences {
     fun setThemeMode(context: Context, mode: String) {
         prefs(context).edit().putString(KEY_THEME_MODE, mode).apply()
         themeModeState = mode
+    }
+
+    // ── Category tint wash ────────────────────────────────────────────
+    /** Whether category-tinted page backgrounds are enabled (default on). */
+    fun isTintWashEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_TINT_WASH_ENABLED, true)
+
+    fun setTintWashEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_TINT_WASH_ENABLED, enabled).apply()
+        tintWashEnabledState = enabled
     }
 
     // ── Daily reminder ───────────────────────────────────────────────
