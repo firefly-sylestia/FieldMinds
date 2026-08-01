@@ -1,66 +1,63 @@
 # Prompt.md — Running Request Log
 
-## Latest Request — "Edit mood board is broken: opens wrong entry / empty board / save blanks the entry"
+## Latest Request — "Mixed gradients look bad" + "Picking a category from Home explore opens a totally different page / Home tab shows that page"
 
 ### Status: ✅ Complete (about to commit & push)
 
-### The bug (user-reported, data-loss severity)
-1. Editing sometimes opened a TOTALLY DIFFERENT saved entry "based on the category"
-2. Sometimes the mood board opened EMPTY
-3. Saving that empty board BLANKED the original saved entry
+### Bug 1 — Mixed gradients look bad
+`CurioMixedDeck.mixedDeckGradient` returned the RAW deep category accents as
+gradient stops (`[fill(A), fill(B), fill(C)]`). `Brush.verticalGradient`
+interpolates them in RGB, which bands through muddy gray/brown — exactly the
+failure the codebase's own docs warn about (teal↔amber / sky↔amber cross the
+olive dead zone).
 
-### Root causes (found by tracing route → screen → save chain)
-1. **Wrong body dispatch** — `FormatBodyForCategory` dispatched on
-   `category.defaultFormat`, but `cat` is derived from the ASYNC-loaded
-   `editingEntry`. Before it loads, `cat` falls back to WILDCARD (the edit
-   route passes `categorySlug=""`) → the Wildcard **OpenNotebook picker**
-   rendered instead of the mood board (a "totally different entry based on
-   the category").
-2. **Empty-board race** — the format body composed before `editingEntry`
-   loaded, so `initialData` was null → blank board; a late
-   `remember(initialData)` re-init could wipe in-progress edits.
-3. **Blanking on save** — `performSave` fell back to creating a FRESH
-   `CurioEntry` when `editingEntry` was null; Room REPLACEs by id, so the
-   fresh (blank, wrong-format) entry overwrote the original.
+**Fix (CurioColors.kt):** `mixedDeckGradient` now builds a smooth HSL sweep —
+for each consecutive accent pair it injects `hslLerp(prev, mid, 0.5f)`, the
+curated pair blend (`mixedDeckAccent`), and `hslLerp(mid, accent, 0.5f)`
+before the next accent (capped to the first 3 accents so a 5-way mix can't
+rainbow). Added a private `hslLerp(a, b, t)` reusing the existing
+`toHsl`/`fromHsl`/`Hsl` machinery (shortest-hue-path, sat/light lerp,
+coerced). 2 accents → 5 stops, 3 accents → 9 stops; `@Composable` retained
+for the single-accent `cardGradient` path. All stops stay deep (AA vs white).
 
-### Fixes (SaveCaptureScreen.kt)
-- **Dispatch by the saved entry's format**: `FormatBodyForCategory` gained
-  `entryFormat: CaptureFormat?` and dispatches on `entryFormat ?:
-  category.defaultFormat`. Edit mode passes `editingEntry?.format` so a
-  direct GalleryWall OR Wildcard OpenNotebook-wrapped mood board reopens
-  with the correct body regardless of category default.
-- **Loading gate**: edit mode shows a `CircularProgressIndicator` until
-  `editingEntry != null` — the format body (and its data callbacks) never
-  render against the wrong fallback category.
-- **Save guard**: `if (editEntryId != null && existingEntry == null)
-  { saveInProgress = false; return@launch }` — edit mode can never write a
-  fresh entry over the original (kills the blanking).
-- `editingEntry` falls back to `TopicCatalog.sampleEntries().find { id }`
-  so preview/sample boards are editable too (ids never collide with user
-  UUIDs).
-- `canSave` additionally gated on `editingEntry != null` in edit mode.
+### Bug 2 — Wrong page on category pick (navigation)
+`SpinScreen` seeds `activeCatIds` from `rememberSaveable`; `navigateToTab`'s
+`restoreState = true` resurrects a STALE session for the same route pattern
+(e.g. an in-screen category switch made inside an earlier `spin/artists`
+visit), so picking "Artists" reopened the deck with Albums' pool — "a totally
+different page" while Shuffle stayed highlighted.
 
-### Also in this request
-- **Double-tap-to-zoom** on saved-view mood board tiles (inline board +
-  expanded dialog), matching the editor: `detectTapGestures(onTap = zoomIn,
-  onDoubleTap = zoomIn)`.
-- **Edit button in the expanded mood board dialog** (pencil, TopStart,
-  mirrors the Close button) — passes `onEdit` through to navigate to
-  `editMoodBoard(entry.id)`.
+**Fixes:**
+- **SpinScreen.kt (root cause):** a slug launch is now authoritative — new
+  `slugCatIds` (remember(categorySlug) → byRouteSlug → ids) + a
+  `LaunchedEffect(categorySlug)` that forces `activeCatIds = slugCatIds`
+  whenever a slug is present (guarded with `!=` so fresh launches skip the
+  redundant write). In-screen category switches (picker sheet) still win
+  (effect keys only on the slug); the generic Spin tab (slug = null) keeps
+  its saved state; landed-topic-survives feature and reveal auto-open guard
+  unaffected.
+- **CategoryPickerScreen.kt (clean stacks):** both spin navigations
+  (tap-to-open single select and multi-select Done) now add
+  `popUpTo(CurioRoutes.HOME)` so the PICKER (and any spin below it) is
+  dropped — back from a fresh deck returns Home, and tabs can never
+  resurrect a stale picker under the new deck. Works from both the
+  Home-opened and Spin-"Browse all" entry points.
 
 ### Validation
-- Code review (deepseek-flash): compile-safe — imports verified (Box /
-  CircularProgressIndicator / Alignment / CaptureFormat / TopicCatalog),
-  `return@launch` pattern matches existing `resolvedTopic == null` guard,
-  `sampleEntries()` suspend call valid inside produceState, braces balanced,
-  single call site updated. Two non-blocking notes: single-tap zoom now
-  waits out the double-tap window (~300ms, consistent with editor); the
-  `runCatching` sample fallback would mask a genuine DB exception (defensive
-  only, sample ids never collide with UUIDs).
+- Code review (deepseek-flash, 2 passes — full change + final delta): clean.
+  Confirmed `hslLerp` type-checks and is dead-code-free; `mixedDeckGradient`
+  never returns empty for ≥2 distinct accents; `popUpTo(HOME)` default
+  inclusive=false pops above HOME only; `slugCatIds` smart-cast + List
+  equality compile; LaunchedEffect state writes are post-composition (safe);
+  imports (CategoryId / CurioCategories / LaunchedEffect / CurioRoutes) all
+  resolve. Non-blocking note: one-frame flash of the stale category on
+  restoreState resurrection before the force applies — accepted tradeoff
+  (a derived-value approach would break in-screen category switching).
 - No gradle build run (per AGENTS.md, CI owns compilation).
 
 ### Prior work (this session)
-- Mood board pinch-to-zoom + in-place zoom (no image page) — committed
-- Editable saved mood boards + non-overlapping, more-visible watermarks —
-  committed earlier
+- Edit-mood-board bug (wrong entry / empty board / save-blanking) — fixed,
+  committed
+- Mood board pinch-to-zoom + in-place zoom, edit button in expanded dialog,
+  CI compile fixes — committed
 - Mixed-deck identity + blends — committed earlier

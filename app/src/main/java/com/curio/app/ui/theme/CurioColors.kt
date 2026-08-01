@@ -216,10 +216,13 @@ object CurioMixedDeck {
 
     /**
      * Hero-card gradient stops. Single accent → the standard theme-aware
-     * [CurioGradients.cardGradient]. Two+ accents → a multi-stop gradient
-     * across the selected accents (capped at three stops so a five-way mix
-     * doesn't slide into rainbow), which is what gives the mixed deck its
-     * signature blended look.
+     * [CurioGradients.cardGradient]. Two+ accents → a smooth multi-accent
+     * sweep: HSL-shortest-path intermediates centered on the curated pair
+     * blend between consecutive accents, so the gradient glides through
+     * premium blended hues instead of banding through muddy RGB midpoints
+     * (the old raw-stop version — teal↔amber and sky↔amber cross the olive
+     * dead zone). Capped to the first 3 accents so a five-way mix doesn't
+     * slide into rainbow.
      */
     @Composable
     fun mixedDeckGradient(accents: List<Color>): List<Color> {
@@ -229,7 +232,39 @@ object CurioMixedDeck {
         if (distinct.size <= 1) {
             return CurioGradients.cardGradient(mixedDeckAccent(distinct))
         }
-        return distinct.take(3).map { CurioGradients.categoryCardFill(it) }
+        val stops = mutableListOf<Color>()
+        distinct.take(3).forEachIndexed { i, accent ->
+            if (i > 0) {
+                val prev = distinct[i - 1]
+                // Seam through the curated pair blend (saturation-boosted,
+                // dead-zone steered), with HSL intermediates on each side so
+                // the transitions stay vivid rather than graying out.
+                val mid = mixedDeckAccent(listOf(prev, accent))
+                stops.add(hslLerp(prev, mid, 0.5f))
+                stops.add(mid)
+                stops.add(hslLerp(mid, accent, 0.5f))
+            }
+            stops.add(accent)
+        }
+        return stops
+    }
+
+    /**
+     * HSL interpolation between two colors along the shortest hue path, at
+     * fraction [t] in 0..1. Same HSL machinery as [hslBlend], so gradient
+     * intermediates stay vivid — RGB-lerped stops between deep accents pass
+     * through muddy gray/brown, the exact failure the curated blends avoid.
+     */
+    private fun hslLerp(a: Color, b: Color, t: Float): Color {
+        val ha = toHsl(a)
+        val hb = toHsl(b)
+        var dh = hb.h - ha.h
+        if (dh > 180f) dh -= 360f
+        if (dh < -180f) dh += 360f
+        val hue = ((ha.h + dh * t) + 360f) % 360f
+        val sat = (ha.s + (hb.s - ha.s) * t).coerceIn(0f, 1f)
+        val light = (ha.l + (hb.l - ha.l) * t).coerceIn(0f, 1f)
+        return fromHsl(hue, sat, light)
     }
 
     /**

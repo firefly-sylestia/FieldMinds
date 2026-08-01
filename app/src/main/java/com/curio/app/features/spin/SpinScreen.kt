@@ -241,6 +241,28 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         initialCats.map { it.id },
         stateSaver = CategoryIdListSaver
     ) { mutableStateOf(initialCats.map { it.id }) }
+    // v5.14 — a SLUG launch is authoritative. navigateToTab restores saved
+    // state for the same route pattern, which could resurrect a stale
+    // session (e.g. an in-screen category switch made inside an earlier
+    // spin/artists visit) — picking "Artists" then reopened the deck with
+    // Albums' pool. Whenever a slug is present, re-derive the category set
+    // from it on arrival; user switches made AFTER arrival (picker sheet)
+    // still win because this effect keys only on the slug.
+    val slugCatIds: List<CategoryId>? = remember(categorySlug) {
+        categorySlug
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.mapNotNull { CurioCategories.byRouteSlug(it)?.id }
+            ?.takeIf { it.isNotEmpty() }
+    }
+    LaunchedEffect(categorySlug) {
+        // Guard: on a normal fresh launch the value already matches; only
+        // write when restoreState resurrected a stale set.
+        if (slugCatIds != null && activeCatIds != slugCatIds) {
+            activeCatIds = slugCatIds
+        }
+    }
     // The first selected category drives chrome (top bar name, watermark
     // accent, confetti tint); the pool below merges every selected
     // category's topics so a multi-select launch spins across all of them.

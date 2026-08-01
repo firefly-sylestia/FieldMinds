@@ -111,8 +111,14 @@ fun CategoryPickerScreen(navController: NavController) {
                                 toggleSlug(slug)
                             } else {
                                 // Default: tap opens this category in Spin.
+                                // popUpTo(HOME) drops the picker (and any spin
+                                // below it) so the fresh deck's back stack is
+                                // just HOME → spin: back returns Home, and the
+                                // bottom-nav tabs can never resurrect a stale
+                                // picker under the new deck.
                                 navController.navigate(CurioRoutes.spinWithCategory(slug)) {
                                     launchSingleTop = true
+                                    popUpTo(CurioRoutes.HOME)
                                 }
                             }
                         },
@@ -142,7 +148,13 @@ fun CategoryPickerScreen(navController: NavController) {
                         navController.navigate(
                             if (slugs.size == 1) CurioRoutes.spinWithCategory(slugs.first())
                             else CurioRoutes.spinWithCategories(slugs)
-                        ) { launchSingleTop = true }
+                        ) {
+                            launchSingleTop = true
+                            // Same cleanup as the single-tap path: the picker
+                            // (and any spin below it) is dropped so the deck
+                            // owns a clean HOME → spin stack.
+                            popUpTo(CurioRoutes.HOME)
+                        }
                     },
                     enabled = selectedSlugs.isNotEmpty(),
                     shape = RoundedCornerShape(24.dp),
