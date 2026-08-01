@@ -230,11 +230,12 @@ fun MoodBoardTiles(
                 .zIndex(i.toFloat())
                 .then(
                     if (onTileZoom != null) {
+                        // v6.1 — onTap only: a single tap zooms IMMEDIATELY.
+                        // Registering onDoubleTap too delayed every single tap
+                        // by the double-tap timeout (~300ms), which made taps
+                        // feel like they sometimes didn't register.
                         Modifier.pointerInput(tile.uri) {
-                            detectTapGestures(
-                                onTap = { onTileZoom(tile.uri) },
-                                onDoubleTap = { onTileZoom(tile.uri) }
-                            )
+                            detectTapGestures(onTap = { onTileZoom(tile.uri) })
                         }
                     } else Modifier
                 )
@@ -256,8 +257,10 @@ fun MoodBoardTiles(
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(6.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        // v6.1 — no inner padding: tiles are sized to the
+                        // photo's own aspect ratio, so the image fills the
+                        // rounded box edge-to-edge (no white frame).
+                        .clip(RoundedCornerShape(18.dp))
                 )
             }
         }

@@ -886,14 +886,12 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         }
                     }
 
-                    // Pinch (two fingers) anywhere on the board magnifies the
-                    // whole collage; tap/double-tap a tile magnifies it
-                    // centered + straight. Single-finger drags keep scrolling.
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .moodBoardPinchZoom(zoomState)
-                    ) {
+                    // Inline (non-expanded) board: tap a tile to magnify it
+                    // centered + straight. Board-level pinch zoom is only
+                    // enabled in the expanded full-screen dialog, so a stray
+                    // two-finger pinch on the inline card can't hijack the
+                    // page scroll.
+                    Box(modifier = Modifier.fillMaxSize()) {
                         MoodBoardTiles(
                             tiles = data.tileLayouts,
                             canvasWPx = canvasW,

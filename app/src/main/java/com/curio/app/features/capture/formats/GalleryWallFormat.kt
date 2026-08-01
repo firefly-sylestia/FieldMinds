@@ -7,8 +7,14 @@ import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateRotation
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
+import android.content.Context
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -283,8 +289,29 @@ private fun MoodBoardCanvas(
             }
         }
         uris.forEach { uri ->
-            val tileW = with(density) { (100..160).random().dp.toPx() }
-            val tileH = with(density) { (120..180).random().dp.toPx() }
+            // v6.1 — size each new tile to the photo's own aspect ratio so
+            // ContentScale.Fit fills the rounded box with no bars/cropping.
+            val bounds = decodeImageBounds(context, uri)
+            val baseW = with(density) { (100..160).random().dp.toPx() }
+            val baseH = with(density) { (120..180).random().dp.toPx() }
+            val minPx = with(density) { 80.dp.toPx() }
+            val maxPx = with(density) { 320.dp.toPx() }
+            val (tileW, tileH) = if (bounds != null && bounds.second > 0) {
+                val aspect = bounds.first.toFloat() / bounds.second.toFloat()
+                if (aspect >= 1f) {
+                    // Landscape: anchor width, derive height.
+                    val w = baseW
+                    val h = (w / aspect).coerceIn(minPx, maxPx)
+                    w to h
+                } else {
+                    // Portrait: anchor height, derive width.
+                    val h = baseH
+                    val w = (h * aspect).coerceIn(minPx, maxPx)
+                    w to h
+                }
+            } else {
+                baseW to baseH
+            }
             val maxX = (canvasWPx - tileW).coerceAtLeast(0f)
             val maxY = (canvasHPx - tileH).coerceAtLeast(0f)
             tiles.add(
@@ -389,40 +416,78 @@ private fun MoodBoardCanvas(
                                     )
                                 }
                                 .pointerInput(tile.id) {
-                                    detectDragGestures(
-                                        onDragStart = {
-                                            draggingTileId = tile.id
-                                            inPinZone = false
-                                        },
-                                        onDrag = { change, dragAmount ->
-                                            change.consume()
-                                            val idx = tiles.indexOfFirst { it.id == tile.id }
-                                            if (idx >= 0) {
-                                                val t = tiles[idx]
-                                                tiles[idx] = t.copy(
-                                                    offsetXPx = (t.offsetXPx + dragAmount.x)
-                                                        .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
-                                                    offsetYPx = (t.offsetYPx + dragAmount.y)
-                                                        .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
-                                                )
-                                                inPinZone = tiles[idx].offsetYPx < pinZoneHeightPx
-                                            }
-                                        },
-                                        onDragEnd = {
-                                            draggingTileId = null
-                                            if (inPinZone) {
+                                    // v6.1 — one handler for every move: one
+                                    // finger drags the tile (with pin-to-front
+                                    // drop zone); two fingers pinch to resize
+                                    // and twist to rotate — replacing the old
+                                    // ⟲ / − / + buttons.
+                                    awaitEachGesture {
+                                        awaitFirstDown(requireUnconsumed = false)
+                                        // Only start a drag once the finger has
+                                        // actually moved past touch slop — a
+                                        // tiny jitter on an intended tap must
+                                        // not flash the pin-to-front zone.
+                                        val slop = viewConfiguration.touchSlop
+                                        var multiTouch = false
+                                        var moved = false
+                                        do {
+                                            val event = awaitPointerEvent()
+                                            val pressed = event.changes.filter { it.pressed }
+                                            if (pressed.size >= 2) {
+                                                multiTouch = true
+                                                val zoom = event.calculateZoom()
+                                                val rotation = event.calculateRotation()
                                                 val idx = tiles.indexOfFirst { it.id == tile.id }
-                                                if (idx >= 0 && idx != tiles.lastIndex) {
-                                                    tiles.add(tiles.removeAt(idx))
+                                                if (idx >= 0) {
+                                                    val t = tiles[idx]
+                                                    val minPx = with(density) { 60.dp.toPx() }
+                                                    val newW = (t.widthPx * zoom)
+                                                        .coerceIn(minPx, (canvasWPx - t.offsetXPx).coerceAtLeast(minPx))
+                                                    val newH = (t.heightPx * zoom)
+                                                        .coerceIn(minPx, (canvasHPx - t.offsetYPx).coerceAtLeast(minPx))
+                                                    tiles[idx] = t.copy(
+                                                        widthPx = newW,
+                                                        heightPx = newH,
+                                                        rotationDeg = (t.rotationDeg + rotation) % 360f,
+                                                        offsetXPx = t.offsetXPx.coerceIn(0f, (canvasWPx - newW).coerceAtLeast(0f)),
+                                                        offsetYPx = t.offsetYPx.coerceIn(0f, (canvasHPx - newH).coerceAtLeast(0f))
+                                                    )
+                                                }
+                                                event.changes.forEach { it.consume() }
+                                            } else if (pressed.size == 1 && !multiTouch) {
+                                                val change = pressed.first()
+                                                val dragAmount = change.position - change.previousPosition
+                                                if (dragAmount.getDistance() >= slop) {
+                                                    if (!moved) {
+                                                        moved = true
+                                                        draggingTileId = tile.id
+                                                        inPinZone = false
+                                                    }
+                                                    change.consume()
+                                                    val idx = tiles.indexOfFirst { it.id == tile.id }
+                                                    if (idx >= 0) {
+                                                        val t = tiles[idx]
+                                                        tiles[idx] = t.copy(
+                                                            offsetXPx = (t.offsetXPx + dragAmount.x)
+                                                                .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
+                                                            offsetYPx = (t.offsetYPx + dragAmount.y)
+                                                                .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
+                                                        )
+                                                        inPinZone = tiles[idx].offsetYPx < pinZoneHeightPx
+                                                    }
                                                 }
                                             }
-                                            inPinZone = false
-                                        },
-                                        onDragCancel = {
-                                            draggingTileId = null
-                                            inPinZone = false
+                                            if (pressed.isEmpty()) break
+                                        } while (true)
+                                        draggingTileId = null
+                                        if (inPinZone) {
+                                            val idx = tiles.indexOfFirst { it.id == tile.id }
+                                            if (idx >= 0 && idx != tiles.lastIndex) {
+                                                tiles.add(tiles.removeAt(idx))
+                                            }
                                         }
-                                    )
+                                        inPinZone = false
+                                    }
                                 }
                         ) {
                             Surface(
@@ -441,9 +506,12 @@ private fun MoodBoardCanvas(
                                         painter = moodBoardPainter(tile.uri),
                                         contentDescription = null,
                                         contentScale = ContentScale.Fit,
+                                        // v6.1 — no inner padding: tiles are
+                                        // sized to the photo's aspect, so the
+                                        // image fills the rounded box edge-
+                                        // to-edge (no white frame).
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .padding(6.dp)
                                             .clip(RoundedCornerShape(14.dp))
                                     )
                                     Surface(
@@ -490,93 +558,9 @@ private fun MoodBoardCanvas(
                                 }
                             }
 
-                            // ⟲ Rotate button — +15° per tap
-                            Surface(
-                                onClick = {
-                                    val idx = tiles.indexOfFirst { it.id == tile.id }
-                                    if (idx >= 0) {
-                                        val t = tiles[idx]
-                                        tiles[idx] = t.copy(rotationDeg = (t.rotationDeg + 15f) % 360f)
-                                    }
-                                },
-                                shape = CircleShape,
-                                color = Color.Black.copy(alpha = 0.55f),
-                                modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .offset(x = (-4).dp, y = (-4).dp)
-                                    .size(22.dp)
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    CurioIcon(
-                                        name = CurioIcons.Refresh,
-                                        contentDescription = "Rotate",
-                                        tint = Color.White,
-                                        size = 13.dp
-                                    )
-                                }
-                            }
-
-                            // ── Resize buttons (− shrink / + grow) ────────
-                            Row(
-                                modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .offset(x = (-4).dp, y = 4.dp),
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Surface(
-                                    onClick = {
-                                        val idx = tiles.indexOfFirst { it.id == tile.id }
-                                        if (idx >= 0) {
-                                            val t = tiles[idx]
-                                            val minPx = with(density) { 60.dp.toPx() }
-                                            val newW = (t.widthPx * 0.8f).coerceAtLeast(minPx)
-                                            val newH = (t.heightPx * 0.8f).coerceAtLeast(minPx)
-                                            tiles[idx] = t.copy(
-                                                widthPx = newW,
-                                                heightPx = newH,
-                                                offsetXPx = t.offsetXPx.coerceIn(0f, (canvasWPx - newW).coerceAtLeast(0f)),
-                                                offsetYPx = t.offsetYPx.coerceIn(0f, (canvasHPx - newH).coerceAtLeast(0f))
-                                            )
-                                        }
-                                    },
-                                    shape = CircleShape,
-                                    color = Color.Black.copy(alpha = 0.55f),
-                                    modifier = Modifier.size(22.dp)
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Text(
-                                            "−",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                                        )
-                                    }
-                                }
-                                Surface(
-                                    onClick = {
-                                        val idx = tiles.indexOfFirst { it.id == tile.id }
-                                        if (idx >= 0) {
-                                            val t = tiles[idx]
-                                            val minPx = with(density) { 60.dp.toPx() }
-                                            val newW = (t.widthPx * 1.2f)
-                                                .coerceIn(minPx, (canvasWPx - t.offsetXPx).coerceAtLeast(minPx))
-                                            val newH = (t.heightPx * 1.2f)
-                                                .coerceIn(minPx, (canvasHPx - t.offsetYPx).coerceAtLeast(minPx))
-                                            tiles[idx] = t.copy(widthPx = newW, heightPx = newH)
-                                        }
-                                    },
-                                    shape = CircleShape,
-                                    color = Color.Black.copy(alpha = 0.55f),
-                                    modifier = Modifier.size(22.dp)
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Text(
-                                            "+",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                                        )
-                                    }
-                                }
-                            }
+                            // v6.1 — rotate + resize moved to gestures:
+                            // two-finger twist rotates, two-finger pinch
+                            // resizes (see the tile's pointerInput above).
                         }
                     }
                 }
@@ -737,4 +721,18 @@ private fun MoodBoardCanvas(
         )
     }
 }
+
+/**
+ * Cheap header-only decode of a content-URI image's pixel bounds — used to
+ * size each new mood-board tile to the photo's own aspect ratio so
+ * [ContentScale.Fit] fills the rounded box with no bars or cropping.
+ * Returns null when the image can't be read or has no dimensions.
+ */
+private fun decodeImageBounds(context: Context, uri: Uri): Pair<Int, Int>? = runCatching {
+    val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    context.contentResolver.openInputStream(uri)?.use { stream ->
+        BitmapFactory.decodeStream(stream, null, opts)
+    }
+    if (opts.outWidth > 0 && opts.outHeight > 0) opts.outWidth to opts.outHeight else null
+}.getOrNull()
 
