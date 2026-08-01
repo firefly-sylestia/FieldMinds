@@ -75,7 +75,6 @@ import androidx.navigation.NavController
 import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
-import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
@@ -138,10 +137,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .fillMaxWidth()
                 .height(292.dp)
                 .background(
-                    Brush.verticalGradient(
-                        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
-                        else CurioGradients.cardGradient(cat.accent)
-                    )
+                    Brush.verticalGradient(CurioGradients.cardGradient(cat.accent))
                 ),
             contentAlignment = Alignment.Center
         ) {

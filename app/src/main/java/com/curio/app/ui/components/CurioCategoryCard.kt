@@ -25,14 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.TopicJsonLoader
-import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -61,12 +60,9 @@ fun CurioCategoryCard(
     val isWildcard = category.id == CategoryId.WILDCARD
     // Muted fill — the raw accent is too loud for a full-width card, so it's
     // deepened just a touch toward black: same hue, softer brightness while
-    // keeping the color rich and vivid.
-    val cardColor = if (isWildcard) {
-        lerp(CurioColors.CategoryPurple, Color.Black, 0.08f)
-    } else {
-        lerp(category.accent, Color.Black, 0.10f)
-    }
+    // keeping the color rich and vivid. Shared with the card gradients so
+    // tiles and big cards always match.
+    val cardColor = CurioGradients.categoryCardFill(category.accent)
     val topicCount = remember(category.id) { TopicJsonLoader.cached(category.id)?.size ?: 0 }
 
     Surface(

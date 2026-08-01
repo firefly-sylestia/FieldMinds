@@ -1,5 +1,6 @@
 package com.curio.app.ui.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 
@@ -34,7 +35,7 @@ object CurioColors {
     val CategoryAmber    = Color(0xFFB45309)  // Books — Authors / Books
     val CategoryTeal     = Color(0xFF0F766E)  // Visual Art — Painters / Artworks
     val CategorySky      = Color(0xFF0369A1)  // Science — Scientists / Discoveries
-    val CategoryPurple   = Color(0xFF7E22CE)  // Wildcard
+    val CategoryCoral    = CoralBlush  // Wildcard — the app's brand primary, not a deep accent
 
     /** Light 300-level twins for accent-colored ink on dark surfaces. */
     val CategoryIndigoInk = Color(0xFFA5B4FC)
@@ -42,7 +43,7 @@ object CurioColors {
     val CategoryAmberInk  = Color(0xFFFCD34D)
     val CategoryTealInk   = Color(0xFF5EEAD4)
     val CategorySkyInk    = Color(0xFF7DD3FC)
-    val CategoryPurpleInk = Color(0xFFD8B4FE)
+    val CategoryCoralInk  = Color(0xFFFFC2CE)  // light coral twin for dark-surface ink
 
     /** Tinted (20% alpha) washes of the researched category accents. */
     val CategoryIndigoTint = CategoryIndigo.copy(alpha = 0.20f)
@@ -50,12 +51,13 @@ object CurioColors {
     val CategoryAmberTint  = CategoryAmber.copy(alpha = 0.20f)
     val CategoryTealTint   = CategoryTeal.copy(alpha = 0.20f)
     val CategorySkyTint    = CategorySky.copy(alpha = 0.20f)
-    val CategoryPurpleTint = CategoryPurple.copy(alpha = 0.20f)
+    val CategoryCoralTint  = CategoryCoral.copy(alpha = 0.20f)
 
     /**
      * Legacy warm pastels — retained ONLY for brand/decorative use
      * (profile stat icons, wildcard rainbow gradient). Categories now use
-     * the researched [CategoryIndigo]..[CategoryPurple] tokens above.
+     * the researched [CategoryIndigo]..[CategorySky] tokens above plus the
+     * brand-primary [CategoryCoral] used by the Wildcard.
      */
     val Lilac            = Color(0xFFC9A6F2)  // legacy soft purple
     val DustyBlue        = Color(0xFF9BB8E8)  // legacy soft blue
@@ -80,12 +82,13 @@ object CurioColors {
 }
 
 /**
- * Solid gradient definitions for card surfaces.
- * Wildcard spans the full pastel rainbow; named categories use a
- * deep-maroon → accent → warm-white progression.
+ * Solid gradient definitions for card surfaces. Every card gradient opens on
+ * the same deepened accent used by the flat category cards ([categoryCardFill])
+ * and fades toward the active theme's background — white in light mode, black
+ * in dark — so cards always echo the app surface behind them.
  */
 object CurioGradients {
-    /** Warm sunset spectrum for the Wildcard — cohesive with the brand palette. */
+    /** Warm sunset spectrum for the Wildcard — cohesive with the brand palette (decorative use only). */
     val WildcardGradientStops = listOf(
         CurioColors.CoralBlush,
         CurioColors.Peach,
@@ -93,24 +96,23 @@ object CurioGradients {
     )
 
     /**
-     * Solid category card gradient: accent → accent → warm white.
-     * No black — rich color that softens toward the paper surface. The
-     * cream lerp stays shallow (0.30) so white content remains readable
-     * across the whole card even with the deeper researched accents.
+     * The flat fill used on category cards/chips — the same color every card
+     * gradient opens on, so tiles and big cards can never drift apart. A
+     * shallow deepen toward black keeps the hue rich while softening
+     * brightness for the full-width tile treatment.
      */
-    fun cardGradient(accent: Color): List<Color> = listOf(
-        accent,
-        lerp(accent, CurioColors.CreamWhite, 0.30f)
-    )
+    fun categoryCardFill(accent: Color): Color = lerp(accent, Color.Black, 0.10f)
 
     /**
-     * Solid wildcard card gradient — pure pastel warmth, no black or plum.
+     * Theme-aware category card gradient: opens on [categoryCardFill] (the
+     * category card color) and softens toward the theme surface — white in
+     * light mode, black in dark — so the card background always matches the
+     * app's background shade.
      */
-    fun wildcardCardGradient(): List<Color> = listOf(
-        CurioColors.CoralBlush,
-        lerp(CurioColors.CoralBlush, CurioColors.Peach, 0.55f),
-        CurioColors.Peach,
-        CurioColors.ButterYellow,
-        lerp(CurioColors.ButterYellow, CurioColors.CreamWhite, 0.45f)
-    )
+    @Composable
+    fun cardGradient(accent: Color): List<Color> {
+        val end = if (isCurioDarkTheme()) Color.Black else Color.White
+        val start = categoryCardFill(accent)
+        return listOf(start, lerp(start, end, 0.30f))
+    }
 }

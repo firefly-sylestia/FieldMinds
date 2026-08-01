@@ -1,44 +1,29 @@
-# Spin Screen: Deck Slide During Spin + Per-Tick Hero Bounce + Smoothness + Pixelated Borders
+# Card Gradients, Watermark Colors & Wildcard Recolor (coral)
 
 ## Request
 
-User: (1) when the spin starts the background cards don't have that slide animation — it only shows when it finishes — fix it; (2) the main card bounce should follow each switch so it looks good; (3) make the spin smoother; (4) still seeing pixelated borders on the spin screen.
+User: (1) match the card color gradient with the category card colors; (2) make the background have the shade of white (light) / black (dark) matching the theme; (3) give the watermark icons the exact gradient colors of the main cards; (4) change the wildcard purple — it's awful — and fix the Surprise main card having a different color than the category tiles; (5) give it the app theme colors (research previous colors and use them).
 
 ## Analysis
 
-All four issues live in `SpinScreen.kt`:
-
-1. **Deck doesn't slide during spin**: `PeekCard`'s `AnimatedContent.transitionSpec` used a pure 70/60ms crossfade while `shuffling == true` (chosen to avoid jank at ~90ms ticks), and the 240ms `slideInVertically` only ran when `shuffling == false` — i.e. AFTER the spin finished. Exactly what the user observed.
-2. **Hero bounce disconnected from the wheel**: the front card's bounce was a free-running 1.2s sine (`heroPulse`/`bounceWave`) unrelated to tick cadence, and its rotation came from a per-topic *hash* (`cycleIndexPulse`) that jumped randomly each tick — the "jittery/not smooth" feel.
-3. **Smoothness**: hash-jitter rotation + tick floor (90ms) shorter than the slide it was meant to accompany.
-4. **Pixelation**: rotated + scaled deck layers rasterized at default quality, aliasing the hairline `BorderStroke`s.
+- `CurioGradients.cardGradient(accent)` was theme-agnostic: `accent → lerp(accent, CreamWhite, 0.30)` regardless of dark mode, and the start color didn't tie into the flat category-card treatment (`lerp(accent, Black, 0.08–0.10)`).
+- `CurioWatermarkBackdrop` tinted all 11 glyphs with a single muted neutral (onSurface 5% / WarmWatermarkInk 16%) + accent whisper for the active glyph — not the category colors.
+- Wildcard flat accent was `CategoryPurple #7E22CE` on tiles/chips/peek-cards, but the Surprise **main card** used a different warm rainbow gradient (`wildcardCardGradient`) — the mismatch the user saw.
+- User chose **coral pink (brand primary #FF8FA3)** for wildcard via ask_user (accepted: white text gets less contrast on flat fills).
 
 ## Plan
 
-- PeekCard: shuffling branch → short 80–90ms directional slide + fade so the deck visibly reels during the spin (not just after); raise tick floor 90 → 105ms so the 90ms slide completes even on the fastest ticks.
-- HeroTicketCard: replace sine + hash with a per-tick pulse keyed on `topic?.id` (`snapTo(1.065)` → `animateTo(1f, spring(0.6, 1200))`), alternating `tickDir` driving `rotationZ = (pulse-1)*80*tickDir`; add a category-switch entrance bounce (`LaunchedEffect(cat.id)`, guarded `!shuffling && !landed`); landing settle snaps to `tickPulse.value` for a seamless handoff; idle scale tracks `tickPulse.value` (rests exactly 1f).
-- Add `renderQuality = RenderQuality.High` to hero + peek `graphicsLayer`s (kills aliased borders); remove dead `cycleIndexPulse`.
-- Static checks + code review; commit & push (CI validates compile on push).
+- `CurioColors.kt`: rename `CategoryPurple*` → `CategoryCoral*` (= CoralBlush brand primary; ink #FFC2CE; tint 20%). Make `cardGradient` `@Composable` + theme-aware: opens on new `categoryCardFill(accent) = lerp(accent, Black, 0.10)` (the category-card fill) and fades toward `White` (light) / `Black` (dark) at 30%. Remove `wildcardCardGradient()`; keep `WildcardGradientStops` for decorative Onboarding/Profile only.
+- `CurioWatermarkBackdrop.kt`: each glyph tinted with its own category's accent from `CurioCategories.all` (active glyph 15% dark / 26% light; others 7% dark / 12% light).
+- All hero/ticket/quest/reveal/entry gradients → `CurioGradients.cardGradient(accent)` (wildcard branch removed; now @Composable calls moved out of `remember{}` lambdas).
+- `CurioCategoryCard` uses `categoryCardFill()` for all categories; `Category.kt` wildcard entry → coral tokens.
+- `CURIO_SPEC.md` §0.2: watermark-ink paragraph, wildcard color line, wildcard-tile bullet → coral.
+- Validate refs/braces/imports + code review; commit & push.
 
 ## Completion Summary
 
-- `SpinScreen.kt`: all four fixes as planned. Imports added: `androidx.compose.animation.core.spring`, `androidx.compose.ui.graphics.RenderQuality`.
-- Code review (2 passes) clean; tuning applied per reviewer (snapTo-kick so even fast ticks visibly pulse; rotation factor 80). Braces balanced (258/258, 803/803); no dangling refs to removed symbols.
-- Reviewer's non-blocking notes: fast phase may read as a hover rather than per-switch kicks (tuning judgment), and single-topic pools never change `topic?.id` so won't pulse (edge case, 100+ topics per category).
+- All palette/gradient/watermark changes applied as planned. Wildcard is consistently brand coral everywhere (tiles, chips, peek cards, hero/ticket/quest/reveal/entry gradients); card gradients open on the category-card fill and fade toward white/black per theme; watermark glyphs carry per-category accent colors.
+- Fixed reviewer-found compile error: `CurioCategoryCard.kt` was missing `import ...CurioGradients`; also dropped unused `lerp`/`CurioColors` there, `CategoryId`/`CurioGradients` in CurioTopicCard, `CategoryId` in EntryDetailScreen.
+- Validation green: zero `CategoryPurple`/`wildcardCardGradient` refs repo-wide, no `cardGradient()` calls inside `remember{}` (non-composable context), braces balanced in all 10 touched files, imports clean.
+- Reviewer notes (non-blocking): coral ticket white-text contrast ~2:1 (accepted tradeoff; not a regression vs. old rainbow pastels — could deepen wildcard fill to `lerp(CoralBlush, Black, ~0.22)` if it reads washed out); gradient lists now reallocated per recomposition (trivial).
 - Gradle build/lint NOT run (forbidden in this environment; CI validates on push).
-
-## Follow-up: CI compile fix — remove non-existent RenderQuality
-
-CI (compileDebugKotlin) failed: `Unresolved reference 'RenderQuality'` at SpinScreen.kt:69 (import), :1209 and :1424 (`renderQuality = RenderQuality.High`).
-
-- Verified `androidx.compose.ui.graphics.RenderQuality` does NOT exist in resolved Compose BOM 2026.05.01 (ui 1.11.2): scanned every transformed jar in the Gradle cache for the class (zero matches) + docs research corroborated (no such API in androidx.compose.ui.graphics).
-- Fix (behavior-neutral, user requested no functionality change): removed the import + both `renderQuality = RenderQuality.High` lines and their now-misleading comments. All animation logic (tickPulse pulse, settleScale/settleY landing, peek slide AnimatedContent, zIndex) untouched.
-- Validation: zero `RenderQuality` refs repo-wide; braces balanced (258/258, 803/803); code review clean. Pixelation polish may be revisited via `CompositingStrategy.Offscreen` (exists in ui 1.11.2) if desired later.
-
-## Follow-up: CompositingStrategy.Offscreen experiment (user-selected)
-
-User opted to try `compositingStrategy = CompositingStrategy.Offscreen` on the hero + peek card `graphicsLayer` blocks (rendering-preference only; animation logic untouched).
-
-- Added import `androidx.compose.ui.graphics.CompositingStrategy` (verified present in ui 1.11.2 jar scan) + the property in both graphicsLayer lambdas (hero after translationY, peek after alpha = 1f), with brief comments.
-- Validation: braces balanced (258/258, 803/803); diff = 7 insertions; no RenderQuality refs. Code review clean.
-- Reviewer flag (non-blocking): Offscreen forces an offscreen render pass per layer each tick — peek cards swap topics every ~105ms during the spin, so up to 4–6 layers re-rasterize per tick; if spin feels jankier, drop it from peek cards (keep hero) or revert to Auto. This is a visual A/B experiment awaiting the user's on-device judgment.

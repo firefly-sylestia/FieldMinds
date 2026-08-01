@@ -66,10 +66,7 @@ fun CurioHeroShuffleCard(
         selectedCategory != null -> selectedCategory.accent
         else -> CurioColors.CoralBlush
     }
-    val cardGradient = remember(isWildcard, activeAccent) {
-        if (isWildcard) CurioGradients.wildcardCardGradient()
-        else CurioGradients.cardGradient(activeAccent)
-    }
+    val cardGradient = CurioGradients.cardGradient(activeAccent)
 
     // ── Press scale animation ─────────────────────────────────────────────
     val pressScale by animateFloatAsState(

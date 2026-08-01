@@ -316,10 +316,7 @@ private fun HeroCard(
     modifier: Modifier = Modifier
 ) {
     val action = resolved?.exploreAction
-    val heroGradient = remember(cat.id) {
-        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
-        else CurioGradients.cardGradient(cat.accent)
-    }
+    val heroGradient = CurioGradients.cardGradient(cat.accent)
 
     Surface(
         modifier = modifier

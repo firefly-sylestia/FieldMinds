@@ -28,10 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.curio.app.data.CaptureFormat
-import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -84,9 +82,7 @@ fun CurioEntryCard(
                     .fillMaxWidth()
                     .height(120.dp)
                     .background(
-                        if (cat.id == CategoryId.WILDCARD)
-                            Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-                        else Brush.horizontalGradient(listOf(cat.accent, cat.tint))
+                        Brush.horizontalGradient(listOf(cat.accent, cat.tint))
                     ),
                 contentAlignment = Alignment.Center
             ) {

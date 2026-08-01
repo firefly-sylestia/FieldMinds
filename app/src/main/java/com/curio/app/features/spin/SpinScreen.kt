@@ -66,7 +66,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -1128,10 +1127,7 @@ private fun HeroTicketCard(
 ) {
     val w = 270.dp
     val h = 292.dp
-    val ticketGradient = remember(cat.id) {
-        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
-        else CurioGradients.cardGradient(accent)
-    }
+    val ticketGradient = CurioGradients.cardGradient(accent)
 
     // ── Per-tick shuffle pulse — the front card bounces in sync with the
     //    wheel: every time the displayed topic switches, the card kicks
@@ -1203,10 +1199,6 @@ private fun HeroTicketCard(
                 scaleY = if (landed) settleScale.value else tickPulse.value
                 rotationZ = if (shuffling) (tickPulse.value - 1f) * 80f * tickDir else 0f
                 translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 30f
-                // Offscreen layer buffer renders the scaled/rotated card
-                // at its natural resolution, then samples it — reduces the
-                // aliased hairline-border look without touching animation.
-                compositingStrategy = CompositingStrategy.Offscreen
             }
             .zIndex(10f)
             .then(
@@ -1403,8 +1395,7 @@ private fun PeekCard(
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.
     val cardColor = remember(cat.id, far) {
-        val base = if (cat.id == CategoryId.WILDCARD) CurioColors.CategoryPurple else cat.accent
-        lerp(base, Color.Black, if (far) 0.42f else 0.28f)
+        lerp(cat.accent, Color.Black, if (far) 0.42f else 0.28f)
     }
 
     Box(
@@ -1419,8 +1410,6 @@ private fun PeekCard(
                 // and render the card as soft/pixelated. Depth comes from
                 // scale + rotation + zIndex instead of transparency.
                 alpha = 1f
-                // Offscreen buffer keeps the tilted layer's borders crisp.
-                compositingStrategy = CompositingStrategy.Offscreen
             }
             .zIndex(if (far) 2f else 5f)
     ) {

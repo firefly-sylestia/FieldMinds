@@ -46,11 +46,11 @@ The brand is intentionally not a recolor of the former wheel. Midnight Signal us
   Light Container............. #E7EEF6
   Error....................... #BA3A4B
 
-  **Watermark ink (category-glyph backdrop)**: dark mode uses near-white
-  `onSurface` at 5% alpha (clean ghosts over the midnight surface); light
-  mode uses `WarmWatermarkInk` #8E8177 at ~16% alpha — the raw maroon
-  `onSurface` at 5% reads muddy/barely visible over the cream surface.
-  Active-category accent whisper: 11% alpha in dark, 20% in light.
+  **Watermark ink (category-glyph backdrop)**: every scattered glyph is
+  tinted with its own category's accent — the exact color that opens that
+  category's main-card gradient — so the backdrop carries the same palette
+  as the cards. Muted alpha: 7% dark / 12% light. The active-category
+  glyph gets a stronger whisper: 15% dark / 26% light.
 
 Each category uses a researched, perceptually-balanced accent (Tailwind-700
 harmonized shades — deep enough that WHITE content clears WCAG AA ≥ 4.5:1 on
@@ -63,8 +63,9 @@ colored text/icons on the midnight dark surfaces (resolved theme-aware via
     Books / Authors ........ Amber  #B45309  (ink #FCD34D)
     Visual Art / Painters .. Teal   #0F766E  (ink #5EEAD4)
     Science & Nature ....... Sky    #0369A1  (ink #7DD3FC)
-    Wildcard ............... Purple #7E22CE  (ink #D8B4FE); big hero/ticket
-                              cards keep the warm rainbow gradient
+    Wildcard ............... Coral #FF8FA3  (ink #FFC2CE) — reuses the
+                              brand-primary; cards use the same themed
+                              gradient as named categories
     (Tokens: `CurioColors.Category*` in `ui/theme/CurioColors.kt`; the legacy
      pastel accents remain only for brand/decorative use — profile stats,
      wildcard rainbow.)
@@ -252,7 +253,7 @@ LAYOUT SKELETON
 INTERACTIONS
   - **Own back-stack entry**: navigating here pushes onto the Home screen's back stack. Back arrow pops back to Home with no action taken. This is distinct from a bottom sheet (which would be a transient overlay).
   - Each tile: large tap target (min 96dp height), opaque category gradient, rounded 30dp expressive shape, top icon chip, bottom-aligned deck title/action pill, and a soft watermark glyph. On tap: tile briefly scales to 96% then springs back to 100% (haptic tick), screen auto-pops after ~150ms, and the app navigates straight into Shuffle pre-loaded with that category.
-  - The Wildcard tile uses the rainbow gradient background instead of a flat tint — reinforces that it's the "anything goes" option.
+  - The Wildcard tile uses the brand-primary coral treatment like every other category — no purple, no rainbow; it reads as the app's own color.
   - "Manage categories" is a low-emphasis filled tonal button at the bottom for users who want to hide categories they don't care about — routes to Settings → Manage Categories (§13.4).
 
 ---

@@ -101,6 +101,27 @@ Use this git workflow:
 
 Follow conventional commit format: `feat:`, `fix:`, `refactor:`, `docs:`, `style:`, `chore:`, etc.
 
+### 🧪 EXPERIMENTAL CHANGES — MUST BE SETTINGS-OPTIONAL
+
+Whenever a change is **experimental or being tested** (a visual A/B, a new
+rendering/animation strategy, a provisional behavior, a tuning experiment),
+do NOT hardcode it as the only behavior. Gate it behind a **user-facing
+settings option** (a toggle in the app's Settings screen) so it can be
+A/B-compared against the current behavior and reverted without a code change.
+
+Rules:
+
+1. Experiments ship as an **opt-in settings toggle**, never as a silent
+   behavior swap.
+2. The toggle must be **discoverable in the app's Settings screen**, not a
+   hidden flag.
+3. When the experiment concludes, **remove the toggle** and hardcode the
+   winning path.
+
+Note: settings-gating is about *how* an experiment ships, not *whether* to
+commit it — the **DO COMMIT AND PUSH AFTER EVERY FIX** rule above still
+applies to settings-gated experiments.
+
 ## Prompt.md — Research & Analysis Tracking
 
 `Prompt.md` at project root is the running log of the current request. See `Prompt.md` itself for its own rules. Agents must update Prompt.md when:

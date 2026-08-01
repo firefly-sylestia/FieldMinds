@@ -17,10 +17,10 @@ import com.curio.app.ui.theme.CurioColors
  *   Science        →  SCIENTISTS, DISCOVERIES
  *   (standalone)   →  WILDCARD
  *
- * Total = 11 top-level chips. The Wildcard category uses a rainbow
- * gradient rather than a flat tint, so [CurioCategory.accent] is nullable
- * for it. Wildcard-colored code paths should look up the gradient from
- * [com.curio.app.ui.theme.CurioGradients].
+ * Total = 11 top-level chips. The Wildcard category reuses the brand-
+ * primary coral accent ([com.curio.app.ui.theme.CurioColors.CategoryCoral]);
+ * its cards share the same themed gradient as the named categories, so no
+ * special-casing is needed for it.
  *
  * The id enum uses UPPER_SNAKE so it survives serialization later
  * (we don't have a real DB yet, but this lets us swap to Room/DataStore
@@ -279,13 +279,13 @@ object CurioCategories {
             family        = CategoryFamily.SCIENCE,
             defaultFormat = CaptureFormat.FieldNotes
         ),
-        // ── Wildcard (purple; big cards keep the rainbow gradient) ───────
+        // ── Wildcard (brand coral; cards use the themed coral gradient) ──
         CurioCategory(
             id            = CategoryId.WILDCARD,
             displayName   = "Wildcard",
-            accent        = CurioColors.CategoryPurple,  // flat accent; UI hero uses the gradient
-            lightAccent   = CurioColors.CategoryPurpleInk,
-            tint          = CurioColors.CategoryPurpleTint,
+            accent        = CurioColors.CategoryCoral,  // brand primary; cards use the themed gradient
+            lightAccent   = CurioColors.CategoryCoralInk,
+            tint          = CurioColors.CategoryCoralTint,
             iconGlyph     = "casino",
             family        = CategoryFamily.WILDCARD,
             defaultFormat = CaptureFormat.OpenNotebook

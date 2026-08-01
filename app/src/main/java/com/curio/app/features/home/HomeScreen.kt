@@ -251,11 +251,10 @@ fun HomeScreen(navController: NavController) {
             // ── 3. Quest card ───────────────────────────────────────────
             val chosen = selectedCategory
             val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
-            val accent = if (isWildcard) CurioColors.CategoryPurple else chosen?.accent ?: CurioColors.CategoryPurple
-            val questGradient = remember(isWildcard, accent) {
-                if (isWildcard) CurioGradients.wildcardCardGradient()
-                else CurioGradients.cardGradient(accent)
-            }
+            // Wildcard reuses the brand-primary coral, so a single elvis
+            // covers both the Surprise and named-category cases.
+            val accent = chosen?.accent ?: CurioColors.CategoryCoral
+            val questGradient = CurioGradients.cardGradient(accent)
             Surface(
                     onClick = {
                         // Both quest branches go through the tab switch helper
@@ -444,7 +443,7 @@ fun HomeScreen(navController: NavController) {
                     item(key = "wildcard") {
                         CategoryChip(
                             name = "Surprise",
-                            accent = CurioColors.CategoryPurple,
+                            accent = CurioColors.CategoryCoral,
                             selected = selectedCategory == null,
                             onClick = { selectedCategory = null }
                         )
