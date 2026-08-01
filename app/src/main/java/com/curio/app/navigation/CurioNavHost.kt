@@ -223,8 +223,23 @@ fun CurioNavHost(
                     navController = navController
                 )
             }
+            // Both edit routes reopen a saved entry (a single mood board or a
+            // whole multi-section Portfolio) in the universal editor — the
+            // screen preloads the entry, lets the user rearrange any take,
+            // and re-saves in place (same id → Room REPLACE).
             composable(
                 route = CurioRoutes.EDIT_MOODBOARD,
+                arguments = listOf(navArgument("entryId") { type = NavType.StringType })
+            ) { entry ->
+                SaveCaptureScreen(
+                    categorySlug = "",
+                    topicName = "",
+                    navController = navController,
+                    editEntryId = entry.arguments?.getString("entryId").orEmpty()
+                )
+            }
+            composable(
+                route = CurioRoutes.EDIT_ENTRY,
                 arguments = listOf(navArgument("entryId") { type = NavType.StringType })
             ) { entry ->
                 SaveCaptureScreen(

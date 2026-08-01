@@ -1,34 +1,30 @@
 # Prompt.md — Request Log
 
-## Current Request: Mood board editor polish (laggy drag · ugly box outline · zoom glitch)
+## Current Request: "Edit entry" for multi-section entries
 
-**User request:** "In moodboard editing the photo drag is laggy and the outline of the box around images looks bad and it glitches when I expand the image, continue this."
+**User request:** Add an "Edit entry" option in the detail dropdown for multi-section entries so users can reopen the whole portfolio (all takes) in the universal editor, not just mood boards.
 
-**User clarification (ask_user):** Tile style — **Frameless float**: no box behind images; photos float on the board with rounded corners.
+**Context:** The universal editor (`SaveCaptureScreen` + `FormatBodyForCategory`) was ALREADY fully generic — it loads any saved entry, unwraps Portfolios into takes, and saves back in place. The gap was purely routing + discoverability: only an `edit-moodboard` route existed and the detail dropdown only offered "Edit mood board" for mood-board-ish entries.
 
 ## Implementation (complete)
 
-### Laggy drag → commit-on-release preview (GalleryWallFormat.kt)
-- Root cause: every drag frame mutated the `SnapshotStateList`, restarting the top-level `LaunchedEffect(tiles.toList())` → rebuilt `CaptureData.GalleryWall` and re-fired `onDataChanged` on EVERY pointer move (and recomposed every tile).
-- Extracted `MoodBoardEditorTile`: the drag/pinch gesture accumulates into a per-tile `TileDragPreview` held in `remember(tile.id)` state, so per-frame writes recompose ONLY the dragged tile. The tile list is mutated once via `onCommit` when the finger lifts.
-- Render clamps mirror commit clamps exactly (incl. a pre-measure canvas-size fallback) so tiles never snap or collapse on release.
-- `currentTile by rememberUpdatedState(tile)` — keyed `pointerInput` never restarts, so gestures read the LIVE tile (fixed stale pin-zone base offset).
-- Pin-zone UI + pin-to-front gated to single-finger drags via a new `byDrag` flag (a pure pinch no longer flashes the zone or pins on release — parity with the original).
-- Dragged tile zIndex-boosts above siblings; `inPinZone` parent state written only on flip.
+### Routing
+- `CurioRoutes.kt`: added `EDIT_ENTRY = "edit-entry/{entryId}"` + `editEntry(entryId)` builder (alongside the existing `editMoodBoard`).
+- `CurioNavHost.kt`: registered `EDIT_ENTRY` → `SaveCaptureScreen(editEntryId = entryId)` — identical to the EDIT_MOODBOARD registration (both reopen the saved entry preloaded, re-save in place via Room REPLACE).
 
-### Ugly box outline → frameless tiles
-- Editor tiles no longer render on a hardcoded `Color.White` card — the photo itself is the tile: `size → rotate → clip(RoundedCornerShape(14.dp))` (rotate-before-clip so the rounded shape rotates intact).
-- `decodeImageBounds` now reads EXIF rotation (`android.media.ExifInterface`, minSdk 26) and swaps bounds for 90°/270° so tile aspect matches Coil's rotated rendering — no letterbox bars inside tiles.
+### Detail dropdown (EntryDetailScreen.kt)
+- New `isMultiSectionEntry(entry)` = `captureData is CaptureData.Portfolio` (Portfolios are by construction 2+ takes).
+- Dropdown logic: Portfolio → "Edit entry" → `editEntry` route; else mood-board → "Edit mood board" → `editMoodBoard` (unchanged).
+- `isMoodBoardEntry` simplified to drop the Portfolio clause (Portfolios are now handled by the "Edit entry" branch; the function's only caller is the dropdown). Direct GalleryWall and OpenNotebook-GalleryWall still get "Edit mood board".
+- A Portfolio containing a GalleryWall now shows "Edit entry" — the universal editor still opens on the mood-board section (existing `activeIndex` GalleryWall-first logic).
 
-### Zoom glitch → internal spring + stacked painters (MoodBoardZoom.kt)
-- Open used to POP in at 2.4x: the call-site `animateFloatAsState` initializes to its target on first composition. Overlay/canvas now animate their own `overlayScale` via `animate(1f → target, spring)` keyed on `scaleTarget` — open AND close spring smoothly; pinch retargets mid-flight. Removed `animatedScale` param from `MoodBoardZoomOverlay`/`MoodBoardZoomCanvas`; call sites updated in GalleryWallFormat.kt + EntryDetailScreen.kt.
-- The overlay re-fetched the image at a bigger decode size → blank flash while it streamed in. Now stacks the board-size painter (already cached) UNDER the hi-res painter — no blank frame.
-- Zoom overlay is frameless too (no surface card, no 6dp padding gap).
+### Docs
+- `SaveCaptureScreen.kt`: KDoc updated — edit mode now covers single mood boards AND whole multi-section Portfolios.
 
 ## Validation
-- code-reviewer-deepseek-flash: 2 rounds. Round 1 found 3 issues (stale tile capture in the pin-zone check; 2-finger gestures triggering drag UI + pin-on-release; pre-measure commit clamp collapsing tiles) — all fixed. Round 2: clean, only cosmetic nits.
-- grep confirmed no leftover `animatedScale` references; `git diff` scoped to 3 files.
+- code-reviewer-deepseek-flash: clean — routes match templates, no double registration, no entry type lost an edit affordance, no dead code/missing imports, universal editor confirmed to reopen every take.
+- grep verified `EDIT_ENTRY`/`editEntry` wiring across routes/navhost/dropdown; git diff scoped to 4 files (51 insertions, 10 deletions).
 - No gradle build per AGENTS.md (CI owns compilation on push).
 
 ## Status
-DONE — committed & pushed (fix: mood board editor polish).
+DONE — committed & pushed (feat: edit entry for multi-section portfolios).

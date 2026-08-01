@@ -92,9 +92,10 @@ import kotlinx.coroutines.launch
  *  - Format body renders instantly (no entrance delay)
  *  - Proper back-navigation with discard confirmation
  *
- * When [editEntryId] is set (mood-board edit mode), the screen preloads the
- * saved entry's data into the format body and saves changes back in place
- * (same id → Room REPLACE), then returns to the live-updating detail screen.
+ * When [editEntryId] is set (edit mode — a single mood board or a whole
+ * multi-section Portfolio), the screen preloads the saved entry's data into
+ * the format body and saves changes back in place (same id → Room REPLACE),
+ * then returns to the live-updating detail screen.
  */
 @Composable
 fun SaveCaptureScreen(

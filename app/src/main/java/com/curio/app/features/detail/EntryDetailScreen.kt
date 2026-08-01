@@ -205,7 +205,20 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             },
                             leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
                         )
-                        if (isMoodBoardEntry(resolvedEntry)) {
+                        if (isMultiSectionEntry(resolvedEntry)) {
+                            // Multi-section (Portfolio): reopen EVERY take in
+                            // the universal editor — not just the mood board.
+                            DropdownMenuItem(
+                                text = { Text("Edit entry") },
+                                onClick = {
+                                    menuExpanded = false
+                                    navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
+                            )
+                        } else if (isMoodBoardEntry(resolvedEntry)) {
                             DropdownMenuItem(
                                 text = { Text("Edit mood board") },
                                 onClick = {
@@ -309,15 +322,21 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 }
 
 /**
- * True when an entry renders as a mood board — either a direct GalleryWall,
- * a Wildcard Open Notebook whose chosen sub-format is a GalleryWall, or a
- * multi-section Portfolio containing a GalleryWall section. All cases can be
- * re-edited via the Edit mood board flow.
+ * True when an entry is a multi-section Portfolio (2+ takes) — these reopen
+ * with EVERY take via the universal "Edit entry" flow, not just one board.
+ */
+private fun isMultiSectionEntry(entry: CurioEntry): Boolean =
+    entry.captureData is CaptureData.Portfolio
+
+/**
+ * True when an entry renders as a plain mood board — a direct GalleryWall or
+ * a Wildcard Open Notebook whose chosen sub-format is a GalleryWall. (A
+ * multi-section Portfolio containing a GalleryWall is handled by the
+ * "Edit entry" flow instead of this mood-board label.)
  */
 private fun isMoodBoardEntry(entry: CurioEntry): Boolean =
     entry.format == CaptureFormat.GalleryWall ||
-        (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall ||
-        (entry.captureData as? CaptureData.Portfolio)?.sections?.any { it.format == CaptureFormat.GalleryWall } == true
+        (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall
 
 @Composable
 private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
