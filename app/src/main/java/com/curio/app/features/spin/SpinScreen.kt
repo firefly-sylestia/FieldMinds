@@ -73,7 +73,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -192,6 +194,16 @@ import kotlin.random.Random
  * 15. The middle section (furniture chips → spin button) is now
  *     vertically scrollable so the extra feature content never overflows
  *     small screens; the top bar and bottom bar both stay pinned.
+ *
+ * v5.10 changes:
+ * 16. **Bigger dice button** — the center CTA grew to 118dp idle / 100dp
+ *     landed (176dp container) with a larger dice glyph inside.
+ * 17. **Dice in every state** — the Casino dice shows even in the "Spin
+ *     again" state (previously a Refresh icon); accent-tinted on the
+ *     neutral landed surface.
+ * 18. **Fluid dice tumble** — the in-button dice animation was slowed from
+ *     980ms to 1600ms per turn with LinearEasing (no restart snap) plus a
+ *     breathing pulse and a soft die body behind the orbiting pips.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -1594,7 +1606,8 @@ private fun SpinButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val buttonSize = if (landedTopic != null) 84.dp else 100.dp
+    // v5.10 — bigger button: 118dp idle, 100dp once a topic has landed.
+    val buttonSize = if (landedTopic != null) 100.dp else 118.dp
     // v5.9 — Ritual & anticipation: a gentle idle breathing scale so the
     // button feels alive while the deck just sits there, drawing the eye
     // to the one thing you can do: spin. Only created when the toggle is
@@ -1613,7 +1626,7 @@ private fun SpinButton(
         1f + wave * 0.04f
     } else 1f
     Box(
-        modifier = Modifier.size(152.dp),
+        modifier = Modifier.size(176.dp),
         contentAlignment = Alignment.Center
     ) {
         OrbitRing(active = isShuffling, color = tint, modifier = Modifier.fillMaxSize())
@@ -1633,19 +1646,15 @@ private fun SpinButton(
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+                // v5.10 — the dice shows in EVERY state: tumbling while
+                // shuffling, a steady accent dice for "Spin again".
                 if (isShuffling) {
-                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(56.dp))
-                } else if (landedTopic != null) {
-                    CurioIcon(
-                        CurioIcons.Refresh, null,
-                        tint = tint,
-                        size = 36.dp
-                    )
+                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(68.dp))
                 } else {
                     CurioIcon(
                         CurioIcons.Casino, null,
-                        tint = Color.White,
-                        size = 44.dp
+                        tint = if (landedTopic != null) tint else Color.White,
+                        size = if (landedTopic != null) 48.dp else 56.dp
                     )
                 }
             }
@@ -1692,26 +1701,48 @@ private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifi
 @Composable
 private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
     val infinite = rememberInfiniteTransition(label = "shuffleGlyph")
+    // v5.10 — smooth, unhurried tumble: LinearEasing wraps 360°→0° with no
+    // visible snap (the old FastOutSlowIn + Restart eased out then jumped
+    // back, which read as fast and janky). 1600ms per turn completes ~1.5–2
+    // rotations inside the 2.4–3.2s shuffle window — fluid, never frantic,
+    // and never stalled.
     val angle by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(980, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Restart
+            animation = tween(1600, easing = LinearEasing)
         ),
         label = "shuffleAngle"
     )
+    // Gentle breathe so the die feels alive while it rolls.
+    val pulse by infinite.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(700, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shufflePulse"
+    )
     Canvas(modifier = modifier) {
-        val radius = (size.minDimension / 2f) * 0.55f
+        val r = size.minDimension / 2f
         val cx = size.width / 2f
         val cy = size.height / 2f
+        val breathe = 1f + pulse * 0.06f
+        // Die body — soft rounded square the pips orbit inside.
+        drawRoundRect(
+            color = tint.copy(alpha = 0.16f),
+            topLeft = Offset(cx - r * 0.72f, cy - r * 0.72f),
+            size = Size(r * 1.44f, r * 1.44f),
+            cornerRadius = CornerRadius(r * 0.30f, r * 0.30f)
+        )
         rotate(degrees = angle, pivot = Offset(cx, cy)) {
             for (i in 0 until 6) {
                 val a = (i.toFloat() / 6) * (2f * Math.PI.toFloat())
                 drawCircle(
                     color = tint,
-                    radius = radius * 0.18f,
-                    center = Offset(cx + cos(a) * radius, cy + sin(a) * radius)
+                    radius = r * (0.15f * breathe),
+                    center = Offset(cx + cos(a) * r * 0.58f, cy + sin(a) * r * 0.58f)
                 )
             }
         }
