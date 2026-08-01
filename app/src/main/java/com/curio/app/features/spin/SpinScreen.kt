@@ -1871,34 +1871,52 @@ private fun DeckControlButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Solid fills — no translucent tint, no border. Selected buttons get the
-    // full accent color with white content; unselected buttons get a solid
-    // surface fill with theme-aware accent ink (stays readable on the
-    // midnight dark surfaces).
+    // Backgroundless — NO pill box. The bottom tray already wears the
+    // category-tint wash, so these buttons read as tint-tinted text controls
+    // floating on it: icon + label in the category ink (theme-aware: deep
+    // accent in light, light twin in dark), with a slim accent underline as
+    // the only "active" affordance — no box to say selected.
+    val ink = if (selected) cat.categoryInk() else cat.categoryInk().copy(alpha = 0.68f)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = if (selected) cat.accent else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
-        border = if (selected) null else cat.categoryBorder(),
+        color = Color.Transparent,
         shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CurioIcon(
-                icon, null,
-                tint = if (selected) Color.White else cat.categoryInk(),
-                size = 24.dp
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
-                color = if (selected) Color.White else cat.categoryInk(),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CurioIcon(
+                    icon, null,
+                    tint = ink,
+                    size = 22.dp
+                )
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Bold
+                    ),
+                    color = ink,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            // Slim accent indicator — the only selected-state affordance.
+            Spacer(Modifier.height(6.dp))
+            Box(
+                modifier = Modifier
+                    .width(if (selected) 22.dp else 0.dp)
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(if (selected) cat.categoryInk() else Color.Transparent)
             )
         }
     }

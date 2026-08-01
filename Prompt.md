@@ -1,18 +1,13 @@
-# Request: Dark-mode wash for red/pink/light-blue still whitewashed
+# Request: Remove box behind Spin bottom-bar Categories/Filter buttons and tint them
 
 ## Request
-In dark mode, the category tint for red (Movies/Rose), pink (Wildcard/Coral), and light blue (Science/Sky) still looks whitewashed — needs a better dark shade.
+The Categories · Filter buttons in the Spin bottom bar are filled pills (a box/background behind them). Remove the box and make the buttons use the category tint.
 
 ## Changes
-- `CategoryInk.kt` — `DarkWashTuning` gained a `darken: Float = 0f` field and a `resolveMidTone(accent, lightAccent)` member (lerps accent→lightAccent at `midToneFactor`, then lerps toward `Color.Black` when `darken > 0`). Both `categoryBackgroundWash` and `categorySurface` now call `tuning.resolveMidTone(...)` — the duplicated inline mid-tone lerp is gone.
-- Tuning updated for the three whitewashed families:
-  - MOVIES (rose/red): midToneFactor 0.35 → **0.15** (closer to deep accent), blend 0.18 → **0.20**.
-  - SCIENCE (sky/light blue): midToneFactor 0.35 → **0.15**, blend 0.18 → **0.20**.
-  - WILDCARD (coral/pink): midToneFactor 0.35 → **0.15**, blend 0.20 → **0.22**, plus `darken = 0.28` — pastel coral has no deep twin, so the mid-tone is pushed toward black to give an actual pink shade instead of a pale white haze.
-- `DEFAULT_DARK_WASH` unchanged (0.5f, 0.15f) — the `darken = 0f` default means untuned families render exactly as before.
+- `SpinScreen.kt` — `DeckControlButton` (both Categories and Filter buttons in `BottomCta`) is now backgroundless: `color = Color.Transparent`, no border, no shadow. Icon + label wear the theme-aware `categoryInk()` (accent in light / light twin in dark) at full strength when active and 68% alpha when idle, since the bottom tray already wears the `categoryBackgroundWash()`. A slim 22×3dp accent underline (also `categoryInk()`) is the only "active" affordance — visible when the button is selected, hidden otherwise — so there's no box to say selected.
 
 ## Validation
-- Code reviewer confirmed clean: member function on the private class valid, `Color.Black` covered by the existing `Color` import, both call sites consistent, `darken` default preserves other families, no external callers of `DarkWashTuning` (private to file).
+- Code reviewer confirmed clean: all referenced composables/imports (Spacer, Box, width, height, clip, background, Column, Alignment, Arrangement, FontWeight, RoundedCornerShape, categoryInk) already present in SpinScreen.kt, braces balanced, no leftover surface/border logic.
 
 ## Completion summary
 - Committed & pushed.
