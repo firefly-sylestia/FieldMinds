@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,16 +18,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -41,12 +46,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.core.content.ContextCompat
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioQuality
@@ -55,8 +60,13 @@ import com.curio.app.data.CurioBackupManager
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
-import com.curio.app.ui.components.CurioForwardArrow
+import com.curio.app.ui.components.CurioCardHeader
+import com.curio.app.ui.components.CurioSettingsCard
+import com.curio.app.ui.components.CurioSettingsDivider
+import com.curio.app.ui.components.CurioSettingsInfoRow
+import com.curio.app.ui.components.CurioSettingsRow
 import com.curio.app.ui.components.ScreenEntrance
+import com.curio.app.ui.components.formatHour
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -64,6 +74,11 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 
+/**
+ * Settings screen — same card language as Profile so the two screens read
+ * as one family: 28dp paper cards with icon-chip headers, arrow rows for
+ * navigation, and switches for toggles.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(navController: NavController) {
@@ -166,23 +181,26 @@ fun SettingsScreen(navController: NavController) {
     if (showNameDialog) {
         AlertDialog(
             onDismissRequest = { showNameDialog = false },
-            shape = RoundedCornerShape(24.dp),
-            title = { Text("Display name", fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Display name", fontWeight = FontWeight.ExtraBold) },
             text = {
-                OutlinedTextField(
-                    value = nameInput,
-                    onValueChange = { nameInput = it },
-                    singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("This is how Curio greets you.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    OutlinedTextField(
+                        value = nameInput,
+                        onValueChange = { nameInput = it },
+                        singleLine = true,
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             },
             confirmButton = {
                 TextButton(onClick = {
                     displayName = nameInput.ifBlank { "Curious Explorer" }
                     AppPreferences.setDisplayName(context, displayName)
                     showNameDialog = false
-                }) { Text("Save") }
+                }) { Text("Save", fontWeight = FontWeight.Bold) }
             },
             dismissButton = {
                 TextButton(onClick = { showNameDialog = false }) { Text("Cancel") }
@@ -206,8 +224,8 @@ fun SettingsScreen(navController: NavController) {
     if (showRestoreConfirm) {
         AlertDialog(
             onDismissRequest = { showRestoreConfirm = false },
-            shape = RoundedCornerShape(24.dp),
-            title = { Text("Restore backup?", fontWeight = FontWeight.Bold) },
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Restore backup?", fontWeight = FontWeight.ExtraBold) },
             text = {
                 Text(
                     "This replaces all of your current captures and settings with " +
@@ -218,7 +236,7 @@ fun SettingsScreen(navController: NavController) {
                 TextButton(onClick = {
                     showRestoreConfirm = false
                     restoreLauncher.launch(arrayOf(CurioBackupManager.MIME_TYPE))
-                }) { Text("Continue") }
+                }) { Text("Continue", fontWeight = FontWeight.Bold) }
             },
             dismissButton = {
                 TextButton(onClick = { showRestoreConfirm = false }) { Text("Cancel") }
@@ -230,58 +248,85 @@ fun SettingsScreen(navController: NavController) {
     backupStatus?.let { (success, message) ->
         AlertDialog(
             onDismissRequest = { backupStatus = null },
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(28.dp),
             title = {
                 Text(
                     if (success) "Done" else "Couldn't do that",
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.ExtraBold
                 )
             },
             text = { Text(message) },
             confirmButton = {
-                TextButton(onClick = { backupStatus = null }) { Text("OK") }
+                TextButton(onClick = { backupStatus = null }) { Text("OK", fontWeight = FontWeight.Bold) }
             }
         )
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 0.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             CurioBackButton(onClick = { navController.popBackStack() })
-            Text("Settings", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onBackground)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Settings",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    "Tune Curio your way",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         ScreenEntrance {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 // Profile
-                item { SectionHeader("Profile") }
                 item {
-                    SettingsItem(CurioIcons.Person, "Display name", displayName) {
-                        nameInput = displayName; showNameDialog = true
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.Person, "Profile", "Your personal details")
+                        CurioSettingsRow(CurioIcons.Edit, "Display name", displayName) {
+                            nameInput = displayName; showNameDialog = true
+                        }
                     }
                 }
 
                 // Appearance
-                item { SectionHeader("Appearance") }
                 item {
-                    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-                        Text(
-                            "Theme",
-                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.DarkMode, "Appearance", "Theme and look")
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(CurioIcons.DarkMode, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Theme", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    listOf("Light", "Dark", "System")[currentThemeIndex],
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(2.dp))
+                        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                             listOf("Light", "Dark", "System").forEachIndexed { index, label ->
                                 SegmentedButton(
                                     selected = index == currentThemeIndex,
@@ -291,47 +336,82 @@ fun SettingsScreen(navController: NavController) {
                                     },
                                     shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
                                 ) {
-                                    Text(label, style = MaterialTheme.typography.labelMedium)
+                                    Text(label, style = MaterialTheme.typography.labelSmall)
                                 }
                             }
                         }
                     }
                 }
 
-                // Audio
-                item { SectionHeader("Recording") }
+                // Recording
                 item {
-                    SettingsItem(CurioIcons.Mic, "Audio quality", audioQuality.label) {
-                        showQualityDialog = true
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.Mic, "Recording", "How your voice notes sound")
+                        CurioSettingsRow(CurioIcons.Mic, "Audio quality", audioQuality.label) {
+                            showQualityDialog = true
+                        }
                     }
                 }
 
                 // Notifications
-                item { SectionHeader("Notifications") }
                 item {
-                    SettingsToggle(
-                        CurioIcons.Notifications, "Daily shuffle reminder",
-                        if (reminderEnabled) "Reminder at ${String.format("%02d:00", reminderHour)}" else "Off",
-                        reminderEnabled,
-                        onToggle = ::setReminder
-                    )
-                }
-                if (reminderEnabled) {
-                    item {
-                        Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text("Time:", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            listOf(9, 12, 15, 18, 21).forEach { hour ->
-                                Surface(
-                                    onClick = { reminderHour = hour; AppPreferences.setReminderHour(context, hour) },
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = if (reminderHour == hour) CurioColors.CoralBlush.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant
-                                ) {
-                                    Text(
-                                        String.format("%02d:00", hour),
-                                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (reminderHour == hour) FontWeight.Bold else FontWeight.Normal),
-                                        color = if (reminderHour == hour) CurioColors.CoralBlush else MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                                    )
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.Notifications, "Notifications", "Daily shuffle reminder")
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(CurioIcons.Notifications, null, tint = CurioColors.CoralBlush, size = 22.dp)
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Daily shuffle reminder", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    if (reminderEnabled) "Every day at ${formatHour(reminderHour)}" else "Off · tap the switch to enable",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(checked = reminderEnabled, onCheckedChange = ::setReminder)
+                        }
+                        if (reminderEnabled) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 18.dp)
+                                Text(
+                                    "Reminder time",
+                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    formatHour(reminderHour),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Spacer(Modifier.height(6.dp))
+                            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                items(listOf(9, 12, 15, 18, 21)) { hour ->
+                                    val selected = hour == reminderHour
+                                    Surface(
+                                        onClick = { reminderHour = hour; AppPreferences.setReminderHour(context, hour) },
+                                        shape = RoundedCornerShape(50),
+                                        color = if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.surfaceContainerHighest,
+                                        contentColor = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+                                        border = BorderStroke(1.dp, if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant),
+                                        shadowElevation = 0.dp
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                        ) {
+                                            if (selected) CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 15.dp)
+                                            Text(formatHour(hour), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -339,71 +419,49 @@ fun SettingsScreen(navController: NavController) {
                 }
 
                 // Categories
-                item { SectionHeader("Categories") }
                 item {
-                    SettingsItem(CurioIcons.DragHandle, "Manage categories", "Show, hide, or reorder") {
-                        navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true }
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.DragHandle, "Categories", "Show, hide, or reorder")
+                        CurioSettingsRow(CurioIcons.DragHandle, "Manage categories", "Show, hide, or reorder") {
+                            navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true }
+                        }
                     }
                 }
 
                 // Backup & restore
-                item { SectionHeader("Backup & restore") }
                 item {
-                    SettingsItem(CurioIcons.Backup, "Back up now", "Save captures, settings + recordings") {
-                        backupLauncher.launch(CurioBackupManager.suggestedFileName())
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.Backup, "Backup & restore", "Keep your data safe")
+                        CurioSettingsRow(CurioIcons.Backup, "Back up now", "Save captures, settings + recordings") {
+                            backupLauncher.launch(CurioBackupManager.suggestedFileName())
+                        }
+                        CurioSettingsDivider()
+                        CurioSettingsRow(CurioIcons.Restore, "Restore from backup", "Replace current data from a file") {
+                            showRestoreConfirm = true
+                        }
+                        CurioSettingsDivider()
+                        val whenLast = if (lastBackupAt > 0L) {
+                            SimpleDateFormat("MMM d, yyyy · h:mm a", locale)
+                                .format(Date(lastBackupAt))
+                        } else "Never"
+                        CurioSettingsInfoRow(CurioIcons.History, "Last backup", whenLast)
                     }
-                }
-                item {
-                    SettingsItem(CurioIcons.Restore, "Restore from backup", "Replace current data from a file") {
-                        showRestoreConfirm = true
-                    }
-                }
-                item {
-                    val whenLast = if (lastBackupAt > 0L) {
-                        SimpleDateFormat("MMM d, yyyy · h:mm a", locale)
-                            .format(Date(lastBackupAt))
-                    } else "Never"
-                    SettingsInfo(CurioIcons.History, "Last backup", whenLast)
                 }
 
                 // About
-                item { SectionHeader("About") }
                 item {
-                    SettingsItem(CurioIcons.Replay, "Replay intro", "See the welcome screens again") {
-                        CurioOnboardingState.reset(context)
-                        navController.navigate(CurioRoutes.ONBOARDING) { launchSingleTop = true }
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.Info, "About Curio", "Help, diagnostics, and app details")
+                        CurioSettingsRow(CurioIcons.Replay, "Replay intro", "See the welcome screens again") {
+                            CurioOnboardingState.reset(context)
+                            navController.navigate(CurioRoutes.ONBOARDING) { launchSingleTop = true }
+                        }
+                        CurioSettingsDivider()
+                        CurioSettingsInfoRow(CurioIcons.Info, "Version", versionName)
                     }
                 }
-                item { SettingsInfo(CurioIcons.Info, "Version", versionName) }
-                item { Spacer(Modifier.height(16.dp)) }
-            }
-        }
-    }
-}
 
-@Composable
-private fun SectionHeader(title: String) {
-    Spacer(Modifier.height(8.dp))
-    Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = MaterialTheme.colorScheme.onBackground)
-    Spacer(Modifier.height(4.dp))
-}
-
-@Composable
-private fun SettingsInfo(icon: String, label: String, value: String) {
-    Surface(
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(Modifier.weight(1f)) {
-                Text(label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
-                Text(value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                item { Spacer(Modifier.height(4.dp)) }
             }
         }
     }
@@ -417,8 +475,8 @@ private fun AudioQualityDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(24.dp),
-        title = { Text("Recording quality", fontWeight = FontWeight.Bold) },
+        shape = RoundedCornerShape(28.dp),
+        title = { Text("Recording quality", fontWeight = FontWeight.ExtraBold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
@@ -430,9 +488,9 @@ private fun AudioQualityDialog(
                     val selected = quality == currentQuality
                     Surface(
                         onClick = { onSelected(quality) },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = if (selected) CurioColors.CoralBlush.copy(alpha = 0.12f) else Color.Transparent,
-                        border = androidx.compose.foundation.BorderStroke(
+                        border = BorderStroke(
                             1.dp,
                             if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant
                         ),
@@ -443,10 +501,10 @@ private fun AudioQualityDialog(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            androidx.compose.material3.RadioButton(
+                            RadioButton(
                                 selected = selected,
                                 onClick = null,
-                                colors = androidx.compose.material3.RadioButtonDefaults.colors(
+                                colors = RadioButtonDefaults.colors(
                                     selectedColor = CurioColors.CoralBlush
                                 )
                             )
@@ -459,34 +517,7 @@ private fun AudioQualityDialog(
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Close") } }
+        confirmButton = { TextButton(onClick = onDismiss) { Text("Close", fontWeight = FontWeight.Bold) } }
     )
 }
 
-@Composable
-private fun SettingsItem(icon: String, label: String, value: String, onClick: () -> Unit) {
-    Surface(onClick = onClick, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface, tonalElevation = 0.5.dp, modifier = Modifier.fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(Modifier.weight(1f)) {
-                Text(label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
-                Text(value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            CurioForwardArrow(tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
-        }
-    }
-}
-
-@Composable
-private fun SettingsToggle(icon: String, label: String, value: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
-    Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface, tonalElevation = 0.5.dp, modifier = Modifier.fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(Modifier.weight(1f)) {
-                Text(label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
-                Text(value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            androidx.compose.material3.Switch(checked = checked, onCheckedChange = onToggle)
-        }
-    }
-}

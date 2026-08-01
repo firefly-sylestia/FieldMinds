@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +27,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -76,7 +74,12 @@ import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioCardHeader
 import com.curio.app.ui.components.CurioForwardArrow
+import com.curio.app.ui.components.formatHour
+import com.curio.app.ui.components.CurioSettingsCard
+import com.curio.app.ui.components.CurioSettingsDivider
+import com.curio.app.ui.components.CurioSettingsRow
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -212,6 +215,22 @@ fun ProfileScreen(navController: NavController) {
                     "Your curiosity, in one place",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            // Gear entry → full Settings screen (backup & restore, categories,
+            // theme, etc.). Mirror of CurioBackButton so the top bar stays
+            // balanced: back arrow left, gear right.
+            Surface(
+                onClick = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } },
+                shape = RoundedCornerShape(50),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Settings,
+                    contentDescription = "Settings",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    size = 24.dp,
+                    modifier = Modifier.padding(8.dp)
                 )
             }
         }
@@ -544,7 +563,7 @@ private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: 
 
 @Composable
 private fun LevelCard(level: Int, saved: Int, progress: Float, nextThreshold: Int, isMaxLevel: Boolean) {
-    ProfileCard {
+    CurioSettingsCard {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Box(
                 modifier = Modifier
@@ -592,10 +611,10 @@ private fun PreferencesCard(
     onReminderHourSelected: (Int) -> Unit,
     onManageCategories: () -> Unit
 ) {
-    ProfileCard {
-        CardHeader(CurioIcons.Settings, "Preferences", "Personalize how Curio feels")
-        ProfileSettingRow(CurioIcons.Person, "Display name", displayName, onEditName)
-        ProfileDivider()
+    CurioSettingsCard {
+        CurioCardHeader(CurioIcons.Settings, "Preferences", "Personalize how Curio feels")
+        CurioSettingsRow(CurioIcons.Person, "Display name", displayName, onEditName)
+        CurioSettingsDivider()
         Column(modifier = Modifier.padding(vertical = 10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 CurioIcon(CurioIcons.DarkMode, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
@@ -615,9 +634,9 @@ private fun PreferencesCard(
                 }
             }
         }
-        ProfileDivider()
-        ProfileSettingRow(CurioIcons.Mic, "Audio quality", audioQuality.label, onAudioQualityClick)
-        ProfileDivider()
+        CurioSettingsDivider()
+        CurioSettingsRow(CurioIcons.Mic, "Audio quality", audioQuality.label, onAudioQualityClick)
+        CurioSettingsDivider()
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -640,8 +659,8 @@ private fun PreferencesCard(
                 onHourSelected = onReminderHourSelected
             )
         }
-        ProfileDivider()
-        ProfileSettingRow(CurioIcons.Palette, "Manage categories", "${CurioCategories.visible.size} lanes visible", onManageCategories)
+        CurioSettingsDivider()
+        CurioSettingsRow(CurioIcons.Palette, "Manage categories", "${CurioCategories.visible.size} lanes visible", onManageCategories)
     }
 }
 
@@ -694,9 +713,9 @@ private fun InlineReminderSelector(selectedHour: Int, onHourSelected: (Int) -> U
 
 @Composable
 private fun CategoriesCard(counts: Map<CategoryId, Int>, onManage: () -> Unit, onCabinet: () -> Unit) {
-    ProfileCard {
+    CurioSettingsCard {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            CardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring", Modifier.weight(1f))
+            CurioCardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring", Modifier.weight(1f))
             TextButton(onClick = onManage) { Text("Manage") }
         }
         Spacer(Modifier.height(8.dp))
@@ -732,12 +751,12 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onManage: () -> Unit, o
 
 @Composable
 private fun RecentActivityCard(entries: List<CurioEntry>, onEntryClick: (String) -> Unit) {
-    ProfileCard {
-        CardHeader(CurioIcons.History, "Recent activity", "Your latest captures")
+    CurioSettingsCard {
+        CurioCardHeader(CurioIcons.History, "Recent activity", "Your latest captures")
         Spacer(Modifier.height(4.dp))
         entries.forEachIndexed { index, entry ->
             RecentEntryRow(entry, { onEntryClick(entry.id) })
-            if (index < entries.lastIndex) ProfileDivider()
+            if (index < entries.lastIndex) CurioSettingsDivider()
         }
     }
 }
@@ -774,65 +793,23 @@ private fun DeveloperCard(
     versionName: String,
     onVersion: () -> Unit
 ) {
-    ProfileCard {
-        CardHeader(CurioIcons.Info, "About Curio", "Help, diagnostics, and app details")
-        ProfileSettingRow(CurioIcons.BugReport, "Report a bug", "Send feedback or an issue", onReportBug)
-        ProfileDivider()
-        ProfileSettingRow(CurioIcons.Replay, "Replay intro", "See the welcome screens again", onReplayIntro)
+    CurioSettingsCard {
+        CurioCardHeader(CurioIcons.Info, "About Curio", "Help, diagnostics, and app details")
+        CurioSettingsRow(CurioIcons.BugReport, "Report a bug", "Send feedback or an issue", onReportBug)
+        CurioSettingsDivider()
+        CurioSettingsRow(CurioIcons.Replay, "Replay intro", "See the welcome screens again", onReplayIntro)
         if (crashCount > 0) {
-            ProfileDivider()
-            ProfileSettingRow(CurioIcons.History, "Crash logs", "$crashCount saved report${if (crashCount == 1) "" else "s"}", onCrashLogs)
+            CurioSettingsDivider()
+            CurioSettingsRow(CurioIcons.History, "Crash logs", "$crashCount saved report${if (crashCount == 1) "" else "s"}", onCrashLogs)
         }
-        ProfileDivider()
-        ProfileSettingRow(CurioIcons.ErrorOutline, "Test crash", "Diagnostic tool", onTestCrash)
-        ProfileDivider()
-        ProfileSettingRow(CurioIcons.Info, "Version", versionName, onVersion)
+        CurioSettingsDivider()
+        CurioSettingsRow(CurioIcons.ErrorOutline, "Test crash", "Diagnostic tool", onTestCrash)
+        CurioSettingsDivider()
+        CurioSettingsRow(CurioIcons.Info, "Version", versionName, onVersion)
     }
 }
 
-@Composable
-private fun ProfileCard(content: @Composable ColumnScope.() -> Unit) {
-    Surface(
-        shape = RoundedCornerShape(28.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 3.dp,
-        shadowElevation = 0.dp,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.38f)),
-        modifier = Modifier.fillMaxWidth()
-    ) { Column(modifier = Modifier.padding(horizontal = 17.dp, vertical = 16.dp), content = content) }
-}
 
-@Composable
-private fun CardHeader(icon: String, title: String, subtitle: String, modifier: Modifier = Modifier) {
-    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Surface(shape = RoundedCornerShape(14.dp), color = CurioColors.CoralBlush.copy(alpha = 0.16f), modifier = Modifier.size(38.dp)) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) { CurioIcon(icon, null, tint = CurioColors.CoralBlush, size = 20.dp) }
-        }
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
-            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        }
-    }
-}
-
-@Composable
-private fun ProfileSettingRow(icon: String, title: String, subtitle: String, onClick: () -> Unit) {
-    Surface(onClick = onClick, color = Color.Transparent, shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(horizontal = 4.dp, vertical = 13.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            CurioIcon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 21.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.bodyLarge)
-                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            CurioForwardArrow(tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f), size = 17.dp)
-        }
-    }
-}
-
-@Composable
-private fun ProfileDivider() {
-    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f), modifier = Modifier.padding(start = 33.dp))
-}
 
 private fun taglineForStreak(streakDays: Int): String = when {
     streakDays >= 30 -> "Marathon explorer · beautifully consistent."
@@ -845,13 +822,6 @@ private fun capturedLabel(entry: CurioEntry): String = when (entry.capturedAtDay
     0 -> "today"
     1 -> "yesterday"
     else -> "${entry.capturedAtDaysAgo}d ago"
-}
-
-private fun formatHour(hour: Int): String {
-    val normalized = hour.coerceIn(0, 23)
-    val suffix = if (normalized < 12) "AM" else "PM"
-    val display = when (val h = normalized % 12) { 0 -> 12 else -> h }
-    return "$display:00 $suffix"
 }
 
 private val levelThresholds = listOf(0, 1, 5, 15, 30, 60, 100, 250, 500)
