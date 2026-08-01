@@ -195,6 +195,14 @@ import kotlin.random.Random
  * 19. **Peek cards catch up** — the slim background cards grew ~6%
  *     (318×102dp near, 288×84dp far) so the whole fan scales with the
  *     hero ticket instead of the peeks staying small behind the big card.
+ *
+ * v6.5 changes:
+ * 20. **Peek cards grow again (~13%)** — the topic title inside each
+ *     background card now has room to read instead of hiding behind the
+ *     fan (360×116dp near, 328×96dp far; proportions kept, only size up).
+ * 21. **Gentler hero bounce** — smaller per-tick kick (1.035), half the
+ *     tilt (40° factor), a softer hop, and a lower landing rest scale so
+ *     the shuffle pulses instead of slamming the card.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -1156,7 +1164,7 @@ private fun CompactChip(
 // ═══════════════════════════════════════════════════════════════════════════
 
 /** Rest scale the hero card settles to after a shuffle lands. */
-private const val LandedRestScale = 1.04f
+private const val LandedRestScale = 1.02f
 
 @Composable
 private fun Carousel(
@@ -1295,11 +1303,10 @@ private fun HeroTicketCard(
     LaunchedEffect(topic?.id, shuffling) {
         if (!shuffling || topic == null) return@LaunchedEffect
         tickDir = -tickDir
-        // Instant kick to peak, then a medium spring back to rest — fast
-        // enough that a 105ms tick gets a full visible jump, bouncy enough
-        // that deceleration ticks settle with a small overshoot.
-        tickPulse.snapTo(1.065f)
-        tickPulse.animateTo(1f, spring(dampingRatio = 0.6f, stiffness = 1200f))
+        // v6.5 — gentler kick: the card pulses instead of slamming. A
+        // slightly more damped spring keeps the overshoot tiny.
+        tickPulse.snapTo(1.035f)
+        tickPulse.animateTo(1f, spring(dampingRatio = 0.7f, stiffness = 1000f))
     }
 
     // ── Category switch — one welcoming bounce as the deck re-fans to the
@@ -1307,7 +1314,7 @@ private fun HeroTicketCard(
     LaunchedEffect(cat.id) {
         if (!shuffling && !landed) {
             tickPulse.snapTo(1f)
-            tickPulse.animateTo(1.045f, CurioMotion.Springs.Bouncy)
+            tickPulse.animateTo(1.025f, CurioMotion.Springs.Bouncy)
             tickPulse.animateTo(1f, CurioMotion.Springs.Elastic)
         }
     }
@@ -1323,7 +1330,7 @@ private fun HeroTicketCard(
     LaunchedEffect(landed) {
         if (landed) {
             settleScale.snapTo(tickPulse.value)
-            settleY.snapTo(-(tickPulse.value - 1f) * 30f)
+            settleY.snapTo(-(tickPulse.value - 1f) * 18f)
         } else {
             settleScale.snapTo(1f)
             settleY.snapTo(0f)
@@ -1350,8 +1357,8 @@ private fun HeroTicketCard(
                 // landing handoff snaps to whatever value it left off at.
                 scaleX = if (landed) settleScale.value else tickPulse.value
                 scaleY = if (landed) settleScale.value else tickPulse.value
-                rotationZ = if (shuffling) (tickPulse.value - 1f) * 80f * tickDir else 0f
-                translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 30f
+                rotationZ = if (shuffling) (tickPulse.value - 1f) * 40f * tickDir else 0f
+                translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 18f
             }
             .zIndex(10f)
             .then(
@@ -1535,18 +1542,19 @@ private fun PeekCard(
     // the spin button and the far pair is spread a touch more so each
     // layer reads as a separate card instead of one blurred pile.
     val yOff = when (slot) {
-        -2 -> -174f
-        -1 -> -130f
-        1 -> 142f
-        else -> 184f
+        -2 -> -178f
+        -1 -> -134f
+        1 -> 146f
+        else -> 188f
     }
-    // v6.4 — peek cards grew ~6% to match the v6.3 hero ticket bump so the
-    // fanned background cards stay proportionally bigger behind it.
-    val w = if (far) 288.dp else 318.dp
-    val h = if (far) 84.dp else 102.dp
+    // v6.5 — peek cards grew ~13% so the topic title inside each background
+    // card has room to read instead of hiding behind the fan. Proportions
+    // are kept — only the overall size went up, never the shape.
+    val w = if (far) 328.dp else 360.dp
+    val h = if (far) 96.dp else 116.dp
     // Corner radius scales with card height so the slim far deck cards
     // keep crisp, proportional corners instead of over-rounded ones.
-    val corner = if (far) 13.dp else 17.dp
+    val corner = if (far) 15.dp else 19.dp
     // Level-based shading — near cards step one shade down from the hero,
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.

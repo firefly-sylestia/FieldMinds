@@ -10,3 +10,4 @@
 • Multi-select category confirm button now says Mix (with count) instead of Done
 • Category picker: unselected cards now show soft category tints and pop bright when selected
 • Cabinet filter chips: neutral inactive color that never re-tints when you switch categories
+• Spin deck: bigger peek cards so the topic title reads, plus a gentler, subtler card bounce
