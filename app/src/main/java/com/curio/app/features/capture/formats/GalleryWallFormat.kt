@@ -57,11 +57,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
+import com.curio.app.ui.components.moodBoardPainter
+import com.curio.app.ui.components.moodBoardPinchZoom
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import coil.compose.rememberAsyncImagePainter
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -325,7 +327,13 @@ private fun MoodBoardCanvas(
                 modifier = Modifier.fillMaxSize()
             )
 
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    // Two-finger pinch anywhere on the board magnifies the
+                    // whole collage (single-finger drags still move tiles).
+                    .moodBoardPinchZoom(zoomState)
+            ) {
                 if (tiles.isEmpty()) {
                     // Empty state
                     Column(
@@ -434,7 +442,7 @@ private fun MoodBoardCanvas(
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Image(
-                                        painter = rememberAsyncImagePainter(tile.uri),
+                                        painter = moodBoardPainter(tile.uri),
                                         contentDescription = null,
                                         contentScale = ContentScale.Fit,
                                         modifier = Modifier
@@ -608,7 +616,27 @@ private fun MoodBoardCanvas(
                 }
             }
 
-            // ── In-place zoom overlay (double-tap / search button — no page) ──
+            // ── In-place zoom overlays (double-tap / search / board pinch — no page) ──
+            if (zoomState.boardZoomed && tiles.isNotEmpty()) {
+                MoodBoardZoomCanvas(
+                    zoomState = zoomState,
+                    animatedScale = animatedScale,
+                    animatedOffsetX = animatedOffsetX,
+                    animatedOffsetY = animatedOffsetY,
+                    tiles = tiles.map {
+                        CaptureData.TileLayout(
+                            uri = it.uri,
+                            offsetXPx = it.offsetXPx,
+                            offsetYPx = it.offsetYPx,
+                            rotationDeg = it.rotationDeg,
+                            widthPx = it.widthPx,
+                            heightPx = it.heightPx
+                        )
+                    },
+                    canvasWPx = canvasWPx,
+                    canvasHPx = canvasHPx
+                )
+            }
             tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                 MoodBoardZoomOverlay(
                     zoomState = zoomState,
@@ -616,11 +644,8 @@ private fun MoodBoardCanvas(
                     animatedOffsetX = animatedOffsetX,
                     animatedOffsetY = animatedOffsetY,
                     tileUri = tile.uri,
-                    offsetXPx = tile.offsetXPx,
-                    offsetYPx = tile.offsetYPx,
                     widthPx = tile.widthPx,
-                    heightPx = tile.heightPx,
-                    rotationDeg = tile.rotationDeg
+                    heightPx = tile.heightPx
                 )
             }
         }

@@ -84,9 +84,11 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardTiles
+import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.moodBoardPinch
+import com.curio.app.ui.components.moodBoardPinchZoom
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.theme.CurioGradients
@@ -858,50 +860,20 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         }
                     }
 
-                    data.tileLayouts.forEachIndexed { i, tile ->
-                        Box(
-                            modifier = Modifier
-                                .offset {
-                                    IntOffset(
-                                        tile.offsetXPx.roundToInt().coerceIn(0, canvasW.roundToInt()),
-                                        tile.offsetYPx.roundToInt().coerceIn(0, canvasH.roundToInt())
-                                    )
-                                }
-                                .zIndex(i.toFloat())
-                                // Pinch (two fingers), tap, or double-tap
-                                // springs the tile up in place — single-finger
-                                // drags keep scrolling the page. Double-tap
-                                // matches the editor's zoom gesture.
-                                .moodBoardPinch(zoomState, tile.uri)
-                                .pointerInput(tile.uri) {
-                                    detectTapGestures(
-                                        onTap = { zoomState.zoomIn(tile.uri) },
-                                        onDoubleTap = { zoomState.zoomIn(tile.uri) }
-                                    )
-                                }
-                        ) {
-                            Surface(
-                                shape = RoundedCornerShape(18.dp),
-                                color = MaterialTheme.colorScheme.surface,
-                                shadowElevation = 0.dp,
-                                modifier = Modifier
-                                    .size(
-                                        width = with(density) { tile.widthPx.toDp() },
-                                        height = with(density) { tile.heightPx.toDp() }
-                                    )
-                                    .rotate(tile.rotationDeg)
-                            ) {
-                                Image(
-                                    painter = rememberAsyncImagePainter(tile.uri),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Fit,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(6.dp)
-                                        .clip(RoundedCornerShape(14.dp))
-                                )
-                            }
-                        }
+                    // Pinch (two fingers) anywhere on the board magnifies the
+                    // whole collage; tap/double-tap a tile magnifies it
+                    // centered + straight. Single-finger drags keep scrolling.
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .moodBoardPinchZoom(zoomState)
+                    ) {
+                        MoodBoardTiles(
+                            tiles = data.tileLayouts,
+                            canvasWPx = canvasW,
+                            canvasHPx = canvasH,
+                            onTileZoom = { zoomState.zoomIn(it) }
+                        )
                     }
                 } else {
                     // Fallback: show images in a grid if no tile data
@@ -920,7 +892,18 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     }
                 }
 
-                // ── In-place zoom overlay (pinch/tap, no separate page) ──
+                // ── In-place zoom overlays (no separate page) ────────────
+                if (zoomState.boardZoomed) {
+                    MoodBoardZoomCanvas(
+                        zoomState = zoomState,
+                        animatedScale = animatedScale,
+                        animatedOffsetX = animatedOffsetX,
+                        animatedOffsetY = animatedOffsetY,
+                        tiles = data.tileLayouts,
+                        canvasWPx = canvasW,
+                        canvasHPx = canvasH
+                    )
+                }
                 data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                     MoodBoardZoomOverlay(
                         zoomState = zoomState,
@@ -928,11 +911,8 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         animatedOffsetX = animatedOffsetX,
                         animatedOffsetY = animatedOffsetY,
                         tileUri = tile.uri,
-                        offsetXPx = tile.offsetXPx,
-                        offsetYPx = tile.offsetYPx,
                         widthPx = tile.widthPx,
-                        heightPx = tile.heightPx,
-                        rotationDeg = tile.rotationDeg
+                        heightPx = tile.heightPx
                     )
                 }
             }
@@ -1030,75 +1010,62 @@ private fun ExpandedMoodBoardDialog(
                         (dialogW / maxX).coerceAtMost(dialogH / maxY)
                     } else 1f
 
+                    // Collage scaled to fit the dialog, centered; pinch on the
+                    // board magnifies it; tap/double-tap a tile magnifies the
+                    // tile centered + straight.
+                    val scaledTiles = data.tileLayouts.map {
+                        CaptureData.TileLayout(
+                            uri = it.uri,
+                            offsetXPx = it.offsetXPx * scale,
+                            offsetYPx = it.offsetYPx * scale,
+                            rotationDeg = it.rotationDeg,
+                            widthPx = it.widthPx * scale,
+                            heightPx = it.heightPx * scale
+                        )
+                    }
+                    val boardW = maxX * scale
+                    val boardH = maxY * scale
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .offset {
                                 IntOffset(
-                                    ((dialogW - maxX * scale) / 2f).roundToInt(),
-                                    ((dialogH - maxY * scale) / 2f).roundToInt()
+                                    ((dialogW - boardW) / 2f).roundToInt(),
+                                    ((dialogH - boardH) / 2f).roundToInt()
                                 )
                             }
+                            .moodBoardPinchZoom(zoomState)
                     ) {
-                        data.tileLayouts.forEachIndexed { i, tile ->
-                            Box(
-                                modifier = Modifier
-                                    .offset {
-                                        IntOffset(
-                                            (tile.offsetXPx * scale).roundToInt(),
-                                            (tile.offsetYPx * scale).roundToInt()
-                                        )
-                                    }
-                                    .zIndex(i.toFloat())
-                                    // Pinch (two fingers), tap, or double-tap
-                                    // springs the tile up in place.
-                                    .moodBoardPinch(zoomState, tile.uri)
-                                    .pointerInput(tile.uri) {
-                                        detectTapGestures(
-                                            onTap = { zoomState.zoomIn(tile.uri) },
-                                            onDoubleTap = { zoomState.zoomIn(tile.uri) }
-                                        )
-                                    }
-                            ) {
-                                Surface(
-                                    shape = RoundedCornerShape(18.dp),
-                                    color = MaterialTheme.colorScheme.surface,
-                                    shadowElevation = 0.dp,
-                                    modifier = Modifier
-                                        .size(
-                                            width = with(density) { (tile.widthPx * scale).toDp() },
-                                            height = with(density) { (tile.heightPx * scale).toDp() }
-                                        )
-                                        .rotate(tile.rotationDeg)
-                                ) {
-                                    Image(
-                                        painter = rememberAsyncImagePainter(tile.uri),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Fit,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(6.dp)
-                                            .clip(RoundedCornerShape(14.dp))
-                                    )
-                                }
-                            }
-                        }
+                        MoodBoardTiles(
+                            tiles = scaledTiles,
+                            canvasWPx = boardW,
+                            canvasHPx = boardH,
+                            onTileZoom = { zoomState.zoomIn(it) }
+                        )
+                    }
 
-                        // ── In-place zoom overlay (pinch/tap, no Lightbox) ──
-                        data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
-                            MoodBoardZoomOverlay(
-                                zoomState = zoomState,
-                                animatedScale = animatedScale,
-                                animatedOffsetX = animatedOffsetX,
-                                animatedOffsetY = animatedOffsetY,
-                                tileUri = tile.uri,
-                                offsetXPx = tile.offsetXPx * scale,
-                                offsetYPx = tile.offsetYPx * scale,
-                                widthPx = tile.widthPx * scale,
-                                heightPx = tile.heightPx * scale,
-                                rotationDeg = tile.rotationDeg
-                            )
-                        }
+                    // ── In-place zoom overlays (no Lightbox) ─────────────
+                    if (zoomState.boardZoomed) {
+                        MoodBoardZoomCanvas(
+                            zoomState = zoomState,
+                            animatedScale = animatedScale,
+                            animatedOffsetX = animatedOffsetX,
+                            animatedOffsetY = animatedOffsetY,
+                            tiles = scaledTiles,
+                            canvasWPx = boardW,
+                            canvasHPx = boardH
+                        )
+                    }
+                    data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
+                        MoodBoardZoomOverlay(
+                            zoomState = zoomState,
+                            animatedScale = animatedScale,
+                            animatedOffsetX = animatedOffsetX,
+                            animatedOffsetY = animatedOffsetY,
+                            tileUri = tile.uri,
+                            widthPx = tile.widthPx * scale,
+                            heightPx = tile.heightPx * scale
+                        )
                     }
                 }
 
