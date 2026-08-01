@@ -83,20 +83,41 @@ import kotlinx.coroutines.launch
  *  - Dual confetti + ember burst on save success
  *  - Format body renders instantly (no entrance delay)
  *  - Proper back-navigation with discard confirmation
+ *
+ * When [editEntryId] is set (mood-board edit mode), the screen preloads the
+ * saved entry's data into the format body and saves changes back in place
+ * (same id → Room REPLACE), then returns to the live-updating detail screen.
  */
 @Composable
 fun SaveCaptureScreen(
     categorySlug: String,
     topicName: String,
-    navController: NavController
+    navController: NavController,
+    editEntryId: String? = null
 ) {
     val context = LocalContext.current
-    val cat = remember(categorySlug) {
+
+    // Edit mode: load the saved entry so its data can prefill the format.
+    val editingEntry by produceState<CurioEntry?>(initialValue = null, editEntryId) {
+        value = editEntryId?.let { id ->
+            runCatching { CurioRepositoryHolder.repo.getById(id) }.getOrNull()
+        }
+    }
+
+    // Always call remember (stable slot) — the entry-driven category only
+    // applies in edit mode.
+    val fallbackCat = remember(categorySlug) {
         CurioCategories.byRouteSlug(categorySlug)
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
+    val cat = editingEntry?.let { CurioCategories.byId(it.topic.categoryId) } ?: fallbackCat
 
-    val topic by produceState<CurioTopic?>(initialValue = null, topicName, cat.id) {
+    val topic by produceState<CurioTopic?>(initialValue = null, topicName, cat.id, editingEntry) {
+        val existing = editingEntry
+        if (existing != null) {
+            value = existing.topic
+            return@produceState
+        }
         val cached = TopicCatalog.findByName(topicName)
         if (cached != null) {
             value = cached
@@ -124,7 +145,7 @@ fun SaveCaptureScreen(
         if (data != null) {
             saveInProgress = true
             scope.launch {
-                val entryId = CaptureRepository.createId()
+                val entryId = editEntryId ?: CaptureRepository.createId()
 
                 // Persist audio file from cache to internal storage before saving
                 val persistedData = if (data is CaptureData.SoundBite && !data.audioFilePath.isNullOrBlank()) {
@@ -145,12 +166,17 @@ fun SaveCaptureScreen(
                     return@launch
                 }
 
-                val entry = CurioEntry(
-                    id = entryId,
-                    topic = resolvedTopic,
-                    format = cat.defaultFormat,
-                    captureData = persistedData
-                )
+                val entry = if (editingEntry != null) {
+                    // Edit mode: keep id/topic/title/timestamp, swap the data.
+                    editingEntry.copy(captureData = persistedData)
+                } else {
+                    CurioEntry(
+                        id = entryId,
+                        topic = resolvedTopic,
+                        format = cat.defaultFormat,
+                        captureData = persistedData
+                    )
+                }
                 runCatching { CurioRepositoryHolder.repo.save(entry) }
                     .onSuccess {
                         savedEntryId = entry.id
@@ -169,9 +195,15 @@ fun SaveCaptureScreen(
         if (confettiTrigger > 0) {
             delay(800)
             savedEntryId?.let { id ->
-                navController.navigate(CurioRoutes.entryDetail(id)) {
-                    popUpTo(CurioRoutes.HOME)
-                    launchSingleTop = true
+                if (editEntryId != null) {
+                    // Edit mode: return to the detail screen — it observes the
+                    // repository flow, so the updated board renders live.
+                    navController.popBackStack()
+                } else {
+                    navController.navigate(CurioRoutes.entryDetail(id)) {
+                        popUpTo(CurioRoutes.HOME)
+                        launchSingleTop = true
+                    }
                 }
             }
         }
@@ -198,7 +230,7 @@ fun SaveCaptureScreen(
                 }
             )
             Text(
-                text = "Save your take",
+                text = if (editEntryId != null) "Edit mood board" else "Save your take",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -260,6 +292,7 @@ fun SaveCaptureScreen(
             ) {
                     FormatBodyForCategory(
                         category = cat,
+                        initialData = editingEntry?.captureData,
                         onCanSaveChange = { canSave = it && topic != null },
                         onDataChanged = { currentCaptureData = it }
                     )
@@ -324,7 +357,7 @@ fun SaveCaptureScreen(
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(
-                                text = "Save entry",
+                                text = if (editEntryId != null) "Save changes" else "Save entry",
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                             )
                         }
@@ -379,12 +412,16 @@ fun SaveCaptureScreen(
 /**
  * Dispatch the right format body based on the active category's default format.
  * Each format now reports both [onCanSaveChange] and [onDataChanged].
+ *
+ * [initialData] (edit mode) is passed through to [GalleryWallFormat] so a
+ * saved mood board can preload its tiles and caption.
  */
 @Composable
 private fun FormatBodyForCategory(
     category: CurioCategory,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit
+    onDataChanged: (CaptureData?) -> Unit,
+    initialData: CaptureData? = null
 ) {
     when (category.defaultFormat) {
         CaptureFormat.SoundBite ->
@@ -394,7 +431,10 @@ private fun FormatBodyForCategory(
         CaptureFormat.Marginalia ->
             MarginaliaFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
         CaptureFormat.GalleryWall ->
-            GalleryWallFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
+            GalleryWallFormat(
+                category.accent, category.tint, onCanSaveChange, onDataChanged,
+                initialData = initialData as? CaptureData.GalleryWall
+            )
         CaptureFormat.FieldNotes ->
             FieldNotesFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
         CaptureFormat.OpenNotebook ->

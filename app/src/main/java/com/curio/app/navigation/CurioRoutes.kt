@@ -45,6 +45,7 @@ object CurioRoutes {
     // ── Push destinations (no bottom nav)
     const val PROFILE = "profile"
     const val ENTRY_DETAIL = "detail/{entryId}"
+    const val EDIT_MOODBOARD = "edit-moodboard/{entryId}"
     const val SETTINGS = "settings"
     const val MANAGE_CATEGORIES = "manage-categories"
     const val TOPIC_HISTORY = "topic-history"
@@ -61,6 +62,8 @@ object CurioRoutes {
     fun captureFor(categorySlug: String, topicName: String) =
         "capture/$categorySlug/${Uri.encode(topicName)}"
     fun entryDetail(entryId: String) = "detail/$entryId"
+    /** Edit a saved GalleryWall (mood board) entry — preloads + re-saves in place. */
+    fun editMoodBoard(entryId: String) = "edit-moodboard/$entryId"
     /** Sets the out-of-band target and returns the arg-free Lightbox route. */
     fun lightbox(imageUrl: String): String {
         LightboxTarget.uri = imageUrl

@@ -1,24 +1,26 @@
-# Category Picker — Multi-Select + Card Visuals
+# Mood Board — Watermark Backdrops, Expanded Editing, Edit Saved Boards
 
 ## Request
 
-User (design direction): "the category selection page cards make the full cards have a different slight shade and make the watermark inside the cards in category have the color gradient of the main cards and in active state give it a different look and remove manage all categories and make it done and enable multiple cards select function"
+User (design direction): "the mood board background doesn't have anything it shows blank and expanding too it shows black screen so change it to theme aware watermark background and use a random pattern for each one. and in entry mood board it looks bad pixelated and cropped and in saved view mood board it looked fine so use the same logic and add expanded view so user can add things properly, and also add an edit function for the saved mood board too."
 
 ## Analysis
 
-- `CategoryPickerScreen` previously: single-tap → immediate navigate to `spin/{slug}`; bottom button was "Manage categories" (`FilledTonalButton`).
-- `CurioCategoryCard` (shared with Spin's picker sheet): flat `categoryCardFill` fill, plain white 10%-alpha watermark, selected = faint white border + white circle w/ accent check. Also had a **sticky pressed bug** — `pressed` set true in `onClick` and never reset, so every tapped card stayed at 0.96 scale forever.
-- SpinScreen took a single `categorySlug` (single `CategorySaver`), one-category pool, and revealed via `cat.id.routeSlug`.
+- `GalleryWallFormat` (capture editor): blank `surfaceVariant` canvas; tiles rendered `ContentScale.Crop` (pixelated/cropped) vs the saved view's `Fit` + padding (looked fine); no expanded editing surface.
+- `EntryDetailScreen.GalleryWallRender` + `ExpandedMoodBoardDialog`: flat `surfaceContainerHigh` / pure **black** backgrounds — the black screen complaint; no edit entry point.
+- No edit flow existed: `SaveCaptureScreen` only created new entries; `EntryDetailScreen` loaded once via one-shot `getById` (stale after edits); no `edit-moodboard` route.
 
 ## Plan
 
-1. **CurioCategoryCard**: full-card theme-aware gradient (inner Box `Brush.verticalGradient(cardGradient)` — clickable `Surface` has no `brush` param), watermark tinted `lerp(cardColor, Color.White, 0.55f)` @ 18% (echoes the main-card gradient), selected state = 2dp white border + scale 1.03 + accent-filled check badge; replace sticky `pressed` with `MutableInteractionSource` + `collectIsPressedAsState()`.
-2. **CategoryPickerScreen**: multi-select toggle (`selectedSlugs` list, saveable), Done button (primary, count label, disabled when empty) replaces Manage categories; navigates `spinWithCategory` (1) or `spinWithCategories` (>1).
-3. **CurioRoutes**: add `spinWithCategories(slugs)` = comma-joined `spin/a,b`.
-4. **SpinScreen**: parse comma-joined slug → `List<CategoryId>` (`CategoryIdListSaver` replaces `CategorySaver`), merged topic pool across selected cats (dedupe by id, defensive `poolIds` fallback if restore empty), reveals route via each topic's **own** `categoryId.routeSlug`; removed unused `Saver` import.
+1. **`CurioWatermarkBackdrop.kt`** — new `CurioMoodBoardBackdrop(seed, accent, modifier)`: deterministic per-seed random scatter of 9–12 category glyphs (bias/corner placements, random sizes/rotations/tints, per-glyph `alphaBoost`), theme-aware base alpha applied at draw time (so Light/Dark toggles re-render without re-seeding).
+2. **`GalleryWallFormat.kt`** — shared `MoodBoardCanvas` (inline card + full-screen `Dialog`); tiles now `ContentScale.Fit` + `padding(6.dp)` + clip (matches saved view); watermark backdrop behind tiles; expand/collapse button (`Fullscreen`/`Close`); optional `initialData: CaptureData.GalleryWall?` preloads tiles+caption for edit mode (`remember(initialData)` keys, index-based tile ids, new ids = `maxOfOrNull+1`).
+3. **`EntryDetailScreen.kt`** — `GalleryWallRender` + `ExpandedMoodBoardDialog` render `CurioMoodBoardBackdrop(seed = entry.id.hashCode())` over theme background (no more black); hint text color now `onBackground`; "Edit mood board" dropdown item for `GalleryWall` entries; entry loading switched to `repo.observeAll().collect` flow (live-updates after edit/delete).
+4. **`SaveCaptureScreen.kt`** — `editEntryId: String?` param: loads entry, derives category (`fallbackCat` always-remembered to avoid conditional-remember hazard), preloads format via `initialData`, saves in place (same id → Room REPLACE), pops back (detail observes flow); title/label switch ("Edit mood board" / "Save changes").
+5. **`CurioRoutes.kt` / `CurioNavHost.kt`** — `EDIT_MOODBOARD = "edit-moodboard/{entryId}"` + `editMoodBoard(entryId)` builder; route registered → `SaveCaptureScreen("", "", editEntryId)`.
 
 ## Completion Summary
 
-- All 4 files updated; validation green: braces balanced (Spin 265/265, picker 16/16, card 10/10, routes 18/18), zero stale refs (`CategorySaver`, `initialCat`, `FilledTonalButton`, unused `Saver` import), press collector wired to `Surface(onClick, interactionSource)`, single-category flows behaviorally identical (topic.categoryId == active cat).
-- Code review clean (2 passes). Minor non-blocking notes: Spin top bar shows only first category name on multi-deck launches; watermark is a single accent-derived tint (CurioIcon takes one tint); picker selection persists across returns (probably desired).
-- Gradle build/lint NOT run (forbidden in this environment; CI validates on push).
+- 6 files changed; validation green: braces balanced (Watermark 17/17, GalleryWall 89/89, EntryDetail 225/225, SaveCapture 66/66, Routes 19/19, NavHost 44/44); no stale refs; imports verified (`RectangleShape`, `SnapshotStateList`, `kotlin.random.Random`, `CurioMoodBoardBackdrop`, `isCurioDarkTheme`, `CurioIcons.Edit`).
+- Code review: clean pass; one fix applied — `CurioMoodBoardBackdrop` originally captured `isDark` inside the `remember(seed, …)` block (theme toggles wouldn't re-render alpha); moved to draw-time base alpha × seeded per-glyph `alphaBoost`.
+- Reviewer notes accepted as non-blocking: fullscreen dialog keeps the inline canvas composed underneath (minor double-composition); edit screen re-seeds the backdrop pattern vs the detail view's id-derived seed.
+- Store changelog `20260730.txt` updated. Gradle build/lint NOT run (forbidden in this environment; CI validates on push).

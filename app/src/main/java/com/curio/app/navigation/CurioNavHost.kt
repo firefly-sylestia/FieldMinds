@@ -223,6 +223,17 @@ fun CurioNavHost(
                     navController = navController
                 )
             }
+            composable(
+                route = CurioRoutes.EDIT_MOODBOARD,
+                arguments = listOf(navArgument("entryId") { type = NavType.StringType })
+            ) { entry ->
+                SaveCaptureScreen(
+                    categorySlug = "",
+                    topicName = "",
+                    navController = navController,
+                    editEntryId = entry.arguments?.getString("entryId").orEmpty()
+                )
+            }
             composable(CurioRoutes.PROFILE) {
                 ProfileScreen(navController = navController)
             }

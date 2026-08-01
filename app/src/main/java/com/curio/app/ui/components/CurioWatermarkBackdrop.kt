@@ -17,6 +17,7 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.isCurioDarkTheme
+import kotlin.random.Random
 
 /**
  * Decorative backdrop pinned behind screen content: all eleven category
@@ -68,6 +69,10 @@ fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifi
  * One scattered glyph — its category's accent at a low alpha, or a stronger
  * whisper of the same color if it's the active category's glyph.
  */
+/**
+ * One scattered glyph — its category's accent at a low alpha, or a stronger
+ * whisper of the same color if it's the active category's glyph.
+ */
 @Composable
 private fun BoxScope.WatermarkGlyph(
     glyph: String,
@@ -94,3 +99,79 @@ private fun BoxScope.WatermarkGlyph(
             .graphicsLayer { rotationZ = rotation }
     )
 }
+
+/**
+ * Decorative mood-board backdrop: a scatter of category glyphs laid out by
+ * a [seed]-driven random pattern, so every mood board gets its own quiet
+ * background collage. Theme-aware (faint in dark mode, slightly stronger in
+ * light mode) and centred on [accent] tones so it stays legible behind
+ * tiles. The seed is stable per board — derive it from the entry id when
+ * re-rendering a saved board, or a fresh random value when creating one.
+ */
+@Composable
+fun CurioMoodBoardBackdrop(
+    seed: Int,
+    accent: Color,
+    modifier: Modifier = Modifier
+) {
+    val isDark = isCurioDarkTheme()
+    val accentByGlyph = remember {
+        CurioCategories.all.associate { it.iconGlyph to it.accent }
+    }
+    val glyphs = remember {
+        CurioCategories.all.map { it.iconGlyph }
+    }
+    // Deterministic per-seed scatter: count, glyphs, biases, sizes, rotations
+    // and an alpha boost. The alpha boost stays in the seeded pattern (so each
+    // glyph keeps its own random weight); the theme-aware base alpha is applied
+    // at draw time so light/dark toggles re-render without re-seeding.
+    val pattern = remember(seed, accentByGlyph, glyphs) {
+        val rng = Random(seed)
+        val count = 9 + rng.nextInt(4) // 9..12 glyphs
+        List(count) {
+            val glyph = glyphs[rng.nextInt(glyphs.size)]
+            val accentForGlyph = accentByGlyph[glyph] ?: accent
+            // BiasAlignment is -1..1 across the Box; bias toward the edges
+            // and corners so the centre stays clear for tiles.
+            val biasX = (if (rng.nextBoolean()) -1 else 1) * (0.55f + rng.nextFloat() * 0.4f)
+            val biasY = (if (rng.nextBoolean()) -1 else 1) * (0.55f + rng.nextFloat() * 0.4f)
+            WatermarkPlacement(
+                glyph = glyph,
+                alignment = BiasAlignment(biasX, biasY),
+                size = (52f + rng.nextFloat() * 56f).dp, // 52..108 dp
+                rotation = -18f + rng.nextFloat() * 36f,
+                // Mostly the board's own accent family, sometimes a sibling
+                // category colour for variety.
+                tint = if (rng.nextFloat() < 0.75f) accent else accentForGlyph,
+                alphaBoost = 0.7f + rng.nextFloat() * 0.6f // 0.7..1.3 per glyph
+            )
+        }
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        pattern.forEach { p ->
+            // Theme-aware base alpha × the glyph's seeded boost, computed at
+            // draw time so light/dark toggles apply immediately.
+            val alpha = (if (isDark) 0.05f else 0.10f) * p.alphaBoost
+            CurioIcon(
+                name = p.glyph,
+                contentDescription = null,
+                tint = p.tint.copy(alpha = alpha),
+                size = p.size,
+                modifier = Modifier
+                    .align(p.alignment)
+                    .graphicsLayer { rotationZ = p.rotation }
+            )
+        }
+    }
+}
+
+/** One seeded glyph placement for [CurioMoodBoardBackdrop]. */
+private data class WatermarkPlacement(
+    val glyph: String,
+    val alignment: Alignment,
+    val size: Dp,
+    val rotation: Float,
+    val tint: Color,
+    val alphaBoost: Float
+)

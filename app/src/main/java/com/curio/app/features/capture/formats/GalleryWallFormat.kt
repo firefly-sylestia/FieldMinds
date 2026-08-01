@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RectangleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -30,17 +31,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
+import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import coil.compose.rememberAsyncImagePainter
@@ -79,55 +82,49 @@ private data class MoodTile(
  *  - Tap to bring a tile to the front (z-order)
  *  - Remove tiles via corner × button
  *  - Add an optional caption below
+ *  - Expand to a full-screen canvas for precise placement (top-right button)
  *
  * Tiles are placed with random initial positions, slight rotations, and
- * varying sizes to create a natural mood-board collage aesthetic.
+ * varying sizes to create a natural mood-board collage aesthetic. Tiles
+ * render with [ContentScale.Fit] + inner padding — the same logic the saved
+ * EntryDetail view uses — so images are never cropped or pixelated while
+ * composing.
+ *
+ * The board canvas sits on a theme-aware watermark backdrop whose random
+ * glyph scatter is seeded per board ([seed]), so every mood board gets its
+ * own quiet background pattern.
+ *
+ * When [initialData] is supplied (edit mode), the board preloads the saved
+ * tiles and caption so the user can continue arranging and re-save.
  */
 @Composable
 fun GalleryWallFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    initialData: CaptureData.GalleryWall? = null
 ) {
-    val context = LocalContext.current
-    val density = LocalDensity.current
-    val tiles = remember { mutableStateListOf<MoodTile>() }
-    var nextId by remember { mutableStateOf(0) }
-    var caption by remember { mutableStateOf("") }
-    var canvasWPx by remember { mutableStateOf(0f) }
-    val canvasHPx = with(density) { 420.dp.toPx() }
-    var expandedImageUri by remember { mutableStateOf<String?>(null) }
-
-    val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenMultipleDocuments()
-    ) { uris ->
-        uris.forEach { uri ->
-            runCatching {
-                context.contentResolver.takePersistableUriPermission(
-                    uri,
-                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+    val tiles = remember(initialData) {
+        mutableStateListOf<MoodTile>().apply {
+            initialData?.tileLayouts?.forEachIndexed { i, t ->
+                add(
+                    MoodTile(
+                        id = i,
+                        uri = t.uri,
+                        offsetXPx = t.offsetXPx,
+                        offsetYPx = t.offsetYPx,
+                        rotationDeg = t.rotationDeg,
+                        widthPx = t.widthPx,
+                        heightPx = t.heightPx
+                    )
                 )
             }
         }
-        uris.forEach { uri ->
-            val tileW = with(density) { (100..160).random().dp.toPx() }
-            val tileH = with(density) { (120..180).random().dp.toPx() }
-            val maxX = (canvasWPx - tileW).coerceAtLeast(0f)
-            val maxY = (canvasHPx - tileH).coerceAtLeast(0f)
-            tiles.add(
-                MoodTile(
-                    id = nextId++,
-                    uri = uri.toString(),
-                    offsetXPx = if (maxX > 0f) Random.nextFloat() * maxX else 0f,
-                    offsetYPx = if (maxY > 0f) Random.nextFloat() * maxY else 0f,
-                    rotationDeg = (-12..12).random().toFloat(),
-                    widthPx = tileW,
-                    heightPx = tileH
-                )
-            )
-        }
     }
+    var caption by remember(initialData) { mutableStateOf(initialData?.caption ?: "") }
+    var boardExpanded by remember { mutableStateOf(false) }
+    val boardSeed = remember(initialData) { Random.nextInt() }
 
     val canSave = tiles.isNotEmpty()
     LaunchedEffect(canSave, caption, tiles.toList()) {
@@ -175,210 +172,18 @@ fun GalleryWallFormat(
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // Mood board canvas — uses BoxWithConstraints for real width
+        // Inline mood board canvas (editable)
         // ═══════════════════════════════════════════════════════════════
-        Surface(
-            shape = RoundedCornerShape(24.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-            tonalElevation = 1.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(420.dp)
-        ) {
-            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-                // Read actual canvas width from constraints (fixes "stuck on left" bug)
-                LaunchedEffect(maxWidth) {
-                    canvasWPx = with(density) { maxWidth.toPx() }
-                }
-
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (tiles.isEmpty()) {
-                        // Empty state
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Surface(
-                                shape = CircleShape,
-                                color = accent.copy(alpha = 0.12f),
-                                modifier = Modifier.size(64.dp)
-                            ) {
-                                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                    CurioIcon(
-                                        name = CurioIcons.Image,
-                                        contentDescription = null,
-                                        tint = accent,
-                                        size = 32.dp
-                                    )
-                                }
-                            }
-                            Spacer(Modifier.height(12.dp))
-                            Text(
-                                text = "Start your mood board",
-                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = "Add images, drag them around",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    } else {
-                        tiles.forEachIndexed { i, tile ->
-                            Box(
-                                modifier = Modifier
-                                    .offset {
-                                        IntOffset(
-                                            tile.offsetXPx.roundToInt().coerceIn(0, canvasWPx.roundToInt()),
-                                            tile.offsetYPx.roundToInt().coerceIn(0, canvasHPx.roundToInt())
-                                        )
-                                    }
-                                    .zIndex(i.toFloat())
-                                    .pointerInput(tile.id) {
-                                        detectTapGestures(
-                                            onTap = {
-                                                val idx = tiles.indexOfFirst { it.id == tile.id }
-                                                if (idx >= 0 && idx != tiles.lastIndex) {
-                                                    tiles.add(tiles.removeAt(idx))
-                                                }
-                                            },
-                                            onDoubleTap = { expandedImageUri = tile.uri }
-                                        )
-                                    }
-                                    .pointerInput(tile.id) {
-                                        detectDragGestures { change, dragAmount ->
-                                            change.consume()
-                                            val idx = tiles.indexOfFirst { it.id == tile.id }
-                                            if (idx >= 0) {
-                                                val t = tiles[idx]
-                                                tiles[idx] = t.copy(
-                                                    offsetXPx = (t.offsetXPx + dragAmount.x)
-                                                        .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
-                                                    offsetYPx = (t.offsetYPx + dragAmount.y)
-                                                        .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
-                                                )
-                                            }
-                                        }
-                                    }
-                            ) {
-                                Surface(
-                                    shape = RoundedCornerShape(14.dp),
-                                    color = Color.White,
-                                    shadowElevation = 0.dp,
-                                    modifier = Modifier
-                                        .size(
-                                            width = with(density) { tile.widthPx.toDp() },
-                                            height = with(density) { tile.heightPx.toDp() }
-                                        )
-                                        .rotate(tile.rotationDeg)
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Image(
-                                            painter = rememberAsyncImagePainter(tile.uri),
-                                            contentDescription = null,
-                                            contentScale = ContentScale.Crop,
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .clip(RoundedCornerShape(14.dp))
-                                        )
-                                        Surface(
-                                            onClick = { expandedImageUri = tile.uri },
-                                            shape = CircleShape,
-                                            color = Color.Black.copy(alpha = 0.48f),
-                                            modifier = Modifier
-                                                .align(Alignment.BottomEnd)
-                                                .padding(7.dp)
-                                                .size(26.dp)
-                                        ) {
-                                            Box(contentAlignment = Alignment.Center) {
-                                                CurioIcon(
-                                                    name = CurioIcons.Search,
-                                                    contentDescription = "Open image",
-                                                    tint = Color.White,
-                                                    size = 14.dp
-                                                )
-                                            }
-                                        }
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                            .background(
-                                                Color.Black.copy(alpha = 0.08f),
-                                                    RoundedCornerShape(14.dp)
-                                                )
-                                        )
-                                    }
-                                }
-
-                                // × Remove button
-                                Surface(
-                                    onClick = {
-                                        val idx = tiles.indexOfFirst { it.id == tile.id }
-                                        if (idx >= 0) tiles.removeAt(idx)
-                                    },
-                                    shape = CircleShape,
-                                    color = Color.Black.copy(alpha = 0.55f),
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .offset(x = 4.dp, y = (-4).dp)
-                                        .size(22.dp)
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        CurioIcon(
-                                            name = CurioIcons.Close,
-                                            contentDescription = "Remove",
-                                            tint = Color.White,
-                                            size = 13.dp
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // ── Floating "+" add button ──────────────────────────
-                    Surface(
-                        onClick = { imagePicker.launch(arrayOf("image/*")) },
-                        shape = RoundedCornerShape(28.dp),
-                        color = accent,
-                        shadowElevation = 0.dp,
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            CurioIcon(
-                                name = CurioIcons.Add,
-                                contentDescription = "Add images",
-                                tint = Color.White,
-                                size = 20.dp
-                            )
-                            Text(
-                                text = "Add images",
-                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                                color = Color.White
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        MoodBoardCanvas(
+            tiles = tiles,
+            accent = accent,
+            seed = boardSeed,
+            fullScreen = false,
+            onExpand = { boardExpanded = true },
+            onCollapse = {}
+        )
 
         // ── Caption field ─────────────────────────────────────────────
-        expandedImageUri?.let { uri ->
-            MoodBoardImageDialog(
-                imageUri = uri,
-                onDismiss = { expandedImageUri = null }
-            )
-        }
-
         OutlinedTextField(
             value = caption,
             onValueChange = { caption = it },
@@ -389,8 +194,306 @@ fun GalleryWallFormat(
             modifier = Modifier.fillMaxWidth()
         )
     }
+
+    // ── Full-screen editing canvas ────────────────────────────────────
+    if (boardExpanded) {
+        Dialog(
+            onDismissRequest = { boardExpanded = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                MoodBoardCanvas(
+                    tiles = tiles,
+                    accent = accent,
+                    seed = boardSeed,
+                    fullScreen = true,
+                    onExpand = {},
+                    onCollapse = { boardExpanded = false }
+                )
+            }
+        }
+    }
 }
 
+/**
+ * The editable mood-board canvas — shared by the inline card and the
+ * full-screen expanded dialog so the same tile interactions (drag, tap to
+ * front, remove, add) work at any size. Renders tiles with
+ * [ContentScale.Fit] + padding exactly like the saved EntryDetail view.
+ */
+@Composable
+private fun MoodBoardCanvas(
+    tiles: SnapshotStateList<MoodTile>,
+    accent: Color,
+    seed: Int,
+    fullScreen: Boolean,
+    onExpand: () -> Unit,
+    onCollapse: () -> Unit
+) {
+    val context = LocalContext.current
+    val density = LocalDensity.current
+    var canvasWPx by remember { mutableFloatStateOf(0f) }
+    var canvasHPx by remember { mutableFloatStateOf(0f) }
+    var expandedImageUri by remember { mutableStateOf<String?>(null) }
+
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris ->
+        uris.forEach { uri ->
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+        }
+        uris.forEach { uri ->
+            val tileW = with(density) { (100..160).random().dp.toPx() }
+            val tileH = with(density) { (120..180).random().dp.toPx() }
+            val maxX = (canvasWPx - tileW).coerceAtLeast(0f)
+            val maxY = (canvasHPx - tileH).coerceAtLeast(0f)
+            tiles.add(
+                MoodTile(
+                    id = (tiles.maxOfOrNull { it.id } ?: -1) + 1,
+                    uri = uri.toString(),
+                    offsetXPx = if (maxX > 0f) Random.nextFloat() * maxX else 0f,
+                    offsetYPx = if (maxY > 0f) Random.nextFloat() * maxY else 0f,
+                    rotationDeg = (-12..12).random().toFloat(),
+                    widthPx = tileW,
+                    heightPx = tileH
+                )
+            )
+        }
+    }
+
+    Surface(
+        shape = if (fullScreen) RectangleShape else RoundedCornerShape(24.dp),
+        color = Color.Transparent,
+        tonalElevation = 0.dp,
+        modifier = if (fullScreen) Modifier.fillMaxSize() else Modifier
+            .fillMaxWidth()
+            .height(420.dp)
+    ) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            // Read actual canvas size from constraints (fixes "stuck on left" bug)
+            LaunchedEffect(maxWidth, maxHeight) {
+                canvasWPx = with(density) { maxWidth.toPx() }
+                canvasHPx = with(density) { maxHeight.toPx() }
+            }
+
+            // ── Theme-aware random watermark backdrop ─────────────────
+            CurioMoodBoardBackdrop(
+                seed = seed,
+                accent = accent,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (tiles.isEmpty()) {
+                    // Empty state
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            color = accent.copy(alpha = 0.12f),
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                CurioIcon(
+                                    name = CurioIcons.Image,
+                                    contentDescription = null,
+                                    tint = accent,
+                                    size = 32.dp
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = "Start your mood board",
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            text = "Add images, drag them around",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                } else {
+                    tiles.forEachIndexed { i, tile ->
+                        Box(
+                            modifier = Modifier
+                                .offset {
+                                    IntOffset(
+                                        tile.offsetXPx.roundToInt().coerceIn(0, canvasWPx.roundToInt()),
+                                        tile.offsetYPx.roundToInt().coerceIn(0, canvasHPx.roundToInt())
+                                    )
+                                }
+                                .zIndex(i.toFloat())
+                                .pointerInput(tile.id) {
+                                    detectTapGestures(
+                                        onTap = {
+                                            val idx = tiles.indexOfFirst { it.id == tile.id }
+                                            if (idx >= 0 && idx != tiles.lastIndex) {
+                                                tiles.add(tiles.removeAt(idx))
+                                            }
+                                        },
+                                        onDoubleTap = { expandedImageUri = tile.uri }
+                                    )
+                                }
+                                .pointerInput(tile.id) {
+                                    detectDragGestures { change, dragAmount ->
+                                        change.consume()
+                                        val idx = tiles.indexOfFirst { it.id == tile.id }
+                                        if (idx >= 0) {
+                                            val t = tiles[idx]
+                                            tiles[idx] = t.copy(
+                                                offsetXPx = (t.offsetXPx + dragAmount.x)
+                                                    .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
+                                                offsetYPx = (t.offsetYPx + dragAmount.y)
+                                                    .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
+                                            )
+                                        }
+                                    }
+                                }
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(14.dp),
+                                color = Color.White,
+                                shadowElevation = 0.dp,
+                                modifier = Modifier
+                                    .size(
+                                        width = with(density) { tile.widthPx.toDp() },
+                                        height = with(density) { tile.heightPx.toDp() }
+                                    )
+                                    .rotate(tile.rotationDeg)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Image(
+                                        painter = rememberAsyncImagePainter(tile.uri),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(6.dp)
+                                            .clip(RoundedCornerShape(14.dp))
+                                    )
+                                    Surface(
+                                        onClick = { expandedImageUri = tile.uri },
+                                        shape = CircleShape,
+                                        color = Color.Black.copy(alpha = 0.48f),
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(7.dp)
+                                            .size(26.dp)
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            CurioIcon(
+                                                name = CurioIcons.Search,
+                                                contentDescription = "Open image",
+                                                tint = Color.White,
+                                                size = 14.dp
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                            // × Remove button
+                            Surface(
+                                onClick = {
+                                    val idx = tiles.indexOfFirst { it.id == tile.id }
+                                    if (idx >= 0) tiles.removeAt(idx)
+                                },
+                                shape = CircleShape,
+                                color = Color.Black.copy(alpha = 0.55f),
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .offset(x = 4.dp, y = (-4).dp)
+                                    .size(22.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    CurioIcon(
+                                        name = CurioIcons.Close,
+                                        contentDescription = "Remove",
+                                        tint = Color.White,
+                                        size = 13.dp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ── Floating "+" add button ──────────────────────────
+                Surface(
+                    onClick = { imagePicker.launch(arrayOf("image/*")) },
+                    shape = RoundedCornerShape(28.dp),
+                    color = accent,
+                    shadowElevation = 0.dp,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(
+                            name = CurioIcons.Add,
+                            contentDescription = "Add images",
+                            tint = Color.White,
+                            size = 20.dp
+                        )
+                        Text(
+                            text = "Add images",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+
+            // ── Expand / collapse button ──────────────────────────────
+            Surface(
+                onClick = { if (fullScreen) onCollapse() else onExpand() },
+                shape = RoundedCornerShape(50),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                shadowElevation = 0.dp,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp)
+                    .size(36.dp)
+                    .zIndex(999f)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(
+                        name = if (fullScreen) CurioIcons.Close else CurioIcons.Fullscreen,
+                        contentDescription = if (fullScreen) "Collapse mood board" else "Expand mood board",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        size = 18.dp
+                    )
+                }
+            }
+        }
+    }
+
+    expandedImageUri?.let { uri ->
+        MoodBoardImageDialog(
+            imageUri = uri,
+            onDismiss = { expandedImageUri = null }
+        )
+    }
+}
 
 @Composable
 private fun MoodBoardImageDialog(

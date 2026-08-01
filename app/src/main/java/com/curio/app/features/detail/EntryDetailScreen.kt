@@ -81,12 +81,14 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.isCurioDarkTheme
 import coil.compose.rememberAsyncImagePainter
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
@@ -105,11 +107,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val authority = remember { "${context.packageName}.fileprovider" }
+    // Observe the repository flow so edits (mood-board re-save) and deletes
+    // reflect instantly when this screen regains focus.
     val entry by produceState<CurioEntry?>(initialValue = null, entryId) {
-        value = runCatching {
-            CurioRepositoryHolder.repo.getById(entryId)
-                ?: TopicCatalog.sampleEntries().find { it.id == entryId }
-        }.getOrNull()
+        runCatching {
+            CurioRepositoryHolder.repo.observeAll().collect { entries ->
+                value = entries.find { it.id == entryId }
+                    ?: TopicCatalog.sampleEntries().find { it.id == entryId }
+            }
+        }
     }
 
     LaunchedEffect(entry) {
@@ -188,6 +194,18 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             },
                             leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
                         )
+                        if (resolvedEntry.format == CaptureFormat.GalleryWall) {
+                            DropdownMenuItem(
+                                text = { Text("Edit mood board") },
+                                onClick = {
+                                    menuExpanded = false
+                                    navController.navigate(CurioRoutes.editMoodBoard(resolvedEntry.id)) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
+                            )
+                        }
                         DropdownMenuItem(
                             text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
                             onClick = {
@@ -742,6 +760,9 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Mood board canvas with tile positions ──────────────────────
+        // The board's watermark pattern is seeded from the entry id so each
+        // saved mood board keeps its own stable background collage.
+        val boardSeed = remember(entry.id) { entry.id.hashCode() }
         Surface(
             shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -751,6 +772,13 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val canvasW = with(density) { maxWidth.toPx() }
                 val canvasH = with(density) { 460.dp.toPx() }
+
+                // ── Theme-aware watermark backdrop (random per board) ──
+                CurioMoodBoardBackdrop(
+                    seed = boardSeed,
+                    accent = category.accent,
+                    modifier = Modifier.fillMaxSize()
+                )
 
                 if (data.tileLayouts.isNotEmpty()) {
                     // ── Expand button — full-screen collage ──────────────
@@ -847,6 +875,8 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         if (boardExpanded) {
             ExpandedMoodBoardDialog(
                 data = data,
+                seed = boardSeed,
+                accent = category.accent,
                 navController = navController,
                 onDismiss = { boardExpanded = false }
             )
@@ -857,15 +887,19 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
 /**
  * Full-screen expanded mood board — scales the tile collage up to fill the
  * screen, centers it, and keeps per-tile tap → Lightbox. Close button
- * top-right; back/outside tap dismisses.
+ * top-right; back/outside tap dismisses. Rests on the same theme-aware
+ * watermark backdrop as the inline board (seeded from the entry id).
  */
 @Composable
 private fun ExpandedMoodBoardDialog(
     data: CaptureData.GalleryWall,
+    seed: Int,
+    accent: Color,
     navController: NavController,
     onDismiss: () -> Unit
 ) {
     val density = LocalDensity.current
+    val isDark = isCurioDarkTheme()
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -873,8 +907,17 @@ private fun ExpandedMoodBoardDialog(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(
+                    if (isDark) MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.surfaceContainerLow
+                )
         ) {
+            // ── Theme-aware watermark backdrop (matches inline board) ──
+            CurioMoodBoardBackdrop(
+                seed = seed,
+                accent = accent,
+                modifier = Modifier.fillMaxSize()
+            )
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val dialogW = with(density) { maxWidth.toPx() }
                 val dialogH = with(density) { maxHeight.toPx() }
@@ -959,7 +1002,7 @@ private fun ExpandedMoodBoardDialog(
                 Text(
                     text = "Tap a tile to open it full screen",
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = Color.White.copy(alpha = 0.6f),
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.55f),
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 24.dp)
