@@ -348,6 +348,30 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     }
     val deckGradient = CurioMixedDeck.mixedDeckGradient(deckAccents)
 
+    // ── Mixed-deck identity (v5.13) ───────────────────────────────────────
+    // A multi-select deck presents as ONE "Mixed" category instead of
+    // wearing the first selected category's name/glyph: sparkles glyph,
+    // blended accent + tint, and the merged topic pool. The synthetic
+    // deckCat is display-only — its id stays the first category's id, so
+    // logic keys (landed topic, filters, reveal guard, last-used prefs)
+    // keep operating on the real category set.
+    val isMixedDeck = remember(activeCatIds) { activeCatIds.distinct().size > 1 }
+    val deckCat = remember(activeCatIds, deckAccent, activeCategory) {
+        if (isMixedDeck) {
+            activeCategory.copy(
+                displayName = "Mixed",
+                iconGlyph = CurioIcons.AutoAwesome,
+                accent = deckAccent,
+                // Pastel twin of the blend so categoryInk() stays readable on
+                // dark surfaces (ink = lightAccent in dark mode).
+                lightAccent = lerp(deckAccent, Color.White, 0.45f),
+                tint = deckAccent.copy(alpha = 0.20f)
+            )
+        } else {
+            activeCategory
+        }
+    }
+
     // Category switch resets transient animation state. The landed card is
     // deliberately NOT cleared here: landedTopicName is keyed by
     // activeCategory.id in rememberSaveable, so switching categories resets
@@ -466,14 +490,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         //    the screen in a muted shade, behind all content, so the quiet
         //    space around the deck still carries a whisper of the Curio
         //    world. The active category's glyph gets a faint accent tint.
-        CurioWatermarkBackdrop(activeCat = cat)
+        CurioWatermarkBackdrop(activeCat = deckCat)
 
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
         // ── 1. Top bar — back, category name, topic count (pinned) ──
         TopBar(
-            cat = cat,
+            cat = deckCat,
             poolCount = pool.size,
             filteredCount = filteredPool.size,
             modifier = Modifier.statusBarsPadding(),
@@ -493,7 +517,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         // Tapping the center card opens a landed topic only; the bottom
         // Shuffle CTA owns starting or re-starting the shuffle.
         Carousel(
-            cat = cat,
+            cat = deckCat,
             deckAccent = deckAccent,
             deckGradient = deckGradient,
             displayPool = displayPool,
@@ -543,7 +567,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         // No duplicate shuffle button: the big center SpinButton above
         // owns all spin starts, so the bottom bar is controls only.
         BottomCta(
-            cat = cat,
+            cat = deckCat,
+            mixedCount = activeCatIds.distinct().size,
             filterActiveCount = activeFilters.size + activeSubtypes.size,
             onCategories = { showCategoryPicker = true },
             onFilter = { showFilters = true }
@@ -556,7 +581,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── CategoryPickerSheet ───────────────────────────────────────────
     if (showCategoryPicker) {
         CategoryPickerSheet(
-            currentCat = cat,
+            currentCat = deckCat,
             onDismiss = { showCategoryPicker = false },
             onCategorySelected = { c ->
                 activeCatIds = listOf(c.id)
@@ -582,7 +607,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── ModalBottomSheet — compact multi-select filter dialog ──────────
     if (showFilters) {
         FilterSheet(
-            cat = cat,
+            cat = deckCat,
             groups = filterGroups,
             initialSubtypes = activeSubtypes,
             initialFilters = activeFilters,
@@ -598,7 +623,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── Confetti on landing ────────────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            colors = listOf(deckAccent, cat.tint, CurioColors.ButterYellow),
+            colors = listOf(deckAccent, deckCat.tint, CurioColors.ButterYellow),
             trigger = confettiTrigger,
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
@@ -1708,6 +1733,7 @@ private fun OpeningPulseDot() {
 @Composable
 private fun BottomCta(
     cat: CurioCategory,
+    mixedCount: Int = 1,
     filterActiveCount: Int,
     onCategories: () -> Unit,
     onFilter: () -> Unit
@@ -1736,7 +1762,10 @@ private fun BottomCta(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 DeckControlButton(
-                    label = cat.displayName,
+                    // A multi-select deck names itself "Mixed · N" so the
+                    // mix is obvious at a glance instead of the first
+                    // category's name.
+                    label = if (mixedCount > 1) "Mixed · $mixedCount" else cat.displayName,
                     icon = cat.iconGlyph,
                     cat = cat,
                     selected = true,

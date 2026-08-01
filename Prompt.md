@@ -1,41 +1,46 @@
 # Prompt.md — Running Request Log
 
-## Latest Request — "More color blends, properly analyse the blends"
+## Latest Request — "Blends have bugs: it selects a category when it should trigger a Mixed category"
 
 ### Status: ✅ Complete (committed & pushed)
 
-### What the analysis found
-`scripts/analyze_blends.py` (kept in repo) verified every CurioMixedDeck blend
-against canonical HSL math + WCAG contrast vs white:
+### The bug
+The blended COLORS worked, but a multi-select deck still presented as the
+FIRST selected category: top bar name/glyph, watermark accent, hero + peek
+card glyphs, bottom CTA "Categories" label, filter sheet header, and the
+picker sheet indicator all used `activeCategory` (first id) — no "Mixed"
+identity existed.
 
-- All 15 curated pairs were hue-correct, but **5 fell below WCAG AA (4.5:1)**:
-  Amber+Coral 3.86, Indigo+Coral 3.99, Rose+Coral 4.02, Amber+Sky 4.14,
-  Amber+Teal 4.36 — they were deepened to the brightest shade still clearing
-  4.5:1 (new #E32D0F, #BE39CE, #EA1142, #0B8484, #15875A).
-- Triples had NO curated values — the old `distinct.reduce { hslBlend }` was
-  **order-dependent** (selection order changed the color) and could drift.
-- 4+ combos used the same flawed reduce.
+### The fix (SpinScreen.kt)
+1. New mixed-deck identity: `isMixedDeck = activeCatIds.distinct().size > 1`,
+   and a display-only synthetic `deckCat` built with `activeCategory.copy(...)`:
+   displayName = "Mixed", iconGlyph = CurioIcons.AutoAwesome (sparkles),
+   accent/tint = the blended deck colors, lightAccent = pastel twin of the
+   blend (lerp toward white) so `categoryInk()` stays readable in dark mode.
+   `id` is PRESERVED (first category) so all logic keys keep working: landed
+   topic, filter state, shuffle reveal guard, last-used prefs, onCardTap
+   cached lookups.
+2. Threaded `deckCat` through every display surface: TopBar, watermark
+   backdrop, Carousel (→ hero glyph, peek glyphs, empty hint), BottomCta,
+   FilterSheet, CategoryPickerSheet indicator, and ConfettiBurst tint.
+3. BottomCta gained `mixedCount: Int = 1` — the Categories button now reads
+   "Mixed · N" for multi-select decks (falls back to the category name).
 
-### Changes (CurioColors.kt)
-1. Refined the 5 sub-AA pair blends (hue/sat preserved, lightness deepened).
-2. New `TripleBlends` map: 20 curated entries (all C(6,3) combos) computed as
-   the order-independent HSL centroid + 4.5:1 lightness steering.
-3. `mixedDeckAccent`: pairs→PairBlends, triples→TripleBlends (fallback
-   hslCentroid), 4+→hslCentroid — no more sequential reduce.
-4. New runtime `hslCentroid` (circular hue mean via atan2 of cos/sin sums,
-   mean sat +0.05 boost) → `steerLightness` (32-iter binary search for
-   brightest shade at 4.5:1 contrast) → `contrastVsWhite`/`toLinear`
-   (WCAG relative luminance, `kotlin.math.pow`).
-5. KDoc updated; every blend now clears 4.5:1 vs white.
+### Notes
+- Watermark backdrop renders neutral for mixed decks (sparkles isn't in the
+  11-glyph scatter, so no active whisper) — intended.
+- Hero bounce is keyed on the first id, so changing the mix while the first
+  id stays the same won't re-bounce — cosmetic only.
 
 ### Validation
-- Braces 21/21; 35 blend entries (15 + 20); zero stale reduce; spot-checked
-  values match the analysis script; code review clean (one KDoc nit fixed).
+- Braces 296/296; every display call site switched to deckCat; no logic path
+  touched (shuffle guard + onCardTap still use the real category); imports
+  (lerp, Color, CurioIcons) already present; code review clean.
 
 ### Prior work (this session)
-- CI compile fixes (smart cast, RectangleShape, version-proof colors) —
-  committed `5d52312d`
+- Richer mixed-deck blends (curated triples, 4+ centroid, AA-verified) —
+  committed `b354ef21`
+- CI compile fixes — `5d52312d`
 - Mood board pin-to-front + clear board — `f128ddfd`
 - Edit mood board reuses saved entry-id watermark seed — `c6262518`
 - Category pickers tap/long-press multi-select — `395f0abf`
-- Premium mixed-deck colors (original) — `01414c20`
