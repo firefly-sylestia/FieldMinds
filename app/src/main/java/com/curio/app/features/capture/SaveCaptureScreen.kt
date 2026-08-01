@@ -81,6 +81,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -604,7 +605,8 @@ private fun FormatBodyForCategory(
                             }
                         },
                         shape = RoundedCornerShape(50),
-                        color = if (active.format == fmt) category.tint else MaterialTheme.colorScheme.surface,
+                        color = if (active.format == fmt) category.tint
+                                else category.categorySurface(MaterialTheme.colorScheme.surface),
                         border = BorderStroke(
                             1.dp,
                             if (active.format == fmt) category.accent.copy(alpha = 0.5f)
@@ -650,7 +652,7 @@ private fun FormatBodyForCategory(
                     onClick = { snapshotActive(); activeIndex = i },
                     shape = RoundedCornerShape(50),
                     color = if (i == activeIndex) category.accent
-                            else MaterialTheme.colorScheme.surfaceVariant,
+                            else category.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
                     modifier = Modifier.padding(vertical = 2.dp)
                 ) {
                     Row(

@@ -38,6 +38,7 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categorySurface
 
 /**
  * Cabinet's entry card — used in the 2-col grid (CURIO_SPEC.md §9).
@@ -76,7 +77,7 @@ fun CurioEntryCard(
         },
         modifier = modifier.scale(pressScale),
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = cat.categorySurface(MaterialTheme.colorScheme.surface),
         shadowElevation = 0.dp,
         tonalElevation = 1.dp
     ) {

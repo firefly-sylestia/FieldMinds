@@ -60,6 +60,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
 
 /**
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
@@ -413,7 +414,7 @@ private fun TeaserCard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = cat.categorySurface(MaterialTheme.colorScheme.surface),
         shadowElevation = 0.dp,
         modifier = modifier.fillMaxWidth()
     ) {
@@ -459,7 +460,7 @@ private fun ActionPromptCard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
         shadowElevation = 0.dp,
         modifier = modifier.fillMaxWidth()
     ) {
@@ -471,7 +472,7 @@ private fun ActionPromptCard(
             ) {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh
+                    color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     CurioIcon(
                         name = verbIcon(action.verb),

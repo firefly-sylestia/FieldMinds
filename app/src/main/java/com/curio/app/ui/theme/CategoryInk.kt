@@ -61,6 +61,28 @@ fun CurioCategory.categoryBackgroundWash(): Color {
     }
 }
 
+/**
+ * Theme-aware surface color for CARDS that sit on a tinted page background.
+ *
+ * Cards used plain theme surfaces (cream in light, midnight grey in dark),
+ * which look out of place sitting on a category-tinted page. This resolves
+ * the same per-family mid-tone as [categoryBackgroundWash] but blends a
+ * little stronger, so a card reads as a tinted elevated surface instead of
+ * a foreign cream block. Honors the Settings tint toggle — when it's off,
+ * [base] is returned unchanged so cards go back to the plain theme surface.
+ */
+@Composable
+fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfaceContainerLow): Color {
+    if (!AppPreferences.tintWashEnabledState) return base
+    return if (isCurioDarkTheme()) {
+        val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
+        val midTone = lerp(accent, lightAccent, tuning.midToneFactor)
+        lerp(base, midTone, tuning.blendFraction + 0.10f)
+    } else {
+        lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
+    }
+}
+
 /** Per-family dark-mode wash tuning (mid-tone pull + blend fraction). */
 private class DarkWashTuning(val midToneFactor: Float, val blendFraction: Float)
 

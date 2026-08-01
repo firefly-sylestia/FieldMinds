@@ -47,6 +47,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
 
 /**
  * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
@@ -92,8 +93,8 @@ fun CabinetScreen(navController: NavController) {
     // twin glow over midnight in dark. "All" falls back to the Wildcard's
     // neutral coral wash (same fallback the empty state uses) so even the
     // unfiltered view stays in the color story instead of a plain patch.
-    val filterWash = (selectedFilter ?: CategoryId.WILDCARD)
-        .let { CurioCategories.byId(it).categoryBackgroundWash() }
+    val filterCat = CurioCategories.byId(selectedFilter ?: CategoryId.WILDCARD)
+    val filterWash = filterCat.categoryBackgroundWash()
 
     Column(
         modifier = Modifier
@@ -119,7 +120,7 @@ fun CabinetScreen(navController: NavController) {
             Surface(
                 onClick = { /* TODO Phase 4: expand search bar */ },
                 shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceVariant
+                color = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 CurioIcon(
                     name = CurioIcons.Search,
@@ -143,6 +144,7 @@ fun CabinetScreen(navController: NavController) {
                     accent = MaterialTheme.colorScheme.primary,
                     tint = MaterialTheme.colorScheme.primaryContainer,
                     ink = MaterialTheme.colorScheme.onPrimaryContainer,
+                    chipSurface = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
                     selected = selectedFilter == null,
                     onClick = { selectedFilter = null }
                 )
@@ -153,6 +155,7 @@ fun CabinetScreen(navController: NavController) {
                     accent = cat.accent,
                     tint = cat.tint,
                     ink = cat.categoryInk(),
+                    chipSurface = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
                     selected = selectedFilter == cat.id,
                     onClick = { selectedFilter = cat.id }
                 )
@@ -222,13 +225,14 @@ private fun FilterChipLite(
     accent: Color,
     tint: Color,
     ink: Color,
+    chipSurface: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
     selected: Boolean,
     onClick: () -> Unit
 ) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
-        color = if (selected) tint else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+        color = if (selected) tint else chipSurface
     ) {
         Text(
             text = label,

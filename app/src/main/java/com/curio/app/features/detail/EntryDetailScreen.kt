@@ -105,6 +105,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import kotlin.math.roundToInt
@@ -188,7 +189,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     Surface(
                         onClick = { menuExpanded = true },
                         shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
+                        color = cat.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.92f)
                     ) {
                         CurioIcon(
                             name = CurioIcons.MoreVert,
@@ -391,7 +392,7 @@ private fun PortfolioRender(entry: CurioEntry, category: CurioCategory, navContr
                     onClick = { activeIndex = i },
                     shape = RoundedCornerShape(50),
                     color = if (selected) category.accent
-                            else MaterialTheme.colorScheme.surfaceVariant,
+                            else category.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
                     modifier = Modifier.padding(vertical = 2.dp)
                 ) {
                     Row(
@@ -499,7 +500,8 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 AudioPlayerBar(
                     audioFilePath = data.audioFilePath,
                     accent = category.accent,
-                    tint = category.tint
+                    tint = category.tint,
+                    surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh)
                 )
             }
         }
@@ -517,7 +519,8 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 private fun AudioPlayerBar(
     audioFilePath: String,
     accent: Color,
-    tint: Color
+    tint: Color,
+    surface: Color
 ) {
     val context = LocalContext.current
     // v5.8 — saveable so rotation keeps the playback position + playing
@@ -603,7 +606,7 @@ private fun AudioPlayerBar(
     // past it, so playback reads like the live meter seen while recording.
     Surface(
         shape = RoundedCornerShape(50),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        color = surface,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -865,7 +868,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
         if (data.reviewText.isNotBlank()) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surface,
+                color = category.categorySurface(MaterialTheme.colorScheme.surface),
                 shadowElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -970,7 +973,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     Surface(
                         onClick = { navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true } },
                         shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        color = category.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.9f),
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -992,7 +995,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     Surface(
                         onClick = { boardExpanded = true },
                         shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        color = category.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.9f),
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.TopEnd)

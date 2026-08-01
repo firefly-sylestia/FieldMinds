@@ -1,20 +1,22 @@
-# Request: Dark-mode tint contrast — red/pink/blue look white-washed
+# Request: Creamy cards on tinted pages look out of place
 
 ## Request
-In dark mode the tint for red (Movies/Rose), pink (Wildcard/Coral) and blue (Science/Sky) still looks white-washed — increase the contrast a little.
+With the category tint enabled, the plain cream cards (theme `surface` / `surfaceContainerLow/High` / `surfaceVariant`) look out of place sitting on the tinted page backgrounds. Fix it "the proper way" — one reusable mechanism, not scattered if/else.
 
 ## Root cause
-The dark-mode wash builds a mid-tone as `lerp(accent, lightAccent, 0.5f)` then blends at 15% over midnight. For those three families the midpoint lands too pale — worst for Coral, whose accent `#FF8FA3` is already a pastel pink — so the hue flattens to grey-white.
+Pages wear `categoryBackgroundWash()` but the cards/chips/sheets on top still used the plain theme surfaces (cream in light, midnight grey in dark), so they read as foreign blocks on the tinted page.
 
 ## Changes
-`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`:
-- Added `private class DarkWashTuning(midToneFactor: Float, blendFraction: Float)` with `DEFAULT_DARK_WASH = (0.5f, 0.15f)` (byte-identical to the previous hardcoded behavior).
-- Added `DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning>` — MOVIES (Rose, red) `(0.35, 0.18)`, SCIENCE (Sky, blue) `(0.35, 0.18)`, WILDCARD (Coral, pink) `(0.35, 0.20)` — pulls the mid-tone closer to the deep accent and blends stronger so the hue survives over midnight.
-- `categoryBackgroundWash()` dark branch now looks up `DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH`; light branch and the tint-wash settings toggle untouched. All other families (Indigo/Amber/Teal) keep the exact previous look.
-- Added `import com.curio.app.data.CategoryFamily` (alphabetical). KDoc for the function kept attached directly above it; tuning declarations live below.
+- `CategoryInk.kt` — new `@Composable fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfaceContainerLow): Color`. Toggle-aware (returns `base` unchanged when the Settings tint toggle is off), dark branch reuses the per-family `DARK_WASH_TUNING` mid-tone with `blendFraction + 0.10f`, light branch `lerp(base, lerp(accent, White, 0.30f), 0.24f)`. Cards blend a touch stronger than the page wash so they read as tinted elevated surfaces.
+- `SpinScreen.kt` — FilterSheet `containerColor`, `CompactChip` unselected state (new `chipSurface` param, passed at all 4 call sites), `EmptyPoolHint` card, bottom-bar pill unselected state → `cat.categorySurface(...)`.
+- `TopicRevealScreen.kt` — `TeaserCard`, `ActionPromptCard`, and its icon chip → `cat.categorySurface(...)`.
+- `EntryDetailScreen.kt` — top-bar menu button, `AudioPlayerBar` capsule (new `surface` param, passed from `SoundBiteRender`), ReelNotes review card, GalleryWall edit/expand buttons, and `PortfolioRender` section-switcher chips → `category.categorySurface(...)`.
+- `CabinetScreen.kt` — replaced inline `filterWash` expr with `filterCat = CurioCategories.byId(selectedFilter ?: WILDCARD)`; search bar + both `FilterChipLite` call sites (new `chipSurface` param) → `filterCat.categorySurface(...)`.
+- `SaveCaptureScreen.kt` — format chips + section tabs unselected states → `category.categorySurface(...)`.
+- `CurioTopicCard.kt` — `CurioEntryCard` surface → `cat.categorySurface(...)` (Cat is derived from the entry; card is only used in the tinted Cabinet).
 
 ## Validation
-- Code reviewer passed (2 passes): import order, `family` public on CurioCategory, `lerp(Color, Color, Float)` signature, map covers exactly the three flagged families with fallback preserving old behavior for the rest, no dead code, doc attachment fixed after first review flagged it.
+- Code reviewer passed the full rollout; its one finding (PortfolioRender chips still plain) was fixed with the same pattern. Verified: default params referencing MaterialTheme.colorScheme are legal in @Composable signatures, named-arg call sites make new param ordering irrelevant, `cat`/`category`/`filterCat` in scope everywhere, imports alphabetical. Non-blocking note: cards blend ~1.7–2× stronger than the page wash (defensible "card stands out" choice).
 
 ## Completion summary
 - Committed & pushed.
