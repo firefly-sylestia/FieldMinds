@@ -1,41 +1,41 @@
 # Prompt.md — Running Request Log
 
-## Latest Request — Fix CI compile failures (3 root causes)
+## Latest Request — "More color blends, properly analyse the blends"
 
 ### Status: ✅ Complete (committed & pushed)
 
-### Summary
-CI (BOM 2026.05.01) failed with compile errors across three files. Fixed all
-without removing any features:
+### What the analysis found
+`scripts/analyze_blends.py` (kept in repo) verified every CurioMixedDeck blend
+against canonical HSL math + WCAG contrast vs white:
 
-1. **SaveCaptureScreen.kt:171** — smart cast on the delegated `editingEntry`
-   property (`if (editingEntry != null) { editingEntry.copy(...) }`) is
-   illegal for delegated properties. Fix: capture a stable local
-   (`val existingEntry = editingEntry`) and branch on that. Behavior
-   identical; no other smart-cast reliance on `editingEntry` remains
-   (all other usages are safe-call/let-param/local-capture).
-2. **GalleryWallFormat.kt:25,287** — `androidx.compose.foundation.shape.
-   RectangleShape` is not in the resolved Compose BOM. Fix: drop the import,
-   use `RoundedCornerShape(0.dp)` (visually identical rectangle) for the
-   full-screen canvas shape.
-3. **CurioColors.kt:173–210** — `Color.toArgb()`, `.hue`, `.saturation`,
-   `.lightness` are not in the resolved Compose BOM. Fix:
-   - Dedupe via `accents.distinct()` (Color is a value class with
-     value-based equality) instead of the toArgb round-trip.
-   - `hslBlend` rewritten with local `toHsl`/`fromHsl` (standard RGB↔HSL
-     math) using only bedrock `Color.red/green/blue` + `Color(r,g,b)`
-     Float constructor; keeps shortest-hue-path + saturation boost, so the
-     premium mixed-deck behavior is preserved. `Color.hsl` was confirmed
-     available but fromHsl avoids all version-API risk.
+- All 15 curated pairs were hue-correct, but **5 fell below WCAG AA (4.5:1)**:
+  Amber+Coral 3.86, Indigo+Coral 3.99, Rose+Coral 4.02, Amber+Sky 4.14,
+  Amber+Teal 4.36 — they were deepened to the brightest shade still clearing
+  4.5:1 (new #E32D0F, #BE39CE, #EA1142, #0B8484, #15875A).
+- Triples had NO curated values — the old `distinct.reduce { hslBlend }` was
+  **order-dependent** (selection order changed the color) and could drift.
+- 4+ combos used the same flawed reduce.
+
+### Changes (CurioColors.kt)
+1. Refined the 5 sub-AA pair blends (hue/sat preserved, lightness deepened).
+2. New `TripleBlends` map: 20 curated entries (all C(6,3) combos) computed as
+   the order-independent HSL centroid + 4.5:1 lightness steering.
+3. `mixedDeckAccent`: pairs→PairBlends, triples→TripleBlends (fallback
+   hslCentroid), 4+→hslCentroid — no more sequential reduce.
+4. New runtime `hslCentroid` (circular hue mean via atan2 of cos/sin sums,
+   mean sat +0.05 boost) → `steerLightness` (32-iter binary search for
+   brightest shade at 4.5:1 contrast) → `contrastVsWhite`/`toLinear`
+   (WCAG relative luminance, `kotlin.math.pow`).
+5. KDoc updated; every blend now clears 4.5:1 vs white.
 
 ### Validation
-- Braces: SaveCaptureScreen 66/66, GalleryWallFormat 117/117, CurioColors 15/15
-- Zero remaining `toArgb`/`hue`/`saturation`/`lightness` (code) and
-  zero `RectangleShape` refs
-- Code review: clean verdict, no blocking issues
+- Braces 21/21; 35 blend entries (15 + 20); zero stale reduce; spot-checked
+  values match the analysis script; code review clean (one KDoc nit fixed).
 
 ### Prior work (this session)
-- Mood board pin-to-front + clear board — committed `f128ddfd`
-- Edit mood board reuses saved entry-id watermark seed — committed `c6262518`
-- Category pickers tap/long-press multi-select — committed `395f0abf`
-- Premium mixed-deck colors — committed `01414c20`
+- CI compile fixes (smart cast, RectangleShape, version-proof colors) —
+  committed `5d52312d`
+- Mood board pin-to-front + clear board — `f128ddfd`
+- Edit mood board reuses saved entry-id watermark seed — `c6262518`
+- Category pickers tap/long-press multi-select — `395f0abf`
+- Premium mixed-deck colors (original) — `01414c20`

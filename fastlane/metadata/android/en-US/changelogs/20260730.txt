@@ -1,2 +1,3 @@
 • Mood board: drag a tile to the top zone to pin it to the front
 • Clear board action in the expanded mood board editor
+• Richer mixed-deck colors: verified premium blends for every pair and triple of categories, plus order-independent blends for bigger mixes

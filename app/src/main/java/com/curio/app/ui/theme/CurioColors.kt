@@ -3,6 +3,7 @@ package com.curio.app.ui.theme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import kotlin.math.pow
 
 /**
  * Curio's color palette.
@@ -131,12 +132,15 @@ object CurioGradients {
  *    the selected colors (Spotify/duotone-style), or the standard theme-aware
  *    single-accent gradient when only one distinct category is active.
  *
- * The two-accent blends below were hand-curated from the researched category
- * palette — computed as HSL midpoints along the SHORTEST hue path with a
- * saturation boost (naive RGB/RGB-lerp midpoints pass through muddy gray,
- * and teal↔amber / sky↔amber cross the olive-green dead zone, so those are
- * deliberately steered to a richer jade/teal instead). Three+ accents fall
- * back to sequential HSL blending through [hslBlend].
+ * Every pair and triple blend below was verified against a canonical HSL
+ * computation: pairs are shortest-hue-path midpoints with a saturation boost
+ * (naive RGB/RGB-lerp midpoints pass through muddy gray, and teal↔amber /
+ * sky↔amber cross the olive-green dead zone, so those are deliberately
+ * steered to a richer jade/teal instead); triples are the order-independent
+ * HSL centroid of the three accents. Every blend clears WCAG AA (4.5:1)
+ * against white — any that fell short were deepened to the brightest shade
+ * that still clears it, keeping mixes vivid with crisp white labels. Four+
+ * accents use the runtime [hslCentroid] with the same 4.5:1 steering.
  */
 object CurioMixedDeck {
 
@@ -147,27 +151,55 @@ object CurioMixedDeck {
         setOf(CurioColors.CategoryIndigo, CurioColors.CategoryAmber) to Color(0xFFA926B5),
         setOf(CurioColors.CategoryIndigo, CurioColors.CategoryTeal)  to Color(0xFF1F62A8),
         setOf(CurioColors.CategoryIndigo, CurioColors.CategorySky)   to Color(0xFF1649C4),
-        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryCoral) to Color(0xFFC44AD2),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryCoral) to Color(0xFFBE39CE),
         // Rose family mixes — ember, violet, blush
         setOf(CurioColors.CategoryRose,   CurioColors.CategoryAmber) to Color(0xFFBF1E14),
         setOf(CurioColors.CategoryRose,   CurioColors.CategoryTeal)  to Color(0xFF4A12A8),
         setOf(CurioColors.CategoryRose,   CurioColors.CategorySky)   to Color(0xFF6D0BB8),
-        setOf(CurioColors.CategoryRose,   CurioColors.CategoryCoral) to Color(0xFFF02D59),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryCoral) to Color(0xFFEA1142),
         // Amber mixes — ember, jade (steered off the olive dead zone), flame
-        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryTeal)  to Color(0xFF158A5C),
-        setOf(CurioColors.CategoryAmber,  CurioColors.CategorySky)   to Color(0xFF0C8B8A),
-        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryCoral) to Color(0xFFF03F22),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryTeal)  to Color(0xFF15875A),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategorySky)   to Color(0xFF0B8484),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryCoral) to Color(0xFFE32D0F),
         // Teal / Sky / Coral family mixes
         setOf(CurioColors.CategoryTeal,   CurioColors.CategorySky)   to Color(0xFF067E94),
         setOf(CurioColors.CategoryTeal,   CurioColors.CategoryCoral) to Color(0xFF6C18F5),
         setOf(CurioColors.CategorySky,    CurioColors.CategoryCoral) to Color(0xFF9E1BFF)
     )
 
+    /** Curated premium blends for every triple of the six researched accents. */
+    private val TripleBlends: Map<Set<Color>, Color> = mapOf(
+        // Indigo-anchored triples — magenta-rose, periwinkle, azure
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryRose,  CurioColors.CategoryAmber) to Color(0xFFE41772),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryRose,  CurioColors.CategoryTeal)  to Color(0xFF7262EB),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryRose,  CurioColors.CategorySky)   to Color(0xFF815AF1),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryRose,  CurioColors.CategoryCoral) to Color(0xFFDD129E),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryAmber, CurioColors.CategoryTeal)  to Color(0xFF2572E7),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryAmber, CurioColors.CategorySky)   to Color(0xFF6563F4),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryAmber, CurioColors.CategoryCoral) to Color(0xFFE70F66),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryTeal,  CurioColors.CategorySky)   to Color(0xFF1479CB),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategoryTeal,  CurioColors.CategoryCoral) to Color(0xFF6F61F1),
+        setOf(CurioColors.CategoryIndigo, CurioColors.CategorySky,   CurioColors.CategoryCoral) to Color(0xFF8158F6),
+        // Rose-anchored triples — burnt orange, crimson, magenta
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryAmber, CurioColors.CategoryTeal)  to Color(0xFFD4450D),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryAmber, CurioColors.CategorySky)   to Color(0xFFEC0630),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryAmber, CurioColors.CategoryCoral) to Color(0xFFEE0505),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryTeal,  CurioColors.CategorySky)   to Color(0xFF0B76DC),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategoryTeal,  CurioColors.CategoryCoral) to Color(0xFFE90A57),
+        setOf(CurioColors.CategoryRose,   CurioColors.CategorySky,   CurioColors.CategoryCoral) to Color(0xFFE20291),
+        // Amber / Teal / Sky triples — jade, ember, azure (steered off olive)
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryTeal,  CurioColors.CategorySky)   to Color(0xFF058673),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategoryTeal,  CurioColors.CategoryCoral) to Color(0xFFCF4B06),
+        setOf(CurioColors.CategoryAmber,  CurioColors.CategorySky,   CurioColors.CategoryCoral) to Color(0xFFEE001A),
+        setOf(CurioColors.CategoryTeal,   CurioColors.CategorySky,   CurioColors.CategoryCoral) to Color(0xFF0478D3)
+    )
+
     /**
      * The single blend color a mixed deck wears on peeks, the spin button and
-     * confetti. A single distinct accent returns itself unchanged; pairs use
-     * the curated table; three+ chain-blend in HSL (shortest hue path, boosted
-     * saturation) so the result stays vivid rather than muddy.
+     * confetti. A single distinct accent returns itself unchanged; pairs and
+     * triples use the curated tables; four+ use the order-independent
+     * [hslCentroid] (circular hue mean), so every mix stays vivid, white-label
+     * safe, and never depends on selection order.
      */
     fun mixedDeckAccent(accents: List<Color>): Color {
         // Color is a value class — value-based equality means distinct() alone
@@ -177,7 +209,8 @@ object CurioMixedDeck {
             0 -> CurioColors.CategoryCoral
             1 -> distinct.first()
             2 -> PairBlends[distinct.toSet()] ?: hslBlend(distinct[0], distinct[1])
-            else -> distinct.reduce { acc, c -> hslBlend(acc, c) }
+            3 -> TripleBlends[distinct.toSet()] ?: hslCentroid(distinct)
+            else -> hslCentroid(distinct)
         }
     }
 
@@ -221,6 +254,48 @@ object CurioMixedDeck {
         val light = (ha.l + hb.l) / 2f
         return fromHsl(hue, sat, light)
     }
+
+    /**
+     * Order-independent blend for 4+ accents (and the fallback for any
+     * unmapped pair/triple): circular mean of the hues, mean saturation with
+     * a small boost, then lightness steered to the brightest shade that still
+     * clears WCAG AA (4.5:1) against white — matching the curated tables.
+     */
+    private fun hslCentroid(colors: List<Color>): Color {
+        val hs = colors.map { toHsl(it) }
+        val n = hs.size.toFloat()
+        var sx = 0f
+        var sy = 0f
+        for (h in hs) {
+            val rad = h.h * (kotlin.math.PI.toFloat() / 180f)
+            sx += kotlin.math.cos(rad)
+            sy += kotlin.math.sin(rad)
+        }
+        val hue = (kotlin.math.atan2(sy, sx) * (180f / kotlin.math.PI.toFloat()) + 360f) % 360f
+        val sat = (hs.sumOf { it.s.toDouble() }.toFloat() / n + 0.05f).coerceIn(0f, 1f)
+        return steerLightness(hue, sat, 4.5f)
+    }
+
+    /** Brightest shade of (hue, sat) that still clears [target] contrast vs white. */
+    private fun steerLightness(hue: Float, sat: Float, target: Float): Color {
+        var lo = 0f
+        var hi = 1f
+        repeat(32) {
+            val mid = (lo + hi) / 2f
+            if (contrastVsWhite(fromHsl(hue, sat, mid)) >= target) lo = mid else hi = mid
+        }
+        return fromHsl(hue, sat, lo)
+    }
+
+    /** WCAG contrast ratio of [color] against white. */
+    private fun contrastVsWhite(color: Color): Float {
+        val l = 0.2126f * toLinear(color.red) + 0.7152f * toLinear(color.green) + 0.0722f * toLinear(color.blue)
+        return 1.05f / (l + 0.05f)
+    }
+
+    /** sRGB channel → linear light (WCAG relative luminance). */
+    private fun toLinear(c: Float): Float =
+        if (c <= 0.03928f) c / 12.92f else ((c + 0.055f) / 1.055f).pow(2.4f)
 
     /** HSL components of a color, computed from its RGBA channels. */
     private data class Hsl(val h: Float, val s: Float, val l: Float)
