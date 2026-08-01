@@ -1,9 +1,11 @@
 package com.curio.app.ui.theme
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.unit.dp
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryFamily
 import com.curio.app.data.CurioCategory
@@ -81,6 +83,26 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
     } else {
         lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
     }
+}
+
+/**
+ * Theme-aware border for CARDS and BUTTONS that wear a tinted surface on a
+ * tinted page background.
+ *
+ * Tinted surfaces ([categorySurface], `category.tint`, etc.) sit on a
+ * category-washed page, so without a rule they can visually melt into the
+ * background. This returns a slim theme-aware edge — deep accent in light
+ * mode, light twin in dark (same resolution as [categoryInk]) — at a low
+ * alpha so the card/button reads as a distinct surface without a hard line.
+ *
+ * Honors the Settings tint toggle: when it's off, [fallback] is returned
+ * (null by default = no border), so plain-theme pages keep their exact
+ * pre-tint look.
+ */
+@Composable
+fun CurioCategory.categoryBorder(fallback: BorderStroke? = null): BorderStroke? {
+    if (!AppPreferences.tintWashEnabledState) return fallback
+    return BorderStroke(1.dp, categoryInk().copy(alpha = 0.30f))
 }
 
 /** Per-family dark-mode wash tuning (mid-tone pull + blend fraction). */

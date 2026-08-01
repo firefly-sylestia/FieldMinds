@@ -46,6 +46,7 @@ import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryBackgroundWash
+import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 
@@ -120,7 +121,8 @@ fun CabinetScreen(navController: NavController) {
             Surface(
                 onClick = { /* TODO Phase 4: expand search bar */ },
                 shape = RoundedCornerShape(50),
-                color = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant)
+                color = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
+                border = filterCat.categoryBorder()
             ) {
                 CurioIcon(
                     name = CurioIcons.Search,
@@ -145,6 +147,7 @@ fun CabinetScreen(navController: NavController) {
                     tint = MaterialTheme.colorScheme.primaryContainer,
                     ink = MaterialTheme.colorScheme.onPrimaryContainer,
                     chipSurface = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+                    chipBorder = filterCat.categoryBorder(),
                     selected = selectedFilter == null,
                     onClick = { selectedFilter = null }
                 )
@@ -156,6 +159,7 @@ fun CabinetScreen(navController: NavController) {
                     tint = cat.tint,
                     ink = cat.categoryInk(),
                     chipSurface = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+                    chipBorder = filterCat.categoryBorder(),
                     selected = selectedFilter == cat.id,
                     onClick = { selectedFilter = cat.id }
                 )
@@ -226,13 +230,15 @@ private fun FilterChipLite(
     tint: Color,
     ink: Color,
     chipSurface: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+    chipBorder: BorderStroke? = null,
     selected: Boolean,
     onClick: () -> Unit
 ) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
-        color = if (selected) tint else chipSurface
+        color = if (selected) tint else chipSurface,
+        border = if (selected) null else chipBorder
     ) {
         Text(
             text = label,

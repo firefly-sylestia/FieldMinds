@@ -104,6 +104,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryBackgroundWash
+import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import coil.compose.rememberAsyncImagePainter
@@ -189,7 +190,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     Surface(
                         onClick = { menuExpanded = true },
                         shape = RoundedCornerShape(50),
-                        color = cat.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.92f)
+                        color = cat.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.92f),
+                        border = cat.categoryBorder()
                     ) {
                         CurioIcon(
                             name = CurioIcons.MoreVert,
@@ -393,6 +395,7 @@ private fun PortfolioRender(entry: CurioEntry, category: CurioCategory, navContr
                     shape = RoundedCornerShape(50),
                     color = if (selected) category.accent
                             else category.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
+                    border = if (selected) null else category.categoryBorder(),
                     modifier = Modifier.padding(vertical = 2.dp)
                 ) {
                     Row(
@@ -501,7 +504,8 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     audioFilePath = data.audioFilePath,
                     accent = category.accent,
                     tint = category.tint,
-                    surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                    border = category.categoryBorder()
                 )
             }
         }
@@ -520,7 +524,8 @@ private fun AudioPlayerBar(
     audioFilePath: String,
     accent: Color,
     tint: Color,
-    surface: Color
+    surface: Color,
+    border: BorderStroke?
 ) {
     val context = LocalContext.current
     // v5.8 — saveable so rotation keeps the playback position + playing
@@ -607,6 +612,7 @@ private fun AudioPlayerBar(
     Surface(
         shape = RoundedCornerShape(50),
         color = surface,
+        border = border,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -870,6 +876,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                 shape = RoundedCornerShape(20.dp),
                 color = category.categorySurface(MaterialTheme.colorScheme.surface),
                 shadowElevation = 0.dp,
+                border = category.categoryBorder(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -974,6 +981,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         onClick = { navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true } },
                         shape = RoundedCornerShape(50),
                         color = category.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.9f),
+                        border = category.categoryBorder(),
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -996,6 +1004,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         onClick = { boardExpanded = true },
                         shape = RoundedCornerShape(50),
                         color = category.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.9f),
+                        border = category.categoryBorder(),
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.TopEnd)

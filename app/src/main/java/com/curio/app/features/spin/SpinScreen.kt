@@ -99,6 +99,7 @@ import com.curio.app.ui.theme.CurioMixedDeck
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBackgroundWash
+import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import kotlinx.coroutines.delay
@@ -961,6 +962,9 @@ private fun FilterSheet(
                                 selected = st in draftSubtypes,
                                 accent = cat.accent,
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftSubtypes = if (st in draftSubtypes) draftSubtypes - st else draftSubtypes + st
                                 }
@@ -980,6 +984,9 @@ private fun FilterSheet(
                                 selected = tag in draftFilters,
                                 accent = cat.accent,
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftFilters = if (tag in draftFilters) draftFilters - tag else draftFilters + tag
                                 }
@@ -996,6 +1003,9 @@ private fun FilterSheet(
                                 selected = era in draftFilters,
                                 accent = cat.accent,
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftFilters = if (era in draftFilters) draftFilters - era else draftFilters + era
                                 }
@@ -1012,6 +1022,9 @@ private fun FilterSheet(
                                 selected = origin in draftFilters,
                                 accent = cat.accent,
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftFilters = if (origin in draftFilters) draftFilters - origin else draftFilters + origin
                                 }
@@ -1104,6 +1117,7 @@ private fun CompactChip(
     selected: Boolean,
     accent: Color,
     chipSurface: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    chipBorder: BorderStroke? = null,
     onClick: () -> Unit
 ) {
     // Plain Surface + clickable (no M3 minimum touch-target inflation) keeps
@@ -1111,7 +1125,7 @@ private fun CompactChip(
     Surface(
         shape = RoundedCornerShape(50),
         color = if (selected) accent else chipSurface,
-        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        border = if (selected) null else chipBorder,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(50))
@@ -1209,6 +1223,7 @@ private fun EmptyPoolHint(cat: CurioCategory) {
             shape = RoundedCornerShape(28.dp),
             color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
             shadowElevation = 0.dp,
+            border = cat.categoryBorder(),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
@@ -1864,6 +1879,7 @@ private fun DeckControlButton(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
         color = if (selected) cat.accent else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = if (selected) null else cat.categoryBorder(),
         shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {

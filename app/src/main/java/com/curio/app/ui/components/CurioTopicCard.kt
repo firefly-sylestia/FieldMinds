@@ -38,6 +38,7 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categorySurface
 
 /**
@@ -78,6 +79,7 @@ fun CurioEntryCard(
         modifier = modifier.scale(pressScale),
         shape = RoundedCornerShape(20.dp),
         color = cat.categorySurface(MaterialTheme.colorScheme.surface),
+        border = cat.categoryBorder(),
         shadowElevation = 0.dp,
         tonalElevation = 1.dp
     ) {

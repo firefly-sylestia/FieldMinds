@@ -59,6 +59,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBackgroundWash
+import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 
@@ -416,6 +417,7 @@ private fun TeaserCard(
         shape = RoundedCornerShape(24.dp),
         color = cat.categorySurface(MaterialTheme.colorScheme.surface),
         shadowElevation = 0.dp,
+        border = cat.categoryBorder(),
         modifier = modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
@@ -462,6 +464,7 @@ private fun ActionPromptCard(
         shape = RoundedCornerShape(24.dp),
         color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
         shadowElevation = 0.dp,
+        border = cat.categoryBorder(),
         modifier = modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(18.dp)) {

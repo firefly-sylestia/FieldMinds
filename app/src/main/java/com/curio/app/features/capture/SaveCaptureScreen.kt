@@ -80,6 +80,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBackgroundWash
+import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import kotlinx.coroutines.delay
@@ -274,6 +275,7 @@ fun SaveCaptureScreen(
         Surface(
             color = stripColor,
             shape = RoundedCornerShape(20.dp),
+            border = cat.categoryBorder(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -607,10 +609,11 @@ private fun FormatBodyForCategory(
                         shape = RoundedCornerShape(50),
                         color = if (active.format == fmt) category.tint
                                 else category.categorySurface(MaterialTheme.colorScheme.surface),
-                        border = BorderStroke(
+                        border = if (active.format == fmt) BorderStroke(
                             1.dp,
-                            if (active.format == fmt) category.accent.copy(alpha = 0.5f)
-                            else MaterialTheme.colorScheme.outline
+                            category.accent.copy(alpha = 0.5f)
+                        ) else category.categoryBorder(
+                            fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                         ),
                         modifier = Modifier.padding(vertical = 2.dp)
                     ) {
@@ -653,6 +656,7 @@ private fun FormatBodyForCategory(
                     shape = RoundedCornerShape(50),
                     color = if (i == activeIndex) category.accent
                             else category.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
+                    border = if (i == activeIndex) null else category.categoryBorder(),
                     modifier = Modifier.padding(vertical = 2.dp)
                 ) {
                     Row(
