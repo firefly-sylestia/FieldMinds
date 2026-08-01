@@ -50,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -499,10 +500,11 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 /**
- * Compact ExoPlayer-based audio playback bar with real waveform + play/pause.
- * The waveform is extracted from the audio file using [WaveformExtractor]
- * and rendered as vertical amplitude bars. Played region shows in [accent],
- * unplayed in [tint]. Tap or drag on the waveform to seek.
+ * Single-capsule ExoPlayer audio bar — ONE play/pause button with a real
+ * waveform flowing past it, styled to mirror the recording visualizer's
+ * capsule bars. The waveform is extracted from the audio file using
+ * [WaveformExtractor]; played bars show in [accent], unplayed in [tint].
+ * Tap or drag on the bars to seek.
  */
 @Composable
 private fun AudioPlayerBar(
@@ -588,51 +590,59 @@ private fun AudioPlayerBar(
         }
     }
 
-    // ── Waveform + play/pause ───────────────────────────────────────────
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        WaveformCanvas(
-            samples = waveformSamples,
-            progress = sliderPosition,
-            accent = accent,
-            tint = tint,
-            onSeek = { fraction ->
-                sliderPosition = fraction.coerceIn(0f, 1f)
-                val seekMs = (fraction * duration).toLong()
-                player.seekTo(seekMs)
-                currentPosition = seekMs
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .clip(RoundedCornerShape(12.dp))
-        )
-
+    // ── Single-capsule player — one button, capsule bars ───────────────
+    // Mirrors the recording visualizer (rounded capsule bars): the ONE
+    // play/pause button sits inside the capsule with the waveform flowing
+    // past it, so playback reads like the live meter seen while recording.
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            // ── The one button ─────────────────────────────────────────
+            Surface(
+                onClick = {
+                    if (isPlaying) player.pause() else player.play()
+                },
+                shape = RoundedCornerShape(50),
+                color = accent,
+                shadowElevation = 0.dp,
+                modifier = Modifier.size(44.dp)
             ) {
-                Surface(
-                    onClick = {
-                        if (isPlaying) player.pause() else player.play()
-                    },
-                    shape = RoundedCornerShape(50),
-                    color = accent
-                ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     CurioIcon(
                         name = if (isPlaying) CurioIcons.Pause else CurioIcons.PlayArrow,
                         contentDescription = if (isPlaying) "Pause" else "Play",
                         tint = Color.White,
-                        size = 28.dp,
-                        modifier = Modifier.padding(6.dp)
+                        size = 24.dp
                     )
                 }
             }
 
+            // ── Capsule-bar visualizer (tap/drag to seek) ─────────────
+            WaveformCanvas(
+                samples = waveformSamples,
+                progress = sliderPosition,
+                accent = accent,
+                tint = tint,
+                onSeek = { fraction ->
+                    sliderPosition = fraction.coerceIn(0f, 1f)
+                    val seekMs = (fraction * duration).toLong()
+                    player.seekTo(seekMs)
+                    currentPosition = seekMs
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(34.dp)
+                    .clip(RoundedCornerShape(17.dp))
+            )
+
+            // ── Elapsed / total ────────────────────────────────────────
             Text(
                 text = "${formatMs(currentPosition)} / ${formatMs(duration)}",
                 style = MaterialTheme.typography.labelSmall,
@@ -643,7 +653,10 @@ private fun AudioPlayerBar(
 }
 
 /**
- * Renders waveform amplitude bars with a progress overlay and seek support.
+ * Renders waveform capsule bars with progress coloring + seek support.
+ *
+ * Same bar language as the recording [LiveWaveform] (rounded capsule bars,
+ * no indicator line — the accent/tint split IS the progress readout).
  *
  * @param samples  Normalized amplitude values (0.0–1.0) from [WaveformExtractor].
  * @param progress Playback progress fraction (0.0–1.0).
@@ -692,29 +705,22 @@ private fun WaveformCanvas(
         val barWidth = ((size.width - totalGap) / barCount).coerceAtLeast(1f)
         val playedIndex = (progress * barCount).toInt().coerceIn(0, barCount)
 
-        // Draw each bar
+        // Capsule bars — played in accent, unplayed in tint. Matches the
+        // recording LiveWaveform so saved voice notes look like the meter
+        // the user recorded into.
         for (i in 0 until barCount) {
-            val barHeight = samples[i] * size.height * 0.9f
+            val barHeight = samples[i] * size.height * 0.92f
             val x = i * (barWidth + gap)
             val y = (size.height - barHeight) / 2f
             val color = if (i <= playedIndex) accent else tint
 
             drawRoundRect(
-                color = color.copy(alpha = if (i <= playedIndex) 0.9f else 0.45f),
+                color = color.copy(alpha = if (i <= playedIndex) 0.95f else 0.5f),
                 topLeft = Offset(x, y),
                 size = Size(barWidth, barHeight.coerceAtLeast(2.dp.toPx())),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(barWidth / 3f)
+                cornerRadius = CornerRadius(barWidth / 2f)
             )
         }
-
-        // Position indicator line
-        val indicatorX = progress * size.width
-        drawLine(
-            color = accent,
-            start = Offset(indicatorX, 0f),
-            end = Offset(indicatorX, size.height),
-            strokeWidth = 2.dp.toPx()
-        )
     }
 }
 private fun formatMs(ms: Long): String {

@@ -138,6 +138,22 @@ fun SoundBiteFormat(
         }
     }
 
+    // ── Real-time mic level (0..1) while recording — drives the live
+    //    visualizer with ACTUAL input (AudioRecorder.maxAmplitude), not a
+    //    fake sine, so the bars dance with the voice. Decays to 0 when idle.
+    var micLevel by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(recordingState) {
+        if (recordingState == AudioRecorder.State.RECORDING ||
+            recordingState == AudioRecorder.State.PAUSED
+        ) {
+            while (recordingState == AudioRecorder.State.RECORDING) {
+                micLevel = (recorder.maxAmplitude / 32767f).coerceIn(0f, 1f)
+                delay(70)
+            }
+            micLevel = 0f
+        }
+    }
+
     // ── Extract waveform when entering STOPPED with a valid file ─────────
     val waveformSamples by produceState<FloatArray>(
         initialValue = FloatArray(120),
@@ -236,6 +252,7 @@ fun SoundBiteFormat(
                 tint = tint,
                 isPaused = recordingState == AudioRecorder.State.PAUSED,
                 seconds = recordingSeconds,
+                level = micLevel,
                 onPauseResume = {
                     if (recordingState == AudioRecorder.State.RECORDING) {
                         recorder.pause()
@@ -498,6 +515,7 @@ private fun LiveControls(
     tint: Color,
     isPaused: Boolean,
     seconds: Int,
+    level: Float,
     onPauseResume: () -> Unit,
     onStop: () -> Unit,
     onDiscard: () -> Unit
@@ -536,10 +554,11 @@ private fun LiveControls(
             }
         }
 
-        // Live waveform
+        // Live waveform — real mic amplitude (level 0..1) drives the bars.
         LiveWaveform(
             color = accent,
             active = !isPaused,
+            level = level,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
