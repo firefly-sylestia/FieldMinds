@@ -1630,8 +1630,9 @@ private fun SpinButton(
             onClick = onClick,
             enabled = enabled,
             shape = CircleShape,
-            // Opaque paper button with a strong ink edge and elevation.
-            color = if (landedTopic != null) MaterialTheme.colorScheme.surfaceContainerHigh else tint,
+            // v6.2 — the dice button keeps its filled category color in EVERY
+            // state (idle + landed "Tap to open"), so the CTA never goes grey.
+            color = tint,
             shadowElevation = 0.dp,
             modifier = Modifier
                 .size(buttonSize)
@@ -1643,13 +1644,13 @@ private fun SpinButton(
                 contentAlignment = Alignment.Center
             ) {
                 // v5.10 — the dice shows in EVERY state: tumbling while
-                // shuffling, a steady accent dice for "Spin again".
+                // shuffling, a steady white dice on the filled accent.
                 if (isShuffling) {
                     ShuffleGlyph(tint = Color.White, modifier = Modifier.size(68.dp))
                 } else {
                     CurioIcon(
                         CurioIcons.Casino, null,
-                        tint = if (landedTopic != null) tint else Color.White,
+                        tint = Color.White,
                         size = if (landedTopic != null) 48.dp else 56.dp
                     )
                 }
@@ -1781,11 +1782,13 @@ private fun BottomCta(
 ) {
     val hasFilters = filterActiveCount > 0
 
-    // Anchored paper tray: opaque, elevated.  No dividing rule — the
-    // surface elevation alone separates it from the content above.
+    // Anchored paper tray. v6.2 — it wears the SAME category-tint wash as
+    // the page background (theme background blended with 20% of the deck
+    // accent), so the tray blends with the Spin page instead of reading as
+    // a separate odd-colored bar.
     Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 3.dp,
+        color = lerp(MaterialTheme.colorScheme.background, cat.accent, 0.20f),
+        tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(

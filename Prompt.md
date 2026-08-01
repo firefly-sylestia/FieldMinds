@@ -1,6 +1,24 @@
 # Prompt.md — Request Log
 
-## Current Request: Mood board image drag still janky when editing an entry
+## Current Request: Spin page — bottom bar tint wash + dice always filled
+
+**User request (verbatim):** "i like the color in background in spin page and caan u also make the buttom bar have that color too otherwise it looks odd and make the diec button always have color the first dice which have filled color make the 2nd state when it says tap to open make that dice also the same color"
+
+## Changes
+`features/spin/SpinScreen.kt`:
+1. **BottomCta** — surface color changed from `MaterialTheme.colorScheme.surfaceContainerLow` (tonalElevation 3dp) to `lerp(MaterialTheme.colorScheme.background, cat.accent, 0.20f)` (tonalElevation 0dp), so the bottom tray wears the SAME category-tint wash as the page background instead of reading as a separate odd-colored bar. Matches the root Box wash exactly in light AND dark mode.
+2. **SpinButton** — surface color now always `tint` (was neutral `surfaceContainerHigh` when landed), and the Casino dice icon tint now always `Color.White` (was accent-tinted when landed). The dice button stays filled with the category color in BOTH states (idle "Press Shuffle" and landed "Tap to open"), with a white dice on top.
+
+## Validation
+- code-reviewer-deepseek-flash: clean — `lerp` import present, `cat` in scope in BottomCta, composite exactly reproduces the root wash, `landedTopic` still used (button/dice sizing), no dead params/imports. Minor non-blocking note: Wildcard coral (light pink) has lower white-dice contrast, but that was already the idle-state design the user asked to replicate.
+- No local gradle per AGENTS.md — CI on push is the compile gate.
+
+## Status
+DONE — committed & pushed.
+
+---
+
+## Previous Request: Mood board image drag janky when editing an entry
 
 **User request (verbatim):** "the mood board drag is still buggy and jittery i meant when editing ir entry the image drag is so janky"
 
