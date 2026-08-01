@@ -1,18 +1,20 @@
-# Request: Settings option to turn off the category tint
+# Request: Dark-mode tint contrast — red/pink/blue look white-washed
 
 ## Request
-Add an option in Settings to turn off the category tint and use the plain theme background (the cream/midnight "something else" colors from before the wash rollout) instead of the tinted wash.
+In dark mode the tint for red (Movies/Rose), pink (Wildcard/Coral) and blue (Science/Sky) still looks white-washed — increase the contrast a little.
+
+## Root cause
+The dark-mode wash builds a mid-tone as `lerp(accent, lightAccent, 0.5f)` then blends at 15% over midnight. For those three families the midpoint lands too pale — worst for Coral, whose accent `#FF8FA3` is already a pastel pink — so the hue flattens to grey-white.
 
 ## Changes
-1. `AppPreferences.kt` — added `KEY_TINT_WASH_ENABLED`; reactive `tintWashEnabledState` (private set, default true) seeded in `initThemeMode`; `isTintWashEnabled`/`setTintWashEnabled` (default on). Matches the themeModeState/reminderEnabledState pattern; backup restore re-seeds it via initThemeMode.
-2. `CategoryInk.kt` — `categoryBackgroundWash()` returns `MaterialTheme.colorScheme.background` early when the toggle is off. Single choke point gates Spin (root + BottomCta), Topic Reveal, Save/Capture (root + tray), Cabinet, Picker, EntryDetail (root + expanded wash) automatically.
-3. `SaveCaptureScreen.kt` — Save button: containerColor `if (tintWash) cat.tint else cat.accent`, content/spinner/check `if (tintWash) cat.categoryInk() else Color.White`. Follow-up: `tintWash` moved up to one shared declaration; the topic-reminder strip (Surface color, icon chip, inks) now falls back to `surfaceContainerHigh` + theme neutrals when the toggle is off, and the CTA top gradient edge falls back to a neutral outline gradient.
-4. `GalleryWallFormat.kt` — mood board canvas Surface: `if (tintWashEnabledState) tint else Color.Transparent` (pre-tint state).
-5. `EntryDetailScreen.kt` — saved board Surface: `if (tintWashEnabledState) category.tint else surfaceContainerHigh` (pre-tint state).
-6. `SettingsScreen.kt` — Appearance card gained a "Category tint" row (Palette icon + reactive subtitle + Switch) with a CurioSettingsDivider above it, matching card conventions.
+`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`:
+- Added `private class DarkWashTuning(midToneFactor: Float, blendFraction: Float)` with `DEFAULT_DARK_WASH = (0.5f, 0.15f)` (byte-identical to the previous hardcoded behavior).
+- Added `DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning>` — MOVIES (Rose, red) `(0.35, 0.18)`, SCIENCE (Sky, blue) `(0.35, 0.18)`, WILDCARD (Coral, pink) `(0.35, 0.20)` — pulls the mid-tone closer to the deep accent and blends stronger so the hue survives over midnight.
+- `categoryBackgroundWash()` dark branch now looks up `DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH`; light branch and the tint-wash settings toggle untouched. All other families (Indigo/Amber/Teal) keep the exact previous look.
+- Added `import com.curio.app.data.CategoryFamily` (alphabetical). KDoc for the function kept attached directly above it; tuning declarations live below.
 
 ## Validation
-- Code reviewer passed (2 passes): reactive mutableStateOf read valid in composition, fallbacks match original pre-tint colors, no dead imports, restore re-seeds state, single `tintWash` declaration in scope with no shadowing, all fallback colors are colorScheme members (no new imports). Non-blocking note: the dark-mode neutral gradient edge is subtle — acceptable for a 1dp divider.
+- Code reviewer passed (2 passes): import order, `family` public on CurioCategory, `lerp(Color, Color, Float)` signature, map covers exactly the three flagged families with fallback preserving old behavior for the rest, no dead code, doc attachment fixed after first review flagged it.
 
 ## Completion summary
-- Committed & pushed (daa9e22e + follow-up).
+- Committed & pushed.

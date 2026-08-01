@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import com.curio.app.data.AppPreferences
+import com.curio.app.data.CategoryFamily
 import com.curio.app.data.CurioCategory
 
 /**
@@ -34,9 +35,15 @@ fun CurioCategory.categoryInk(): Color =
  * Dark mode: the deep Tailwind-700 accent alone at 20% reads muddy (amber
  * goes brown, teal goes grey-green), while its light 300-level twin at any
  * useful fraction reads WHITE-WASHED over the midnight surface. So this
- * builds a saturated mid-tone — the accent lerped halfway toward its light
- * twin (≈ the 500-level shade) — and washes it at a moderate 15%. The page
- * keeps the category's hue with real color, never a washed-out grey-white.
+ * builds a saturated mid-tone — the accent lerped partway toward its light
+ * twin (≈ the 500-level shade) — and washes it at a moderate fraction. The
+ * page keeps the category's hue with real color, never a washed-out grey-white.
+ *
+ * A few families need extra contrast: at the default 50% midpoint, rose
+ * (movies), sky (science) and especially coral (wildcard — its accent is
+ * already a pastel pink) read too pale/white-washed. Those pull the
+ * mid-tone closer to the deep accent and blend a touch stronger, so the
+ * hue survives over midnight instead of flattening to grey-white.
  */
 @Composable
 fun CurioCategory.categoryBackgroundWash(): Color {
@@ -46,9 +53,25 @@ fun CurioCategory.categoryBackgroundWash(): Color {
     // as they did before the wash rollout.
     if (!AppPreferences.tintWashEnabledState) return background
     return if (isCurioDarkTheme()) {
-        val midTone = lerp(accent, lightAccent, 0.5f)
-        lerp(background, midTone, 0.15f)
+        val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
+        val midTone = lerp(accent, lightAccent, tuning.midToneFactor)
+        lerp(background, midTone, tuning.blendFraction)
     } else {
         lerp(background, lerp(accent, Color.White, 0.30f), 0.14f)
     }
 }
+
+/** Per-family dark-mode wash tuning (mid-tone pull + blend fraction). */
+private class DarkWashTuning(val midToneFactor: Float, val blendFraction: Float)
+
+private val DEFAULT_DARK_WASH = DarkWashTuning(0.5f, 0.15f)
+
+private val DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning> = mapOf(
+    // Rose (movies) + Sky (science) lean too pale at the 50% midpoint —
+    // pull toward the deep accent and blend a bit stronger.
+    CategoryFamily.MOVIES  to DarkWashTuning(0.35f, 0.18f),
+    CategoryFamily.SCIENCE to DarkWashTuning(0.35f, 0.18f),
+    // Coral (wildcard) is a pastel accent, so the mid-tone is pale at any
+    // factor — contrast has to come from a stronger blend over midnight.
+    CategoryFamily.WILDCARD to DarkWashTuning(0.35f, 0.20f)
+)
