@@ -7,3 +7,4 @@
 • Home tint removed (plain background); Cabinet keeps its chips but drops the page wash
 • Dark mode rose/coral tint deepened to a rich burgundy
 • Removed the now-redundant Home tint toggle from Settings (Home is always plain now)
+• Multi-select category confirm button now says Mix (with count) instead of Done

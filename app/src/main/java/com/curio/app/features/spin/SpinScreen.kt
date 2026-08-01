@@ -222,8 +222,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // a CategoryId, so resolve it through byId(...) to keep BOTH elvis
     // branches CurioCategory (mixing them inferred Any → MutableState<Any>
     // vs the saver's MutableState<CurioCategory> → CI compile failure).
-    // v5.11 — multi-category launch: the category picker's Done can pass a
-    // comma-joined slug list ("artists,albums"). Resolve each part; fall
+    // v5.11 — multi-category launch: the category picker's Mix button can
+    // pass a comma-joined slug list ("artists,albums"). Resolve each part; fall
     // back to the last-used single category when the slug is absent or
     // unresolvable.
     val initialCats = remember(categorySlug) {
@@ -2068,7 +2068,7 @@ private fun CategoryPickerSheet(
 
                     Spacer(Modifier.height(8.dp))
 
-                    // ── Browse all link, or Done row in multi-select ──
+                    // ── Browse all link, or Mix row in multi-select ──
                     if (multiSelectMode) {
                         Row(
                             modifier = Modifier
@@ -2094,7 +2094,7 @@ private fun CategoryPickerSheet(
                             ) {
                                 CurioIcon(CurioIcons.Check, null, size = 18.dp)
                                 Text(
-                                    text = if (selectedSlugs.isEmpty()) "Done" else "Done · ${selectedSlugs.size}",
+                                    text = if (selectedSlugs.isEmpty()) "Mix" else "Mix · ${selectedSlugs.size}",
                                     style = MaterialTheme.typography.labelLarge,
                                     modifier = Modifier.padding(start = 8.dp)
                                 )

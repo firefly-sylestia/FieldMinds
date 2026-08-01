@@ -145,7 +145,7 @@ fun CategoryPickerScreen(navController: NavController) {
         }
 
         if (multiSelectMode) {
-            // ── Done row — only visible in multi-select mode ──────────
+            // ── Mix row — only visible in multi-select mode ────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -177,7 +177,7 @@ fun CategoryPickerScreen(navController: NavController) {
                 ) {
                     CurioIcon(CurioIcons.Check, null, size = 18.dp)
                     Text(
-                        text = if (selectedSlugs.isEmpty()) "Done" else "Done · ${selectedSlugs.size}",
+                        text = if (selectedSlugs.isEmpty()) "Mix" else "Mix · ${selectedSlugs.size}",
                         style = MaterialTheme.typography.labelLarge,
                         modifier = Modifier.padding(start = 8.dp)
                     )
