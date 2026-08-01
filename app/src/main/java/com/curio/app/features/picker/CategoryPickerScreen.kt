@@ -14,12 +14,16 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -33,13 +37,16 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Full-screen Category Picker — compact card grid with a topic count on
- * every tile so as many decks as possible fit on screen at once.
+ * Full-screen Category Picker — multi-select card grid. Tap cards to toggle
+ * their selection (any number), then press Done to launch the Shuffle across
+ * every chosen deck. Cards carry a topic count so as many decks as possible
+ * fit on screen at once.
  */
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
     val categories = remember { CurioCategories.visible }
     val gridState = rememberLazyGridState()
+    var selectedSlugs by rememberSaveable { mutableStateOf(listOf<String>()) }
 
     Column(
         modifier = Modifier
@@ -64,7 +71,7 @@ fun CategoryPickerScreen(navController: NavController) {
         }
 
         Text(
-            text = "Pick a deck for your next Shuffle.",
+            text = "Pick one or more decks, then Done.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 4.dp, bottom = 10.dp)
@@ -82,30 +89,41 @@ fun CategoryPickerScreen(navController: NavController) {
                 items(categories) { cat ->
                     CurioCategoryCard(
                         category = cat,
+                        isSelected = cat.id.routeSlug in selectedSlugs,
                         onClick = {
-                            navController.navigate(
-                                CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                            ) { launchSingleTop = true }
+                            selectedSlugs = if (cat.id.routeSlug in selectedSlugs) {
+                                selectedSlugs - cat.id.routeSlug
+                            } else {
+                                selectedSlugs + cat.id.routeSlug
+                            }
                         }
                     )
                 }
             }
         }
 
-        FilledTonalButton(
-            onClick = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true } },
+        Button(
+            onClick = {
+                if (selectedSlugs.isEmpty()) return@Button
+                val slugs = selectedSlugs
+                navController.navigate(
+                    if (slugs.size == 1) CurioRoutes.spinWithCategory(slugs.first())
+                    else CurioRoutes.spinWithCategories(slugs)
+                ) { launchSingleTop = true }
+            },
+            enabled = selectedSlugs.isNotEmpty(),
             shape = RoundedCornerShape(24.dp),
-            colors = ButtonDefaults.filledTonalButtonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                contentColor = MaterialTheme.colorScheme.onSurface
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            CurioIcon(CurioIcons.Settings, null, size = 18.dp)
+            CurioIcon(CurioIcons.Check, null, size = 18.dp)
             Text(
-                text = "Manage categories",
+                text = if (selectedSlugs.isEmpty()) "Done" else "Done · ${selectedSlugs.size}",
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(start = 8.dp)
             )

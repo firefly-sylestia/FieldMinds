@@ -1,29 +1,24 @@
-# Profile & Settings Screens — Consistency + Unhide Settings
+# Category Picker — Multi-Select + Card Visuals
 
 ## Request
 
-User: "fix the profile and settings screen as they are above as different and the settings are hidden" — i.e. (1) Profile and Settings render inconsistently (different visual language), and (2) the Settings screen is unreachable (hidden — `CurioRoutes.SETTINGS` was registered in the nav host but nothing navigated to it).
+User (design direction): "the category selection page cards make the full cards have a different slight shade and make the watermark inside the cards in category have the color gradient of the main cards and in active state give it a different look and remove manage all categories and make it done and enable multiple cards select function"
 
 ## Analysis
 
-- Profile used rich 28dp `ProfileCard`s (surfaceContainerLow, tonalElevation 3, border) with icon-chip `CardHeader`s and arrow `ProfileSettingRow`s.
-- Settings used flat 14dp `SettingsItem`/`SettingsToggle` rows directly on the background with plain-text `SectionHeader`s — a visibly different language.
-- No entry point to `CurioRoutes.SETTINGS` existed anywhere (Home drawer → PROFILE; Profile had no settings link).
+- `CategoryPickerScreen` previously: single-tap → immediate navigate to `spin/{slug}`; bottom button was "Manage categories" (`FilledTonalButton`).
+- `CurioCategoryCard` (shared with Spin's picker sheet): flat `categoryCardFill` fill, plain white 10%-alpha watermark, selected = faint white border + white circle w/ accent check. Also had a **sticky pressed bug** — `pressed` set true in `onClick` and never reset, so every tapped card stayed at 0.96 scale forever.
+- SpinScreen took a single `categorySlug` (single `CategorySaver`), one-category pool, and revealed via `cat.id.routeSlug`.
 
 ## Plan
 
-- Create shared primitives in `ui/components/CurioSettingsCard.kt`: `CurioSettingsCard` (28dp paper card), `CurioCardHeader` (icon-chip), `CurioSettingsRow` (arrow row), `CurioSettingsInfoRow`, `CurioSettingsDivider`, plus shared top-level `formatHour`.
-- Restyle SettingsScreen to the card language using the shared components, preserving ALL logic (state, lifecycle observer, backup/restore launchers, notification permission, name/quality/restore/status dialogs, reminder LazyRow).
-- ProfileScreen: use the shared components; delete its private `ProfileCard`/`CardHeader`/`ProfileSettingRow`/`ProfileDivider`; add a gear `Surface` button in the top bar → `CurioRoutes.SETTINGS` (unhides Settings).
-- Clean unused imports in both screens; remove duplicate `formatHour` copies in favor of the shared one.
-- Validate braces/refs/imports + code review; commit & push.
+1. **CurioCategoryCard**: full-card theme-aware gradient (inner Box `Brush.verticalGradient(cardGradient)` — clickable `Surface` has no `brush` param), watermark tinted `lerp(cardColor, Color.White, 0.55f)` @ 18% (echoes the main-card gradient), selected state = 2dp white border + scale 1.03 + accent-filled check badge; replace sticky `pressed` with `MutableInteractionSource` + `collectIsPressedAsState()`.
+2. **CategoryPickerScreen**: multi-select toggle (`selectedSlugs` list, saveable), Done button (primary, count label, disabled when empty) replaces Manage categories; navigates `spinWithCategory` (1) or `spinWithCategories` (>1).
+3. **CurioRoutes**: add `spinWithCategories(slugs)` = comma-joined `spin/a,b`.
+4. **SpinScreen**: parse comma-joined slug → `List<CategoryId>` (`CategoryIdListSaver` replaces `CategorySaver`), merged topic pool across selected cats (dedupe by id, defensive `poolIds` fallback if restore empty), reveals route via each topic's **own** `categoryId.routeSlug`; removed unused `Saver` import.
 
 ## Completion Summary
 
-- Shared `CurioSettingsCard.kt` created; both Profile and Settings now render from the exact same card primitives (can never drift).
-- Settings restyled: 7 cards (Profile, Appearance, Recording, Notifications, Categories, Backup & restore, About) with icon-chip headers + arrow rows; reminder time chips use shared `formatHour` (was `String.format("%02d:00")`).
-- Profile top bar gained a gear button (mirror of `CurioBackButton`) navigating to Settings — the previously hidden screen is now reachable.
-- Private duplicates + now-unused imports removed from both screens (Profile: ColumnScope, HorizontalDivider; Settings: Box, ColumnScope, size, HorizontalDivider, TextOverflow; CurioForwardArrow was already absent from Settings).
-- Validation green: zero leftover private-component refs, `formatHour` defined exactly once (4 refs each screen = import + 3 usages), braces balanced (Profile 183/183·461/461, Settings 125/125·233/233, shared 17/17·60/60), code review clean (2 passes).
-- Reviewer nits (non-blocking): Settings cards where header icon == first row icon (DarkMode/Mic/DragHandle/Notifications) read slightly redundant vs Profile's distinct header pattern; gear button hand-rolls CurioBackButton styling. Left as-is to avoid churn.
+- All 4 files updated; validation green: braces balanced (Spin 265/265, picker 16/16, card 10/10, routes 18/18), zero stale refs (`CategorySaver`, `initialCat`, `FilledTonalButton`, unused `Saver` import), press collector wired to `Surface(onClick, interactionSource)`, single-category flows behaviorally identical (topic.categoryId == active cat).
+- Code review clean (2 passes). Minor non-blocking notes: Spin top bar shows only first category name on multi-deck launches; watermark is a single accent-derived tint (CurioIcon takes one tint); picker selection persists across returns (probably desired).
 - Gradle build/lint NOT run (forbidden in this environment; CI validates on push).

@@ -56,7 +56,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -189,14 +188,10 @@ import kotlin.random.Random
 // lists (Set<String> has no built-in Bundle saver).
 // ═══════════════════════════════════════════════════════════════════════════
 
-/** Saves the active category by its enum name; falls back to Wildcard. */
-private val CategorySaver = Saver<CurioCategory, String>(
-    save = { it.id.name },
-    restore = { name ->
-        CategoryId.values().firstOrNull { it.name == name }
-            ?.let { CurioCategories.byId(it) }
-            ?: CurioCategories.byId(CategoryId.WILDCARD)
-    }
+/** Serializes a List<CategoryId> (single or multi-category launch set) by enum name. */
+private val CategoryIdListSaver = listSaver<List<CategoryId>, String>(
+    save = { it.map { id -> id.name } },
+    restore = { names -> names.mapNotNull { name -> CategoryId.values().firstOrNull { it.name == name } } }
 )
 
 /** Serializes a Set<String> (filter chips, recent ids) as a saveable list. */
@@ -214,29 +209,55 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // a CategoryId, so resolve it through byId(...) to keep BOTH elvis
     // branches CurioCategory (mixing them inferred Any → MutableState<Any>
     // vs the saver's MutableState<CurioCategory> → CI compile failure).
-    val initialCat = remember(categorySlug) {
-        categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: CurioCategories.byId(AppPreferences.getLastSpinCategory(context))
+    // v5.11 — multi-category launch: the category picker's Done can pass a
+    // comma-joined slug list ("artists,albums"). Resolve each part; fall
+    // back to the last-used single category when the slug is absent or
+    // unresolvable.
+    val initialCats = remember(categorySlug) {
+        val resolved = categorySlug
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.mapNotNull { CurioCategories.byRouteSlug(it) }
+            .orEmpty()
+        if (resolved.isNotEmpty()) resolved
+        else listOf(CurioCategories.byId(AppPreferences.getLastSpinCategory(context)))
     }
 
     // v5.5 — remember which category this session opened in, so the plain
-    // Spin tab opens where the user left off on the next launch. byRouteSlug
-    // is nullable — only persist when the slug actually resolves (v5.7.1).
+    // Spin tab opens where the user left off on the next launch. Persist the
+    // first resolved category when a slug (single or multi) is present.
     LaunchedEffect(Unit) {
-        categorySlug?.let { slug ->
-            CurioCategories.byRouteSlug(slug)?.let { resolved ->
-                AppPreferences.setLastSpinCategory(context, resolved.id)
-            }
+        if (categorySlug != null) {
+            initialCats.firstOrNull()?.let { AppPreferences.setLastSpinCategory(context, it.id) }
         }
     }
 
     // ── Saveable screen state — survives nav away/back, rotation and ──
-    //    process death (v5.3). activeCategory persists across all of them;
-    //    filters + recent history are keyed per category so switching
-    //    categories still resets them to fresh.
-    var activeCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf(initialCat) }
-    val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), activeCategory.id) {
-        value = TopicJsonLoader.load(activeCategory.id)
+    //    process death (v5.3). The active category SET persists across all
+    //    of them; filters + recent history are keyed per first category so
+    //    switching categories still resets them to fresh.
+    var activeCatIds by rememberSaveable(
+        initialCats.map { it.id },
+        stateSaver = CategoryIdListSaver
+    ) { mutableStateOf(initialCats.map { it.id }) }
+    // The first selected category drives chrome (top bar name, watermark
+    // accent, confetti tint); the pool below merges every selected
+    // category's topics so a multi-select launch spins across all of them.
+    val activeCategory = remember(activeCatIds) {
+        val id = activeCatIds.firstOrNull() ?: AppPreferences.getLastSpinCategory(context)
+        CurioCategories.byId(id)
+    }
+    // Defensive: a corrupted saved state could restore an empty category
+    // set — fall back to the last-used category so the pool still loads.
+    val poolIds = if (activeCatIds.isEmpty()) listOf(AppPreferences.getLastSpinCategory(context)) else activeCatIds
+    val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), poolIds) {
+        val merged = mutableListOf<CurioTopic>()
+        val seen = mutableSetOf<String>()
+        poolIds.forEach { id ->
+            TopicJsonLoader.load(id).forEach { t -> if (seen.add(t.id)) merged.add(t) }
+        }
+        value = merged
     }
 
     // ── Multi-select filter state (per-category, saveable) ────────────
@@ -400,7 +421,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // captured `cat` at launch, so only navigate if it's still the
             // active category.
             if (cat.id != activeCategory.id) return@LaunchedEffect
-            navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, primary.name)) {
+            navController.navigate(CurioRoutes.revealFor(primary.categoryId.routeSlug, primary.name)) {
                 launchSingleTop = true
             }
         }
@@ -474,7 +495,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     }
                 if (resolved != null) {
                     landingAlreadyOpened = true
-                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
+                    navController.navigate(CurioRoutes.revealFor(resolved.categoryId.routeSlug, resolved.name)) {
                         launchSingleTop = true
                     }
                 }
@@ -523,7 +544,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             currentCat = cat,
             onDismiss = { showCategoryPicker = false },
             onCategorySelected = { c ->
-                activeCategory = c
+                activeCatIds = listOf(c.id)
                 // v5.5 — persist so the Spin tab reopens on this category
                 // after the app is killed and relaunched.
                 AppPreferences.setLastSpinCategory(context, c.id)

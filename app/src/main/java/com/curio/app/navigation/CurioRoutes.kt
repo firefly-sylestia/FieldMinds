@@ -54,6 +54,8 @@ object CurioRoutes {
 
     // ── Route builders ──────────────────────────────────────────────────────
     fun spinWithCategory(slug: String) = "spin/$slug"
+    /** Multi-category launch — comma-joined slugs ("spin/artists,albums"). */
+    fun spinWithCategories(slugs: List<String>) = "spin/${slugs.joinToString(",")}"
     fun revealFor(categorySlug: String, topicName: String) =
         "reveal/$categorySlug/${Uri.encode(topicName)}"
     fun captureFor(categorySlug: String, topicName: String) =
