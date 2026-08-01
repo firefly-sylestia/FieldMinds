@@ -265,8 +265,13 @@ fun SaveCaptureScreen(
         }
 
         // ── Topic reminder strip with gradient ───────────────────────────
+        // Wears the category tint with the tint setting on; with it off it
+        // falls back to a plain theme surface so the whole flow goes neutral.
+        val tintWash = AppPreferences.tintWashEnabledState
+        val stripColor = if (tintWash) cat.tint else MaterialTheme.colorScheme.surfaceContainerHigh
+        val stripInk = if (tintWash) cat.categoryInk() else MaterialTheme.colorScheme.onSurface
         Surface(
-            color = cat.tint,
+            color = stripColor,
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -279,12 +284,13 @@ fun SaveCaptureScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = cat.accent.copy(alpha = 0.15f)
+                    color = if (tintWash) cat.accent.copy(alpha = 0.15f)
+                            else MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     CurioIcon(
                         name = cat.iconGlyph,
                         contentDescription = null,
-                        tint = cat.categoryInk(),
+                        tint = if (tintWash) cat.categoryInk() else MaterialTheme.colorScheme.onSurfaceVariant,
                         size = 22.dp,
                         modifier = Modifier.padding(6.dp)
                     )
@@ -293,12 +299,12 @@ fun SaveCaptureScreen(
                     Text(
                         text = topic?.name ?: "Loading…",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = cat.categoryInk()
+                        color = stripInk
                     )
                     Text(
                         text = cat.displayName,
                         style = MaterialTheme.typography.labelSmall,
-                        color = cat.categoryInk().copy(alpha = 0.7f)
+                        color = stripInk.copy(alpha = 0.7f)
                     )
                 }
             }
@@ -363,10 +369,14 @@ fun SaveCaptureScreen(
                         .height(1.dp)
                         .background(
                             Brush.horizontalGradient(
-                                colors = listOf(
+                                colors = if (tintWash) listOf(
                                     cat.tint,
                                     cat.accent.copy(alpha = 0.3f),
                                     cat.tint
+                                ) else listOf(
+                                    MaterialTheme.colorScheme.outlineVariant,
+                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                                    MaterialTheme.colorScheme.outlineVariant
                                 )
                             )
                         )
@@ -375,7 +385,6 @@ fun SaveCaptureScreen(
                     // The save button wears the category TINT with ink content
                     // when the tint setting is on; with it off it reverts to
                     // the plain accent fill + white content as before.
-                    val tintWash = AppPreferences.tintWashEnabledState
                     Button(
                         onClick = performSave,
                         enabled = canSave && !saveInProgress,
