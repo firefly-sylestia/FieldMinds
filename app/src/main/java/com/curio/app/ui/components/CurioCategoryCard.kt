@@ -127,7 +127,8 @@ fun CurioCategoryCard(
                         color = Color.White
                     ) {
                         CurioIcon(
-                            CurioIcons.Check, null,
+                            name = CurioIcons.Check,
+                            contentDescription = null,
                             tint = cardColor,
                             size = 16.dp,
                             modifier = Modifier.padding(3.dp)
