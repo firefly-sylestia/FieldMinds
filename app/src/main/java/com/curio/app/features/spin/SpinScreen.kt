@@ -190,6 +190,11 @@ import kotlin.random.Random
  * 18. **Bigger deck + CTA** — the hero ticket grew to 286×310dp (carousel
  *     444dp) and the dice button to 126dp idle / 108dp landed, with the
  *     dice glyphs scaled up to match.
+ *
+ * v6.4 changes:
+ * 19. **Peek cards catch up** — the slim background cards grew ~6%
+ *     (318×102dp near, 288×84dp far) so the whole fan scales with the
+ *     hero ticket instead of the peeks staying small behind the big card.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -1535,11 +1540,13 @@ private fun PeekCard(
         1 -> 142f
         else -> 184f
     }
-    val w = if (far) 272.dp else 300.dp
-    val h = if (far) 78.dp else 96.dp
+    // v6.4 — peek cards grew ~6% to match the v6.3 hero ticket bump so the
+    // fanned background cards stay proportionally bigger behind it.
+    val w = if (far) 288.dp else 318.dp
+    val h = if (far) 84.dp else 102.dp
     // Corner radius scales with card height so the slim far deck cards
     // keep crisp, proportional corners instead of over-rounded ones.
-    val corner = if (far) 12.dp else 16.dp
+    val corner = if (far) 13.dp else 17.dp
     // Level-based shading — near cards step one shade down from the hero,
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.
@@ -1871,52 +1878,34 @@ private fun DeckControlButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Backgroundless — NO pill box. The bottom tray already wears the
-    // category-tint wash, so these buttons read as tint-tinted text controls
-    // floating on it: icon + label in the category ink (theme-aware: deep
-    // accent in light, light twin in dark), with a slim accent underline as
-    // the only "active" affordance — no box to say selected.
-    val ink = if (selected) cat.categoryInk() else cat.categoryInk().copy(alpha = 0.68f)
+    // Solid fills — no translucent tint, no border. Selected buttons get the
+    // full accent color with white content; unselected buttons get a solid
+    // surface fill with theme-aware accent ink (stays readable on the
+    // midnight dark surfaces).
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = Color.Transparent,
+        color = if (selected) cat.accent else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = if (selected) null else cat.categoryBorder(),
         shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CurioIcon(
-                    icon, null,
-                    tint = ink,
-                    size = 22.dp
-                )
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Bold
-                    ),
-                    color = ink,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            // Slim accent indicator — the only selected-state affordance.
-            Spacer(Modifier.height(6.dp))
-            Box(
-                modifier = Modifier
-                    .width(if (selected) 22.dp else 0.dp)
-                    .height(3.dp)
-                    .clip(RoundedCornerShape(2.dp))
-                    .background(if (selected) cat.categoryInk() else Color.Transparent)
+            CurioIcon(
+                icon, null,
+                tint = if (selected) Color.White else cat.categoryInk(),
+                size = 24.dp
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
+                color = if (selected) Color.White else cat.categoryInk(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

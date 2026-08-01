@@ -75,9 +75,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
-import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
-import com.curio.app.ui.theme.categorySurface
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -134,13 +132,6 @@ fun HomeScreen(navController: NavController) {
     val reminderEnabled = AppPreferences.reminderEnabledState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    // v6.6 — Home wears the category tint wash like every other screen
-    // (selected chip, or Wildcard when Surprise). Gated by BOTH the global
-    // tint toggle and the dedicated Home toggle so Home can stay plain
-    // while the rest of the app tints.
-    val washCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)
-    val homeTintOn = AppPreferences.tintWashEnabledState && AppPreferences.homeTintEnabledState
-
     val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
         try {
             value = CurioRepositoryHolder.repo.getAll().take(4)
@@ -169,13 +160,12 @@ fun HomeScreen(navController: NavController) {
         },
         gesturesEnabled = drawerState.isOpen || drawerState.isAnimationRunning
     ) {
+        // v6.7 — Home sits on the plain theme background: the category tint
+        // wash is removed from Home (other screens still tint via Settings).
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    if (homeTintOn) washCat.categoryBackgroundWash()
-                    else MaterialTheme.colorScheme.background
-                )
+                .background(MaterialTheme.colorScheme.background)
         ) {
             // ── Watermark backdrop — muted category glyphs behind all ──
             //    content (same treatment as the Spin page). The selected
@@ -198,12 +188,11 @@ fun HomeScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Refined menu button with better icon — wears the tinted
-                // surface so it doesn't read as a cream pill on the wash.
+                // Refined menu button with better icon.
                 Surface(
                     onClick = { scope.launch { drawerState.open() } },
                     shape = RoundedCornerShape(50),
-                    color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -218,7 +207,7 @@ fun HomeScreen(navController: NavController) {
                 Surface(
                     onClick = { navController.navigate(CurioRoutes.PROFILE) { launchSingleTop = true } },
                     shape = CircleShape,
-                    color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
                     shadowElevation = 0.dp,
                     modifier = Modifier.size(42.dp)
                 ) {
@@ -389,21 +378,21 @@ fun HomeScreen(navController: NavController) {
                     glyph = "local_fire_department",
                     value = "$streakDays",
                     tint = CurioColors.CoralBlush,
-                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
+                    surface = MaterialTheme.colorScheme.surfaceContainerLow
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.Inventory2,
                     value = "$totalSaved",
                     tint = CurioColors.Sage,
-                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
+                    surface = MaterialTheme.colorScheme.surfaceContainerLow
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.History,
                     value = "${recentEntries.size}",
                     tint = CurioColors.Lilac,
-                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
+                    surface = MaterialTheme.colorScheme.surfaceContainerLow
                 )
             }
 
@@ -424,7 +413,7 @@ fun HomeScreen(navController: NavController) {
                     Surface(
                         onClick = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
                         shape = RoundedCornerShape(50),
-                        color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerHigh),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
                         shadowElevation = 0.dp
                     ) {
@@ -460,7 +449,7 @@ fun HomeScreen(navController: NavController) {
                             name = "Surprise",
                             accent = CurioColors.CategoryCoral,
                             selected = selectedCategory == null,
-                            surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
+                            surface = MaterialTheme.colorScheme.surfaceContainerLow,
                             onClick = { selectedCategory = null }
                         )
                     }
@@ -470,7 +459,7 @@ fun HomeScreen(navController: NavController) {
                                 name = cat.displayName,
                                 accent = cat.accent,
                                 selected = selectedCategory?.id == cat.id,
-                                surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
+                                surface = MaterialTheme.colorScheme.surfaceContainerLow,
                                 onClick = {
                                     selectedCategory =
                                         if (selectedCategory?.id == cat.id) null else cat
@@ -499,7 +488,7 @@ fun HomeScreen(navController: NavController) {
                         Surface(
                             onClick = { navController.navigateToTab(CurioRoutes.CABINET) },
                             shape = RoundedCornerShape(50),
-                            color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
+                            color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
                             CurioForwardArrow(
                                 "Open Cabinet",
@@ -513,7 +502,7 @@ fun HomeScreen(navController: NavController) {
 
                 if (recentEntries.isEmpty()) {
                     FirstTimeEmpty(
-                        surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
+                        surface = MaterialTheme.colorScheme.surfaceContainerLow,
                         onPickCategory = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
                         onShuffleSurprise = { navController.navigateToTab(CurioRoutes.SPIN) }
                     )
@@ -522,7 +511,7 @@ fun HomeScreen(navController: NavController) {
                         recentEntries.forEach { entry ->
                             RecentEntryRow(
                                 entry = entry,
-                                surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surface),
+                                surface = MaterialTheme.colorScheme.surface,
                                 onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) { launchSingleTop = true } }
                             )
                         }
@@ -537,7 +526,7 @@ fun HomeScreen(navController: NavController) {
             if (!reminderEnabled) {
                 Spacer(Modifier.height(16.dp))
                 ReminderNudgeCard(
-                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
+                    surface = MaterialTheme.colorScheme.surfaceContainerLow,
                     onTap = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
                 )
             }
@@ -552,18 +541,6 @@ fun HomeScreen(navController: NavController) {
 // ═══════════════════════════════════════════════════════════════════════
 // Stat pill (compact)
 // ══════════════════════════════════════════════���════════════════════════
-
-/**
- * Home's cream-surfaces helper — resolves the tinted surface for pills /
- * chips / cards on the Home page. Honors BOTH the global category-tint
- * toggle and the dedicated Home-tint toggle (v6.6): when either is off,
- * [base] is returned unchanged so Home reverts to its plain cream look.
- */
-@Composable
-private fun homeTintSurface(washCat: CurioCategory, base: Color): Color {
-    if (!AppPreferences.tintWashEnabledState || !AppPreferences.homeTintEnabledState) return base
-    return washCat.categorySurface(base)
-}
 
 @Composable
 private fun StatPill(

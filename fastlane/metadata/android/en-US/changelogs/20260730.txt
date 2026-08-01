@@ -2,3 +2,11 @@
 • Clear board action in the expanded mood board editor
 • Richer mixed-deck colors: verified premium blends for every pair and triple of categories, plus order-independent blends for bigger mixes
 • Multi-select decks now show as a "Mixed" category — sparkles glyph, blended accent, and a Mixed · N badge — instead of the first picked category
+• Spin: bigger peek cards behind the shuffle card, and Categories/Filter back to filled pill buttons
+• Review stars get an outline (solid fill + crisp stroke)
+• Home tint removed (plain background); Cabinet keeps its chips but drops the page wash
+• Dark mode rose/coral tint deepened to a rich burgundy
+• Spin: bigger peek cards behind the shuffle card, and Categories/Filter back to filled pill buttons
+• Review stars get an outline (solid fill + crisp stroke)
+• Home tint removed (plain background); Cabinet keeps its chips but drops the page wash
+• Dark mode rose/coral tint deepened to a rich burgundy

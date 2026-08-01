@@ -1,7 +1,6 @@
 package com.curio.app.features.cabinet
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,7 +45,6 @@ import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
@@ -89,19 +87,13 @@ fun CabinetScreen(navController: NavController) {
         else entries.filter { it.topic.categoryId == selectedFilter }
     }
 
-    // Category tint wash — the Cabinet wears the ACTIVE FILTER's tint over
-    // the theme background (matching the Spin page), so browsing a category
-    // feels tied to it. Theme-aware: deep accent over cream in light, pastel
-    // twin glow over midnight in dark. "All" falls back to the Wildcard's
-    // neutral coral wash (same fallback the empty state uses) so even the
-    // unfiltered view stays in the color story instead of a plain patch.
+    // The Cabinet sits on the plain theme background — the page-level
+    // category wash is removed; the chips and cards keep their surfaces.
     val filterCat = CurioCategories.byId(selectedFilter ?: CategoryId.WILDCARD)
-    val filterWash = filterCat.categoryBackgroundWash()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(filterWash)
             .statusBarsPadding()
     ) {
         // ── Top bar ────────────────────────────────────────────────────────

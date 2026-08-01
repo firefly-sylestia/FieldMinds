@@ -138,9 +138,9 @@ private val DEFAULT_DARK_WASH = DarkWashTuning(0.5f, 0.15f)
 
 private val DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning> = mapOf(
     // Rose (movies, red) read whitewashed over midnight — hug the deep
-    // accent (low factor) and deepen a touch toward black so the wash is
-    // a dark maroon-red instead of a pale rose.
-    CategoryFamily.MOVIES  to DarkWashTuning(0.10f, 0.22f, darken = 0.10f),
+    // accent (low factor) and deepen toward the shared deep-rose twin so
+    // the wash is a dark #5E0034 burgundy instead of a pale rose.
+    CategoryFamily.MOVIES  to DarkWashTuning(0.10f, 0.22f, darken = 0.60f, deepTwin = Color(0xFF5E0034)),
     // Sky (science, light blue) — slightly darker than the earlier deep-pull:
     // keep the azure hue but nudge the mid-tone a bit toward black so the
     // wash doesn't float pale-blue over midnight.
@@ -151,6 +151,7 @@ private val DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning> = mapOf(
     CategoryFamily.BOOKS   to DarkWashTuning(0.15f, 0.22f, darken = 0.35f, deepTwin = Color(0xFF78350F)),
     // Coral (wildcard, pink) is a pastel accent — no mid-tone pull gets it
     // dark, and deepening toward black turned it a muddy grey-pink. Deepen
-    // toward a real deep pink twin instead so the wash is a dark rose-pink.
-    CategoryFamily.WILDCARD to DarkWashTuning(0.10f, 0.24f, darken = 0.40f, deepTwin = Color(0xFFBE185D))
+    // toward the same deep-rose twin as the movies family so the wash is a
+    // dark #5E0034 burgundy instead of a pale rose-pink.
+    CategoryFamily.WILDCARD to DarkWashTuning(0.10f, 0.24f, darken = 0.60f, deepTwin = Color(0xFF5E0034))
 )

@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -47,13 +48,15 @@ import kotlin.math.sin
  */
 
 /**
- * A truly FILLED 5-pointed star drawn as a solid Canvas path.
+ * A FILLED 5-pointed star with a crisp outline — drawn as a solid Canvas
+ * path plus a stroke.
  *
  * The bundled icon font is Material Symbols *Outlined*, where even the
  * `star` ligature renders as a hollow outline — so filled rating stars
  * were just outlines with a tint. Drawing the path directly guarantees a
  * solid fill in any color. When [filled] is false the SAME solid path is
  * drawn at low alpha, so a rating row reads filled-or-ghost, never hollow.
+ * Both states carry an outline stroke so the stars read as outlined.
  */
 @Composable
 fun FilledStar(
@@ -75,7 +78,14 @@ fun FilledStar(
             if (i == 0) star.moveTo(x, y) else star.lineTo(x, y)
         }
         star.close()
+        // Solid fill (ghost at low alpha when unrated) PLUS an outline
+        // stroke, so the stars read as outlined instead of flat blobs.
         drawPath(star, color = if (filled) color else color.copy(alpha = 0.25f))
+        drawPath(
+            star,
+            color = color.copy(alpha = if (filled) 0.85f else 0.45f),
+            style = Stroke(width = this.size.minDimension * 0.07f)
+        )
     }
 }
 
@@ -83,7 +93,7 @@ fun FilledStar(
  * 1-5 star rating row — CURIO_SPEC §8.2 ReelNotes ("optional star rating,
  * 1-5"). Tap a star to set; tap the currently-set star to clear (return
  * to 0). [accent] controls the filled-star color in the category palette.
- * Stars are [FilledStar] Canvas paths — solid fills, never outlines.
+ * Stars are [FilledStar] Canvas paths — solid fills with an outline stroke.
  */
 @Composable
 fun StarRating(
