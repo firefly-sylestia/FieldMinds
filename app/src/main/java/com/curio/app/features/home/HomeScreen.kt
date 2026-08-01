@@ -576,8 +576,8 @@ private fun CategoryChip(
     )
     val inactiveContainer = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, 0.10f)
     // Muted selected fill — same treatment as the picker cards: the raw
-    // accent is too loud, so it's deepened a step toward black.
-    val selectedContainer = lerp(accent, Color.Black, 0.22f)
+    // accent is deepened just a touch toward black so it stays rich.
+    val selectedContainer = lerp(accent, Color.Black, 0.10f)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),

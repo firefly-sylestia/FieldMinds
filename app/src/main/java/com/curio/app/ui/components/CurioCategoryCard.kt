@@ -3,12 +3,14 @@ package com.curio.app.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -37,9 +39,10 @@ import com.curio.app.ui.theme.CurioMotion
 
 /**
  * Compact category card shared by the standalone category picker and the
- * Spin page picker sheet — just the category name, live topic count, and an
- * optional selected state (white outline + check). Text-only by design. One
- * component so the two pickers can never drift apart visually.
+ * Spin page picker sheet — category name, live topic count, a subtle ghost
+ * watermark of the category glyph on the right edge, and an optional
+ * selected state (white outline + check). One component so the two pickers
+ * can never drift apart visually.
  */
 @Composable
 fun CurioCategoryCard(
@@ -57,11 +60,12 @@ fun CurioCategoryCard(
 
     val isWildcard = category.id == CategoryId.WILDCARD
     // Muted fill — the raw accent is too loud for a full-width card, so it's
-    // deepened a step toward black: same hue, noticeably softer brightness.
+    // deepened just a touch toward black: same hue, softer brightness while
+    // keeping the color rich and vivid.
     val cardColor = if (isWildcard) {
-        lerp(CurioColors.CoralBlush, Color.Black, 0.18f)
+        lerp(CurioColors.CoralBlush, Color.Black, 0.08f)
     } else {
-        lerp(category.accent, Color.Black, 0.22f)
+        lerp(category.accent, Color.Black, 0.10f)
     }
     val topicCount = remember(category.id) { TopicJsonLoader.cached(category.id)?.size ?: 0 }
 
@@ -80,13 +84,25 @@ fun CurioCategoryCard(
             .height(104.dp)
             .scale(scale)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Ghost icon — subtle decorative watermark, tucked behind the
+            // text on the right edge.
+            CurioIcon(
+                name = category.iconGlyph,
+                contentDescription = null,
+                tint = Color.White.copy(alpha = 0.10f),
+                size = 64.dp,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 10.dp)
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
