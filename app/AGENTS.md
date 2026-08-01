@@ -10,11 +10,13 @@ Read `master.md` and root `AGENTS.md` first, then this file for app-module-speci
 
 ## Purpose
 
-The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library. The full UX/UI spec lives at [`CURIO_SPEC.md`](CURIO_SPEC.md) at the repo root of this module. Every screen and component decision must reference this spec — it is the source of truth for what users see.
+The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library.
 
-The **data layer** (category taxonomy, topic schema, `ExploreAction` prompt format, authoring pipeline, rollout cadence) is documented separately in [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md). It expands the category palette from 6 → 10 and ships 150+ topics per category authored via LLM-draft + human-review. **Read both docs together** before any feature work that touches data or content.
+**Design direction comes from the user, not from in-repo docs.** There is no design spec in this repo (the former `CURIO_SPEC.md` was deleted). Before making design decisions — colors, typography, shapes, motion, layout, empty states, copy, emoji-vs-icon policy — ask the user for direction. Do not invent or follow design rules from old docs, prompts, or code comments.
 
-The legacy FieldMind codebase is preserved at `app-legacy/` (frozen, never modified). Curio inherits two things from it: the **Material Symbols** variable font and **geom.ttf** display typography (see `CURIO_SPEC.md` §0.4 + §0.6). Both font files are **copied** into `app/src/main/res/font/`; `app-legacy/` is never read at runtime by Curio except via the curated copy.
+The **data layer** (category taxonomy, topic schema, `ExploreAction` prompt format, authoring pipeline, rollout cadence) is documented separately in [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md). It expands the category palette from 6 → 10 and ships 150+ topics per category authored via LLM-draft + human-review. **Read it before any feature work that touches data or content.**
+
+The legacy FieldMind codebase is preserved at `app-legacy/` — **frozen, NEVER modified**. Do not edit, refactor, or "fix" anything under `app-legacy/`; treat it as read-only reference at most. Curio inherits two things from it: the **Material Symbols** variable font and **geom.ttf** display typography. Both font files are **copied** into `app/src/main/res/font/`; `app-legacy/` is never read at runtime by Curio except via the curated copy.
 
 ## Ownership
 
@@ -58,10 +60,6 @@ app/src/main/java/com/curio/app/
 - `app/src/main/res/mipmap-anydpi-v26/ic_launcher{,_round}.xml` — adaptive-icon declarations referencing the colored and monochrome layers above
 - `app/src/main/assets/topics/` — Curio topic data files (one per ready category; see Content authoring below)
 
-### Canonical design doc
-
-- `app/CURIO_SPEC.md` — Curio's full UI/UX spec (v2). **Read this before adding any screen or component** — it is the source of truth for all design decisions (colors, typography, shapes, motion, navigation, screen layouts, empty states, etc.).
-
 ## Local Contracts
 
 ### Identity
@@ -83,7 +81,7 @@ app/src/main/java/com/curio/app/
 - All UI is 100% Jetpack Compose. No XML layouts for screens, ever.
 - `MainActivity` is the only entry point. It hosts `CurioNavHost` inside `CurioTheme`.
 - Edge-to-edge is enabled at the Activity level; the system bars are themed by `CurioTheme`'s `SideEffect` to match the current color scheme + light/dark mode.
-- **NO emoji anywhere** in user-facing copy or visuals. Use `CurioIcon(name = CurioIcons.X)` with the Material Symbols ligature font instead. See `CURIO_SPEC.md` §0.6.
+- Icon rendering uses `CurioIcon(name = CurioIcons.X)` with the Material Symbols ligature font. Emoji-vs-icon policy is a design decision — confirm with the user (see the Purpose note above).
 - All glyph names used by `CurioIcon` are declared in `CurioIcons.kt` (single source of truth for icon names). Adding a glyph = adding a `const val` there first.
 
 ### Navigation
@@ -95,7 +93,7 @@ app/src/main/java/com/curio/app/
 ## Work Guidance
 
 ### Adding a new screen
-1. Read `CURIO_SPEC.md` section for the screen.
+1. Ask the user for design direction for the screen — there is no in-repo design spec to follow.
 2. Create the file at `app/src/main/java/com/curio/app/features/{feature}/{Feature}Screen.kt`.
 3. If it's a stack of related sub-screens, group them in one file like `PlaceholderScreens.kt` does today, with a shared `*Scaffold` private helper at the top.
 4. Add a route constant + (if needed) a route builder to `CurioRoutes.kt`.
@@ -104,7 +102,7 @@ app/src/main/java/com/curio/app/
 
 ### Adding a new design system primitive
 - Add to `ui/theme/` (colors → `CurioColors.kt`, glyphs → `CurioIcons.kt`, etc.).
-- New colors must be justified against `CURIO_SPEC.md` §0.2. If the spec doesn't mention it, push back and update the spec first.
+- New colors, type styles, and shape tokens are design decisions — confirm them with the user before adding.
 - New icons must be declared in the `CurioIcons` object (snake_case ligature names) — do NOT inline glyph names in screens.
 - **All design-system primitives (the `CurioIcon` composable + `CurioIcons` glyph constants object) live under `ui/theme/`.** Components in `ui/components/` consume them via import — they do not re-export them. Wrong-package imports (e.g. `import com.curio.app.ui.components.CurioIcon`) compile silently against an empty package and only fail in CI's `compileDebugKotlin`. Always import from `ui.theme.*`.
 
@@ -136,8 +134,7 @@ Topic data lives in JSON files under `app/src/main/assets/topics/{category}.json
 
 ## Child DOX Index
 
-- [`CURIO_SPEC.md`](CURIO_SPEC.md) — Canonical **UX/UI** spec for Curio (per `master.md` Update After Editing rule: changes affecting screen design, navigation, or component behavior go in this doc, not buried in code comments).
-- [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md) — Canonical **data layer** spec (companion to CURIO_SPEC.md). Owns: category taxonomy expansion (6 → 10), `CurioTopic` + `ExploreAction` schema, JSON-on-disk canonical format, Room DB seed flow, image strategy (URL + Coil, no bundling), authoring pipeline (LLM-draft + human-review + smoke test), per-category rollout cadence (one category per PR, Music first). Read this BEFORE adding any topic data, category entry, or capture-format prompt.
+- [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md) — Canonical **data layer** spec. Owns: category taxonomy expansion (6 → 10), `CurioTopic` + `ExploreAction` schema, JSON-on-disk canonical format, Room DB seed flow, image strategy (URL + Coil, no bundling), authoring pipeline (LLM-draft + human-review + smoke test), per-category rollout cadence (one category per PR, Music first). Read this BEFORE adding any topic data, category entry, or capture-format prompt.
 - [`src/main/assets/topics/SCHEMA.md`](src/main/assets/topics/SCHEMA.md) — Quick-reference schema doc for topic JSON files. Lives next to `music.json` so authors have the schema at their fingertips without opening the larger `CURIO_DATA_PLAN.md`. Points back to the full source-of-truth for anything not covered.
 - (Future) `app/src/main/java/com/curio/app/features/{home,spin,cabinet,capture}/AGENTS.md` — per-screen feature contracts, added when each screen gets real implementation in Phase 3+.
 - (Future) `app/src/main/java/com/curio/app/ui/theme/AGENTS.md` — design system primitive contracts, added when the theme system grows (Phase 3+ when dark-mode polish, motion tokens, etc. land).

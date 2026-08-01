@@ -147,11 +147,7 @@ Whenever you make significant changes, you MUST update the "What's New" section 
 
 ### What to Update
 
-1. **In-App Changelog** — `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindChangelogScreen.kt`
-   - Add a new `FieldMindChangelogEntry` at the **top** of the `fieldMindChangelog` list
-   - Structure: `version`, `date`, `title`, `importance` (`"Major"`/`"Patch"`), descriptive `tags`, and `sections` (list of `Pair<String, List<String>>`)
-   - Each section: emoji-prefixed heading + detailed check-marked bullet points
-   - Follow existing style (emoji headers, Material3 card design)
+1. **In-App Changelog** — only when the active `app/` module has a changelog screen. The new Curio app has no changelog screen yet; the old `FieldMindChangelogScreen.kt` lives in frozen `app-legacy/` and is **never edited**. When a changelog screen exists, add a new entry at the top of its list following the existing entry structure and style.
 
 2. **Fastlane Store Changelog** — `fastlane/metadata/android/en-US/changelogs/{versionCode}.txt`
    - See `fastlane/AGENTS.md` for store conventions (≤500 chars, versionCode naming)
@@ -168,9 +164,9 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 
 ## Child DOX Index
 
-- [app/AGENTS.md](app/AGENTS.md) — Active Android app module under rebuild
-- [app/CURIO_SPEC.md](app/CURIO_SPEC.md) — Canonical UX/UI spec for the new app (Curio)
-- [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — Frozen legacy Android app source (not built, not shipped; not consulted during normal revamp work)
+- [app/AGENTS.md](app/AGENTS.md) — Active Android app module (Curio) under rebuild — design direction comes from the user, not from in-repo docs
+- [app/CURIO_DATA_PLAN.md](app/CURIO_DATA_PLAN.md) — Curio data-layer spec (topics, categories, authoring pipeline)
+- [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — **Frozen legacy Android app source — NEVER modified, refactored, or "fixed"**. Not built, not shipped, read-only reference at most
 - [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
 - [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
 - [wiki/AGENTS.md](wiki/AGENTS.md) — Wiki documentation: user/contributor docs
