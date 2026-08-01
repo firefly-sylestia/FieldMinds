@@ -1064,17 +1064,17 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         }
                     }
 
-                    // Inline (non-expanded) board: tap a tile to magnify it
-                    // centered + straight. Board-level pinch zoom is only
-                    // enabled in the expanded full-screen dialog, so a stray
-                    // two-finger pinch on the inline card can't hijack the
-                    // page scroll.
+                    // Inline (non-expanded) board: double-tap a tile to
+                    // magnify it centered + straight (same gesture as the
+                    // editor). Board-level pinch zoom is only enabled in the
+                    // expanded full-screen dialog, so a stray two-finger
+                    // pinch on the inline card can't hijack the page scroll.
                     Box(modifier = Modifier.fillMaxSize()) {
                         MoodBoardTiles(
                             tiles = data.tileLayouts,
                             canvasWPx = canvasW,
                             canvasHPx = canvasH,
-                            onTileZoom = { zoomState.zoomIn(it) }
+                            onTileZoom = { uri, w, h, vw, vh -> zoomState.zoomIn(uri, w, h, vw, vh) }
                         )
                     }
                 } else {
@@ -1210,7 +1210,7 @@ private fun ExpandedMoodBoardDialog(
                     } else 1f
 
                     // Collage scaled to fit the dialog, centered; pinch on the
-                    // board magnifies it; tap/double-tap a tile magnifies the
+                    // board magnifies it; double-tap a tile magnifies the
                     // tile centered + straight.
                     val scaledTiles = data.tileLayouts.map {
                         CaptureData.TileLayout(
@@ -1239,7 +1239,7 @@ private fun ExpandedMoodBoardDialog(
                             tiles = scaledTiles,
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            onTileZoom = { zoomState.zoomIn(it) }
+                            onTileZoom = { uri, w, h, vw, vh -> zoomState.zoomIn(uri, w, h, vw, vh) }
                         )
                     }
 
@@ -1310,7 +1310,7 @@ private fun ExpandedMoodBoardDialog(
 
                 // ── Hint ─────────────────────────────────────────────────
                 Text(
-                    text = "Tap a tile to zoom · pinch to magnify",
+                    text = "Double-tap a tile to zoom · pinch to magnify",
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.55f),
                     modifier = Modifier

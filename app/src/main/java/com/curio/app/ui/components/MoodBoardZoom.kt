@@ -70,11 +70,21 @@ class MoodBoardZoomState {
     var offsetX by mutableFloatStateOf(0f)
     var offsetY by mutableFloatStateOf(0f)
     var closing by mutableStateOf(false)
+    // The zoom level [zoomIn] opens at for the CURRENT tile — fit-based so a
+    // small tile opens large enough to read while a big tile doesn't blow
+    // past the screen. [resetZoom] springs back to this.
+    var defaultScale by mutableFloatStateOf(2.4f)
 
     val isZoomed: Boolean get() = zoomedUri != null || boardZoomed
 
-    /** Tap/double-tap a tile: spring it up to ~2.4x, centered + straight. */
-    fun zoomIn(uri: String) {
+    /**
+     * Double-tap a tile: spring it up, centered + straight. The target zoom
+     * is fit-based — the tile is scaled to fill ~90% of the board viewport's
+     * smaller dimension, clamped so a small tile really zooms in while a
+     * near-full-board tile only lifts slightly (instead of exploding past
+     * the screen at a flat 2.4x).
+     */
+    fun zoomIn(uri: String, tileW: Float = 0f, tileH: Float = 0f, viewW: Float = 0f, viewH: Float = 0f) {
         closing = false
         boardZoomed = false
         if (zoomedUri != uri) {
@@ -83,7 +93,20 @@ class MoodBoardZoomState {
             offsetX = 0f
             offsetY = 0f
         }
-        scaleTarget = 2.4f
+        defaultScale = fitZoomScale(tileW, tileH, viewW, viewH)
+        scaleTarget = defaultScale
+    }
+
+    /**
+     * Fit-based open zoom: ~90% of the viewport's short side, clamped 1.1–5x.
+     * The 1.1f floor means a tile that already fills the board opens at
+     * essentially its fit size (straight + a slight lift) instead of
+     * exploding past the screen — while small tiles still zoom in a lot.
+     */
+    private fun fitZoomScale(tileW: Float, tileH: Float, viewW: Float, viewH: Float): Float {
+        if (tileW <= 0f || tileH <= 0f || viewW <= 0f || viewH <= 0f) return 2.4f
+        val fit = minOf(viewW / tileW, viewH / tileH)
+        return (fit * 0.9f).coerceIn(1.1f, 5f)
     }
 
     /** Two-finger pinch on the board itself: magnify the whole collage. */
@@ -105,13 +128,14 @@ class MoodBoardZoomState {
     }
 
     /**
-     * Double-tap the zoomed image: spring back to the default 2.4x, centered
-     * + straight — a quick "reset view" while staying zoomed. Unlike
-     * [zoomIn] (which opens a NEW tile), this never switches the target.
+     * Double-tap the zoomed image: spring back to the tile's fit-based
+     * [defaultScale], centered + straight — a quick "reset view" while
+     * staying zoomed. Unlike [zoomIn] (which opens a NEW tile), this never
+     * switches the target.
      */
     fun resetZoom() {
         closing = false
-        scaleTarget = 2.4f
+        scaleTarget = defaultScale
         offsetX = 0f
         offsetY = 0f
     }
@@ -129,7 +153,7 @@ class MoodBoardZoomState {
             offsetX = 0f
             offsetY = 0f
         }
-        scaleTarget = (scaleTarget * zoom).coerceIn(1f, 4f)
+        scaleTarget = (scaleTarget * zoom).coerceIn(1f, 8f)
         offsetX = (offsetX + pan.x).coerceIn(-900f, 900f)
         offsetY = (offsetY + pan.y).coerceIn(-900f, 900f)
     }
@@ -208,14 +232,14 @@ fun Modifier.moodBoardPinchZoom(zoomState: MoodBoardZoomState): Modifier =
  * Static mood-board tile collage — renders saved [CaptureData.TileLayout]s at
  * their pixel offsets with their rotations. Shared by the saved EntryDetail
  * board, the expanded full-screen board and the board-magnifier overlay.
- * When [onTileZoom] is provided each tile responds to tap / double-tap.
+ * When [onTileZoom] is provided each tile responds to double-tap.
  */
 @Composable
 fun MoodBoardTiles(
     tiles: List<CaptureData.TileLayout>,
     canvasWPx: Float,
     canvasHPx: Float,
-    onTileZoom: ((String) -> Unit)? = null,
+    onTileZoom: ((String, Float, Float, Float, Float) -> Unit)? = null,
     zoomed: Boolean = false
 ) {
     val density = LocalDensity.current
@@ -231,12 +255,14 @@ fun MoodBoardTiles(
                 .zIndex(i.toFloat())
                 .then(
                     if (onTileZoom != null) {
-                        // v6.1 — onTap only: a single tap zooms IMMEDIATELY.
-                        // Registering onDoubleTap too delayed every single tap
-                        // by the double-tap timeout (~300ms), which made taps
-                        // feel like they sometimes didn't register.
+                        // Double-tap zooms the tile — same gesture as the
+                        // editor. A single tap on the saved board intentionally
+                        // does nothing, so the double-tap timeout doesn't
+                        // delay any action (there is no single-tap action).
                         Modifier.pointerInput(tile.uri) {
-                            detectTapGestures(onTap = { onTileZoom(tile.uri) })
+                            detectTapGestures(
+                                onDoubleTap = { onTileZoom(tile.uri, tile.widthPx, tile.heightPx, canvasWPx, canvasHPx) }
+                            )
                         }
                     } else Modifier
                 )
@@ -272,8 +298,9 @@ fun MoodBoardTiles(
  * In-place zoom overlay for ONE magnified tile. Drop it as the LAST child of
  * the board's Box scope: it springs the tapped/pinched image up CENTERED and
  * STRAIGHT (no rotation, no offset) — no navigation, no separate page. Tap
- * anywhere closes it; pinch/pan refine the zoom up to 4x; double-tap the
- * image resets to the default 2.4x; double-tap the board around it closes.
+ * anywhere closes it; pinch/pan refine the zoom up to 8x; double-tap the
+ * image resets to its fit-based default zoom; double-tap the board around it
+ * closes.
  *
  * [animatedOffsetX] / [animatedOffsetY] come from `animateFloatAsState` at
  * the board level; the SCALE is animated internally from 1x so the overlay
@@ -411,7 +438,7 @@ fun MoodBoardZoomOverlay(
 /**
  * Whole-board magnifier overlay — two-finger pinch on the mood board itself
  * (not just the images) springs the entire collage up, centered and straight.
- * Pinch inside it zooms further up to 4x and drag pans; tap or double-tap
+ * Pinch inside it zooms further up to 8x and drag pans; tap or double-tap
  * (or pinch back to 1x) closes it. The scale is animated internally from 1x
  * so the board springs up on open instead of popping in.
  */

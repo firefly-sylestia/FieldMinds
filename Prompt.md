@@ -1,25 +1,19 @@
-# Request: Saved-entry audio player broken + visualizer redesign
+# Request: Mood-board zoom — double-tap to open, adaptive scale
 
 ## Request
-The saved-entry audio player shows but plays no sound, won't replay after ending, and the visualizer renders badly. The saved view should use the same visualizer design as the recording meter.
-
-## Root causes found
-1. **No sound** — ExoPlayer had no `AudioAttributes`/volume/focus routing; some devices route to a silent output or duck → "plays but no sound".
-2. **Won't replay** — after `STATE_ENDED`, `play()` alone doesn't restart; after a load error the player sits in `STATE_IDLE` where `play()` can't restart and `seekTo(0)` can even throw.
-3. **Broken visualizer** — `WaveformExtractor.extractPcmShorts` read PCM shorts with the buffer's default BIG_ENDIAN order, but MediaCodec decoders emit little-endian PCM → every sample byte-swapped → noise. Also the saved view used 120 bars squeezed into a ~250dp canvas (bars ≈0.1dp, coerced to 1dp → overflow), unlike the recording's 36 capsule bars.
+In the saved mood board: (1) opening an image should use double-tap (as the hint says), not single tap; (2) small images don't zoom in enough; (3) big images open up in an overly large view.
 
 ## Changes
-- `WaveformExtractor.kt` — `extractPcmShorts` pins the duplicated buffer to `LITTLE_ENDIAN` before the `dup.short` read loop (`dup.order(ByteOrder.LITTLE_ENDIAN)`); new import `java.nio.ByteOrder`. This is the only PCM read path.
-- `EntryDetailScreen.kt`:
-  - Waveform extraction now `barCount = 36` with `FloatArray(36)` initial/fallback — same bar language as the recording `LiveWaveform`.
-  - `ExoPlayer` now `setAudioAttributes(AudioAttributes.DEFAULT, handleAudioFocus = true)` + `setHandleAudioBecomingNoisy(true)` + `setVolume(1f)`.
-  - `STATE_ENDED` → reset UI + park at start (`seekTo(0)`); `STATE_IDLE` → reset `isPlaying`; `onPlayerError` → reset UI only (no seek — unavailable once errored into IDLE).
-  - Play button: `STATE_ENDED` → `seekTo(0)`, `STATE_IDLE` → `prepare()` (documented retry path), then `play()`.
-  - New imports `androidx.media3.common.AudioAttributes` + `PlaybackException` (ordered AudioAttributes, MediaItem, PlaybackException, Player, ExoPlayer).
-  - `WaveformCanvas` already rendered 36 capsule bars mirroring `LiveWaveform` (accent/tint split is the progress readout) — kept.
+- `MoodBoardZoom.kt`:
+  - `MoodBoardZoomState.zoomIn` now takes tile + viewport dims `(uri, tileW, tileH, viewW, viewH)` and computes a **fit-based** default scale via `fitZoomScale` = `(minOf(viewW/tileW, viewH/tileH) * 0.9f).coerceIn(1.1f, 5f)` (2.4f fallback when dims unknown) — small tiles zoom in up to 5x, while a tile that already fills the board opens at essentially its fit size (straight + slight lift) instead of exploding past the screen.
+  - New `defaultScale` field — `resetZoom()` (double-tap on the zoomed image) springs back to the fit-based default instead of a hardcoded 2.4x.
+  - `applyPinch` max clamp raised 4f → 8f so small images can be pinched in further.
+  - `MoodBoardTiles` now opens tiles on **double-tap** (matching the editor gesture) — `onTileZoom` callback type widened to `((String, Float, Float, Float, Float) -> Unit)?` and passes `(uri, tile.widthPx, tile.heightPx, canvasWPx, canvasHPx)`.
+- `EntryDetailScreen.kt` — both `MoodBoardTiles` call sites (inline board + expanded dialog) pass the new dims (`canvasW/canvasH` and `boardW/boardH`); hint text updated to "Double-tap a tile to zoom · pinch to magnify".
+- `GalleryWallFormat.kt` — editor tile `onZoomIn` widened to `(String, Float, Float, Float, Float) -> Unit`; double-tap and the search button pass `(uri, tile.widthPx, tile.heightPx, canvasW, canvasH)` so the editor zoom is fit-based too.
 
 ## Validation
-- Code reviewer passed 4 passes. Findings applied as prescribed: (1) `PlaybackException` import must precede `Player` alphabetically; (2) `STATE_IDLE` retry needs `prepare()`, not just seek; (3) `onPlayerError`'s unconditional `seekTo(0)` could throw `IllegalStateException` once the player errors into IDLE — removed. All scopes/braces/imports verified; reviewer confirmed ready to push.
+- Code reviewer passed 2 passes. One refinement applied as prescribed: the `fitZoomScale` floor was lowered 1.4f → 1.1f so a near-full-board tile opens at fit size instead of still overflowing the viewport (directly targeting the "opens up in a large view" symptom). All call sites, dims, and scopes verified; reviewer confirmed ready to push.
 
 ## Completion summary
 - Committed & pushed.

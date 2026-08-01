@@ -445,7 +445,7 @@ private fun MoodBoardCanvas(
                                 val idx = tiles.indexOfFirst { it.id == id }
                                 if (idx >= 0) tiles.removeAt(idx)
                             },
-                            onZoomIn = { zoomState.zoomIn(it) },
+                            onZoomIn = { uri, tw, th, vw, vh -> zoomState.zoomIn(uri, tw, th, vw, vh) },
                             onDragStart = { draggingTileId = it },
                             onPinZoneChange = { if (it != inPinZone) inPinZone = it },
                             onCommit = { id, preview ->
@@ -666,7 +666,7 @@ private fun MoodBoardEditorTile(
     minTilePx: Float,
     onBringToFront: (Int) -> Unit,
     onRemove: (Int) -> Unit,
-    onZoomIn: (String) -> Unit,
+    onZoomIn: (String, Float, Float, Float, Float) -> Unit,
     onDragStart: (Int) -> Unit,
     onPinZoneChange: (Boolean) -> Unit,
     onCommit: (Int, TileDragPreview) -> Unit,
@@ -705,7 +705,9 @@ private fun MoodBoardEditorTile(
                     onTap = { onBringToFront(currentTile.id) },
                     // Double-tap zooms the image in place instead of opening
                     // a full-screen page.
-                    onDoubleTap = { onZoomIn(currentTile.uri) }
+                    onDoubleTap = {
+                        onZoomIn(currentTile.uri, currentTile.widthPx, currentTile.heightPx, canvasW, canvasH)
+                    }
                 )
             }
             .pointerInput(tile.id) {
@@ -785,7 +787,7 @@ private fun MoodBoardEditorTile(
 
         // ── Zoom-in-place button (bottom-end) ─────────────────────────
         Surface(
-            onClick = { onZoomIn(tile.uri) },
+            onClick = { onZoomIn(tile.uri, tile.widthPx, tile.heightPx, canvasW, canvasH) },
             shape = CircleShape,
             color = Color.Black.copy(alpha = 0.48f),
             modifier = Modifier
