@@ -1963,7 +1963,10 @@ private fun CategoryPickerSheet(
         ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
+                // v6.6 — the full-screen category selection page wears the
+                // same category tint wash as the Spin page it sits on, so
+                // the picker never flashes a foreign plain background.
+                color = currentCat.categoryBackgroundWash()
             ) {
                 Column(
                     modifier = Modifier

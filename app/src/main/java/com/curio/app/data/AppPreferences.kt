@@ -24,6 +24,7 @@ object AppPreferences {
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
+    private const val KEY_HOME_TINT_ENABLED = "home_tint_enabled"
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
@@ -54,10 +55,19 @@ object AppPreferences {
     var tintWashEnabledState by mutableStateOf(true)
         private set
 
+    /**
+     * Reactive HOME-screen-only tint state — independent of the global tint
+     * toggle. When off, the Home page keeps the plain theme background even
+     * while every other screen wears its category tint.
+     */
+    var homeTintEnabledState by mutableStateOf(true)
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
+        homeTintEnabledState = isHomeTintEnabled(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -77,6 +87,16 @@ object AppPreferences {
     fun setTintWashEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_TINT_WASH_ENABLED, enabled).apply()
         tintWashEnabledState = enabled
+    }
+
+    // ── Home screen tint (separate from the global wash) ───────────────
+    /** Whether the Home page wears a category tint (default on). */
+    fun isHomeTintEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_HOME_TINT_ENABLED, true)
+
+    fun setHomeTintEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_HOME_TINT_ENABLED, enabled).apply()
+        homeTintEnabledState = enabled
     }
 
     // ── Daily reminder ───────────────────────────────────────────────

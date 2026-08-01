@@ -75,7 +75,9 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -132,6 +134,12 @@ fun HomeScreen(navController: NavController) {
     val reminderEnabled = AppPreferences.reminderEnabledState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    // v6.6 — Home wears the category tint wash like every other screen
+    // (selected chip, or Wildcard when Surprise). Gated by BOTH the global
+    // tint toggle and the dedicated Home toggle so Home can stay plain
+    // while the rest of the app tints.
+    val washCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)
+    val homeTintOn = AppPreferences.tintWashEnabledState && AppPreferences.homeTintEnabledState
 
     val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
         try {
@@ -164,7 +172,10 @@ fun HomeScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(
+                    if (homeTintOn) washCat.categoryBackgroundWash()
+                    else MaterialTheme.colorScheme.background
+                )
         ) {
             // ── Watermark backdrop — muted category glyphs behind all ──
             //    content (same treatment as the Spin page). The selected
@@ -187,11 +198,12 @@ fun HomeScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Refined menu button with better icon
+                // Refined menu button with better icon — wears the tinted
+                // surface so it doesn't read as a cream pill on the wash.
                 Surface(
                     onClick = { scope.launch { drawerState.open() } },
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -206,7 +218,7 @@ fun HomeScreen(navController: NavController) {
                 Surface(
                     onClick = { navController.navigate(CurioRoutes.PROFILE) { launchSingleTop = true } },
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
                     shadowElevation = 0.dp,
                     modifier = Modifier.size(42.dp)
                 ) {
@@ -376,19 +388,22 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier.weight(1f),
                     glyph = "local_fire_department",
                     value = "$streakDays",
-                    tint = CurioColors.CoralBlush
+                    tint = CurioColors.CoralBlush,
+                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.Inventory2,
                     value = "$totalSaved",
-                    tint = CurioColors.Sage
+                    tint = CurioColors.Sage,
+                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.History,
                     value = "${recentEntries.size}",
-                    tint = CurioColors.Lilac
+                    tint = CurioColors.Lilac,
+                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
                 )
             }
 
@@ -409,7 +424,7 @@ fun HomeScreen(navController: NavController) {
                     Surface(
                         onClick = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
                         shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerHigh),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
                         shadowElevation = 0.dp
                     ) {
@@ -445,6 +460,7 @@ fun HomeScreen(navController: NavController) {
                             name = "Surprise",
                             accent = CurioColors.CategoryCoral,
                             selected = selectedCategory == null,
+                            surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
                             onClick = { selectedCategory = null }
                         )
                     }
@@ -454,6 +470,7 @@ fun HomeScreen(navController: NavController) {
                                 name = cat.displayName,
                                 accent = cat.accent,
                                 selected = selectedCategory?.id == cat.id,
+                                surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
                                 onClick = {
                                     selectedCategory =
                                         if (selectedCategory?.id == cat.id) null else cat
@@ -482,7 +499,7 @@ fun HomeScreen(navController: NavController) {
                         Surface(
                             onClick = { navController.navigateToTab(CurioRoutes.CABINET) },
                             shape = RoundedCornerShape(50),
-                            color = MaterialTheme.colorScheme.surfaceContainerLow
+                            color = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow)
                         ) {
                             CurioForwardArrow(
                                 "Open Cabinet",
@@ -496,6 +513,7 @@ fun HomeScreen(navController: NavController) {
 
                 if (recentEntries.isEmpty()) {
                     FirstTimeEmpty(
+                        surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
                         onPickCategory = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
                         onShuffleSurprise = { navController.navigateToTab(CurioRoutes.SPIN) }
                     )
@@ -504,6 +522,7 @@ fun HomeScreen(navController: NavController) {
                         recentEntries.forEach { entry ->
                             RecentEntryRow(
                                 entry = entry,
+                                surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surface),
                                 onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) { launchSingleTop = true } }
                             )
                         }
@@ -518,6 +537,7 @@ fun HomeScreen(navController: NavController) {
             if (!reminderEnabled) {
                 Spacer(Modifier.height(16.dp))
                 ReminderNudgeCard(
+                    surface = homeTintSurface(washCat, MaterialTheme.colorScheme.surfaceContainerLow),
                     onTap = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
                 )
             }
@@ -533,18 +553,31 @@ fun HomeScreen(navController: NavController) {
 // Stat pill (compact)
 // ══════════════════════════════════════════════���════════════════════════
 
+/**
+ * Home's cream-surfaces helper — resolves the tinted surface for pills /
+ * chips / cards on the Home page. Honors BOTH the global category-tint
+ * toggle and the dedicated Home-tint toggle (v6.6): when either is off,
+ * [base] is returned unchanged so Home reverts to its plain cream look.
+ */
+@Composable
+private fun homeTintSurface(washCat: CurioCategory, base: Color): Color {
+    if (!AppPreferences.tintWashEnabledState || !AppPreferences.homeTintEnabledState) return base
+    return washCat.categorySurface(base)
+}
+
 @Composable
 private fun StatPill(
     modifier: Modifier = Modifier,
     glyph: String,
     value: String,
-    tint: Color
+    tint: Color,
+    surface: Color = MaterialTheme.colorScheme.surfaceContainerLow
 ) {
     // Color accent on the icon, readable onSurface text, solid theme surface.
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = surface,
         shadowElevation = 0.dp
     ) {
             Row(
@@ -575,14 +608,15 @@ private fun CategoryChip(
     name: String,
     accent: Color,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    surface: Color = MaterialTheme.colorScheme.surfaceContainerLow
 ) {
     val scale by animateFloatAsState(
         targetValue = if (selected) 1.06f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
         label = "catChipScale"
     )
-    val inactiveContainer = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, 0.10f)
+    val inactiveContainer = lerp(surface, accent, 0.10f)
     // Muted selected fill — same treatment as the picker cards: the raw
     // accent is deepened just a touch toward black so it stays rich.
     val selectedContainer = lerp(accent, Color.Black, 0.10f)
@@ -614,12 +648,12 @@ private fun CategoryChip(
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
+private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit, surface: Color = MaterialTheme.colorScheme.surface) {
     val cat = CurioCategories.byId(entry.topic.categoryId)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = surface,
         shadowElevation = 0.dp,
         tonalElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
@@ -679,11 +713,12 @@ private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = captured
 @Composable
 private fun FirstTimeEmpty(
     onPickCategory: () -> Unit,
-    onShuffleSurprise: () -> Unit
+    onShuffleSurprise: () -> Unit,
+    surface: Color = MaterialTheme.colorScheme.surfaceContainerLow
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = surface,
         shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -736,7 +771,10 @@ private fun FirstTimeEmpty(
                 Surface(
                     onClick = onPickCategory,
                     shape = RoundedCornerShape(50),
-                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    // v6.6 — derive from the tinted card surface so this
+                    // secondary button never reads as a foreign cream pill
+                    // on the tinted first-run card.
+                    color = lerp(surface, MaterialTheme.colorScheme.surfaceContainerLow, 0.5f),
                     border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Text(
@@ -756,12 +794,12 @@ private fun FirstTimeEmpty(
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ReminderNudgeCard(onTap: () -> Unit) {
+private fun ReminderNudgeCard(onTap: () -> Unit, surface: Color = MaterialTheme.colorScheme.surfaceContainerLow) {
     val fg = MaterialTheme.colorScheme.onSurface
     Surface(
         onClick = onTap,
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = surface,
         shadowElevation = 0.dp,
         modifier = Modifier
             .fillMaxWidth()

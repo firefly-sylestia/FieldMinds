@@ -1,19 +1,31 @@
-# Request: Improve journal favorite-quotes + make review stars filled
+# Current Request
 
-## Request
-(1) Improve the journal entry favorite quotes feature; (2) in the review, make the stars fill instead of just outline.
+## Status: COMPLETED (pushed)
 
-## Root cause
-The app's icon font is Material Symbols **Outlined** (`material_symbols_outlined.ttf`) — even the `star` ligature renders as a hollow outline, so "filled" rating stars were just tinted outlines in both the capture form and the saved review.
+"fix dark-mode pink/brown/red/blue tints; add tint to category selection page; expand tint to full app incl. Home; fix remaining cream buttons; separate Home-tint-only toggle"
 
-## Changes
-- `CurioIcons.kt` — new `FormatQuote = "format_quote"` glyph const.
-- `CaptureFormatComponents.kt` — NEW `@Composable fun FilledStar(color, starSize, modifier, filled)` that draws a solid 5-pointed star path on Canvas (outer radius = `size.minDimension/2`, inner at 0.42×, angle = `Math.toRadians(-90 + i*36)`); unfilled stars draw the same solid path at 25% alpha (filled-or-ghost, never hollow). `StarRating` rewritten to use it (32dp, clickable, `.semantics { contentDescription = "N star(s)" }` restored since Canvas has no automatic label). New imports: `Canvas`, `Offset`, `Path`, `kotlin.math.cos/sin`, `semantics`/`contentDescription` (ASCII-ordered).
-- `MarginaliaFormat.kt` — capture-side `QuoteCard` upgraded: header row with FormatQuote glyph + "Quote N" label + Remove button (moved out of the bottom), accent rule border (28% alpha) + 2dp shadow lift so each card reads as a placed notecard. New imports `Spacer` + `width`.
-- `EntryDetailScreen.kt` — saved review (`ReelNotesRender`) now renders 5 `FilledStar` (imported from capture.formats): filled in `categoryInk()`, remainder as outline-ghost. Saved `MarginaliaRender` upgraded: new `MarginaliaSectionHeader` (FormatQuote glyph + label + optional count) above "My thoughts" and "Favorite quotes"; journal + quote cards use `categorySurface(...)` + `categoryBorder()` and quotes get a FormatQuote glyph, accent rule, 1dp shadow and the existing ±1.5° rotation — mirroring the capture form.
+## Changes (5 files)
 
-## Validation
-- Code reviewer passed 3 passes. One fix applied as prescribed: the rewritten `StarRating` lost the old CurioIcon's `contentDescription` — restored via `.semantics {}` on the star so the tappable rating row stays accessible. Star geometry/scope/imports verified; reviewer confirmed ready to push.
+1. **`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`**
+   - `DarkWashTuning` gained optional `deepTwin: Color?`; `resolveMidTone` lerps toward `deepTwin` (or black) when `darken > 0`.
+   - Dark-mode tuning: **MOVIES** (red) → hug deep accent + darken 0.10; **SCIENCE** (dark blue) → nudge darker (darken 0.10); **BOOKS** (brown) → new entry, dark coffee twin `0xFF78350F`; **WILDCARD** (pink) → dark rose-pink twin `0xFFBE185D` (fixes muddy grey-pink).
+   - Untuned families (indigo/teal) still fall through to `DEFAULT_DARK_WASH` (darken 0) → no behavior drift.
 
-## Completion summary
-- Committed & pushed.
+2. **`app/src/main/java/com/curio/app/data/AppPreferences.kt`**
+   - New independent `homeTintEnabledState` + `KEY_HOME_TINT_ENABLED`, `isHomeTintEnabled`/`setHomeTintEnabled`, seeded in `initThemeMode`.
+
+3. **`app/src/main/java/com/curio/app/features/home/HomeScreen.kt`**
+   - Home background now wears the category wash (`selectedCategory ?: WILDCARD`), gated by BOTH global tint + new Home toggle.
+   - New `homeTintSurface(washCat, base)` helper; stat pills, menu/avatar pills, All button, category chips, recent rows, first-time card, reminder card, and "Pick a lane" button all derive from the tinted surface (no more foreign cream on tint).
+
+4. **`app/src/main/java/com/curio/app/features/settings/SettingsScreen.kt`**
+   - New "Home screen tint" switch row (Appearance card) — toggles Home tint independently.
+
+5. **`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
+   - Full-screen `CategoryPickerSheet` now wears `currentCat.categoryBackgroundWash()` (matches the standalone picker which already had it).
+
+## Review
+- code-reviewer-deepseek-flash: clean ×2 (caught + fixed the "Pick a lane" cream button; indentation + kdoc nits fixed).
+
+## CI
+- Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).

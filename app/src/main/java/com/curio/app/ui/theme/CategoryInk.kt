@@ -42,10 +42,11 @@ fun CurioCategory.categoryInk(): Color =
  * page keeps the category's hue with real color, never a washed-out grey-white.
  *
  * A few families need extra contrast: at the default 50% midpoint, rose
- * (movies), sky (science) and especially coral (wildcard — its accent is
- * already a pastel pink) read too pale/white-washed. Those pull the
- * mid-tone closer to the deep accent and blend a touch stronger, so the
- * hue survives over midnight instead of flattening to grey-white.
+ * (movies), sky (science), amber (books — brown) and especially coral
+ * (wildcard — its accent is already a pastel pink) read too
+ * pale/white-washed. Those pull the mid-tone closer to the deep accent
+ * (or a deep hue twin, for pale accents) and blend a touch stronger, so
+ * the hue survives over midnight instead of flattening to grey-white.
  */
 @Composable
 fun CurioCategory.categoryBackgroundWash(): Color {
@@ -111,32 +112,45 @@ fun CurioCategory.categoryBorder(fallback: BorderStroke? = null): BorderStroke? 
  * @param midToneFactor How far the mid-tone is pulled from the deep accent
  *   toward its light twin (lower = stays closer to the deep accent = darker).
  * @param blendFraction How strongly the mid-tone is blended over midnight.
- * @param darken Extra darkening of the mid-tone toward black — needed for
- *   families whose accent is itself pale (e.g. wildcard coral), where no
- *   mid-tone pull can reach a real shade on its own.
+ * @param darken Extra darkening of the mid-tone toward [deepTwin] (or black
+ *   when no twin is given) — needed for families whose accent is itself
+ *   pale (e.g. wildcard coral), where no mid-tone pull can reach a real
+ *   shade on its own.
+ * @param deepTwin A deeper shade of the same hue to darken toward. Falling
+ *   back to black for pale accents (coral) produced a muddy grey-pink over
+ *   midnight; a real deep pink twin keeps the hue while going dark.
  */
 private class DarkWashTuning(
     val midToneFactor: Float,
     val blendFraction: Float,
-    val darken: Float = 0f
+    val darken: Float = 0f,
+    val deepTwin: Color? = null
 ) {
-    /** The wash mid-tone for this family — deepened toward black when tuned. */
+    /** The wash mid-tone for this family — deepened toward [deepTwin]/black when tuned. */
     fun resolveMidTone(accent: Color, lightAccent: Color): Color {
         val midTone = lerp(accent, lightAccent, midToneFactor)
-        return if (darken > 0f) lerp(midTone, Color.Black, darken) else midTone
+        if (darken <= 0f) return midTone
+        return lerp(midTone, deepTwin ?: Color.Black, darken)
     }
 }
 
 private val DEFAULT_DARK_WASH = DarkWashTuning(0.5f, 0.15f)
 
 private val DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning> = mapOf(
-    // Rose (movies, red) + Sky (science, light blue) read whitewashed over
-    // midnight — pull close to the deep accent (lower factor) and blend a
-    // touch stronger so the wash keeps a real dark shade of the hue.
-    CategoryFamily.MOVIES  to DarkWashTuning(0.15f, 0.20f),
-    CategoryFamily.SCIENCE to DarkWashTuning(0.15f, 0.20f),
+    // Rose (movies, red) read whitewashed over midnight — hug the deep
+    // accent (low factor) and deepen a touch toward black so the wash is
+    // a dark maroon-red instead of a pale rose.
+    CategoryFamily.MOVIES  to DarkWashTuning(0.10f, 0.22f, darken = 0.10f),
+    // Sky (science, light blue) — slightly darker than the earlier deep-pull:
+    // keep the azure hue but nudge the mid-tone a bit toward black so the
+    // wash doesn't float pale-blue over midnight.
+    CategoryFamily.SCIENCE to DarkWashTuning(0.12f, 0.20f, darken = 0.10f),
+    // Amber (books, brown) — the accent is already a warm brown, but the
+    // default 50% midpoint pulled it toward its gold twin and washed out.
+    // Keep it near the deep amber and deepen toward a dark coffee brown.
+    CategoryFamily.BOOKS   to DarkWashTuning(0.15f, 0.22f, darken = 0.35f, deepTwin = Color(0xFF78350F)),
     // Coral (wildcard, pink) is a pastel accent — no mid-tone pull gets it
-    // dark, so deepen the mid-tone toward black to give the wash an actual
-    // pink shade instead of a pale white haze over midnight.
-    CategoryFamily.WILDCARD to DarkWashTuning(0.15f, 0.22f, darken = 0.28f)
+    // dark, and deepening toward black turned it a muddy grey-pink. Deepen
+    // toward a real deep pink twin instead so the wash is a dark rose-pink.
+    CategoryFamily.WILDCARD to DarkWashTuning(0.10f, 0.24f, darken = 0.40f, deepTwin = Color(0xFFBE185D))
 )
