@@ -89,13 +89,16 @@ fun CabinetScreen(navController: NavController) {
     // Category tint wash — the Cabinet wears the ACTIVE FILTER's tint over
     // the theme background (matching the Spin page), so browsing a category
     // feels tied to it. Theme-aware: deep accent over cream in light, pastel
-    // twin glow over midnight in dark. "All" has no single category → plain.
-    val filterWash = selectedFilter?.let { CurioCategories.byId(it).categoryBackgroundWash() }
+    // twin glow over midnight in dark. "All" falls back to the Wildcard's
+    // neutral coral wash (same fallback the empty state uses) so even the
+    // unfiltered view stays in the color story instead of a plain patch.
+    val filterWash = (selectedFilter ?: CategoryId.WILDCARD)
+        .let { CurioCategories.byId(it).categoryBackgroundWash() }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(filterWash ?: MaterialTheme.colorScheme.background)
+            .background(filterWash)
             .statusBarsPadding()
     ) {
         // ── Top bar ────────────────────────────────────────────────────────
