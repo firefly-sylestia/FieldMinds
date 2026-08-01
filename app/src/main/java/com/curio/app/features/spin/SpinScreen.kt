@@ -1789,11 +1789,13 @@ private fun RouletteDial(
     }
     val settledAngle = when {
         shuffling -> cycleIndex * segmentAngle * 2f
-        landedTopic != null -> {
+        // Both the landed state and a mid-spin category switch (landedTopic
+        // null but ticks already counted) settle to the nearest wedge from
+        // the last tick angle — so the wheel never unwinds backward to 0.
+        else -> {
             val mod = ((lastTickAngle.floatValue % 360f) + 360f) % 360f
             (mod / segmentAngle).roundToInt() * segmentAngle
         }
-        else -> 0f
     }
     val rotation by animateFloatAsState(
         targetValue = settledAngle,
