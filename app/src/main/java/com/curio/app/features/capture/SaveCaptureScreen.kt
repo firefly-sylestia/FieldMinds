@@ -233,6 +233,10 @@ fun SaveCaptureScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            // Category tint wash — the capture screen wears a faint wash of
+            // the active category over the theme background, matching the
+            // Spin page so saving stays in the same color story.
+            .background(cat.tint)
     ) {
         // ── Premium top bar ──────────────────────────────────────────────
         Row(

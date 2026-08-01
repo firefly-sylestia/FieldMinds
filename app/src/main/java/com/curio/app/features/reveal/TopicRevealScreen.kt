@@ -132,6 +132,10 @@ fun TopicRevealScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            // Category tint wash — the reveal page wears a faint wash of the
+            // topic's category over the theme background, matching the Spin
+            // page so the whole explore flow feels tied to the deck.
+            .background(cat.tint)
             .verticalScroll(rememberScrollState())
     ) {
         // ── 1. Top bar (close ✕ only) ──────────────────────────────────

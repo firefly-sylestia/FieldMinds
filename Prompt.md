@@ -1,6 +1,26 @@
 # Prompt.md — Request Log
 
-## Current Request: Audio not playing in saved entries
+## Current Request: Expand category-tint wash to Topic Reveal, Save/Capture, and Cabinet
+
+**User request (verbatim):** "also expand that category tint to topic and entry filling too and also the cabinet too"
+
+## Changes
+The Spin-page category-tint background wash (theme background + faint `.background(cat.tint)` layer) now also applies to:
+- `features/reveal/TopicRevealScreen.kt` — root Column adds `.background(cat.tint)` after the theme background (`cat` = the reveal topic's category).
+- `features/capture/SaveCaptureScreen.kt` — root Column adds `.background(cat.tint)` after the theme background (`cat` = the entry's category).
+- `features/cabinet/CabinetScreen.kt` — root Column tints by the ACTIVE filter chip: `val filterTint = selectedFilter?.let { CurioCategories.byId(it).tint }` applied via `.then(if (filterTint != null) Modifier.background(filterTint) else Modifier)`; "All" keeps the plain background (no single category).
+- `app/AGENTS.md` — durable design-preference note updated: the wash applies to Spin, Topic Reveal, Save/Capture, and Cabinet (filter-following).
+
+## Validation
+- code-reviewer-deepseek-flash: clean — `cat`/`filterTint` properly scoped, imports present, modifier layering correct (background paints bottom → tint → content), byId safe for valid enum ids, consistent with the Spin pattern. Nitpick applied: dropped the unnecessary `remember(selectedFilter)` wrapper in CabinetScreen.
+- No local gradle per AGENTS.md — CI on push is the compile gate.
+
+## Status
+DONE — committed & pushed.
+
+---
+
+## Previous Request: Audio not playing in saved entries
 
 **User request (verbatim):** "the aduio isnt playing in the saved entry"
 
@@ -30,68 +50,6 @@ DONE — committed & pushed.
 
 ## Validation
 - code-reviewer-deepseek-flash: clean — `lerp` import present, `cat` in scope in BottomCta, composite exactly reproduces the root wash, `landedTopic` still used (button/dice sizing), no dead params/imports. Minor non-blocking note: Wildcard coral (light pink) has lower white-dice contrast, but that was already the idle-state design the user asked to replicate.
-- No local gradle per AGENTS.md — CI on push is the compile gate.
-
-## Status
-DONE — committed & pushed.
-
----
-
-## Previous Request: Mood board image drag janky when editing an entry
-
-**User request (verbatim):** "the mood board drag is still buggy and jittery i meant when editing ir entry the image drag is so janky"
-
-## Root cause
-`MoodBoardEditorTile`'s `awaitEachGesture` drag handler gated **every** pointer-move event by touch slop (`dragAmount.getDistance() >= slop`). At 60–120Hz, per-frame deltas during slow/moderate drags sit far below slop, so the tile only moved when a single event happened to cross it — producing sticky, stuttering, jittery dragging.
-
-## Fix
-`features/capture/formats/GalleryWallFormat.kt` — capture the down position (`val down = awaitFirstDown(...)`); the slop check now gates **only the drag start** via total travel from the down point `(change.position - down.position).getDistance() >= slop`. Once `dragged` is true, every event delta applies 1:1. Consumption stays inside `if (dragged)` (taps / parent scroll unaffected within slop), pin-to-front zone logic intact, lift-without-slop still exits cleanly.
-
-## Validation
-- code-reviewer-deepseek-flash: clean — correct `down` usage, 1:1 first-move delta with no double-count, consumption correct, pin-zone intact; other drag handlers (`detectTransformGestures` zoom overlays, `moodBoardPinchZoom`) handle slop internally and do NOT share this bug.
-- No local gradle per AGENTS.md — CI on push is the compile gate.
-
-## Status
-DONE — committed & pushed.
-
----
-
-## Previous Request: Home hero card doesn't match cream background
-
-**User request (verbatim):** "the home hero card doesnt matc te roer color fix it"
-
-## Root cause
-The Home hero card (`CurioHeroCard.kt`) uses `CurioGradients.cardGradient()`, whose light-mode gradient end was still pure `Color.White` — after the previous change made the light background SoftCream (`#F7F0E4`), the hero card (and every other card-gradient consumer: category cards, TopicReveal, EntryDetail, Profile, quest cards) faded toward white and clashed with the cream surface.
-
-## Fix
-`CurioColors.kt` — `CurioGradients.cardGradient()` light-mode end changed `Color.White` → `CurioColors.SoftCream`, so all card gradients now wash into the cream background. Dark mode end (`Color.Black`) untouched. Doc comment updated.
-
-## Validation
-- code-reviewer-deepseek-flash: clean — `CurioColors.SoftCream` resolves from sibling `CurioGradients` object, `cardGradient` already @Composable, dark mode untouched. Optional note (not taken): dark gradient fades to pure black vs midnight `#0B1018` — pre-existing, out of scope.
-- No local gradle per AGENTS.md — CI on push is the compile gate.
-
-## Status
-DONE — committed & pushed.
-
----
-
-## Previous Request: Light-mode cream background + Spin-page category tint
-
-**User request (verbatim):** "make te ap ligt mode white color a less white color not dark color that creamy color but not tat black and like add the card category tint to it only in spin page"
-
-## Clarified via ask_user
-1. **Cream level:** Soft cream (`#F7F0E4`) — gentle warm off-white, barely not white, not dark/black.
-2. **Spin tint scope:** Background wash — the whole Spin page background gets a subtle wash of the active category's tint behind the deck.
-
-## Changes
-- `ui/theme/CurioColors.kt` — added `SoftCream = Color(0xFFF7F0E4)`; reworded `CreamWhite` comment (now ink/decoration only, no longer a surface).
-- `ui/theme/CurioTheme.kt` — light scheme `background`/`surface`/`surfaceContainerLowest` → `SoftCream`. Container steps deepened (Variant/Low/Container/High/Highest) so cards/sheets stay distinct on the cream surface. Dark scheme untouched.
-- `features/spin/SpinScreen.kt` — root Box adds `.background(deckCat.tint)` after the theme background, so **only** the Spin page wears the category-tint wash (subtle 20% alpha over both cream light and midnight dark).
-- `app/AGENTS.md` — recorded the durable user design preferences under UI section.
-
-## Validation
-- code-reviewer-deepseek-flash (2 passes): clean — modifier layering correct (background paints bottom, tint over it, content above), hierarchy coherent, no dark-mode drift, no broken references. Nitpick fixed (CreamWhite comment).
-- grep: SoftCream used in light scheme; only SpinScreen has the tint wash (all other screens keep plain `colorScheme.background`).
 - No local gradle per AGENTS.md — CI on push is the compile gate.
 
 ## Status

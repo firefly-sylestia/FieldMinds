@@ -85,10 +85,19 @@ fun CabinetScreen(navController: NavController) {
         else entries.filter { it.topic.categoryId == selectedFilter }
     }
 
+    // Category tint wash — the Cabinet wears the ACTIVE FILTER's tint over
+    // the theme background (matching the Spin page), so browsing a category
+    // feels tied to it. "All" has no single category → plain background.
+    val filterTint = selectedFilter?.let { CurioCategories.byId(it).tint }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .then(
+                if (filterTint != null) Modifier.background(filterTint)
+                else Modifier
+            )
             .statusBarsPadding()
     ) {
         // ── Top bar ────────────────────────────────────────────────────────
