@@ -29,16 +29,19 @@ fun CurioCategory.categoryInk(): Color =
  * Light mode: the deep accent at 20% over the cream background — the soft
  * pastel wash the user picked.
  *
- * Dark mode: the deep Tailwind-700 accents at 20% over the midnight surface
- * read muddy (amber goes brown, teal goes grey-green), so this uses each
- * category's light 300-level twin at a gentler 16% instead — a clean subtle
- * glow that keeps the page tied to the category without the murk.
+ * Dark mode: the deep Tailwind-700 accent alone at 20% reads muddy (amber
+ * goes brown, teal goes grey-green), while its light 300-level twin at any
+ * useful fraction reads WHITE-WASHED over the midnight surface. So this
+ * builds a saturated mid-tone — the accent lerped halfway toward its light
+ * twin (≈ the 500-level shade) — and washes it at a moderate 15%. The page
+ * keeps the category's hue with real color, never a washed-out grey-white.
  */
 @Composable
 fun CurioCategory.categoryBackgroundWash(): Color {
     val background = MaterialTheme.colorScheme.background
     return if (isCurioDarkTheme()) {
-        lerp(background, lightAccent, 0.16f)
+        val midTone = lerp(accent, lightAccent, 0.5f)
+        lerp(background, midTone, 0.15f)
     } else {
         lerp(background, accent, 0.20f)
     }
