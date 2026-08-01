@@ -56,7 +56,7 @@ fun CurioCategory.categoryBackgroundWash(): Color {
     if (!AppPreferences.tintWashEnabledState) return background
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
-        val midTone = lerp(accent, lightAccent, tuning.midToneFactor)
+        val midTone = tuning.resolveMidTone(accent, lightAccent)
         lerp(background, midTone, tuning.blendFraction)
     } else {
         lerp(background, lerp(accent, Color.White, 0.30f), 0.14f)
@@ -78,7 +78,7 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
     if (!AppPreferences.tintWashEnabledState) return base
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
-        val midTone = lerp(accent, lightAccent, tuning.midToneFactor)
+        val midTone = tuning.resolveMidTone(accent, lightAccent)
         lerp(base, midTone, tuning.blendFraction + 0.10f)
     } else {
         lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
@@ -105,17 +105,38 @@ fun CurioCategory.categoryBorder(fallback: BorderStroke? = null): BorderStroke? 
     return BorderStroke(1.dp, categoryInk().copy(alpha = 0.30f))
 }
 
-/** Per-family dark-mode wash tuning (mid-tone pull + blend fraction). */
-private class DarkWashTuning(val midToneFactor: Float, val blendFraction: Float)
+/**
+ * Per-family dark-mode wash tuning.
+ *
+ * @param midToneFactor How far the mid-tone is pulled from the deep accent
+ *   toward its light twin (lower = stays closer to the deep accent = darker).
+ * @param blendFraction How strongly the mid-tone is blended over midnight.
+ * @param darken Extra darkening of the mid-tone toward black — needed for
+ *   families whose accent is itself pale (e.g. wildcard coral), where no
+ *   mid-tone pull can reach a real shade on its own.
+ */
+private class DarkWashTuning(
+    val midToneFactor: Float,
+    val blendFraction: Float,
+    val darken: Float = 0f
+) {
+    /** The wash mid-tone for this family — deepened toward black when tuned. */
+    fun resolveMidTone(accent: Color, lightAccent: Color): Color {
+        val midTone = lerp(accent, lightAccent, midToneFactor)
+        return if (darken > 0f) lerp(midTone, Color.Black, darken) else midTone
+    }
+}
 
 private val DEFAULT_DARK_WASH = DarkWashTuning(0.5f, 0.15f)
 
 private val DARK_WASH_TUNING: Map<CategoryFamily, DarkWashTuning> = mapOf(
-    // Rose (movies) + Sky (science) lean too pale at the 50% midpoint —
-    // pull toward the deep accent and blend a bit stronger.
-    CategoryFamily.MOVIES  to DarkWashTuning(0.35f, 0.18f),
-    CategoryFamily.SCIENCE to DarkWashTuning(0.35f, 0.18f),
-    // Coral (wildcard) is a pastel accent, so the mid-tone is pale at any
-    // factor — contrast has to come from a stronger blend over midnight.
-    CategoryFamily.WILDCARD to DarkWashTuning(0.35f, 0.20f)
+    // Rose (movies, red) + Sky (science, light blue) read whitewashed over
+    // midnight — pull close to the deep accent (lower factor) and blend a
+    // touch stronger so the wash keeps a real dark shade of the hue.
+    CategoryFamily.MOVIES  to DarkWashTuning(0.15f, 0.20f),
+    CategoryFamily.SCIENCE to DarkWashTuning(0.15f, 0.20f),
+    // Coral (wildcard, pink) is a pastel accent — no mid-tone pull gets it
+    // dark, so deepen the mid-tone toward black to give the wash an actual
+    // pink shade instead of a pale white haze over midnight.
+    CategoryFamily.WILDCARD to DarkWashTuning(0.15f, 0.22f, darken = 0.28f)
 )
