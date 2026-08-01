@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Simple SharedPreferences wrapper for Curio user preferences.
@@ -25,6 +27,7 @@ object AppPreferences {
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_HOME_TINT_ENABLED = "home_tint_enabled"
+    private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
@@ -63,11 +66,20 @@ object AppPreferences {
     var homeTintEnabledState by mutableStateOf(true)
         private set
 
+    /**
+     * Reactive pinned-topics state — updated by [pinTopic] / [unpinTopic] so
+     * the Topic Reveal pin button and the Topic History "Pinned" section
+     * recompose instantly. Seeded from prefs in [initThemeMode].
+     */
+    var pinnedTopicsState by mutableStateOf<List<PinnedTopic>>(emptyList())
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         homeTintEnabledState = isHomeTintEnabled(context)
+        pinnedTopicsState = getPinnedTopics(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -97,6 +109,65 @@ object AppPreferences {
     fun setHomeTintEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_HOME_TINT_ENABLED, enabled).apply()
         homeTintEnabledState = enabled
+    }
+
+    // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────
+    /**
+     * Returns all pinned topics, newest first. Persisted as a JSON array so
+     * topic names with delimiters survive round-trips.
+     */
+    fun getPinnedTopics(context: Context): List<PinnedTopic> {
+        val raw = prefs(context).getString(KEY_PINNED_TOPICS, null) ?: return emptyList()
+        return try {
+            val arr = JSONArray(raw)
+            List(arr.length()) { i ->
+                val obj = arr.getJSONObject(i)
+                val id = obj.optString("categoryId")
+                val cat = CategoryId.values().firstOrNull { it.name == id } ?: return@List null
+                PinnedTopic(
+                    categoryId = cat,
+                    topicName = obj.optString("topicName"),
+                    pinnedAtMillis = obj.optLong("pinnedAtMillis", System.currentTimeMillis())
+                )
+            }.filterNotNull()
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    fun isTopicPinned(context: Context, categoryId: CategoryId, topicName: String): Boolean =
+        getPinnedTopics(context).any {
+            it.categoryId == categoryId && it.topicName == topicName
+        }
+
+    /** Pins a topic (newest first, deduped). No-op when already pinned. */
+    fun pinTopic(context: Context, categoryId: CategoryId, topicName: String) {
+        if (topicName.isBlank()) return
+        val current = getPinnedTopics(context)
+        if (current.any { it.categoryId == categoryId && it.topicName == topicName }) return
+        val updated = listOf(PinnedTopic(categoryId, topicName, System.currentTimeMillis())) + current
+        savePinnedTopics(context, updated)
+    }
+
+    fun unpinTopic(context: Context, categoryId: CategoryId, topicName: String) {
+        val updated = getPinnedTopics(context).filterNot {
+            it.categoryId == categoryId && it.topicName == topicName
+        }
+        savePinnedTopics(context, updated)
+    }
+
+    private fun savePinnedTopics(context: Context, topics: List<PinnedTopic>) {
+        val arr = JSONArray()
+        topics.forEach {
+            arr.put(
+                JSONObject()
+                    .put("categoryId", it.categoryId.name)
+                    .put("topicName", it.topicName)
+                    .put("pinnedAtMillis", it.pinnedAtMillis)
+            )
+        }
+        prefs(context).edit().putString(KEY_PINNED_TOPICS, arr.toString()).apply()
+        pinnedTopicsState = topics
     }
 
     // ── Daily reminder ───────────────────────────────────────────────
@@ -180,3 +251,13 @@ object AppPreferences {
     private fun prefs(context: Context) =
         context.applicationContext.getSharedPreferences(NAME, Context.MODE_PRIVATE)
 }
+
+/**
+ * A topic the user pinned on the Topic Reveal screen so they can revisit it
+ * later (listed under "Pinned for later" in Topic History).
+ */
+data class PinnedTopic(
+    val categoryId: CategoryId,
+    val topicName: String,
+    val pinnedAtMillis: Long
+)

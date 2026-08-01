@@ -26,17 +26,21 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.PinnedTopic
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.ScreenEntrance
+import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
@@ -53,6 +57,10 @@ import com.curio.app.ui.theme.categoryInk
  */
 @Composable
 fun TopicHistoryScreen(navController: NavController) {
+    val context = LocalContext.current
+    // v6.7 — pinned-for-later topics from the Topic Reveal screen, listed
+    // above the day-grouped capture history so the user can revisit them.
+    val pinnedTopics = AppPreferences.pinnedTopicsState
     val entriesState = produceState<List<HistoryEntry>>(initialValue = emptyList()) {
         try {
             CurioRepositoryHolder.repo.observeAll().collect { savedEntries ->
@@ -90,7 +98,7 @@ fun TopicHistoryScreen(navController: NavController) {
             )
         }
 
-        if (entries.isEmpty()) {
+        if (entries.isEmpty() && pinnedTopics.isEmpty()) {
             CurioEmptyState(
                 glyph = CurioIcons.History,
                 headline = "No shuffles yet",
@@ -112,6 +120,53 @@ fun TopicHistoryScreen(navController: NavController) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                // ── Pinned for later (pin button on Topic Reveal) ────────
+                if (pinnedTopics.isNotEmpty()) {
+                    item(key = "pinned_header") {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, bottom = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Bookmark, null,
+                                tint = CurioColors.CoralBlush,
+                                size = 16.dp
+                            )
+                            Text(
+                                text = "Pinned for later",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    items(pinnedTopics, key = { "pin_${it.categoryId.name}_${it.topicName}" }) { pinned ->
+                        PinnedRow(
+                            pinned = pinned,
+                            onClick = {
+                                navController.navigate(
+                                    com.curio.app.navigation.CurioRoutes.revealFor(
+                                        pinned.categoryId.routeSlug,
+                                        pinned.topicName
+                                    )
+                                ) { launchSingleTop = true }
+                            },
+                            onUnpin = {
+                                AppPreferences.unpinTopic(context, pinned.categoryId, pinned.topicName)
+                            }
+                        )
+                    }
+                    if (entries.isNotEmpty()) {
+                        item(key = "pinned_divider") {
+                            Spacer(Modifier.height(10.dp))
+                        }
+                    }
+                }
+
                 grouped.forEach { (dayLabel: String, dayEntries: List<HistoryEntry>) ->
                     item(key = "header_$dayLabel") {
                         Text(
@@ -206,6 +261,75 @@ private fun HistoryRow(entry: HistoryEntry, onClick: () -> Unit) {
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     size = 16.dp,
                     modifier = Modifier.padding(top = 2.dp)
+                )
+            }
+        }
+    }
+}
+
+
+// ── Pinned-for-later row — bookmark glyph + category accent dot ───────────
+
+@Composable
+private fun PinnedRow(pinned: PinnedTopic, onClick: () -> Unit, onUnpin: () -> Unit) {
+    val cat = CurioCategories.byId(pinned.categoryId)
+
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // ── Category accent dot with filled bookmark ────────────────
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(cat.tint, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Bookmark,
+                    contentDescription = null,
+                    tint = cat.categoryInk(),
+                    size = 20.dp
+                )
+            }
+
+            Spacer(Modifier.size(12.dp))
+
+            // ── Topic name + category ───────────────────────────────────
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = pinned.topicName,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = cat.displayName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = cat.categoryInk()
+                )
+            }
+
+            // ── Unpin affordance ────────────────────────────────────────
+            Surface(
+                onClick = onUnpin,
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceContainerLow
+            ) {
+                CurioIcon(
+                    CurioIcons.BookmarkBorder, "Unpin",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 16.dp,
+                    modifier = Modifier.padding(6.dp)
                 )
             }
         }

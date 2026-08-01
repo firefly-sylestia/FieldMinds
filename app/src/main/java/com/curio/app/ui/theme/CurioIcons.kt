@@ -71,6 +71,8 @@ object CurioIcons {
     const val Refresh     = "refresh"
     const val Star        = "star"
     const val StarOutline = "star_outline"
+    const val Bookmark    = "bookmark"           // filled — pinned topic
+    const val BookmarkBorder = "bookmark_border" // outline — not pinned
     const val FormatQuote = "format_quote"
     const val Mic         = "mic"
     const val MicNone     = "mic_none"

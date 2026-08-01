@@ -40,12 +40,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioTopic
@@ -130,6 +132,13 @@ fun TopicRevealScreen(
 
     val resolved = topic
     val navInsets = WindowInsets.navigationBars.asPaddingValues()
+    val context = LocalContext.current
+    // v6.7 — pin for later: the bookmark toggles on/off so the user can save
+    // the topic and revisit it from Topic History → "Pinned for later".
+    // Reads the REACTIVE pinnedTopicsState (not prefs) so the icon toggles
+    // immediately when the user taps pin/unpin.
+    val isPinned = resolved != null &&
+        AppPreferences.pinnedTopicsState.any { it.categoryId == cat.id && it.topicName == resolved.name }
 
     Column(
         modifier = Modifier
@@ -142,19 +151,42 @@ fun TopicRevealScreen(
             .background(cat.categoryBackgroundWash())
             .verticalScroll(rememberScrollState())
     ) {
-        // ── 1. Top bar (close ✕ only) ──────────────────────────────────
+        // ── 1. Top bar (pin bookmark + close ✕) ────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 0.dp),
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Pin for later — filled bookmark when pinned (category accent),
+            // outline when not. Only meaningful once the topic has resolved.
             Surface(
-                // Return to the Spin deck (not Home) — the landed card
-                // keeps its "Tap to open" state so it can be reopened
-                // until the user spins again or explores it (v5.6).
+                onClick = {
+                    val topic = resolved ?: return@Surface
+                    if (AppPreferences.isTopicPinned(context, cat.id, topic.name)) {
+                        AppPreferences.unpinTopic(context, cat.id, topic.name)
+                    } else {
+                        AppPreferences.pinTopic(context, cat.id, topic.name)
+                    }
+                },
+                shape = CircleShape,
+                color = if (isPinned) cat.accent else MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                CurioIcon(
+                    name = if (isPinned) CurioIcons.Bookmark else CurioIcons.BookmarkBorder,
+                    contentDescription = if (isPinned) "Unpin this topic" else "Pin this topic for later",
+                    tint = if (isPinned) Color.White else MaterialTheme.colorScheme.onSurface,
+                    size = 22.dp,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+
+            // Close — return to the Spin deck (not Home): the landed card
+            // keeps its "Tap to open" state so it can be reopened until the
+            // user spins again or explores it (v5.6).
+            Surface(
                 onClick = { navController.popBackStack() },
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.surfaceVariant

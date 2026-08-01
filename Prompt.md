@@ -2,35 +2,29 @@
 
 ## Status: COMPLETED (pushed)
 
-"fix dark-mode pink/brown/red/blue tints; add tint to category selection page; expand tint to full app incl. Home; fix remaining cream buttons; separate Home-tint-only toggle"
+"in topic reveal screen add a pin topic feature which will save that topic later for the user to relog it properly after watching"
 
-## Changes (5 files)
+## Changes (4 files)
 
-1. **`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`**
-   - `DarkWashTuning` gained optional `deepTwin: Color?`; `resolveMidTone` lerps toward `deepTwin` (or black) when `darken > 0`.
-   - Dark-mode tuning: **MOVIES** (red) → hug deep accent + darken 0.10; **SCIENCE** (dark blue) → nudge darker (darken 0.10); **BOOKS** (brown) → new entry, dark coffee twin `0xFF78350F`; **WILDCARD** (pink) → dark rose-pink twin `0xFFBE185D` (fixes muddy grey-pink).
-   - Untuned families (indigo/teal) still fall through to `DEFAULT_DARK_WASH` (darken 0) → no behavior drift.
+1. **`app/src/main/java/com/curio/app/data/AppPreferences.kt`**
+   - New `PinnedTopic(categoryId, topicName, pinnedAtMillis)` top-level data class.
+   - JSON persistence (`org.json`, already used by TopicJsonLoader) under `KEY_PINNED_TOPICS`: `getPinnedTopics` (newest first, filterNotNull), `isTopicPinned`, `pinTopic` (deduped), `unpinTopic`, `savePinnedTopics`.
+   - Reactive `pinnedTopicsState` (mutableStateOf, private set), seeded in `initThemeMode` so the reveal button + history list update instantly.
 
-2. **`app/src/main/java/com/curio/app/data/AppPreferences.kt`**
-   - New independent `homeTintEnabledState` + `KEY_HOME_TINT_ENABLED`, `isHomeTintEnabled`/`setHomeTintEnabled`, seeded in `initThemeMode`.
+2. **`app/src/main/java/com/curio/app/ui/theme/CurioIcons.kt`**
+   - Added `Bookmark = "bookmark"` (filled) + `BookmarkBorder = "bookmark_border"` (outline) glyphs.
 
-3. **`app/src/main/java/com/curio/app/features/home/HomeScreen.kt`**
-   - Home background now wears the category wash (`selectedCategory ?: WILDCARD`), gated by BOTH global tint + new Home toggle.
-   - New `homeTintSurface(washCat, base)` helper; stat pills, menu/avatar pills, All button, category chips, recent rows, first-time card, reminder card, and "Pick a lane" button all derive from the tinted surface (no more foreign cream on tint).
+3. **`app/src/main/java/com/curio/app/features/reveal/TopicRevealScreen.kt`**
+   - Top bar now has a pin button (bookmark) before the close ✕: filled + category accent when pinned, outline when not; toggles `pinTopic`/`unpinTopic`.
+   - `isPinned` reads the REACTIVE `pinnedTopicsState` (reviewer caught the original prefs-read version that wouldn't recompose — fixed).
 
-4. **`app/src/main/java/com/curio/app/features/settings/SettingsScreen.kt`**
-   - New "Home screen tint" switch row (Appearance card) — toggles Home tint independently.
-
-5. **`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
-   - Full-screen `CategoryPickerSheet` now wears `currentCat.categoryBackgroundWash()` (matches the standalone picker which already had it).
+4. **`app/src/main/java/com/curio/app/features/topichistory/TopicHistoryScreen.kt`**
+   - New "Pinned for later" section at the top of the LazyColumn (bookmark header, `PinnedRow` per topic with category accent dot + name + category + unpin button), above the day-grouped capture history.
+   - Tapping a pinned row reopens `revealFor(categorySlug, topicName)`.
+   - Empty-state now only shows when there are neither entries nor pins.
 
 ## Review
-- code-reviewer-deepseek-flash: clean ×2 (caught + fixed the "Pick a lane" cream button; indentation + kdoc nits fixed).
-
-## CI fix (pushed `887bf8ce`)
-- GitHub Actions `compileDebugKotlin` failed: `CabinetScreen.kt:233:17 Unresolved reference 'BorderStroke'`.
-- Root cause: `FilterChipLite` signature declares `chipBorder: BorderStroke? = null` but the file only imported `androidx.compose.foundation.background` — the `BorderStroke` import was missing (pre-existing latent gap surfaced by CI).
-- Fix: added `import androidx.compose.foundation.BorderStroke` before the `background` import (ASCII order, matches HomeScreen.kt/CategoryInk.kt). Reviewer confirmed clean; CI re-run is the gate.
+- code-reviewer-deepseek-flash: clean ×2 (caught + fixed the non-reactive `isPinned` bug).
 
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).
