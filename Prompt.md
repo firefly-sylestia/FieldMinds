@@ -1,30 +1,22 @@
 # Prompt.md — Request Log
 
-## Current Request: "Edit entry" for multi-section entries
+## Current Request: Cabinet card preview — stacked badge for portfolio entries
 
-**User request:** Add an "Edit entry" option in the detail dropdown for multi-section entries so users can reopen the whole portfolio (all takes) in the universal editor, not just mood boards.
-
-**Context:** The universal editor (`SaveCaptureScreen` + `FormatBodyForCategory`) was ALREADY fully generic — it loads any saved entry, unwraps Portfolios into takes, and saves back in place. The gap was purely routing + discoverability: only an `edit-moodboard` route existed and the detail dropdown only offered "Edit mood board" for mood-board-ish entries.
+**User request:** Update the Cabinet card preview for portfolio entries to show a small stacked badge of all section format icons instead of just the first one.
 
 ## Implementation (complete)
 
-### Routing
-- `CurioRoutes.kt`: added `EDIT_ENTRY = "edit-entry/{entryId}"` + `editEntry(entryId)` builder (alongside the existing `editMoodBoard`).
-- `CurioNavHost.kt`: registered `EDIT_ENTRY` → `SaveCaptureScreen(editEntryId = entryId)` — identical to the EDIT_MOODBOARD registration (both reopen the saved entry preloaded, re-save in place via Room REPLACE).
-
-### Detail dropdown (EntryDetailScreen.kt)
-- New `isMultiSectionEntry(entry)` = `captureData is CaptureData.Portfolio` (Portfolios are by construction 2+ takes).
-- Dropdown logic: Portfolio → "Edit entry" → `editEntry` route; else mood-board → "Edit mood board" → `editMoodBoard` (unchanged).
-- `isMoodBoardEntry` simplified to drop the Portfolio clause (Portfolios are now handled by the "Edit entry" branch; the function's only caller is the dropdown). Direct GalleryWall and OpenNotebook-GalleryWall still get "Edit mood board".
-- A Portfolio containing a GalleryWall now shows "Edit entry" — the universal editor still opens on the mood-board section (existing `activeIndex` GalleryWall-first logic).
-
-### Docs
-- `SaveCaptureScreen.kt`: KDoc updated — edit mode now covers single mood boards AND whole multi-section Portfolios.
+### CurioTopicCard.kt (`CurioEntryCard` — the only Cabinet card component; sole user is CabinetScreen)
+- The card's bottom-right corner previously rendered a single `CurioIcon(formatGlyph(entry.format))` — for a Portfolio that's only the FIRST section's format.
+- Added `EntryFormatBadges(entry)`:
+  - Non-Portfolio entries (or an empty/malformed Portfolio) → unchanged single-glyph fallback (`formatGlyph(entry.format)`), byte-for-byte the old rendering.
+  - Portfolio entries → a small STACKED badge cluster: one 18dp circular badge per section's format glyph (`formatGlyph(section.format)`), overlapping like an avatar stack via `Arrangement.spacedBy((-6).dp)` (later circles draw on top), each separated by a 1dp `surface`-colored border. Capped at 3 badges; extra takes roll up into a "+N" overflow chip. The card's `bodyPreview` already lists every take's short name ("2 takes · Voice + Review").
+- New imports: `BorderStroke`, `size`, `CircleShape`, `FontWeight`, `CaptureData`.
 
 ## Validation
-- code-reviewer-deepseek-flash: clean — routes match templates, no double registration, no entry type lost an edit affordance, no dead code/missing imports, universal editor confirmed to reopen every take.
-- grep verified `EDIT_ENTRY`/`editEntry` wiring across routes/navhost/dropdown; git diff scoped to 4 files (51 insertions, 10 deletions).
+- code-reviewer-deepseek-flash: clean — imports complete, negative-spacing stack renders correctly, non-portfolio behavior preserved via the `sections.isEmpty()` fallback, badge cluster fits the 2-col grid (~60dp vs ~134dp available). Only cosmetic nits (duplicated circle structure for "+N"; 1dp tonalElevation makes the pure-`surface` border read a hair off — imperceptible).
+- git diff scoped to 1 file (75 insertions, 5 deletions); confirmed `CurioEntryCard` has no other users.
 - No gradle build per AGENTS.md (CI owns compilation on push).
 
 ## Status
-DONE — committed & pushed (feat: edit entry for multi-section portfolios).
+DONE — committed & pushed (feat: cabinet card stacked format badges for portfolios).

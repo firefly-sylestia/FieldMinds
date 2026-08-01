@@ -1,5 +1,6 @@
 package com.curio.app.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,8 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
@@ -123,14 +128,79 @@ fun CurioEntryCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    CurioIcon(
-                        name = formatGlyph(entry.format),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        size = 16.dp
+                    EntryFormatBadges(entry)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Bottom-right format indicator on a Cabinet card: a plain glyph for
+ * single-format entries, or a small STACKED badge — one circle per take's
+ * format (capped at 3, with a "+N" overflow chip) — for multi-section
+ * Portfolio entries, so the whole take composition is visible at a glance.
+ */
+@Composable
+private fun EntryFormatBadges(entry: CurioEntry) {
+    val sections = (entry.captureData as? CaptureData.Portfolio)?.sections.orEmpty()
+    if (sections.isEmpty()) {
+        // Single-format entry (or an empty/malformed Portfolio): keep the
+        // existing single-glyph look.
+        CurioIcon(
+            name = formatGlyph(entry.format),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            size = 16.dp
+        )
+        return
+    }
+    val visible = sections.take(3)
+    val extra = sections.size - visible.size
+    Row(
+        // Negative spacing makes each badge overlap the previous one, like an
+        // avatar stack; later children draw on top.
+        horizontalArrangement = Arrangement.spacedBy((-6).dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        visible.forEach { section ->
+            FormatBadgeCircle(glyph = formatGlyph(section.format))
+        }
+        if (extra > 0) {
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+                modifier = Modifier.size(18.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "+$extra",
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
+        }
+    }
+}
+
+/** One circular format badge in the stacked [EntryFormatBadges] cluster. */
+@Composable
+private fun FormatBadgeCircle(glyph: String) {
+    Surface(
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+        modifier = Modifier.size(18.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            CurioIcon(
+                name = glyph,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                size = 12.dp
+            )
         }
     }
 }
