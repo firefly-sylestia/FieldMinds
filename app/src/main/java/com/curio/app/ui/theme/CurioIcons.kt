@@ -71,6 +71,7 @@ object CurioIcons {
     const val Refresh     = "refresh"
     const val Star        = "star"
     const val StarOutline = "star_outline"
+    const val FormatQuote = "format_quote"
     const val Mic         = "mic"
     const val MicNone     = "mic_none"
     const val Image       = "image"

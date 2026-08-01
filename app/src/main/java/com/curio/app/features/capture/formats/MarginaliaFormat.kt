@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -185,11 +187,51 @@ private fun QuoteCard(
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = tint,
+        // Slim accent rule + a soft lift so each card reads as a placed
+        // notecard, not a flat field floating on the page.
+        border = BorderStroke(1.dp, accent.copy(alpha = 0.28f)),
+        shadowElevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
             .rotate(rotation)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
+            // ── Card header — quote mark + number, Remove on the right ──
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CurioIcon(
+                    name = CurioIcons.FormatQuote,
+                    contentDescription = null,
+                    tint = accent,
+                    size = 18.dp
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    text = "Quote ${index + 1}",
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    ),
+                    color = accent,
+                    modifier = Modifier.weight(1f)
+                )
+                TextButton(
+                    onClick = onRemove,
+                    contentPadding = PaddingValues(
+                        horizontal = 8.dp,
+                        vertical = 2.dp
+                    )
+                ) {
+                    Text(
+                        text = "Remove",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = accent
+                    )
+                }
+            }
             OutlinedTextField(
                 value = text,
                 onValueChange = onTextChange,
@@ -206,26 +248,6 @@ private fun QuoteCard(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(
-                    onClick = onRemove,
-                    contentPadding = PaddingValues(
-                        horizontal = 8.dp,
-                        vertical = 4.dp
-                    )
-                ) {
-                    Text(
-                        text = "Remove",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = accent
-                    )
-                }
-            }
         }
     }
 }

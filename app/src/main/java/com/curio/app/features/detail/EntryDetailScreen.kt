@@ -92,6 +92,7 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.shortName
+import com.curio.app.features.capture.formats.FilledStar
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.components.MoodBoardTiles
@@ -842,20 +843,18 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    repeat(data.rating.coerceIn(0, 5)) { 
-                        CurioIcon(
-                            CurioIcons.Star, null, 
-                            tint = category.categoryInk(), 
-                            size = 24.dp
-                        ) 
-                    }
-                    repeat((5 - data.rating).coerceIn(0, 5)) { 
-                        CurioIcon(
-                            CurioIcons.StarOutline, null, 
-                            tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), 
-                            size = 24.dp
-                        ) 
-                    }
+                    // Solid Canvas stars — the Material Symbols Outlined font
+                // renders even `star` as a hollow outline, so filled stars
+                // are drawn as solid paths (ghost fill for the remainder).
+                repeat(5) { i ->
+                    val starFilled = i < data.rating.coerceIn(0, 5)
+                    FilledStar(
+                        color = if (starFilled) category.categoryInk()
+                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.35f),
+                        filled = starFilled,
+                        starSize = 24.dp
+                    )
+                }
                 }
             }
         }
@@ -950,19 +949,96 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
 private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.Marginalia ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // ── Journal — "My thoughts" section with a real header ───────
         if (data.journalText.isNotBlank()) {
-            Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth()) {
-                Text(data.journalText, modifier = Modifier.padding(20.dp), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            MarginaliaSectionHeader(label = "My thoughts", category = category)
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
+                border = category.categoryBorder(),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    data.journalText,
+                    modifier = Modifier.padding(20.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
-        data.quotes.filter { it.isNotBlank() }.forEach { quote ->
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = category.tint,
-                modifier = Modifier.fillMaxWidth().rotate(if (data.quotes.indexOf(quote) % 2 == 0) 1.5f else -1.5f)
-            ) {
-                Text("\"$quote\"", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurface)
+
+        // ── Favorite quotes — hand-placed notecards with quote marks ──
+        val quotes = data.quotes.filter { it.isNotBlank() }
+        if (quotes.isNotEmpty()) {
+            MarginaliaSectionHeader(label = "Favorite quotes", category = category, count = quotes.size)
+            quotes.forEachIndexed { i, quote ->
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
+                    // Slim accent rule + a soft lift so each quote reads as
+                    // a placed notecard — matches the capture form's cards.
+                    border = BorderStroke(1.dp, category.categoryInk().copy(alpha = 0.22f)),
+                    shadowElevation = 1.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .rotate(if (i % 2 == 0) 1.5f else -1.5f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        CurioIcon(
+                            name = CurioIcons.FormatQuote,
+                            contentDescription = null,
+                            tint = category.categoryInk().copy(alpha = 0.55f),
+                            size = 22.dp
+                        )
+                        Text(
+                            text = "\u201C$quote\u201D",
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
+        }
+    }
+}
+
+/**
+ * Marginalia section header — small quote-mark glyph + label (+ count)
+ * above the journal / quotes sections, mirroring the capture form's
+ * section labels so the saved view matches what the user wrote into.
+ */
+@Composable
+private fun MarginaliaSectionHeader(
+    label: String,
+    category: CurioCategory,
+    count: Int? = null
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        CurioIcon(
+            name = CurioIcons.FormatQuote,
+            contentDescription = null,
+            tint = category.categoryInk(),
+            size = 16.dp
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        if (count != null) {
+            Text(
+                text = "$count",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.curio.app.features.capture.formats
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,13 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import coil.compose.rememberAsyncImagePainter
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * Shared composable components used by the 6 capture format bodies.
@@ -40,9 +47,43 @@ import coil.compose.rememberAsyncImagePainter
  */
 
 /**
+ * A truly FILLED 5-pointed star drawn as a solid Canvas path.
+ *
+ * The bundled icon font is Material Symbols *Outlined*, where even the
+ * `star` ligature renders as a hollow outline — so filled rating stars
+ * were just outlines with a tint. Drawing the path directly guarantees a
+ * solid fill in any color. When [filled] is false the SAME solid path is
+ * drawn at low alpha, so a rating row reads filled-or-ghost, never hollow.
+ */
+@Composable
+fun FilledStar(
+    color: Color,
+    starSize: androidx.compose.ui.unit.Dp,
+    modifier: Modifier = Modifier,
+    filled: Boolean = true
+) {
+    Canvas(modifier = modifier.size(starSize)) {
+        val radius = this.size.minDimension / 2f
+        val center = Offset(this.size.width / 2f, this.size.height / 2f)
+        val star = Path()
+        // 5-pointed star: outer points at full radius, inner at ~42%.
+        for (i in 0 until 10) {
+            val angle = Math.toRadians(-90.0 + i * 36.0)
+            val r = if (i % 2 == 0) radius else radius * 0.42f
+            val x = center.x + (r * cos(angle)).toFloat()
+            val y = center.y + (r * sin(angle)).toFloat()
+            if (i == 0) star.moveTo(x, y) else star.lineTo(x, y)
+        }
+        star.close()
+        drawPath(star, color = if (filled) color else color.copy(alpha = 0.25f))
+    }
+}
+
+/**
  * 1-5 star rating row — CURIO_SPEC §8.2 ReelNotes ("optional star rating,
  * 1-5"). Tap a star to set; tap the currently-set star to clear (return
  * to 0). [accent] controls the filled-star color in the category palette.
+ * Stars are [FilledStar] Canvas paths — solid fills, never outlines.
  */
 @Composable
 fun StarRating(
@@ -55,14 +96,19 @@ fun StarRating(
         repeat(5) { i ->
             val starNumber = i + 1
             val filled = i < rating
-            CurioIcon(
-                name = if (filled) CurioIcons.Star else CurioIcons.StarOutline,
-                contentDescription = "$starNumber star${if (starNumber == 1) "" else "s"}",
-                tint = if (filled) accent else MaterialTheme.colorScheme.outline,
-                size = 32.dp,
-                modifier = Modifier.clickable {
-                    onRatingChange(if (rating == starNumber) 0 else starNumber)
-                }
+            FilledStar(
+                color = if (filled) accent else MaterialTheme.colorScheme.outline,
+                filled = filled,
+                starSize = 32.dp,
+                modifier = Modifier
+                    .semantics {
+                        // Canvas has no automatic label — restore the label
+                        // the old CurioIcon used to carry.
+                        contentDescription = "$starNumber star${if (starNumber == 1) "" else "s"}"
+                    }
+                    .clickable {
+                        onRatingChange(if (rating == starNumber) 0 else starNumber)
+                    }
             )
         }
     }
