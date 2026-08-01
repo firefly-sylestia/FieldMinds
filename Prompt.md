@@ -1,19 +1,20 @@
-# Request: Shuffle card + button size bump (Spin page)
+# Request: Category tint on Category Picker + Edit Entry screens
 
 ## Request
-Increase the size of the shuffle card a little and also its button a little.
+Apply the category tint (wash) to the Category Picker screen and the Edit Entry screen so the whole flow is consistent.
 
 ## Analysis
-- Spin page (`SpinScreen.kt`): the hero "ticket" card (`HeroTicketCard`) was 270×292dp inside a 420dp carousel Box; the center `SpinButton` was 118dp idle / 100dp landed (176dp outer container with an OrbitRing), with 68dp ShuffleGlyph and 56/48dp Casino dice icons.
+- Spin, Topic Reveal, Save/Capture root, and Cabinet already wear `categoryBackgroundWash()`.
+- CategoryPickerScreen: root Column was plain `MaterialTheme.colorScheme.background` — no tint. It hands off to the Shuffle tab, so the last-used deck is the natural tint source.
+- Edit Entry = SaveCaptureScreen in edit mode (`edit-entry/{entryId}` → SaveCaptureScreen): root Column ALREADY had the wash, but the sticky bottom Save CTA tray was plain `background` + tonalElevation 2dp, looking odd against the tinted page (same as the Spin bottom bar before its fix).
 
-## Changes (SpinScreen.kt)
-1. HeroTicketCard: w 270→286dp, h 292→310dp (~+6%) — comment noted as v6.3.
-2. Carousel container Box: 420→444dp so the bigger ticket keeps breathing room.
-3. SpinButton: 118→126dp idle, 100→108dp landed (~+7%).
-4. Dice glyphs: ShuffleGlyph 68→72dp; Casino 56→60dp idle, 48→52dp landed.
+## Changes
+1. `CategoryPickerScreen.kt` — added `categoryBackgroundWash` import; `val washCat = remember { getLastSpinCategories(context).firstOrNull() ?: getLastSpinCategory(context); byId(id) }`; root Column `.background(washCat.categoryBackgroundWash())`.
+2. `SaveCaptureScreen.kt` — bottom Save CTA Surface color → `cat.categoryBackgroundWash()`, tonalElevation 2dp → 0dp so the tray blends into the tinted page.
 
 ## Validation
-- Code reviewer passed: peek-card geometry and the w+24/h+24 outer box derive from w/h so they scale automatically; OrbitRing radius derives from the 176dp container's minDimension so a 126dp button still fits; no other references to the old numbers.
+- AppPreferences signatures verified (getLastSpinCategories → List<CategoryId>, getLastSpinCategory → CategoryId, WILDCARD fallback).
+- Code reviewer passed: imports alphabetical, types check (CategoryId? ?: CategoryId = CategoryId), no dead code, `cat`/`context` in scope, wash already imported in SaveCaptureScreen.
 
 ## Completion summary
 - Committed & pushed.

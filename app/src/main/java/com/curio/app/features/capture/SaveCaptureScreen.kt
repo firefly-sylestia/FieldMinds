@@ -346,10 +346,13 @@ fun SaveCaptureScreen(
         }
 
         // ── Sticky bottom Save CTA with gradient edge ────────────────────
+        // Wears the same category wash as the page (and the Spin bottom bar)
+        // so the CTA tray blends into the tinted screen instead of sitting on
+        // a plain patch of theme background.
         Surface(
-            color = MaterialTheme.colorScheme.background,
+            color = cat.categoryBackgroundWash(),
             shadowElevation = 0.dp,
-            tonalElevation = 2.dp
+            tonalElevation = 0.dp
         ) {
             Box {
                 // Top gradient edge

@@ -39,6 +39,7 @@ import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryBackgroundWash
 
 /**
  * Full-screen Category Picker.
@@ -55,6 +56,14 @@ fun CategoryPickerScreen(navController: NavController) {
     val context = LocalContext.current
     val categories = remember { CurioCategories.visible }
     val gridState = rememberLazyGridState()
+    // ── Category tint wash — this picker hands off straight to the Shuffle
+    //    tab, so it wears the last-used deck's color story (same wash as the
+    //    Spin page / Save / Cabinet) instead of a plain theme background.
+    val washCat = remember {
+        val id = AppPreferences.getLastSpinCategories(context).firstOrNull()
+            ?: AppPreferences.getLastSpinCategory(context)
+        CurioCategories.byId(id)
+    }
     // Null = not in multi-select mode (tap-to-open). Once set, cards toggle.
     var selectedSlugs by rememberSaveable { mutableStateOf(listOf<String>()) }
     var multiSelectMode by rememberSaveable { mutableStateOf(false) }
@@ -66,7 +75,9 @@ fun CategoryPickerScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            // Theme-aware category wash — deep accent over cream in light,
+            // pastel twin glow over midnight in dark.
+            .background(washCat.categoryBackgroundWash())
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
