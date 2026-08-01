@@ -288,6 +288,10 @@ private fun MoodBoardCanvas(
     var draggingTileId by remember { mutableStateOf<Int?>(null) }
     var inPinZone by remember { mutableStateOf(false) }
     var showClearConfirm by remember { mutableStateOf(false) }
+    // Tile × deletion confirms first — edit-mode boards arrive prefilled, so
+    // the × must never silently throw away a saved image (same protection as
+    // the take-tab × in the universal editor).
+    var pendingRemoveTileId by remember { mutableStateOf<Int?>(null) }
     // In-place tile zoom: double-tap springs the image up over the canvas —
     // no separate dialog page. Pinch/pan continue on the zoom overlay.
     val zoomState = rememberMoodBoardZoomState()
@@ -442,8 +446,9 @@ private fun MoodBoardCanvas(
                                 if (idx >= 0 && idx != tiles.lastIndex) tiles.add(tiles.removeAt(idx))
                             },
                             onRemove = { id ->
-                                val idx = tiles.indexOfFirst { it.id == id }
-                                if (idx >= 0) tiles.removeAt(idx)
+                                // Confirm before deleting a tile — the × sits on
+                                // a real image, so route through the dialog.
+                                pendingRemoveTileId = id
                             },
                             onZoomIn = { uri, tw, th, vw, vh -> zoomState.zoomIn(uri, tw, th, vw, vh) },
                             onDragStart = { draggingTileId = it },
@@ -636,6 +641,30 @@ private fun MoodBoardCanvas(
             },
             dismissButton = {
                 TextButton(onClick = { showClearConfirm = false }) {
+                    Text("Keep")
+                }
+            }
+        )
+    }
+
+    // ── Confirm before removing a single tile via its × ──────────────
+    if (pendingRemoveTileId != null) {
+        AlertDialog(
+            onDismissRequest = { pendingRemoveTileId = null },
+            title = { Text("Remove this image?") },
+            text = { Text("This will delete the image from your mood board. This can't be undone.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    val id = pendingRemoveTileId
+                    val idx = tiles.indexOfFirst { it.id == id }
+                    if (idx >= 0) tiles.removeAt(idx)
+                    pendingRemoveTileId = null
+                }) {
+                    Text("Remove", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingRemoveTileId = null }) {
                     Text("Keep")
                 }
             }

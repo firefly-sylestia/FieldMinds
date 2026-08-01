@@ -2,29 +2,32 @@
 
 ## Status: COMPLETED — committed and pushed to `revamp`
 
-CI compile fix: `Task :app:compileDebugKotlin FAILED` with
-`Unresolved reference 'solidColor'` at CurioCategoryCard.kt:122.
-
-## Root cause
-The idle-branch card background used `Brush.solidColor(idleSurface)` — the
-`Brush.solidColor` factory isn't resolvable against the Compose BOM this
-project resolves (2026.05.01). The reviewer previously asserted it was a
-standard API; it isn't available here.
+"Extend the removal confirmation to the per-tile × inside the GalleryWall
+mood board editor too, so single-take mood-board edits also confirm before
+deleting a tile."
 
 ## Change (1 file)
-**`app/src/main/java/com/curio/app/ui/components/CurioCategoryCard.kt`**
-- Replaced `Brush.solidColor(idleSurface)` with `SolidColor(idleSurface)` —
-  the always-available `Brush` subclass constructor (same flat-fill result).
-- Added `import androidx.compose.ui.graphics.SolidColor`.
-- Both `background()` branches remain `Brush`-typed (selected =
-  `Brush.verticalGradient`, idle = `SolidColor`), so no type mismatch.
-- `Brush` import stays used by the selected branch — no unused import.
-- Grep confirms no other `Brush.solidColor` usages remain in the app.
+
+**`app/src/main/java/com/curio/app/features/capture/formats/GalleryWallFormat.kt`**
+- `MoodBoardCanvas` gains `pendingRemoveTileId: Int?` state.
+- The per-tile × `onRemove` callback now sets `pendingRemoveTileId` instead
+  of deleting directly.
+- New AlertDialog ("Remove this image?" / **Remove** in error color /
+  **Keep**) deletes the tile on confirm — mirrors the existing
+  `showClearConfirm` dialog pattern. Reset on dismiss, Keep, and Remove.
+- This covers single-take mood-board edits (where no take-tab × exists) —
+  the × in both the inline canvas and the full-screen expanded editor route
+  through the same dialog.
+- Always-confirms (not gated on edit mode): consistent with the existing
+  unconditional "Clear board" confirmation, and a tile is always content.
 
 ## Review
-- code-reviewer-deepseek-flash: clean — SolidColor is the always-available
-  equivalent, both branches Brush-typed, imports correct and in order.
+- code-reviewer-deepseek-flash: clean — dialog mirrors showClearConfirm,
+  imports already present (AlertDialog/TextButton/MaterialTheme), removal
+  logic matches old direct path (indexOfFirst by id + removeAt), reset paths
+  complete, dialogs mutually exclusive. Non-blocking note (accepted):
+  always-confirm vs edit-mode-only — kept always-confirm to match Clear
+  board precedent and because tiles are always content.
 
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).
-  This fix targets the exact reported failure; the re-run on push is the gate.
