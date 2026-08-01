@@ -66,12 +66,6 @@ object CurioMotion {
             stiffness = 250f
         )
 
-        /** Used by SpinScreen's dial rotation — strong overshoot for the "settling" feel. */
-        val WheelLanding: SpringSpec<Float> = spring(
-            dampingRatio = 0.40f,
-            stiffness = 80f
-        )
-
         /**
          * Organic morph spring — very low stiffness, high damping.
          * Like a water droplet settling; slow, smooth, no bounce.
@@ -144,9 +138,6 @@ object CurioMotion {
 
     /** Extended particle count for big reward moments. */
     const val ConfettiParticleCountLarge: Int = 18
-
-    /** Default dial wedge count (per section 5: 6 to 8 visual segments). */
-    const val DialWedgeCount: Int = 6
 
     /** Number of full rotations per Spin (per section 5: 3 to 5). */
     const val MinSpinTurns: Int = 3
