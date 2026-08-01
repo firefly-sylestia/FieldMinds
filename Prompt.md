@@ -1,6 +1,25 @@
 # Prompt.md — Request Log
 
-## Current Request: Light-mode cream background + Spin-page category tint
+## Current Request: Home hero card doesn't match cream background
+
+**User request (verbatim):** "the home hero card doesnt matc te roer color fix it"
+
+## Root cause
+The Home hero card (`CurioHeroCard.kt`) uses `CurioGradients.cardGradient()`, whose light-mode gradient end was still pure `Color.White` — after the previous change made the light background SoftCream (`#F7F0E4`), the hero card (and every other card-gradient consumer: category cards, TopicReveal, EntryDetail, Profile, quest cards) faded toward white and clashed with the cream surface.
+
+## Fix
+`CurioColors.kt` — `CurioGradients.cardGradient()` light-mode end changed `Color.White` → `CurioColors.SoftCream`, so all card gradients now wash into the cream background. Dark mode end (`Color.Black`) untouched. Doc comment updated.
+
+## Validation
+- code-reviewer-deepseek-flash: clean — `CurioColors.SoftCream` resolves from sibling `CurioGradients` object, `cardGradient` already @Composable, dark mode untouched. Optional note (not taken): dark gradient fades to pure black vs midnight `#0B1018` — pre-existing, out of scope.
+- No local gradle per AGENTS.md — CI on push is the compile gate.
+
+## Status
+DONE — committed & pushed.
+
+---
+
+## Previous Request: Light-mode cream background + Spin-page category tint
 
 **User request (verbatim):** "make te ap ligt mode white color a less white color not dark color that creamy color but not tat black and like add the card category tint to it only in spin page"
 

@@ -107,13 +107,14 @@ object CurioGradients {
 
     /**
      * Theme-aware category card gradient: opens on [categoryCardFill] (the
-     * category card color) and softens toward the theme surface — white in
-     * light mode, black in dark — so the card background always matches the
-     * app's background shade.
+     * category card color) and softens toward the theme surface — the soft
+     * cream background in light mode, black in dark — so the card background
+     * always matches the app's background shade (the hero card must not
+     * wash out to pure white on the cream surface).
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
-        val end = if (isCurioDarkTheme()) Color.Black else Color.White
+        val end = if (isCurioDarkTheme()) Color.Black else CurioColors.SoftCream
         val start = categoryCardFill(accent)
         return listOf(start, lerp(start, end, 0.30f))
     }
