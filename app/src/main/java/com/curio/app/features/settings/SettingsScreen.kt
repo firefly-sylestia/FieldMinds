@@ -61,6 +61,7 @@ import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioCardHeader
+import com.curio.app.ui.components.CurioSectionLabel
 import com.curio.app.ui.components.CurioSettingsCard
 import com.curio.app.ui.components.CurioSettingsDivider
 import com.curio.app.ui.components.CurioSettingsInfoRow
@@ -296,6 +297,9 @@ fun SettingsScreen(navController: NavController) {
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
+                // ── General: who you are + how it looks
+                item { CurioSectionLabel("General") }
+
                 // Profile
                 item {
                     CurioSettingsCard {
@@ -342,6 +346,9 @@ fun SettingsScreen(navController: NavController) {
                         }
                     }
                 }
+
+                // ── Preferences: how content behaves
+                item { CurioSectionLabel("Preferences") }
 
                 // Recording
                 item {
@@ -428,6 +435,9 @@ fun SettingsScreen(navController: NavController) {
                     }
                 }
 
+                // ── Data: keep everything safe
+                item { CurioSectionLabel("Data") }
+
                 // Backup & restore
                 item {
                     CurioSettingsCard {
@@ -447,6 +457,9 @@ fun SettingsScreen(navController: NavController) {
                         CurioSettingsInfoRow(CurioIcons.History, "Last backup", whenLast)
                     }
                 }
+
+                // ── Support: help & app details
+                item { CurioSectionLabel("Support") }
 
                 // About
                 item {

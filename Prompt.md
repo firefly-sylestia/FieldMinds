@@ -1,50 +1,35 @@
-# Request: Profile page — proper Settings entry + remove duplicate settings
+# Request: Polish Settings screen grouping
 
 ## Analysis
 
-The Profile page (`ProfileScreen.kt`) duplicated the entire Settings screen
-(`SettingsScreen.kt`):
+The Settings screen (`SettingsScreen.kt`) is now the single home for all
+settings (Profile page duplicates were removed in the previous request). Its
+7 cards already had icon-chip headers (`CurioCardHeader`), so the polish was
+to add **section labels** between logical groups. The shared
+`CurioSectionLabel` component (in `CurioSettingsComponents.kt`) existed but
+was completely unused — the perfect tool.
 
-- `PreferencesCard` on Profile inlined Display name, Theme, Audio quality,
-  Daily shuffle reminder, and Manage categories — every one of these already
-  lives in Settings (Profile/Appearance/Recording/Notifications/Categories
-  cards).
-- `DeveloperCard` on Profile repeated Replay intro + Version, which also live
-  in Settings' About card.
-- The only Settings entry on Profile was a small gear icon in the top bar —
-  easy to miss.
+## Changes (app/src/main/java/com/curio/app/features/settings/SettingsScreen.kt)
 
-## Changes (app/src/main/java/com/curio/app/features/profile/ProfileScreen.kt)
+Added 4 section labels to the LazyColumn, reusing `CurioSectionLabel`:
 
-1. **Added a proper Settings card** — new `SettingsCard` composable placed
-   right after the Level card: gradient icon chip + "Settings" + subtitle
-   "Theme · reminders · audio · backup" + forward arrow, navigates to
-   `CurioRoutes.SETTINGS`. The top-bar gear shortcut stays.
-2. **Removed the duplicated PreferencesCard** + `InlineReminderSelector`
-   (theme segmented buttons, audio-quality dialog, reminder switch/time
-   picker, manage-categories row all deleted — Settings owns them now).
-3. **Trimmed DeveloperCard** to only Profile-unique items: Report a bug,
-   Crash logs, Test crash. Replay intro + Version rows removed (in Settings'
-   About card); header renamed "Support & diagnostics".
-4. **Trimmed CategoriesCard** — removed the "Manage" TextButton (duplicates
-   Settings → Manage categories); "Open the Cabinet" kept (Profile-unique).
-5. **Cleanup** — removed now-unused state (themeMode, audioQuality,
-   reminderEnabled, reminderHour, showQualityDialog, showVersionDialog), the
-   notification-permission launcher + enableReminder/setReminder, the
-   quality/version dialogs (ProfileDialogs is display-name only), the
-   versionName val, and 16 unused imports. Class doc comment updated.
+- **General** — Profile (display name), Appearance (theme)
+- **Preferences** — Recording (audio quality), Notifications (reminder),
+  Categories (manage)
+- **Data** — Backup & restore
+- **Support** — About Curio (replay intro, version)
 
-Nothing was lost: theme/audio/reminder/display-name/manage-categories stay in
-Settings; Replay intro + Version remain in Settings' About card.
+Also added the `CurioSectionLabel` import (alphabetically placed between
+CurioCardHeader and CurioSettingsCard) and small `// ──` group comments.
 
 ## Validation
 
-- code-searcher: 0 matches for all removed symbols
-  (PreferencesCard/InlineReminderSelector/formatHour/SegmentedButton/
-  RadioButton/Switch) in ProfileScreen.kt.
-- code-reviewer-deepseek-flash: clean pass — removed imports all verified
-  unused, kept imports all still referenced, new SettingsCard uses only
-  imported APIs, CurioRoutes.SETTINGS exists, no feature lost.
+- code-searcher: 5 matches — 1 import (line 64) + 4 labels (lines 301/351/
+  439/462), all correctly wrapped in `item {}`.
+- code-reviewer-deepseek-flash: clean pass — import resolves, item wrapping
+  correct, no brace imbalance, activates previously-dead shared code.
+  Cosmetic note only: first label sits ~26dp below the header (content
+  padding + fixed label top padding) — accepted as-is.
 - No local gradle build per AGENTS.md — CI owns compilation on push.
 
 ## Status
