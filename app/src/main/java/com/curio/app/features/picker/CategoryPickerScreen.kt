@@ -27,10 +27,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CurioCategories
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.components.MorphEntrance
@@ -49,6 +52,7 @@ import com.curio.app.ui.theme.CurioIcons
  */
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
+    val context = LocalContext.current
     val categories = remember { CurioCategories.visible }
     val gridState = rememberLazyGridState()
     // Null = not in multi-select mode (tap-to-open). Once set, cards toggle.
@@ -110,16 +114,13 @@ fun CategoryPickerScreen(navController: NavController) {
                             if (multiSelectMode) {
                                 toggleSlug(slug)
                             } else {
-                                // Default: tap opens this category in Spin.
-                                // popUpTo(HOME) drops the picker (and any spin
-                                // below it) so the fresh deck's back stack is
-                                // just HOME → spin: back returns Home, and the
-                                // bottom-nav tabs can never resurrect a stale
-                                // picker under the new deck.
-                                navController.navigate(CurioRoutes.spinWithCategory(slug)) {
-                                    launchSingleTop = true
-                                    popUpTo(CurioRoutes.HOME)
-                                }
+                                // Default: tap opens this category on the
+                                // persistent Shuffle tab (the plain "spin"
+                                // route), not a separate spin/{slug} page.
+                                // The selection is persisted so it survives
+                                // back navigation, tab switches and relaunch.
+                                AppPreferences.setLastSpinCategories(context, listOf(cat.id))
+                                navController.navigateToTab(CurioRoutes.SPIN)
                             }
                         },
                         onLongClick = {
@@ -144,17 +145,16 @@ fun CategoryPickerScreen(navController: NavController) {
                 Button(
                     onClick = {
                         if (selectedSlugs.isEmpty()) return@Button
-                        val slugs = selectedSlugs
-                        navController.navigate(
-                            if (slugs.size == 1) CurioRoutes.spinWithCategory(slugs.first())
-                            else CurioRoutes.spinWithCategories(slugs)
-                        ) {
-                            launchSingleTop = true
-                            // Same cleanup as the single-tap path: the picker
-                            // (and any spin below it) is dropped so the deck
-                            // owns a clean HOME → spin stack.
-                            popUpTo(CurioRoutes.HOME)
-                        }
+                        // Resolve the chosen slugs and persist the FULL set
+                        // (single or mixed) so the Shuffle tab reopens the
+                        // same deck after back navigation, tab switches and
+                        // app restarts. navigateToTab drops the picker and
+                        // lands on the real Shuffle tab — not a separate
+                        // spin/{slug} instance.
+                        val ids = selectedSlugs.mapNotNull { CurioCategories.byRouteSlug(it)?.id }
+                        if (ids.isEmpty()) return@Button
+                        AppPreferences.setLastSpinCategories(context, ids)
+                        navController.navigateToTab(CurioRoutes.SPIN)
                     },
                     enabled = selectedSlugs.isNotEmpty(),
                     shape = RoundedCornerShape(24.dp),

@@ -221,15 +221,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             ?.mapNotNull { CurioCategories.byRouteSlug(it) }
             .orEmpty()
         if (resolved.isNotEmpty()) resolved
-        else listOf(CurioCategories.byId(AppPreferences.getLastSpinCategory(context)))
+        else AppPreferences.getLastSpinCategories(context).map { CurioCategories.byId(it) }
     }
 
     // v5.5 — remember which category this session opened in, so the plain
     // Spin tab opens where the user left off on the next launch. Persist the
-    // first resolved category when a slug (single or multi) is present.
+    // FULL launch set (single or mixed) when a slug (single or multi) is
+    // present so multi-select decks survive too.
     LaunchedEffect(Unit) {
         if (categorySlug != null) {
-            initialCats.firstOrNull()?.let { AppPreferences.setLastSpinCategory(context, it.id) }
+            AppPreferences.setLastSpinCategories(context, initialCats.map { it.id })
         }
     }
 
@@ -261,6 +262,18 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         // write when restoreState resurrected a stale set.
         if (slugCatIds != null && activeCatIds != slugCatIds) {
             activeCatIds = slugCatIds
+        }
+        // v5.15 — the plain Shuffle tab is equally authoritative from
+        // prefs: the category picker ("What are we exploring?") now lands
+        // here via navigateToTab(SPIN) after persisting its (possibly
+        // mixed) selection, and restoreState could otherwise resurrect the
+        // previous deck. Every in-screen switch also persists, so prefs
+        // always reflect the user's latest deck.
+        if (categorySlug == null) {
+            val persisted = AppPreferences.getLastSpinCategories(context)
+            if (persisted.isNotEmpty() && activeCatIds != persisted) {
+                activeCatIds = persisted
+            }
         }
     }
     // The first selected category drives chrome (top bar name, watermark
@@ -609,14 +622,15 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 activeCatIds = listOf(c.id)
                 // v5.5 — persist so the Spin tab reopens on this category
                 // after the app is killed and relaunched.
-                AppPreferences.setLastSpinCategory(context, c.id)
+                AppPreferences.setLastSpinCategories(context, listOf(c.id))
                 showCategoryPicker = false
             },
             onCategoriesSelected = { cats ->
                 activeCatIds = cats.map { it.id }
-                cats.firstOrNull()?.let {
-                    AppPreferences.setLastSpinCategory(context, it.id)
-                }
+                // v5.15 — persist the FULL mixed set (not just the first)
+                // so a multi-select deck survives back navigation, tab
+                // switches and app restarts.
+                AppPreferences.setLastSpinCategories(context, cats.map { it.id })
                 showCategoryPicker = false
             },
             onBrowseAll = {

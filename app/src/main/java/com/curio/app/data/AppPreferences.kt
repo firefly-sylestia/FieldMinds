@@ -24,6 +24,7 @@ object AppPreferences {
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
+    private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
 
     // ── Display name ─────────────────────────────────────────────────
@@ -95,6 +96,31 @@ object AppPreferences {
 
     fun setLastSpinCategory(context: Context, id: CategoryId) =
         prefs(context).edit().putString(KEY_LAST_SPIN_CATEGORY, id.name).apply()
+
+    /**
+     * Full last-used Spin category SET (single or mixed multi-select) —
+     * persisted so the Shuffle tab reopens the same deck after back
+     * navigation, tab switches and app restarts. The single-category key
+     * is kept in sync with the first entry for backwards compat with
+     * [getLastSpinCategory].
+     */
+    fun getLastSpinCategories(context: Context): List<CategoryId> {
+        val raw = prefs(context).getString(KEY_LAST_SPIN_CATEGORIES, null)
+        val ids = raw
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.mapNotNull { name -> CategoryId.values().firstOrNull { it.name == name } }
+            .orEmpty()
+        return if (ids.isNotEmpty()) ids else listOf(getLastSpinCategory(context))
+    }
+
+    fun setLastSpinCategories(context: Context, ids: List<CategoryId>) {
+        val names = ids.map { it.name }.distinct()
+        if (names.isEmpty()) return
+        prefs(context).edit().putString(KEY_LAST_SPIN_CATEGORIES, names.joinToString(",")).apply()
+        setLastSpinCategory(context, ids.first())
+    }
 
     // ── Landed Spin topic (per category) — persisted so the landed card ──
     //    survives ANY navigation. rememberSaveable alone dies when the

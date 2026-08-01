@@ -1,45 +1,37 @@
-# Request: Remove dark zoom overlay + add top dismiss button
+# Prompt — Running Request Log
 
-## Analysis
+## Current Request
 
-User: "why theres a dark overlay though i dont want that overlay remove it and
-also at the top add a dismiss for the zoom or if the image is open"
+**"When opening the categories from the 'What are we exploring?' page (Home → All pill), open them on the Shuffle page instead of a different page, and save the mixed selection too so it survives back etc."**
 
-The mood-board zoom overlays (`MoodBoardZoomOverlay` for a single image and
-`MoodBoardZoomCanvas` for the whole board) both painted a dark scrim
-(`Color.Black.copy(alpha = 0.55f)`) over the entire canvas behind the zoomed
-content. The user wants that scrim gone and a visible × dismiss button at the
-top of the zoom.
+User clarified: the All pill opens the What-are-we-exploring page; categories tapped there were opening a *separate* shuffle instance (a `spin/{slug}` page) instead of the persistent Shuffle tab.
 
-## Changes (app/src/main/java/com/curio/app/ui/components/MoodBoardZoom.kt)
+## Status: COMPLETE
 
-1. Removed `import androidx.compose.foundation.background` (no longer used).
-2. Added `com.curio.app.ui.theme.CurioIcon` + `CurioIcons` imports.
-3. `MoodBoardZoomOverlay` (image zoom): removed the `.background(...)` scrim
-   from the gesture box; added a top-right dismiss Surface
-   (`CurioIcons.Close`, `zoomState.zoomOut()`, surface.copy(alpha=0.9f),
-   TopEnd + 12dp padding, 36dp) as a child of the gesture box.
-4. `MoodBoardZoomCanvas` (board magnifier): same — scrim removed, dismiss
-   button added.
+## What was done
 
-Gesture behavior preserved: the overlay box is transparent but still
-hit-testable via its pointerInput handlers, so tap-anywhere closes and
-pinch/pan refine the zoom; the child Surface(onClick) consumes its own tap
-(no double-fire with the parent detectTapGestures — and both call the
-idempotent zoomOut() anyway).
+1. **AppPreferences** (`app/src/main/java/com/curio/app/data/AppPreferences.kt`)
+   - Added `KEY_LAST_SPIN_CATEGORIES` (comma-joined set key) + `getLastSpinCategories(context)` / `setLastSpinCategories(context, ids)`.
+   - `getLastSpinCategories` parses the set, falls back to the single-category key (then WILDCARD) when unset.
+   - `setLastSpinCategories` stores distinct names comma-joined and keeps the single-category key in sync with the first entry (backwards compatible).
+
+2. **CategoryPickerScreen** (`app/src/main/java/com/curio/app/features/picker/CategoryPickerScreen.kt`)
+   - Single tap: now persists `setLastSpinCategories(context, listOf(cat.id))` then `navigateToTab(CurioRoutes.SPIN)` — lands on the real Shuffle tab, not a separate `spin/{slug}` page. Removed the old `navigate(spinWithCategory) { popUpTo(HOME) }`.
+   - Done (multi-select): resolves slugs → ids via `CurioCategories.byRouteSlug(...)?.id`, persists the FULL set, then `navigateToTab(SPIN)`.
+   - Added imports: `LocalContext`, `AppPreferences`, `navigateToTab`.
+
+3. **SpinScreen** (`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`)
+   - Plain-tab seeding (`categorySlug == null`): `initialCats` now comes from `getLastSpinCategories` (full set), not just the single last category.
+   - Slug-launch persist effect now saves the FULL launch set (mixed survives).
+   - New null-slug branch in `LaunchedEffect(categorySlug)`: re-derives `activeCatIds` from prefs so `restoreState` can't resurrect a stale deck when the picker landed on the plain tab.
+   - CategoryPickerSheet `onCategorySelected` / `onCategoriesSelected` now persist the full set.
 
 ## Validation
 
-- code-searcher: 0 matches for `background(Color.Black` / background import
-  in the file; CurioIcon/CurioIcons.Close confirmed at lines 45-46, 349-351,
-  447-449.
-- code-reviewer-deepseek-flash: clean pass — brace balance, imports resolve,
-  gesture conflict harmless, transparent overlay still captures events,
-  dismiss covers the board's expand button (zIndex 1000 vs 999) while zoomed
-  (desirable). Optional nit only: dismiss Surface duplicated in both overlays
-  (matches existing inline style).
+- code-searcher confirmed all edits landed (picker: imports + navigateToTab + setLastSpinCategories; spin: seeding + effect + sheet persist) and zero leftover references.
+- code-reviewer-deepseek-flash reviewed clean (brace balance, imports resolve, rememberSaveable input-keying invalidates stale restore, list equality valid). Noted one-time migration quirk (old in-session mixed deck falls back to single on first post-update entry) — acceptable.
 - No local gradle build per AGENTS.md — CI owns compilation on push.
 
-## Status
+## Commit
 
-Complete. Commit `TBD` on branch `revamp`.
+- `feat: category picker opens categories on the Shuffle tab (not a separate spin page) and persists mixed multi-select decks across back/tab/relaunch`
