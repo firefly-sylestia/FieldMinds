@@ -100,6 +100,7 @@ import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.isCurioDarkTheme
 import coil.compose.rememberAsyncImagePainter
@@ -148,7 +149,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            // Category tint wash — the saved-entry page wears the entry's
+            // category wash over the theme background (same as Spin / Save /
+            // Cabinet), so a capture from the Cabinet reads in its category's
+            // color story instead of a plain patch.
+            .background(cat.categoryBackgroundWash())
             .verticalScroll(rememberScrollState())
     ) {
         // ── Expressive hero banner ─────────────────────────────────────
