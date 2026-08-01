@@ -1,6 +1,7 @@
 package com.curio.app.navigation
 
 import android.net.Uri
+import androidx.navigation.NavController
 
 /**
  * Centralized route names for the Curio NavHost — see CURIO_SPEC.md §1.
@@ -78,4 +79,26 @@ object CurioRoutes {
      * exactly the user-visible splash-nav bug.
      */
     val bottomNavRoutePrefixes: Set<String> = setOf(HOME, SPIN, CABINET)
+}
+
+/**
+ * Standard bottom-nav tab switch: pop the back stack back to the persistent
+ * HOME root (saving the popped states), then navigate to [route] with
+ * `launchSingleTop` + `restoreState` so every tab keeps at most one entry on
+ * the back stack while preserving its scroll/UI state across switches.
+ *
+ * Anchored to HOME — NOT `graph.findStartDestination()`: the NavHost's
+ * declared start destination (SPLASH) is popped inclusively on launch, so
+ * `popUpTo(findStartDestination())` would target a destination that is no
+ * longer in the stack — a silent no-op that lets every tab switch and every
+ * re-opened screen pile up duplicate back-stack entries (back then walks
+ * through the same screens repeatedly). HOME is the persistent root that
+ * always remains after Splash/Onboarding/Crash routes land.
+ */
+fun NavController.navigateToTab(route: String) {
+    navigate(route) {
+        popUpTo(CurioRoutes.HOME) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
+    }
 }

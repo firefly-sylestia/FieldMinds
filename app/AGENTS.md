@@ -88,7 +88,8 @@ app/src/main/java/com/curio/app/
 
 ### Navigation
 - Single NavHost with flat routes (see `CurioRoutes.kt`). Bottom nav visibility is gated by the `CurioRoutes.bottomNavRoutes` set (`HOME`, `SPIN`, `CABINET`).
-- Bottom-nav switching uses the standard Compose pattern: `popUpTo(startDestination) { saveState = true }` + `launchSingleTop = true` + `restoreState = true`.
+- **Tab switching MUST use `NavController.navigateToTab(route)`** (defined in `CurioRoutes.kt`), which anchors `popUpTo(HOME) { saveState = true }` + `launchSingleTop = true` + `restoreState = true`. Do NOT anchor to `graph.findStartDestination()`: the NavHost's declared start destination is `SPLASH`, which SplashScreen pops inclusively on launch — so the anchor is gone from the stack and `popUpTo` silently no-ops, piling up duplicate back-stack entries (back walks through the same screens repeatedly). HOME is the persistent root that always remains after Splash/Onboarding/Crash land.
+- Every plain `navigate()` to a push destination (Profile, Settings, Picker, Entry Detail, Lightbox, Manage Categories, Onboarding replay, etc.) MUST set `launchSingleTop = true` so re-opening a previously-opened screen never stacks a copy.
 - Tab routes also accept a `categorySlug` argument so the same `Spin` screen renders both as a tab target (`categorySlug = null`) and as a pushed destination (`categorySlug = "music"` etc.).
 
 ## Work Guidance

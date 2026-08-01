@@ -342,7 +342,7 @@ fun SettingsScreen(navController: NavController) {
                 item { SectionHeader("Categories") }
                 item {
                     SettingsItem(CurioIcons.DragHandle, "Manage categories", "Show, hide, or reorder") {
-                        navController.navigate(CurioRoutes.MANAGE_CATEGORIES)
+                        navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true }
                     }
                 }
 
@@ -371,7 +371,7 @@ fun SettingsScreen(navController: NavController) {
                 item {
                     SettingsItem(CurioIcons.Replay, "Replay intro", "See the welcome screens again") {
                         CurioOnboardingState.reset(context)
-                        navController.navigate(CurioRoutes.ONBOARDING)
+                        navController.navigate(CurioRoutes.ONBOARDING) { launchSingleTop = true }
                     }
                 }
                 item { SettingsInfo(CurioIcons.Info, "Version", versionName) }

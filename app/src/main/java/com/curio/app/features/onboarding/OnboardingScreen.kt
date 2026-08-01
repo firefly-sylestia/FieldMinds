@@ -205,6 +205,10 @@ private fun finishOnboarding(context: Context, navController: NavController) {
     CurioOnboardingState.markComplete(context)
     navController.navigate(CurioRoutes.HOME) {
         popUpTo(CurioRoutes.ONBOARDING) { inclusive = true }
+        // launchSingleTop dedups the replay path: onboarding is pushed on
+        // top of an existing HOME, so without it [HOME, ONBOARDING] → pops
+        // onboarding → pushes a second HOME and back walks Home twice.
+        launchSingleTop = true
     }
 }
 

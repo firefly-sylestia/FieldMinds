@@ -1,52 +1,30 @@
-# Remove Spin Page Optional Features, Add Watermark Backdrop
+# Fix Back-Stack Duplication (Same Screen Repeatedly on Back)
 
 ## Request
 
-User disliked all the Spin-page features added in Settings (roulette dial, ritual & anticipation, deck enrichment, screen furniture) and asked to remove them so the Spin page goes back to how it was — and instead add background components with the category icons as a muted-shade watermark in the background.
+User reported: navigation "stacks" — when tapping around, pressing back walks through the same screens multiple times if they were opened before.
+
+## Analysis
+
+Root cause: the bottom-nav tab pattern anchored `popUpTo(graph.findStartDestination().id)`. The NavHost's declared start destination is `SPLASH`, but SplashScreen pops itself on launch (`popUpTo(SPLASH) { inclusive = true }`), so the anchor is no longer in the back stack. Per Navigation docs, `popUpTo` with a missing destination is a silent no-op — every tab switch and every re-opened push screen piled up duplicate entries, and back walked through them all.
 
 ## Plan
 
-- Read DOX chain (master.md → AGENTS.md → app/AGENTS.md) and the Spin/settings/prefs files.
-- Remove the four Spin-page feature prefs from AppPreferences (keys, reactive states, seeding, accessors).
-- Remove the "Spin page" toggle section from SettingsScreen.
-- Strip the v5.9 feature code from SpinScreen (RouletteDial, RitualHeader, SlotWindowPointer, InDeckStrip, FurnitureChips, RecentlyExploredStrip, enrich/idlePulse params, feature reads) and restore the pre-v5.9 flat layout (44dp gap → carousel → spin button → weight spacer → bottom bar).
-- Add a muted category-glyph watermark backdrop behind all Spin content (active category glyph gets a faint accent tint).
-- Remove now-unused imports; update header doc; update store changelog; commit + push.
+- Read DOX chain + all navigation call sites (CurioNavHost, CurioRoutes, CurioBottomNav, Home/Spin/Cabinet/Profile/Settings/Picker/Detail/Capture/Reveal/History/Crash/Lightbox/Onboarding/Splash).
+- Add `NavController.navigateToTab(route)` in `CurioRoutes.kt`: `popUpTo(HOME) { saveState = true } + launchSingleTop = true + restoreState = true` (HOME is the persistent root that always remains).
+- Switch bottom nav + Home quest card (both branches) + Open Cabinet arrow + empty-state shuffle to `navigateToTab`.
+- Add `launchSingleTop = true` to every plain push navigation (Home drawer/avatar/All chip/recent entry/reminder, Settings Manage Categories + Replay Intro, Spin Picker, EntryDetail lightbox ×3, Onboarding finish).
+- Update app/AGENTS.md Navigation contract; commit + push.
 
 ## Completion Summary
 
-- AppPreferences: removed KEY_SPIN_* constants, spin*State mirrors, initThemeMode seeding, and the four is/set accessor pairs (57 lines).
-- SettingsScreen: removed the entire "Spin page" toggle section (4 toggles + header).
-- SpinScreen: removed all v5.9 feature composables (~400 lines) and parameters (Carousel.enrich, HeroTicketCard.enrich, SpinButton.idlePulse); restored the pre-v5.9 non-scrollable layout; kept v5.10 dice-button changes (not part of the settings features).
-- New `SpinWatermarkBackdrop` + `WatermarkGlyph` composables scatter all 11 category glyphs around the screen edges in `onSurface` @ 5% alpha, with the active category's glyph at its accent @ 11% alpha.
-- Static checks: braces/parens balanced (255/255, 765/765), no dangling references to removed symbols, unused imports cleaned.
-- Gradle build/lint deliberately NOT run (forbidden in this environment; CI validates on push).
-
-## Follow-up (dice fix)
-
-User: no need to revert the dice button, but the die had a weird square inside it — fix it.
-
-- Removed the rounded-square die body (`drawRoundRect` with `CornerRadius`/`Size`) that sat behind the six orbiting pips in `ShuffleGlyph`, so the shuffle dice is now just the tumbling pips.
-- Removed the now-unused `CornerRadius`/`Size` geometry imports and updated the v5.10 header doc note.
-- Verified: no leftover references, braces 255/255, code review clean.
-- Committed + pushed: `3a4455ba`.
-
-## Follow-up (Home watermark)
-
-User: add the same muted category-icon watermark backdrop to the Home screen so the design language carries across pages.
-
-- Extracted the Spin-only watermark into a shared component `app/src/main/java/com/curio/app/ui/components/CurioWatermarkBackdrop.kt` (`CurioWatermarkBackdrop(activeCat, modifier)` + private `BoxScope.WatermarkGlyph`).
-- SpinScreen now calls the shared component (removed its private `SpinWatermarkBackdrop`/`WatermarkGlyph` and the now-unused `Dp` import).
-- HomeScreen adds the backdrop inside its outer `Box` behind the scrollable content, with `activeCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)` so "Surprise" highlights the wildcard die.
-- Code review caught a latent compile bug (inherited from the original Spin private copy): `Modifier.align` is a `BoxScope` member extension, so `WatermarkGlyph` is now declared `private fun BoxScope.WatermarkGlyph(...)` — this would have failed CI once compiled.
-- Verified: braces balanced, no dangling refs to old private names, review clean. Gradle build/lint NOT run (forbidden here; CI validates on push).
-
-## Follow-up (CI compile fix)
-
-User: pasted a CI failure from `:app:compileDebugKotlin`.
-
-- Errors: `Argument type mismatch: actual type is 'Float', but '(IntSize, IntSize, LayoutDirection) -> IntOffset' was expected` + `Too many arguments for 'fun Alignment(...)'` on the watermark tile lines, plus `Unresolved reference 'align'` — all pointing at SpinScreen.kt (a stale pre-extraction run).
-- Root cause: `Alignment(horizontalBias, verticalBias)` is NOT a valid constructor in Compose BOM 2026.05.01 — `Alignment` only takes an alignment function (or none). The correct API is `BiasAlignment(horizontalBias, verticalBias)`.
-- Fix: in the shared `CurioWatermarkBackdrop.kt`, converted all 11 `Alignment(float, float)` calls to `BiasAlignment(float, float)` and added `import androidx.compose.ui.BiasAlignment`. The `WatermarkGlyph` param stays typed `Alignment` (BiasAlignment is a subclass); `Modifier.align(Alignment)` accepts it. The old `Unresolved reference 'align'` was already resolved by the BoxScope extension during extraction.
-- Audited the whole repo: no other float-arg `Alignment(` usages outside this file; braces balanced; review clean.
-- Committed + pushed: (see next commit).
+- `CurioRoutes.kt`: added top-level `fun NavController.navigateToTab(route)` (anchor HOME, not start destination; KDoc explains why).
+- `CurioBottomNav.kt`: tab onClick uses `navigateToTab`; removed now-unused `findStartDestination` + `NavController` imports.
+- `HomeScreen.kt`: quest card (wildcard + category) → `navigateToTab`; Open Cabinet arrow → `navigateToTab(CABINET)`; empty-state shuffle → `navigateToTab(SPIN)`; drawer onNavigate, avatar PROFILE, All chip PICKER, recent entry, reminder card → `launchSingleTop = true`; added `navigateToTab` import, removed `findStartDestination` import.
+- `SettingsScreen.kt`: Manage Categories + Replay Intro → `launchSingleTop = true`.
+- `SpinScreen.kt`: onBrowseAll PICKER → `launchSingleTop = true`.
+- `EntryDetailScreen.kt`: 3 lightbox navigations → `launchSingleTop = true` (safe — lightbox is fullscreen, URI re-set before each navigate).
+- `OnboardingScreen.kt`: `finishOnboarding` adds `launchSingleTop = true` (fixes replay-path duplicate HOME: [HOME, ONBOARDING] → pops onboarding → HOME already on top → no second push).
+- `app/AGENTS.md`: Navigation contract now mandates `navigateToTab` for tab switching and `launchSingleTop` for push destinations.
+- Code review (deepseek-flash) ×2: clean; only a non-blocking note that deep-link/restored-root stacks without HOME degrade to old behavior (parity, not regression).
+- Static checks: braces/parens balanced in all 7 changed files; no remaining unguarded `navigate()` calls. Gradle build/lint NOT run (forbidden in this environment; CI validates on push).

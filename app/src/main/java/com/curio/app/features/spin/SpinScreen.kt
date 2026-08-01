@@ -528,7 +528,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             },
             onBrowseAll = {
                 showCategoryPicker = false
-                navController.navigate(CurioRoutes.PICKER)
+                navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true }
             }
         )
     }

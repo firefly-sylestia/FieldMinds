@@ -59,7 +59,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
@@ -68,6 +67,7 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioForwardArrow
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
@@ -154,7 +154,7 @@ fun HomeScreen(navController: NavController) {
             HomeDrawerContent(
                 onNavigate = { route ->
                     scope.launch { drawerState.close() }
-                    navController.navigate(route)
+                    navController.navigate(route) { launchSingleTop = true }
                 }
             )
         },
@@ -203,7 +203,7 @@ fun HomeScreen(navController: NavController) {
                 }
                 // Refined avatar pill with better styling
                 Surface(
-                    onClick = { navController.navigate(CurioRoutes.PROFILE) },
+                    onClick = { navController.navigate(CurioRoutes.PROFILE) { launchSingleTop = true } },
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     shadowElevation = 0.dp,
@@ -257,14 +257,14 @@ fun HomeScreen(navController: NavController) {
             }
             Surface(
                     onClick = {
+                        // Both quest branches go through the tab switch helper
+                        // (anchor = HOME, the persistent root): plain pushes
+                        // here used to pile up duplicate back-stack entries
+                        // when the same quest card was opened repeatedly.
                         if (chosen == null || chosen.id == CategoryId.WILDCARD) {
-                            navController.navigate(CurioRoutes.SPIN)
+                            navController.navigateToTab(CurioRoutes.SPIN)
                         } else {
-                            navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug)) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navController.navigateToTab(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
                         }
                     },
                     shape = RoundedCornerShape(28.dp),
@@ -407,7 +407,7 @@ fun HomeScreen(navController: NavController) {
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Surface(
-                        onClick = { navController.navigate(CurioRoutes.PICKER) },
+                        onClick = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
                         shape = RoundedCornerShape(50),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
@@ -480,7 +480,7 @@ fun HomeScreen(navController: NavController) {
                     )
                     if (recentEntries.isNotEmpty()) {
                         Surface(
-                            onClick = { navController.navigate(CurioRoutes.CABINET) },
+                            onClick = { navController.navigateToTab(CurioRoutes.CABINET) },
                             shape = RoundedCornerShape(50),
                             color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
@@ -496,15 +496,15 @@ fun HomeScreen(navController: NavController) {
 
                 if (recentEntries.isEmpty()) {
                     FirstTimeEmpty(
-                        onPickCategory = { navController.navigate(CurioRoutes.PICKER) },
-                        onShuffleSurprise = { navController.navigate(CurioRoutes.SPIN) }
+                        onPickCategory = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
+                        onShuffleSurprise = { navController.navigateToTab(CurioRoutes.SPIN) }
                     )
                 } else {
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         recentEntries.forEach { entry ->
                             RecentEntryRow(
                                 entry = entry,
-                                onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) }
+                                onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) { launchSingleTop = true } }
                             )
                         }
                     }
@@ -518,7 +518,7 @@ fun HomeScreen(navController: NavController) {
             if (!reminderEnabled) {
                 Spacer(Modifier.height(16.dp))
                 ReminderNudgeCard(
-                    onTap = { navController.navigate(CurioRoutes.SETTINGS) }
+                    onTap = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
                 )
             }
 

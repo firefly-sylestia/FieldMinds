@@ -28,12 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
@@ -108,13 +107,11 @@ fun CurioBottomBar(
                 selected = selected,
                 onClick = {
                     if (currentRoute != destination.route) {
-                        navController.navigate(destination.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        // Anchor to HOME (the persistent root), not the
+                        // graph start destination: SPLASH is popped on
+                        // launch, so popUpTo(startDestination) would be a
+                        // no-op and tab switches would pile up duplicates.
+                        navController.navigateToTab(destination.route)
                     }
                 },
                 icon = {

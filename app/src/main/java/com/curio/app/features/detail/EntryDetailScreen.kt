@@ -791,7 +791,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                                 .zIndex(i.toFloat())
                         ) {
                             Surface(
-                                onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) },
+                                onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) { launchSingleTop = true } },
                                 shape = RoundedCornerShape(18.dp),
                                 color = MaterialTheme.colorScheme.surface,
                                 shadowElevation = 0.dp,
@@ -913,7 +913,7 @@ private fun ExpandedMoodBoardDialog(
                                     .zIndex(i.toFloat())
                             ) {
                                 Surface(
-                                    onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) },
+                                    onClick = { navController.navigate(CurioRoutes.lightbox(tile.uri)) { launchSingleTop = true } },
                                     shape = RoundedCornerShape(18.dp),
                                     color = MaterialTheme.colorScheme.surface,
                                     shadowElevation = 0.dp,
@@ -999,7 +999,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                 data.imageUris.take(3).forEach { uri ->
                     Surface(
-                        onClick = { navController.navigate(CurioRoutes.lightbox(uri)) },
+                        onClick = { navController.navigate(CurioRoutes.lightbox(uri)) { launchSingleTop = true } },
                         shape = RoundedCornerShape(16.dp),
                         shadowElevation = 0.dp,
                         modifier = Modifier.weight(1f).height(120.dp)
