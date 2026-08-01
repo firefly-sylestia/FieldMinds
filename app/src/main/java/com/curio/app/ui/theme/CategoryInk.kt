@@ -26,8 +26,9 @@ fun CurioCategory.categoryInk(): Color =
  * Theme-aware wash color for a category-aware page BACKGROUND (Spin, Topic
  * Reveal, Save/Capture, Cabinet filter).
  *
- * Light mode: the deep accent at 20% over the cream background — the soft
- * pastel wash the user picked.
+ * Light mode: the accent is first softened toward white (30%) then blended
+ * at a gentler 14% over the cream background — lighter and whiter than the
+ * original 20% wash, so the tint reads airy instead of dark.
  *
  * Dark mode: the deep Tailwind-700 accent alone at 20% reads muddy (amber
  * goes brown, teal goes grey-green), while its light 300-level twin at any
@@ -43,6 +44,6 @@ fun CurioCategory.categoryBackgroundWash(): Color {
         val midTone = lerp(accent, lightAccent, 0.5f)
         lerp(background, midTone, 0.15f)
     } else {
-        lerp(background, accent, 0.20f)
+        lerp(background, lerp(accent, Color.White, 0.30f), 0.14f)
     }
 }

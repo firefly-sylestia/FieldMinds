@@ -3,6 +3,7 @@ package com.curio.app.features.detail
 import android.net.Uri
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -942,6 +943,10 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             shadowElevation = 0.dp,
+            // Faint category rule — the saved board sits on the tinted page,
+            // so a slim theme-aware border (accent in light, light twin in
+            // dark via categoryInk) keeps it from blending into the wash.
+            border = BorderStroke(1.dp, category.categoryInk().copy(alpha = 0.26f)),
             modifier = Modifier.fillMaxWidth().height(460.dp)
         ) {
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {

@@ -1,19 +1,18 @@
-# Request: Dark-mode category tint looks white-washed — fix with proper tints
+# Request: Mood board border + save button tint + lighter light-mode wash
 
 ## Request
-In dark mode the category tint (background wash) looks white-washed; fix it by using proper tints.
-
-## Analysis
-- `categoryBackgroundWash()` in `CategoryInk.kt`: dark mode blended each category's near-white 300-level twin (`lightAccent`, e.g. indigo 0xFFA5B4FC, amber 0xFFFCD34D) at 16% over the midnight background (0xFF0B1018) — inherently white-washed.
-- Deep accent alone at 20% over midnight reads muddy (amber→brown, teal→grey-green) — the original reason the twin was chosen.
-- Fix: build a saturated mid-tone = `lerp(accent, lightAccent, 0.5f)` (≈500-level shade) and wash it at 15%. Real hue, no white-out, no mud.
+1. In mood board, add a faint border (it looks blended into the tinted page).
+2. Expand the tint to the save button background below too.
+3. In light mode, make the tint less dark / a little more whitish.
 
 ## Changes
-- `CategoryInk.kt`: dark branch → `val midTone = lerp(accent, lightAccent, 0.5f); lerp(background, midTone, 0.15f)`. Light mode unchanged (20% deep accent over cream). KDoc updated.
-- Single helper → fix propagates to Spin, Topic Reveal, Save/Capture, Cabinet (filter + All), Category Picker, and saved-entry detail automatically.
+1. `GalleryWallFormat.kt` — editor MoodBoardCanvas Surface gets `border = if (fullScreen) null else BorderStroke(1.dp, accent.copy(alpha = 0.26f))` (faint accent rule so the board reads as a distinct surface on the tinted wash). Added `androidx.compose.foundation.BorderStroke` import.
+2. `EntryDetailScreen.kt` — saved GalleryWallRender board Surface gets `border = BorderStroke(1.dp, category.categoryInk().copy(alpha = 0.26f))` — theme-aware (accent in light, light twin in dark). Added BorderStroke import.
+3. `SaveCaptureScreen.kt` — sticky Save Button: containerColor `cat.accent` → `cat.tint`, contentColor/spinner/check icon `Color.White` → `cat.categoryInk()` so the whole bottom area stays in the page's color story.
+4. `CategoryInk.kt` — light-mode wash `lerp(background, accent, 0.20f)` → `lerp(background, lerp(accent, Color.White, 0.30f), 0.14f)` — lighter/whiter. Dark mode unchanged (mid-tone at 15%).
 
 ## Validation
-- Code reviewer passed: lerp already imported, accent/lightAccent in scope, no callers depend on the old fraction, KDoc accurate.
+- Code reviewer passed: Surface border params accept BorderStroke?, categoryInk() @Composable call valid in Surface params, cat/category in scope, imports ASCII-ordered, Color import still used (section tabs) so no dead import. Minor notes: editor border uses plain accent (low-contrast on dark wash vs saved view's light twin — acceptable since MoodBoardCanvas only gets accent); tinted button may blend with the light tray (matches user's explicit "expand the tint" ask).
 
 ## Completion summary
 - Committed & pushed.

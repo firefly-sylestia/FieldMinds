@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -350,6 +351,10 @@ private fun MoodBoardCanvas(
         shape = if (fullScreen) RoundedCornerShape(0.dp) else RoundedCornerShape(24.dp),
         color = Color.Transparent,
         tonalElevation = 0.dp,
+        // Faint accent rule — the board sits on the tinted page, so a slim
+        // category-colored border keeps it from visually blending into the
+        // wash (full-screen editor is on a plain dialog background, no need).
+        border = if (fullScreen) null else BorderStroke(1.dp, accent.copy(alpha = 0.26f)),
         modifier = if (fullScreen) Modifier.fillMaxSize() else Modifier
             .fillMaxWidth()
             .height(420.dp)

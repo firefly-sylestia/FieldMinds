@@ -371,13 +371,17 @@ fun SaveCaptureScreen(
                         )
                 )
                 Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+                    // The save button itself wears the category TINT (not the
+                    // full accent) with ink-colored content — the whole bottom
+                    // area stays in the page's color story instead of one
+                    // solid accent block.
                     Button(
                         onClick = performSave,
                         enabled = canSave && !saveInProgress,
                         shape = RoundedCornerShape(32.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = cat.accent,
-                            contentColor = Color.White,
+                            containerColor = cat.tint,
+                            contentColor = cat.categoryInk(),
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
@@ -388,7 +392,7 @@ fun SaveCaptureScreen(
                     ) {
                         if (saveInProgress) {
                             CircularProgressIndicator(
-                                color = Color.White,
+                                color = cat.categoryInk(),
                                 strokeWidth = 2.dp,
                                 modifier = Modifier.size(22.dp)
                             )
@@ -401,7 +405,7 @@ fun SaveCaptureScreen(
                             CurioIcon(
                                 name = CurioIcons.Check,
                                 contentDescription = null,
-                                tint = Color.White,
+                                tint = cat.categoryInk(),
                                 size = 20.dp
                             )
                             Spacer(Modifier.width(8.dp))
