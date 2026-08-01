@@ -57,10 +57,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
-import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.moodBoardPainter
-import com.curio.app.ui.components.moodBoardPinchZoom
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -327,12 +325,10 @@ private fun MoodBoardCanvas(
                 modifier = Modifier.fillMaxSize()
             )
 
+            // (No board-level pinch in the editor — single-finger drags move
+            // tiles; image zoom is per-tile via double-tap or the magnifier.)
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    // Two-finger pinch anywhere on the board magnifies the
-                    // whole collage (single-finger drags still move tiles).
-                    .moodBoardPinchZoom(zoomState)
+                modifier = Modifier.fillMaxSize()
             ) {
                 if (tiles.isEmpty()) {
                     // Empty state
@@ -493,6 +489,94 @@ private fun MoodBoardCanvas(
                                     )
                                 }
                             }
+
+                            // ⟲ Rotate button — +15° per tap
+                            Surface(
+                                onClick = {
+                                    val idx = tiles.indexOfFirst { it.id == tile.id }
+                                    if (idx >= 0) {
+                                        val t = tiles[idx]
+                                        tiles[idx] = t.copy(rotationDeg = (t.rotationDeg + 15f) % 360f)
+                                    }
+                                },
+                                shape = CircleShape,
+                                color = Color.Black.copy(alpha = 0.55f),
+                                modifier = Modifier
+                                    .align(Alignment.TopStart)
+                                    .offset(x = (-4).dp, y = (-4).dp)
+                                    .size(22.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    CurioIcon(
+                                        name = CurioIcons.Refresh,
+                                        contentDescription = "Rotate",
+                                        tint = Color.White,
+                                        size = 13.dp
+                                    )
+                                }
+                            }
+
+                            // ── Resize buttons (− shrink / + grow) ────────
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .offset(x = (-4).dp, y = 4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Surface(
+                                    onClick = {
+                                        val idx = tiles.indexOfFirst { it.id == tile.id }
+                                        if (idx >= 0) {
+                                            val t = tiles[idx]
+                                            val minPx = with(density) { 60.dp.toPx() }
+                                            val newW = (t.widthPx * 0.8f).coerceAtLeast(minPx)
+                                            val newH = (t.heightPx * 0.8f).coerceAtLeast(minPx)
+                                            tiles[idx] = t.copy(
+                                                widthPx = newW,
+                                                heightPx = newH,
+                                                offsetXPx = t.offsetXPx.coerceIn(0f, (canvasWPx - newW).coerceAtLeast(0f)),
+                                                offsetYPx = t.offsetYPx.coerceIn(0f, (canvasHPx - newH).coerceAtLeast(0f))
+                                            )
+                                        }
+                                    },
+                                    shape = CircleShape,
+                                    color = Color.Black.copy(alpha = 0.55f),
+                                    modifier = Modifier.size(22.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Text(
+                                            "−",
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                                        )
+                                    }
+                                }
+                                Surface(
+                                    onClick = {
+                                        val idx = tiles.indexOfFirst { it.id == tile.id }
+                                        if (idx >= 0) {
+                                            val t = tiles[idx]
+                                            val minPx = with(density) { 60.dp.toPx() }
+                                            val newW = (t.widthPx * 1.2f)
+                                                .coerceIn(minPx, (canvasWPx - t.offsetXPx).coerceAtLeast(minPx))
+                                            val newH = (t.heightPx * 1.2f)
+                                                .coerceIn(minPx, (canvasHPx - t.offsetYPx).coerceAtLeast(minPx))
+                                            tiles[idx] = t.copy(widthPx = newW, heightPx = newH)
+                                        }
+                                    },
+                                    shape = CircleShape,
+                                    color = Color.Black.copy(alpha = 0.55f),
+                                    modifier = Modifier.size(22.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Text(
+                                            "+",
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -616,27 +700,7 @@ private fun MoodBoardCanvas(
                 }
             }
 
-            // ── In-place zoom overlays (double-tap / search / board pinch — no page) ──
-            if (zoomState.boardZoomed && tiles.isNotEmpty()) {
-                MoodBoardZoomCanvas(
-                    zoomState = zoomState,
-                    animatedScale = animatedScale,
-                    animatedOffsetX = animatedOffsetX,
-                    animatedOffsetY = animatedOffsetY,
-                    tiles = tiles.map {
-                        CaptureData.TileLayout(
-                            uri = it.uri,
-                            offsetXPx = it.offsetXPx,
-                            offsetYPx = it.offsetYPx,
-                            rotationDeg = it.rotationDeg,
-                            widthPx = it.widthPx,
-                            heightPx = it.heightPx
-                        )
-                    },
-                    canvasWPx = canvasWPx,
-                    canvasHPx = canvasHPx
-                )
-            }
+            // ── In-place image zoom overlay (double-tap / search — no page) ──
             tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                 MoodBoardZoomOverlay(
                     zoomState = zoomState,

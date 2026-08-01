@@ -285,8 +285,11 @@ fun MoodBoardZoomOverlay(
         }
     }
 
-    // Scrim + gestures: tap closes, pinch/pan refines the zoom. The image
-    // layer above has no pointer handlers, so events pass through to here.
+    // ONE box owns the whole overlay: scrim + gestures + the image as a
+    // CHILD. Because the image lives INSIDE the gesture box, every pointer
+    // event — on the image or on the scrim above/below it — reaches the same
+    // transform/tap handlers. (Previously the image was a sibling drawn on
+    // top, so pinching the scrim around the image could miss the zoom.)
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -299,16 +302,10 @@ fun MoodBoardZoomOverlay(
             }
             .pointerInput(tileUri) {
                 detectTapGestures(onTap = { zoomState.zoomOut() })
-            }
-    )
-
-    // The zoomed image — centered on the canvas and upright, spring-scaled.
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .zIndex(1001f),
+            },
         contentAlignment = Alignment.Center
     ) {
+        // The zoomed image — centered on the canvas and upright, spring-scaled.
         Box(
             modifier = Modifier.graphicsLayer {
                 scaleX = animatedScale
@@ -374,7 +371,9 @@ fun MoodBoardZoomCanvas(
         }
     }
 
-    // Scrim + gestures: tap closes, pinch/pan refines the board zoom.
+    // ONE box owns the whole overlay: scrim + gestures + the collage as a
+    // CHILD, so a pinch anywhere over the board magnifier (including the
+    // scrim around the collage) reaches the same transform handler.
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -387,16 +386,10 @@ fun MoodBoardZoomCanvas(
             }
             .pointerInput(Unit) {
                 detectTapGestures(onTap = { zoomState.zoomOut() })
-            }
-    )
-
-    // The whole collage — centered, straight, spring-scaled.
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .zIndex(1001f),
+            },
         contentAlignment = Alignment.Center
     ) {
+        // The whole collage — centered, straight, spring-scaled.
         Box(
             modifier = Modifier.graphicsLayer {
                 scaleX = animatedScale
