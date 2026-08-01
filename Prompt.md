@@ -2,36 +2,31 @@
 
 ## Current Request
 
-**"When opening the categories from the 'What are we exploring?' page (Home → All pill), open them on the Shuffle page instead of a different page, and save the mixed selection too so it survives back etc."**
-
-User clarified: the All pill opens the What-are-we-exploring page; categories tapped there were opening a *separate* shuffle instance (a `spin/{slug}` page) instead of the persistent Shuffle tab.
+**"Double-tap the zoomed image to reset to 2.4×, or double-tap anywhere on the board to close the zoom"** (mood board zoom UX).
 
 ## Status: COMPLETE
 
 ## What was done
 
-1. **AppPreferences** (`app/src/main/java/com/curio/app/data/AppPreferences.kt`)
-   - Added `KEY_LAST_SPIN_CATEGORIES` (comma-joined set key) + `getLastSpinCategories(context)` / `setLastSpinCategories(context, ids)`.
-   - `getLastSpinCategories` parses the set, falls back to the single-category key (then WILDCARD) when unset.
-   - `setLastSpinCategories` stores distinct names comma-joined and keeps the single-category key in sync with the first entry (backwards compatible).
+Single file: `app/src/main/java/com/curio/app/ui/components/MoodBoardZoom.kt`
 
-2. **CategoryPickerScreen** (`app/src/main/java/com/curio/app/features/picker/CategoryPickerScreen.kt`)
-   - Single tap: now persists `setLastSpinCategories(context, listOf(cat.id))` then `navigateToTab(CurioRoutes.SPIN)` — lands on the real Shuffle tab, not a separate `spin/{slug}` page. Removed the old `navigate(spinWithCategory) { popUpTo(HOME) }`.
-   - Done (multi-select): resolves slugs → ids via `CurioCategories.byRouteSlug(...)?.id`, persists the FULL set, then `navigateToTab(SPIN)`.
-   - Added imports: `LocalContext`, `AppPreferences`, `navigateToTab`.
+1. **`MoodBoardZoomState.resetZoom()`** — new method: springs back to the default 2.4×, centered + straight (no pan), while staying zoomed. Distinct from `zoomIn` (which switches tiles) and `zoomOut` (which closes).
 
-3. **SpinScreen** (`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`)
-   - Plain-tab seeding (`categorySlug == null`): `initialCats` now comes from `getLastSpinCategories` (full set), not just the single last category.
-   - Slug-launch persist effect now saves the FULL launch set (mixed survives).
-   - New null-slug branch in `LaunchedEffect(categorySlug)`: re-derives `activeCatIds` from prefs so `restoreState` can't resurrect a stale deck when the picker landed on the plain tab.
-   - CategoryPickerSheet `onCategorySelected` / `onCategoriesSelected` now persist the full set.
+2. **`MoodBoardZoomOverlay`** (single-image zoom) — tap handler now uses `detectTapGestures(onTap = close, onDoubleTap = hit-test)`:
+   - Double-tap **on the image** → `resetZoom()` (back to 2.4×).
+   - Double-tap **on the board around the image** → `zoomOut()` (close).
+   - Hit-test uses `liveScale`/`liveOffsetX`/`liveOffsetY` via `rememberUpdatedState` so the gesture coroutine reads the current animated scale/pan without restarting `pointerInput` (keys stay `tileUri`).
+
+3. **`MoodBoardZoomCanvas`** (whole-board magnifier) — `onDoubleTap = zoomOut()` added alongside `onTap`.
+
+4. Imports: added `androidx.compose.runtime.rememberUpdatedState`. KDoc comments updated.
 
 ## Validation
 
-- code-searcher confirmed all edits landed (picker: imports + navigateToTab + setLastSpinCategories; spin: seeding + effect + sheet persist) and zero leftover references.
-- code-reviewer-deepseek-flash reviewed clean (brace balance, imports resolve, rememberSaveable input-keying invalidates stale restore, list equality valid). Noted one-time migration quirk (old in-session mixed deck falls back to single on first post-update entry) — acceptable.
+- code-searcher confirmed all edits landed (resetZoom, rememberUpdatedState import, live values, both onDoubleTap blocks).
+- code-reviewer-deepseek-flash reviewed clean: `size` in pointerInput scope correct, `(Offset)->Unit` lambdas valid, `getValue`/`Offset` already imported, hit-test math matches the centered+scaled image rect, brace balance intact. Noted non-blocking: adding onDoubleTap delays onTap by the double-tap timeout (~300ms) — inherent tradeoff, fine.
 - No local gradle build per AGENTS.md — CI owns compilation on push.
 
 ## Commit
 
-- `feat: category picker opens categories on the Shuffle tab (not a separate spin page) and persists mixed multi-select decks across back/tab/relaunch`
+- `feat: mood board zoom — double-tap image resets to 2.4x, double-tap board closes`

@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -98,6 +99,18 @@ class MoodBoardZoomState {
     fun zoomOut() {
         closing = true
         scaleTarget = 1f
+        offsetX = 0f
+        offsetY = 0f
+    }
+
+    /**
+     * Double-tap the zoomed image: spring back to the default 2.4x, centered
+     * + straight — a quick "reset view" while staying zoomed. Unlike
+     * [zoomIn] (which opens a NEW tile), this never switches the target.
+     */
+    fun resetZoom() {
+        closing = false
+        scaleTarget = 2.4f
         offsetX = 0f
         offsetY = 0f
     }
@@ -253,10 +266,10 @@ fun MoodBoardTiles(
 
 /**
  * In-place zoom overlay for ONE magnified tile. Drop it as the LAST child of
- * the board's Box scope: it darkens the rest of the board and springs the
- * tapped/pinched image up CENTERED and STRAIGHT (no rotation, no offset) —
- * no navigation, no separate page. Tap anywhere closes it; pinch/pan refine
- * the zoom up to 4x.
+ * the board's Box scope: it springs the tapped/pinched image up CENTERED and
+ * STRAIGHT (no rotation, no offset) — no navigation, no separate page. Tap
+ * anywhere closes it; pinch/pan refine the zoom up to 4x; double-tap the
+ * image resets to the default 2.4x; double-tap the board around it closes.
  *
  * [animatedScale] / [animatedOffsetX] / [animatedOffsetY] must come from
  * `animateFloatAsState` at the board level so the spring interpolates from
@@ -286,6 +299,13 @@ fun MoodBoardZoomOverlay(
         }
     }
 
+    // Live animated values for the double-tap hit-test — the gesture
+    // coroutine must read the CURRENT scale/pan without restarting on every
+    // animation frame (keying pointerInput on them would cancel gestures).
+    val liveScale by rememberUpdatedState(animatedScale)
+    val liveOffsetX by rememberUpdatedState(animatedOffsetX)
+    val liveOffsetY by rememberUpdatedState(animatedOffsetY)
+
     // ONE box owns the whole overlay: gestures + the image as a CHILD, so
     // every pointer event — on the image or around it — reaches the same
     // transform/tap handlers. No dark scrim; a dismiss button sits at the
@@ -300,7 +320,20 @@ fun MoodBoardZoomOverlay(
                 }
             }
             .pointerInput(tileUri) {
-                detectTapGestures(onTap = { zoomState.zoomOut() })
+                detectTapGestures(
+                    onTap = { zoomState.zoomOut() },
+                    onDoubleTap = { tap ->
+                        // Double-tap the zoomed image → spring back to the
+                        // default 2.4x. Double-tap the board around it → close.
+                        val halfW = widthPx / 2f * liveScale
+                        val halfH = heightPx / 2f * liveScale
+                        val cx = size.width / 2f + liveOffsetX
+                        val cy = size.height / 2f + liveOffsetY
+                        val onImage = tap.x in (cx - halfW)..(cx + halfW) &&
+                            tap.y in (cy - halfH)..(cy + halfH)
+                        if (onImage) zoomState.resetZoom() else zoomState.zoomOut()
+                    }
+                )
             },
         contentAlignment = Alignment.Center
     ) {
@@ -360,8 +393,8 @@ fun MoodBoardZoomOverlay(
 /**
  * Whole-board magnifier overlay — two-finger pinch on the mood board itself
  * (not just the images) springs the entire collage up, centered and straight.
- * Pinch inside it zooms further up to 4x and drag pans; tap (or pinch back
- * to 1x) closes it.
+ * Pinch inside it zooms further up to 4x and drag pans; tap or double-tap
+ * (or pinch back to 1x) closes it.
  */
 @Composable
 fun MoodBoardZoomCanvas(
@@ -404,7 +437,10 @@ fun MoodBoardZoomCanvas(
                 }
             }
             .pointerInput(Unit) {
-                detectTapGestures(onTap = { zoomState.zoomOut() })
+                detectTapGestures(
+                    onTap = { zoomState.zoomOut() },
+                    onDoubleTap = { zoomState.zoomOut() }
+                )
             },
         contentAlignment = Alignment.Center
     ) {
