@@ -27,5 +27,10 @@
 ## Review
 - code-reviewer-deepseek-flash: clean ×2 (caught + fixed the "Pick a lane" cream button; indentation + kdoc nits fixed).
 
+## CI fix (pushed `887bf8ce`)
+- GitHub Actions `compileDebugKotlin` failed: `CabinetScreen.kt:233:17 Unresolved reference 'BorderStroke'`.
+- Root cause: `FilterChipLite` signature declares `chipBorder: BorderStroke? = null` but the file only imported `androidx.compose.foundation.background` — the `BorderStroke` import was missing (pre-existing latent gap surfaced by CI).
+- Fix: added `import androidx.compose.foundation.BorderStroke` before the `background` import (ASCII order, matches HomeScreen.kt/CategoryInk.kt). Reviewer confirmed clean; CI re-run is the gate.
+
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).
