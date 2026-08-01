@@ -1,6 +1,25 @@
 # Prompt.md — Request Log
 
-## Current Request: Spin page — bottom bar tint wash + dice always filled
+## Current Request: Audio not playing in saved entries
+
+**User request (verbatim):** "the aduio isnt playing in the saved entry"
+
+## Root cause
+`AudioStorageManager.persistAudio` stores audio as a **raw absolute filesystem path** (`filesDir/audio/{entryId}.m4a` → `destFile.absolutePath`). `EntryDetailScreen.AudioPlayerBar` fed that string straight to `MediaItem.fromUri(audioFilePath)` — a bare path parses as a **schemeless URI** that ExoPlayer's `DefaultDataSource` cannot resolve, so playback silently failed. (The waveform still rendered because `WaveformExtractor` uses `MediaExtractor.setDataSource(filePath)` which accepts raw paths natively — hence "waveform visible, no audio".)
+
+## Fix
+`features/detail/EntryDetailScreen.kt` — `AudioPlayerBar` now builds `audioUri` via `remember(audioFilePath) { val parsed = Uri.parse(audioFilePath); if (parsed.scheme != null) parsed else Uri.fromFile(File(audioFilePath)) }` and keys the player on it. Added imports `android.net.Uri` + `java.io.File`. Passes through already-schemed URIs (content://) defensively.
+
+## Validation
+- code-reviewer-deepseek-flash: clean — imports correctly ordered, remember keys sound, player disposal fine (DisposableEffect keyed on player), no other `fromUri` raw-path call sites; only nitpick was the defensive schemed-URI branch (harmless, currently unreachable since every producer stores raw paths).
+- No local gradle per AGENTS.md — CI on push is the compile gate.
+
+## Status
+DONE — committed & pushed.
+
+---
+
+## Previous Request: Spin page — bottom bar tint wash + dice always filled
 
 **User request (verbatim):** "i like the color in background in spin page and caan u also make the buttom bar have that color too otherwise it looks odd and make the diec button always have color the first dice which have filled color make the 2nd state when it says tap to open make that dice also the same color"
 

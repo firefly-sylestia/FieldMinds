@@ -1,5 +1,6 @@
 package com.curio.app.features.detail
 
+import android.net.Uri
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
@@ -101,6 +102,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.isCurioDarkTheme
 import coil.compose.rememberAsyncImagePainter
+import java.io.File
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -526,9 +528,19 @@ private fun AudioPlayerBar(
         } ?: FloatArray(120) { kotlin.random.Random.nextFloat() * 0.6f + 0.2f }
     }
 
-    val player = remember {
+    // The stored audioFilePath is a RAW absolute filesystem path (e.g.
+    // /data/user/0/com.curio.app/files/audio/xyz.m4a) — feeding that string
+    // straight to MediaItem.fromUri() parses it as a schemeless URI that
+    // ExoPlayer's DefaultDataSource cannot resolve, so the audio would never
+    // play. Wrap it in a file:// URI instead (pass through unchanged if the
+    // path ever arrives already schemed, e.g. content:// from a picker).
+    val audioUri = remember(audioFilePath) {
+        val parsed = Uri.parse(audioFilePath)
+        if (parsed.scheme != null) parsed else Uri.fromFile(File(audioFilePath))
+    }
+    val player = remember(audioUri) {
         ExoPlayer.Builder(context.applicationContext).build().apply {
-            setMediaItem(MediaItem.fromUri(audioFilePath))
+            setMediaItem(MediaItem.fromUri(audioUri))
             prepare()
             playWhenReady = false
         }
