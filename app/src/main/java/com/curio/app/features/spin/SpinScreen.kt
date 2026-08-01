@@ -66,7 +66,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RenderQuality
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -1203,10 +1202,6 @@ private fun HeroTicketCard(
                 scaleY = if (landed) settleScale.value else tickPulse.value
                 rotationZ = if (shuffling) (tickPulse.value - 1f) * 80f * tickDir else 0f
                 translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 30f
-                // Crisp borders + corners while the layer scales and rocks —
-                // forces the rasterizer to downsample instead of pixelating
-                // the hairline border + rounded corners.
-                renderQuality = RenderQuality.High
             }
             .zIndex(10f)
             .then(
@@ -1419,9 +1414,6 @@ private fun PeekCard(
                 // and render the card as soft/pixelated. Depth comes from
                 // scale + rotation + zIndex instead of transparency.
                 alpha = 1f
-                // High-quality downsampling keeps the rotated hairline
-                // borders + rounded corners crisp instead of aliased.
-                renderQuality = RenderQuality.High
             }
             .zIndex(if (far) 2f else 5f)
     ) {

@@ -26,3 +26,11 @@ All four issues live in `SpinScreen.kt`:
 - Code review (2 passes) clean; tuning applied per reviewer (snapTo-kick so even fast ticks visibly pulse; rotation factor 80). Braces balanced (258/258, 803/803); no dangling refs to removed symbols.
 - Reviewer's non-blocking notes: fast phase may read as a hover rather than per-switch kicks (tuning judgment), and single-topic pools never change `topic?.id` so won't pulse (edge case, 100+ topics per category).
 - Gradle build/lint NOT run (forbidden in this environment; CI validates on push).
+
+## Follow-up: CI compile fix — remove non-existent RenderQuality
+
+CI (compileDebugKotlin) failed: `Unresolved reference 'RenderQuality'` at SpinScreen.kt:69 (import), :1209 and :1424 (`renderQuality = RenderQuality.High`).
+
+- Verified `androidx.compose.ui.graphics.RenderQuality` does NOT exist in resolved Compose BOM 2026.05.01 (ui 1.11.2): scanned every transformed jar in the Gradle cache for the class (zero matches) + docs research corroborated (no such API in androidx.compose.ui.graphics).
+- Fix (behavior-neutral, user requested no functionality change): removed the import + both `renderQuality = RenderQuality.High` lines and their now-misleading comments. All animation logic (tickPulse pulse, settleScale/settleY landing, peek slide AnimatedContent, zIndex) untouched.
+- Validation: zero `RenderQuality` refs repo-wide; braces balanced (258/258, 803/803); code review clean. Pixelation polish may be revisited via `CompositingStrategy.Offscreen` (exists in ui 1.11.2) if desired later.
