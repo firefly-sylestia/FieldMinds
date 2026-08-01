@@ -45,6 +45,7 @@ import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryInk
 
 /**
  * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
@@ -140,6 +141,7 @@ fun CabinetScreen(navController: NavController) {
                     label = cat.displayName,
                     accent = cat.accent,
                     tint = cat.tint,
+                    ink = cat.categoryInk(),
                     selected = selectedFilter == cat.id,
                     onClick = { selectedFilter = cat.id }
                 )
@@ -169,7 +171,7 @@ fun CabinetScreen(navController: NavController) {
                         glyph = CurioIcons.SearchOff,
                         headline = "No ${cat.displayName} captures yet",
                         subtext = "Shuffle for ${cat.displayName} to find your first one.",
-                        tint = cat.accent.copy(alpha = 0.4f),
+                        tint = cat.categoryInk().copy(alpha = 0.4f),
                         ctaLabel = "Shuffle for ${cat.displayName}",
                         onCtaClick = {
                             navController.navigate(
@@ -208,6 +210,7 @@ private fun FilterChipLite(
     label: String,
     accent: Color,
     tint: Color,
+    ink: Color,
     selected: Boolean,
     onClick: () -> Unit
 ) {
@@ -219,7 +222,7 @@ private fun FilterChipLite(
         Text(
             text = label,
             style = MaterialTheme.typography.labelLarge,
-            color = if (selected) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+            color = if (selected) ink else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }

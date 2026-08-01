@@ -98,6 +98,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryInk
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -590,7 +591,7 @@ private fun TopBar(
         ) {
             CurioIcon(
                 cat.iconGlyph, null,
-                tint = cat.accent,
+                tint = cat.categoryInk(),
                 size = 18.dp
             )
             Text(
@@ -732,7 +733,7 @@ private fun FilterSheet(
                     .padding(horizontal = 20.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CurioIcon(cat.iconGlyph, null, tint = cat.accent, size = 22.dp)
+                CurioIcon(cat.iconGlyph, null, tint = cat.categoryInk(), size = 22.dp)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = cat.displayName,
@@ -905,14 +906,14 @@ private fun FilterSheet(
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = cat.accent,
-                    contentColor = CurioColors.DeepPlum
+                    contentColor = Color.White
                 ),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                CurioIcon(CurioIcons.Check, null, tint = CurioColors.DeepPlum, size = 18.dp)
+                CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
@@ -943,7 +944,7 @@ private fun ActiveFilterChip(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
-                color = CurioColors.DeepPlum
+                color = Color.White
             )
             Surface(
                 shape = CircleShape,
@@ -997,7 +998,7 @@ private fun CompactChip(
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
                 ),
-                color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
+                color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -1089,7 +1090,7 @@ private fun EmptyPoolHint(cat: CurioCategory) {
             ) {
                 CurioIcon(
                     cat.iconGlyph, null,
-                    tint = cat.accent.copy(alpha = 0.5f),
+                    tint = cat.categoryInk().copy(alpha = 0.5f),
                     size = 56.dp
                 )
                 Spacer(Modifier.height(14.dp))
@@ -1394,7 +1395,7 @@ private fun PeekCard(
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.
     val cardColor = remember(cat.id, far) {
-        val base = if (cat.id == CategoryId.WILDCARD) CurioColors.CoralBlush else cat.accent
+        val base = if (cat.id == CategoryId.WILDCARD) CurioColors.CategoryPurple else cat.accent
         lerp(base, Color.Black, if (far) 0.42f else 0.28f)
     }
 
@@ -1521,7 +1522,7 @@ private fun SpinButton(
                 // v5.10 — the dice shows in EVERY state: tumbling while
                 // shuffling, a steady accent dice for "Spin again".
                 if (isShuffling) {
-                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(68.dp))
+                    ShuffleGlyph(tint = Color.White, modifier = Modifier.size(68.dp))
                 } else {
                     CurioIcon(
                         CurioIcons.Casino, null,
@@ -1680,7 +1681,7 @@ private fun BottomCta(
                 DeckControlButton(
                     label = cat.displayName,
                     icon = cat.iconGlyph,
-                    accent = cat.accent,
+                    cat = cat,
                     selected = true,
                     onClick = onCategories,
                     modifier = Modifier.weight(1f)
@@ -1688,7 +1689,7 @@ private fun BottomCta(
                 DeckControlButton(
                     label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
                     icon = CurioIcons.Search,
-                    accent = cat.accent,
+                    cat = cat,
                     selected = hasFilters,
                     onClick = onFilter,
                     modifier = Modifier.weight(1f)
@@ -1703,18 +1704,19 @@ private fun BottomCta(
 private fun DeckControlButton(
     label: String,
     icon: String,
-    accent: Color,
+    cat: CurioCategory,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Solid fills — no translucent tint, no border. Selected buttons get the
-    // full accent color (DeepPlum content, matching the center SpinButton),
-    // unselected buttons get a solid surface fill with accent icon + text.
+    // full accent color with white content; unselected buttons get a solid
+    // surface fill with theme-aware accent ink (stays readable on the
+    // midnight dark surfaces).
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerHigh,
+        color = if (selected) cat.accent else MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {
@@ -1725,13 +1727,13 @@ private fun DeckControlButton(
         ) {
             CurioIcon(
                 icon, null,
-                tint = if (selected) CurioColors.DeepPlum else accent,
+                tint = if (selected) Color.White else cat.categoryInk(),
                 size = 24.dp
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
-                color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
+                color = if (selected) Color.White else cat.categoryInk(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -1821,7 +1823,7 @@ private fun CategoryPickerSheet(
                             Text(
                                 text = currentCat.displayName,
                                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
-                                color = currentCat.accent,
+                                color = currentCat.categoryInk(),
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
                             )
                         }

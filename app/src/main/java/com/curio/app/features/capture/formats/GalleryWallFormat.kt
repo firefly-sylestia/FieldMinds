@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
-import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import coil.compose.rememberAsyncImagePainter
@@ -358,13 +357,13 @@ fun GalleryWallFormat(
                             CurioIcon(
                                 name = CurioIcons.Add,
                                 contentDescription = "Add images",
-                                tint = CurioColors.DeepPlum,
+                                tint = Color.White,
                                 size = 20.dp
                             )
                             Text(
                                 text = "Add images",
                                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                                color = CurioColors.DeepPlum
+                                color = Color.White
                             )
                         }
                     }

@@ -58,6 +58,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryInk
 
 /**
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
@@ -248,9 +249,9 @@ fun TopicRevealScreen(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
-                        contentColor = CurioColors.DeepPlum,
+                        contentColor = Color.White,
                         disabledContainerColor = cat.accent.copy(alpha = 0.35f),
-                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
+                        disabledContentColor = Color.White.copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
                     modifier = Modifier
@@ -261,7 +262,7 @@ fun TopicRevealScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CurioIcon(CurioIcons.AutoAwesome, null, tint = CurioColors.DeepPlum, size = 20.dp)
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
                         Text(
                             text = "Start exploring",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
@@ -421,7 +422,7 @@ private fun TeaserCard(
                 CurioIcon(
                     name = CurioIcons.AutoAwesome,
                     contentDescription = null,
-                    tint = cat.accent,
+                    tint = cat.categoryInk(),
                     size = 16.dp
                 )
                 Text(

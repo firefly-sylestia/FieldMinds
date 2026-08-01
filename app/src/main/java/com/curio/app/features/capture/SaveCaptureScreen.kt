@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -69,6 +70,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryInk
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -223,7 +225,7 @@ fun SaveCaptureScreen(
                     CurioIcon(
                         name = cat.iconGlyph,
                         contentDescription = null,
-                        tint = cat.accent,
+                        tint = cat.categoryInk(),
                         size = 22.dp,
                         modifier = Modifier.padding(6.dp)
                     )
@@ -232,12 +234,12 @@ fun SaveCaptureScreen(
                     Text(
                         text = topic?.name ?: "Loading…",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = cat.accent
+                        color = cat.categoryInk()
                     )
                     Text(
                         text = cat.displayName,
                         style = MaterialTheme.typography.labelSmall,
-                        color = cat.accent.copy(alpha = 0.7f)
+                        color = cat.categoryInk().copy(alpha = 0.7f)
                     )
                 }
             }
@@ -293,7 +295,7 @@ fun SaveCaptureScreen(
                         shape = RoundedCornerShape(32.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = cat.accent,
-                            contentColor = CurioColors.DeepPlum,
+                            contentColor = Color.White,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
@@ -304,7 +306,7 @@ fun SaveCaptureScreen(
                     ) {
                         if (saveInProgress) {
                             CircularProgressIndicator(
-                                color = CurioColors.DeepPlum,
+                                color = Color.White,
                                 strokeWidth = 2.dp,
                                 modifier = Modifier.size(22.dp)
                             )
@@ -317,7 +319,7 @@ fun SaveCaptureScreen(
                             CurioIcon(
                                 name = CurioIcons.Check,
                                 contentDescription = null,
-                                tint = CurioColors.DeepPlum,
+                                tint = Color.White,
                                 size = 20.dp
                             )
                             Spacer(Modifier.width(8.dp))

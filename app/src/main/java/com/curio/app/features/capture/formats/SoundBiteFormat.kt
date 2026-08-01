@@ -53,7 +53,6 @@ import com.curio.app.ui.components.TrimWaveform
 import com.curio.app.ui.components.WaveformExtractor
 import com.curio.app.ui.components.formatRecordingTime
 import com.curio.app.ui.components.rememberPulseScale
-import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import kotlinx.coroutines.Dispatchers
@@ -401,7 +400,7 @@ private fun TrimSection(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = accent,
-                    contentColor = CurioColors.DeepPlum,
+                    contentColor = Color.White,
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
@@ -410,7 +409,7 @@ private fun TrimSection(
             ) {
                 if (trimInProgress) {
                     CircularProgressIndicator(
-                        color = CurioColors.DeepPlum,
+                        color = Color.White,
                         strokeWidth = 2.dp,
                         modifier = Modifier.size(18.dp)
                     )
@@ -450,7 +449,7 @@ private fun IdleControls(
                 CurioIcon(
                     name = CurioIcons.Mic,
                     contentDescription = "Start recording",
-                    tint = CurioColors.DeepPlum,
+                    tint = Color.White,
                     size = 48.dp
                 )
             }
@@ -501,7 +500,7 @@ private fun LiveControls(
                     CurioIcon(
                         name = if (isPaused) CurioIcons.MicNone else CurioIcons.Mic,
                         contentDescription = null,
-                        tint = CurioColors.DeepPlum,
+                        tint = Color.White,
                         size = 48.dp
                     )
                 }

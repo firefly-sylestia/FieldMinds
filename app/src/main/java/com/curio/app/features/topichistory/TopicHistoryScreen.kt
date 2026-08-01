@@ -39,6 +39,7 @@ import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryInk
 
 /**
  * Topic History — see CURIO_SPEC.md §13.5.
@@ -167,7 +168,7 @@ private fun HistoryRow(entry: HistoryEntry, onClick: () -> Unit) {
                 CurioIcon(
                     name = cat.iconGlyph,
                     contentDescription = null,
-                    tint = cat.accent,
+                    tint = cat.categoryInk(),
                     size = 22.dp
                 )
             }
@@ -186,7 +187,7 @@ private fun HistoryRow(entry: HistoryEntry, onClick: () -> Unit) {
                 Text(
                     text = cat.displayName,
                     style = MaterialTheme.typography.bodySmall,
-                    color = cat.accent
+                    color = cat.categoryInk()
                 )
             }
 

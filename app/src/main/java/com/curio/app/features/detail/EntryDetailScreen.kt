@@ -84,11 +84,11 @@ import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.shareComposableCard
-import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
-import coil.compose.rememberAsyncImagePainter
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryInk
+import coil.compose.rememberAsyncImagePainter
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -222,8 +222,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.accent, size = 14.dp)
-                            Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.accent)
+                            CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.categoryInk(), size = 14.dp)
+                            Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.categoryInk())
                         }
                     }
                     if (resolvedEntry.title != null) {
@@ -317,7 +317,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     CurioIcon(
                         name = CurioIcons.PlayArrow,
                         contentDescription = "Play",
-                        tint = CurioColors.DeepPlum,
+                        tint = Color.White,
                         size = 32.dp,
                         modifier = Modifier.padding(8.dp)
                     )
@@ -349,7 +349,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                                 Text(
                                     text = data.encodingFormat,
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                                    color = category.accent,
+                                    color = category.categoryInk(),
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                                 )
                             }
@@ -488,7 +488,7 @@ private fun AudioPlayerBar(
                     CurioIcon(
                         name = if (isPlaying) CurioIcons.Pause else CurioIcons.PlayArrow,
                         contentDescription = if (isPlaying) "Pause" else "Play",
-                        tint = CurioColors.DeepPlum,
+                        tint = Color.White,
                         size = 28.dp,
                         modifier = Modifier.padding(6.dp)
                     )
@@ -613,7 +613,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             ) {
                 CurioIcon(
                     CurioIcons.Movie, null,
-                    tint = category.accent.copy(alpha = 0.5f),
+                    tint = category.categoryInk().copy(alpha = 0.5f),
                     size = 48.dp
                 )
                 Text(
@@ -643,7 +643,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                     repeat(data.rating.coerceIn(0, 5)) { 
                         CurioIcon(
                             CurioIcons.Star, null, 
-                            tint = category.accent, 
+                            tint = category.categoryInk(), 
                             size = 24.dp
                         ) 
                     }
@@ -672,7 +672,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                 ) {
                     CurioIcon(
                         CurioIcons.Image, null,
-                        tint = category.accent,
+                        tint = category.categoryInk(),
                         size = 18.dp
                     )
                     Text(
@@ -821,7 +821,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        CurioIcon(CurioIcons.Image, null, tint = category.accent.copy(alpha = 0.3f), size = 48.dp)
+                        CurioIcon(CurioIcons.Image, null, tint = category.categoryInk().copy(alpha = 0.3f), size = 48.dp)
                         Spacer(Modifier.height(8.dp))
                         Text(
                             "${data.imageCount} image${if (data.imageCount != 1) "s" else ""}",
@@ -979,19 +979,19 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
         data.surprised.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
         data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }

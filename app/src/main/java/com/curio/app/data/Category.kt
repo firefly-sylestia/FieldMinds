@@ -79,7 +79,7 @@ enum class CategoryId {
  * themes (used for color tinting + Wildcard pool composition).
  *
  * Within a family, sub-categories share the same accent color (e.g.
- * Artists + Albums both use Lilac) so the user intuitively reads them
+ * Artists + Albums both use indigo) so the user intuitively reads them
  * as "related domains" even though they're independent chips.
  */
 enum class CategoryFamily {
@@ -130,6 +130,10 @@ enum class CategoryFamily {
  *   for this category. The 6 format bodies (Sound Bite / Reel Notes /
  *   Marginalia / Gallery Wall / Field Notes / Open Notebook) are reused
  *   across categories — see [CaptureFormat].
+ * @property accent Deep fill color for cards, chips and buttons — white
+ *   content stays >= 4.5:1 on every accent (researched Tailwind-700 set).
+ * @property lightAccent Light 300-level twin of [accent] for accent-colored
+ *   text/icons on dark surfaces — resolved via [com.curio.app.ui.theme.categoryInk].
  */
 data class CurioCategory(
     val id: CategoryId,
@@ -140,7 +144,10 @@ data class CurioCategory(
     val family: CategoryFamily,
     val defaultFormat: CaptureFormat,
     val isHidden: Boolean = false,
-    val isReady: Boolean = false
+    val isReady: Boolean = false,
+    // Kept LAST so positional constructions never shift the mid-constructor
+    // defaults (all current call sites use named args; appending keeps that safe).
+    val lightAccent: Color = accent
 )
 
 /**
@@ -167,12 +174,13 @@ data class CurioCategory(
 object CurioCategories {
 
     val all: List<CurioCategory> = listOf(
-        // ── Music family (Lilac) ────────────────────────────────────────
+        // ── Music family (Indigo) ───────────────────────────────────────
         CurioCategory(
             id            = CategoryId.ARTISTS,
             displayName   = "Artists",
-            accent        = CurioColors.Lilac,
-            tint          = CurioColors.LilacTint,
+            accent        = CurioColors.CategoryIndigo,
+            lightAccent   = CurioColors.CategoryIndigoInk,
+            tint          = CurioColors.CategoryIndigoTint,
             iconGlyph     = "person",
             family        = CategoryFamily.MUSIC,
             defaultFormat = CaptureFormat.SoundBite
@@ -180,18 +188,20 @@ object CurioCategories {
         CurioCategory(
             id            = CategoryId.ALBUMS,
             displayName   = "Albums",
-            accent        = CurioColors.Lilac,
-            tint          = CurioColors.LilacTint,
+            accent        = CurioColors.CategoryIndigo,
+            lightAccent   = CurioColors.CategoryIndigoInk,
+            tint          = CurioColors.CategoryIndigoTint,
             iconGlyph     = "album",
             family        = CategoryFamily.MUSIC,
             defaultFormat = CaptureFormat.ReelNotes
         ),
-        // ── Movies family (Dusty Blue) ──────────────────────────────────
+        // ── Movies family (Rose) ────────────────────────────────────────
         CurioCategory(
             id            = CategoryId.DIRECTORS,
             displayName   = "Directors",
-            accent        = CurioColors.DustyBlue,
-            tint          = CurioColors.DustyBlueTint,
+            accent        = CurioColors.CategoryRose,
+            lightAccent   = CurioColors.CategoryRoseInk,
+            tint          = CurioColors.CategoryRoseTint,
             iconGlyph     = "videocam",
             family        = CategoryFamily.MOVIES,
             defaultFormat = CaptureFormat.ReelNotes
@@ -199,18 +209,20 @@ object CurioCategories {
         CurioCategory(
             id            = CategoryId.FILMS,
             displayName   = "Films",
-            accent        = CurioColors.DustyBlue,
-            tint          = CurioColors.DustyBlueTint,
+            accent        = CurioColors.CategoryRose,
+            lightAccent   = CurioColors.CategoryRoseInk,
+            tint          = CurioColors.CategoryRoseTint,
             iconGlyph     = "movie",
             family        = CategoryFamily.MOVIES,
             defaultFormat = CaptureFormat.Marginalia
         ),
-        // ── Books family (Sage) ─────────────────────────────────────────
+        // ── Books family (Amber) ────────────────────────────────────────
         CurioCategory(
             id            = CategoryId.AUTHORS,
             displayName   = "Authors",
-            accent        = CurioColors.Sage,
-            tint          = CurioColors.SageTint,
+            accent        = CurioColors.CategoryAmber,
+            lightAccent   = CurioColors.CategoryAmberInk,
+            tint          = CurioColors.CategoryAmberTint,
             iconGlyph     = "edit_note",
             family        = CategoryFamily.BOOKS,
             defaultFormat = CaptureFormat.Marginalia
@@ -218,18 +230,20 @@ object CurioCategories {
         CurioCategory(
             id            = CategoryId.BOOKS,
             displayName   = "Books",
-            accent        = CurioColors.Sage,
-            tint          = CurioColors.SageTint,
+            accent        = CurioColors.CategoryAmber,
+            lightAccent   = CurioColors.CategoryAmberInk,
+            tint          = CurioColors.CategoryAmberTint,
             iconGlyph     = "menu_book",
             family        = CategoryFamily.BOOKS,
             defaultFormat = CaptureFormat.Marginalia
         ),
-        // ── Visual Art family (Peach) ───────────────────────────────────
+        // ── Visual Art family (Teal) ────────────────────────────────────
         CurioCategory(
             id            = CategoryId.PAINTERS,
             displayName   = "Painters",
-            accent        = CurioColors.Peach,
-            tint          = CurioColors.PeachTint,
+            accent        = CurioColors.CategoryTeal,
+            lightAccent   = CurioColors.CategoryTealInk,
+            tint          = CurioColors.CategoryTealTint,
             iconGlyph     = "brush",
             family        = CategoryFamily.VISUAL_ART,
             defaultFormat = CaptureFormat.GalleryWall
@@ -237,18 +251,20 @@ object CurioCategories {
         CurioCategory(
             id            = CategoryId.ARTWORKS,
             displayName   = "Artworks",
-            accent        = CurioColors.Peach,
-            tint          = CurioColors.PeachTint,
+            accent        = CurioColors.CategoryTeal,
+            lightAccent   = CurioColors.CategoryTealInk,
+            tint          = CurioColors.CategoryTealTint,
             iconGlyph     = "palette",
             family        = CategoryFamily.VISUAL_ART,
             defaultFormat = CaptureFormat.GalleryWall
         ),
-        // ── Science family (Teal) ───────────────────────────────────────
+        // ── Science family (Sky) ────────────────────────────────────────
         CurioCategory(
             id            = CategoryId.SCIENTISTS,
             displayName   = "Scientists",
-            accent        = CurioColors.Teal,
-            tint          = CurioColors.TealTint,
+            accent        = CurioColors.CategorySky,
+            lightAccent   = CurioColors.CategorySkyInk,
+            tint          = CurioColors.CategorySkyTint,
             iconGlyph     = "science",
             family        = CategoryFamily.SCIENCE,
             defaultFormat = CaptureFormat.FieldNotes
@@ -256,18 +272,20 @@ object CurioCategories {
         CurioCategory(
             id            = CategoryId.DISCOVERIES,
             displayName   = "Discoveries",
-            accent        = CurioColors.Teal,
-            tint          = CurioColors.TealTint,
+            accent        = CurioColors.CategorySky,
+            lightAccent   = CurioColors.CategorySkyInk,
+            tint          = CurioColors.CategorySkyTint,
             iconGlyph     = "lightbulb",
             family        = CategoryFamily.SCIENCE,
             defaultFormat = CaptureFormat.FieldNotes
         ),
-        // ── Wildcard (rainbow) ──────────────────────────────────────────
+        // ── Wildcard (purple; big cards keep the rainbow gradient) ───────
         CurioCategory(
             id            = CategoryId.WILDCARD,
             displayName   = "Wildcard",
-            accent        = CurioColors.CoralBlush,    // fallback; UI uses the gradient
-            tint          = CurioColors.CoralBlush.copy(alpha = 0.20f),
+            accent        = CurioColors.CategoryPurple,  // flat accent; UI hero uses the gradient
+            lightAccent   = CurioColors.CategoryPurpleInk,
+            tint          = CurioColors.CategoryPurpleTint,
             iconGlyph     = "casino",
             family        = CategoryFamily.WILDCARD,
             defaultFormat = CaptureFormat.OpenNotebook

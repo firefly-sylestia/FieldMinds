@@ -81,6 +81,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryInk
 
 /**
  * Profile and personal settings hub.
@@ -753,7 +754,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
             Box(
                 modifier = Modifier.size(40.dp).clip(RoundedCornerShape(13.dp)).background(category.accent.copy(alpha = 0.16f)),
                 contentAlignment = Alignment.Center
-            ) { CurioIcon(category.iconGlyph, null, tint = category.accent, size = 20.dp) }
+            ) { CurioIcon(category.iconGlyph, null, tint = category.categoryInk(), size = 20.dp) }
             Column(modifier = Modifier.weight(1f)) {
                 Text(entry.topic.name, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text("${category.displayName} · ${capturedLabel(entry)}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

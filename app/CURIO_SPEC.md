@@ -52,15 +52,22 @@ The brand is intentionally not a recolor of the former wheel. Midnight Signal us
   `onSurface` at 5% reads muddy/barely visible over the cream surface.
   Active-category accent whisper: 11% alpha in dark, 20% in light.
 
-Each category keeps its existing source-compatible token name while adopting a
-signal color used for chips, category headers, spin segments, and hero rules:
-    Music / Artists ........ Electric Blue #3D8CFF
-    Movies / Directors ..... Cobalt        #5B5FEF
-    Books / Authors ........ Mint          #16B89A
-    Visual Art / Painters .. Orange        #E6652F
-    Science & Nature ....... Cyan          #079DB8
-    Wildcard ............... Signal-spectrum gradient (blue → cyan → mint →
-                              orange → cobalt)
+Each category uses a researched, perceptually-balanced accent (Tailwind-700
+harmonized shades — deep enough that WHITE content clears WCAG AA ≥ 4.5:1 on
+every accent) used for chips, category headers, cards, gradients, and hero
+rules. Each deep accent pairs with a light 300-level "ink" twin for accent-
+colored text/icons on the midnight dark surfaces (resolved theme-aware via
+`CurioCategory.categoryInk()`):
+    Music / Artists ........ Indigo #4338CA  (ink #A5B4FC)
+    Movies / Directors ..... Rose   #BE123C  (ink #FDA4AF)
+    Books / Authors ........ Amber  #B45309  (ink #FCD34D)
+    Visual Art / Painters .. Teal   #0F766E  (ink #5EEAD4)
+    Science & Nature ....... Sky    #0369A1  (ink #7DD3FC)
+    Wildcard ............... Purple #7E22CE  (ink #D8B4FE); big hero/ticket
+                              cards keep the warm rainbow gradient
+    (Tokens: `CurioColors.Category*` in `ui/theme/CurioColors.kt`; the legacy
+     pastel accents remain only for brand/decorative use — profile stats,
+     wildcard rainbow.)
 
 The launcher mark is an angular open portal with a mint aperture and an orange
 signal spark. It is used consistently by the adaptive launcher, themed icon,

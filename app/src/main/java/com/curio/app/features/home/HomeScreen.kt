@@ -75,6 +75,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryInk
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -250,7 +251,7 @@ fun HomeScreen(navController: NavController) {
             // ── 3. Quest card ───────────────────────────────────────────
             val chosen = selectedCategory
             val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
-            val accent = if (isWildcard) CurioColors.CoralBlush else chosen?.accent ?: CurioColors.CoralBlush
+            val accent = if (isWildcard) CurioColors.CategoryPurple else chosen?.accent ?: CurioColors.CategoryPurple
             val questGradient = remember(isWildcard, accent) {
                 if (isWildcard) CurioGradients.wildcardCardGradient()
                 else CurioGradients.cardGradient(accent)
@@ -443,7 +444,7 @@ fun HomeScreen(navController: NavController) {
                     item(key = "wildcard") {
                         CategoryChip(
                             name = "Surprise",
-                            accent = CurioColors.CoralBlush,
+                            accent = CurioColors.CategoryPurple,
                             selected = selectedCategory == null,
                             onClick = { selectedCategory = null }
                         )
@@ -640,7 +641,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(
-                    cat.iconGlyph, null, tint = cat.accent, size = 22.dp
+                    cat.iconGlyph, null, tint = cat.categoryInk(), size = 22.dp
                 )
             }
             Column(modifier = Modifier.weight(1f)) {

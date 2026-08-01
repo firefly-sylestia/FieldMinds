@@ -63,7 +63,7 @@ fun CurioCategoryCard(
     // deepened just a touch toward black: same hue, softer brightness while
     // keeping the color rich and vivid.
     val cardColor = if (isWildcard) {
-        lerp(CurioColors.CoralBlush, Color.Black, 0.08f)
+        lerp(CurioColors.CategoryPurple, Color.Black, 0.08f)
     } else {
         lerp(category.accent, Color.Black, 0.10f)
     }
