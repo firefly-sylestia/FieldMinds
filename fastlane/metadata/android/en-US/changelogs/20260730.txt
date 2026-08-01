@@ -1,1 +1,2 @@
-Simplified the Shuffle page with a clean fan-deck carousel and muted category-icon watermark backdrop. Mood boards upgraded: theme-aware watermark backgrounds with a unique random pattern per board, crisper Fit-rendered tiles that never crop, a full-screen canvas for arranging images, and Edit to re-open any saved mood board — the editor now keeps the same backdrop pattern as the saved view. Multi-category spins blend every selected category's color into a premium mixed deck. Category pickers: tap a deck to spin it, or press and hold to pick several together.
+• Mood board: drag a tile to the top zone to pin it to the front
+• Clear board action in the expanded mood board editor

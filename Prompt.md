@@ -1,21 +1,39 @@
-# Mood Board Edit — Reuse Entry-Id Watermark Seed
+# Prompt.md — Running Request Log
 
-## Request
+## Latest Request — Mood Board: pin-to-front drag gesture + clear board
 
-User: "Make the edit screen reuse the saved board's entry-id-derived watermark seed so the editor pattern matches the saved view exactly"
+### Status: ✅ Complete (committed & pushed)
 
-## Analysis
+### Summary
+Added drag-to-pin-to-front and a clear-board action to the mood board editor
+(`app/src/main/java/com/curio/app/features/capture/formats/GalleryWallFormat.kt`):
 
-- `EntryDetailScreen.GalleryWallRender` derives the backdrop seed from the entry id: `remember(entry.id) { entry.id.hashCode() }`.
-- The edit screen (`SaveCaptureScreen` → `FormatBodyForCategory` → `GalleryWallFormat`) preloaded tiles/caption but always generated a **fresh random** seed (`Random.nextInt()`), so the editor's watermark pattern differed from the saved view — the earlier reviewer nit.
+1. **Pin-to-front drag zone** — dragging any tile into a translucent 52dp drop
+   zone at the top of the canvas highlights the strip ("Release to pin to
+   front") and, on release, brings the tile to the front of the z-order
+   (same `tiles.add(tiles.removeAt(idx))` mechanism as tap-to-front). The
+   strip only appears while a drag is in progress (`draggingTileId != null`),
+   uses `KeyboardArrowUp` + accent colors, and sits at zIndex 500 so touches
+   pass through to the dragged tile (plain Box, no pointer handlers).
+2. **Clear board** — expanded (full-screen) editor only: a "Clear board" pill
+   at BottomStart (errorContainer, `Delete` icon) opens an AlertDialog
+   ("Remove all N images?") with Clear/Keep. Hidden when the board is empty
+   (`fullScreen && tiles.isNotEmpty()`).
+3. Drag gesture upgraded to full `detectDragGestures(onDragStart/onDrag/
+   onDragEnd/onDragCancel)` lifecycle; `inPinZone` derived from the tile's
+   offsetYPx vs pinZoneHeightPx after each drag move.
 
-## Plan
+### Validation
+- Braces balanced: GalleryWallFormat 117/117
+- Imports: `layout.width`, `AlertDialog`, `TextButton` added, all used
+- Code review: clean verdict (2 minor nits fixed: hidden clear on empty
+  board, KDoc mention of pin gesture)
 
-1. **`GalleryWallFormat.kt`** — added optional `boardSeed: Int? = null` param; local renamed `boardSeed` → `seed` (avoid shadowing) with `remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }`; both `MoodBoardCanvas` call sites (inline + fullscreen dialog) pass `seed = seed`. KDoc updated to reference the real `[boardSeed]` param.
-2. **`SaveCaptureScreen.kt`** — `FormatBodyForCategory` gained `boardSeed: Int? = null` passed through to `GalleryWallFormat`; call site passes `boardSeed = editEntryId?.hashCode()` — same id, same hashCode as EntryDetail, so the editor matches the saved view.
-
-## Completion Summary
-
-- Validation green: braces (GalleryWallFormat 89/89, SaveCaptureScreen 66/66), seed threaded end-to-end, zero stale `val boardSeed` locals, `editEntryId?.hashCode()` == `entry.id.hashCode()` confirmed against EntryDetailScreen line 765.
-- Code review clean: defaulted param keeps `OpenNotebookFormat`'s `GalleryWallFormat` call compiling; new-board flow (boardSeed = null) behavior unchanged; KDoc no longer references a non-existent `[seed]` param.
-- Store changelog `20260730.txt` updated. Gradle build/lint NOT run (forbidden in this env; CI validates on push).
+### Prior work (this session)
+- Premium mixed-deck colors (CurioMixedDeck in CurioColors.kt, SpinScreen
+  wiring) — committed `01414c20`
+- Category pickers: tap-to-open default, long-press multi-select with Done,
+  no tick (CurioCategoryCard, CategoryPickerScreen, SpinScreen sheet) —
+  committed `395f0abf`
+- Edit mood board reuses saved entry-id watermark seed (GalleryWallFormat
+  boardSeed param + SaveCaptureScreen threading) — committed `c6262518`

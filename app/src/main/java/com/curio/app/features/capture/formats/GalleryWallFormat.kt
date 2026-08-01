@@ -20,14 +20,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RectangleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -227,8 +230,9 @@ fun GalleryWallFormat(
 /**
  * The editable mood-board canvas — shared by the inline card and the
  * full-screen expanded dialog so the same tile interactions (drag, tap to
- * front, remove, add) work at any size. Renders tiles with
- * [ContentScale.Fit] + padding exactly like the saved EntryDetail view.
+ * front, drag-to-pin-zone, remove, add, clear) work at any size. Renders
+ * tiles with [ContentScale.Fit] + padding exactly like the saved
+ * EntryDetail view.
  */
 @Composable
 private fun MoodBoardCanvas(
@@ -244,6 +248,10 @@ private fun MoodBoardCanvas(
     var canvasWPx by remember { mutableFloatStateOf(0f) }
     var canvasHPx by remember { mutableFloatStateOf(0f) }
     var expandedImageUri by remember { mutableStateOf<String?>(null) }
+    var draggingTileId by remember { mutableStateOf<Int?>(null) }
+    var inPinZone by remember { mutableStateOf(false) }
+    var showClearConfirm by remember { mutableStateOf(false) }
+    val pinZoneHeightPx = with(density) { 52.dp.toPx() }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -355,19 +363,40 @@ private fun MoodBoardCanvas(
                                     )
                                 }
                                 .pointerInput(tile.id) {
-                                    detectDragGestures { change, dragAmount ->
-                                        change.consume()
-                                        val idx = tiles.indexOfFirst { it.id == tile.id }
-                                        if (idx >= 0) {
-                                            val t = tiles[idx]
-                                            tiles[idx] = t.copy(
-                                                offsetXPx = (t.offsetXPx + dragAmount.x)
-                                                    .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
-                                                offsetYPx = (t.offsetYPx + dragAmount.y)
-                                                    .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
-                                            )
+                                    detectDragGestures(
+                                        onDragStart = {
+                                            draggingTileId = tile.id
+                                            inPinZone = false
+                                        },
+                                        onDrag = { change, dragAmount ->
+                                            change.consume()
+                                            val idx = tiles.indexOfFirst { it.id == tile.id }
+                                            if (idx >= 0) {
+                                                val t = tiles[idx]
+                                                tiles[idx] = t.copy(
+                                                    offsetXPx = (t.offsetXPx + dragAmount.x)
+                                                        .coerceIn(0f, (canvasWPx - t.widthPx).coerceAtLeast(0f)),
+                                                    offsetYPx = (t.offsetYPx + dragAmount.y)
+                                                        .coerceIn(0f, (canvasHPx - t.heightPx).coerceAtLeast(0f))
+                                                )
+                                                inPinZone = tiles[idx].offsetYPx < pinZoneHeightPx
+                                            }
+                                        },
+                                        onDragEnd = {
+                                            draggingTileId = null
+                                            if (inPinZone) {
+                                                val idx = tiles.indexOfFirst { it.id == tile.id }
+                                                if (idx >= 0 && idx != tiles.lastIndex) {
+                                                    tiles.add(tiles.removeAt(idx))
+                                                }
+                                            }
+                                            inPinZone = false
+                                        },
+                                        onDragCancel = {
+                                            draggingTileId = null
+                                            inPinZone = false
                                         }
-                                    }
+                                    )
                                 }
                         ) {
                             Surface(
@@ -466,9 +495,76 @@ private fun MoodBoardCanvas(
                         )
                     }
                 }
-            }
+            }                // ── Pin-to-front drop zone (appears while dragging) ──────
+                if (draggingTileId != null) {
+                    val highlight = inPinZone
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .fillMaxWidth()
+                            .height(52.dp)
+                            .background(
+                                color = accent.copy(alpha = if (highlight) 0.3f else 0.13f),
+                                shape = RoundedCornerShape(bottomStart = 22.dp, bottomEnd = 22.dp)
+                            )
+                            .zIndex(500f)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 14.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.KeyboardArrowUp,
+                                contentDescription = null,
+                                tint = accent,
+                                size = 18.dp
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                text = if (highlight) "Release to pin to front" else "Drag here to pin to front",
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                color = accent
+                            )
+                        }
+                    }
+                }
 
-            // ── Expand / collapse button ──────────────────────────────
+                // ── Clear board (expanded editor only, hidden when empty) ──
+                if (fullScreen && tiles.isNotEmpty()) {
+                    Surface(
+                        onClick = { showClearConfirm = true },
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.errorContainer,
+                        shadowElevation = 0.dp,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                            .zIndex(999f)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.Delete,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onErrorContainer,
+                                size = 15.dp
+                            )
+                            Text(
+                                text = "Clear board",
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        }
+                    }
+                }
+
+                // ── Expand / collapse button ──────────────────────────────
             Surface(
                 onClick = { if (fullScreen) onCollapse() else onExpand() },
                 shape = RoundedCornerShape(50),
@@ -496,6 +592,27 @@ private fun MoodBoardCanvas(
         MoodBoardImageDialog(
             imageUri = uri,
             onDismiss = { expandedImageUri = null }
+        )
+    }
+
+    if (showClearConfirm) {
+        AlertDialog(
+            onDismissRequest = { showClearConfirm = false },
+            title = { Text("Clear mood board?") },
+            text = { Text("Remove all ${tiles.size} images? This can't be undone.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    tiles.clear()
+                    showClearConfirm = false
+                }) {
+                    Text("Clear", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearConfirm = false }) {
+                    Text("Keep")
+                }
+            }
         )
     }
 }
