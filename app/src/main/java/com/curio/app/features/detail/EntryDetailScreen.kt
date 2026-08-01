@@ -314,7 +314,7 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
-        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category)
+        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
         CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category, navController)
     }
@@ -767,7 +767,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
+private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
     var boardExpanded by remember { mutableStateOf(false) }

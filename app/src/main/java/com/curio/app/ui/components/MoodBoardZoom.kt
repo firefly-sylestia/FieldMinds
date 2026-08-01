@@ -131,7 +131,10 @@ fun Modifier.moodBoardPinch(zoomState: MoodBoardZoomState, uri: String): Modifie
                 }
                 if (pressed.isEmpty()) break
                 if (pressed.size >= 2) {
-                    event.changes.forEach { if (it.positionChanged()) it.consume() }
+                    // Take over the gesture from the parent scrollable while
+                    // pinching — consume every change (consume() is guaranteed
+                    // available; positionChanged() is not in this Compose BOM).
+                    event.changes.forEach { it.consume() }
                 }
             } while (true)
         }
