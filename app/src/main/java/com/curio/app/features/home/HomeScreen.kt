@@ -69,6 +69,7 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioForwardArrow
+import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -164,6 +165,13 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
+            // ── Watermark backdrop — muted category glyphs behind all ──
+            //    content (same treatment as the Spin page). The selected
+            //    category's glyph gets a faint accent tint; "Surprise"
+            //    highlights the wildcard die.
+            CurioWatermarkBackdrop(
+                activeCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()

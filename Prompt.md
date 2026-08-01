@@ -30,3 +30,13 @@ User: no need to revert the dice button, but the die had a weird square inside i
 - Removed the now-unused `CornerRadius`/`Size` geometry imports and updated the v5.10 header doc note.
 - Verified: no leftover references, braces 255/255, code review clean.
 - Committed + pushed: `3a4455ba`.
+
+## Follow-up (Home watermark)
+
+User: add the same muted category-icon watermark backdrop to the Home screen so the design language carries across pages.
+
+- Extracted the Spin-only watermark into a shared component `app/src/main/java/com/curio/app/ui/components/CurioWatermarkBackdrop.kt` (`CurioWatermarkBackdrop(activeCat, modifier)` + private `BoxScope.WatermarkGlyph`).
+- SpinScreen now calls the shared component (removed its private `SpinWatermarkBackdrop`/`WatermarkGlyph` and the now-unused `Dp` import).
+- HomeScreen adds the backdrop inside its outer `Box` behind the scrollable content, with `activeCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)` so "Surprise" highlights the wildcard die.
+- Code review caught a latent compile bug (inherited from the original Spin private copy): `Modifier.align` is a `BoxScope` member extension, so `WatermarkGlyph` is now declared `private fun BoxScope.WatermarkGlyph(...)` — this would have failed CI once compiled.
+- Verified: braces balanced, no dangling refs to old private names, review clean. Gradle build/lint NOT run (forbidden here; CI validates on push).
