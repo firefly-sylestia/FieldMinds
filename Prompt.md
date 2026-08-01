@@ -1,30 +1,47 @@
 # Current Request
 
-## Status: IN PROGRESS — edits applied, review passed, commit pending
+## Status: COMPLETED — committed and pushed to `revamp`
 
-"when edit entry when we switch while editing show save and switch and keep editing then discard at the left."
+Two-part request:
 
-## Changes (1 file)
+1. "similar to white mode tint, make the dark mode tint follow a similar way —
+   the dark should be more [visible], same way I implemented, but use the
+   proper current color shades for dark mode."
+2. "add a dialog in edit entry when I remove something by tapping the cross
+   if I've drafted changes."
 
-1. **`app/src/main/java/com/curio/app/features/capture/SaveCaptureScreen.kt`**
-   - The leave-with-unsaved-edits dialog is now a three-way choice:
-     - **Discard** (error color) in the `dismissButton` slot → LEFT, as
-       requested — pops back without saving.
-     - **Keep editing** TextButton + **Save and switch** primary Button in a
-       Row in the `confirmButton` slot (right). "Save and switch" calls
-       `performSave()`, which saves and auto-returns to the detail screen
-       in edit mode.
-   - Title/message updated ("Unsaved changes").
-   - Added `BackHandler(enabled = canSave)` so the SYSTEM back button also
-     opens the dialog (previously only the top-bar arrow did).
+## Changes (2 files)
+
+1. **`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`**
+   - `categorySurface()` dark branch: blend fraction raised from
+     `tuning.blendFraction + 0.10f` → `+ 0.30f`. Dark cards now wear the
+     proper dark mid-tone (the same per-family DARK_WASH_TUNING shades) at
+     0.45–0.54 strength, so tiles/chips visibly carry their category tint on
+     the midnight page — the same "cards = wash's stronger sibling"
+     relationship light mode already has (light stays 0.24, unchanged). The
+     page wash itself stays deep; only surfaces get the boost.
+   - KDoc updated to note the dark mode blends markedly stronger.
+
+2. **`app/src/main/java/com/curio/app/features/capture/SaveCaptureScreen.kt`**
+   - The × on a take tab now confirms before removing when the take holds
+     drafted content (`canSave && data != null`) or a live recording is
+     running (`busy`) — in edit mode every take arrives prefilled, so the X
+     never silently throws away drafted changes. Empty takes (and no live
+     recording) still remove freely.
+   - New `pendingRemoveIndex` state + AlertDialog ("Remove this take?" with
+     **Remove** / **Keep editing**), mirroring the existing
+     `pendingFormatSwitch` confirmation pattern.
+   - Extracted shared `removeSection(i)` local fun (activeIndex fixup) used
+     by both the direct-remove path and the dialog confirm, so the two can
+     never drift apart.
 
 ## Review
-- code-reviewer-deepseek-flash: clean — Discard correctly on the left
-  (dismissButton slot), performSave in scope, BackHandler import + usage
-  correct (non-composable lambda), all referenced imports already present,
-  no leftover old dialog code. Nit (accepted): "Save and switch" routes
-  through the normal save flow (brief confetti before popping back) — kept
-  for consistency with the bottom Save CTA.
+- code-reviewer-deepseek-flash: clean on both changes — dark blend values in
+  sane bounds (0.45–0.54), proper dark shades retained, contrast holds;
+  remove dialog logic matches the direct-remove path, reset paths complete,
+  no stale duplicated block (deduped per review). Noted (accepted): the
+  GalleryWall per-tile × in a single-board mood edit is outside this scope —
+  the request's "cross" is the take tab × in the edit-entry section strip.
 
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).

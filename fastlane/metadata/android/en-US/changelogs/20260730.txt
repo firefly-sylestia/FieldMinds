@@ -12,3 +12,5 @@
 • Cabinet filter chips: neutral inactive color that never re-tints when you switch categories
 • Spin deck: bigger peek cards so the topic title reads, plus a gentler, subtler card bounce
 • Editing an entry: leaving with unsaved edits now offers Save and switch, Keep editing, or Discard
+• Editing an entry: removing a take with drafted content now asks for confirmation first
+• Dark mode: category cards and chips wear a clearer, more visible category tint (deep shades, same as light mode)

@@ -569,9 +569,22 @@ private fun FormatBodyForCategory(
         sections.getOrNull(activeIndex)?.let { it.seed = it.data }
     }
 
+    // Removes a take and re-anchors the active index — shared by the X
+    // button's direct-remove path and the remove-confirmation dialog so the
+    // two can never drift apart.
+    fun removeSection(i: Int) {
+        if (i < activeIndex) activeIndex--
+        sections.removeAt(i)
+        if (activeIndex >= sections.size) activeIndex = sections.size - 1
+    }
+
     // Switching a FILLED section's format clears its content — confirm first
     // so a fat-finger on the format chips never silently wipes a take.
     var pendingFormatSwitch by remember { mutableStateOf<CaptureFormat?>(null) }
+    // Removing a take that holds drafted content (or a live recording) also
+    // confirms first — in edit mode every take arrives prefilled, so the X
+    // must never silently throw away drafted changes.
+    var pendingRemoveIndex by remember { mutableStateOf<Int?>(null) }
     fun applyFormat(section: CaptureSectionState, fmt: CaptureFormat) {
         section.format = fmt
         section.canSave = false
@@ -705,9 +718,16 @@ private fun FormatBodyForCategory(
                         if (sections.size > 1) {
                             Surface(
                                 onClick = {
-                                    if (i < activeIndex) activeIndex--
-                                    sections.removeAt(i)
-                                    if (activeIndex >= sections.size) activeIndex = sections.size - 1
+                                    val section = sections.getOrNull(i)
+                                    // Confirm removal when the take has drafted
+                                    // content or a live recording in progress;
+                                    // an empty take (and no recording) removes
+                                    // freely.
+                                    if ((section?.canSave == true && section.data != null) || section?.busy == true) {
+                                        pendingRemoveIndex = i
+                                    } else {
+                                        removeSection(i)
+                                    }
                                 },
                                 shape = CircleShape,
                                 color = Color.Transparent
@@ -796,6 +816,28 @@ private fun FormatBodyForCategory(
                 }
             }
         }
+    }
+
+    // ── Confirm before removing a take with drafted content ─────────────
+    pendingRemoveIndex?.let { removeIdx ->
+        AlertDialog(
+            onDismissRequest = { pendingRemoveIndex = null },
+            title = { Text("Remove this take?") },
+            text = { Text("This will delete the content you've drafted in this take (including any live recording).") },
+            confirmButton = {
+                TextButton(onClick = {
+                    removeSection(removeIdx)
+                    pendingRemoveIndex = null
+                }) {
+                    Text("Remove", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingRemoveIndex = null }) {
+                    Text("Keep editing")
+                }
+            }
+        )
     }
 
     // ── Confirm before switching a filled take's format ──────────────────
