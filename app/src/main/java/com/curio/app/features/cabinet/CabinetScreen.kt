@@ -132,6 +132,7 @@ fun CabinetScreen(navController: NavController) {
                     label = "All",
                     accent = MaterialTheme.colorScheme.primary,
                     tint = MaterialTheme.colorScheme.primaryContainer,
+                    ink = MaterialTheme.colorScheme.onPrimaryContainer,
                     selected = selectedFilter == null,
                     onClick = { selectedFilter = null }
                 )

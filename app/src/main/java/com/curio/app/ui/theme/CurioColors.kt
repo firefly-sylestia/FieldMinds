@@ -77,13 +77,6 @@ object CurioColors {
      * keeps the near-white onSurface ghosts.
      */
     val WarmWatermarkInk = Color(0xFF8E8177)
-
-    /** Tinted (20% alpha) versions of category accents for backgrounds. */
-    val LilacTint     = Lilac.copy(alpha = 0.20f)
-    val DustyBlueTint = DustyBlue.copy(alpha = 0.20f)
-    val SageTint      = Sage.copy(alpha = 0.20f)
-    val PeachTint     = Peach.copy(alpha = 0.20f)
-    val TealTint      = Teal.copy(alpha = 0.20f)
 }
 
 /**
