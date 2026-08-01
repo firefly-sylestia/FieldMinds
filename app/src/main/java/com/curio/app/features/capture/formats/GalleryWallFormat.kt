@@ -690,10 +690,15 @@ private fun MoodBoardEditorTile(
                 // twist to rotate. Updates only the local preview state, so
                 // nothing above this tile recomposes mid-gesture.
                 awaitEachGesture {
-                    awaitFirstDown(requireUnconsumed = false)
-                    // Only start a drag once the finger has actually moved
-                    // past touch slop — a tiny jitter on an intended tap must
-                    // not flash the pin-to-front zone.
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    // Touch slop gates only the START of a drag: total travel
+                    // from the down point must cross slop before the tile is
+                    // claimed, so a tiny jitter on an intended tap never
+                    // flashes the pin-to-front zone. Once dragging, EVERY
+                    // event delta applies 1:1 — gating each move by slop made
+                    // slow/moderate drags stutter, because per-frame deltas
+                    // at 60-120Hz sit far below slop and the tile only jumped
+                    // when a single event happened to cross it.
                     val slop = viewConfiguration.touchSlop
                     var multiTouch = false
                     var dragged = false
@@ -713,11 +718,11 @@ private fun MoodBoardEditorTile(
                         } else if (pressed.size == 1 && !multiTouch) {
                             val change = pressed.first()
                             val dragAmount = change.position - change.previousPosition
-                            if (dragAmount.getDistance() >= slop) {
-                                if (!dragged) {
-                                    dragged = true
-                                    onDragStart(tile.id)
-                                }
+                            if (!dragged && (change.position - down.position).getDistance() >= slop) {
+                                dragged = true
+                                onDragStart(tile.id)
+                            }
+                            if (dragged) {
                                 change.consume()
                                 dx += dragAmount.x
                                 dy += dragAmount.y

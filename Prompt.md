@@ -1,6 +1,25 @@
 # Prompt.md — Request Log
 
-## Current Request: Home hero card doesn't match cream background
+## Current Request: Mood board image drag still janky when editing an entry
+
+**User request (verbatim):** "the mood board drag is still buggy and jittery i meant when editing ir entry the image drag is so janky"
+
+## Root cause
+`MoodBoardEditorTile`'s `awaitEachGesture` drag handler gated **every** pointer-move event by touch slop (`dragAmount.getDistance() >= slop`). At 60–120Hz, per-frame deltas during slow/moderate drags sit far below slop, so the tile only moved when a single event happened to cross it — producing sticky, stuttering, jittery dragging.
+
+## Fix
+`features/capture/formats/GalleryWallFormat.kt` — capture the down position (`val down = awaitFirstDown(...)`); the slop check now gates **only the drag start** via total travel from the down point `(change.position - down.position).getDistance() >= slop`. Once `dragged` is true, every event delta applies 1:1. Consumption stays inside `if (dragged)` (taps / parent scroll unaffected within slop), pin-to-front zone logic intact, lift-without-slop still exits cleanly.
+
+## Validation
+- code-reviewer-deepseek-flash: clean — correct `down` usage, 1:1 first-move delta with no double-count, consumption correct, pin-zone intact; other drag handlers (`detectTransformGestures` zoom overlays, `moodBoardPinchZoom`) handle slop internally and do NOT share this bug.
+- No local gradle per AGENTS.md — CI on push is the compile gate.
+
+## Status
+DONE — committed & pushed.
+
+---
+
+## Previous Request: Home hero card doesn't match cream background
 
 **User request (verbatim):** "the home hero card doesnt matc te roer color fix it"
 
