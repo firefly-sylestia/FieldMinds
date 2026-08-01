@@ -183,6 +183,11 @@ import kotlin.random.Random
  * 17. **Fluid dice tumble** — the in-button dice animation was slowed from
  *     980ms to 1600ms per turn with LinearEasing (no restart snap) plus a
  *     breathing pulse on the orbiting pips.
+ *
+ * v6.3 changes:
+ * 18. **Bigger deck + CTA** — the hero ticket grew to 286×310dp (carousel
+ *     444dp) and the dice button to 126dp idle / 108dp landed, with the
+ *     dice glyphs scaled up to match.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -1144,7 +1149,9 @@ private fun Carousel(
 ) {
     val poolSize = displayPool.size
     Box(
-        modifier = modifier.height(420.dp),
+        // v6.3 — grew with the hero ticket so the bigger card keeps its
+        // breathing room above/below.
+        modifier = modifier.height(444.dp),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -1241,8 +1248,10 @@ private fun HeroTicketCard(
     enabled: Boolean,
     onTap: () -> Unit
 ) {
-    val w = 270.dp
-    val h = 292.dp
+    // v6.3 — slightly bigger ticket (~6% up) so the hero card reads a
+    // touch more prominent on the deck.
+    val w = 286.dp
+    val h = 310.dp
     // Mixed decks pass a multi-accent gradient; single decks keep the
     // standard theme-aware card gradient via CurioMixedDeck.mixedDeckGradient.
     val ticketGradient = gradient
@@ -1621,8 +1630,8 @@ private fun SpinButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    // v5.10 — bigger button: 118dp idle, 100dp once a topic has landed.
-    val buttonSize = if (landedTopic != null) 100.dp else 118.dp
+    // v6.3 — button grew a little (~7% up): 126dp idle, 108dp landed.
+    val buttonSize = if (landedTopic != null) 108.dp else 126.dp
     Box(
         modifier = Modifier.size(176.dp),
         contentAlignment = Alignment.Center
@@ -1648,12 +1657,12 @@ private fun SpinButton(
                 // v5.10 — the dice shows in EVERY state: tumbling while
                 // shuffling, a steady white dice on the filled accent.
                 if (isShuffling) {
-                    ShuffleGlyph(tint = Color.White, modifier = Modifier.size(68.dp))
+                    ShuffleGlyph(tint = Color.White, modifier = Modifier.size(72.dp))
                 } else {
                     CurioIcon(
                         CurioIcons.Casino, null,
                         tint = Color.White,
-                        size = if (landedTopic != null) 48.dp else 56.dp
+                        size = if (landedTopic != null) 52.dp else 60.dp
                     )
                 }
             }
