@@ -91,8 +91,10 @@ private data class MoodTile(
  * composing.
  *
  * The board canvas sits on a theme-aware watermark backdrop whose random
- * glyph scatter is seeded per board ([seed]), so every mood board gets its
- * own quiet background pattern.
+ * glyph scatter is seeded per board, so every mood board gets its own quiet
+ * background pattern. New boards get a fresh random seed; edit mode passes
+ * [boardSeed] (the saved entry's id hash) so the editor's pattern matches
+ * the saved EntryDetail view exactly.
  *
  * When [initialData] is supplied (edit mode), the board preloads the saved
  * tiles and caption so the user can continue arranging and re-save.
@@ -103,7 +105,8 @@ fun GalleryWallFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.GalleryWall? = null
+    initialData: CaptureData.GalleryWall? = null,
+    boardSeed: Int? = null
 ) {
     val tiles = remember(initialData) {
         mutableStateListOf<MoodTile>().apply {
@@ -124,7 +127,9 @@ fun GalleryWallFormat(
     }
     var caption by remember(initialData) { mutableStateOf(initialData?.caption ?: "") }
     var boardExpanded by remember { mutableStateOf(false) }
-    val boardSeed = remember(initialData) { Random.nextInt() }
+    // New board: fresh random pattern. Edit mode: reuse the caller-provided
+    // seed (entry-id hash) so the editor matches the saved view's backdrop.
+    val seed = remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }
 
     val canSave = tiles.isNotEmpty()
     LaunchedEffect(canSave, caption, tiles.toList()) {
@@ -177,7 +182,7 @@ fun GalleryWallFormat(
         MoodBoardCanvas(
             tiles = tiles,
             accent = accent,
-            seed = boardSeed,
+            seed = seed,
             fullScreen = false,
             onExpand = { boardExpanded = true },
             onCollapse = {}
@@ -209,7 +214,7 @@ fun GalleryWallFormat(
                 MoodBoardCanvas(
                     tiles = tiles,
                     accent = accent,
-                    seed = boardSeed,
+                    seed = seed,
                     fullScreen = true,
                     onExpand = {},
                     onCollapse = { boardExpanded = false }

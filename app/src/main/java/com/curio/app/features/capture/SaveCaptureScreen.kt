@@ -293,6 +293,9 @@ fun SaveCaptureScreen(
                     FormatBodyForCategory(
                         category = cat,
                         initialData = editingEntry?.captureData,
+                        // Reuse the saved entry's id-derived seed so the editor's
+                        // watermark pattern matches the saved view exactly.
+                        boardSeed = editEntryId?.hashCode(),
                         onCanSaveChange = { canSave = it && topic != null },
                         onDataChanged = { currentCaptureData = it }
                     )
@@ -414,14 +417,17 @@ fun SaveCaptureScreen(
  * Each format now reports both [onCanSaveChange] and [onDataChanged].
  *
  * [initialData] (edit mode) is passed through to [GalleryWallFormat] so a
- * saved mood board can preload its tiles and caption.
+ * saved mood board can preload its tiles and caption; [boardSeed] (edit
+ * mode only) is the saved entry's id hash so the editor's watermark pattern
+ * matches the saved view.
  */
 @Composable
 private fun FormatBodyForCategory(
     category: CurioCategory,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit,
-    initialData: CaptureData? = null
+    initialData: CaptureData? = null,
+    boardSeed: Int? = null
 ) {
     when (category.defaultFormat) {
         CaptureFormat.SoundBite ->
@@ -433,7 +439,8 @@ private fun FormatBodyForCategory(
         CaptureFormat.GalleryWall ->
             GalleryWallFormat(
                 category.accent, category.tint, onCanSaveChange, onDataChanged,
-                initialData = initialData as? CaptureData.GalleryWall
+                initialData = initialData as? CaptureData.GalleryWall,
+                boardSeed = boardSeed
             )
         CaptureFormat.FieldNotes ->
             FieldNotesFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
