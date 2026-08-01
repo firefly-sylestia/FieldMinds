@@ -448,6 +448,10 @@ private fun FormatBodyForCategory(
         CaptureFormat.FieldNotes ->
             FieldNotesFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
         CaptureFormat.OpenNotebook ->
-            OpenNotebookFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
+            OpenNotebookFormat(
+                category.accent, category.tint, onCanSaveChange, onDataChanged,
+                initialData = initialData as? CaptureData.OpenNotebook,
+                boardSeed = boardSeed
+            )
     }
 }

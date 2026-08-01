@@ -50,17 +50,32 @@ import com.curio.app.ui.theme.CurioIcons
  *
  * The entry is still tagged "Wildcard" in the Cabinet regardless of
  * which sub-format was used.
+ *
+ * Edit mode ([initialData]): the picker preselects the saved sub-format
+ * and the sub-body preloads its data (mood boards also get [boardSeed]
+ * so the watermark pattern matches the saved view). Re-saving emits an
+ * OpenNotebook wrapper again, preserving the entry's format.
  */
 @Composable
 fun OpenNotebookFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    initialData: CaptureData.OpenNotebook? = null,
+    boardSeed: Int? = null
 ) {
-    var selectedFormat by remember { mutableStateOf(NotebookChoice.VOICE) }
-    var subCanSave by remember { mutableStateOf(false) }
-    var subData by remember { mutableStateOf<CaptureData?>(null) }
+    // Edit mode: open the picker on the saved choice instead of VOICE, and
+    // seed the sub-body with the saved data. Keyed on initialData so the
+    // async edit-entry load re-initializes state when it arrives.
+    val initialChoice = initialData?.let { fromCaptureFormat(it.subFormat) } ?: NotebookChoice.VOICE
+    var selectedFormat by remember(initialData) { mutableStateOf(initialChoice) }
+    // Only preload when the saved sub-format actually supports [initialData]
+    // (mood boards do). Other sub-bodies start blank so re-saving an entry
+    // that can't be preloaded never silently wipes its stored content.
+    val canPreload = initialData?.subFormat == CaptureFormat.GalleryWall
+    var subCanSave by remember(initialData) { mutableStateOf(canPreload) }
+    var subData by remember(initialData) { mutableStateOf<CaptureData?>(initialData?.subData) }
 
     LaunchedEffect(subCanSave, subData, selectedFormat) {
         onCanSaveChange(subCanSave)
@@ -113,7 +128,11 @@ fun OpenNotebookFormat(
                     accent, tint, { subCanSave = it }, { subData = it }
                 )
                 NotebookChoice.MOODBOARD -> GalleryWallFormat(
-                    accent, tint, { subCanSave = it }, { subData = it }
+                    accent, tint, { subCanSave = it }, { subData = it },
+                    // Edit mode: preload the saved board + reuse its seed so
+                    // the editor's watermark matches the saved view.
+                    initialData = initialData?.subData as? CaptureData.GalleryWall,
+                    boardSeed = boardSeed
                 )
                 NotebookChoice.FIELD -> FieldNotesFormat(
                     accent, tint, { subCanSave = it }, { subData = it }
@@ -130,6 +149,16 @@ private fun notebookToCaptureFormat(choice: NotebookChoice): CaptureFormat = whe
     NotebookChoice.JOURNAL -> CaptureFormat.Marginalia
     NotebookChoice.MOODBOARD -> CaptureFormat.GalleryWall
     NotebookChoice.FIELD -> CaptureFormat.FieldNotes
+}
+
+/** Inverse of [notebookToCaptureFormat] — restores the picker choice from a stored format (edit mode). */
+private fun fromCaptureFormat(format: CaptureFormat): NotebookChoice = when (format) {
+    CaptureFormat.SoundBite -> NotebookChoice.VOICE
+    CaptureFormat.ReelNotes -> NotebookChoice.REVIEW
+    CaptureFormat.Marginalia -> NotebookChoice.JOURNAL
+    CaptureFormat.GalleryWall -> NotebookChoice.MOODBOARD
+    CaptureFormat.FieldNotes -> NotebookChoice.FIELD
+    CaptureFormat.OpenNotebook -> NotebookChoice.VOICE // nested notebooks aren't stored; safe default
 }
 
 /**

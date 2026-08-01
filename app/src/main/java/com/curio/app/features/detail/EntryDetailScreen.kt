@@ -194,7 +194,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             },
                             leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
                         )
-                        if (resolvedEntry.format == CaptureFormat.GalleryWall) {
+                        if (isMoodBoardEntry(resolvedEntry)) {
                             DropdownMenuItem(
                                 text = { Text("Edit mood board") },
                                 onClick = {
@@ -293,6 +293,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         )
     }
 }
+
+/**
+ * True when an entry renders as a mood board — either a direct GalleryWall
+ * or a Wildcard Open Notebook whose chosen sub-format is a GalleryWall. Both
+ * cases can be re-edited in place via the Edit mood board flow.
+ */
+private fun isMoodBoardEntry(entry: CurioEntry): Boolean =
+    entry.format == CaptureFormat.GalleryWall ||
+        (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall
 
 @Composable
 private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
@@ -781,6 +790,28 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 )
 
                 if (data.tileLayouts.isNotEmpty()) {
+                    // ── Edit button — reopen this board in the editor ──────
+                    Surface(
+                        onClick = { navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true } },
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        shadowElevation = 0.dp,
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(12.dp)
+                            .size(36.dp)
+                            .zIndex(999f)
+                    ) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            CurioIcon(
+                                name = CurioIcons.Edit,
+                                contentDescription = "Edit mood board",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                size = 18.dp
+                            )
+                        }
+                    }
+
                     // ── Expand button — full-screen collage ──────────────
                     Surface(
                         onClick = { boardExpanded = true },

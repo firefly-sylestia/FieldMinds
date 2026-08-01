@@ -37,9 +37,10 @@ import kotlin.random.Random
  * Glyphs mirror `CurioCategories.all` in data/Category.kt (11 categories,
  * verified 1:1 at startup) — if the catalog ever grows, add a tile here.
  *
- * Theme-aware alpha: dark mode keeps the glyphs very faint (they read as
- * color ghosts over the midnight surface); light mode raises the alpha a
- * touch so the accents stay visible over the warm cream surface.
+ * Theme-aware alpha: dark mode keeps the glyphs as soft color ghosts over
+ * the midnight surface (raised from the old near-invisible values so the
+ * palette still reads); light mode stays a touch stronger over the warm
+ * cream surface.
  */
 @Composable
 fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifier) {
@@ -69,10 +70,6 @@ fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifi
  * One scattered glyph — its category's accent at a low alpha, or a stronger
  * whisper of the same color if it's the active category's glyph.
  */
-/**
- * One scattered glyph — its category's accent at a low alpha, or a stronger
- * whisper of the same color if it's the active category's glyph.
- */
 @Composable
 private fun BoxScope.WatermarkGlyph(
     glyph: String,
@@ -85,9 +82,12 @@ private fun BoxScope.WatermarkGlyph(
 ) {
     val active = glyph == activeCat.iconGlyph
     val accent = accentByGlyph[glyph] ?: CurioColors.WarmWatermarkInk
+    // Dark mode: glyphs are muted ghosts but must stay visible (raised from
+    // 0.07/0.15 which barely read on the midnight surface). Light mode gets
+    // a modest bump too so the palette stays present over cream.
     val alpha = when {
-        active -> if (isDark) 0.15f else 0.26f
-        else -> if (isDark) 0.07f else 0.12f
+        active -> if (isDark) 0.22f else 0.30f
+        else -> if (isDark) 0.11f else 0.15f
     }
     CurioIcon(
         name = glyph,
@@ -102,11 +102,13 @@ private fun BoxScope.WatermarkGlyph(
 
 /**
  * Decorative mood-board backdrop: a scatter of category glyphs laid out by
- * a [seed]-driven random pattern, so every mood board gets its own quiet
- * background collage. Theme-aware (faint in dark mode, slightly stronger in
- * light mode) and centred on [accent] tones so it stays legible behind
- * tiles. The seed is stable per board — derive it from the entry id when
- * re-rendering a saved board, or a fresh random value when creating one.
+ * a [seed]-driven pattern over a sparse ring of anchor slots, so every mood
+ * board gets its own quiet background collage WITHOUT glyphs overlapping
+ * (positions are a seeded subset of well-spaced slots plus a small jitter).
+ * Theme-aware (muted in dark mode, slightly stronger in light mode) and
+ * centred on [accent] tones so it stays legible behind tiles. The seed is
+ * stable per board — derive it from the entry id when re-rendering a saved
+ * board, or a fresh random value when creating one.
  */
 @Composable
 fun CurioMoodBoardBackdrop(
@@ -121,29 +123,46 @@ fun CurioMoodBoardBackdrop(
     val glyphs = remember {
         CurioCategories.all.map { it.iconGlyph }
     }
-    // Deterministic per-seed scatter: count, glyphs, biases, sizes, rotations
-    // and an alpha boost. The alpha boost stays in the seeded pattern (so each
-    // glyph keeps its own random weight); the theme-aware base alpha is applied
-    // at draw time so light/dark toggles re-render without re-seeding.
+    // Deterministic per-seed scatter: pick a seeded SUBSET of a sparse ring
+    // of anchor slots (never two glyphs on the same slot) so the collage can
+    // never overlap, then jitter each a little so it reads organic instead of
+    // grid-locked. Sizes are capped so neighbouring slots stay clear. The
+    // alpha boost stays in the seeded pattern (each glyph keeps its own
+    // random weight); the theme-aware base alpha is applied at draw time so
+    // light/dark toggles re-render without re-seeding.
     val pattern = remember(seed, accentByGlyph, glyphs) {
         val rng = Random(seed)
-        val count = 9 + rng.nextInt(4) // 9..12 glyphs
-        List(count) {
+        // Sparse ring of well-spaced slots around the perimeter — the centre
+        // stays clear for tiles.
+        val slots = listOf(
+            BiasAlignment(-0.90f, -0.90f), BiasAlignment(-0.35f, -0.92f),
+            BiasAlignment(0.30f, -0.90f),  BiasAlignment(0.88f, -0.86f),
+            BiasAlignment(0.95f, -0.42f),  BiasAlignment(0.90f, 0.10f),
+            BiasAlignment(0.92f, 0.58f),   BiasAlignment(0.62f, 0.92f),
+            BiasAlignment(0.05f, 0.94f),   BiasAlignment(-0.50f, 0.92f),
+            BiasAlignment(-0.94f, 0.72f),  BiasAlignment(-0.95f, 0.18f),
+            BiasAlignment(-0.92f, -0.35f), BiasAlignment(-0.60f, -0.55f)
+        )
+        val count = 9 + rng.nextInt(3) // 9..11 glyphs
+        slots.shuffled(rng).take(count).map { slot ->
             val glyph = glyphs[rng.nextInt(glyphs.size)]
             val accentForGlyph = accentByGlyph[glyph] ?: accent
-            // BiasAlignment is -1..1 across the Box; bias toward the edges
-            // and corners so the centre stays clear for tiles.
-            val biasX = (if (rng.nextBoolean()) -1 else 1) * (0.55f + rng.nextFloat() * 0.4f)
-            val biasY = (if (rng.nextBoolean()) -1 else 1) * (0.55f + rng.nextFloat() * 0.4f)
+            // Small jitter keeps the subset from looking grid-locked without
+            // letting neighbours collide (slots are far apart).
+            val jitterX = (rng.nextFloat() * 2f - 1f) * 0.05f
+            val jitterY = (rng.nextFloat() * 2f - 1f) * 0.05f
             WatermarkPlacement(
                 glyph = glyph,
-                alignment = BiasAlignment(biasX, biasY),
-                size = (52f + rng.nextFloat() * 56f).dp, // 52..108 dp
+                alignment = BiasAlignment(
+                    (slot.horizontalBias + jitterX).coerceIn(-1f, 1f),
+                    (slot.verticalBias + jitterY).coerceIn(-1f, 1f)
+                ),
+                size = (46f + rng.nextFloat() * 38f).dp, // 46..84 dp
                 rotation = -18f + rng.nextFloat() * 36f,
                 // Mostly the board's own accent family, sometimes a sibling
                 // category colour for variety.
                 tint = if (rng.nextFloat() < 0.75f) accent else accentForGlyph,
-                alphaBoost = 0.7f + rng.nextFloat() * 0.6f // 0.7..1.3 per glyph
+                alphaBoost = 0.8f + rng.nextFloat() * 0.4f // 0.8..1.2 per glyph
             )
         }
     }
@@ -151,8 +170,10 @@ fun CurioMoodBoardBackdrop(
     Box(modifier = modifier.fillMaxSize()) {
         pattern.forEach { p ->
             // Theme-aware base alpha × the glyph's seeded boost, computed at
-            // draw time so light/dark toggles apply immediately.
-            val alpha = (if (isDark) 0.05f else 0.10f) * p.alphaBoost
+            // draw time so light/dark toggles apply immediately. Dark mode
+            // was raised from 0.05 so the collage is actually visible on the
+            // midnight surface.
+            val alpha = (if (isDark) 0.10f else 0.14f) * p.alphaBoost
             CurioIcon(
                 name = p.glyph,
                 contentDescription = null,

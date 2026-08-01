@@ -1,46 +1,55 @@
 # Prompt.md — Running Request Log
 
-## Latest Request — "Blends have bugs: it selects a category when it should trigger a Mixed category"
+## Latest Request — "No option to edit mood board after saving; mood board watermarks overlap; dark-mode watermarks barely visible"
 
-### Status: ✅ Complete (committed & pushed)
+### Status: ✅ Complete (about to commit & push)
 
-### The bug
-The blended COLORS worked, but a multi-select deck still presented as the
-FIRST selected category: top bar name/glyph, watermark accent, hero + peek
-card glyphs, bottom CTA "Categories" label, filter sheet header, and the
-picker sheet indicator all used `activeCategory` (first id) — no "Mixed"
-identity existed.
+### The three asks
+1. **Mood board editing after saving** — user clarified the real bug: there was
+   NO visible option to edit a saved mood board.
+2. **Mood board watermarks overlapping** — the seeded backdrop used fully
+   random bias positions, so glyphs could land on top of each other.
+3. **Dark-mode watermarks barely visible** — base alphas (0.05–0.15) read as
+   nothing on the midnight surface.
 
-### The fix (SpinScreen.kt)
-1. New mixed-deck identity: `isMixedDeck = activeCatIds.distinct().size > 1`,
-   and a display-only synthetic `deckCat` built with `activeCategory.copy(...)`:
-   displayName = "Mixed", iconGlyph = CurioIcons.AutoAwesome (sparkles),
-   accent/tint = the blended deck colors, lightAccent = pastel twin of the
-   blend (lerp toward white) so `categoryInk()` stays readable in dark mode.
-   `id` is PRESERVED (first category) so all logic keys keep working: landed
-   topic, filter state, shuffle reveal guard, last-used prefs, onCardTap
-   cached lookups.
-2. Threaded `deckCat` through every display surface: TopBar, watermark
-   backdrop, Carousel (→ hero glyph, peek glyphs, empty hint), BottomCta,
-   FilterSheet, CategoryPickerSheet indicator, and ConfettiBurst tint.
-3. BottomCta gained `mixedCount: Int = 1` — the Categories button now reads
-   "Mixed · N" for multi-select decks (falls back to the category name).
-
-### Notes
-- Watermark backdrop renders neutral for mixed decks (sparkles isn't in the
-  11-glyph scatter, so no active whisper) — intended.
-- Hero bounce is keyed on the first id, so changing the mix while the first
-  id stays the same won't re-bounce — cosmetic only.
+### Fixes
+1. **Edit option now reachable two ways (EntryDetailScreen.kt)**
+   - New `isMoodBoardEntry()` helper: true for direct `GalleryWall` OR a
+     Wildcard `OpenNotebook` whose `subFormat == GalleryWall`. The ⋮ menu's
+     "Edit mood board" item now shows for BOTH (previously only direct
+     GalleryWall).
+   - Added a visible ✏️ Edit button on the saved board itself (top-start,
+     mirroring the expand button) that navigates to `editMoodBoard(entry.id)`.
+2. **Edit preload for Wildcard mood boards (OpenNotebookFormat.kt +
+   SaveCaptureScreen.kt)**
+   - `OpenNotebookFormat` gained `initialData: CaptureData.OpenNotebook?` +
+     `boardSeed: Int?`; the picker preselects the saved sub-format
+     (`fromCaptureFormat` inverse map) and preloads `subData` into the
+     GalleryWall sub-body, keyed on `remember(initialData)` so the async
+     edit-entry load re-initializes state.
+   - `subCanSave` gated on `canPreload` (subFormat == GalleryWall) so
+     non-preloadable sub-bodies never silently wipe stored content.
+   - `FormatBodyForCategory` passes `initialData` + `boardSeed` through.
+   - Re-save keeps the OpenNotebook wrapper (`existingEntry.copy`) so format
+     stays stable and `isMoodBoardEntry` still detects it.
+3. **No-overlap mood board backdrop (CurioWatermarkBackdrop.kt)**
+   - `CurioMoodBoardBackdrop` now draws a seeded SUBSET of 14 fixed, sparse
+     ring slots (9–11 glyphs) + tiny jitter — glyphs can never share a slot,
+     sizes capped 46–84dp. Same seed contract (entry-id hash) preserved.
+4. **Dark-mode visibility raised everywhere**
+   - `CurioWatermarkBackdrop`: active 0.15→0.22, inactive 0.07→0.11 (dark);
+     light 0.26→0.30 / 0.12→0.15.
+   - `CurioMoodBoardBackdrop`: dark base 0.05→0.10, light 0.10→0.14 (× boost).
 
 ### Validation
-- Braces 296/296; every display call site switched to deckCat; no logic path
-  touched (shuffle guard + onCardTap still use the real category); imports
-  (lerp, Color, CurioIcons) already present; code review clean.
+- Code review (deepseek-flash): compile-safe — `BiasAlignment.horizontalBias/
+  verticalBias` are public vals, `shuffled(Random)` + `Float.coerceIn` are
+  stdlib, M3 `Surface(onClick=)` already used elsewhere, `remember(initialData)`
+  handles async load, re-save preserves wrapper. Reviewer feedback applied:
+  deduped the doubled `WatermarkGlyph` KDoc and gated `subCanSave` on
+  preload-capable sub-formats.
+- No gradle build run (per AGENTS.md, CI owns compilation).
 
 ### Prior work (this session)
-- Richer mixed-deck blends (curated triples, 4+ centroid, AA-verified) —
-  committed `b354ef21`
-- CI compile fixes — `5d52312d`
-- Mood board pin-to-front + clear board — `f128ddfd`
-- Edit mood board reuses saved entry-id watermark seed — `c6262518`
-- Category pickers tap/long-press multi-select — `395f0abf`
+- Mixed-deck identity + blends — committed earlier
+- Mood board pin-to-front / clear board / edit seed reuse — committed earlier
