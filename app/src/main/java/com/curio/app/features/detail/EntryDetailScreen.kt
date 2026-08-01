@@ -868,12 +868,16 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
                                     )
                                 }
                                 .zIndex(i.toFloat())
-                                // Pinch (two fingers) or tap springs the tile
-                                // up in place — single-finger drags keep
-                                // scrolling the page.
+                                // Pinch (two fingers), tap, or double-tap
+                                // springs the tile up in place — single-finger
+                                // drags keep scrolling the page. Double-tap
+                                // matches the editor's zoom gesture.
                                 .moodBoardPinch(zoomState, tile.uri)
                                 .pointerInput(tile.uri) {
-                                    detectTapGestures(onTap = { zoomState.zoomIn(tile.uri) })
+                                    detectTapGestures(
+                                        onTap = { zoomState.zoomIn(tile.uri) },
+                                        onDoubleTap = { zoomState.zoomIn(tile.uri) }
+                                    )
                                 }
                         ) {
                             Surface(
@@ -954,7 +958,10 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
                 data = data,
                 seed = boardSeed,
                 accent = category.accent,
-                onDismiss = { boardExpanded = false }
+                onDismiss = { boardExpanded = false },
+                onEdit = {
+                    navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true }
+                }
             )
         }
     }
@@ -971,7 +978,8 @@ private fun ExpandedMoodBoardDialog(
     data: CaptureData.GalleryWall,
     seed: Int,
     accent: Color,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onEdit: () -> Unit
 ) {
     val density = LocalDensity.current
     val isDark = isCurioDarkTheme()
@@ -1042,11 +1050,14 @@ private fun ExpandedMoodBoardDialog(
                                         )
                                     }
                                     .zIndex(i.toFloat())
-                                    // Pinch (two fingers) or tap springs the
-                                    // tile up in place.
+                                    // Pinch (two fingers), tap, or double-tap
+                                    // springs the tile up in place.
                                     .moodBoardPinch(zoomState, tile.uri)
                                     .pointerInput(tile.uri) {
-                                        detectTapGestures(onTap = { zoomState.zoomIn(tile.uri) })
+                                        detectTapGestures(
+                                            onTap = { zoomState.zoomIn(tile.uri) },
+                                            onDoubleTap = { zoomState.zoomIn(tile.uri) }
+                                        )
                                     }
                             ) {
                                 Surface(
@@ -1088,6 +1099,26 @@ private fun ExpandedMoodBoardDialog(
                                 rotationDeg = tile.rotationDeg
                             )
                         }
+                    }
+                }
+
+                // ── Edit button — reopen this board in the editor ─────────
+                Surface(
+                    onClick = onEdit,
+                    shape = RoundedCornerShape(50),
+                    color = Color.Black.copy(alpha = 0.55f),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(16.dp)
+                        .size(44.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        CurioIcon(
+                            name = CurioIcons.Edit,
+                            contentDescription = "Edit mood board",
+                            tint = Color.White,
+                            size = 22.dp
+                        )
                     }
                 }
 

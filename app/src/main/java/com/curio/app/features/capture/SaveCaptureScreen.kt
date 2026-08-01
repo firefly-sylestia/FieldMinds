@@ -98,9 +98,12 @@ fun SaveCaptureScreen(
     val context = LocalContext.current
 
     // Edit mode: load the saved entry so its data can prefill the format.
+    // Falls back to a sample entry (not in the DB) so preview boards can be
+    // edited too — saving then persists a real copy of the board.
     val editingEntry by produceState<CurioEntry?>(initialValue = null, editEntryId) {
         value = editEntryId?.let { id ->
             runCatching { CurioRepositoryHolder.repo.getById(id) }.getOrNull()
+                ?: TopicCatalog.sampleEntries().find { it.id == id }
         }
     }
 
@@ -169,6 +172,13 @@ fun SaveCaptureScreen(
                 // Local capture: editingEntry is a delegated property (produceState),
                 // so the compiler can't smart-cast it — grab a stable local first.
                 val existingEntry = editingEntry
+                // Edit mode must NEVER write a fresh entry: Room REPLACEs by id,
+                // so a fresh entry here would overwrite the original with blank
+                // data. If the source entry is somehow missing, abort instead.
+                if (editEntryId != null && existingEntry == null) {
+                    saveInProgress = false
+                    return@launch
+                }
                 val entry = if (existingEntry != null) {
                     // Edit mode: keep id/topic/title/timestamp, swap the data.
                     existingEntry.copy(captureData = persistedData)
@@ -293,15 +303,32 @@ fun SaveCaptureScreen(
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                    FormatBodyForCategory(
-                        category = cat,
-                        initialData = editingEntry?.captureData,
-                        // Reuse the saved entry's id-derived seed so the editor's
-                        // watermark pattern matches the saved view exactly.
-                        boardSeed = editEntryId?.hashCode(),
-                        onCanSaveChange = { canSave = it && topic != null },
-                        onDataChanged = { currentCaptureData = it }
-                    )
+                    if (editEntryId != null && editingEntry == null) {
+                        // Edit mode: hold until the saved entry loads. Rendering
+                        // the format body now would fall back to the Wildcard
+                        // category's body and could emit blank data.
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 48.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(color = cat.accent)
+                        }
+                    } else {
+                        FormatBodyForCategory(
+                            category = cat,
+                            // Dispatch on the SAVED entry's format in edit mode so
+                            // the right body renders regardless of category default.
+                            entryFormat = editingEntry?.format,
+                            initialData = editingEntry?.captureData,
+                            // Reuse the saved entry's id-derived seed so the editor's
+                            // watermark pattern matches the saved view exactly.
+                            boardSeed = editEntryId?.hashCode(),
+                            onCanSaveChange = { canSave = it && topic != null && (editEntryId == null || editingEntry != null) },
+                            onDataChanged = { currentCaptureData = it }
+                        )
+                    }
             }
         }
 
@@ -416,7 +443,12 @@ fun SaveCaptureScreen(
 }
 
 /**
- * Dispatch the right format body based on the active category's default format.
+ * Dispatch the right format body. In edit mode ([entryFormat] present) the
+ * body is chosen by the SAVED entry's format — a mood board saved as a
+ * direct GalleryWall OR as a Wildcard OpenNotebook wrapper reopens with the
+ * correct body regardless of the category's default. In create mode it
+ * falls back to the active category's default format.
+ *
  * Each format now reports both [onCanSaveChange] and [onDataChanged].
  *
  * [initialData] (edit mode) is passed through to [GalleryWallFormat] so a
@@ -429,10 +461,11 @@ private fun FormatBodyForCategory(
     category: CurioCategory,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit,
+    entryFormat: CaptureFormat? = null,
     initialData: CaptureData? = null,
     boardSeed: Int? = null
 ) {
-    when (category.defaultFormat) {
+    when (entryFormat ?: category.defaultFormat) {
         CaptureFormat.SoundBite ->
             SoundBiteFormat(category.accent, category.tint, onCanSaveChange, onDataChanged)
         CaptureFormat.ReelNotes ->
