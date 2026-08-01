@@ -38,6 +38,9 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBorder
+import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
 
 /**
  * Compact category card shared by the standalone category picker and the
@@ -56,6 +59,11 @@ import com.curio.app.ui.theme.CurioMotion
  * The selected state is a distinct raised treatment (crisp white rule + a
  * soft inner glow sheen) — deliberately NOT a check badge, so active vs
  * inactive read as two different card looks.
+ *
+ * Idle cards wear the category's tinted surface — the page wash's stronger
+ * sibling — so the grid reads as tints of the background ("the tint, but a
+ * little different") and the card pops to the full bright gradient only
+ * when selected.
  */
 @Composable
 fun CurioCategoryCard(
@@ -83,9 +91,15 @@ fun CurioCategoryCard(
 
     val isWildcard = category.id == CategoryId.WILDCARD
     // Full-card gradient — the same theme-aware treatment as the main cards,
-    // so tiles and hero tickets always share one shade language.
+    // so tiles and hero tickets always share one shade language. Used ONLY
+    // for the selected (proper bright) state.
     val gradient = CurioGradients.cardGradient(category.accent)
     val cardColor = CurioGradients.categoryCardFill(category.accent)
+    // Idle cards wear the category's tinted surface — the page wash, but a
+    // touch stronger — so unselected tiles sit on the washed page as soft
+    // tints of their own color instead of shouting in full brightness.
+    val idleSurface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow)
+    val idleInk = category.categoryInk()
     val topicCount = remember(category.id) { TopicJsonLoader.cached(category.id)?.size ?: 0 }
 
     Surface(
@@ -93,7 +107,8 @@ fun CurioCategoryCard(
         color = Color.Transparent,
         shadowElevation = 0.dp,
         tonalElevation = 0.dp,
-        border = if (isSelected) BorderStroke(2.dp, Color.White) else null,
+        border = if (isSelected) BorderStroke(2.dp, Color.White)
+                 else category.categoryBorder(),
         modifier = modifier
             .fillMaxWidth()
             .height(104.dp)
@@ -103,7 +118,8 @@ fun CurioCategoryCard(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.verticalGradient(gradient),
+                    if (isSelected) Brush.verticalGradient(gradient)
+                    else Brush.solidColor(idleSurface),
                     RoundedCornerShape(22.dp)
                 )
                 .combinedClickable(
@@ -138,7 +154,8 @@ fun CurioCategoryCard(
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = lerp(cardColor, Color.White, 0.55f).copy(alpha = 0.18f),
+                tint = if (isSelected) lerp(cardColor, Color.White, 0.55f).copy(alpha = 0.18f)
+                       else idleInk.copy(alpha = 0.16f),
                 size = 64.dp,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -158,14 +175,15 @@ fun CurioCategoryCard(
                     Text(
                         text = category.displayName,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                        color = Color.White,
+                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = if (isWildcard) "Surprise mix" else "$topicCount topics",
                         style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.85f),
+                        color = if (isSelected) Color.White.copy(alpha = 0.85f)
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1
                     )
                 }
