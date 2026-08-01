@@ -1,6 +1,7 @@
 package com.curio.app.features.capture
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.foundation.BorderStroke
@@ -152,6 +153,12 @@ fun SaveCaptureScreen(
     var emberTrigger by remember { mutableIntStateOf(0) }
     var savedEntryId by remember { mutableStateOf<String?>(null) }
     var showDiscardDialog by remember { mutableStateOf(false) }
+
+    // System back while editing → the same three-way leave dialog as the
+    // top-bar back button (save and switch / keep editing / discard).
+    BackHandler(enabled = canSave) {
+        showDiscardDialog = true
+    }
 
     val scope = rememberCoroutineScope()
 
@@ -433,22 +440,36 @@ fun SaveCaptureScreen(
         }
     }
 
-    // ── Discard confirmation dialog ─────────────────────────────────────
+    // ── Three-way leave dialog (save and switch / keep editing / discard) ─
+    //    Shown when leaving with unsaved edits. Discard sits on the LEFT;
+    //    the primary "Save and switch" action is the rightmost button.
     if (showDiscardDialog) {
         AlertDialog(
             onDismissRequest = { showDiscardDialog = false },
-            title = { Text("Discard this capture?") },
-            text = { Text("You'll lose what you've added here. This can't be undone.") },
-            confirmButton = {
+            title = { Text("Unsaved changes") },
+            text = { Text("You have unsaved edits. Save them and switch away, or leave without saving.") },
+            dismissButton = {
                 TextButton(onClick = {
                     showDiscardDialog = false
-                    navController.popBackStack()                }) {
+                    navController.popBackStack()
+                }) {
                     Text("Discard", color = MaterialTheme.colorScheme.error)
                 }
             },
-            dismissButton = {
-                TextButton(onClick = { showDiscardDialog = false }) {
-                    Text("Keep editing")
+            confirmButton = {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    TextButton(onClick = { showDiscardDialog = false }) {
+                        Text("Keep editing")
+                    }
+                    Button(
+                        onClick = {
+                            showDiscardDialog = false
+                            performSave()
+                        },
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        Text("Save and switch")
+                    }
                 }
             }
         )

@@ -2,27 +2,29 @@
 
 ## Status: IN PROGRESS — edits applied, review passed, commit pending
 
-"the background peek cards need to be more larger so that the title the topic it shows doesn't hide, don't change the dimension of the card just increase the size of it and also make the main card bounce animation better like its tilting too much and bouncing too much in spin just make it bounce a little"
+"when edit entry when we switch while editing show save and switch and keep editing then discard at the left."
 
 ## Changes (1 file)
 
-1. **`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
-   - **Peek cards ~13% bigger (proportions kept, size only):** near
-     318×102 → 360×116, far 288×84 → 328×96; corners scale with height
-     (17→19 / 13→15); fan yOffs nudged outward (−178/−134/146/188) so the
-     topic title inside each background card has room to read instead of
-     hiding behind the fan.
-   - **Gentler hero bounce:** per-tick kick 1.065 → 1.035 with a more
-     damped spring (0.7/1000), tilt factor 80 → 40 (max ~5.2° → ~1.4°),
-     hop factor 30 → 18, category-switch bounce 1.045 → 1.025, landing
-     rest scale 1.04 → 1.02. Header doc gets a v6.5 note.
+1. **`app/src/main/java/com/curio/app/features/capture/SaveCaptureScreen.kt`**
+   - The leave-with-unsaved-edits dialog is now a three-way choice:
+     - **Discard** (error color) in the `dismissButton` slot → LEFT, as
+       requested — pops back without saving.
+     - **Keep editing** TextButton + **Save and switch** primary Button in a
+       Row in the `confirmButton` slot (right). "Save and switch" calls
+       `performSave()`, which saves and auto-returns to the detail screen
+       in edit mode.
+   - Title/message updated ("Unsaved changes").
+   - Added `BackHandler(enabled = canSave)` so the SYSTEM back button also
+     opens the dialog (previously only the top-bar arrow did).
 
 ## Review
-- code-reviewer-deepseek-flash: clean — no stale old values in live code
-  (only the v6.4 historical doc line records the old sizes), types correct.
-  Notes: bottom far peek hangs ~10dp past the carousel edge into the 32dp
-  padding gap above the SpinButton (no clip, no crowding); peek titles still
-  ellipsize on very long names (out of scope — request was size only).
+- code-reviewer-deepseek-flash: clean — Discard correctly on the left
+  (dismissButton slot), performSave in scope, BackHandler import + usage
+  correct (non-composable lambda), all referenced imports already present,
+  no leftover old dialog code. Nit (accepted): "Save and switch" routes
+  through the normal save flow (brief confetti before popping back) — kept
+  for consistency with the bottom Save CTA.
 
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).
