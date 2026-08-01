@@ -1,58 +1,52 @@
-# Prompt.md — Running Request Log
+# Request: Profile page — proper Settings entry + remove duplicate settings
 
-## Latest Request — "Check other saved entries save logic — album entry texts disappear / images don't show, similar to that"
+## Analysis
 
-### Status: ✅ Complete (about to commit & push)
+The Profile page (`ProfileScreen.kt`) duplicated the entire Settings screen
+(`SettingsScreen.kt`):
 
-### The bug (user-reported)
-In the Albums (Reel Notes) saved entry, the review text disappears and attached
-images never show. "Similar to that" across other formats.
+- `PreferencesCard` on Profile inlined Display name, Theme, Audio quality,
+  Daily shuffle reminder, and Manage categories — every one of these already
+  lives in Settings (Profile/Appearance/Recording/Notifications/Categories
+  cards).
+- `DeveloperCard` on Profile repeated Replay intro + Version, which also live
+  in Settings' About card.
+- The only Settings entry on Profile was a small gear icon in the top bar —
+  easy to miss.
 
-### Root causes
-1. **Stale data emission (the "texts disappear" bug)** — `ReelNotesFormat` and
-   `MarginaliaFormat` emitted their capture data inside
-   `LaunchedEffect(canSave)` — keyed ONLY on the boolean. Once the first
-   character was typed (`canSave` flips true) the effect never re-ran, so:
-   - more review text typed after the first char → not re-emitted
-   - star rating changed → not re-emitted
-   - images added → not re-emitted
-   - (Marginalia) later journal text / quotes → not re-emitted
-   `SaveCaptureScreen` then saved the STALE first snapshot → text/rating/images
-   silently dropped. (SoundBite keys title/note; FieldNotes keys all fields;
-   GalleryWall keys caption+tiles; OpenNotebook keys subData — those were OK.)
-2. **Reel Notes never actually attached images** — `attachedImages` was a
-   placeholder `mutableStateListOf<Int>()` ("Add" just appended `0`; no picker),
-   and `CaptureData.ReelNotes` had no `imageUris` field → no real image could be
-   persisted or rendered.
+## Changes (app/src/main/java/com/curio/app/features/profile/ProfileScreen.kt)
 
-### Fixes
-- **CaptureData.kt** — `ReelNotes` gained `val imageUris: List<String> = emptyList()`
-  AFTER `imageCount` (positional constructions like `ReelNotes(0,"",0)` still
-  compile; old saved JSON deserializes with the field missing → guarded at render).
-- **ReelNotesFormat.kt** — real image picking: `imageUris: List<String>` +
-  `OpenMultipleDocuments` launcher with `takePersistableUriPermission`, capped at
-  3, `ImageThumb(imageUri = …)`, remove filters the list. Emission now keyed on
-  `(canSave, rating, reviewText, imageUris)` and emits
-  `ReelNotes(rating, reviewText, imageUris.size, imageUris)`. Removed the now
-  unused `mutableStateListOf` import; added activity/result + LocalContext imports.
-- **MarginaliaFormat.kt** — emission keyed on `(canSave, journalText, quotes.toList())`.
-- **EntryDetailScreen.kt** — `ReelNotesRender` gained `navController`; renders real
-  image thumbnails (up to 3, tap → Lightbox) when `imageUris` non-empty, with the
-  legacy `imageCount` badge as fallback. `data.imageUris.orEmpty()` guards legacy
-  Gson blobs where the missing field decodes to null (Unsafe allocation skips
-  Kotlin defaults).
+1. **Added a proper Settings card** — new `SettingsCard` composable placed
+   right after the Level card: gradient icon chip + "Settings" + subtitle
+   "Theme · reminders · audio · backup" + forward arrow, navigates to
+   `CurioRoutes.SETTINGS`. The top-bar gear shortcut stays.
+2. **Removed the duplicated PreferencesCard** + `InlineReminderSelector`
+   (theme segmented buttons, audio-quality dialog, reminder switch/time
+   picker, manage-categories row all deleted — Settings owns them now).
+3. **Trimmed DeveloperCard** to only Profile-unique items: Report a bug,
+   Crash logs, Test crash. Replay intro + Version rows removed (in Settings'
+   About card); header renamed "Support & diagnostics".
+4. **Trimmed CategoriesCard** — removed the "Manage" TextButton (duplicates
+   Settings → Manage categories); "Open the Cabinet" kept (Profile-unique).
+5. **Cleanup** — removed now-unused state (themeMode, audioQuality,
+   reminderEnabled, reminderHour, showQualityDialog, showVersionDialog), the
+   notification-permission launcher + enableReminder/setReminder, the
+   quality/version dialogs (ProfileDialogs is display-name only), the
+   versionName val, and 16 unused imports. Class doc comment updated.
 
-### Validation
-- Code review (deepseek-flash, 2 passes): compile-safe — all `ReelNotes`
-  constructions (positional fallbacks in CaptureEntity/TopicCatalog, named sample)
-  stay valid with the new defaulted field; Gson round-trip + `deserializeCaptureData`
-  detection unaffected; no leftover `attachedImages`/`mutableStateListOf<Int>` refs;
-  imports verified (Image / rememberAsyncImagePainter / CurioRoutes / height /
-  weight already present in EntryDetailScreen). One real concern raised (Gson
-  missing-field → null, not default) → fixed with `.orEmpty()` and re-reviewed clean.
-- No gradle build run (per AGENTS.md, CI owns compilation).
+Nothing was lost: theme/audio/reminder/display-name/manage-categories stay in
+Settings; Replay intro + Version remain in Settings' About card.
 
-### Prior work (this session)
-- Mood board zoom (centered/straight, board pinch, high-res decode) — committed
-- Mixed-deck gradients + category-pick navigation — committed earlier
-- Edit-mood-board bug fixes — committed earlier
+## Validation
+
+- code-searcher: 0 matches for all removed symbols
+  (PreferencesCard/InlineReminderSelector/formatHour/SegmentedButton/
+  RadioButton/Switch) in ProfileScreen.kt.
+- code-reviewer-deepseek-flash: clean pass — removed imports all verified
+  unused, kept imports all still referenced, new SettingsCard uses only
+  imported APIs, CurioRoutes.SETTINGS exists, no feature lost.
+- No local gradle build per AGENTS.md — CI owns compilation on push.
+
+## Status
+
+Complete. Commit `TBD` on branch `revamp`.

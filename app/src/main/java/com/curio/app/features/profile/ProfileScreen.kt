@@ -1,11 +1,5 @@
 package com.curio.app.features.profile
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,13 +24,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,26 +45,20 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
-import com.curio.app.data.AudioQuality
-import com.curio.app.data.AudioQualitySettings
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
-import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioCardHeader
 import com.curio.app.ui.components.CurioForwardArrow
-import com.curio.app.ui.components.formatHour
 import com.curio.app.ui.components.CurioSettingsCard
 import com.curio.app.ui.components.CurioSettingsDivider
 import com.curio.app.ui.components.CurioSettingsRow
@@ -87,25 +69,20 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
 
 /**
- * Profile and personal settings hub.
+ * Profile hub — identity, stats, and a single proper Settings entry.
  *
- * The screen intentionally uses a calm hierarchy: a compact identity hero,
- * four glanceable stats, then settings and activity cards. Every row that
- * looks interactive either opens a dialog or navigates; informational values
- * are rendered as text instead of dead buttons.
+ * Personalization settings (theme, audio quality, reminders, categories,
+ * backup) live in the Settings screen; Profile keeps only a hero, glanceable
+ * stats, lanes/activity, and a Settings card that opens that screen. Every
+ * row that looks interactive either opens a dialog or navigates; informational
+ * values are rendered as text instead of dead buttons.
  */
 @Composable
 fun ProfileScreen(navController: NavController) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var displayName by remember { mutableStateOf(AppPreferences.getDisplayName(context)) }
-    var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
-    var audioQuality by remember { mutableStateOf(AudioQualitySettings.get(context)) }
-    val reminderEnabled = AppPreferences.reminderEnabledState
-    var reminderHour by remember { mutableIntStateOf(AppPreferences.getReminderHour(context)) }
     var showNameDialog by remember { mutableStateOf(false) }
-    var showQualityDialog by remember { mutableStateOf(false) }
-    var showVersionDialog by remember { mutableStateOf(false) }
     var nameInput by remember(displayName) { mutableStateOf(displayName) }
     var crashCount by remember { mutableIntStateOf(0) }
     var totalSaved by remember { mutableIntStateOf(0) }
@@ -116,39 +93,10 @@ fun ProfileScreen(navController: NavController) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 displayName = AppPreferences.getDisplayName(context)
-                themeMode = AppPreferences.getThemeMode(context)
-                audioQuality = AudioQualitySettings.get(context)
-                reminderHour = AppPreferences.getReminderHour(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-    }
-
-    val requestNotifications = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) {
-            AppPreferences.setReminderEnabled(context, true)
-        }
-    }
-
-    fun enableReminder() {
-        if (Build.VERSION.SDK_INT >= 33 &&
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            AppPreferences.setReminderEnabled(context, true)
-        }
-    }
-
-    fun setReminder(enabled: Boolean) {
-        if (enabled) enableReminder()
-        else {
-            AppPreferences.setReminderEnabled(context, false)
-        }
     }
 
     LaunchedEffect(Unit) {
@@ -164,10 +112,6 @@ fun ProfileScreen(navController: NavController) {
     val streakDays = StreakTracker.getStreak(context)
     val level = levelFor(totalSaved)
     val progress = progressTowardsNextLevel(totalSaved)
-    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
-    val themeLabels = listOf("Light", "Dark", "System")
-    val themeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
-    val versionName = com.curio.app.BuildConfig.VERSION_NAME
 
     ProfileDialogs(
         showNameDialog = showNameDialog,
@@ -178,17 +122,7 @@ fun ProfileScreen(navController: NavController) {
             displayName = nameInput.trim().ifBlank { "Curious Explorer" }
             AppPreferences.setDisplayName(context, displayName)
             showNameDialog = false
-        },
-        showQualityDialog = showQualityDialog,
-        currentQuality = audioQuality,
-        onQualitySelected = {
-            audioQuality = it
-            AudioQualitySettings.set(context, it)
-            showQualityDialog = false
-        },
-        showVersionDialog = showVersionDialog,
-        versionName = versionName,
-        onDismissVersion = { showVersionDialog = false }
+        }
     )
 
     Column(
@@ -268,35 +202,14 @@ fun ProfileScreen(navController: NavController) {
                 )
             }
             item {
-                PreferencesCard(
-                    displayName = displayName,
-                    themeIndex = themeIndex,
-                    themeLabels = themeLabels,
-                    onEditName = {
-                        nameInput = displayName
-                        showNameDialog = true
-                    },
-                    onThemeChange = {
-                        themeMode = themes[it]
-                        AppPreferences.setThemeMode(context, themes[it])
-                    },
-                    audioQuality = audioQuality,
-                    onAudioQualityClick = { showQualityDialog = true },
-                    reminderEnabled = reminderEnabled,
-                    reminderHour = reminderHour,
-                    onReminderToggle = ::setReminder,
-                    onReminderHourSelected = { hour ->
-                        reminderHour = hour
-                        AppPreferences.setReminderHour(context, hour)
-                    },
-                    onManageCategories = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true } }
+                SettingsCard(
+                    onOpenSettings = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
                 )
             }
             if (categoryCounts.isNotEmpty()) {
                 item {
                     CategoriesCard(
                         counts = categoryCounts,
-                        onManage = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) { launchSingleTop = true } },
                         onCabinet = { navController.navigate(CurioRoutes.CABINET) { launchSingleTop = true } }
                     )
                 }
@@ -314,13 +227,7 @@ fun ProfileScreen(navController: NavController) {
                     crashCount = crashCount,
                     onTestCrash = { CurioCrashReporter.testCrash() },
                     onCrashLogs = { navController.navigate(CurioRoutes.CRASH) { launchSingleTop = true } },
-                    onReportBug = { navController.navigate(CurioRoutes.BUG_REPORT) { launchSingleTop = true } },
-                    onReplayIntro = {
-                        CurioOnboardingState.reset(context)
-                        navController.navigate(CurioRoutes.ONBOARDING) { launchSingleTop = true }
-                    },
-                    versionName = versionName,
-                    onVersion = { showVersionDialog = true }
+                    onReportBug = { navController.navigate(CurioRoutes.BUG_REPORT) { launchSingleTop = true } }
                 )
             }
             item { Spacer(Modifier.navigationBarsPadding().height(4.dp)) }
@@ -334,13 +241,7 @@ private fun ProfileDialogs(
     nameInput: String,
     onNameInputChange: (String) -> Unit,
     onDismissName: () -> Unit,
-    onSaveName: () -> Unit,
-    showQualityDialog: Boolean,
-    currentQuality: AudioQuality,
-    onQualitySelected: (AudioQuality) -> Unit,
-    showVersionDialog: Boolean,
-    versionName: String,
-    onDismissVersion: () -> Unit
+    onSaveName: () -> Unit
 ) {
     if (showNameDialog) {
         AlertDialog(
@@ -361,59 +262,6 @@ private fun ProfileDialogs(
             },
             confirmButton = { TextButton(onClick = onSaveName) { Text("Save", fontWeight = FontWeight.Bold) } },
             dismissButton = { TextButton(onClick = onDismissName) { Text("Cancel") } }
-        )
-    }
-
-    if (showQualityDialog) {
-        AlertDialog(
-            onDismissRequest = { onQualitySelected(currentQuality) },
-            shape = RoundedCornerShape(28.dp),
-            title = { Text("Recording quality", fontWeight = FontWeight.ExtraBold) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Choose the balance that feels right for your voice notes.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    AudioQuality.entries.forEach { quality ->
-                        val selected = quality == currentQuality
-                        Surface(
-                            onClick = { onQualitySelected(quality) },
-                            shape = RoundedCornerShape(16.dp),
-                            color = if (selected) CurioColors.CoralBlush.copy(alpha = 0.12f) else Color.Transparent,
-                            border = BorderStroke(
-                                1.dp,
-                                if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                RadioButton(
-                                    selected = selected,
-                                    onClick = null,
-                                    colors = RadioButtonDefaults.colors(selectedColor = CurioColors.CoralBlush)
-                                )
-                                Column {
-                                    Text(quality.label, fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
-                                    Text(quality.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = { TextButton(onClick = { onQualitySelected(currentQuality) }) { Text("Close") } }
-        )
-    }
-
-    if (showVersionDialog) {
-        AlertDialog(
-            onDismissRequest = onDismissVersion,
-            shape = RoundedCornerShape(28.dp),
-            title = { Text("Curio", fontWeight = FontWeight.ExtraBold) },
-            text = { Text("Version $versionName\n\nA small place for big curiosity.") },
-            confirmButton = { TextButton(onClick = onDismissVersion) { Text("Close") } }
         )
     }
 }
@@ -597,127 +445,46 @@ private fun LevelCard(level: Int, saved: Int, progress: Float, nextThreshold: In
 }
 
 @Composable
-private fun PreferencesCard(
-    displayName: String,
-    themeIndex: Int,
-    themeLabels: List<String>,
-    onEditName: () -> Unit,
-    onThemeChange: (Int) -> Unit,
-    audioQuality: AudioQuality,
-    onAudioQualityClick: () -> Unit,
-    reminderEnabled: Boolean,
-    reminderHour: Int,
-    onReminderToggle: (Boolean) -> Unit,
-    onReminderHourSelected: (Int) -> Unit,
-    onManageCategories: () -> Unit
-) {
+private fun SettingsCard(onOpenSettings: () -> Unit) {
     CurioSettingsCard {
-        CurioCardHeader(CurioIcons.Settings, "Preferences", "Personalize how Curio feels")
-        CurioSettingsRow(CurioIcons.Person, "Display name", displayName, onEditName)
-        CurioSettingsDivider()
-        Column(modifier = Modifier.padding(vertical = 10.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CurioIcon(CurioIcons.DarkMode, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Theme", style = MaterialTheme.typography.bodyLarge)
-                    Text(themeLabels[themeIndex], style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            }
-            Spacer(Modifier.height(10.dp))
-            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                themeLabels.forEachIndexed { index, label ->
-                    SegmentedButton(
-                        selected = index == themeIndex,
-                        onClick = { onThemeChange(index) },
-                        shape = SegmentedButtonDefaults.itemShape(index, themeLabels.size)
-                    ) { Text(label, style = MaterialTheme.typography.labelSmall) }
-                }
-            }
-        }
-        CurioSettingsDivider()
-        CurioSettingsRow(CurioIcons.Mic, "Audio quality", audioQuality.label, onAudioQualityClick)
-        CurioSettingsDivider()
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Surface(
+            onClick = onOpenSettings,
+            color = Color.Transparent,
+            shape = RoundedCornerShape(18.dp),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            CurioIcon(CurioIcons.Notifications, null, tint = CurioColors.CoralBlush, size = 22.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Daily shuffle reminder", style = MaterialTheme.typography.bodyLarge)
-                Text(
-                    if (reminderEnabled) "Every day at ${formatHour(reminderHour)}" else "Off · tap the switch to enable",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Switch(checked = reminderEnabled, onCheckedChange = onReminderToggle)
-        }
-        if (reminderEnabled) {
-            InlineReminderSelector(
-                selectedHour = reminderHour,
-                onHourSelected = onReminderHourSelected
-            )
-        }
-        CurioSettingsDivider()
-        CurioSettingsRow(CurioIcons.Palette, "Manage categories", "${CurioCategories.visible.size} lanes visible", onManageCategories)
-    }
-}
-
-@Composable
-private fun InlineReminderSelector(selectedHour: Int, onHourSelected: (Int) -> Unit) {
-    val hours = listOf(9, 12, 15, 18, 21)
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            CurioIcon(CurioIcons.Schedule, null, tint = CurioColors.CoralBlush, size = 18.dp)
-            Text(
-                "Reminder time",
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                formatHour(selectedHour),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(hours) { hour ->
-                val selected = hour == selectedHour
-                Surface(
-                    onClick = { onHourSelected(hour) },
-                    shape = RoundedCornerShape(50),
-                    color = if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.surfaceContainerHighest,
-                    contentColor = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
-                    border = BorderStroke(1.dp, if (selected) CurioColors.CoralBlush else MaterialTheme.colorScheme.outlineVariant),
-                    shadowElevation = 0.dp
+            Row(
+                modifier = Modifier.padding(vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(46.dp)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(Brush.linearGradient(listOf(CurioColors.CoralBlush, CurioColors.Peach))),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        if (selected) CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 15.dp)
-                        Text(formatHour(hour), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
-                    }
+                    CurioIcon(CurioIcons.Settings, null, tint = Color.White, size = 23.dp)
                 }
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Settings", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                    Text(
+                        "Theme · reminders · audio · backup",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                CurioForwardArrow(tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f), size = 18.dp)
             }
         }
     }
 }
 
 @Composable
-private fun CategoriesCard(counts: Map<CategoryId, Int>, onManage: () -> Unit, onCabinet: () -> Unit) {
+private fun CategoriesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) {
     CurioSettingsCard {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            CurioCardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring", Modifier.weight(1f))
-            TextButton(onClick = onManage) { Text("Manage") }
-        }
+        CurioCardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring")
         Spacer(Modifier.height(8.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(counts.entries.sortedByDescending { it.value }.take(4)) { (categoryId, count) ->
@@ -788,24 +555,17 @@ private fun DeveloperCard(
     crashCount: Int,
     onTestCrash: () -> Unit,
     onCrashLogs: () -> Unit,
-    onReportBug: () -> Unit,
-    onReplayIntro: () -> Unit,
-    versionName: String,
-    onVersion: () -> Unit
+    onReportBug: () -> Unit
 ) {
     CurioSettingsCard {
-        CurioCardHeader(CurioIcons.Info, "About Curio", "Help, diagnostics, and app details")
+        CurioCardHeader(CurioIcons.Info, "Support & diagnostics", "Help, reports, and developer tools")
         CurioSettingsRow(CurioIcons.BugReport, "Report a bug", "Send feedback or an issue", onReportBug)
-        CurioSettingsDivider()
-        CurioSettingsRow(CurioIcons.Replay, "Replay intro", "See the welcome screens again", onReplayIntro)
         if (crashCount > 0) {
             CurioSettingsDivider()
             CurioSettingsRow(CurioIcons.History, "Crash logs", "$crashCount saved report${if (crashCount == 1) "" else "s"}", onCrashLogs)
         }
         CurioSettingsDivider()
         CurioSettingsRow(CurioIcons.ErrorOutline, "Test crash", "Diagnostic tool", onTestCrash)
-        CurioSettingsDivider()
-        CurioSettingsRow(CurioIcons.Info, "Version", versionName, onVersion)
     }
 }
 
