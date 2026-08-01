@@ -1,19 +1,25 @@
-# Request: Proper borders where cards/buttons blend into the tint
+# Request: Saved-entry audio player broken + visualizer redesign
 
 ## Request
-Cards and buttons that wear tinted surfaces on category-tinted pages visually melt into the page wash — add proper borders so they read as distinct surfaces.
+The saved-entry audio player shows but plays no sound, won't replay after ending, and the visualizer renders badly. The saved view should use the same visualizer design as the recording meter.
+
+## Root causes found
+1. **No sound** — ExoPlayer had no `AudioAttributes`/volume/focus routing; some devices route to a silent output or duck → "plays but no sound".
+2. **Won't replay** — after `STATE_ENDED`, `play()` alone doesn't restart; after a load error the player sits in `STATE_IDLE` where `play()` can't restart and `seekTo(0)` can even throw.
+3. **Broken visualizer** — `WaveformExtractor.extractPcmShorts` read PCM shorts with the buffer's default BIG_ENDIAN order, but MediaCodec decoders emit little-endian PCM → every sample byte-swapped → noise. Also the saved view used 120 bars squeezed into a ~250dp canvas (bars ≈0.1dp, coerced to 1dp → overflow), unlike the recording's 36 capsule bars.
 
 ## Changes
-- `CategoryInk.kt` — new `@Composable fun CurioCategory.categoryBorder(fallback: BorderStroke? = null): BorderStroke?`. Toggle-aware: returns `fallback` (null default = no border) when the Settings tint toggle is off, else `BorderStroke(1.dp, categoryInk().copy(alpha = 0.30f))` — deep accent in light, light twin in dark, same resolution as `categoryInk()` and the mood-board border pattern. New imports `androidx.compose.foundation.BorderStroke` + `androidx.compose.ui.unit.dp`.
-- `SpinScreen.kt` — EmptyPoolHint card, bottom-bar pill (unselected), and CompactChip (new `chipBorder` param, 4 call sites, fallback keeps pre-tint outlineVariant when toggle off) get `cat.categoryBorder()`.
-- `TopicRevealScreen.kt` — TeaserCard + ActionPromptCard get `border = cat.categoryBorder()`.
-- `EntryDetailScreen.kt` — top-bar menu button, AudioPlayerBar capsule (new `border: BorderStroke?` param passed from SoundBiteRender), ReelNotes review card, GalleryWall edit/expand buttons, PortfolioRender section chips (unselected only).
-- `CabinetScreen.kt` — search bar + both FilterChipLite call sites (new `chipBorder: BorderStroke? = null` param) get `border = filterCat.categoryBorder()`.
-- `SaveCaptureScreen.kt` — topic-reminder strip gets `cat.categoryBorder()`; format chips use `if (active.format == fmt) BorderStroke(accent 0.5) else category.categoryBorder(fallback = BorderStroke(1.dp, outline))` so the pre-tint outline border is preserved when the toggle is off; section tabs get a border when unselected.
-- `CurioTopicCard.kt` — CurioEntryCard gets `border = cat.categoryBorder()`.
+- `WaveformExtractor.kt` — `extractPcmShorts` pins the duplicated buffer to `LITTLE_ENDIAN` before the `dup.short` read loop (`dup.order(ByteOrder.LITTLE_ENDIAN)`); new import `java.nio.ByteOrder`. This is the only PCM read path.
+- `EntryDetailScreen.kt`:
+  - Waveform extraction now `barCount = 36` with `FloatArray(36)` initial/fallback — same bar language as the recording `LiveWaveform`.
+  - `ExoPlayer` now `setAudioAttributes(AudioAttributes.DEFAULT, handleAudioFocus = true)` + `setHandleAudioBecomingNoisy(true)` + `setVolume(1f)`.
+  - `STATE_ENDED` → reset UI + park at start (`seekTo(0)`); `STATE_IDLE` → reset `isPlaying`; `onPlayerError` → reset UI only (no seek — unavailable once errored into IDLE).
+  - Play button: `STATE_ENDED` → `seekTo(0)`, `STATE_IDLE` → `prepare()` (documented retry path), then `play()`.
+  - New imports `androidx.media3.common.AudioAttributes` + `PlaybackException` (ordered AudioAttributes, MediaItem, PlaybackException, Player, ExoPlayer).
+  - `WaveformCanvas` already rendered 36 capsule bars mirroring `LiveWaveform` (accent/tint split is the progress readout) — kept.
 
 ## Validation
-- Code reviewer passed 3 passes. Findings fixed as prescribed: (1) SaveCaptureScreen format chips would lose their pre-existing outline border with the toggle off → fixed with the `fallback` param; (2) SpinScreen CompactChip paired a tinted fill with a neutral grey border → fixed with the `chipBorder` param + outlineVariant fallback (mirrors FilterChipLite). All scopes (`cat`/`category`/`filterCat`) resolve, named args make param ordering safe, imports alphabetical, `Surface(border:)` accepts `BorderStroke?`, no regressions for surfaces that previously had no border (they correctly get none when toggle off).
+- Code reviewer passed 4 passes. Findings applied as prescribed: (1) `PlaybackException` import must precede `Player` alphabetically; (2) `STATE_IDLE` retry needs `prepare()`, not just seek; (3) `onPlayerError`'s unconditional `seekTo(0)` could throw `IllegalStateException` once the player errors into IDLE — removed. All scopes/braces/imports verified; reviewer confirmed ready to push.
 
 ## Completion summary
 - Committed & pushed.

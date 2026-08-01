@@ -76,7 +76,9 @@ import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.WaveformExtractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
@@ -535,14 +537,16 @@ private fun AudioPlayerBar(
     var duration by rememberSaveable { mutableLongStateOf(0L) }
     var sliderPosition by rememberSaveable { mutableFloatStateOf(0f) }
 
-    // Extract waveform samples off the main thread
+    // Extract waveform samples off the main thread. Same bar language as the
+    // recording visualizer (LiveWaveform uses 36 capsule bars) so the saved
+    // view looks identical to the meter the user recorded into.
     val waveformSamples by produceState<FloatArray>(
-        initialValue = FloatArray(120),
+        initialValue = FloatArray(36),
         key1 = audioFilePath
     ) {
         value = withContext(kotlinx.coroutines.Dispatchers.Default) {
-            WaveformExtractor.extract(audioFilePath, barCount = 120)
-        } ?: FloatArray(120) { kotlin.random.Random.nextFloat() * 0.6f + 0.2f }
+            WaveformExtractor.extract(audioFilePath, barCount = 36)
+        } ?: FloatArray(36) { kotlin.random.Random.nextFloat() * 0.6f + 0.2f }
     }
 
     // The stored audioFilePath is a RAW absolute filesystem path (e.g.
@@ -557,6 +561,12 @@ private fun AudioPlayerBar(
     }
     val player = remember(audioUri) {
         ExoPlayer.Builder(context.applicationContext).build().apply {
+            // Route to the media audio stream with proper focus handling —
+            // without AudioAttributes some devices route to a silent output
+            // or duck audio, which reads as "plays but no sound".
+            setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus = */ true)
+            setHandleAudioBecomingNoisy(true)
+            setVolume(1f)
             setMediaItem(MediaItem.fromUri(audioUri))
             prepare()
             playWhenReady = false
@@ -583,10 +593,29 @@ private fun AudioPlayerBar(
                     }
                     Player.STATE_ENDED -> {
                         isPlaying = false
+                        // Park the player back at the start so the next tap
+                        // on the play button replays instead of dead-ending.
                         currentPosition = 0L
                         sliderPosition = 0f
+                        player.seekTo(0)
+                    }
+                    Player.STATE_IDLE -> {
+                        // A failed load (missing/corrupt file) leaves the
+                        // player IDLE — don't leave the UI stuck "playing".
+                        isPlaying = false
                     }
                 }
+            }
+            override fun onPlayerError(error: PlaybackException) {
+                // Broken file or decode failure: reset the UI so the button
+                // doesn't look stuck. DON'T seek here — by the time this
+                // fires the player is typically already in the errored IDLE
+                // state where seek commands are unavailable, and the call
+                // would throw. The play-button retry path (prepare() on
+                // IDLE) restarts from the top on the next tap.
+                isPlaying = false
+                currentPosition = 0L
+                sliderPosition = 0f
             }
         }
         player.addListener(listener)
@@ -623,7 +652,20 @@ private fun AudioPlayerBar(
             // ── The one button ─────────────────────────────────────────
             Surface(
                 onClick = {
-                    if (isPlaying) player.pause() else player.play()
+                    if (isPlaying) {
+                        player.pause()
+                    } else {
+                        // Replay from the start: if the clip ended, ExoPlayer
+                        // won't restart on play() alone — re-seek to 0 first.
+                        // If it errored into IDLE, play() also won't restart
+                        // it: re-prepare the media item so the retry loads.
+                        if (player.playbackState == Player.STATE_ENDED) {
+                            player.seekTo(0)
+                        } else if (player.playbackState == Player.STATE_IDLE) {
+                            player.prepare()
+                        }
+                        player.play()
+                    }
                 },
                 shape = RoundedCornerShape(50),
                 color = accent,
