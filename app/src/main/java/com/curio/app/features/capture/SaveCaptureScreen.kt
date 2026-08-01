@@ -166,9 +166,12 @@ fun SaveCaptureScreen(
                     return@launch
                 }
 
-                val entry = if (editingEntry != null) {
+                // Local capture: editingEntry is a delegated property (produceState),
+                // so the compiler can't smart-cast it — grab a stable local first.
+                val existingEntry = editingEntry
+                val entry = if (existingEntry != null) {
                     // Edit mode: keep id/topic/title/timestamp, swap the data.
-                    editingEntry.copy(captureData = persistedData)
+                    existingEntry.copy(captureData = persistedData)
                 } else {
                     CurioEntry(
                         id = entryId,

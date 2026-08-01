@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RectangleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
@@ -284,7 +283,9 @@ private fun MoodBoardCanvas(
     }
 
     Surface(
-        shape = if (fullScreen) RectangleShape else RoundedCornerShape(24.dp),
+        // RoundedCornerShape(0.dp) is a rectangle — RectangleShape isn't
+        // available in the Compose BOM this project resolves.
+        shape = if (fullScreen) RoundedCornerShape(0.dp) else RoundedCornerShape(24.dp),
         color = Color.Transparent,
         tonalElevation = 0.dp,
         modifier = if (fullScreen) Modifier.fillMaxSize() else Modifier

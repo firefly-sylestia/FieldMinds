@@ -170,7 +170,9 @@ object CurioMixedDeck {
      * saturation) so the result stays vivid rather than muddy.
      */
     fun mixedDeckAccent(accents: List<Color>): Color {
-        val distinct = accents.map { it.toArgb() }.distinct().map { Color(it) }
+        // Color is a value class — value-based equality means distinct() alone
+        // dedupes (toArgb() isn't part of the Compose BOM resolved here).
+        val distinct = accents.distinct()
         return when (distinct.size) {
             0 -> CurioColors.CategoryCoral
             1 -> distinct.first()
@@ -188,7 +190,9 @@ object CurioMixedDeck {
      */
     @Composable
     fun mixedDeckGradient(accents: List<Color>): List<Color> {
-        val distinct = accents.map { it.toArgb() }.distinct().map { Color(it) }
+        // Color is a value class — value-based equality means distinct() alone
+        // dedupes (toArgb() isn't part of the Compose BOM resolved here).
+        val distinct = accents.distinct()
         if (distinct.size <= 1) {
             return CurioGradients.cardGradient(mixedDeckAccent(distinct))
         }
@@ -198,16 +202,62 @@ object CurioMixedDeck {
     /**
      * HSL midpoint blend along the shortest hue path with a small saturation
      * boost — the premium way to mix two deep accents without a muddy middle.
+     *
+     * Uses local HSL conversion ([toHsl], [fromHsl]) built only on the bedrock
+     * RGBA channels of [Color], so the blend stays version-proof across the
+     * Compose BOM this project resolves (no hue/saturation/lightness
+     * accessors, which aren't part of that API surface).
      */
     private fun hslBlend(a: Color, b: Color): Color {
-        var dh = b.hue - a.hue
+        val ha = toHsl(a)
+        val hb = toHsl(b)
+        var dh = hb.h - ha.h
         if (dh > 180f) dh -= 360f
         if (dh < -180f) dh += 360f
-        val hue = ((a.hue + dh / 2f) + 360f) % 360f
+        val hue = ((ha.h + dh / 2f) + 360f) % 360f
         // Boosted midpoint saturation keeps the blend vivid (naive averaging
         // can drift toward gray when the endpoints differ in lightness).
-        val sat = ((a.saturation + b.saturation) / 2f + 0.05f).coerceIn(0f, 1f)
-        val light = (a.lightness + b.lightness) / 2f
-        return Color.hsl(hue, sat, light)
+        val sat = ((ha.s + hb.s) / 2f + 0.05f).coerceIn(0f, 1f)
+        val light = (ha.l + hb.l) / 2f
+        return fromHsl(hue, sat, light)
+    }
+
+    /** HSL components of a color, computed from its RGBA channels. */
+    private data class Hsl(val h: Float, val s: Float, val l: Float)
+
+    /** Standard RGB → HSL conversion (channels in [0,1], hue in degrees). */
+    private fun toHsl(color: Color): Hsl {
+        val r = color.red
+        val g = color.green
+        val b = color.blue
+        val max = maxOf(r, g, b)
+        val min = minOf(r, g, b)
+        val l = (max + min) / 2f
+        val d = max - min
+        val s = if (d == 0f) 0f else d / (1f - kotlin.math.abs(2f * l - 1f))
+        val h = when {
+            d == 0f -> 0f
+            max == r -> ((g - b) / d) % 6f
+            max == g -> (b - r) / d + 2f
+            else -> (r - g) / d + 4f
+        } * 60f
+        return Hsl((h + 360f) % 360f, s.coerceIn(0f, 1f), l.coerceIn(0f, 1f))
+    }
+
+    /** Standard HSL → RGB conversion (hue in degrees, s/l in [0,1]). */
+    private fun fromHsl(h: Float, s: Float, l: Float): Color {
+        val c = (1f - kotlin.math.abs(2f * l - 1f)) * s
+        val hp = h / 60f
+        val x = c * (1f - kotlin.math.abs(hp % 2f - 1f))
+        val (r, g, b) = when {
+            hp < 1f -> Triple(c, x, 0f)
+            hp < 2f -> Triple(x, c, 0f)
+            hp < 3f -> Triple(0f, c, x)
+            hp < 4f -> Triple(0f, x, c)
+            hp < 5f -> Triple(x, 0f, c)
+            else -> Triple(c, 0f, x)
+        }
+        val m = l - c / 2f
+        return Color(r + m, g + m, b + m)
     }
 }

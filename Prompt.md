@@ -1,39 +1,41 @@
 # Prompt.md — Running Request Log
 
-## Latest Request — Mood Board: pin-to-front drag gesture + clear board
+## Latest Request — Fix CI compile failures (3 root causes)
 
 ### Status: ✅ Complete (committed & pushed)
 
 ### Summary
-Added drag-to-pin-to-front and a clear-board action to the mood board editor
-(`app/src/main/java/com/curio/app/features/capture/formats/GalleryWallFormat.kt`):
+CI (BOM 2026.05.01) failed with compile errors across three files. Fixed all
+without removing any features:
 
-1. **Pin-to-front drag zone** — dragging any tile into a translucent 52dp drop
-   zone at the top of the canvas highlights the strip ("Release to pin to
-   front") and, on release, brings the tile to the front of the z-order
-   (same `tiles.add(tiles.removeAt(idx))` mechanism as tap-to-front). The
-   strip only appears while a drag is in progress (`draggingTileId != null`),
-   uses `KeyboardArrowUp` + accent colors, and sits at zIndex 500 so touches
-   pass through to the dragged tile (plain Box, no pointer handlers).
-2. **Clear board** — expanded (full-screen) editor only: a "Clear board" pill
-   at BottomStart (errorContainer, `Delete` icon) opens an AlertDialog
-   ("Remove all N images?") with Clear/Keep. Hidden when the board is empty
-   (`fullScreen && tiles.isNotEmpty()`).
-3. Drag gesture upgraded to full `detectDragGestures(onDragStart/onDrag/
-   onDragEnd/onDragCancel)` lifecycle; `inPinZone` derived from the tile's
-   offsetYPx vs pinZoneHeightPx after each drag move.
+1. **SaveCaptureScreen.kt:171** — smart cast on the delegated `editingEntry`
+   property (`if (editingEntry != null) { editingEntry.copy(...) }`) is
+   illegal for delegated properties. Fix: capture a stable local
+   (`val existingEntry = editingEntry`) and branch on that. Behavior
+   identical; no other smart-cast reliance on `editingEntry` remains
+   (all other usages are safe-call/let-param/local-capture).
+2. **GalleryWallFormat.kt:25,287** — `androidx.compose.foundation.shape.
+   RectangleShape` is not in the resolved Compose BOM. Fix: drop the import,
+   use `RoundedCornerShape(0.dp)` (visually identical rectangle) for the
+   full-screen canvas shape.
+3. **CurioColors.kt:173–210** — `Color.toArgb()`, `.hue`, `.saturation`,
+   `.lightness` are not in the resolved Compose BOM. Fix:
+   - Dedupe via `accents.distinct()` (Color is a value class with
+     value-based equality) instead of the toArgb round-trip.
+   - `hslBlend` rewritten with local `toHsl`/`fromHsl` (standard RGB↔HSL
+     math) using only bedrock `Color.red/green/blue` + `Color(r,g,b)`
+     Float constructor; keeps shortest-hue-path + saturation boost, so the
+     premium mixed-deck behavior is preserved. `Color.hsl` was confirmed
+     available but fromHsl avoids all version-API risk.
 
 ### Validation
-- Braces balanced: GalleryWallFormat 117/117
-- Imports: `layout.width`, `AlertDialog`, `TextButton` added, all used
-- Code review: clean verdict (2 minor nits fixed: hidden clear on empty
-  board, KDoc mention of pin gesture)
+- Braces: SaveCaptureScreen 66/66, GalleryWallFormat 117/117, CurioColors 15/15
+- Zero remaining `toArgb`/`hue`/`saturation`/`lightness` (code) and
+  zero `RectangleShape` refs
+- Code review: clean verdict, no blocking issues
 
 ### Prior work (this session)
-- Premium mixed-deck colors (CurioMixedDeck in CurioColors.kt, SpinScreen
-  wiring) — committed `01414c20`
-- Category pickers: tap-to-open default, long-press multi-select with Done,
-  no tick (CurioCategoryCard, CategoryPickerScreen, SpinScreen sheet) —
-  committed `395f0abf`
-- Edit mood board reuses saved entry-id watermark seed (GalleryWallFormat
-  boardSeed param + SaveCaptureScreen threading) — committed `c6262518`
+- Mood board pin-to-front + clear board — committed `f128ddfd`
+- Edit mood board reuses saved entry-id watermark seed — committed `c6262518`
+- Category pickers tap/long-press multi-select — committed `395f0abf`
+- Premium mixed-deck colors — committed `01414c20`
