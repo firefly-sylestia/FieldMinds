@@ -16,3 +16,4 @@
 • Dark mode: category cards and chips wear a clearer, more visible category tint (deep shades, same as light mode)
 • Bottom nav bar blends with the category tint on the Spin screen (Home and Cabinet stay plain)
 • Fixed navigation from the Cabinet empty state: Shuffle now switches tabs cleanly instead of corrupting the back stack
+• Fixed a build issue with the category picker's idle card tint
