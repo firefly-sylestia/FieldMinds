@@ -66,9 +66,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -182,7 +180,7 @@ import kotlin.random.Random
  *     neutral landed surface.
  * 17. **Fluid dice tumble** — the in-button dice animation was slowed from
  *     980ms to 1600ms per turn with LinearEasing (no restart snap) plus a
- *     breathing pulse and a soft die body behind the orbiting pips.
+ *     breathing pulse on the orbiting pips.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -1603,13 +1601,6 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
         val cx = size.width / 2f
         val cy = size.height / 2f
         val breathe = 1f + pulse * 0.06f
-        // Die body — soft rounded square the pips orbit inside.
-        drawRoundRect(
-            color = tint.copy(alpha = 0.16f),
-            topLeft = Offset(cx - r * 0.72f, cy - r * 0.72f),
-            size = Size(r * 1.44f, r * 1.44f),
-            cornerRadius = CornerRadius(r * 0.30f, r * 0.30f)
-        )
         rotate(degrees = angle, pivot = Offset(cx, cy)) {
             for (i in 0 until 6) {
                 val a = (i.toFloat() / 6) * (2f * Math.PI.toFloat())
