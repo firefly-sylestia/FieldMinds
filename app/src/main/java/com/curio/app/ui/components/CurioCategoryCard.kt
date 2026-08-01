@@ -3,6 +3,7 @@ package com.curio.app.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -28,6 +27,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -36,33 +37,40 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
-import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 
 /**
  * Compact category card shared by the standalone category picker and the
  * Spin page picker sheet — category name, live topic count, a subtle ghost
  * watermark of the category glyph on the right edge, and an optional
- * selected state (crisp white rule + accent check badge). One component so
- * the two pickers can never drift apart visually.
+ * selected state. One component so the two pickers can never drift apart
+ * visually.
  *
- * The full card surface uses the same theme-aware gradient as the main hero
- * cards (accent → softened toward the surface) so the tiles share the deck's
- * shade language, and the watermark is tinted with that gradient's accent
- * color instead of a flat white ghost.
+ * Interaction contract (both pickers agree on this):
+ *  - **Tap** — the picker's default action: open that category in the Spin
+ *    page (single-select launch).
+ *  - **Tap + hold (long-press)** — enter multi-select mode and select this
+ *    card; further taps toggle selection. The Done button only appears in
+ *    this mode.
+ *
+ * The selected state is a distinct raised treatment (crisp white rule + a
+ * soft inner glow sheen) — deliberately NOT a check badge, so active vs
+ * inactive read as two different card looks.
  */
 @Composable
 fun CurioCategoryCard(
     category: CurioCategory,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
+    onLongClick: (() -> Unit)? = null
 ) {
     // True press tracking (not a sticky click flag): the card returns to
     // rest scale after every tap — important now that cards are toggle
-    // targets in the multi-select picker and get tapped repeatedly.
+    // targets in multi-select mode and get tapped repeatedly.
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
+    val haptics = LocalHapticFeedback.current
     val scale by animateFloatAsState(
         targetValue = when {
             pressed -> 0.96f
@@ -81,8 +89,6 @@ fun CurioCategoryCard(
     val topicCount = remember(category.id) { TopicJsonLoader.cached(category.id)?.size ?: 0 }
 
     Surface(
-        onClick = onClick,
-        interactionSource = interactionSource,
         shape = RoundedCornerShape(22.dp),
         color = Color.Transparent,
         shadowElevation = 0.dp,
@@ -100,7 +106,32 @@ fun CurioCategoryCard(
                     Brush.verticalGradient(gradient),
                     RoundedCornerShape(22.dp)
                 )
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick?.let { long ->
+                        {
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                            long()
+                        }
+                    },
+                    interactionSource = interactionSource,
+                    indication = null
+                )
         ) {
+            // ── Active-state sheen — soft white glow over the gradient so
+            //    the selected tile reads as clearly raised, distinct from the
+            //    idle tile (no check badge).
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Color.White.copy(alpha = 0.16f),
+                            RoundedCornerShape(22.dp)
+                        )
+                )
+            }
+
             // Ghost icon — tinted with the card's gradient accent color
             // (echoed softly toward white) so the watermark carries the
             // same palette as the main-card gradient, not a flat white ghost.
@@ -137,22 +168,6 @@ fun CurioCategoryCard(
                         color = Color.White.copy(alpha = 0.85f),
                         maxLines = 1
                     )
-                }
-                if (isSelected) {
-                    // Active state — accent-filled check badge on a crisp
-                    // white rule, distinct from the idle tile.
-                    Surface(
-                        shape = CircleShape,
-                        color = cardColor
-                    ) {
-                        CurioIcon(
-                            name = CurioIcons.Check,
-                            contentDescription = null,
-                            tint = Color.White,
-                            size = 16.dp,
-                            modifier = Modifier.padding(3.dp)
-                        )
-                    }
                 }
             }
         }

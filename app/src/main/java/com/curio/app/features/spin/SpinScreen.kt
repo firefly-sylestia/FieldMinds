@@ -565,6 +565,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 AppPreferences.setLastSpinCategory(context, c.id)
                 showCategoryPicker = false
             },
+            onCategoriesSelected = { cats ->
+                activeCatIds = cats.map { it.id }
+                cats.firstOrNull()?.let {
+                    AppPreferences.setLastSpinCategory(context, it.id)
+                }
+                showCategoryPicker = false
+            },
             onBrowseAll = {
                 showCategoryPicker = false
                 navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true }
@@ -1801,10 +1808,14 @@ private fun CategoryPickerSheet(
     currentCat: CurioCategory,
     onDismiss: () -> Unit,
     onCategorySelected: (CurioCategory) -> Unit,
+    onCategoriesSelected: (List<CurioCategory>) -> Unit,
     onBrowseAll: () -> Unit
 ) {
     val categories = remember { CurioCategories.visible }
     var visible by remember { mutableStateOf(false) }
+    // Default = tap-to-open (single). Long-press enters multi-select mode.
+    var multiSelectMode by remember { mutableStateOf(false) }
+    var selectedSlugs by remember { mutableStateOf(setOf<String>()) }
 
     LaunchedEffect(Unit) { visible = true }
 
@@ -1862,19 +1873,47 @@ private fun CategoryPickerSheet(
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
                         )
-                        // Current category indicator
-                        Surface(
-                            shape = RoundedCornerShape(50),
-                            color = currentCat.accent.copy(alpha = 0.15f)
-                        ) {
-                            Text(
-                                text = currentCat.displayName,
-                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
-                                color = currentCat.categoryInk(),
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
-                            )
+                        // Current category indicator — or selection count in
+                        // multi-select mode.
+                        if (multiSelectMode) {
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = currentCat.accent.copy(alpha = 0.15f)
+                            ) {
+                                Text(
+                                    text = if (selectedSlugs.isEmpty()) "Select decks"
+                                    else "${selectedSlugs.size} selected",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                                    color = currentCat.categoryInk(),
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                                )
+                            }
+                        } else {
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = currentCat.accent.copy(alpha = 0.15f)
+                            ) {
+                                Text(
+                                    text = currentCat.displayName,
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                                    color = currentCat.categoryInk(),
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                                )
+                            }
                         }
                     }
+
+                    // ── Mode hint — tap to open, hold to multi-select ──
+                    Text(
+                        text = if (multiSelectMode) {
+                            "Tap to toggle decks · Done to spin together"
+                        } else {
+                            "Tap a deck to spin it · hold to pick several"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                    )
 
                     // ── Tile grid filling the screen ────────────────
                     MorphEntrance {
@@ -1887,10 +1926,25 @@ private fun CategoryPickerSheet(
                         ) {
                             // All tiles render at once — no per-tile stagger.
                             items(categories) { cat ->
+                                val slug = cat.id.routeSlug
                                 CurioCategoryCard(
                                     category = cat,
-                                    isSelected = cat.id == currentCat.id,
-                                    onClick = { onCategorySelected(cat) }
+                                    isSelected = if (multiSelectMode) slug in selectedSlugs
+                                    else cat.id == currentCat.id,
+                                    onClick = {
+                                        if (multiSelectMode) {
+                                            selectedSlugs = if (slug in selectedSlugs) selectedSlugs - slug
+                                            else selectedSlugs + slug
+                                        } else {
+                                            onCategorySelected(cat)
+                                        }
+                                    },
+                                    onLongClick = {
+                                        multiSelectMode = true
+                                        if (slug !in selectedSlugs) {
+                                            selectedSlugs = selectedSlugs + slug
+                                        }
+                                    }
                                 )
                             }
                         }
@@ -1898,20 +1952,66 @@ private fun CategoryPickerSheet(
 
                     Spacer(Modifier.height(8.dp))
 
-                    // ── Browse all link ─────────────────────────────
-                    TextButton(
-                        onClick = onBrowseAll,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    ) {
-                        CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = "Browse all categories",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                    // ── Browse all link, or Done row in multi-select ──
+                    if (multiSelectMode) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Button(
+                                onClick = {
+                                    if (selectedSlugs.isEmpty()) return@Button
+                                    onCategoriesSelected(
+                                        categories.filter { it.id.routeSlug in selectedSlugs }
+                                    )
+                                },
+                                enabled = selectedSlugs.isNotEmpty(),
+                                shape = RoundedCornerShape(24.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                ),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                CurioIcon(CurioIcons.Check, null, size = 18.dp)
+                                Text(
+                                    text = if (selectedSlugs.isEmpty()) "Done" else "Done · ${selectedSlugs.size}",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                            TextButton(
+                                onClick = {
+                                    multiSelectMode = false
+                                    selectedSlugs = emptySet()
+                                }
+                            ) {
+                                Text(
+                                    "Cancel",
+                                    style = MaterialTheme.typography.labelLarge.copy(
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                )
+                            }
+                        }
+                    } else {
+                        TextButton(
+                            onClick = onBrowseAll,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                text = "Browse all categories",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
 
                     Spacer(Modifier.height(8.dp))

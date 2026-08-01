@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,8 +38,12 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Full-screen Category Picker — multi-select card grid. Tap cards to toggle
- * their selection (any number), then press Done to launch the Shuffle across
+ * Full-screen Category Picker.
+ *
+ * Default (single-select): **tap a card to open that category in the Spin
+ * page immediately** — like the original picker. **Tap and hold** a card to
+ * enter multi-select mode; in that mode taps toggle selection (any number)
+ * and a **Done** button appears (only then) to launch the Shuffle across
  * every chosen deck. Cards carry a topic count so as many decks as possible
  * fit on screen at once.
  */
@@ -46,7 +51,13 @@ import com.curio.app.ui.theme.CurioIcons
 fun CategoryPickerScreen(navController: NavController) {
     val categories = remember { CurioCategories.visible }
     val gridState = rememberLazyGridState()
+    // Null = not in multi-select mode (tap-to-open). Once set, cards toggle.
     var selectedSlugs by rememberSaveable { mutableStateOf(listOf<String>()) }
+    var multiSelectMode by rememberSaveable { mutableStateOf(false) }
+
+    val toggleSlug = { slug: String ->
+        selectedSlugs = if (slug in selectedSlugs) selectedSlugs - slug else selectedSlugs + slug
+    }
 
     Column(
         modifier = Modifier
@@ -71,7 +82,11 @@ fun CategoryPickerScreen(navController: NavController) {
         }
 
         Text(
-            text = "Pick one or more decks, then Done.",
+            text = if (multiSelectMode) {
+                "Tap to toggle decks · Done to spin them together"
+            } else {
+                "Tap a deck to spin it · hold to pick several"
+            },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 4.dp, bottom = 10.dp)
@@ -87,46 +102,76 @@ fun CategoryPickerScreen(navController: NavController) {
                 modifier = Modifier.weight(1f)
             ) {
                 items(categories) { cat ->
+                    val slug = cat.id.routeSlug
                     CurioCategoryCard(
                         category = cat,
-                        isSelected = cat.id.routeSlug in selectedSlugs,
+                        isSelected = multiSelectMode && slug in selectedSlugs,
                         onClick = {
-                            selectedSlugs = if (cat.id.routeSlug in selectedSlugs) {
-                                selectedSlugs - cat.id.routeSlug
+                            if (multiSelectMode) {
+                                toggleSlug(slug)
                             } else {
-                                selectedSlugs + cat.id.routeSlug
+                                // Default: tap opens this category in Spin.
+                                navController.navigate(CurioRoutes.spinWithCategory(slug)) {
+                                    launchSingleTop = true
+                                }
                             }
+                        },
+                        onLongClick = {
+                            // Enter multi-select mode and select this card.
+                            multiSelectMode = true
+                            if (slug !in selectedSlugs) toggleSlug(slug)
                         }
                     )
                 }
             }
         }
 
-        Button(
-            onClick = {
-                if (selectedSlugs.isEmpty()) return@Button
-                val slugs = selectedSlugs
-                navController.navigate(
-                    if (slugs.size == 1) CurioRoutes.spinWithCategory(slugs.first())
-                    else CurioRoutes.spinWithCategories(slugs)
-                ) { launchSingleTop = true }
-            },
-            enabled = selectedSlugs.isNotEmpty(),
-            shape = RoundedCornerShape(24.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            CurioIcon(CurioIcons.Check, null, size = 18.dp)
-            Text(
-                text = if (selectedSlugs.isEmpty()) "Done" else "Done · ${selectedSlugs.size}",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(start = 8.dp)
-            )
+        if (multiSelectMode) {
+            // ── Done row — only visible in multi-select mode ──────────
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Button(
+                    onClick = {
+                        if (selectedSlugs.isEmpty()) return@Button
+                        val slugs = selectedSlugs
+                        navController.navigate(
+                            if (slugs.size == 1) CurioRoutes.spinWithCategory(slugs.first())
+                            else CurioRoutes.spinWithCategories(slugs)
+                        ) { launchSingleTop = true }
+                    },
+                    enabled = selectedSlugs.isNotEmpty(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CurioIcon(CurioIcons.Check, null, size = 18.dp)
+                    Text(
+                        text = if (selectedSlugs.isEmpty()) "Done" else "Done · ${selectedSlugs.size}",
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        // Exit multi-select mode; selection is discarded.
+                        multiSelectMode = false
+                        selectedSlugs = emptyList()
+                    }
+                ) {
+                    Text(
+                        "Cancel",
+                        style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    )
+                }
+            }
         }
     }
 }
