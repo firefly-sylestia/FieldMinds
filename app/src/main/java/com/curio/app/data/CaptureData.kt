@@ -21,11 +21,15 @@ sealed class CaptureData {
         val encodingFormat: String = "AAC"
     ) : CaptureData()
 
-    /** Reel Notes (§8.2): review with rating, text, and image count. */
+    /** Reel Notes (§8.2): review with rating, text, and attached images. */
     data class ReelNotes(
         val rating: Int,
         val reviewText: String,
-        val imageCount: Int
+        val imageCount: Int,
+        // Real attached image URIs (poster / stills) so saved entries can show
+        // the actual images — legacy entries only stored a count, so this
+        // defaults to empty and stays backward-compatible.
+        val imageUris: List<String> = emptyList()
     ) : CaptureData()
 
     /** Marginalia (§8.3): journal entry with favorite quotes. */

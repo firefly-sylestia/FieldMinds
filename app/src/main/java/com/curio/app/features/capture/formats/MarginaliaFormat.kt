@@ -61,7 +61,10 @@ fun MarginaliaFormat(
 
     val canSave = journalText.isNotBlank() ||
                   quotes.any { it.isNotBlank() }
-    LaunchedEffect(canSave) {
+    // Key on the content too: journal text typed or quotes added AFTER the
+    // first character must re-emit, or saving would persist stale data
+    // (later text/quotes silently dropped from the saved entry).
+    LaunchedEffect(canSave, journalText, quotes.toList()) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.Marginalia(journalText, quotes.toList())

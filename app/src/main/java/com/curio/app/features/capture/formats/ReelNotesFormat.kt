@@ -1,5 +1,7 @@
 package com.curio.app.features.capture.formats
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,13 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -45,15 +47,32 @@ fun ReelNotesFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {}
 ) {
+    val context = LocalContext.current
     var rating by remember { mutableStateOf(0) }
     var reviewText by remember { mutableStateOf("") }
-    val attachedImages = remember { mutableStateListOf<Int>() }
+    var imageUris by remember { mutableStateOf<List<String>>(emptyList()) }
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris ->
+        uris.forEach { uri ->
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+        }
+        imageUris = (imageUris + uris.map { it.toString() }).take(3)
+    }
 
     val canSave = reviewText.isNotBlank()
-    LaunchedEffect(canSave) {
+    // Key on every input, not just canSave: rating, review text and images
+    // added AFTER the first character must re-emit, or saving would persist
+    // stale data (text/rating/images silently dropped from the saved entry).
+    LaunchedEffect(canSave, rating, reviewText, imageUris) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.ReelNotes(rating, reviewText, attachedImages.size)
+            if (canSave) CaptureData.ReelNotes(rating, reviewText, imageUris.size, imageUris)
             else null
         )
     }
@@ -105,20 +124,21 @@ fun ReelNotesFormat(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                attachedImages.forEachIndexed { i, _ ->
+                imageUris.forEachIndexed { i, uri ->
                     ImageThumb(
                         index = i + 1,
                         accent = accent,
                         tint = tint,
+                        imageUri = uri,
                         onClick = { /* TODO Phase 4: open lightbox */ },
-                        onRemove = { attachedImages.removeAt(i) }
+                        onRemove = { imageUris = imageUris.filterIndexed { idx, _ -> idx != i } }
                     )
                 }
-                if (attachedImages.size < 3) {
+                if (imageUris.size < 3) {
                     AddImageButton(
                         accent = accent,
                         tint = tint,
-                        onClick = { attachedImages.add(0) }
+                        onClick = { imagePicker.launch(arrayOf("image/*")) }
                     )
                 }
             }

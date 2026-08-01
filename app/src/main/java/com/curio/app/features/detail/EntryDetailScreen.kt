@@ -314,7 +314,7 @@ private fun isMoodBoardEntry(entry: CurioEntry): Boolean =
 private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     when (entry.format) {
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
-        CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
+        CaptureFormat.ReelNotes -> ReelNotesRender(entry, category, navController)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
@@ -626,7 +626,7 @@ private fun formatFileSize(bytes: Long): String {
 }
 
 @Composable
-private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
+private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.ReelNotes
     
     // Handle null or malformed data gracefully
@@ -688,8 +688,34 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             }
         }
         
-        // Image count badge
-        if (data.imageCount > 0) {
+        // Attached images — real thumbnails for new captures (tap opens the
+        // Lightbox); legacy entries only stored a count, so keep the badge
+        // fallback for those. orEmpty() guards legacy Gson blobs where the
+        // imageUris field is absent (missing Kotlin-default fields decode
+        // to null, not the default).
+        val attachedUris = data.imageUris.orEmpty()
+        if (attachedUris.isNotEmpty()) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                attachedUris.take(3).forEach { uri ->
+                    Surface(
+                        onClick = { navController.navigate(CurioRoutes.lightbox(uri)) { launchSingleTop = true } },
+                        shape = RoundedCornerShape(16.dp),
+                        shadowElevation = 0.dp,
+                        modifier = Modifier.weight(1f).height(120.dp)
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(uri),
+                            contentDescription = "Attached image",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxSize().padding(4.dp)
+                        )
+                    }
+                }
+            }
+        } else if (data.imageCount > 0) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
                 color = category.tint,
