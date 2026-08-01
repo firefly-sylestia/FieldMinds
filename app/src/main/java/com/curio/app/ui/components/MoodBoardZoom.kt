@@ -3,7 +3,6 @@ package com.curio.app.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculatePan
@@ -43,6 +42,8 @@ import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.curio.app.data.CaptureData
+import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
 import kotlin.math.roundToInt
 
 /**
@@ -285,16 +286,14 @@ fun MoodBoardZoomOverlay(
         }
     }
 
-    // ONE box owns the whole overlay: scrim + gestures + the image as a
-    // CHILD. Because the image lives INSIDE the gesture box, every pointer
-    // event — on the image or on the scrim above/below it — reaches the same
-    // transform/tap handlers. (Previously the image was a sibling drawn on
-    // top, so pinching the scrim around the image could miss the zoom.)
+    // ONE box owns the whole overlay: gestures + the image as a CHILD, so
+    // every pointer event — on the image or around it — reaches the same
+    // transform/tap handlers. No dark scrim; a dismiss button sits at the
+    // top while the image is zoomed.
     Box(
         modifier = modifier
             .fillMaxSize()
             .zIndex(1000f)
-            .background(Color.Black.copy(alpha = 0.55f))
             .pointerInput(tileUri) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     zoomState.applyPinch(tileUri, pan, zoom)
@@ -331,6 +330,27 @@ fun MoodBoardZoomOverlay(
                         .fillMaxSize()
                         .padding(6.dp)
                         .clip(RoundedCornerShape(14.dp))
+                )
+            }
+        }
+
+        // ── Dismiss — closes the zoom ──────────────────────────────────
+        Surface(
+            onClick = { zoomState.zoomOut() },
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+            shadowElevation = 0.dp,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(12.dp)
+                .size(36.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                CurioIcon(
+                    name = CurioIcons.Close,
+                    contentDescription = "Close zoom",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    size = 18.dp
                 )
             }
         }
@@ -371,14 +391,13 @@ fun MoodBoardZoomCanvas(
         }
     }
 
-    // ONE box owns the whole overlay: scrim + gestures + the collage as a
-    // CHILD, so a pinch anywhere over the board magnifier (including the
-    // scrim around the collage) reaches the same transform handler.
+    // ONE box owns the whole overlay: gestures + the collage as a CHILD, so
+    // a pinch anywhere over the board magnifier reaches the same transform
+    // handler. No dark scrim; a dismiss button sits at the top.
     Box(
         modifier = modifier
             .fillMaxSize()
             .zIndex(1000f)
-            .background(Color.Black.copy(alpha = 0.55f))
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     zoomState.applyPinch(null, pan, zoom)
@@ -409,6 +428,27 @@ fun MoodBoardZoomCanvas(
                     canvasWPx = canvasWPx,
                     canvasHPx = canvasHPx,
                     zoomed = true
+                )
+            }
+        }
+
+        // ── Dismiss — closes the board zoom ────────────────────────────
+        Surface(
+            onClick = { zoomState.zoomOut() },
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+            shadowElevation = 0.dp,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(12.dp)
+                .size(36.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                CurioIcon(
+                    name = CurioIcons.Close,
+                    contentDescription = "Close zoom",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    size = 18.dp
                 )
             }
         }
