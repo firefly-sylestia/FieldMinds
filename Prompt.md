@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood board detail page: overlapping watermarks fixed — saved board surface is now opaque**
+
+### What was asked
+
+In the detail page mood board, the two watermarks are overlapping with each other — fix it.
+
+### What was changed
+
+- **`EntryDetailScreen.kt`** (`GalleryWallRender`) — the saved board `Surface` color changed from `if (AppPreferences.tintWashEnabledState) category.tint else surfaceContainerHigh` to `category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh)`. Root cause: `category.tint` is a 20%-alpha translucent wash (`Category{Family}Tint = Category{Family}.copy(alpha = 0.20f)`), so the page-level `CurioWatermarkBackdrop` (11 category glyphs drawn behind ALL detail content) bled through the board and visually collided with the board's own seeded `CurioMoodBoardBackdrop` — two overlapping watermark layers. `categorySurface` returns an OPAQUE category-tinted card color (lerp of opaque colors = opaque in both themes) and already honors the Settings tint toggle (returns `base` unchanged when off), so the page watermark is now hidden behind the board and only the board's own seeded glyph pattern shows. Also removed the now-unused `AppPreferences` import (the removed conditional was its only use in the file).
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified `categorySurface` is already imported (used for the board's Edit button in the same render), opaque in both themes, toggle-honoring; the editor board (`GalleryWallFormat`'s own `MoodBoardCanvas` color) and the full-screen `ExpandedMoodBoardDialog` (opaque wash background, no page watermark behind a dialog window) correctly left untouched. One nit applied: removed the orphaned `AppPreferences` import.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Quote cards added to Reel Notes (review), Sound Bite (voice) and Mood Board (GalleryWall) — extracted Marginalia's "Favorite quotes" into a shared component**
 
 ### What was asked

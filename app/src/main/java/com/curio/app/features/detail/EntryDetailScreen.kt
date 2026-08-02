@@ -88,7 +88,6 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
-import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
@@ -1211,11 +1210,14 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         val boardSeed = remember(entry.id) { entry.id.hashCode() }
         Surface(
             shape = RoundedCornerShape(28.dp),
-            // The saved board background wears the category tint (same wash
-            // language as the editor + the page around it); with the tint
-            // setting off it reverts to the plain elevated surface.
-            color = if (AppPreferences.tintWashEnabledState) category.tint
-                    else MaterialTheme.colorScheme.surfaceContainerHigh,
+            // The saved board wears an OPAQUE category-tinted card surface
+            // ([categorySurface] — the same card language as the rest of the
+            // page, honoring the Settings tint toggle). The old 20%-alpha
+            // [CurioCategory.tint] let the page-level watermark glyphs bleed
+            // through and collide with the board's own seeded glyph pattern
+            // (two overlapping watermarks); an opaque surface hides the page
+            // watermark so only the board's [CurioMoodBoardBackdrop] shows.
+            color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
             shadowElevation = 0.dp,
             // Faint category rule — the saved board sits on the tinted page,
             // so a slim theme-aware border (accent in light, light twin in
