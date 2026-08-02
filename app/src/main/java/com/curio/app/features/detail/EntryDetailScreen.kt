@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -553,6 +554,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     style = data.noteStyle ?: data.notePaperStyle(),
                     paperColor = noteSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -972,6 +974,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                minHeight = 96.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -986,6 +989,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                minHeight = 96.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -1010,6 +1014,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                 style = data.journalStyle ?: data.notePaperStyle(),
                 paperColor = journalSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                minHeight = 96.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -1051,6 +1056,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                     paperColor = quoteSheet,
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
                     corner = 12.dp,
+                    minHeight = 72.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .rotate(rotation)
@@ -1283,6 +1289,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 style = data.captionStyle ?: data.notePaperStyle(),
                 paperColor = captionSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                minHeight = 72.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -1499,6 +1506,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     style = data.observedStyle ?: data.notePaperStyle(),
                     paperColor = observedSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -1517,6 +1525,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     style = data.surprisedStyle ?: data.notePaperStyle(),
                     paperColor = surprisedSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -1535,6 +1544,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     style = data.learnNextStyle ?: data.notePaperStyle(),
                     paperColor = learnNextSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(

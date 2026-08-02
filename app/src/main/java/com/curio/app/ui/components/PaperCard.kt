@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -90,6 +91,11 @@ fun PaperCard(
     corner: Dp = 14.dp,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
+    /** Minimum card height — a floor so a single-line field still reads as
+     *  a proper note slip instead of collapsing to text + padding. The
+     *  editor's text fields enforce 96dp; saved views pass the same so the
+     *  note keeps its shape between edit and detail. */
+    minHeight: Dp = 0.dp,
     /** Red school-notebook margin — a vertical red rule near the left edge
      *  with the text indented past it (the classic ruled-with-red-margin
      *  page). */
@@ -133,7 +139,7 @@ fun PaperCard(
         color = notePaperSurface(paperColor),
         shadowElevation = 1.dp,
         border = BorderStroke(1.dp, notePaperBorder(paperColor)),
-        modifier = modifier.rotate(rotation)
+        modifier = modifier.heightIn(min = minHeight).rotate(rotation)
     ) {
         Box(
             // Subtle rigid-card sheen — a whisper of top light + bottom
@@ -570,6 +576,9 @@ fun TornPaperCard(
     ruled: Boolean = false,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+    /** Same min-height floor as [PaperCard] — saved views pass it so short
+     *  torn notes keep a proper slip shape. */
+    minHeight: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit
 ) {
     // Each card remembers its own seed so every torn note gets a distinct
@@ -624,7 +633,7 @@ fun TornPaperCard(
         color = surface,
         shadowElevation = 0.dp,
         border = BorderStroke(1.dp, edge),
-        modifier = modifier.rotate(rotation)
+        modifier = modifier.heightIn(min = minHeight).rotate(rotation)
     ) {
         Box(
             // Subtle rigid-card sheen — matches PaperCard so torn + ruled
@@ -683,11 +692,12 @@ fun NotePaperCard(
     corner: Dp = 14.dp,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
+    minHeight: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit
 ) {
     when (style) {
         NotePaperStyle.TORN -> TornPaperCard(
-            modifier = modifier,
+            modifier = modifier.heightIn(min = minHeight),
             rotation = rotation,
             ruled = false,
             paperColor = paperColor,
@@ -695,7 +705,7 @@ fun NotePaperCard(
             content = content
         )
         NotePaperStyle.TORN_RULED -> TornPaperCard(
-            modifier = modifier,
+            modifier = modifier.heightIn(min = minHeight),
             rotation = rotation,
             ruled = true,
             paperColor = paperColor,
@@ -703,7 +713,7 @@ fun NotePaperCard(
             content = content
         )
         NotePaperStyle.COFFEE -> PaperCard(
-            modifier = modifier,
+            modifier = modifier.heightIn(min = minHeight),
             ruled = true,
             rotation = rotation,
             corner = corner,
@@ -713,7 +723,7 @@ fun NotePaperCard(
             content = content
         )
         NotePaperStyle.FOLDED -> PaperCard(
-            modifier = modifier,
+            modifier = modifier.heightIn(min = minHeight),
             ruled = true,
             rotation = rotation,
             corner = corner,
@@ -723,7 +733,7 @@ fun NotePaperCard(
             content = content
         )
         NotePaperStyle.RED_MARGIN -> PaperCard(
-            modifier = modifier,
+            modifier = modifier.heightIn(min = minHeight),
             ruled = true,
             rotation = rotation,
             corner = corner,
@@ -733,7 +743,7 @@ fun NotePaperCard(
             content = content
         )
         NotePaperStyle.RULED -> PaperCard(
-            modifier = modifier,
+            modifier = modifier.heightIn(min = minHeight),
             ruled = ruled,
             rotation = rotation,
             corner = corner,

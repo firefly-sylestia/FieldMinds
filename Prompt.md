@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**Saved-entry paper text boxes no longer collapse — every paper slip gets a min-height floor**
+
+### What was asked
+
+The saved entry text box height is still low — especially for single-line text. Fix it properly.
+
+### What was changed
+
+- **`PaperCard.kt`** — new `minHeight: Dp = 0.dp` param on `PaperCard` and `TornPaperCard`, applied as `modifier.heightIn(min = minHeight).rotate(rotation)` on the Surface (layout constraint before the draw-level rotation — same order as before). `NotePaperCard` gained the param and threads it into ALL 6 dispatch branches. Default `0.dp` keeps every existing caller unchanged (e.g. the editor's `PaperLineField`).
+- **`EntryDetailScreen.kt`** — all 9 saved-view `NotePaperCard` sites got explicit floors: paragraph fields (SoundBite note, ReelNotes review + "No review written yet" fallback, Marginalia journal, FieldNotes observed/surprised/learnNext) = **96.dp** (matching the editor's field `minHeight = 96.dp`), quote cards + caption = **72.dp** so a single-line slip still reads as a proper note instead of text + padding.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. All 6 dispatch branches + all 9 call sites verified (basher grep), `heightIn` before `rotate` is a legal layout-then-draw ordering preserving the pre-existing rotation, imports sorted (`heightIn` added to both files), types resolve, the only other `NotePaperCard` caller (`CaptureFormatComponents.kt` PaperLineField) is unaffected by the 0.dp default.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Patrick Hand handwritten font for the paper text fields (quotes, journal, review, notes, captions, field notes)**
 
 ### What was asked
