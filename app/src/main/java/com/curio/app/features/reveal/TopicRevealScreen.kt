@@ -166,6 +166,11 @@ fun TopicRevealScreen(
     /** Starts a timed explore session, opens the Google search, back to Home. */
     fun startExploreSession(topic: CurioTopic) {
         engaged = true
+        // Engaging for real — record as recently-explored and clear any
+        // recently-unexplored entry. recordExplored tags the row "Resumed"
+        // when the user came back to a topic they'd left.
+        ExploreSessionStore.recordExplored(context, cat.id, topic.name)
+        ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
         val action = topic.exploreAction
         val session = ExploreSession(
             categoryId = cat.id,
@@ -381,12 +386,12 @@ fun TopicRevealScreen(
                     onClick = {
                         val topic = resolved ?: return@Button
                         // NOTE: engaged is NOT set here — merely tapping the
-                        // CTA isn't engaging. It's set only when the user picks
-                        // "Explore now" or "Write about it", so a user who
+                        // CTA isn't engaging. The topic is only recorded as
+                        // recently-explored when the user actually picks
+                        // "Explore now" or "Write about it" (those paths call
+                        // recordExplored + removeUnexplored), so a user who
                         // dismisses the dialog and backs out still gets the
                         // topic recorded as recently-UNexplored.
-                        ExploreSessionStore.recordExplored(context, cat.id, topic.name)
-                        ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
                         showExploreDialog = true
                     },
                     enabled = resolved != null,
@@ -489,6 +494,11 @@ fun TopicRevealScreen(
                 TextButton(
                     onClick = {
                         engaged = true
+                        // Writing about it counts as engaging — record as
+                        // recently-explored (clears the unexplored entry,
+                        // tagging "Resumed" if the user came back to it).
+                        ExploreSessionStore.recordExplored(context, cat.id, topic.name)
+                        ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
                         showExploreDialog = false
                         navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, topic.name)) {
                             launchSingleTop = true

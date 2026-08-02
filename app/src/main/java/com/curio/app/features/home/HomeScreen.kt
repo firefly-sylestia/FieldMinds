@@ -608,6 +608,9 @@ fun HomeScreen(navController: NavController) {
                             ExploreTopicRow(
                                 category = category,
                                 topicName = explored.topicName,
+                                // A topic the user left unexplored and later
+                                // came back to wears a small "Resumed" tag.
+                                tag = if (explored.wasUnexplored) "Resumed" else null,
                                 subtitle = "Explored · tap to write about it",
                                 onClick = {
                                     navController.navigate(
@@ -1295,7 +1298,8 @@ private fun ExploreTopicRow(
     category: CurioCategory,
     topicName: String,
     subtitle: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    tag: String? = null
 ) {
     val accent = category.themedAccent()
     // Backgroundless row — explored/unexplored topics read as a plain
@@ -1311,21 +1315,42 @@ private fun ExploreTopicRow(
     ) {
         CurioIcon(category.iconGlyph, null, tint = accent, size = 24.dp)
         Column(modifier = Modifier.weight(1f)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
                 Text(
                     topicName,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
                 )
-                Text(
-                    subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (tag != null) {
+                    // Small accent pill — signals a topic the user left
+                    // unexplored earlier and came back to (resumed).
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = accent.copy(alpha = 0.14f)
+                    ) {
+                        Text(
+                            text = tag,
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                            color = accent,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                    }
+                }
             }
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
             CurioForwardArrow(
                 contentDescription = subtitle,
                 tint = accent,

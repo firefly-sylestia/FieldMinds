@@ -26,11 +26,18 @@ data class ExploreSession(
     val startMillis: Long
 )
 
-/** A topic the user engaged with (tapped Explore) — recently-explored list. */
+/**
+ * A topic the user engaged with (tapped Explore) — recently-explored list.
+ *
+ * [wasUnexplored] marks a topic that previously sat in the recently-
+ * unexplored list and the user came back to (resumed) — Home shows a small
+ * "Resumed" tag on those rows.
+ */
 data class ExploredTopic(
     val categoryId: CategoryId,
     val topicName: String,
-    val exploredAtMillis: Long
+    val exploredAtMillis: Long,
+    val wasUnexplored: Boolean = false
 )
 
 /** A topic the user left WITHOUT exploring — recently-unexplored list. */
@@ -112,8 +119,19 @@ object ExploreSessionStore {
      */
     fun recordExplored(context: Context, categoryId: CategoryId, topicName: String) {
         if (topicName.isBlank()) return
+        // Was the topic sitting in the recently-unexplored list? If so the
+        // user has come BACK to it — tag the explored entry so Home can
+        // show a "Resumed" badge instead of a plain explored row.
+        val wasUnexplored = readUnexplored(context).any {
+            it.categoryId == categoryId && it.topicName == topicName
+        }
         val updated = listOf(
-            ExploredTopic(categoryId, topicName, System.currentTimeMillis())
+            ExploredTopic(
+                categoryId = categoryId,
+                topicName = topicName,
+                exploredAtMillis = System.currentTimeMillis(),
+                wasUnexplored = wasUnexplored
+            )
         ) + readExplored(context).filterNot {
             it.categoryId == categoryId && it.topicName == topicName
         }
@@ -140,7 +158,8 @@ object ExploreSessionStore {
                 ExploredTopic(
                     categoryId = cat,
                     topicName = obj.optString("topicName"),
-                    exploredAtMillis = obj.optLong("exploredAtMillis")
+                    exploredAtMillis = obj.optLong("exploredAtMillis"),
+                    wasUnexplored = obj.optBoolean("wasUnexplored")
                 )
             }.filterNotNull()
         } catch (_: Exception) {
@@ -156,6 +175,7 @@ object ExploreSessionStore {
                     .put("categoryId", it.categoryId.name)
                     .put("topicName", it.topicName)
                     .put("exploredAtMillis", it.exploredAtMillis)
+                    .put("wasUnexplored", it.wasUnexplored)
             )
         }
         prefs(context).edit().putString(KEY_EXPLORED, arr.toString()).apply()
