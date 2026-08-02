@@ -52,7 +52,6 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryChipSurface
 import com.curio.app.ui.theme.categoryInk
-import com.curio.app.ui.theme.categorySurface
 
 /**
  * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
@@ -93,14 +92,15 @@ fun CabinetScreen(navController: NavController) {
     }
 
     // The Cabinet wears the active filter's category wash — the same tinted
-    // background as the filters page — so a selected category colors the
-    // whole page, and the top back button dismisses the filter back to "All".
-    val filterCat = CurioCategories.byId(selectedFilter ?: CategoryId.WILDCARD)
+    // background as the filters page — ONLY while a category filter is
+    // active. The "All" page stays on the plain theme background (like Home),
+    // and the search button keeps its neutral look in every state.
+    val filterCat = selectedFilter?.let { CurioCategories.byId(it) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(filterCat.categoryBackgroundWash())
+            .background(filterCat?.categoryBackgroundWash() ?: MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
         // ── Top bar ────────────────────────────────────────────────────────
@@ -131,8 +131,10 @@ fun CabinetScreen(navController: NavController) {
             Surface(
                 onClick = { /* TODO Phase 4: expand search bar */ },
                 shape = RoundedCornerShape(50),
-                color = filterCat.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
-                border = filterCat.categoryBorder()
+                // Always neutral — the search button never wears the category
+                // tint, only the page background does (when a filter is set).
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 CurioIcon(
                     name = CurioIcons.Search,
