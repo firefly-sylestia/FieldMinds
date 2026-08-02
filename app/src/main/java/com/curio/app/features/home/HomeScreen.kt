@@ -490,6 +490,7 @@ fun HomeScreen(navController: NavController) {
                             accent = CurioColors.CategoryCoral,
                             selected = selectedCategory == null,
                             surface = MaterialTheme.colorScheme.surfaceContainerLow,
+                            iconGlyph = CurioIcons.Casino,
                             onClick = { selectedCategory = null }
                         )
                     }
@@ -500,6 +501,7 @@ fun HomeScreen(navController: NavController) {
                                 accent = cat.themedAccent(),
                                 selected = selectedCategory?.id == cat.id,
                                 surface = MaterialTheme.colorScheme.surfaceContainerLow,
+                                iconGlyph = cat.iconGlyph,
                                 onClick = {
                                     selectedCategory =
                                         if (selectedCategory?.id == cat.id) null else cat
@@ -718,7 +720,10 @@ private fun CategoryChip(
     accent: Color,
     selected: Boolean,
     onClick: () -> Unit,
-    surface: Color = MaterialTheme.colorScheme.surfaceContainerLow
+    surface: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    // Optional Material-Symbols glyph rendered next to the label — a bare
+    // icon, NO boxed background behind it (just the glyph).
+    iconGlyph: String? = null
 ) {
     val scale by animateFloatAsState(
         targetValue = if (selected) 1.06f else 1f,
@@ -741,6 +746,15 @@ private fun CategoryChip(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if (iconGlyph != null) {
+                CurioIcon(
+                    name = iconGlyph,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = 6.dp),
+                    tint = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+                    size = 18.dp
+                )
+            }
             Text(
                 text = name,
                 style = MaterialTheme.typography.labelLarge.copy(
