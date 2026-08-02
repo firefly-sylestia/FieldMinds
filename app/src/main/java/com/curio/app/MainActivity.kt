@@ -8,6 +8,7 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureRepository
 import com.curio.app.data.CurioDatabase
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.ExploreSessionStore
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioNavHost
@@ -44,6 +45,9 @@ class MainActivity : ComponentActivity() {
         CurioRepositoryHolder.init(db.captureDao())
 
         AppPreferences.initThemeMode(this)
+        // Load the persisted explore-session flow state (active session +
+        // recently explored/unexplored lists) before any screen reads it.
+        ExploreSessionStore.seed(this)
         if (AppPreferences.isReminderEnabled(this)) {
             com.curio.app.data.DailyReminderScheduler.schedule(
                 this,

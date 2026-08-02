@@ -6,18 +6,34 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,6 +41,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.curio.app.data.AppPreferences
+import com.curio.app.data.ExploreReminderScheduler
+import com.curio.app.data.ExploreSessionStore
+import com.curio.app.infrastructure.ExploreSessionService
 import com.curio.app.features.bugreport.BugReportScreen
 import com.curio.app.features.crash.CurioCrashScreen
 import com.curio.app.features.lightbox.LightboxScreen
@@ -82,6 +102,39 @@ fun CurioNavHost(
         currentRoute?.substringBefore("/")
     }
     val showBottomBar = routePrefix in CurioRoutes.bottomNavRoutePrefixes
+
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var showDoneDialog by rememberSaveable { mutableStateOf(false) }
+    // Survives rotation so the startup prompt only fires on a truly fresh
+    // process (an active session left behind by a killed app).
+    var startupPromptDone by rememberSaveable { mutableStateOf(false) }
+
+    // Ask "are you done exploring?" whenever the app returns to the
+    // foreground while an explore session is active — mid-session, after
+    // the browser search, or after the app was killed in the background.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                if (AppPreferences.isExploreSessionsEnabled(context)) {
+                    showDoneDialog = ExploreSessionStore.getActiveSession(context) != null
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+    // Startup restore: the observer above is added after the activity is
+    // already RESUMED on launch, so a persisted session from a killed
+    // process surfaces here instead.
+    LaunchedEffect(Unit) {
+        if (!startupPromptDone) {
+            startupPromptDone = true
+            if (AppPreferences.isExploreSessionsEnabled(context)) {
+                showDoneDialog = ExploreSessionStore.getActiveSession(context) != null
+            }
+        }
+    }
 
     Scaffold(
         bottomBar = {
@@ -274,5 +327,41 @@ fun CurioNavHost(
                 LightboxScreen(navController = navController)
             }
         }
+    }
+
+    // ── Done-exploring prompt (app return while a session is active) ────
+    val activeSession = ExploreSessionStore.activeSessionState
+    if (showDoneDialog && activeSession != null) {
+        AlertDialog(
+            onDismissRequest = { showDoneDialog = false },
+            title = { Text("Done exploring ${activeSession.topicName}?") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "You started ${activeSession.verb.lowercase()} ${activeSession.targetName} a little while ago.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        "If you're done, write it down while it's fresh. Or keep exploring — no rush.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDoneDialog = false
+                    ExploreSessionStore.clearSession(context)
+                    ExploreReminderScheduler.cancel(context)
+                    ExploreSessionService.stop(context)
+                    navController.navigate(
+                        CurioRoutes.captureFor(activeSession.categoryId.routeSlug, activeSession.topicName)
+                    ) { launchSingleTop = true }
+                }) { Text("Done — write about it") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDoneDialog = false }) { Text("Keep exploring") }
+            }
+        )
     }
 }

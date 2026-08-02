@@ -46,6 +46,7 @@ object AppPreferences {
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
+    private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
     private const val KEY_TOPIC_SENTIMENTS = "topic_sentiments"  // JSON object: "CATEGORY:topicId" -> "like"/"dislike"
@@ -95,6 +96,10 @@ object AppPreferences {
      * Seeded from prefs in [initThemeMode].
      */
     var entryMetaEnabledState by mutableStateOf(true)
+    // Explore sessions — the explore-now timer/reminder/done flow. Default
+    // ON; off disables the timer notification + reminder + done prompt while
+    // Explore-now still opens the browser and records recently-explored.
+    var exploreSessionsEnabledState by mutableStateOf(true)
         private set
 
     /**
@@ -129,6 +134,7 @@ object AppPreferences {
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
+        exploreSessionsEnabledState = isExploreSessionsEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
         savedQuotesState = getSavedQuotes(context)
         topicSentimentsState = getTopicSentiments(context)
@@ -178,6 +184,22 @@ object AppPreferences {
     fun setEntryMetaEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_ENTRY_META_ENABLED, enabled).apply()
         entryMetaEnabledState = enabled
+    }
+
+    /** Whether the explore-session flow (timer/reminder/done prompt) is on. */
+    fun isExploreSessionsEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_EXPLORE_SESSIONS_ENABLED, true)
+
+    fun setExploreSessionsEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_EXPLORE_SESSIONS_ENABLED, enabled).apply()
+        exploreSessionsEnabledState = enabled
+        if (!enabled) {
+            // Turning the feature off mid-session: tear the live session
+            // down so the timer, reminder and done-prompt all stop.
+            ExploreSessionStore.clearSession(context)
+            ExploreReminderScheduler.cancel(context)
+            com.curio.app.infrastructure.ExploreSessionService.stop(context)
+        }
     }
 
     // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────

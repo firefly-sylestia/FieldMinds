@@ -2,6 +2,42 @@
 
 ## Latest Request (COMPLETED)
 
+**Explore-system revamp: timed explore sessions with notifications, done-prompt, and recently-explored/unexplored tracking**
+
+### What was asked
+
+1. Tapping Explore on a topic reveal auto-records it as **recently explored** (even without a Cabinet save).
+2. Exiting a topic without doing anything records it in a new **Recently unexplored** Home section.
+3. The CTA opens a dialog with **Explore now / Write about it**.
+4. **Explore now** → opens a Google search for the topic (with year, and artist for albums) → starts a **timer notification** (elapsed-time chronometer, not a countdown) → at the recommended duration a **reminder notification** pops (“done or not?”) naming the topic and what to do.
+5. On returning to the app, it **asks if the user is done exploring**, then lets them write about it. The session must **not die** in the background (persisted + foreground service + boot restore).
+
+### Decisions (from ask_user)
+
+- **Settings toggle, default ON** (Settings → Notifications → “Explore sessions”). Off still opens the browser and records recently-explored, but no timer/reminder/done-prompt.
+- **Recently unexplored = new Home section** (below Recently explored, “tap to resume”).
+- Done-prompt on **every app return**, incl. mid-session and after background kill.
+
+### Implementation
+
+- `data/ExploreSession.kt` — `ExploreSession`/`ExploredTopic`/`UnexploredTopic` models + `ExploreSessionStore` (JSON-persisted active session + two reactive Home lists; serialization helpers `toJsonString()`/`parseExploreSession()`).
+- `data/ExploreSearch.kt` — Google search URL builder (year from name/era tag; artist from album teaser; subtype disambiguator).
+- `data/ExploreReminderScheduler.kt` + `infrastructure/ExploreReminderReceiver.kt` — AlarmManager reminder at start+duration; “Done exploring <topic>?” notification; ACTION_STOP tears the session down.
+- `infrastructure/ExploreSessionService.kt` — foreground service (specialUse type), chronometer notification w/ topic + verb + target, “Done exploring” action; **self-heals on START_STICKY restart** via the persisted session.
+- `infrastructure/ExploreBootReceiver.kt` — resumes session after boot/app-update/clock change.
+- `Manifest` — FOREGROUND_SERVICE(+SPECIAL_USE) perms, service (`foregroundServiceType="specialUse"` + subtype property), receivers.
+- `TopicRevealScreen.kt` — CTA records explored + opens dialog; Explore now starts session + opens browser + navigates Home; close/shuffle/back while not engaged records unexplored (BackHandler).
+- `CurioNavHost.kt` — “Done exploring?” dialog on every ON_RESUME + startup restore (rememberSaveable-guarded, rotation-safe).
+- `HomeScreen.kt` — recently-explored topic rows (write about it) + new Recently unexplored section (resume).
+- `SettingsScreen.kt` — “Explore sessions” toggle row; **disabling mid-session tears down service/alarm/session**.
+- `MainActivity.kt` — seeds `ExploreSessionStore` in onCreate.
+
+### Review
+
+Code reviewer pass: fixed FGS self-heal fallback, toggle-off teardown, and rotation-safe dialog state. CI validates on push.
+
+## Latest Request (COMPLETED)
+
 **Journal image attachments raised from 3 to 6 — saved view shows ALL images in a scrollable strip (single image still full-width)**
 
 ### What was asked

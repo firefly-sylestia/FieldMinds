@@ -67,6 +67,7 @@ import com.curio.app.data.SavedQuote
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.ExploreSessionStore
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
@@ -549,7 +550,10 @@ fun HomeScreen(navController: NavController) {
                 }
                 Spacer(Modifier.height(10.dp))
 
-                if (recentEntries.isEmpty()) {
+                val exploredTopics = ExploreSessionStore.recentlyExploredState
+                val unexploredTopics = ExploreSessionStore.recentlyUnexploredState
+
+                if (recentEntries.isEmpty() && exploredTopics.isEmpty()) {
                     FirstTimeEmpty(
                         surface = MaterialTheme.colorScheme.surfaceContainerLow,
                         onPickCategory = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
@@ -557,6 +561,22 @@ fun HomeScreen(navController: NavController) {
                     )
                 } else {
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        // Explore-session topics — recorded the moment the
+                        // user tapped Explore on a reveal, before (or even
+                        // without) anything being saved to the Cabinet.
+                        exploredTopics.forEach { explored ->
+                            val category = CurioCategories.byId(explored.categoryId)
+                            ExploreTopicRow(
+                                category = category,
+                                topicName = explored.topicName,
+                                subtitle = "Explored · tap to write about it",
+                                onClick = {
+                                    navController.navigate(
+                                        CurioRoutes.captureFor(explored.categoryId.routeSlug, explored.topicName)
+                                    ) { launchSingleTop = true }
+                                }
+                            )
+                        }
                         recentEntries.forEach { entry ->
                             RecentEntryRow(
                                 entry = entry,
@@ -569,6 +589,36 @@ fun HomeScreen(navController: NavController) {
 
                 // Add breathing room before the bottom card / nav bar
                 Spacer(Modifier.height(12.dp))
+            }
+
+            // ── 7b. Recently unexplored — topics the user left without ──
+            //     exploring, so Home offers a way to resume them.
+            if (unexploredTopics.isNotEmpty()) {
+                Spacer(Modifier.height(20.dp))
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    Text(
+                        "Recently unexplored",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        unexploredTopics.forEach { unexplored ->
+                            val category = CurioCategories.byId(unexplored.categoryId)
+                            ExploreTopicRow(
+                                category = category,
+                                topicName = unexplored.topicName,
+                                subtitle = "Left without exploring · tap to resume",
+                                onClick = {
+                                    navController.navigate(
+                                        CurioRoutes.revealFor(unexplored.categoryId.routeSlug, unexplored.topicName)
+                                    ) { launchSingleTop = true }
+                                }
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(12.dp))
+                }
             }
 
             // ── 8. Reminder nudge (when reminders off) ─────────────────
@@ -1183,6 +1233,65 @@ private fun greetingForNow(displayName: String): String {
         else -> "Welcome back"
     }
     return "$greeting, $displayName"
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Explore-session topic row (recently explored / recently unexplored)
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun ExploreTopicRow(
+    category: CurioCategory,
+    topicName: String,
+    subtitle: String,
+    onClick: () -> Unit
+) {
+    val accent = category.themedAccent()
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 0.dp,
+        tonalElevation = 2.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(accent.copy(alpha = 0.16f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(category.iconGlyph, null, tint = accent, size = 20.dp)
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    topicName,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            CurioForwardArrow(
+                label = subtitle,
+                tint = accent,
+                modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
+            )
+        }
+    }
 }
 
 

@@ -1,0 +1,259 @@
+package com.curio.app.data
+
+import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import org.json.JSONArray
+import org.json.JSONObject
+
+/**
+ * An in-progress explore session — the user tapped "Explore now" on a topic
+ * reveal, the app opened a browser search for it, and a timer notification
+ * is recording how long they spend. Persisted so the session survives the
+ * app being backgrounded or killed: on return/startup the app asks whether
+ * they're done and lets them write about it.
+ */
+data class ExploreSession(
+    val categoryId: CategoryId,
+    val topicName: String,
+    val subtype: String,
+    val verb: String,
+    val targetName: String,
+    val durationMinutes: Int,
+    val instruction: String,
+    val searchUrl: String,
+    val startMillis: Long
+)
+
+/** A topic the user engaged with (tapped Explore) — recently-explored list. */
+data class ExploredTopic(
+    val categoryId: CategoryId,
+    val topicName: String,
+    val exploredAtMillis: Long
+)
+
+/** A topic the user left WITHOUT exploring — recently-unexplored list. */
+data class UnexploredTopic(
+    val categoryId: CategoryId,
+    val topicName: String,
+    val seenAtMillis: Long
+)
+
+/**
+ * Persists the explore-session flow state:
+ *  - the single [ExploreSession] (one at a time; starting a new one replaces
+ *    any previous),
+ *  - the [ExploredTopic] list ("recently explored" on Home — recorded the
+ *    moment the user taps Explore on a topic reveal, even before anything is
+ *    saved to the Cabinet),
+ *  - the [UnexploredTopic] list ("recently unexplored" on Home — topics the
+ *    user backed out of without exploring, so they can resume later).
+ *
+ * All JSON-persisted (topic names carry arbitrary characters, so raw string
+ * prefs would break on delimiters). Reactive states are seeded by
+ * [seed] from MainActivity and stay in sync as the lists change.
+ */
+object ExploreSessionStore {
+
+    private const val KEY_ACTIVE_SESSION = "explore_active_session"
+    private const val KEY_EXPLORED = "explore_recently_explored"
+    private const val KEY_UNEXPLORED = "explore_recently_unexplored"
+
+    // Cap the Home lists so they never grow unbounded.
+    private const val MAX_LIST = 12
+
+    var activeSessionState by mutableStateOf<ExploreSession?>(null)
+        private set
+    var recentlyExploredState by mutableStateOf<List<ExploredTopic>>(emptyList())
+        private set
+    var recentlyUnexploredState by mutableStateOf<List<UnexploredTopic>>(emptyList())
+        private set
+
+    private fun prefs(context: Context) =
+        context.getSharedPreferences("curio_prefs", Context.MODE_PRIVATE)
+
+    /** Load all persisted state (called once from MainActivity onCreate). */
+    fun seed(context: Context) {
+        activeSessionState = readSession(context)
+        recentlyExploredState = readExplored(context)
+        recentlyUnexploredState = readUnexplored(context)
+    }
+
+    // ── Active session ─────────────────────────────────────────────────
+
+    fun getActiveSession(context: Context): ExploreSession? = readSession(context)
+
+    /** Starts (or replaces) the active explore session. */
+    fun startSession(context: Context, session: ExploreSession) {
+        prefs(context).edit()
+            .putString(KEY_ACTIVE_SESSION, session.toJson().toString())
+            .apply()
+        activeSessionState = session
+    }
+
+    /** Clears the active session (explore finished / written about). */
+    fun clearSession(context: Context) {
+        prefs(context).edit().remove(KEY_ACTIVE_SESSION).apply()
+        activeSessionState = null
+    }
+
+    private fun readSession(context: Context): ExploreSession? {
+        val raw = prefs(context).getString(KEY_ACTIVE_SESSION, null) ?: return null
+        return parseExploreSession(raw)
+    }
+
+    // ── Recently explored ──────────────────────────────────────────────
+
+    /**
+     * Records a topic as recently-explored (newest first, deduped by
+     * category+topic). Called the moment the user taps "Start exploring" on
+     * the reveal screen — independent of any Cabinet save.
+     */
+    fun recordExplored(context: Context, categoryId: CategoryId, topicName: String) {
+        if (topicName.isBlank()) return
+        val updated = listOf(
+            ExploredTopic(categoryId, topicName, System.currentTimeMillis())
+        ) + readExplored(context).filterNot {
+            it.categoryId == categoryId && it.topicName == topicName
+        }
+        saveExplored(context, updated.take(MAX_LIST))
+    }
+
+    fun removeExplored(context: Context, categoryId: CategoryId, topicName: String) {
+        saveExplored(
+            context,
+            readExplored(context).filterNot {
+                it.categoryId == categoryId && it.topicName == topicName
+            }
+        )
+    }
+
+    private fun readExplored(context: Context): List<ExploredTopic> {
+        val raw = prefs(context).getString(KEY_EXPLORED, null) ?: return emptyList()
+        return try {
+            val arr = JSONArray(raw)
+            List(arr.length()) { i ->
+                val obj = arr.getJSONObject(i)
+                val id = obj.optString("categoryId")
+                val cat = CategoryId.values().firstOrNull { it.name == id } ?: return@List null
+                ExploredTopic(
+                    categoryId = cat,
+                    topicName = obj.optString("topicName"),
+                    exploredAtMillis = obj.optLong("exploredAtMillis")
+                )
+            }.filterNotNull()
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun saveExplored(context: Context, topics: List<ExploredTopic>) {
+        val arr = JSONArray()
+        topics.forEach {
+            arr.put(
+                JSONObject()
+                    .put("categoryId", it.categoryId.name)
+                    .put("topicName", it.topicName)
+                    .put("exploredAtMillis", it.exploredAtMillis)
+            )
+        }
+        prefs(context).edit().putString(KEY_EXPLORED, arr.toString()).apply()
+        recentlyExploredState = topics
+    }
+
+    // ── Recently unexplored ────────────────────────────────────────────
+
+    /**
+     * Records a topic the user backed out of WITHOUT exploring (newest
+     * first, deduped), so Home can offer "Resume exploring".
+     */
+    fun recordUnexplored(context: Context, categoryId: CategoryId, topicName: String) {
+        if (topicName.isBlank()) return
+        val updated = listOf(
+            UnexploredTopic(categoryId, topicName, System.currentTimeMillis())
+        ) + readUnexplored(context).filterNot {
+            it.categoryId == categoryId && it.topicName == topicName
+        }
+        saveUnexplored(context, updated.take(MAX_LIST))
+    }
+
+    /** Clears a topic from the unexplored list once it's actually explored. */
+    fun removeUnexplored(context: Context, categoryId: CategoryId, topicName: String) {
+        saveUnexplored(
+            context,
+            readUnexplored(context).filterNot {
+                it.categoryId == categoryId && it.topicName == topicName
+            }
+        )
+    }
+
+    private fun readUnexplored(context: Context): List<UnexploredTopic> {
+        val raw = prefs(context).getString(KEY_UNEXPLORED, null) ?: return emptyList()
+        return try {
+            val arr = JSONArray(raw)
+            List(arr.length()) { i ->
+                val obj = arr.getJSONObject(i)
+                val id = obj.optString("categoryId")
+                val cat = CategoryId.values().firstOrNull { it.name == id } ?: return@List null
+                UnexploredTopic(
+                    categoryId = cat,
+                    topicName = obj.optString("topicName"),
+                    seenAtMillis = obj.optLong("seenAtMillis")
+                )
+            }.filterNotNull()
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun saveUnexplored(context: Context, topics: List<UnexploredTopic>) {
+        val arr = JSONArray()
+        topics.forEach {
+            arr.put(
+                JSONObject()
+                    .put("categoryId", it.categoryId.name)
+                    .put("topicName", it.topicName)
+                    .put("seenAtMillis", it.seenAtMillis)
+            )
+        }
+        prefs(context).edit().putString(KEY_UNEXPLORED, arr.toString()).apply()
+        recentlyUnexploredState = topics
+    }
+}
+
+// ── Serialization helpers (shared with the explore-session service) ──────
+
+/** Hand the session across component/process boundaries via intent extras. */
+fun ExploreSession.toJsonString(): String = toJson().toString()
+
+/** Inverse of [ExploreSession.toJsonString] — null on malformed input. */
+fun parseExploreSession(raw: String): ExploreSession? {
+    return runCatching {
+        val obj = JSONObject(raw)
+        val id = obj.optString("categoryId")
+        val cat = CategoryId.values().firstOrNull { it.name == id } ?: return null
+        ExploreSession(
+            categoryId = cat,
+            topicName = obj.optString("topicName"),
+            subtype = obj.optString("subtype"),
+            verb = obj.optString("verb"),
+            targetName = obj.optString("targetName"),
+            durationMinutes = obj.optInt("durationMinutes"),
+            instruction = obj.optString("instruction"),
+            searchUrl = obj.optString("searchUrl"),
+            startMillis = obj.optLong("startMillis")
+        )
+    }.getOrNull()
+}
+
+private fun ExploreSession.toJson(): JSONObject = JSONObject()
+    .put("categoryId", categoryId.name)
+    .put("topicName", topicName)
+    .put("subtype", subtype)
+    .put("verb", verb)
+    .put("targetName", targetName)
+    .put("durationMinutes", durationMinutes)
+    .put("instruction", instruction)
+    .put("searchUrl", searchUrl)
+    .put("startMillis", startMillis)

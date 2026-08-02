@@ -516,6 +516,27 @@ fun SettingsScreen(navController: NavController) {
                             }
                             Switch(checked = reminderEnabled, onCheckedChange = ::setReminder)
                         }
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(CurioIcons.Timer, null, tint = CurioColors.CoralBlush, size = 22.dp)
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Explore sessions", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    if (AppPreferences.exploreSessionsEnabledState)
+                                        "Timer, reminder & done prompt when you explore a topic"
+                                    else "Off · explore still opens the browser without tracking",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.exploreSessionsEnabledState,
+                                onCheckedChange = { AppPreferences.setExploreSessionsEnabled(context, it) }
+                            )
+                        }
                         if (reminderEnabled) {
                             Row(
                                 modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),

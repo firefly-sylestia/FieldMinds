@@ -1,5 +1,8 @@
 package com.curio.app.features.reveal
 
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +25,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,8 +57,12 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioTopic
+import com.curio.app.data.ExploreSession
+import com.curio.app.data.ExploreSessionStore
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
+import com.curio.app.data.buildExploreSearchUrl
+import com.curio.app.infrastructure.ExploreSessionService
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.theme.CurioColors
@@ -146,6 +155,44 @@ fun TopicRevealScreen(
     // Reads the REACTIVE sentiment state so the buttons toggle instantly.
     val sentiment = resolved?.let { AppPreferences.topicSentiment(cat.id, it.id) }
 
+    // Explore-session flow — tapping the CTA records the topic as
+    // recently-explored the moment it's tapped (even before anything is
+    // saved to the Cabinet), then opens a two-way dialog (Explore now /
+    // Write about it). Leaving the screen without engaging records it as
+    // recently-unexplored so Home can offer to resume it.
+    var engaged by rememberSaveable { mutableStateOf(false) }
+    var showExploreDialog by rememberSaveable { mutableStateOf(false) }
+
+    /** Starts a timed explore session, opens the Google search, back to Home. */
+    fun startExploreSession(topic: CurioTopic) {
+        val action = topic.exploreAction
+        val session = ExploreSession(
+            categoryId = cat.id,
+            topicName = topic.name,
+            subtype = topic.subtype,
+            verb = action.verb,
+            targetName = action.targetName,
+            durationMinutes = action.durationMinutes,
+            instruction = action.instruction,
+            searchUrl = buildExploreSearchUrl(topic),
+            startMillis = System.currentTimeMillis()
+        )
+        if (AppPreferences.isExploreSessionsEnabled(context)) {
+            ExploreSessionStore.startSession(context, session)
+            ExploreSessionService.start(context, session)
+        }
+        showExploreDialog = false
+        // Open the Google search, then land back on Home — returning to the
+        // app triggers the "are you done exploring?" prompt.
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(session.searchUrl)))
+        }
+        navController.navigate(CurioRoutes.HOME) {
+            popUpTo(CurioRoutes.HOME) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -193,7 +240,12 @@ fun TopicRevealScreen(
             // keeps its "Tap to open" state so it can be reopened until the
             // user spins again or explores it (v5.6).
             Surface(
-                onClick = { navController.popBackStack() },
+                onClick = {
+                    if (!engaged) {
+                        resolved?.let { ExploreSessionStore.recordUnexplored(context, cat.id, it.name) }
+                    }
+                    navController.popBackStack()
+                },
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.surfaceVariant
             ) {
@@ -326,10 +378,11 @@ fun TopicRevealScreen(
                 // ── 7. Primary CTA ─────────────────────────────────────────
                 Button(
                     onClick = {
-                        val name = resolved?.name ?: return@Button
-                        navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, name)) {
-                            launchSingleTop = true
-                        }
+                        val topic = resolved ?: return@Button
+                        engaged = true
+                        ExploreSessionStore.recordExplored(context, cat.id, topic.name)
+                        ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
+                        showExploreDialog = true
                     },
                     enabled = resolved != null,
                     shape = RoundedCornerShape(50),
@@ -358,7 +411,12 @@ fun TopicRevealScreen(
 
                 // ── 8. Secondary action text button ────────────────────────
                 TextButton(
-                    onClick = { navController.popBackStack() },
+                    onClick = {
+                        if (!engaged) {
+                            resolved?.let { ExploreSessionStore.recordUnexplored(context, cat.id, it.name) }
+                        }
+                        navController.popBackStack()
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -378,6 +436,49 @@ fun TopicRevealScreen(
             }
 
         Spacer(Modifier.height(navInsets.calculateBottomPadding()))
+    }
+
+    // Leaving via the system back gesture without engaging → recently-unexplored.
+    BackHandler {
+        if (!engaged) {
+            resolved?.let { ExploreSessionStore.recordUnexplored(context, cat.id, it.name) }
+        }
+        navController.popBackStack()
+    }
+
+    if (showExploreDialog && resolved != null) {
+        val topic = resolved
+        val action = topic.exploreAction
+        AlertDialog(
+            onDismissRequest = { showExploreDialog = false },
+            title = { Text("Explore ${topic.name}?") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "Time to ${action.verb.lowercase()} ${action.targetName} — roughly ${action.durationMinutes} min. We'll open a Google search to get you started.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        "Your explore gets timed (not a countdown), and when you come back we'll ask if you're done so you can write it down.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { startExploreSession(topic) }) { Text("Explore now") }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showExploreDialog = false
+                        navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, topic.name)) {
+                            launchSingleTop = true
+                        }
+                    }
+                ) { Text("Write about it") }
+            }
+        )
     }
 
     if (confettiTrigger > 0) {
