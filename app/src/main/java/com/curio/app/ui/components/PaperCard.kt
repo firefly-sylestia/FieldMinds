@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Outline
@@ -339,9 +338,12 @@ fun TornPaperCard(
     // The tiling brush wraps the SHARED texture — one bitmap, one brush, all
     // torn cards (the seed makes each card's EDGE unique, so the generic
     // grain can be shared).
+    // This Compose version's ImageShader takes (image, tileModeX, tileModeY)
+    // with NO filterQuality param, and the tiling enum is TileMode.Repeated
+    // (not Repeat) — matching the version in gradle/libs.versions.toml.
     val grainBrush = remember {
         ShaderBrush(
-            ImageShader(sharedGrainBitmap, TileMode.Repeat, TileMode.Repeat, FilterQuality.Low)
+            ImageShader(sharedGrainBitmap, TileMode.Repeated, TileMode.Repeated)
         )
     }
     // The torn outline can intrude up to ~3dp past the caller's inset (some
