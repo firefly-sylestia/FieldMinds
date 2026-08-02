@@ -78,6 +78,13 @@ Default section order:
 
 When the user requests a durable behavior change, record it here or in the relevant child AGENTS.md
 
+### ❓ Ask When Unsure
+
+If an agent understands the user's request less than ~80%, it MUST ask for
+confirmation before proceeding — never guess and run with the most plausible
+reading. Use the ask_user tool to clarify ambiguous, missing, or conflicting
+context first. See root `AGENTS.md` "ASK WHEN UNSURE".
+
 ### ✅ Commit and Push After Every Change
 
 Agents MUST commit and push all changes before the task is complete. Do not leave changes uncommitted. Follow the commit workflow in the root `AGENTS.md`:

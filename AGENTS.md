@@ -14,6 +14,21 @@ This file is part of the **DOX framework** defined in `master.md`. All agents MU
 
 Top-level instruction file for all AI agents (Codebuff/Buffy and spawned sub-agents) working on the FieldMind Android project. Project-wide rules, global preferences, and the top-level Child DOX Index.
 
+## ❓ ASK WHEN UNSURE
+
+If you understand the user's request less than ~80%, **ask for confirmation
+before doing anything**. Do not guess, do not assume, do not pick the most
+plausible interpretation and run with it. A wrong guess wastes a full cycle
+(edit → review → commit → push → CI → revert) and can ship an unwanted
+change. When in doubt, use the ask_user tool to clarify the request, and
+only proceed once the user confirms.
+
+This rule covers ambiguous phrasing, missing context, conflicting
+instructions, and any request where multiple readings would lead to
+different implementations. Spawned sub-agents don't have the ask_user tool
+— when they hit this uncertainty they must report it back to the parent
+agent, who asks the user.
+
 ## Critical Environment Rules
 
 ### ❌ NEVER RUN COMPILE OR BUILD COMMANDS
