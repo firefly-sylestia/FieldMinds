@@ -2,7 +2,24 @@
 
 ## Latest Request (COMPLETED)
 
-**Paper polish: collapsible color swatches, subtle rigid-card sheen on papers, taller saved-view papers, watermark on detail + Cabinet pages**
+**Per-sheet highlighter/ink tones — the paper COLOR now drives a matching marker + ink**
+
+### What was asked
+
+Let the paper color also drive the highlighter/ink tone per sheet so colored notes get a matching marker color.
+
+### What was changed
+
+- **`PaperPalette.kt`** — new `notePaperHighlight(color)` — each `NotePaperColor` gets its OWN translucent marker tone (amber on CREAM, warm gold on BUTTER, rose on PINK, mint green on MINT, sky blue on SKY, lavender on LILAC), so a highlighted phrase on a colored note reads as a marker that belongs to that page. `notePaperInk(color)` changed from a fixed dark to a `when()` with subtle hue-shifted darks per sheet (still warm-dark and readable on every pastel).
+- **`RichTextEditor.kt`** — new `effectiveHighlight = if (paper) notePaperHighlight(paperColor) else highlightColor` used in the `tfv` remember init, the `LaunchedEffect(text, spans)` reseed, `emit()`, and `applyFlag()` (non-paper fields keep the caller's amber default). New `LaunchedEffect(paper, paperColor, effectiveHighlight)` repaints existing highlight spans in the new marker tone when the user taps a swatch — spans only carry the highlight FLAG, the color is baked at build time — preserving selection + composition.
+- **`EntryDetailScreen.kt`** — all saved-view `NotePaperCard` sites (SoundBite note, ReelNotes review + "No review written yet" fallback, Marginalia journal + per-quote cards, GalleryWall caption, FieldNotes ×3) hoist a `*Sheet` val and pass `notePaperHighlight(sheet)` to `buildRichAnnotated` + `notePaperInk(sheet)` as the Text color; quote-icon tint + placeholder alphas derive from the sheet too. Imports swapped from `paperHighlight`/`paperInk` to `notePaperHighlight`/`notePaperInk`.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified both `when()` blocks exhaustive (no `else` → compiler-enforced), the repaint `LaunchedEffect` can't loop (keys never include `tfv`), all 8 saved-view sites updated with the import swap confirmed clean by whole-file search, fallback alphas correct. Two cosmetic nits accepted (effective* declarations grouped apart; one redundant first-composition repaint — harmless).
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
 
 ### What was asked
 

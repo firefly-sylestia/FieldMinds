@@ -116,8 +116,8 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
-import com.curio.app.ui.theme.paperHighlight
-import com.curio.app.ui.theme.paperInk
+import com.curio.app.ui.theme.notePaperHighlight
+import com.curio.app.ui.theme.notePaperInk
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import kotlin.math.roundToInt
@@ -547,16 +547,17 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 
             // ── Note — shown on the same note-paper slip the editor used ──
             if (data.note.isNotBlank()) {
+                val noteSheet = data.noteColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
-                    paperColor = data.noteColor ?: NotePaperColor.CREAM,
+                    paperColor = noteSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        buildRichAnnotated(data.note, data.noteSpans.orEmpty(), paperHighlight()),
+                        buildRichAnnotated(data.note, data.noteSpans.orEmpty(), notePaperHighlight(noteSheet)),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = paperInk()
+                        color = notePaperInk(noteSheet)
                     )
                 }
             }
@@ -964,31 +965,32 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
         // as the Marginalia journal, so the saved review reads as written
         // on paper in light AND dark mode (NotePaperCard is theme-aware and
         // renders the torn-note style when that's what was chosen).
+        val reviewSheet = data.reviewColor ?: NotePaperColor.CREAM
         if (data.reviewText.isNotBlank()) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
-                paperColor = data.reviewColor ?: NotePaperColor.CREAM,
+                paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    buildRichAnnotated(data.reviewText, data.reviewSpans.orEmpty(), paperHighlight()),
+                    buildRichAnnotated(data.reviewText, data.reviewSpans.orEmpty(), notePaperHighlight(reviewSheet)),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = paperInk()
+                    color = notePaperInk(reviewSheet)
                 )
             }
         } else {
             // Fallback when no review text
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
-                paperColor = data.reviewColor ?: NotePaperColor.CREAM,
+                paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     "No review written yet",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = paperInk().copy(alpha = 0.55f)
+                    color = notePaperInk(reviewSheet).copy(alpha = 0.55f)
                 )
             }
         }
@@ -1002,9 +1004,10 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
         // ── Journal — "My thoughts" on a note-paper page ──────────────
         if (data.journalText.isNotBlank()) {
             MarginaliaSectionHeader(label = "My thoughts", category = category)
+            val journalSheet = data.journalColor ?: NotePaperColor.CREAM
             NotePaperCard(
                 style = data.journalStyle ?: data.notePaperStyle(),
-                paperColor = data.journalColor ?: NotePaperColor.CREAM,
+                paperColor = journalSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1012,10 +1015,10 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                     buildRichAnnotated(
                         data.journalText,
                         data.journalSpans.orEmpty(),
-                        paperHighlight()
+                        notePaperHighlight(journalSheet)
                     ),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = paperInk()
+                    color = notePaperInk(journalSheet)
                 )
             }
         }
@@ -1041,9 +1044,10 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                 // original index so viewing never re-rolls it either.
                 val rotation = data.quoteTilts.orEmpty().getOrNull(origIndex)
                     ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
+                val quoteSheet = data.quoteColors.orEmpty().getOrNull(origIndex) ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.quoteStyles.orEmpty().getOrNull(origIndex) ?: data.notePaperStyle(),
-                    paperColor = data.quoteColors.orEmpty().getOrNull(origIndex) ?: NotePaperColor.CREAM,
+                    paperColor = quoteSheet,
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
                     corner = 12.dp,
                     modifier = Modifier
@@ -1057,7 +1061,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                         CurioIcon(
                             name = CurioIcons.FormatQuote,
                             contentDescription = null,
-                            tint = paperInk().copy(alpha = 0.45f),
+                            tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
                             size = 20.dp
                         )
                         Text(
@@ -1066,11 +1070,11 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                             text = buildRichAnnotated(
                                 "\u201C$quote\u201D",
                                 spans.map { it.copy(start = it.start + 1, end = it.end + 1) },
-                                paperHighlight()
+                                notePaperHighlight(quoteSheet)
                             ),
                             modifier = Modifier.weight(1f),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = paperInk()
+                            color = notePaperInk(quoteSheet)
                         )
                     }
                 }
@@ -1273,16 +1277,17 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
 
         if (data.caption.isNotBlank()) {
             // Caption wears the same note-paper slip as the editor's field.
+            val captionSheet = data.captionColor ?: NotePaperColor.CREAM
             NotePaperCard(
                 style = data.captionStyle ?: data.notePaperStyle(),
-                paperColor = data.captionColor ?: NotePaperColor.CREAM,
+                paperColor = captionSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     data.caption,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = paperInk()
+                    color = notePaperInk(captionSheet)
                 )
             }
         }
@@ -1488,16 +1493,17 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
+                val observedSheet = data.observedColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.observedStyle ?: data.notePaperStyle(),
-                    paperColor = data.observedColor ?: NotePaperColor.CREAM,
+                    paperColor = observedSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        buildRichAnnotated(text, data.observedSpans.orEmpty(), paperHighlight()),
+                        buildRichAnnotated(text, data.observedSpans.orEmpty(), notePaperHighlight(observedSheet)),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = paperInk()
+                        color = notePaperInk(observedSheet)
                     )
                 }
             }
@@ -1505,16 +1511,17 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.surprised.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
+                val surprisedSheet = data.surprisedColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.surprisedStyle ?: data.notePaperStyle(),
-                    paperColor = data.surprisedColor ?: NotePaperColor.CREAM,
+                    paperColor = surprisedSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        buildRichAnnotated(text, data.surprisedSpans.orEmpty(), paperHighlight()),
+                        buildRichAnnotated(text, data.surprisedSpans.orEmpty(), notePaperHighlight(surprisedSheet)),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = paperInk()
+                        color = notePaperInk(surprisedSheet)
                     )
                 }
             }
@@ -1522,16 +1529,17 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
+                val learnNextSheet = data.learnNextColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.learnNextStyle ?: data.notePaperStyle(),
-                    paperColor = data.learnNextColor ?: NotePaperColor.CREAM,
+                    paperColor = learnNextSheet,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        buildRichAnnotated(text, data.learnNextSpans.orEmpty(), paperHighlight()),
+                        buildRichAnnotated(text, data.learnNextSpans.orEmpty(), notePaperHighlight(learnNextSheet)),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = paperInk()
+                        color = notePaperInk(learnNextSheet)
                     )
                 }
             }

@@ -47,9 +47,12 @@ fun paperBorder(): Color = Color(0xFFCBB98F)
 // ─────────────────────────────────────────────────────────────────────────────
 // Note-paper COLORS — a per-text-box swatch picker next to the Ruled/Torn
 // toggle. [notePaperSurface] resolves the chosen [NotePaperColor] to its
-// paper sheet; [notePaperInk] keeps the warm dark ink readable on every
-// pastel; [notePaperRule] and [notePaperBorder] derive the ruled lines and
-// hairline edge from the sheet so each color stays coherent. All are
+// paper sheet; [notePaperInk] keeps a dark ink readable on every pastel
+// with a whisper of the sheet's hue; [notePaperHighlight] gives each sheet
+// its OWN matching marker tone (amber on cream, rose on pink, mint green on
+// mint...) so a colored note's highlight reads as a marker that belongs to
+// that page; [notePaperRule] and [notePaperBorder] derive the ruled lines
+// and hairline edge from the sheet so each color stays coherent. All are
 // theme-agnostic — the paper is the same in both modes, whatever the swatch.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -63,9 +66,35 @@ fun notePaperSurface(color: NotePaperColor): Color = when (color) {
     NotePaperColor.LILAC -> Color(0xFFEDE4F4)
 }
 
-/** The warm dark ink reads on every light pastel sheet. */
+/** The ink stays warm-dark for readability on every pastel, but carries a
+ *  whisper of the sheet's hue (golden on butter, deep rose on pink, deep
+ *  green on mint...) so colored notes read as written with an ink that
+ *  belongs to their page — not a generic brown. */
 @Composable
-fun notePaperInk(color: NotePaperColor): Color = Color(0xFF3B3124)
+fun notePaperInk(color: NotePaperColor): Color = when (color) {
+    NotePaperColor.CREAM -> Color(0xFF3B3124)
+    NotePaperColor.BUTTER -> Color(0xFF3E3521)
+    NotePaperColor.PINK -> Color(0xFF432A26)
+    NotePaperColor.MINT -> Color(0xFF2A3529)
+    NotePaperColor.SKY -> Color(0xFF232F3B)
+    NotePaperColor.LILAC -> Color(0xFF322A40)
+}
+
+/** Highlighter MARKER color matching the sheet — each note-paper color gets
+ *  its own translucent marker tone (amber on cream, warm gold on butter,
+ *  rose on pink, mint green on mint, sky blue on sky, lavender on lilac),
+ *  so a highlighted phrase on a colored note reads as a marker that belongs
+ *  to that page. Translucent like [paperHighlight] so the dark ink stays
+ *  readable through it. */
+@Composable
+fun notePaperHighlight(color: NotePaperColor): Color = when (color) {
+    NotePaperColor.CREAM -> Color(0x66FFD54F)
+    NotePaperColor.BUTTER -> Color(0x66FFD23E)
+    NotePaperColor.PINK -> Color(0x66F2A79E)
+    NotePaperColor.MINT -> Color(0x66A9D6A5)
+    NotePaperColor.SKY -> Color(0x66A7C8E8)
+    NotePaperColor.LILAC -> Color(0x66C4B0E0)
+}
 
 /** Ruled lines derived from the sheet — slightly darker than the paper. */
 @Composable

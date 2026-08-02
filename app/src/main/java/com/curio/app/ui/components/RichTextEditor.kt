@@ -52,6 +52,7 @@ import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperHighlight
@@ -282,6 +283,9 @@ fun RichTextEditor(
     fieldPadding: PaddingValues = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
     /** Draws the field's hairline border — off when the editor sits on paper. */
     showFieldBorder: Boolean = true,
+    /** Highlighter marker for non-paper fields (default translucent amber).
+     *  On note-paper the marker follows the SHEET's color instead — see
+     *  [notePaperHighlight]. */
     highlightColor: Color = paperHighlight(),
     /** Renders the field on a note-paper card with the toolbar OUTSIDE the
      *  card, so the ruled lines line up under the field text while typing —
@@ -306,8 +310,13 @@ fun RichTextEditor(
     // keyed remember would rebuild the field (and drop the cursor) on every
     // keystroke. Hold the value unkeyed and reseed only when the parent
     // pushes a DIFFERENT text (e.g. editing a different saved entry).
+    // On note-paper the highlighter marker follows the SHEET — each paper
+    // color gets its own matching marker tone (see [notePaperHighlight]), so
+    // a colored note's highlight reads as a marker that belongs to that page.
+    // Non-paper fields keep the caller's [highlightColor] (default amber).
+    val effectiveHighlight = if (paper) notePaperHighlight(paperColor) else highlightColor
     var tfv by remember {
-        mutableStateOf(TextFieldValue(buildRichAnnotated(text, spans, highlightColor)))
+        mutableStateOf(TextFieldValue(buildRichAnnotated(text, spans, effectiveHighlight)))
     }
     var toolbarExpanded by remember { mutableStateOf(false) }
     // Text layout of the field — anchors the floating format bar to the
@@ -331,12 +340,25 @@ fun RichTextEditor(
 
     LaunchedEffect(text, spans) {
         if (tfv.text != text) {
-            tfv = TextFieldValue(buildRichAnnotated(text, spans, highlightColor))
+            tfv = TextFieldValue(buildRichAnnotated(text, spans, effectiveHighlight))
             // Different content loaded (e.g. editing another saved entry) —
             // drop any armed format from the previous text.
             pendingBold = false
             pendingItalic = false
             pendingHighlight = false
+        }
+    }
+    // Sheet-color change (swatch tap): spans only carry the highlight FLAG,
+    // the marker color is baked into the AnnotatedString at build time. When
+    // the paper color changes, repaint existing highlights in the NEW marker
+    // tone without disturbing the text or cursor.
+    LaunchedEffect(paper, paperColor, effectiveHighlight) {
+        if (paper && tfv.text == text) {
+            tfv = TextFieldValue(
+                buildRichAnnotated(tfv.text, extractRichSpans(tfv.annotatedString), effectiveHighlight),
+                selection = tfv.selection,
+                composition = tfv.composition
+            )
         }
     }
 
@@ -407,7 +429,7 @@ fun RichTextEditor(
             }
         }
         val result = TextFieldValue(
-            buildRichAnnotated(new.text, spans, highlightColor),
+            buildRichAnnotated(new.text, spans, effectiveHighlight),
             selection = new.selection,
             composition = new.composition
         )
@@ -439,7 +461,7 @@ fun RichTextEditor(
         // value ourselves, so set it and report it here. This also avoids
         // trusting any field-reported AnnotatedString for span content.
         val styled = TextFieldValue(
-            buildRichAnnotated(tfv.text, updated, highlightColor),
+            buildRichAnnotated(tfv.text, updated, effectiveHighlight),
             selection = sel
         )
         tfv = styled
