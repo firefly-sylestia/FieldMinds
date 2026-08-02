@@ -118,12 +118,16 @@ fun PaperCard(
     val foldInsetDp = 22.dp
     val marginInset = with(density) { marginInsetDp.toPx() }
     val safePadding = PaddingValues(
-        left = if (redMargin) maxOf(
+        // PaddingValues has no `left`/`right` parameters — the horizontal
+        // insets are `start`/`end`. The app is LTR-only, so start = left and
+        // end = right; the Ltr-direction padding we read above maps straight
+        // onto them.
+        start = if (redMargin) maxOf(
             contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
             marginInsetDp + 8.dp
         ) else contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
         top = contentPadding.calculateTopPadding(),
-        right = if (folded) maxOf(
+        end = if (folded) maxOf(
             contentPadding.calculateRightPadding(LayoutDirection.Ltr),
             foldInsetDp + 2.dp
         ) else contentPadding.calculateRightPadding(LayoutDirection.Ltr),

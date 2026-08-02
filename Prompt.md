@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**CI fix: PaperCard.safePadding re-broken — `PaddingValues` has no `left`/`right` parameters (previous e3482999 "fix" introduced the bug)**
+
+### What was asked
+
+CI failed on PaperCard.kt again — `No parameter with name 'left'/'right' found` at the `safePadding` `PaddingValues(...)` call, with cascading `Cannot infer type parameter 'R'`, `Unresolved reference 'calculateTopPadding'`, and `operator modifier required on compareTo` downstream.
+
+### What was changed
+
+- **`PaperCard.kt`** — root cause: commit e3482999 rebuilt `safePadding` in Dp (correct — `calculate*Padding` return Dp in this Compose version) but used `left =` / `right =` named arguments, which do NOT exist on `androidx.compose.foundation.layout.PaddingValues` — its constructor is `PaddingValues(start, top, end, bottom)` (plus `all` / `horizontal`+`vertical` overloads). `safePadding` became an error type, and every consumer cascaded (ruleStart's `with(density)` R-inference, `calculateTopPadding` unresolved, the `while (y < size.height)` compareTo on an error-typed Float). Fix: renamed the named args to `start =` / `end =` (the app is LTR-only, so start = left / end = right; the values still come from `calculateLeftPadding(LayoutDirection.Ltr)` / `calculateRightPadding(LayoutDirection.Ltr)`). Added a comment explaining the param-name constraint so it never regresses again.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified `start`/`end` are the correct `PaddingValues` param names, the `start =`/`end =` usages at the `drawLine`/`drawPath` Offset sites (~182-193, 350-351) are unrelated (Offset params, not PaddingValues), `TornPaperCard.safeContentPadding` uses the valid `horizontal`/`vertical` overload, the cascading errors all stem from the error-typed `safePadding` and resolve once it's well-typed, braces balanced, and a repo-wide grep confirmed NO other `left =`/`right =` PaddingValues args leaked anywhere in `app/src/main`.
+
+### Follow-ups / notes
+- The user's earlier "fix review stars + highlight color on colored paper" request was superseded by this CI fix ("nvm that fix this") — the ReelNotes stars/images/highlight polish from commit c64fa044 is still in place; if the stars/highlight still look off visually, that's a follow-up.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **ReelNotes saved-entry polish: visible review stars, in-place image zoom (no Lightbox page, proper landscape), readable highlights on colored paper**
 
 ### What was asked
