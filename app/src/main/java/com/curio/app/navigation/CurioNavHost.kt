@@ -12,6 +12,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
@@ -29,9 +30,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
@@ -45,6 +49,9 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.ExploreReminderScheduler
 import com.curio.app.data.ExploreSessionStore
 import com.curio.app.infrastructure.ExploreSessionService
+import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
+import kotlinx.coroutines.delay
 import com.curio.app.features.bugreport.BugReportScreen
 import com.curio.app.features.crash.CurioCrashScreen
 import com.curio.app.features.lightbox.LightboxScreen
@@ -332,17 +339,40 @@ fun CurioNavHost(
     // ── Done-exploring prompt (app return while a session is active) ────
     val activeSession = ExploreSessionStore.activeSessionState
     if (showDoneDialog && activeSession != null) {
+        // Live elapsed time — ticks every second while the dialog is open
+        // (recomputed from the session's original start, so it survives
+        // process restarts too). Cancels automatically on dismiss.
+        var elapsedMillis by remember(activeSession.startMillis) {
+            mutableStateOf(System.currentTimeMillis() - activeSession.startMillis)
+        }
+        LaunchedEffect(activeSession.startMillis) {
+            while (true) {
+                elapsedMillis = System.currentTimeMillis() - activeSession.startMillis
+                delay(1_000)
+            }
+        }
         AlertDialog(
             onDismissRequest = { showDoneDialog = false },
             title = { Text("Done exploring ${activeSession.topicName}?") },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CurioIcon(
+                            name = CurioIcons.Timer,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            size = 18.dp
+                        )
+                        Text(
+                            "You've been exploring for ${formatElapsed(elapsedMillis)}",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        )
+                    }
                     Text(
-                        "You started ${activeSession.verb.lowercase()} ${activeSession.targetName} a little while ago.",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        "If you're done, write it down while it's fresh. Or keep exploring — no rush.",
+                        "You started ${activeSession.verb.lowercase()} ${activeSession.targetName} — if you're done, write it down while it's fresh. Or keep exploring, no rush.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -363,5 +393,21 @@ fun CurioNavHost(
                 TextButton(onClick = { showDoneDialog = false }) { Text("Keep exploring") }
             }
         )
+    }
+}
+
+/**
+ * Formats elapsed explore time as a friendly reading — "34s", "12m 5s",
+ * "1h 24m" — not a countdown, just how long they've been at it.
+ */
+private fun formatElapsed(millis: Long): String {
+    val totalSeconds = (millis / 1000L).coerceAtLeast(0L)
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+    return when {
+        hours > 0 -> "${hours}h ${minutes}m"
+        minutes > 0 -> "${minutes}m ${seconds}s"
+        else -> "${seconds}s"
     }
 }

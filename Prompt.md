@@ -2,6 +2,14 @@
 
 ## Latest Request (COMPLETED)
 
+**Done-exploring dialog now shows live elapsed explore time**
+
+- CurioNavHost: the "Done exploring <topic>?" dialog gained a Timer-icon line — "You've been exploring for 12m 5s" — computed from ExploreSession.startMillis, ticking live every second via a remember(startMillis) state + LaunchedEffect while(true) loop (auto-cancelled on dismiss; survives process restarts since it's derived from the persisted start).
+- New private top-level `formatElapsed(millis)` helper: "34s" / "12m 5s" / "1h 24m"; coerceAtLeast(0) guards backwards clock.
+- Reviewer: clean pass.
+
+## Latest Request (COMPLETED)
+
 **Setup revamp — onboarding now includes a permissions step**
 
 ### What was asked
