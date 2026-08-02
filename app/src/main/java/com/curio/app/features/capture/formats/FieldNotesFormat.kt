@@ -26,10 +26,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.paperInk
@@ -129,31 +128,27 @@ fun FieldNotesFormat(
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            // Each section wears the note-paper slip like the journal pages.
-            PaperCard(
+            // Each section wears the note-paper slip like the journal pages;
+            // the toolbar renders OUTSIDE the paper (paper mode) so the
+            // ruled lines line up under the text while typing.
+            RichTextEditor(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                ruled = true,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
-            ) {
-                RichTextEditor(
-                    text = observed,
-                    spans = observedSpans,
-                    onRichTextChange = { newText, newSpans ->
-                        observed = newText
-                        observedSpans = newSpans
-                    },
-                    placeholder = "What did you see, hear, notice?",
-                    toolbarMode = RichTextToolbarMode.TOGGLE,
-                    minHeight = 100.dp,
-                    ink = paperInk(),
-                    surface = Color.Transparent,
-                    accent = MaterialTheme.colorScheme.tertiary,
-                    fieldPadding = PaddingValues(0.dp),
-                    showFieldBorder = false
-                )
-            }
+                text = observed,
+                spans = observedSpans,
+                onRichTextChange = { newText, newSpans ->
+                    observed = newText
+                    observedSpans = newSpans
+                },
+                placeholder = "What did you see, hear, notice?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 100.dp,
+                ink = paperInk(),
+                accent = MaterialTheme.colorScheme.tertiary,
+                paper = true,
+                paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+            )
         }
 
         // ── Section 2: What surprised me ───────────────────────────────────
@@ -169,30 +164,24 @@ fun FieldNotesFormat(
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            PaperCard(
+            RichTextEditor(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                ruled = true,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
-            ) {
-                RichTextEditor(
-                    text = surprised,
-                    spans = surprisedSpans,
-                    onRichTextChange = { newText, newSpans ->
-                        surprised = newText
-                        surprisedSpans = newSpans
-                    },
-                    placeholder = "What was unexpected or delightful?",
-                    toolbarMode = RichTextToolbarMode.TOGGLE,
-                    minHeight = 100.dp,
-                    ink = paperInk(),
-                    surface = Color.Transparent,
-                    accent = MaterialTheme.colorScheme.tertiary,
-                    fieldPadding = PaddingValues(0.dp),
-                    showFieldBorder = false
-                )
-            }
+                text = surprised,
+                spans = surprisedSpans,
+                onRichTextChange = { newText, newSpans ->
+                    surprised = newText
+                    surprisedSpans = newSpans
+                },
+                placeholder = "What was unexpected or delightful?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 100.dp,
+                ink = paperInk(),
+                accent = MaterialTheme.colorScheme.tertiary,
+                paper = true,
+                paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+            )
         }
 
         // ── Section 3: What I want to learn next ───────────────────────────
@@ -208,30 +197,24 @@ fun FieldNotesFormat(
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            PaperCard(
+            RichTextEditor(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                ruled = true,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
-            ) {
-                RichTextEditor(
-                    text = learnNext,
-                    spans = learnNextSpans,
-                    onRichTextChange = { newText, newSpans ->
-                        learnNext = newText
-                        learnNextSpans = newSpans
-                    },
-                    placeholder = "Where does this lead?",
-                    toolbarMode = RichTextToolbarMode.TOGGLE,
-                    minHeight = 100.dp,
-                    ink = paperInk(),
-                    surface = Color.Transparent,
-                    accent = MaterialTheme.colorScheme.tertiary,
-                    fieldPadding = PaddingValues(0.dp),
-                    showFieldBorder = false
-                )
-            }
+                text = learnNext,
+                spans = learnNextSpans,
+                onRichTextChange = { newText, newSpans ->
+                    learnNext = newText
+                    learnNextSpans = newSpans
+                },
+                placeholder = "Where does this lead?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 100.dp,
+                ink = paperInk(),
+                accent = MaterialTheme.colorScheme.tertiary,
+                paper = true,
+                paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+            )
         }
 
         Spacer(Modifier.height(8.dp))

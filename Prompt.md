@@ -2,26 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
-**"extend the paper box margin style to more text boxes"**
+**CI failure: unresolved references `calculateTopPadding` / `calculateLeftPadding` / `isUnspecified` + move the toolbar outside the paper card so ruled lines align with the text in edit mode**
+
+### What was wrong (CI)
+
+`app:compileDebugKotlin` failed on 4 unresolved references, all in files touched by the paper-style work:
+- `PaperCard.kt:9` — `import androidx.compose.foundation.layout.calculateTopPadding` (no such top-level symbol)
+- `PaperCard.kt:66` — `bodyLineHeight.isUnspecified`
+- `RichTextEditor.kt:14-15` — `import androidx.compose.foundation.layout.calculateLeftPadding` / `calculateTopPadding`
+
+Root cause: in this Compose generation (BOM 2026.05.01 → foundation/ui-unit 1.11.2), `PaddingValues.calculateTopPadding()` / `calculateLeftPadding(layoutDirection)` are **member functions** of the interface, not top-level extensions — so the imports were invalid (the call sites themselves were never flagged). `TextUnit.isUnspecified` was replaced by the `TextUnit.Unspecified` companion constant.
 
 ### What was changed
 
-The note-paper look (warm cream paper in light mode, toned dark paper in dark mode, faint ruled lines) now covers ALL text boxes, not just the Marginalia journal/quotes and Reel Notes review. A new shared helper plus per-format edits:
+**CI fixes**
+- `PaperCard.kt` — dropped the bogus `calculateTopPadding` import; added `import androidx.compose.ui.unit.TextUnit`; `bodyLineHeight.isUnspecified` → `bodyLineHeight == TextUnit.Unspecified`.
+- `RichTextEditor.kt` — dropped both bogus imports; the member-function calls now resolve without imports.
 
-1. **`PaperLineField`** (new, in `CaptureFormatComponents.kt`) — a single-line text field wearing the paper look: a thin label above a small `PaperCard` slip with `paperInk` text, paper-tinted placeholder, and `SolidColor(accent)` cursor. Used for short inputs (titles, captions) so they match the notebook style instead of a plain outline box.
-
-2. **SoundBite** — the optional title field is now a `PaperLineField` (kept `ImeAction.Next` + enabled-during-recording guard); the rich-text note editor sits directly on a `PaperCard` slip (`ink=paperInk()`, `surface=Color.Transparent`, `fieldPadding=0`, `showFieldBorder=false`) matching the journal/review pattern.
-
-3. **Field Notes** — all three section editors (What I observed / What surprised me / What I want to learn next) are now wrapped in `PaperCard` slips with the same paper params.
-
-4. **Gallery Wall** — the caption field is now a `PaperLineField` (label above the paper slip).
-
-5. **Saved views** (`EntryDetailScreen`) — the SoundBite note, the three Field Notes sections, and the Gallery Wall caption all render on `PaperCard` with `paperInk` when viewing a saved entry, so the saved view mirrors what the user wrote into.
-
-Removed imports that became unused: `OutlinedTextField`/`KeyboardOptions` (SoundBite), `OutlinedTextField`/`KeyboardOptions`/`ImeAction` (GalleryWall). Imports in CaptureFormatComponents were re-verified clean after an initial import-block mishap (fixed with a full rewrite of the import block).
+**Toolbar moved OUTSIDE the paper card (the pending request)**
+- `RichTextEditor` gained `paper: Boolean = false` + `paperContentPadding` params. When `paper = true`, the toolbar renders **above** a `PaperCard` that wraps only the field (a local `@Composable () -> Unit` `fieldBlock`), so the ruled lines line up under the field text while typing — the same cadence as the saved detail view. Paper mode forces `surface = Color.Transparent`, `border = null`, and `effectiveFieldPadding = 0.dp`.
+- Call sites switched from `PaperCard { RichTextEditor(...) }` to `RichTextEditor(paper = true, paperContentPadding = ...)`:
+  - Marginalia journal + quote cards (quote card header now sits above the slip)
+  - Reel Notes review field
+  - SoundBite note
+  - Field Notes all 3 sections
+- Removed now-unused imports: `PaperCard` (Marginalia, ReelNotes, SoundBite, FieldNotes). Restored `Color` import in FieldNotesFormat after review (function signature still uses it).
 
 ### Review
-1 round of code-reviewer-deepseek-flash — clean, no blocking issues. Only nits: three Field Notes sections duplicate the same PaperCard config (matches existing style), and `PaperLineField.placeholder` is unused at call sites (harmless default).
+code-reviewer-deepseek-flash found ONE critical issue — the `Color` import removal in FieldNotesFormat.kt was wrong (the composable signature still takes `accent: Color, tint: Color`) — fixed. Everything else clean: member-function padding calls verified, `fieldBlock` local composable lambda is valid, unused-import leftovers (`heightIn` Marginalia, `RoundedCornerShape` ReelNotes, `TextSpan` SoundBite) are pre-existing warning-only.
 
 ### Follow-ups / notes
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.

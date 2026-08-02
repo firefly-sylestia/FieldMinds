@@ -47,7 +47,6 @@ import com.curio.app.data.CaptureData
 import com.curio.app.data.TextSpan
 import com.curio.app.features.capture.AudioRecorder
 import com.curio.app.ui.components.AudioTrimmer
-import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.paperInk
@@ -363,32 +362,27 @@ fun SoundBiteFormat(
             imeAction = ImeAction.Next
         )
 
-        // Rich-text note — formatting behind a small toggle. Sits directly
-        // on the note-paper slip (no inner box / double margin), matching
-        // the journal and review fields in light and dark mode.
-        PaperCard(
+        // Rich-text note — formatting behind a small toggle. The toolbar
+        // renders OUTSIDE the paper slip (paper mode) so the ruled lines
+        // line up under the text while typing; the field itself sits
+        // directly on the paper (no inner box / double margin).
+        RichTextEditor(
             modifier = Modifier.fillMaxWidth(),
-            ruled = true,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
-        ) {
-            RichTextEditor(
-                text = note,
-                spans = noteSpans,
-                onRichTextChange = { newText, newSpans ->
-                    note = newText
-                    noteSpans = newSpans
-                },
-                placeholder = "What did this recording capture?",
-                toolbarMode = RichTextToolbarMode.TOGGLE,
-                minHeight = 96.dp,
-                enabled = recordingState != AudioRecorder.State.RECORDING,
-                ink = paperInk(),
-                surface = Color.Transparent,
-                accent = MaterialTheme.colorScheme.tertiary,
-                fieldPadding = PaddingValues(0.dp),
-                showFieldBorder = false
-            )
-        }
+            text = note,
+            spans = noteSpans,
+            onRichTextChange = { newText, newSpans ->
+                note = newText
+                noteSpans = newSpans
+            },
+            placeholder = "What did this recording capture?",
+            toolbarMode = RichTextToolbarMode.TOGGLE,
+            minHeight = 96.dp,
+            enabled = recordingState != AudioRecorder.State.RECORDING,
+            ink = paperInk(),
+            accent = MaterialTheme.colorScheme.tertiary,
+            paper = true,
+            paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        )
     }
 }
 

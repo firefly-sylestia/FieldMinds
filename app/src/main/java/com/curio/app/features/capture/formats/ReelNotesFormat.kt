@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.paperInk
@@ -112,31 +111,25 @@ fun ReelNotesFormat(
 
         // ── Review text field — rich text behind a small format toggle ──
         // Wears the same note-paper box as the Marginalia journal (light +
-        // dark), so a written review reads as written on paper. The format
-        // toggle stays a small button; the field itself sits directly on the
-        // paper (no inner box / double margin).
-        PaperCard(
+        // dark). The toolbar renders OUTSIDE the paper slip (paper mode) so
+        // the ruled lines line up under the text while typing; the field
+        // itself sits directly on the paper (no inner box / double margin).
+        RichTextEditor(
             modifier = Modifier.fillMaxWidth(),
-            ruled = true,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
-        ) {
-            RichTextEditor(
-                text = reviewText,
-                spans = reviewSpans,
-                onRichTextChange = { newText, newSpans ->
-                    reviewText = newText
-                    reviewSpans = newSpans
-                },
-                placeholder = "What did you think of the film?",
-                toolbarMode = RichTextToolbarMode.TOGGLE,
-                minHeight = 140.dp,
-                ink = paperInk(),
-                surface = Color.Transparent,
-                accent = MaterialTheme.colorScheme.tertiary,
-                fieldPadding = PaddingValues(0.dp),
-                showFieldBorder = false
-            )
-        }
+            text = reviewText,
+            spans = reviewSpans,
+            onRichTextChange = { newText, newSpans ->
+                reviewText = newText
+                reviewSpans = newSpans
+            },
+            placeholder = "What did you think of the film?",
+            toolbarMode = RichTextToolbarMode.TOGGLE,
+            minHeight = 140.dp,
+            ink = paperInk(),
+            accent = MaterialTheme.colorScheme.tertiary,
+            paper = true,
+            paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        )
 
         // ── Image attach row ───────────────────────────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

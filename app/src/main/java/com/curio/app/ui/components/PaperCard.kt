@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateTopPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +18,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.paperBorder
 import com.curio.app.ui.theme.paperRule
@@ -63,7 +63,7 @@ fun PaperCard(
                 // that omits it) — fall back to the classic 24dp cadence.
                 val bodyLineHeight = MaterialTheme.typography.bodyLarge.lineHeight
                 val ruleSpacing = with(density) {
-                    if (bodyLineHeight.isUnspecified) 24.dp.toPx() else bodyLineHeight.toPx()
+                    if (bodyLineHeight == TextUnit.Unspecified) 24.dp.toPx() else bodyLineHeight.toPx()
                 }
                 val ruleStart = with(density) {
                     contentPadding.calculateTopPadding().toPx()

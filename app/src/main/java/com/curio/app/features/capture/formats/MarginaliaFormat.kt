@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
@@ -108,28 +107,24 @@ fun MarginaliaFormat(
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            PaperCard(
+            // The toolbar renders OUTSIDE the paper slip (paper mode) so the
+            // ruled lines line up under the text while typing.
+            RichTextEditor(
                 modifier = Modifier.fillMaxWidth(),
-                ruled = true,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
-            ) {
-                RichTextEditor(
-                    text = journalText,
-                    spans = journalSpans,
-                    onRichTextChange = { newText, newSpans ->
-                        journalText = newText
-                        journalSpans = newSpans
-                    },
-                    placeholder = "What did this book make you think about?",
-                    toolbarMode = RichTextToolbarMode.MAIN,
-                    minHeight = 140.dp,
-                    ink = paperInk(),
-                    surface = Color.Transparent,
-                    accent = MaterialTheme.colorScheme.tertiary,
-                    fieldPadding = PaddingValues(0.dp),
-                    showFieldBorder = false
-                )
-            }
+                text = journalText,
+                spans = journalSpans,
+                onRichTextChange = { newText, newSpans ->
+                    journalText = newText
+                    journalSpans = newSpans
+                },
+                placeholder = "What did this book make you think about?",
+                toolbarMode = RichTextToolbarMode.MAIN,
+                minHeight = 140.dp,
+                ink = paperInk(),
+                accent = MaterialTheme.colorScheme.tertiary,
+                paper = true,
+                paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+            )
         }
 
         // ── Quote cards ───────────────────────────────────────────────────
@@ -216,14 +211,12 @@ private fun QuoteCard(
     onTextChange: (text: String, spans: List<TextSpan>) -> Unit,
     onRemove: () -> Unit
 ) {
-    PaperCard(
+    // The header row + toolbar render ABOVE the paper slip (the card holds
+    // only the field), so the ruled lines line up under the quote text.
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .rotate(rotation),
-        ruled = true,
-        // Compact inset — quote cards stay tight so a stack of them reads
-        // as a neat pile of notecards rather than heavy journal blocks.
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
+            .rotate(rotation)
     ) {
         // ── Card header — quote mark + number, Remove on the right ──
         Row(
@@ -261,6 +254,7 @@ private fun QuoteCard(
             }
         }
         RichTextEditor(
+            modifier = Modifier.fillMaxWidth(),
             text = text,
             spans = spans,
             onRichTextChange = onTextChange,
@@ -268,10 +262,9 @@ private fun QuoteCard(
             toolbarMode = RichTextToolbarMode.MAIN,
             minHeight = 64.dp,
             ink = paperInk(),
-            surface = Color.Transparent,
             accent = MaterialTheme.colorScheme.tertiary,
-            fieldPadding = PaddingValues(0.dp),
-            showFieldBorder = false
+            paper = true,
+            paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
         )
     }
 }

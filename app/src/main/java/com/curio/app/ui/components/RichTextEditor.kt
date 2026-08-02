@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.calculateLeftPadding
-import androidx.compose.foundation.layout.calculateTopPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -232,7 +230,15 @@ fun RichTextEditor(
     fieldPadding: PaddingValues = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
     /** Draws the field's hairline border — off when the editor sits on paper. */
     showFieldBorder: Boolean = true,
-    highlightColor: Color = paperHighlight()
+    highlightColor: Color = paperHighlight(),
+    /** Renders the field on a note-paper [PaperCard] (theme-aware cream /
+     *  toned paper with ruled lines) with the toolbar OUTSIDE the card, so
+     *  the ruled lines line up under the field text while typing — matching
+     *  the saved detail view's paper pages. Default false keeps the plain
+     *  surface field. */
+    paper: Boolean = false,
+    /** Content inset of the paper card when [paper] is true. */
+    paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
 ) {
     // NOTE: NOT keyed on [text] — the parent echoes our edits back, so a
     // keyed remember would rebuild the field (and drop the cursor) on every
@@ -251,6 +257,9 @@ fun RichTextEditor(
     var pendingBold by remember { mutableStateOf(false) }
     var pendingItalic by remember { mutableStateOf(false) }
     var pendingHighlight by remember { mutableStateOf(false) }
+    // Paper mode: the field floats directly on the card's paper — no inner
+    // padding of its own (the card owns the margins).
+    val effectiveFieldPadding = if (paper) PaddingValues(0.dp) else fieldPadding
 
     LaunchedEffect(text, spans) {
         if (tfv.text != text) {
@@ -397,79 +406,96 @@ fun RichTextEditor(
         }
 
         // ── The field ───────────────────────────────────────────────────
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            Surface(
-                shape = RoundedCornerShape(14.dp),
-                color = surface,
-                border = if (showFieldBorder) BorderStroke(1.dp, accent.copy(alpha = 0.25f)) else null,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                BasicTextField(
-                    value = tfv,
-                    onValueChange = { emit(it) },
-                    enabled = enabled,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
-                    cursorBrush = SolidColor(accent),
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        imeAction = ImeAction.Default
-                    ),
-                    onTextLayout = { layoutResult = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = minHeight)
-                        .padding(fieldPadding)
-                )
-            }
+        // On note-paper ([paper]) the field renders inside a PaperCard with
+        // the toolbar OUTSIDE the card, so the ruled lines line up under the
+        // text while typing — matching the saved detail view's paper pages.
+        val fieldBlock: @Composable () -> Unit = {
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                Surface(
+                    shape = RoundedCornerShape(14.dp),
+                    color = if (paper) Color.Transparent else surface,
+                    border = if (paper || !showFieldBorder) null
+                            else BorderStroke(1.dp, accent.copy(alpha = 0.25f)),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    BasicTextField(
+                        value = tfv,
+                        onValueChange = { emit(it) },
+                        enabled = enabled,
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
+                        cursorBrush = SolidColor(accent),
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            imeAction = ImeAction.Default
+                        ),
+                        onTextLayout = { layoutResult = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = minHeight)
+                            .padding(effectiveFieldPadding)
+                    )
+                }
 
-            // ── Floating format bar — appears above the text selection so
-            // formatting EXISTING text is discoverable: select words, then
-            // tap B / I / highlight right there (the main toolbar still
-            // works too — this is an extra, selection-local entry point).
-            val selection = tfv.selection
-            val layout = layoutResult
-            if (enabled && !selection.collapsed && layout != null) {
-                val density = LocalDensity.current
-                val caretRect = runCatching { layout.getCursorRect(selection.max) }.getOrNull()
-                if (caretRect != null) {
-                    val padLeft = with(density) { fieldPadding.calculateLeftPadding(LayoutDirection.Ltr).toPx() }
-                    val padTop = with(density) { fieldPadding.calculateTopPadding().toPx() }
-                    val barHeight = with(density) { 40.dp.toPx() }
-                    val barWidth = with(density) { 132.dp.toPx() }
-                    val gap = with(density) { 8.dp.toPx() }
-                    // Float above the selection; drop below it when the
-                    // selection is at the very top of the field.
-                    val aboveY = padTop + caretRect.top - barHeight - gap
-                    val y = if (aboveY >= 0f) aboveY else padTop + caretRect.bottom + gap
-                    // Center the bar on the selection end, clamped so it
-                    // never runs off the field's left/right edge.
-                    val maxX = (with(density) { maxWidth.toPx() } - barWidth).coerceAtLeast(0f)
-                    val x = (padLeft + caretRect.left - barWidth / 2f).coerceIn(0f, maxX)
-                    Popup(
-                        alignment = Alignment.TopStart,
-                        offset = IntOffset(x.roundToInt(), y.roundToInt()),
-                        properties = PopupProperties(focusable = false)
-                    ) {
-                        SelectionFormatBar(
-                            boldActive = hasFlagAt(RichFlag.BOLD),
-                            italicActive = hasFlagAt(RichFlag.ITALIC),
-                            highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                            accent = accent,
-                            enabled = enabled,
-                            onBold = { applyFlag(RichFlag.BOLD) },
-                            onItalic = { applyFlag(RichFlag.ITALIC) },
-                            onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
-                        )
+                // ── Floating format bar — appears above the text selection so
+                // formatting EXISTING text is discoverable: select words, then
+                // tap B / I / highlight right there (the main toolbar still
+                // works too — this is an extra, selection-local entry point).
+                val selection = tfv.selection
+                val layout = layoutResult
+                if (enabled && !selection.collapsed && layout != null) {
+                    val density = LocalDensity.current
+                    val caretRect = runCatching { layout.getCursorRect(selection.max) }.getOrNull()
+                    if (caretRect != null) {
+                        val padLeft = with(density) { effectiveFieldPadding.calculateLeftPadding(LayoutDirection.Ltr).toPx() }
+                        val padTop = with(density) { effectiveFieldPadding.calculateTopPadding().toPx() }
+                        val barHeight = with(density) { 40.dp.toPx() }
+                        val barWidth = with(density) { 132.dp.toPx() }
+                        val gap = with(density) { 8.dp.toPx() }
+                        // Float above the selection; drop below it when the
+                        // selection is at the very top of the field.
+                        val aboveY = padTop + caretRect.top - barHeight - gap
+                        val y = if (aboveY >= 0f) aboveY else padTop + caretRect.bottom + gap
+                        // Center the bar on the selection end, clamped so it
+                        // never runs off the field's left/right edge.
+                        val maxX = (with(density) { maxWidth.toPx() } - barWidth).coerceAtLeast(0f)
+                        val x = (padLeft + caretRect.left - barWidth / 2f).coerceIn(0f, maxX)
+                        Popup(
+                            alignment = Alignment.TopStart,
+                            offset = IntOffset(x.roundToInt(), y.roundToInt()),
+                            properties = PopupProperties(focusable = false)
+                        ) {
+                            SelectionFormatBar(
+                                boldActive = hasFlagAt(RichFlag.BOLD),
+                                italicActive = hasFlagAt(RichFlag.ITALIC),
+                                highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
+                                accent = accent,
+                                enabled = enabled,
+                                onBold = { applyFlag(RichFlag.BOLD) },
+                                onItalic = { applyFlag(RichFlag.ITALIC) },
+                                onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
+                            )
+                        }
                     }
                 }
             }
+            if (tfv.text.isEmpty() && placeholder.isNotEmpty()) {
+                Text(
+                    text = placeholder,
+                    style = MaterialTheme.typography.bodyLarge.copy(color = ink.copy(alpha = 0.45f)),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                )
+            }
         }
-        if (tfv.text.isEmpty() && placeholder.isNotEmpty()) {
-            Text(
-                text = placeholder,
-                style = MaterialTheme.typography.bodyLarge.copy(color = ink.copy(alpha = 0.45f)),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-            )
+        if (paper) {
+            PaperCard(
+                modifier = Modifier.fillMaxWidth(),
+                ruled = true,
+                contentPadding = paperContentPadding
+            ) {
+                fieldBlock()
+            }
+        } else {
+            fieldBlock()
         }
     }
 }
