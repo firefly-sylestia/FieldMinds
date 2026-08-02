@@ -131,6 +131,15 @@ dropped). This does NOT apply to:
 - Changes to user-visible text (strings, What's New, changelogs).
 - Any change that alters behavior, layout, or compiled output.
 
+### 🆕 NEW FEATURES — ASK THE USER: TOGGLEABLE OR NOT?
+
+Whenever an agent is ADDING A NEW MEASURE — a new feature, capability, or
+behavior the app didn't have before — ask the user whether they want it
+**toggleable** (behind a user-facing Settings option) or **always-on**.
+Use the ask_user tool BEFORE implementing and follow their answer. This
+ask does NOT apply to refinements or fixes of existing behavior — those
+ship as-is without the toggleable question.
+
 ### 🧪 EXPERIMENTAL CHANGES — MUST BE SETTINGS-OPTIONAL
 
 Whenever a change is **experimental or being tested** (a visual A/B, a new

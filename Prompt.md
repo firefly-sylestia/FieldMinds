@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Agent rule: when ADDING a new feature, ask the user whether it should be toggleable or always-on (refinements/fixes ship without the ask)**
+
+### What was asked
+
+Add to the agent instructions: when adding a new measure, ask the user if they want it toggleable or not — not for refinements or fixes, only for new things.
+
+### What was changed
+
+- **`AGENTS.md` (root)** — new section **"🆕 NEW FEATURES — ASK THE USER: TOGGLEABLE OR NOT?"** before the experimental section: whenever an agent is adding a NEW measure (a new feature/capability/behavior), ask the user via ask_user whether it should be toggleable (behind a user-facing Settings option) or always-on, and follow their answer. Explicitly scoped OUT: refinements and fixes of existing behavior ship as-is without the question.
+- **`app/AGENTS.md`** — mirrored the rule in the app module's "Experimental features (A/B testing)" section as a new bullet (new measures → ask first; refinements/fixes → no ask).
+
+### Review
+
+Not applicable — small agent-instruction doc change (no code).
+
+### Follow-ups / notes
+
+- Agent instruction changes are committed and pushed immediately so every agent sees them (per root AGENTS.md).
+
+
+## Previous Requests
+
 **Note-paper polish: torn pages get the rigid-surface sheen, coffee stains and the folded corner redone to actually look good**
 
 ### What was asked
