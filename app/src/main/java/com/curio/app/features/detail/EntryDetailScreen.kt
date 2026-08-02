@@ -200,7 +200,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(430.dp)
+                .height(380.dp)
+                // Rounded bottom corners — the hero card curves into the
+                // page instead of ending on a hard horizontal edge.
+                .clip(RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp))
                 .background(
                     Brush.verticalGradient(CurioGradients.cardGradient(cat.themedAccent()))
                 ),
@@ -214,7 +217,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     // clear of the overlaid back / more buttons at the top of
                     // the banner — without this floor, a two-line title (or
                     // the frosted bar) pushes the column up under the buttons.
-                    .padding(top = 80.dp, bottom = 28.dp)
+                    .padding(top = 80.dp, bottom = 16.dp)
             ) {
                 CurioIcon(
                     name = cat.iconGlyph,
@@ -277,9 +280,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
             Row(
                 modifier = Modifier
+                    // Buttons anchored in the icon's band — previously they
+                    // floated mid-card (Box contentAlignment centers every
+                    // child), sitting at the title's level. Now they sit at
+                    // the top corners, dropped down far enough (72dp below
+                    // the status bar) to sit level with the centered glyph.
+                    .align(Alignment.TopCenter)
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(16.dp),
+                    .padding(start = 16.dp, end = 16.dp, top = 72.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -370,6 +379,22 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     }
                 }
             }
+
+            // ── Bottom fade — the hero's lower edge dissolves into the
+            //     page's category wash so the card merges smoothly with the
+            //     content below (no hard gradient cutoff line).
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(36.dp)
+                    .align(Alignment.BottomCenter)
+                    .background(
+                        Brush.verticalGradient(
+                            0f to Color.Transparent,
+                            1f to cat.categoryBackgroundWash()
+                        )
+                    )
+            )
         }
 
         // ── Topic meta — the title now lives INSIDE the hero above, so
