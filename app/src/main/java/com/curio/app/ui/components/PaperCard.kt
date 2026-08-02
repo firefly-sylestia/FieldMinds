@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.matchParentSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -15,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.paperBorder
@@ -48,9 +48,11 @@ fun PaperCard(
     ) {
         Box {
             // Faint ruled lines behind the content — the notebook texture.
+            // (paperRule() is @Composable, so resolve it here in the
+            // composable scope — the Canvas draw lambda is not composable.)
+            val ruleColor = if (ruled) paperRule() else Color.Unspecified
             if (ruled) {
                 Canvas(modifier = Modifier.matchParentSize()) {
-                    val ruleColor = paperRule()
                     val spacing = 24.dp.toPx()
                     var y = spacing
                     while (y < size.height) {

@@ -74,7 +74,9 @@ fun buildRichAnnotated(text: String, spans: List<TextSpan>, highlightColor: Colo
                     SpanStyle(
                         fontWeight = if (sp.bold) FontWeight.Bold else null,
                         fontStyle = if (sp.italic) FontStyle.Italic else null,
-                        background = if (sp.highlight) highlightColor else null
+                        // Non-null Color in this Compose version — the "no
+                        // highlight" sentinel is Color.Unspecified.
+                        background = if (sp.highlight) highlightColor else Color.Unspecified
                     ),
                     s, e
                 )
@@ -91,7 +93,7 @@ fun extractRichSpans(annotated: AnnotatedString): List<TextSpan> =
     annotated.spanStyles.mapNotNull { range ->
         val bold = range.item.fontWeight == FontWeight.Bold
         val italic = range.item.fontStyle == FontStyle.Italic
-        val highlight = range.item.background != null
+        val highlight = range.item.background != Color.Unspecified
         if (!bold && !italic && !highlight) null
         else TextSpan(range.start, range.end, bold, italic, highlight)
     }.merged()
@@ -203,14 +205,16 @@ fun RichTextEditor(
     var toolbarExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(text, spans) {
-        if (tfv.text.text != text) {
+        if (tfv.text != text) {
             tfv = TextFieldValue(buildRichAnnotated(text, spans, highlightColor))
         }
     }
 
     fun emit(new: TextFieldValue) {
         tfv = new
-        onRichTextChange(new.text.text, extractRichSpans(new.text))
+        // `text` is plain String in this Compose version; the styled
+        // AnnotatedString lives on `annotatedString`.
+        onRichTextChange(new.text, extractRichSpans(new.annotatedString))
     }
 
     fun applyFlag(flag: RichFlag) {
@@ -218,17 +222,17 @@ fun RichTextEditor(
         if (sel.collapsed) return
         val s = minOf(sel.start, sel.end)
         val e = maxOf(sel.start, sel.end)
-        val current = extractRichSpans(tfv.text)
+        val current = extractRichSpans(tfv.annotatedString)
         val add = !spansFullyCovered(current, s, e, flag)
         val updated = toggleSpanFlag(current, s, e, flag, add)
-        emit(TextFieldValue(buildRichAnnotated(tfv.text.text, updated, highlightColor), selection = sel))
+        emit(TextFieldValue(buildRichAnnotated(tfv.text, updated, highlightColor), selection = sel))
     }
 
     fun hasFlagAt(flag: RichFlag): Boolean {
         val sel = tfv.selection
         val s = minOf(sel.start, sel.end)
         val e = maxOf(sel.start, sel.end)
-        val current = extractRichSpans(tfv.text)
+        val current = extractRichSpans(tfv.annotatedString)
         if (sel.collapsed) {
             // Caret: report active when the char under it carries the flag.
             val pos = s
@@ -313,7 +317,7 @@ fun RichTextEditor(
                     .padding(horizontal = 14.dp, vertical = 12.dp)
             )
         }
-        if (tfv.text.text.isEmpty() && placeholder.isNotEmpty()) {
+        if (tfv.text.isEmpty() && placeholder.isNotEmpty()) {
             Text(
                 text = placeholder,
                 style = MaterialTheme.typography.bodyLarge.copy(color = ink.copy(alpha = 0.45f)),
