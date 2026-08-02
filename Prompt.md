@@ -2,24 +2,22 @@
 
 ## Latest Request (COMPLETED)
 
-**"make the margins and the texts properly aligned and also use the same paper style box in dark mode too and in review boxes as well"**
+**"fix the text formatting as its not properly working... make it use the selected text format change and apply the same type after too like if i select the bold and then type it will make it bold as well"**
 
 ### What was changed
 
-Paper style + alignment pass across the note-paper surfaces:
+All in `RichTextEditor.kt`. The old behavior silently ignored a format tap when no text was selected (`if (sel.collapsed) return`), so users couldn't discover how to format existing text. Fixed with three complementary mechanisms (existing toolbar KEPT):
 
-1. **`PaperCard.kt`** — Ruled lines now follow the notebook cadence: spaced at `bodyLarge` line-height and starting one cadence below the top content padding, so the first line of text sits ON the first rule (real-paper feel) instead of floating at a fixed 24dp from the card edge. Guarded against an Unspecified `lineHeight` (falls back to 24dp).
+1. **Sticky (armed) formats** — tapping Bold/Italic/Highlight with a collapsed caret now ARMS the format instead of no-oping: the next characters typed carry it (toolbar button lights up via `hasFlagAt`). Applying a format to a selection also arms it, so "make this bold, then keep typing" works — exactly the requested behavior.
 
-2. **`RichTextEditor.kt`** — New `fieldPadding` (default 14/12) and `showFieldBorder` (default true) params so paper-wrapped editors can drop the inner rounded box + double margin and write directly on the paper.
+2. **Floating selection bar** — when a non-collapsed selection exists, a compact `SelectionFormatBar` (B / I / highlight) floats above the selection (Popup anchored to the caret via `TextLayoutResult`/`onTextLayout`), making it obvious how to format existing text. Falls below the selection when it's at the top of the field.
 
-3. **`MarginaliaFormat.kt`** — Journal + quote-card editors now pass `fieldPadding = 0.dp` / `showFieldBorder = false` (text sits directly on the paper at the card's own content margin). Journal content padding unified to 16/14 and quote cards to 12/10 — matching the saved detail view exactly, so what you type aligns with what you see saved.
+3. **Insertion diffing** — `findInsertedRange(oldText, newText)` (bounds-safe common-prefix/suffix, reported in new-text coordinates) applies an armed format to exactly the changed characters — including typing OVER a selection (replace) — while pure deletions and unchanged text return null. `emit` rebuilds the AnnotatedString with the added span and preserves selection + IME composition.
 
-4. **`ReelNotesFormat.kt`** — The review field (capture form) now wears the same note-paper box as the Marginalia journal (ruled paper, `paperInk`, transparent surface, no inner border) — light AND dark mode.
-
-5. **`EntryDetailScreen.kt`** — The saved review box (`ReelNotesRender`) switched from the category surface to `PaperCard` with `paperInk`, matching the journal's paper look in both themes; "No review written yet" fallback also wears paper.
+Supporting changes: the floating bar is anchored via a `BoxWithConstraints` wrapper around the field (centered on the selection end, clamped to the field width so it never runs off-screen), pending flags reset when a different entry's text is loaded in `LaunchedEffect`, and `hasFlagAt` returns `armed || underCaret` for a collapsed caret.
 
 ### Review
-1 round of code-reviewer-deepseek-flash — clean. Actioned its one real concern: `bodyLarge.lineHeight.toPx()` guarded against Unspecified (CurioTypography sets it to 24.sp, so safe either way). Note: in the capture editor the MAIN toolbar renders inside the PaperCard, so the ruled lines align under the field's text in the saved view (text directly in card); in the editor the toolbar shifts the field down slightly — rules remain a faint texture there.
+2 rounds of code-reviewer-deepseek-flash — clean. Round 1 noted a dead `showSelectionBar` param (removed) and right-edge overflow (fixed with a width clamp). Round 2 verified the generalized diff is bounds-safe and covers selection-replacement; no blocking issues.
 
 ### Follow-ups / notes
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
