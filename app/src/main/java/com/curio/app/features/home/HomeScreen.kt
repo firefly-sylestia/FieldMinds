@@ -26,11 +26,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -67,8 +70,12 @@ import com.curio.app.data.SavedQuote
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.ExploreReminderScheduler
+import com.curio.app.data.ExploreSession
 import com.curio.app.data.ExploreSessionStore
 import com.curio.app.data.StreakTracker
+import com.curio.app.data.formatElapsed
+import com.curio.app.infrastructure.ExploreSessionService
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioForwardArrow
@@ -80,7 +87,10 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.themedAccent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.content.Intent
+import android.net.Uri
 import java.util.Calendar
 
 /**
@@ -403,6 +413,30 @@ fun HomeScreen(navController: NavController) {
             }
 
             Spacer(Modifier.height(20.dp))
+
+            // ── 4b. Currently exploring — live session card ────────────
+            val activeSession = ExploreSessionStore.activeSessionState
+            if (activeSession != null) {
+                CurrentlyExploringCard(
+                    session = activeSession,
+                    onDone = {
+                        ExploreSessionStore.clearSession(context)
+                        ExploreReminderScheduler.cancel(context)
+                        ExploreSessionService.stop(context)
+                        navController.navigate(
+                            CurioRoutes.captureFor(activeSession.categoryId.routeSlug, activeSession.topicName)
+                        ) { launchSingleTop = true }
+                    },
+                    onKeepExploring = {
+                        // Re-open the Google search — the session keeps
+                        // ticking in the background.
+                        runCatching {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(activeSession.searchUrl)))
+                        }
+                    }
+                )
+                Spacer(Modifier.height(20.dp))
+            }
 
             // ── 5. Categories chip row ──────────────────────────────────
             Column {
@@ -1290,6 +1324,115 @@ private fun ExploreTopicRow(
                 tint = accent,
                 modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
             )
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Currently exploring — live session card
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun CurrentlyExploringCard(
+    session: ExploreSession,
+    onDone: () -> Unit,
+    onKeepExploring: () -> Unit
+) {
+    val accent = CurioCategories.byId(session.categoryId).themedAccent()
+    // Live elapsed time — recomputed from the persisted session start so it
+    // survives process restarts; the tick cancels when the card leaves
+    // composition (session ended / Home left).
+    var elapsedMillis by remember(session.startMillis) {
+        mutableStateOf(System.currentTimeMillis() - session.startMillis)
+    }
+    LaunchedEffect(session.startMillis) {
+        while (true) {
+            elapsedMillis = System.currentTimeMillis() - session.startMillis
+            delay(1_000)
+        }
+    }
+
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = 0.dp,
+        border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(RoundedCornerShape(13.dp))
+                        .background(accent.copy(alpha = 0.16f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CurioIcon(
+                        CurioIcons.Timer, null,
+                        tint = accent,
+                        size = 22.dp
+                    )
+                }
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        "Currently exploring",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = accent
+                    )
+                    Text(
+                        session.topicName,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            val overRecommended = elapsedMillis >= session.durationMinutes * 60_000L
+            Text(
+                if (overRecommended) {
+                    "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far — past the ~${session.durationMinutes} min mark"
+                } else {
+                    "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far · ~${session.durationMinutes} min recommended"
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Button(
+                    onClick = onDone,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = accent,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Done — write about it", style = MaterialTheme.typography.labelLarge)
+                }
+                OutlinedButton(
+                    onClick = onKeepExploring,
+                    shape = RoundedCornerShape(50),
+                    border = BorderStroke(1.dp, accent.copy(alpha = 0.5f)),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = accent),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Keep exploring", style = MaterialTheme.typography.labelLarge)
+                }
+            }
         }
     }
 }

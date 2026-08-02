@@ -2,6 +2,19 @@
 
 ## Latest Request (COMPLETED)
 
+**'Currently exploring' card on Home (live elapsed time + Done / Keep exploring)**
+
+- HomeScreen: when `ExploreSessionStore.activeSessionState` is non-null, a new `CurrentlyExploringCard` renders between the stats strip and Categories — accent-bordered card with Timer glyph, "Currently exploring" label, topic name, and a live elapsed line ticking every second (remember(startMillis) + LaunchedEffect 1s loop, auto-cancelled on dismiss).
+- Two actions: **Done — write about it** (accent Button) tears down the session (clear + cancel reminder + stop service) and navigates to capture; **Keep exploring** (OutlinedButton) re-opens the Google search. The card disappears reactively the moment the session ends.
+- The recommendation line switches phrasing once elapsed passes the mark ("…past the ~45 min mark" instead of "…~45 min recommended").
+- `formatElapsed` moved from CurioNavHost's private copy to a shared public helper in ExploreSession.kt (NavHost now imports it) so the dialog and card format identically.
+
+### Review
+
+Reviewer pass (clean; applied the past-the-mark phrasing polish). CI validates on push.
+
+## Latest Request (COMPLETED)
+
 **Done-exploring dialog now shows live elapsed explore time**
 
 - CurioNavHost: the "Done exploring <topic>?" dialog gained a Timer-icon line — "You've been exploring for 12m 5s" — computed from ExploreSession.startMillis, ticking live every second via a remember(startMillis) state + LaunchedEffect while(true) loop (auto-cancelled on dismiss; survives process restarts since it's derived from the persisted start).

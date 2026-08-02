@@ -257,3 +257,20 @@ private fun ExploreSession.toJson(): JSONObject = JSONObject()
     .put("instruction", instruction)
     .put("searchUrl", searchUrl)
     .put("startMillis", startMillis)
+
+/**
+ * Formats elapsed explore time as a friendly reading — "34s", "12m 5s",
+ * "1h 24m" — not a countdown, just how long the user has been at it.
+ * Shared by the done-exploring dialog and the Home session card.
+ */
+fun formatElapsed(millis: Long): String {
+    val totalSeconds = (millis / 1000L).coerceAtLeast(0L)
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+    return when {
+        hours > 0 -> "${hours}h ${minutes}m"
+        minutes > 0 -> "${minutes}m ${seconds}s"
+        else -> "${seconds}s"
+    }
+}

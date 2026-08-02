@@ -48,6 +48,7 @@ import androidx.navigation.navArgument
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.ExploreReminderScheduler
 import com.curio.app.data.ExploreSessionStore
+import com.curio.app.data.formatElapsed
 import com.curio.app.infrastructure.ExploreSessionService
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -396,18 +397,4 @@ fun CurioNavHost(
     }
 }
 
-/**
- * Formats elapsed explore time as a friendly reading — "34s", "12m 5s",
- * "1h 24m" — not a countdown, just how long they've been at it.
- */
-private fun formatElapsed(millis: Long): String {
-    val totalSeconds = (millis / 1000L).coerceAtLeast(0L)
-    val hours = totalSeconds / 3600
-    val minutes = (totalSeconds % 3600) / 60
-    val seconds = totalSeconds % 60
-    return when {
-        hours > 0 -> "${hours}h ${minutes}m"
-        minutes > 0 -> "${minutes}m ${seconds}s"
-        else -> "${seconds}s"
-    }
-}
+
