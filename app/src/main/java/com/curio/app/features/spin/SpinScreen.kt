@@ -499,11 +499,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val interval = (200L + (320L * eased).toLong()).coerceAtMost(520L)
             cycleIndex = ++tick
             // Slot-machine ratchet: haptic intensity escalates as the wheel
-            // decelerates — a light tick while blurring fast (fast ticks
-            // coalesce anyway), a firmer segment tick through the slowdown,
-            // and a solid keyboard-tap click in the final settle phase. As
-            // intervals lengthen, ticks naturally space out like a prize
-            // wheel locking in. NOTE: SegmentFrequentTick / KeyboardTap are
+            // decelerates — a light tick at the brisk opening cadence, a
+            // firmer segment tick through the slowdown, and a solid
+            // keyboard-tap click in the final settle phase. As intervals
+            // lengthen, ticks naturally space out like a prize wheel
+            // locking in. NOTE: SegmentFrequentTick / KeyboardTap are
             // the renamed equivalents of the old ClockTick / Keypress
             // constants (Compose UI 1.12) — do NOT revert them.
             val ratchet = when {
