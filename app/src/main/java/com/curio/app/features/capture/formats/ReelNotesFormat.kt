@@ -179,15 +179,8 @@ fun ReelNotesFormat(
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
 
-        // ── Quote cards — the SHARED hand-placed paper notecard section ──
-        // New cards inherit the review box's current paper style + color.
-        QuoteCardsSection(
-            state = quoteCards,
-            newCardStyle = { reviewStyle },
-            newCardColor = { reviewColor }
-        )
-
-        // ── Mood — behind the "Entry date & mood" setting ────────────────
+        // ── Mood — right under the review field, ABOVE the quote cards ──
+        // (behind the "Entry date & mood" setting).
         if (AppPreferences.entryMetaEnabledState) {
             MoodChipsRow(
                 mood = mood,
@@ -195,6 +188,14 @@ fun ReelNotesFormat(
                 onMoodChange = { mood = it }
             )
         }
+
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // New cards inherit the review box's current paper style + color.
+        QuoteCardsSection(
+            state = quoteCards,
+            newCardStyle = { reviewStyle },
+            newCardColor = { reviewColor }
+        )
 
         // ── Image attach row ───────────────────────────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -444,6 +444,16 @@ fun SoundBiteFormat(
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
 
+        // ── Mood — right under the note field, ABOVE the quote cards ────
+        // (behind the "Entry date & mood" setting).
+        if (AppPreferences.entryMetaEnabledState) {
+            MoodChipsRow(
+                mood = mood,
+                accent = accent,
+                onMoodChange = { mood = it }
+            )
+        }
+
         // ── Quote cards — the SHARED hand-placed paper notecard section ──
         // Frozen while actively recording (the cards need the keyboard).
         QuoteCardsSection(
@@ -452,15 +462,6 @@ fun SoundBiteFormat(
             newCardStyle = { noteStyle },
             newCardColor = { noteColor }
         )
-
-        // ── Mood — behind the "Entry date & mood" setting ────────────────
-        if (AppPreferences.entryMetaEnabledState) {
-            MoodChipsRow(
-                mood = mood,
-                accent = accent,
-                onMoodChange = { mood = it }
-            )
-        }
     }
 }
 

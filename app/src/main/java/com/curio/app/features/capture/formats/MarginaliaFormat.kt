@@ -237,15 +237,8 @@ fun MarginaliaFormat(
             )
         }
 
-        // ── Quote cards — the SHARED hand-placed paper notecard section ──
-        // New cards inherit the journal's current paper style + color.
-        QuoteCardsSection(
-            state = quoteCards,
-            newCardStyle = { journalStyle },
-            newCardColor = { journalColor }
-        )
-
-        // ── Mood + attachments — behind the "Entry date & mood" setting ──
+        // ── Mood — right under the journal page, ABOVE the quote cards ──
+        // (behind the "Entry date & mood" setting).
         if (AppPreferences.entryMetaEnabledState) {
             // Mood row — tap a mood to set it, tap again to clear. Shared
             // across all capture formats via the MoodChipsRow component.
@@ -254,7 +247,18 @@ fun MarginaliaFormat(
                 accent = accent,
                 onMoodChange = { mood = it }
             )
+        }
 
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // New cards inherit the journal's current paper style + color.
+        QuoteCardsSection(
+            state = quoteCards,
+            newCardStyle = { journalStyle },
+            newCardColor = { journalColor }
+        )
+
+        // ── Attachments — behind the "Entry date & mood" setting ─────────
+        if (AppPreferences.entryMetaEnabledState) {
             // Attach gallery images (up to 6) — same row as Reel Notes.
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(

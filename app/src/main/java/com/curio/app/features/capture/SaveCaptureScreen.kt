@@ -661,7 +661,15 @@ private fun FormatBodyForCategory(
                             CurioIcon(
                                 name = formatGlyph(fmt),
                                 contentDescription = null,
-                                tint = if (active.format == fmt) category.themedAccent()
+                                // Active chip: readable in EVERY theme — on the
+                                // light tint wash the ink is the category's
+                                // theme-aware ink (deep in light, pastel twin in
+                                // dark); with the wash off (AMOLED/Material) the
+                                // chip is a solid deep accent so the content
+                                // must flip to white — deep-accent text on a
+                                // deep-accent chip was invisible in AMOLED.
+                                tint = if (active.format == fmt)
+                                       (if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White)
                                        else MaterialTheme.colorScheme.onSurfaceVariant,
                                 size = 16.dp
                             )
@@ -670,8 +678,9 @@ private fun FormatBodyForCategory(
                                 style = MaterialTheme.typography.labelLarge.copy(
                                     fontWeight = if (active.format == fmt) FontWeight.SemiBold else FontWeight.Normal
                                 ),
-                                color = if (active.format == fmt) category.themedAccent()
-                                       else MaterialTheme.colorScheme.onSurface
+                                color = if (active.format == fmt)
+                                        (if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White)
+                                        else MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -765,13 +774,13 @@ private fun FormatBodyForCategory(
                     CurioIcon(
                         name = CurioIcons.Add,
                         contentDescription = null,
-                        tint = if (AppPreferences.tintWashEffective()) category.accent else Color.White,
+                        tint = if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White,
                         size = 16.dp
                     )
                     Text(
                         text = "Add take",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = if (AppPreferences.tintWashEffective()) category.accent else Color.White
+                        color = if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White
                     )
                 }
             }

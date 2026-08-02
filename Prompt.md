@@ -2,6 +2,23 @@
 
 ## Latest Request (COMPLETED)
 
+**Dark/AMOLED visual fixes — creamy icons, invisible format-chip text, mood row moved above**
+
+### What was asked
+
+1. The "creamy" icons (meta-card icons tinted CoralBlush, waveform unplayed bars using the 20% tint wash) look bad in dark mode and AMOLED.
+2. In AMOLED the texts of Voice/Review/Journal (the capture format chips) weren't visible.
+3. Place the "How did it make you feel?" (mood) row ABOVE the entry content.
+
+### What was done
+
+- **SaveCaptureScreen.kt format chips** — the ACTIVE chip's icon+text used `category.themedAccent()` (deep accent) as their color while the chip background was ALSO `themedAccent()` when the tint wash was off (AMOLED/Material) → deep-accent text on a deep-accent chip = invisible. Now: wash on → `category.categoryInk()` (theme-aware), wash off → `Color.White`. The "+ Add take" button also switched `category.accent` → `category.categoryInk()` when the wash is on (was deep-on-murk in dark).
+- **EntryDetailScreen.kt** — (a) `AudioPlayerBar` gained a `playedAccent` param; in dark mode both the played and unplayed waveform bars now use the pastel ink twin (`category.categoryInk()`) so the progress split reads consistently instead of a deep accent inverting the readout against the now-light unplayed bars. (b) `EntryMetaCard` `MetaSegment` icons: `primary` (CoralBlush — a cream pastel that reads washed-out on the dark meta card) → `onSurfaceVariant` in dark, `primary` in light. Added `isCurioDarkTheme` import.
+- **MoodChipsRow moved ABOVE** — in Marginalia (right under the journal page), ReelNotes (under the review field), SoundBite (under the note field) it now sits ABOVE QuoteCardsSection; in FieldNotes it sits above the photo attach. The old trailing FieldNotes mood block was removed (no duplicate).
+
+### Validation
+- Braces/parens balanced on all 6 edited files; code-reviewer pass confirmed the four theme combos (light+wash, dark+wash, AMOLED, Material) all readable; reviewer's readout-inversion nit addressed via the new `playedAccent` param.
+
 **Migrate LocalLifecycleOwner off the deprecated compose-ui import**
 
 - OnboardingScreen.kt + CurioNavHost.kt now import `androidx.lifecycle.compose.LocalLifecycleOwner` (the lifecycle-runtime-compose 2.10.0 dependency was already present; SettingsScreen/ProfileScreen already used it) — clears both `LocalLifecycleOwner is deprecated` lint warnings. Pure import swap, no behavior change.

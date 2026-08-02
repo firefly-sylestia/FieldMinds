@@ -124,6 +124,7 @@ import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.themedAccent
+import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.glyph
 import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
@@ -502,7 +503,11 @@ private fun RowScope.MetaSegment(icon: String, title: String, subtitle: String) 
         CurioIcon(
             name = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            // Not the theme primary (CoralBlush) — a cream pastel that reads
+            // washed-out on the dark meta card; the neutral surface variant
+            // stays crisp in light and dark.
+            tint = if (isCurioDarkTheme()) MaterialTheme.colorScheme.onSurfaceVariant
+                   else MaterialTheme.colorScheme.primary,
             size = 20.dp
         )
         Text(
@@ -682,7 +687,16 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 AudioPlayerBar(
                     audioFilePath = data.audioFilePath,
                     accent = category.themedAccent(),
-                    tint = category.tint,
+                    // Played waveform bars: keep the SAME hue family as the
+                    // unplayed ones in dark mode (pastel twin, differing only
+                    // by alpha) so the progress split reads consistently — a
+                    // deep accent would be darker than the unplayed pastel and
+                    // invert the readout on dark surfaces.
+                    playedAccent = if (isCurioDarkTheme()) category.categoryInk() else category.themedAccent(),
+                    // Unplayed waveform bars: the 20% tint wash is a light-
+                    // mode-only color (murky, near-invisible on dark); in dark
+                    // mode use the pastel ink twin so the capsule bars read.
+                    tint = if (isCurioDarkTheme()) category.categoryInk() else category.tint,
                     surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                     border = category.categoryBorder()
                 )
@@ -736,6 +750,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 private fun AudioPlayerBar(
     audioFilePath: String,
     accent: Color,
+    playedAccent: Color,
     tint: Color,
     surface: Color,
     border: BorderStroke?
@@ -897,7 +912,7 @@ private fun AudioPlayerBar(
             WaveformCanvas(
                 samples = waveformSamples,
                 progress = sliderPosition,
-                accent = accent,
+                accent = playedAccent,
                 tint = tint,
                 onSeek = { fraction ->
                     sliderPosition = fraction.coerceIn(0f, 1f)
@@ -1319,7 +1334,10 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
             AudioPlayerBar(
                 audioFilePath = data.audioFilePath,
                 accent = category.themedAccent(),
-                tint = category.tint,
+                // Same theme-aware played/unplayed split as the SoundBite
+                // section (pastel pair in dark, deep-accent pair in light).
+                playedAccent = if (isCurioDarkTheme()) category.categoryInk() else category.themedAccent(),
+                tint = if (isCurioDarkTheme()) category.categoryInk() else category.tint,
                 surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                 border = category.categoryBorder()
             )

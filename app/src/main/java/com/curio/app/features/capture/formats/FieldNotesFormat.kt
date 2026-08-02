@@ -273,6 +273,18 @@ fun FieldNotesFormat(
 
         Spacer(Modifier.height(8.dp))
 
+        // ── Mood — right under the fields, ABOVE the photo attach ────────
+        // (behind the "Entry date & mood" setting).
+        if (AppPreferences.entryMetaEnabledState) {
+            MoodChipsRow(
+                mood = mood,
+                accent = accent,
+                onMoodChange = { mood = it }
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
         // ── Optional photo attach (CURIO_SPEC §8.5) ────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
@@ -298,15 +310,6 @@ fun FieldNotesFormat(
                     onClick = { imagePicker.launch(arrayOf("image/*")) }
                 )
             }
-        }
-
-        // ── Mood — behind the "Entry date & mood" setting ────────────────
-        if (AppPreferences.entryMetaEnabledState) {
-            MoodChipsRow(
-                mood = mood,
-                accent = accent,
-                onMoodChange = { mood = it }
-            )
         }
     }
 }
