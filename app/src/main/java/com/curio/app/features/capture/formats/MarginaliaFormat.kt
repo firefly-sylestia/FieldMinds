@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
-import com.curio.app.data.JournalMood
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.features.capture.AudioRecorder
@@ -41,7 +38,6 @@ import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.glyph
 import com.curio.app.ui.theme.paperInk
 import kotlinx.coroutines.delay
 
@@ -251,51 +247,13 @@ fun MarginaliaFormat(
 
         // ── Mood + attachments — behind the "Entry date & mood" setting ──
         if (AppPreferences.entryMetaEnabledState) {
-            // Mood row — tap a mood to set it, tap again to clear.
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = "How did it make you feel?",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    JournalMood.entries.forEach { m ->
-                        val selected = mood == m
-                        Surface(
-                            onClick = { mood = if (selected) null else m },
-                            shape = RoundedCornerShape(50),
-                            color = if (selected) accent else MaterialTheme.colorScheme.surfaceVariant,
-                            border = if (selected) null
-                                    else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                CurioIcon(
-                                    name = m.glyph,
-                                    contentDescription = null,
-                                    tint = if (selected) Color.White
-                                           else MaterialTheme.colorScheme.onSurfaceVariant,
-                                    size = 16.dp
-                                )
-                                Text(
-                                    text = m.label,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = if (selected) Color.White
-                                           else MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            // Mood row — tap a mood to set it, tap again to clear. Shared
+            // across all capture formats via the MoodChipsRow component.
+            MoodChipsRow(
+                mood = mood,
+                accent = accent,
+                onMoodChange = { mood = it }
+            )
 
             // Attach gallery images (up to 3) — same row as Reel Notes.
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

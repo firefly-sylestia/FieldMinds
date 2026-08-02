@@ -5,6 +5,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.JournalMood
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
@@ -51,6 +54,7 @@ import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.glyph
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperBorder
@@ -659,5 +663,65 @@ private fun QuoteCard(
             onPaperColorChange = { state.setColor(index, it) },
             paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
         )
+    }
+}
+
+/**
+ * The shared "How did it make you feel?" mood row — a horizontally
+ * scrollable chip row of every [JournalMood]. Tap a mood to set it, tap
+ * again to clear. Used by ALL capture formats (Marginalia journal, Reel
+ * Notes review, Sound Bite note, Field Notes) so every entry can carry a
+ * mood; the saved-entry meta card reads it. Callers gate this behind the
+ * "Entry date & mood" setting themselves.
+ */
+@Composable
+fun MoodChipsRow(
+    mood: JournalMood?,
+    accent: Color,
+    onMoodChange: (JournalMood?) -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "How did it make you feel?",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            JournalMood.entries.forEach { m ->
+                val selected = mood == m
+                Surface(
+                    onClick = { onMoodChange(if (selected) null else m) },
+                    shape = RoundedCornerShape(50),
+                    color = if (selected) accent else MaterialTheme.colorScheme.surfaceVariant,
+                    border = if (selected) null
+                            else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CurioIcon(
+                            name = m.glyph,
+                            contentDescription = null,
+                            tint = if (selected) Color.White
+                                   else MaterialTheme.colorScheme.onSurfaceVariant,
+                            size = 16.dp
+                        )
+                        Text(
+                            text = m.label,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (selected) Color.White
+                                   else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        }
     }
 }

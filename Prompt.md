@@ -2,6 +2,37 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood pickers in every format — Reel Notes, Field Notes, and Sound Bite join the journal, all behind the existing "Entry date & mood" toggle**
+
+### What was asked
+
+Add mood pickers to the other formats (Reel Notes, Field Notes, Sound Bite) so every entry can carry a mood.
+
+User chose (ask_user): ride the existing "Entry date & mood" Settings toggle (default ON) — the same switch that already gates the journal's mood row + meta card.
+
+### What was changed
+
+- **`CaptureData.kt`** — `SoundBite`, `ReelNotes`, `FieldNotes` each gain `mood: JournalMood? = null` (trailing default; Gson legacy-safe — old entries decode to null → no mood).
+- **`CaptureFormatComponents.kt`** — NEW shared `MoodChipsRow(mood, accent, onMoodChange)`: the journal's horizontally-scrollable mood chip row extracted into a reusable component (tap sets / tap again clears; selected chip fills the accent with white icon+text). Imports added: `horizontalScroll`, `rememberScrollState`, `JournalMood`, `glyph`, `CurioIcon` (deduped — the file already imported it).
+- **`MarginaliaFormat.kt`** — the inline mood row is now a `MoodChipsRow(...)` call; removed the four orphaned imports (`horizontalScroll`, `rememberScrollState`, `glyph`, `JournalMood` — type inference makes the last one unneeded).
+- **`ReelNotesFormat.kt`** — `mood` state seeded from `initialData?.mood`, added to the LaunchedEffect emit keys, emitted as `mood = mood`, and `MoodChipsRow` rendered between the quote cards and the image row, behind `if (AppPreferences.entryMetaEnabledState)`. `AppPreferences` import added.
+- **`FieldNotesFormat.kt`** — same wiring; `MoodChipsRow` after the photo-attach row at the end of the column.
+- **`SoundBiteFormat.kt`** — same wiring; `MoodChipsRow` after `QuoteCardsSection` at the end of the column.
+- **`EntryDetailScreen.kt`** — `EntryMetaCard` mood extraction now covers all four formats directly plus `OpenNotebook` unwraps for all four sub-formats (was journal-only), so wildcard takes show their mood too.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass, no blockers. Notes: (1) SoundBite's mood row stays tappable while RECORDING (unlike the frozen title field/quote cards) — harmless because canSave requires STOPPED + file, and the row has no enabled param by design; (2) the mood board (GalleryWall) is now the only format without a mood — outside the explicit ask (user listed Reel Notes/Field Notes/Sound Bite), offered as a follow-up. Verified: `JournalMood` import removal is safe in MarginaliaFormat (type inferred from `initialData?.mood`), meta-card nested `when` exhaustive, `mood` is a stable emit key in all three formats, canSave semantics correctly exclude mood-only entries (mood is metadata riding on real content), CurioIcon deduped with no orphaned imports, braces balanced across all 7 files.
+
+### Follow-ups / notes
+
+- OpenNotebook (wildcard) automatically inherits mood through the sub-format editors + the meta-card unwrap — no extra wiring needed.
+- If the mood board should carry a mood too, that's a clean follow-up (GalleryWallFormat gains the same state + row + field).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Size dropdown replaces the buggy A+/A− step buttons (icon stays lit while armed) + CI fix for MarginaliaFormat's missing padding import**
 
 ### What was asked

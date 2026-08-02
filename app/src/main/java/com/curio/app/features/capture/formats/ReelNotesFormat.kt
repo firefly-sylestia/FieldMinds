@@ -2,6 +2,7 @@ package com.curio.app.features.capture.formats
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -68,6 +69,9 @@ fun ReelNotesFormat(
     var reviewColor by remember(initialData) {
         mutableStateOf(initialData?.reviewColor ?: NotePaperColor.CREAM)
     }
+    // Mood — the shared "How did it make you feel?" row. Optional; legacy
+    // entries have none (Gson → null).
+    var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
     // Quote cards — the SHARED hand-placed paper notecard section (same
     // component Marginalia / Sound Bite / Mood Board use). Owns the parallel
     // lists (text / spans / tilt / style / color); new cards inherit the
@@ -102,7 +106,7 @@ fun ReelNotesFormat(
     // persist stale data (text/rating/quotes/images silently dropped from
     // the saved entry).
     LaunchedEffect(
-        canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle, reviewColor,
+        canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle, reviewColor, mood,
         quoteCards.quotes.toList(), quoteCards.spans.toList(), quoteCards.tilts.toList(),
         quoteCards.styles.toList(), quoteCards.colors.toList()
     ) {
@@ -122,7 +126,8 @@ fun ReelNotesFormat(
                 quoteStyles = quoteCards.styles.toList(),
                 quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the primary field's style.
-                paperStyle = reviewStyle
+                paperStyle = reviewStyle,
+                mood = mood
             )
             else null
         )
@@ -181,6 +186,15 @@ fun ReelNotesFormat(
             newCardStyle = { reviewStyle },
             newCardColor = { reviewColor }
         )
+
+        // ── Mood — behind the "Entry date & mood" setting ────────────────
+        if (AppPreferences.entryMetaEnabledState) {
+            MoodChipsRow(
+                mood = mood,
+                accent = accent,
+                onMoodChange = { mood = it }
+            )
+        }
 
         // ── Image attach row ───────────────────────────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

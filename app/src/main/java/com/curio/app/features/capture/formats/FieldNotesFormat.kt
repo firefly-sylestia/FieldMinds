@@ -2,6 +2,7 @@ package com.curio.app.features.capture.formats
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -97,6 +98,9 @@ fun FieldNotesFormat(
     var learnNextColor by remember(initialData) {
         mutableStateOf(initialData?.learnNextColor ?: NotePaperColor.CREAM)
     }
+    // Mood — the shared "How did it make you feel?" row. Optional; legacy
+    // entries have none (Gson → null).
+    var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -123,7 +127,7 @@ fun FieldNotesFormat(
     LaunchedEffect(
         canSave, observed, observedSpans, surprised, surprisedSpans,
         learnNext, learnNextSpans, imageUris, observedStyle, surprisedStyle, learnNextStyle,
-        observedColor, surprisedColor, learnNextColor
+        observedColor, surprisedColor, learnNextColor, mood
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -142,7 +146,8 @@ fun FieldNotesFormat(
                 surprisedColor = surprisedColor,
                 learnNextColor = learnNextColor,
                 // Legacy fallback — mirror the first section's style.
-                paperStyle = observedStyle
+                paperStyle = observedStyle,
+                mood = mood
             )
             else null
         )
@@ -293,6 +298,15 @@ fun FieldNotesFormat(
                     onClick = { imagePicker.launch(arrayOf("image/*")) }
                 )
             }
+        }
+
+        // ── Mood — behind the "Entry date & mood" setting ────────────────
+        if (AppPreferences.entryMetaEnabledState) {
+            MoodChipsRow(
+                mood = mood,
+                accent = accent,
+                onMoodChange = { mood = it }
+            )
         }
     }
 }

@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -121,6 +122,9 @@ fun SoundBiteFormat(
     var noteColor by remember(initialData) {
         mutableStateOf(initialData?.noteColor ?: NotePaperColor.CREAM)
     }
+    // Mood — the shared "How did it make you feel?" row. Optional; legacy
+    // entries have none (Gson → null).
+    var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
     // Quote cards — the SHARED hand-placed paper notecard section (same
     // component Marginalia / Reel Notes / Mood Board use). Owns the parallel
     // lists (text / spans / tilt / style / color); new cards inherit the
@@ -240,7 +244,7 @@ fun SoundBiteFormat(
                   !trimInProgress
     LaunchedEffect(
         canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle,
-        titleColor, noteColor, quoteCards.quotes.toList(), quoteCards.spans.toList(),
+        titleColor, noteColor, mood, quoteCards.quotes.toList(), quoteCards.spans.toList(),
         quoteCards.tilts.toList(), quoteCards.styles.toList(), quoteCards.colors.toList()
     ) {
         onCanSaveChange(canSave)
@@ -261,7 +265,8 @@ fun SoundBiteFormat(
                 quoteStyles = quoteCards.styles.toList(),
                 quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the primary field's style.
-                paperStyle = noteStyle
+                paperStyle = noteStyle,
+                mood = mood
             )
             else null
         )
@@ -447,6 +452,15 @@ fun SoundBiteFormat(
             newCardStyle = { noteStyle },
             newCardColor = { noteColor }
         )
+
+        // ── Mood — behind the "Entry date & mood" setting ────────────────
+        if (AppPreferences.entryMetaEnabledState) {
+            MoodChipsRow(
+                mood = mood,
+                accent = accent,
+                onMoodChange = { mood = it }
+            )
+        }
     }
 }
 

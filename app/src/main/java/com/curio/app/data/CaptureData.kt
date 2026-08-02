@@ -120,7 +120,10 @@ sealed class CaptureData {
         // Take-level note-paper style — legacy fallback + the "primary"
         // field's style for old consumers. New entries set per-field styles
         // and mirror the note here so [notePaperStyle] stays meaningful.
-        val paperStyle: NotePaperStyle? = null
+        val paperStyle: NotePaperStyle? = null,
+        // Mood — picked in the editor, shown in the saved entry's meta
+        // card. Legacy entries omit it (Gson → null) → no mood.
+        val mood: JournalMood? = null
     ) : CaptureData()
 
     /** Reel Notes (§8.2): review with rating, text, and attached images. */
@@ -151,7 +154,10 @@ sealed class CaptureData {
         val quoteStyles: List<NotePaperStyle> = emptyList(),
         val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback.
-        val paperStyle: NotePaperStyle? = null
+        val paperStyle: NotePaperStyle? = null,
+        // Mood — picked in the editor, shown in the saved entry's meta
+        // card. Legacy entries omit it (Gson → null) → no mood.
+        val mood: JournalMood? = null
     ) : CaptureData()
 
     /** Marginalia (§8.3): journal entry with favorite quotes. */
@@ -258,7 +264,10 @@ sealed class CaptureData {
         val surprisedColor: NotePaperColor? = null,
         val learnNextColor: NotePaperColor? = null,
         // Take-level note-paper style — legacy fallback.
-        val paperStyle: NotePaperStyle? = null
+        val paperStyle: NotePaperStyle? = null,
+        // Mood — picked in the editor, shown in the saved entry's meta
+        // card. Legacy entries omit it (Gson → null) → no mood.
+        val mood: JournalMood? = null
     ) : CaptureData()
 
     /**

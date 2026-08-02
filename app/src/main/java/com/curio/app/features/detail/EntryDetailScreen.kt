@@ -431,11 +431,21 @@ private fun formatCapturedDate(millis: Long): String =
  */
 @Composable
 private fun EntryMetaCard(entry: CurioEntry) {
-    // Mood lives on the journal — unwrap OpenNotebook wildcard journals so
-    // a mood picked there still shows in the card.
+    // Mood can live on ANY format now — every editor shows the shared mood
+    // row. Unwrap OpenNotebook wildcard takes so a mood picked there still
+    // shows in the card.
     val mood = when (val d = entry.captureData) {
         is CaptureData.Marginalia -> d.mood
-        is CaptureData.OpenNotebook -> (d.subData as? CaptureData.Marginalia)?.mood
+        is CaptureData.ReelNotes -> d.mood
+        is CaptureData.SoundBite -> d.mood
+        is CaptureData.FieldNotes -> d.mood
+        is CaptureData.OpenNotebook -> when (val sub = d.subData) {
+            is CaptureData.Marginalia -> sub.mood
+            is CaptureData.ReelNotes -> sub.mood
+            is CaptureData.SoundBite -> sub.mood
+            is CaptureData.FieldNotes -> sub.mood
+            else -> null
+        }
         else -> null
     }
     val timeLabel = formatCapturedTime(entry.capturedAtMillis)
