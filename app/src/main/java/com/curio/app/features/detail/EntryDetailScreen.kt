@@ -199,7 +199,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(392.dp)
+                .height(430.dp)
                 .background(
                     Brush.verticalGradient(CurioGradients.cardGradient(cat.themedAccent()))
                 ),
@@ -207,7 +207,13 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 28.dp)
+                modifier = Modifier
+                    .padding(horizontal = 28.dp)
+                    // Keep the centered content (glyph + title + frosted bar)
+                    // clear of the overlaid back / more buttons at the top of
+                    // the banner — without this floor, a two-line title (or
+                    // the frosted bar) pushes the column up under the buttons.
+                    .padding(top = 80.dp, bottom = 28.dp)
             ) {
                 CurioIcon(
                     name = cat.iconGlyph,
