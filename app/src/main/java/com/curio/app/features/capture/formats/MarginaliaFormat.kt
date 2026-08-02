@@ -152,7 +152,10 @@ fun MarginaliaFormat(
             }
 
             quotes.forEachIndexed { i, quote ->
-                val rotation = if (i % 2 == 0) 1.5f else -1.5f
+                // Random hand-placed tilt (−2.5°..2.5°), stable per card
+                // (keyed by index) so recomposition and typing never
+                // re-roll the rotation mid-edit.
+                val rotation = remember(i) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
                 QuoteCard(
                     index = i,
                     text = quote,

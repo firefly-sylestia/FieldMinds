@@ -993,12 +993,16 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
         if (quotePairs.isNotEmpty()) {
             MarginaliaSectionHeader(label = "Favorite quotes", category = category, count = quotePairs.size)
             quotePairs.forEachIndexed { i, (quote, spans) ->
+                // Random hand-placed tilt (−2.5°..2.5°), stable per quote
+                // (keyed by index) so scrolling/recomposition never re-rolls
+                // the rotation while viewing.
+                val rotation = remember(i) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
                 PaperCard(
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
                     corner = 12.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .rotate(if (i % 2 == 0) 1.5f else -1.5f)
+                        .rotate(rotation)
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
