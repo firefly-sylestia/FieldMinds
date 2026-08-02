@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import kotlin.math.roundToInt
@@ -65,6 +67,14 @@ import com.curio.app.ui.theme.PatrickHandFontFamily
  * boolean so saved captures stay plain data + offsets.
  */
 private enum class RichFlag { BOLD, ITALIC, HIGHLIGHT }
+
+// Per-letter font-size scale for the A+/A− tools: steps of 2sp above/below
+// the field's default bodyLarge size (16sp), clamped to a notebook-sane
+// range that still fits the paper's 24sp ruled-line cadence.
+private const val BASE_FONT_SP = 16f
+private const val FONT_SIZE_STEP = 2f
+private const val MIN_FONT_SP = 12f
+private const val MAX_FONT_SP = 24f
 
 /** How the formatting toolbar is presented. */
 enum class RichTextToolbarMode {
@@ -91,6 +101,8 @@ fun buildRichAnnotated(text: String, spans: List<TextSpan>, highlightColor: Colo
                     SpanStyle(
                         fontWeight = if (sp.bold) FontWeight.Bold else null,
                         fontStyle = if (sp.italic) FontStyle.Italic else null,
+                        // Per-letter size (sp) — only spans the styled letters.
+                        fontSize = sp.fontSizeSp?.sp,
                         // Patrick Hand ships ONE regular file (no bold/italic
                         // TTF exists), so bold/italic only render because the
                         // text stack SYNTHESIZES them. The platform default
@@ -120,8 +132,10 @@ fun extractRichSpans(annotated: AnnotatedString): List<TextSpan> =
         val bold = range.item.fontWeight == FontWeight.Bold
         val italic = range.item.fontStyle == FontStyle.Italic
         val highlight = range.item.background != Color.Unspecified
-        if (!bold && !italic && !highlight) null
-        else TextSpan(range.start, range.end, bold, italic, highlight)
+        val size = range.item.fontSize
+        val sizeSp = if (size.isSpecified) size.value else null
+        if (!bold && !italic && !highlight && sizeSp == null) null
+        else TextSpan(range.start, range.end, bold, italic, highlight, sizeSp)
     }.merged()
 
 /** Sorts and merges adjacent/overlapping spans with identical flags. */
@@ -132,7 +146,8 @@ private fun List<TextSpan>.merged(): List<TextSpan> {
     for (sp in sorted) {
         val last = out.lastOrNull()
         if (last != null && last.end >= sp.start &&
-            last.bold == sp.bold && last.italic == sp.italic && last.highlight == sp.highlight
+            last.bold == sp.bold && last.italic == sp.italic &&
+            last.highlight == sp.highlight && last.fontSizeSp == sp.fontSizeSp
         ) {
             out[out.size - 1] = last.copy(end = maxOf(last.end, sp.end))
         } else {
@@ -151,8 +166,11 @@ private fun TextSpan.has(flag: RichFlag): Boolean = when (flag) {
 /** True when every character of [s, e) is covered by a span carrying [flag]. */
 private fun spansFullyCovered(spans: List<TextSpan>, s: Int, e: Int, flag: RichFlag): Boolean {
     var pos = s
-    for (sp in spans.filter { it.end > s && it.start < e }.sortedBy { it.start }) {
-        if (sp.start > pos || !sp.has(flag)) return false
+    // Only flag-carrying spans can cover the flag — a size-only span (which
+    // coexists with flag spans after an A+/A− resize) must not make the
+    // toolbar report the flag as missing just because it sorts first.
+    for (sp in spans.filter { it.end > s && it.start < e && it.has(flag) }.sortedBy { it.start }) {
+        if (sp.start > pos) return false
         pos = maxOf(pos, sp.end)
         if (pos >= e) return true
     }
@@ -215,13 +233,13 @@ private fun rebaseSpans(oldText: String, newText: String, spans: List<TextSpan>)
             e <= prefix -> out.add(sp)
             // Fully after the changed region — shift by the length delta.
             s >= oldEnd -> out.add(
-                TextSpan(s + delta, e + delta, sp.bold, sp.italic, sp.highlight)
+                TextSpan(s + delta, e + delta, sp.bold, sp.italic, sp.highlight, sp.fontSizeSp)
             )
             // Overlaps the changed region — keep only the untouched parts.
             else -> {
-                if (s < prefix) out.add(TextSpan(s, prefix, sp.bold, sp.italic, sp.highlight))
+                if (s < prefix) out.add(TextSpan(s, prefix, sp.bold, sp.italic, sp.highlight, sp.fontSizeSp))
                 if (e > oldEnd) out.add(
-                    TextSpan(maxOf(s, oldEnd) + delta, e + delta, sp.bold, sp.italic, sp.highlight)
+                    TextSpan(maxOf(s, oldEnd) + delta, e + delta, sp.bold, sp.italic, sp.highlight, sp.fontSizeSp)
                 )
             }
         }
@@ -264,6 +282,48 @@ private fun toggleSpanFlag(spans: List<TextSpan>, s: Int, e: Int, flag: RichFlag
         if (sp.end > e) out.add(sp.copy(start = e))
     }
     return out.merged()
+}
+
+/**
+ * Sets the font size of [s, e) to exactly [targetSp] sp, splitting every
+ * overlapping span so ONLY the selection's letters change size. The new
+ * size-only span coexists with any bold/italic/highlight spans ([merged]
+ * keeps spans with different flags separate, and both styles render
+ * together), so enlarging letters never strips their other formatting.
+ */
+private fun setSpanSize(spans: List<TextSpan>, s: Int, e: Int, targetSp: Float): List<TextSpan> {
+    if (e <= s) return spans
+    val out = mutableListOf<TextSpan>()
+    for (sp in spans) {
+        if (sp.end <= s || sp.start >= e) {
+            out.add(sp)
+            continue
+        }
+        if (sp.start < s) out.add(sp.copy(end = s))
+        val midStart = maxOf(sp.start, s)
+        val midEnd = minOf(sp.end, e)
+        val mid = sp.copy(start = midStart, end = midEnd, fontSizeSp = null)
+        if (mid.bold || mid.italic || mid.highlight) out.add(mid)
+        if (sp.end > e) out.add(sp.copy(start = e))
+    }
+    out.add(TextSpan(start = s, end = e, fontSizeSp = targetSp))
+    return out.merged()
+}
+
+/**
+ * Increases (positive [deltaSp]) or decreases (negative) the font size of
+ * [s, e) by one step, based on the LARGEST size already applied to the
+ * selection (or the field default when nothing in it is sized) — so
+ * repeated taps keep growing the same letters. Clamped to [MIN_FONT_SP]..
+ * [MAX_FONT_SP].
+ */
+private fun applyFontSize(spans: List<TextSpan>, s: Int, e: Int, deltaSp: Float): List<TextSpan> {
+    if (e <= s) return spans
+    val current = spans.filter { it.end > s && it.start < e }
+        .mapNotNull { it.fontSizeSp }
+        .maxOrNull() ?: BASE_FONT_SP
+    val target = (current + deltaSp).coerceIn(MIN_FONT_SP, MAX_FONT_SP)
+    return setSpanSize(spans, s, e, target)
 }
 
 /**
@@ -340,6 +400,9 @@ fun RichTextEditor(
     var pendingBold by remember { mutableStateOf(false) }
     var pendingItalic by remember { mutableStateOf(false) }
     var pendingHighlight by remember { mutableStateOf(false) }
+    // Armed font-size target (sp) — like the flags, tapping A+/A− without a
+    // selection arms a FIXED size so the next characters typed carry it.
+    var pendingSizeSp by remember { mutableStateOf<Float?>(null) }
     // Paper mode: the field floats directly on the card's paper — no inner
     // padding of its own (the card owns the margins). The toolbar + cursor
     // also switch to the warm paper accent: these controls sit on cream in
@@ -358,6 +421,7 @@ fun RichTextEditor(
             pendingBold = false
             pendingItalic = false
             pendingHighlight = false
+            pendingSizeSp = null
         }
     }
     // Sheet-color change (swatch tap): spans only carry the highlight FLAG,
@@ -426,6 +490,9 @@ fun RichTextEditor(
                 if (sp.highlight) {
                     spans = toggleSpanFlag(spans, caret, insertedRange.last + 1, RichFlag.HIGHLIGHT, true)
                 }
+                sp.fontSizeSp?.let { size ->
+                    spans = setSpanSize(spans, caret, insertedRange.last + 1, size)
+                }
             }
         }
         // Sticky format: when a format is armed and the user just typed
@@ -433,7 +500,7 @@ fun RichTextEditor(
         // characters so typing continues in that style (BasicTextField only
         // inherits the style under the caret, so an armed format needs
         // explicit application). Pure deletions diff to null and are skipped.
-        if (pendingBold || pendingItalic || pendingHighlight) {
+        if (pendingBold || pendingItalic || pendingHighlight || pendingSizeSp != null) {
             insertedRange?.let { range ->
                 if (pendingBold) {
                     spans = toggleSpanFlag(spans, range.first, range.last + 1, RichFlag.BOLD, true)
@@ -443,6 +510,9 @@ fun RichTextEditor(
                 }
                 if (pendingHighlight) {
                     spans = toggleSpanFlag(spans, range.first, range.last + 1, RichFlag.HIGHLIGHT, true)
+                }
+                pendingSizeSp?.let { size ->
+                    spans = setSpanSize(spans, range.first, range.last + 1, size)
                 }
             }
         }
@@ -493,6 +563,56 @@ fun RichTextEditor(
         }
     }
 
+    fun applySize(deltaSp: Float) {
+        val sel = tfv.selection
+        if (sel.collapsed) {
+            // No selection — arm a FIXED target size (a step from the current
+            // size under the caret, not an ever-growing one) so the next
+            // characters typed carry it.
+            val pos = sel.start
+            // Any size under the caret (max — a bold+size overlap reports the
+            // size span, not the flag span that happens to sort first).
+            val current = extractRichSpans(tfv.annotatedString)
+                .filter { it.start <= pos && pos < it.end }
+                .mapNotNull { it.fontSizeSp }
+                .maxOrNull() ?: BASE_FONT_SP
+            pendingSizeSp = (current + deltaSp).coerceIn(MIN_FONT_SP, MAX_FONT_SP)
+            return
+        }
+        val s = minOf(sel.start, sel.end)
+        val e = maxOf(sel.start, sel.end)
+        val updated = applyFontSize(extractRichSpans(tfv.annotatedString), s, e, deltaSp)
+        val styled = TextFieldValue(
+            buildRichAnnotated(tfv.text, updated, effectiveHighlight),
+            selection = sel
+        )
+        tfv = styled
+        onRichTextChange(styled.text, extractRichSpans(styled.annotatedString))
+        // Keep typing at the newly-applied size.
+        pendingSizeSp = extractRichSpans(styled.annotatedString)
+            .filter { it.end > s && it.start < e }
+            .mapNotNull { it.fontSizeSp }
+            .maxOrNull()
+    }
+
+    /** The effective font size (sp) at the caret / over the selection. */
+    fun currentSizeSp(): Float {
+        val sel = tfv.selection
+        val current = extractRichSpans(tfv.annotatedString)
+        if (sel.collapsed) {
+            val pos = sel.start
+            return pendingSizeSp
+                ?: current.filter { it.start <= pos && pos < it.end }
+                    .mapNotNull { it.fontSizeSp }
+                    .maxOrNull() ?: BASE_FONT_SP
+        }
+        val s = minOf(sel.start, sel.end)
+        val e = maxOf(sel.start, sel.end)
+        return current.filter { it.end > s && it.start < e }
+            .mapNotNull { it.fontSizeSp }
+            .maxOrNull() ?: BASE_FONT_SP
+    }
+
     fun hasFlagAt(flag: RichFlag): Boolean {
         val sel = tfv.selection
         val s = minOf(sel.start, sel.end)
@@ -527,11 +647,15 @@ fun RichTextEditor(
                     boldActive = hasFlagAt(RichFlag.BOLD),
                     italicActive = hasFlagAt(RichFlag.ITALIC),
                     highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
+                    sizeUpActive = currentSizeSp() > BASE_FONT_SP,
+                    sizeDownActive = currentSizeSp() < BASE_FONT_SP,
                     accent = effectiveAccent,
                     enabled = enabled,
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
-                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
+                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
+                    onSizeUp = { applySize(FONT_SIZE_STEP) },
+                    onSizeDown = { applySize(-FONT_SIZE_STEP) }
                 )
                 if (paper) {
                     NotePaperStyleToggle(
@@ -616,11 +740,15 @@ fun RichTextEditor(
                     boldActive = hasFlagAt(RichFlag.BOLD),
                     italicActive = hasFlagAt(RichFlag.ITALIC),
                     highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
+                    sizeUpActive = currentSizeSp() > BASE_FONT_SP,
+                    sizeDownActive = currentSizeSp() < BASE_FONT_SP,
                     accent = effectiveAccent,
                     enabled = enabled,
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
-                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
+                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
+                    onSizeUp = { applySize(FONT_SIZE_STEP) },
+                    onSizeDown = { applySize(-FONT_SIZE_STEP) }
                 )
             }
         }
@@ -680,7 +808,9 @@ fun RichTextEditor(
                         val padLeft = with(density) { effectiveFieldPadding.calculateLeftPadding(LayoutDirection.Ltr).toPx() }
                         val padTop = with(density) { effectiveFieldPadding.calculateTopPadding().toPx() }
                         val barHeight = with(density) { 40.dp.toPx() }
-                        val barWidth = with(density) { 132.dp.toPx() }
+                        // 5 buttons (B / I / highlight / A+ / A−) are wider than
+                        // the old 3-button bar.
+                        val barWidth = with(density) { 180.dp.toPx() }
                         val gap = with(density) { 8.dp.toPx() }
                         // Float above the selection; drop below it when the
                         // selection is at the very top of the field.
@@ -699,11 +829,15 @@ fun RichTextEditor(
                                 boldActive = hasFlagAt(RichFlag.BOLD),
                                 italicActive = hasFlagAt(RichFlag.ITALIC),
                                 highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
+                                sizeUpActive = currentSizeSp() > BASE_FONT_SP,
+                                sizeDownActive = currentSizeSp() < BASE_FONT_SP,
                                 accent = effectiveAccent,
                                 enabled = enabled,
                                 onBold = { applyFlag(RichFlag.BOLD) },
                                 onItalic = { applyFlag(RichFlag.ITALIC) },
-                                onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
+                                onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
+                                onSizeUp = { applySize(FONT_SIZE_STEP) },
+                                onSizeDown = { applySize(-FONT_SIZE_STEP) }
                             )
                         }
                     }
@@ -790,11 +924,15 @@ private fun SelectionFormatBar(
     boldActive: Boolean,
     italicActive: Boolean,
     highlightActive: Boolean,
+    sizeUpActive: Boolean,
+    sizeDownActive: Boolean,
     accent: Color,
     enabled: Boolean,
     onBold: () -> Unit,
     onItalic: () -> Unit,
-    onHighlight: () -> Unit
+    onHighlight: () -> Unit,
+    onSizeUp: () -> Unit,
+    onSizeDown: () -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
@@ -832,6 +970,22 @@ private fun SelectionFormatBar(
                 enabled = enabled,
                 onClick = onHighlight
             )
+            FormatToolButton(
+                icon = CurioIcons.TextIncrease,
+                label = "Bigger text",
+                active = sizeUpActive,
+                accent = accent,
+                enabled = enabled,
+                onClick = onSizeUp
+            )
+            FormatToolButton(
+                icon = CurioIcons.TextDecrease,
+                label = "Smaller text",
+                active = sizeDownActive,
+                accent = accent,
+                enabled = enabled,
+                onClick = onSizeDown
+            )
         }
     }
 }
@@ -842,11 +996,15 @@ private fun FormatToolbar(
     boldActive: Boolean,
     italicActive: Boolean,
     highlightActive: Boolean,
+    sizeUpActive: Boolean,
+    sizeDownActive: Boolean,
     accent: Color,
     enabled: Boolean,
     onBold: () -> Unit,
     onItalic: () -> Unit,
-    onHighlight: () -> Unit
+    onHighlight: () -> Unit,
+    onSizeUp: () -> Unit,
+    onSizeDown: () -> Unit
 ) {
     Row(
         modifier = Modifier.padding(bottom = 6.dp),
@@ -876,6 +1034,25 @@ private fun FormatToolbar(
             accent = accent,
             enabled = enabled,
             onClick = onHighlight
+        )
+        // A+/A− — per-letter font size (NOT a toggle: each tap steps the
+        // selection's letters one size up/down; the button is lit while the
+        // current size sits above/below the field default).
+        FormatToolButton(
+            icon = CurioIcons.TextIncrease,
+            label = "Bigger text",
+            active = sizeUpActive,
+            accent = accent,
+            enabled = enabled,
+            onClick = onSizeUp
+        )
+        FormatToolButton(
+            icon = CurioIcons.TextDecrease,
+            label = "Smaller text",
+            active = sizeDownActive,
+            accent = accent,
+            enabled = enabled,
+            onClick = onSizeDown
         )
     }
 }

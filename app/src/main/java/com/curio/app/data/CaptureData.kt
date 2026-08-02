@@ -48,7 +48,13 @@ data class TextSpan(
     val end: Int,
     val bold: Boolean = false,
     val italic: Boolean = false,
-    val highlight: Boolean = false
+    val highlight: Boolean = false,
+    // Optional per-letter font size in sp — lets the A+/A− rich-text tools
+    // enlarge/shrink INDIVIDUAL letters while the rest of the field keeps
+    // its default size. null = inherit the field's bodyLarge size. Stored as
+    // a plain Float (not TextUnit) so Gson serializes it cleanly in saved
+    // entries; legacy entries omit it → null.
+    val fontSizeSp: Float? = null
 )
 
 /**

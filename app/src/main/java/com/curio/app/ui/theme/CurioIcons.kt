@@ -80,6 +80,8 @@ object CurioIcons {
     const val FormatUnderline = "format_underline" // U — underline
     const val FormatHighlight = "format_color_fill" // highlighter marker
     const val FormatText = "text_fields"           // small toggle for other fields
+    const val TextIncrease = "text_increase"       // A+ — enlarge selection
+    const val TextDecrease = "text_decrease"       // A− — shrink selection
     const val Mic         = "mic"
     const val MicNone     = "mic_none"
     const val Image       = "image"

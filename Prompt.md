@@ -2,6 +2,37 @@
 
 ## Latest Request (COMPLETED)
 
+**Per-letter font-size tool (A+/A−) in the rich-text toolbar**
+
+### What was asked
+
+Add a font size tool that can increase individual letters — not just the whole field.
+
+### What was changed
+
+- **`CaptureData.kt`** — `TextSpan` gains `fontSizeSp: Float? = null` (plain Float, not TextUnit, so Gson serializes it cleanly; legacy entries omit it → null).
+- **`CurioIcons.kt`** — new `TextIncrease` (`text_increase`) / `TextDecrease` (`text_decrease`) glyphs.
+- **`RichTextEditor.kt`** — the A+/A− tools:
+  - `buildRichAnnotated` renders `fontSize = sp.fontSizeSp?.sp`; `extractRichSpans` reads it back via `TextUnit.isSpecified`; `merged()` merges adjacent spans only when `fontSizeSp` also matches (so a sized span can't absorb a same-flag neighbor); the 3 positional `TextSpan()` calls in `rebaseSpans` now pass `sp.fontSizeSp`.
+  - New `setSpanSize(spans, s, e, targetSp)` — splits every overlapping span, drops ONLY the size in the middle, adds a size-only span over the selection, re-merges (bold/italic/highlight spans are untouched and coexist with the size span). `applyFontSize` steps from the LARGEST size already in the selection (or the 16sp field default) by ±2sp, clamped 12–24sp (fits the paper's 24sp ruled line height).
+  - `pendingSizeSp` armed target — tapping A+/A− with a collapsed caret arms a fixed size for the next typed chars; applying to a selection keeps the applied size armed; `emit()` inherits the size of the span under the caret and applies the armed size to inserted ranges (mirrors the B/I/highlight sticky model).
+  - `applySize(deltaSp)` + `currentSizeSp()` power the toolbar: A+ is lit while the effective size > 16sp, A− while < 16sp.
+  - `FormatToolbar` + `SelectionFormatBar` gained the two buttons (all 3 call sites); the floating selection bar widened 132dp → 180dp for 5 buttons.
+  - `spansFullyCovered` now filters to flag-carrying spans so a size-only span overlapping a bold/italic/highlight span can't make the toolbar report the flag as missing (or trigger a redundant re-add).
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass with two applied fixes — (1) `spansFullyCovered` filtered to flag-carrying spans (a size-only span stable-sorting before a flag span at the same start made `hasFlagAt` report styled text as unstyled and re-add the flag redundantly; size spans make overlapping heterogeneous spans common, and the same latent quirk existed for bold+highlight), (2) dropped the dead `mid.fontSizeSp != null` condition in `setSpanSize` (mid is explicitly copied with fontSizeSp = null). Verified `SpanStyle.fontSize`, `TextUnit.isSpecified`, `Float.sp` exist in the Compose version, Gson-safety of `Float?`, the split/merge roundtrip preserves bold/italic/highlight while resizing, all 3 toolbar call sites updated, and braces balance.
+
+### Follow-ups / notes
+
+- Saved entries render sized letters automatically (buildRichAnnotated is shared); the quote-card +1 span shift preserves size via copy().
+- The armed size (like bold) persists until replaced — there's no dedicated "off" state; A− arms 2sp below the caret's size.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Bold/italic rendering, highlight-sticking, and a saved mood-board crash**
 
 ### What was asked
