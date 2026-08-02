@@ -4,19 +4,22 @@ import com.curio.app.data.CaptureFormat
 
 /**
  * The note-paper look a capture's text boxes wear. [RULED] is the classic
- * notebook page (cream paper + ruled lines, toned paper in dark mode);
- * [TORN] is the torn-note style — a properly ripped paper slip with jagged
- * edges, no ruled lines, slight rotation for a hand-placed feel;
- * [TORN_RULED] is a torn slip that ALSO carries ruled lines (the "rules on
- * torn" toggle) — ripped edge, notebook cadence inside.
+ * notebook page (cream paper + ruled lines); [TORN] is the torn-note style —
+ * a properly ripped paper slip with jagged edges, no ruled lines, slight
+ * rotation for a hand-placed feel; [TORN_RULED] is a torn slip that ALSO
+ * carries ruled lines (the "rules on torn" toggle) — ripped edge, notebook
+ * cadence inside. [COFFEE] is a ruled page with coffee-stain blotches along
+ * the edges; [FOLDED] is a ruled page with a folded (dog-ear) top-right
+ * corner; [RED_MARGIN] is the classic school-notebook ruled page with a red
+ * vertical margin line and the text indented past it.
  *
- * Chosen PER TEXT BOX (each field's toolbar holds a Ruled/Torn toggle +
+ * Chosen PER TEXT BOX (each field's toolbar holds the style chips +
  * rules-on-torn toggle) and persisted per field on every [CaptureData]
  * variant, so each note keeps its own look across save → detail view.
  * Legacy entries omit the per-field fields (Gson → null) and resolve to
  * the take-level [CaptureData.paperStyle] or [RULED].
  */
-enum class NotePaperStyle { RULED, TORN, TORN_RULED }
+enum class NotePaperStyle { RULED, TORN, TORN_RULED, COFFEE, FOLDED, RED_MARGIN }
 
 /**
  * The note-paper COLOR a capture's text boxes wear — a small swatch picker

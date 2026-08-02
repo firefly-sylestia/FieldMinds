@@ -2,7 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
-**Per-sheet highlighter/ink tones — the paper COLOR now drives a matching marker + ink**
+**Three new note-paper styles — coffee-stain edge, folded-corner page, red-margin notebook — as extra toggle options**
+
+### What was asked
+
+Add more note-paper styles: a coffee-stain edge, a folded-corner page, or a ruled-with-red-margin notebook line as extra toggle options.
+
+### What was changed
+
+- **`CaptureData.kt`** — `NotePaperStyle` grew from RULED/TORN/TORN_RULED to +COFFEE / FOLDED / RED_MARGIN. Gson-safe: old persisted entries only reference old names.
+- **`CurioIcons.kt`** — new chip glyphs: `LocalCafe` (local_cafe), `FoldedCorner` (auto_stories), `RedMarginLine` (border_clear).
+- **`PaperCard.kt`** — `PaperCard` gained `redMargin` / `coffeeStains` / `folded` decoration flags. New `safePadding` logic: red margin indents content left past the 22dp red rule; folded pads content right so text never runs under the flap. New private `FoldedCornerShape` (rounded rect with the top-right corner cut along a diagonal dog-ear — Surface clips content to it). New `DrawScope` extensions `drawCoffeeStains` (seeded `Random(0xCAFE5EED)`, radial-gradient blobs + ring strokes, deterministic per size) and `drawFoldFlap` (flap triangle in lerp-darkened paper, crease line, soft drop shadow). `NotePaperCard` now dispatches all 6 styles; `NotePaperStyleToggle` is a horizontally-scrollable 6-chip row (Ruled / Torn / Coffee / Folded / Red Margin + Rules chip while torn). New imports: `horizontalScroll`, `rememberScrollState`, `Stroke`, `lerp`.
+- **`RichTextEditor.kt`** — `when(paperStyle)` adds COFFEE / FOLDED / RED_MARGIN → `PaperCard` with flags; both `NotePaperStyleToggle` call sites (MAIN toolbar row + TOGGLE SpaceBetween row) gained `Modifier.weight(1f)` so the scrollable chip row takes leftover width instead of overflowing the toolbar.
+- **`CaptureFormatComponents.kt`** — `PaperLineField` rewritten onto the central `NotePaperCard(style = paperStyle, ...)` dispatch (removed the torn/not-torn if/else and the `@Composable (PaddingValues) -> Unit` card lambda); the style chips moved to their own full-width scrollable row; imports swapped (NotePaperCard added, PaperCard/TornPaperCard removed).
+
+### Review
+code-reviewer-deepseek-flash: first pass flagged ONE real compile blocker — `safePadding` fed px Floats (`calculateLeftPadding` etc.) into the `PaddingValues` constructor, which requires Dp. Fixed by wrapping the construction in `with(density)` and calling `.toDp()` on every Float (incl. `maxOf(Float, Float).toDp()`). Second pass clean: FoldedCornerShape path walk is a valid clockwise outline, both dispatch `when`s cover all 6 enum values, `weight`/`horizontalScroll` combos legal (weight applied in RowScope at both call sites), PaperLineField import swap clean (PaddingValues/Alignment/Arrangement still used), fold/red-margin padding math keeps text clear of the flap and margin line. Minor nit applied: `drawCoffeeStains` param renamed `size` → `canvasSize` (AGENTS.md rule 7). Braces balanced across all 5 files (basher).
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
 
 ### What was asked
 

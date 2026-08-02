@@ -97,6 +97,11 @@ object CurioIcons {
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
 
+    // ── Note-paper style chips (Ruled/Torn/Coffee/Folded/Red-margin)
+    const val LocalCafe     = "local_cafe"        // coffee-stain paper
+    const val FoldedCorner  = "auto_stories"      // folded page (dog-ear)
+    const val RedMarginLine = "border_clear"      // ruled with red margin
+
     // ── Backup / restore glyphs (Settings → Backup & restore)
     const val Backup       = "backup"        // cloud upload — export data
     const val Restore      = "restore"       // cloud download — import data

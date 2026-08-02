@@ -5,6 +5,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +41,8 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -68,6 +72,13 @@ import kotlin.random.Random
  * (notebook texture) and a soft hairline edge. [rotation] keeps the
  * hand-placed notecard feel in the saved view.
  *
+ * Decoration flags extend the plain ruled page into the other notebook
+ * styles: [redMargin] draws the classic school-notebook red vertical margin
+ * line (text indented past it), [coffeeStains] spills deterministic coffee
+ * blotches along the edges, and [folded] folds the top-right corner into a
+ * dog-ear (corner cut by a diagonal, flap + crease shadow drawn over it;
+ * the content is padded so text never runs under the flap).
+ *
  * [contentPadding] defaults to a COMPACT inset (12dp) so quote cards stay
  * tight; pass a larger value for the journal page.
  */
@@ -79,10 +90,46 @@ fun PaperCard(
     corner: Dp = 14.dp,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
+    /** Red school-notebook margin — a vertical red rule near the left edge
+     *  with the text indented past it (the classic ruled-with-red-margin
+     *  page). */
+    redMargin: Boolean = false,
+    /** Coffee-stain blotches along the paper's edges — deterministic per
+     *  size (seeded), so typing / recomposition never re-rolls them. */
+    coffeeStains: Boolean = false,
+    /** Folded (dog-ear) top-right corner — the corner is cut by a diagonal
+     *  and the folded flap + crease shadow drawn over it. */
+    folded: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val density = LocalDensity.current
+    // Effective padding — the red margin and the folded corner need extra
+    // inset so the text never runs under the margin line or the flap.
+    val marginInset = with(density) { 22.dp.toPx() }
+    val foldInset = with(density) { 22.dp.toPx() }
+    // calculate*Padding return px (Float) — convert back to Dp for the
+    // PaddingValues constructor, which takes Dp.
+    val safePadding = with(density) {
+        PaddingValues(
+            left = if (redMargin) maxOf(
+                contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
+                marginInset + 8.dp.toPx()
+            ).toDp()
+            else contentPadding.calculateLeftPadding(LayoutDirection.Ltr).toDp(),
+            top = contentPadding.calculateTopPadding().toDp(),
+            right = if (folded) maxOf(
+                contentPadding.calculateRightPadding(LayoutDirection.Ltr),
+                foldInset + 2.dp.toPx()
+            ).toDp()
+            else contentPadding.calculateRightPadding(LayoutDirection.Ltr).toDp(),
+            bottom = contentPadding.calculateBottomPadding().toDp()
+        )
+    }
+    val shape = remember(corner, folded) {
+        if (folded) FoldedCornerShape(corner, 22.dp) else RoundedCornerShape(corner)
+    }
     Surface(
-        shape = RoundedCornerShape(corner),
+        shape = shape,
         color = notePaperSurface(paperColor),
         shadowElevation = 1.dp,
         border = BorderStroke(1.dp, notePaperBorder(paperColor)),
@@ -105,21 +152,25 @@ fun PaperCard(
             // (notePaperRule() is @Composable, so resolve it here in the
             // composable scope — the Canvas draw lambda is not composable.)
             val ruleColor = if (ruled) notePaperRule(paperColor) else Color.Unspecified
-            if (ruled) {
-                // Notebook cadence: rules spaced at the body line height,
-                // starting one cadence below the top content padding so the
-                // first line of text sits ON the first rule (real paper).
-                val density = LocalDensity.current
-                // Guard against an Unspecified lineHeight (custom typography
-                // that omits it) — fall back to the classic 24dp cadence.
-                val bodyLineHeight = MaterialTheme.typography.bodyLarge.lineHeight
-                val ruleSpacing = with(density) {
-                    if (bodyLineHeight == TextUnit.Unspecified) 24.dp.toPx() else bodyLineHeight.toPx()
-                }
-                val ruleStart = with(density) {
-                    contentPadding.calculateTopPadding().toPx()
-                } + ruleSpacing
-                Canvas(modifier = Modifier.matchParentSize()) {
+            // Notebook cadence: rules spaced at the body line height,
+            // starting one cadence below the top content padding so the
+            // first line of text sits ON the first rule (real paper).
+            // Guard against an Unspecified lineHeight (custom typography
+            // that omits it) — fall back to the classic 24dp cadence.
+            val bodyLineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+            val ruleSpacing = with(density) {
+                if (bodyLineHeight == TextUnit.Unspecified) 24.dp.toPx() else bodyLineHeight.toPx()
+            }
+            val ruleStart = with(density) {
+                safePadding.calculateTopPadding().toPx()
+            } + ruleSpacing
+            // Red margin color — a warm school-notebook red that reads on
+            // the cream sheet in both themes.
+            val marginColor = Color(0xFFC4524A)
+            val paperSurface = notePaperSurface(paperColor)
+            val paperEdge = notePaperBorder(paperColor)
+            Canvas(modifier = Modifier.matchParentSize()) {
+                if (ruled) {
                     var y = ruleStart
                     while (y < size.height) {
                         drawLine(
@@ -131,15 +182,181 @@ fun PaperCard(
                         y += ruleSpacing
                     }
                 }
+                if (redMargin) {
+                    drawLine(
+                        color = marginColor.copy(alpha = 0.55f),
+                        start = Offset(marginInset, 0f),
+                        end = Offset(marginInset, size.height),
+                        strokeWidth = with(density) { 1.2.dp.toPx() }
+                    )
+                }
+                if (coffeeStains) drawCoffeeStains(size, density)
             }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding),
+                    .padding(safePadding),
                 content = content
+            )
+            // Fold flap drawn ABOVE the content — the cut corner (Surface
+            // clips to the shape) shows the background through the missing
+            // corner, and the flap triangle + crease shadow sit on the paper.
+            if (folded) {
+                Canvas(modifier = Modifier.matchParentSize()) {
+                    drawFoldFlap(size, density, paperSurface, paperEdge)
+                }
+            }
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Folded-corner (dog-ear) page + coffee-stain + red-margin decorations.
+// The folded shape cuts the top-right corner along a diagonal (Surface
+// clips content to it, so text can never run under the flap); the flap +
+// crease are drawn as an overlay. Coffee stains and the red margin line
+// render inside the rules Canvas (behind the text, like real ink).
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Rounded-rect outline with the TOP-RIGHT corner replaced by a diagonal
+ * cut — the "folded page" dog-ear. The crease runs from `(w - fold, 0)` to
+ * `(w, fold)`; the missing corner above it shows the page background, and
+ * [drawFoldFlap] paints the folded flap + crease shadow over the paper.
+ * Deterministic pure function of (size, corner, fold) — stable across
+ * recompositions, so typing never re-folds the page.
+ */
+private class FoldedCornerShape(
+    private val corner: Dp,
+    private val fold: Dp
+) : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val c = with(density) { corner.toPx() }
+        val f = with(density) { fold.toPx() }
+        val w = size.width
+        val h = size.height
+        val path = Path().apply {
+            if (w <= 0f || h <= 0f) {
+                moveTo(0f, 0f); lineTo(w, 0f); lineTo(w, h); lineTo(0f, h); close()
+                return@apply
+            }
+            // Clockwise from the top edge: rounded top-left, straight top
+            // to the fold, diagonal cut, straight right, then the two
+            // remaining rounded corners.
+            moveTo(c, 0f)
+            // Top-left corner (rounded).
+            cubicTo(0f, 0f, 0f, c, 0f, c)
+            // Left edge down to the bottom-left corner.
+            lineTo(0f, h - c)
+            cubicTo(0f, h, c, h, c, h)
+            // Bottom edge to the bottom-right corner.
+            lineTo(w - c, h)
+            cubicTo(w, h, w, h - c, w, h - c)
+            // Right edge up to the fold's lower point.
+            lineTo(w, f)
+            // The diagonal cut — the dog-ear crease.
+            lineTo(w - f, 0f)
+            close()
+        }
+        return Outline.Generic(path)
+    }
+}
+
+/**
+ * Coffee-stain blotches along the paper's edges — soft radial brown blobs
+ * with a couple of darker "rings" (the classic coffee-ring look). Positions
+ * are seeded and derived from [size] FRACTIONS, so every recomposition and
+ * every card size renders the same stains — never re-rolled while typing.
+ */
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCoffeeStains(
+    canvasSize: Size,
+    density: Density
+) {
+    val rnd = Random(0xCAFE5EED)
+    val brown = Color(0xFF5B3A22)
+    // Five blotches, one per edge + one center-right, all kept near the
+    // margins so the writing area stays clean.
+    val spots = listOf(
+        Offset(canvasSize.width * 0.12f, canvasSize.height * 0.14f),
+        Offset(canvasSize.width * 0.86f, canvasSize.height * 0.18f),
+        Offset(canvasSize.width * 0.14f, canvasSize.height * 0.86f),
+        Offset(canvasSize.width * 0.84f, canvasSize.height * 0.82f),
+        Offset(canvasSize.width * 0.5f, canvasSize.height * 0.5f)
+    )
+    spots.forEachIndexed { i, center ->
+        val radius = with(density) { (7 + rnd.nextInt(5)).dp.toPx() }
+        val alpha = 0.05f + rnd.nextFloat() * 0.06f
+        // Soft body + translucent edge (radial falloff).
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    brown.copy(alpha = alpha + 0.04f),
+                    brown.copy(alpha = alpha * 0.4f),
+                    Color.Transparent
+                ),
+                center = center,
+                radius = radius
+            ),
+            radius = radius,
+            center = center
+        )
+        // A few get the classic darker ring.
+        if (i % 2 == 0) {
+            drawCircle(
+                color = brown.copy(alpha = alpha + 0.05f),
+                radius = radius * 0.62f,
+                center = center,
+                style = Stroke(width = with(density) { 1.2.dp.toPx() })
             )
         }
     }
+}
+
+/**
+ * The folded flap + crease shadow for the dog-ear. The flap is the
+ * reflected corner triangle (w - fold, 0) → (w, fold) → (w - fold, fold),
+ * painted slightly darker than the sheet (the underside of the fold); the
+ * crease is a hairline along the diagonal; a faint drop shadow under the
+ * flap gives the fold depth.
+ */
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
+    size: Size,
+    density: Density,
+    paperSurface: Color,
+    paperEdge: Color
+) {
+    val f = with(density) { 22.dp.toPx() }
+    val w = size.width
+    // Folded flap triangle.
+    val flap = Path().apply {
+        moveTo(w - f, 0f)
+        lineTo(w, f)
+        lineTo(w - f, f)
+        close()
+    }
+    // Slightly darker paper tone for the underside of the fold.
+    drawPath(flap, color = lerp(paperSurface, Color.Black, 0.07f))
+    // Hairline crease along the diagonal.
+    drawLine(
+        color = lerp(paperEdge, Color.Black, 0.15f),
+        start = Offset(w - f, 0f),
+        end = Offset(w, f),
+        strokeWidth = with(density) { 1.dp.toPx() }
+    )
+    // Soft drop shadow just under the flap.
+    drawPath(
+        Path().apply {
+            moveTo(w - f, 0f)
+            lineTo(w, f)
+            lineTo(w - f + f * 0.18f, f * 0.82f)
+            close()
+        },
+        color = Color.Black.copy(alpha = 0.06f)
+    )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -482,6 +699,36 @@ fun NotePaperCard(
             contentPadding = contentPadding,
             content = content
         )
+        NotePaperStyle.COFFEE -> PaperCard(
+            modifier = modifier,
+            ruled = true,
+            rotation = rotation,
+            corner = corner,
+            paperColor = paperColor,
+            contentPadding = contentPadding,
+            coffeeStains = true,
+            content = content
+        )
+        NotePaperStyle.FOLDED -> PaperCard(
+            modifier = modifier,
+            ruled = true,
+            rotation = rotation,
+            corner = corner,
+            paperColor = paperColor,
+            contentPadding = contentPadding,
+            folded = true,
+            content = content
+        )
+        NotePaperStyle.RED_MARGIN -> PaperCard(
+            modifier = modifier,
+            ruled = true,
+            rotation = rotation,
+            corner = corner,
+            paperColor = paperColor,
+            contentPadding = contentPadding,
+            redMargin = true,
+            content = content
+        )
         NotePaperStyle.RULED -> PaperCard(
             modifier = modifier,
             ruled = ruled,
@@ -495,11 +742,14 @@ fun NotePaperCard(
 }
 
 /**
- * The per-text-box note-paper picker — a compact Ruled / Torn toggle plus a
- * \"rules\" toggle that appears while Torn is selected (switches the torn
- * slip between plain [NotePaperStyle.TORN] and ruled [NotePaperStyle.TORN_RULED]).
- * Lives in the field's own toolbar (alongside the format toolbox), NOT in a
- * section-level row — so each text box keeps its own independent paper look.
+ * The per-text-box note-paper picker — a chip row for every style
+ * (Ruled / Torn / Coffee / Folded / Red Margin, plus a \"rules\" chip that
+ * appears while Torn is selected to switch between plain
+ * [NotePaperStyle.TORN] and ruled [NotePaperStyle.TORN_RULED]). The row is
+ * HORIZONTALLY SCROLLABLE — six chips overflow a phone-width toolbar row
+ * (Rows don't wrap), so the chips scroll instead of clipping. Lives in the
+ * field's own toolbar (alongside the format toolbox), NOT in a section-level
+ * row — so each text box keeps its own independent paper look.
  */
 @Composable
 fun NotePaperStyleToggle(
@@ -511,14 +761,15 @@ fun NotePaperStyleToggle(
 ) {
     val torn = style == NotePaperStyle.TORN || style == NotePaperStyle.TORN_RULED
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         NotePaperStyleChip(
             icon = CurioIcons.MenuBook,
             label = "Ruled",
-            active = !torn,
+            active = style == NotePaperStyle.RULED,
             accent = accent,
             enabled = enabled,
             onClick = { onStyleChange(NotePaperStyle.RULED) }
@@ -530,6 +781,30 @@ fun NotePaperStyleToggle(
             accent = accent,
             enabled = enabled,
             onClick = { onStyleChange(NotePaperStyle.TORN) }
+        )
+        NotePaperStyleChip(
+            icon = CurioIcons.LocalCafe,
+            label = "Coffee",
+            active = style == NotePaperStyle.COFFEE,
+            accent = accent,
+            enabled = enabled,
+            onClick = { onStyleChange(NotePaperStyle.COFFEE) }
+        )
+        NotePaperStyleChip(
+            icon = CurioIcons.FoldedCorner,
+            label = "Folded",
+            active = style == NotePaperStyle.FOLDED,
+            accent = accent,
+            enabled = enabled,
+            onClick = { onStyleChange(NotePaperStyle.FOLDED) }
+        )
+        NotePaperStyleChip(
+            icon = CurioIcons.RedMarginLine,
+            label = "Red Margin",
+            active = style == NotePaperStyle.RED_MARGIN,
+            accent = accent,
+            enabled = enabled,
+            onClick = { onStyleChange(NotePaperStyle.RED_MARGIN) }
         )
         // Rules on the torn slip — only meaningful while a torn style is on.
         if (torn) {

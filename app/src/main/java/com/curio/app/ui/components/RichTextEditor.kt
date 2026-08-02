@@ -520,7 +520,11 @@ fun RichTextEditor(
                         style = paperStyle,
                         onStyleChange = onPaperStyleChange,
                         accent = effectiveAccent,
-                        enabled = enabled
+                        enabled = enabled,
+                        // The style chips now scroll (6 styles + rules chip
+                        // overflow a phone row) — weight lets the scroll row
+                        // take the leftover width after the format toolbox.
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
@@ -545,13 +549,16 @@ fun RichTextEditor(
                 if (paper) {
                     // Per-field paper toggle stays visible without expanding
                     // the format row (SoundBite note, ReelNotes, Field Notes
-                    // sections use TOGGLE mode).
+                    // sections use TOGGLE mode). The chips scroll — weight
+                    // keeps the row from pushing the format button off-screen.
                     NotePaperStyleToggle(
                         style = paperStyle,
                         onStyleChange = onPaperStyleChange,
                         accent = effectiveAccent,
                         enabled = enabled,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(bottom = 4.dp)
                     )
                 }
                 Surface(
@@ -689,6 +696,33 @@ fun RichTextEditor(
         }
         if (paper) {
             when (paperStyle) {
+                NotePaperStyle.COFFEE -> PaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = true,
+                    paperColor = paperColor,
+                    contentPadding = paperContentPadding,
+                    coffeeStains = true
+                ) {
+                    fieldBlock()
+                }
+                NotePaperStyle.FOLDED -> PaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = true,
+                    paperColor = paperColor,
+                    contentPadding = paperContentPadding,
+                    folded = true
+                ) {
+                    fieldBlock()
+                }
+                NotePaperStyle.RED_MARGIN -> PaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = true,
+                    paperColor = paperColor,
+                    contentPadding = paperContentPadding,
+                    redMargin = true
+                ) {
+                    fieldBlock()
+                }
                 NotePaperStyle.RULED -> PaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = true,
