@@ -1,5 +1,6 @@
 package com.curio.app.ui.theme
 
+import com.curio.app.data.JournalMood
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
@@ -116,7 +117,29 @@ object CurioIcons {
     const val Schedule      = "schedule"
     const val LocalFire     = "local_fire_department"
     const val DarkMode      = "dark_mode"
+
+    // ── Journal mood glyphs (Marginalia editor + saved-entry meta card)
+    const val MoodCalm       = "self_improvement"    // meditating figure
+    const val MoodHappy      = "sentiment_satisfied" // smiley
+    const val MoodCurious    = "psychology"          // head with gears
+    const val MoodInspired   = "lightbulb"           // bulb
+    const val MoodTired      = "bedtime"             // crescent moon
+    const val MoodOverwhelmed = "mood_bad"           // frowning face
+
+    // ── Entry meta card glyph (date & time segment)
+    const val CalendarToday  = "calendar_today"
 }
+
+/** The Material Symbols glyph a journal mood wears. */
+val JournalMood.glyph: String
+    get() = when (this) {
+        JournalMood.CALM -> CurioIcons.MoodCalm
+        JournalMood.HAPPY -> CurioIcons.MoodHappy
+        JournalMood.CURIOUS -> CurioIcons.MoodCurious
+        JournalMood.INSPIRED -> CurioIcons.MoodInspired
+        JournalMood.TIRED -> CurioIcons.MoodTired
+        JournalMood.OVERWHELMED -> CurioIcons.MoodOverwhelmed
+    }
 
 /**
  * Renders a Material Symbols glyph via ligature.

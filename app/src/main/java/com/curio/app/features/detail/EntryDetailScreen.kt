@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -38,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -120,11 +122,15 @@ import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.themedAccent
+import com.curio.app.ui.theme.glyph
 import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.PatrickHandFontFamily
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -333,14 +339,18 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     }
                 }
                 Text(
-                    text = when (resolvedEntry.capturedAtDaysAgo) {
-                        0 -> "Captured today"
-                        1 -> "Captured yesterday"
-                        else -> "Captured ${resolvedEntry.capturedAtDaysAgo}d ago"
-                    },
+                    text = if (AppPreferences.entryMetaEnabledState) {
+                        capturedAtLabel(resolvedEntry) + " · " +
+                            formatCapturedTime(resolvedEntry.capturedAtMillis)
+                    } else capturedAtLabel(resolvedEntry),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                // ── Theme-aware meta card — date & time / mood / type ──
+                if (AppPreferences.entryMetaEnabledState) {
+                    EntryMetaCard(entry = resolvedEntry)
+                }
             }
         }
 
@@ -396,6 +406,113 @@ private fun isMoodBoardEntry(entry: CurioEntry): Boolean =
     entry.format == CaptureFormat.GalleryWall ||
         (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall
 
+/** "Captured today" / "Captured yesterday" / "Captured Nd ago" label. */
+private fun capturedAtLabel(entry: CurioEntry): String = when (entry.capturedAtDaysAgo) {
+    0 -> "Captured today"
+    1 -> "Captured yesterday"
+    else -> "Captured ${entry.capturedAtDaysAgo}d ago"
+}
+
+/** Wall-clock time of a capture, e.g. "3:42 PM". */
+private fun formatCapturedTime(millis: Long): String =
+    SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(millis))
+
+/** Calendar date of a capture, e.g. "Aug 2, 2026". */
+private fun formatCapturedDate(millis: Long): String =
+    SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(millis))
+
+/**
+ * Theme-aware entry meta card — sits right below the "Captured today ·
+ * 3:42 PM" line and above the format body. Segments: date & time, mood
+ * (journals only, with its icon), and the entry type — 3 segments when a
+ * mood exists, 2 otherwise. Plain theme surfaces only (no category tint),
+ * so it stays neutral in every theme style (Curio / AMOLED / Material).
+ */
+@Composable
+private fun EntryMetaCard(entry: CurioEntry) {
+    // Mood lives on the journal — unwrap OpenNotebook wildcard journals so
+    // a mood picked there still shows in the card.
+    val mood = when (val d = entry.captureData) {
+        is CaptureData.Marginalia -> d.mood
+        is CaptureData.OpenNotebook -> (d.subData as? CaptureData.Marginalia)?.mood
+        else -> null
+    }
+    val timeLabel = formatCapturedTime(entry.capturedAtMillis)
+    val typeLabel = if (entry.captureData is CaptureData.Portfolio) "Portfolio"
+                    else entry.format.shortName
+    val typeGlyph = if (entry.captureData is CaptureData.Portfolio) CurioIcons.Inventory2
+                    else formatGlyph(entry.format)
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            MetaSegment(
+                icon = CurioIcons.CalendarToday,
+                title = formatCapturedDate(entry.capturedAtMillis),
+                subtitle = timeLabel
+            )
+            MetaDivider()
+            if (mood != null) {
+                MetaSegment(
+                    icon = mood.glyph,
+                    title = mood.label,
+                    subtitle = "Mood"
+                )
+                MetaDivider()
+            }
+            MetaSegment(
+                icon = typeGlyph,
+                title = typeLabel,
+                subtitle = "Type"
+            )
+        }
+    }
+}
+
+/** One equal-weight segment of [EntryMetaCard] — icon over label pair. */
+@Composable
+private fun RowScope.MetaSegment(icon: String, title: String, subtitle: String) {
+    Column(
+        modifier = Modifier.weight(1f),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        CurioIcon(
+            name = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            size = 20.dp
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            softWrap = false
+        )
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** Short vertical divider between [EntryMetaCard] segments. */
+@Composable
+private fun RowScope.MetaDivider() {
+    VerticalDivider(
+        modifier = Modifier.height(36.dp),
+        color = MaterialTheme.colorScheme.outlineVariant
+    )
+}
+
 @Composable
 private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     // Multi-section entries render a compact section switcher that flips
@@ -407,7 +524,7 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController
     when (entry.format) {
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
-        CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
+        CaptureFormat.Marginalia -> MarginaliaRender(entry, category, navController)
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
         CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category, navController)
@@ -1098,7 +1215,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
+private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.Marginalia ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         // ── Journal — "My thoughts" on a note-paper page ──────────────
@@ -1137,6 +1254,45 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
             fallbackStyle = data.notePaperStyle(),
             category = category
         )
+
+        // ── Attachments — gallery images + optional voice note ─────────
+        // (orEmpty() guards legacy blobs where imageUris is absent.)
+        val attachedUris = data.imageUris.orEmpty()
+        if (attachedUris.isNotEmpty()) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                attachedUris.take(3).forEach { uri ->
+                    Surface(
+                        onClick = {
+                            navController.navigate(CurioRoutes.lightbox(uri)) {
+                                launchSingleTop = true
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        shadowElevation = 0.dp,
+                        modifier = Modifier.weight(1f).height(120.dp)
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(uri),
+                            contentDescription = "Open image",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxSize().padding(4.dp)
+                        )
+                    }
+                }
+            }
+        }
+        if (!data.audioFilePath.isNullOrBlank()) {
+            AudioPlayerBar(
+                audioFilePath = data.audioFilePath,
+                accent = category.themedAccent(),
+                tint = category.tint,
+                surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                border = category.categoryBorder()
+            )
+        }
     }
 }
 

@@ -38,6 +38,7 @@ object AppPreferences {
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
+    private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
@@ -78,6 +79,16 @@ object AppPreferences {
         private set
 
     /**
+     * Reactive entry-meta state — updated by [setEntryMetaEnabled] so the
+     * saved-entry meta card (date & time / mood / type), the "Captured
+     * today · 3:42 PM" time, and the journal's mood + attachment sections
+     * recompose instantly when the user toggles it in Settings. Default ON.
+     * Seeded from prefs in [initThemeMode].
+     */
+    var entryMetaEnabledState by mutableStateOf(true)
+        private set
+
+    /**
      * Reactive pinned-topics state — updated by [pinTopic] / [unpinTopic] so
      * the Topic Reveal pin button and the Topic History "Pinned" section
      * recompose instantly. Seeded from prefs in [initThemeMode].
@@ -90,6 +101,7 @@ object AppPreferences {
         themeStyleState = getThemeStyle(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
+        entryMetaEnabledState = isEntryMetaEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
     }
 
@@ -129,6 +141,14 @@ object AppPreferences {
     fun setTintWashEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_TINT_WASH_ENABLED, enabled).apply()
         tintWashEnabledState = enabled
+    }
+
+    fun isEntryMetaEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_ENTRY_META_ENABLED, true)
+
+    fun setEntryMetaEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_ENTRY_META_ENABLED, enabled).apply()
+        entryMetaEnabledState = enabled
     }
 
     // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────

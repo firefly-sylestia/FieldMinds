@@ -33,6 +33,27 @@ enum class NotePaperStyle { RULED, TORN, TORN_RULED, COFFEE, FOLDED, RED_MARGIN 
 enum class NotePaperColor { CREAM, BUTTER, PINK, MINT, SKY, LILAC }
 
 /**
+ * The mood a journal entry records — picked in the Marginalia editor's
+ * "How did it make you feel?" row and shown (with its icon) in the saved
+ * entry's meta card. Stored by name via Gson; legacy entries omit it
+ * (→ null) and simply show no mood.
+ */
+enum class JournalMood {
+    CALM, HAPPY, CURIOUS, INSPIRED, TIRED, OVERWHELMED;
+
+    /** Display label — plain text, safe for the editor chips + meta card. */
+    val label: String
+        get() = when (this) {
+            CALM -> "Calm"
+            HAPPY -> "Happy"
+            CURIOUS -> "Curious"
+            INSPIRED -> "Inspired"
+            TIRED -> "Tired"
+            OVERWHELMED -> "Overwhelmed"
+        }
+}
+
+/**
  * A styled run over a string of text — half-open [start, end) character
  * offsets, plus the rich-text flags that style that run. Used by the
  * formats' text fields (Marginalia journal + quotes, Reel Notes review,
@@ -162,7 +183,19 @@ sealed class CaptureData {
         val journalColor: NotePaperColor? = null,
         val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback.
-        val paperStyle: NotePaperStyle? = null
+        val paperStyle: NotePaperStyle? = null,
+        // Mood — picked in the journal editor, shown in the saved entry's
+        // meta card. Legacy entries omit it (Gson → null) → no mood.
+        val mood: JournalMood? = null,
+        // Attached gallery images — legacy entries omit them (Gson → null,
+        // guard with orEmpty() at the call sites).
+        val imageUris: List<String> = emptyList(),
+        // Optional voice-note attachment — the same AudioRecorder pipeline
+        // as Sound Bite. Legacy entries omit them (Gson → null / 0).
+        val audioFilePath: String? = null,
+        val audioDurationSeconds: Int = 0,
+        val audioFileSizeBytes: Long = 0,
+        val audioEncodingFormat: String = "AAC"
     ) : CaptureData()
 
     /** A single tile's layout on the mood board canvas. */
@@ -360,6 +393,7 @@ sealed class CaptureData {
      */
     fun audioFilePaths(): List<String> = when (this) {
         is SoundBite -> listOfNotNull(audioFilePath)
+        is Marginalia -> listOfNotNull(audioFilePath)
         is OpenNotebook -> subData.audioFilePaths()
         is Portfolio -> sections.flatMap { it.data.audioFilePaths() }
         else -> emptyList()

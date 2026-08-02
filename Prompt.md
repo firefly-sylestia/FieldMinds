@@ -2,6 +2,40 @@
 
 ## Latest Request (COMPLETED)
 
+**Entry date & mood — auto date/time display, journal mood picker, journal attachments (images + voice note), theme-aware meta card in saved entries (Settings toggle, default ON)**
+
+### What was asked
+
+1. When adding a journal or any entry, automatically note the date and time.
+2. Add a mood picker to the journal, and attachments too.
+3. In the saved entry, right below "Captured today" and above the entry, show the date and the mood (with icons), then the data and the type in a theme-aware card view, in 2 or 3 segments — and the same in other formats.
+4. Show the time alongside "Captured today".
+
+User chose (ask_user): 6 moods with icons; images + audio attachments; behind a Settings toggle, default ON.
+
+### What was changed
+
+- **`CaptureData.kt`** — new `JournalMood` enum (CALM/HAPPY/CURIOUS/INSPIRED/TIRED/OVERWHELMED with a `label`); `Marginalia` gains `mood: JournalMood?`, `imageUris: List<String>`, and the voice-note fields (`audioFilePath`, `audioDurationSeconds`, `audioFileSizeBytes`, `audioEncodingFormat`) — all Gson legacy-safe (null/empty for old entries); `audioFilePaths()` now recurses Marginalia so delete/backup clean up journal recordings too.
+- **`CurioIcons.kt`** — 6 mood glyph constants (self_improvement / sentiment_satisfied / psychology / lightbulb / bedtime / mood_bad) + `JournalMood.glyph` extension (label lives on the enum) + `CalendarToday` for the meta card.
+- **`AppPreferences.kt`** — new `entry_meta_enabled` pref (default true) with reactive `entryMetaEnabledState` + get/set, seeded in `initThemeMode`.
+- **`SettingsScreen.kt`** — Appearance card gains an "Entry date & mood" switch row (icon + description + Switch bound to the new pref).
+- **`MarginaliaFormat.kt`** — behind the toggle: a horizontally-scrollable 6-chip mood row (tap to set, tap again to clear; selected chip fills accent), an attach-images row (reuses `ImageThumb`/`AddImageButton`, OpenMultipleDocuments picker, up to 3, persistable URI permission like Reel Notes), and a compact `JournalVoiceNoteRow` (record → stop → keep/remove, discard while recording, runtime mic permission via launcher, `AudioRecorder` reuse, 1s timer). `canSave` includes attachments; LaunchedEffect keys + emit include mood/imageUris/audio fields (incl. `audioState` per review).
+- **`EntryDetailScreen.kt`** — "Captured today" label appends the wall-clock time ("· 3:42 PM", SimpleDateFormat); new theme-aware `EntryMetaCard` below it and above the format body — equal-weight segments (icon over label): date & time | mood (journals only, unwraps OpenNotebook wildcard journals) | type (format `shortName` + existing `formatGlyph`, "Portfolio" for multi-section) with `VerticalDivider`s — 3 segments when a mood exists, 2 otherwise; plain theme surfaces (no category tint) so it stays neutral in Curio/AMOLED/Material. Both gated on the toggle (off = old label, no card). `MarginaliaRender` gained a `navController` param (single call site) and now renders journal attachments: images as tappable tiles → Lightbox route (same pattern as FieldNotes) + the voice note via the shared `AudioPlayerBar`.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass with 4 applied items — (1) removed dead `CurioIcons.Description` (the existing `ui.components.formatGlyph` is reused instead), (2) dropped the unused `hasPermission` param from `JournalVoiceNoteRow` (permission handling lives at the call site), (3) meta card now unwraps `OpenNotebook` sub-format so wildcard-journal moods surface too, (4) `audioState` added to the editor's LaunchedEffect keys. Verified Gson legacy handling (orEmpty guards at seed + render; positional `Marginalia("", emptyList())` fallback compiles via trailing defaults), enum-by-name serialization, `VerticalDivider`/`RowScope`/`glyph` imports, `AudioPlayerBar` param order matches SoundBiteRender, the settings Switch is the safe single-brace form, entry data is preserved even when the toggle is off, and braces balance across all 6 files.
+
+### Follow-ups / notes
+
+- `JournalMood` lives on the data enum (label) with glyph in `ui.theme` (extension) — no data→ui dependency.
+- Audio cleanup on delete works via the new `audioFilePaths()` Marginalia branch (delete + backup flows already call it).
+- Edge: a wildcard (OpenNotebook) journal's mood shows in the meta card but the in-editor mood row is the same shared Marginalia editor — consistent.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Agent rule reminder: a toggle decided at ask-time is NOT permanent — remove it per the experiment-closeout rule**
 
 ### What was asked

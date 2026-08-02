@@ -453,6 +453,33 @@ fun SettingsScreen(navController: NavController) {
                                     } else null
                             )
                         }
+                        CurioSettingsDivider()
+                        // ── Entry date & mood — the meta card (date / time /
+                        //    mood / type) on saved entries + the journal's mood
+                        //    and attachment sections. Default ON.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.CalendarToday, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Entry date & mood", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    "Date, time, mood, and attachments on saved entries",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.entryMetaEnabledState,
+                                onCheckedChange = { AppPreferences.setEntryMetaEnabled(context, it) }
+                            )
+                        }
                     }
                 }
 
