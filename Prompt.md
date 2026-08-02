@@ -2,6 +2,14 @@
 
 ## Latest Request (COMPLETED)
 
+**Migrate LocalLifecycleOwner off the deprecated compose-ui import**
+
+- OnboardingScreen.kt + CurioNavHost.kt now import `androidx.lifecycle.compose.LocalLifecycleOwner` (the lifecycle-runtime-compose 2.10.0 dependency was already present; SettingsScreen/ProfileScreen already used it) — clears both `LocalLifecycleOwner is deprecated` lint warnings. Pure import swap, no behavior change.
+
+Pushed; CI re-validates on push.
+
+## Latest Request (COMPLETED)
+
 **CI fix: lint NewApi error in CurioTheme**
 
 - `dynamicDarkColorScheme`/`dynamicLightColorScheme` (API 31) were called unconditionally at CurioTheme.kt:172 — lint's 2 errors (one per call) aborted the build (minSdk 26).
