@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperStyle
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -136,7 +137,10 @@ fun GalleryWallFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
     initialData: CaptureData.GalleryWall? = null,
-    boardSeed: Int? = null
+    boardSeed: Int? = null,
+    /** Note-paper style — [NotePaperStyle.TORN] renders the caption as a
+     *  torn note instead of a ruled notebook slip. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED
 ) {
     val tiles = remember(initialData) {
         mutableStateListOf<MoodTile>().apply {
@@ -162,14 +166,15 @@ fun GalleryWallFormat(
     val seed = remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }
 
     val canSave = tiles.isNotEmpty()
-    LaunchedEffect(canSave, caption, tiles.toList()) {
+    LaunchedEffect(canSave, caption, tiles.toList(), paperStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.GalleryWall(
                 imageCount = tiles.size,
                 caption = caption,
                 imageUris = tiles.map { it.uri },
-                tileLayouts = tiles.map { CaptureData.TileLayout(it.uri, it.offsetXPx, it.offsetYPx, it.rotationDeg, it.widthPx, it.heightPx) }
+                tileLayouts = tiles.map { CaptureData.TileLayout(it.uri, it.offsetXPx, it.offsetYPx, it.rotationDeg, it.widthPx, it.heightPx) },
+                paperStyle = paperStyle
             )
             else null
         )
@@ -224,7 +229,8 @@ fun GalleryWallFormat(
         PaperLineField(
             value = caption,
             onValueChange = { caption = it },
-            label = "Add a caption (optional)"
+            label = "Add a caption (optional)",
+            torn = paperStyle == NotePaperStyle.TORN
         )
     }
 

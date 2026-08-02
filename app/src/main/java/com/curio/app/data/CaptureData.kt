@@ -3,6 +3,18 @@ package com.curio.app.data
 import com.curio.app.data.CaptureFormat
 
 /**
+ * The note-paper look a capture's text boxes wear. [RULED] is the classic
+ * notebook page (cream paper + ruled lines, toned paper in dark mode);
+ * [TORN] is the torn-note style — a properly ripped paper slip with jagged
+ * edges, no ruled lines, slight rotation for a hand-placed feel.
+ *
+ * Persisted on every [CaptureData] variant so each note keeps its own
+ * style ("behave its own individual") across save → detail view. Legacy
+ * entries omit the field (Gson → null) and read as [RULED].
+ */
+enum class NotePaperStyle { RULED, TORN }
+
+/**
  * A styled run over a string of text — half-open [start, end) character
  * offsets, plus the rich-text flags that style that run. Used by the
  * formats' text fields (Marginalia journal + quotes, Reel Notes review,
@@ -40,7 +52,10 @@ sealed class CaptureData {
         val encodingFormat: String = "AAC",
         // Optional rich-text formatting for the note field (bold/italic/
         // highlight). Legacy entries omit it → null, guard with orEmpty().
-        val noteSpans: List<TextSpan> = emptyList()
+        val noteSpans: List<TextSpan> = emptyList(),
+        // Note-paper style (ruled notebook page vs torn note). Legacy entries
+        // omit it → null, resolved via [notePaperStyle].
+        val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
     /** Reel Notes (§8.2): review with rating, text, and attached images. */
@@ -54,7 +69,9 @@ sealed class CaptureData {
         val imageUris: List<String> = emptyList(),
         // Optional rich-text formatting for the review field. Legacy entries
         // omit it → null, guard with orEmpty().
-        val reviewSpans: List<TextSpan> = emptyList()
+        val reviewSpans: List<TextSpan> = emptyList(),
+        // Note-paper style (ruled notebook page vs torn note).
+        val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
     /** Marginalia (§8.3): journal entry with favorite quotes. */
@@ -65,7 +82,9 @@ sealed class CaptureData {
         // to journalText; quoteSpans is parallel to quotes (one span list per
         // quote). Legacy entries omit both → null, guard with orEmpty().
         val journalSpans: List<TextSpan> = emptyList(),
-        val quoteSpans: List<List<TextSpan>> = emptyList()
+        val quoteSpans: List<List<TextSpan>> = emptyList(),
+        // Note-paper style (ruled notebook page vs torn note).
+        val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
     /** A single tile's layout on the mood board canvas. */
@@ -83,7 +102,9 @@ sealed class CaptureData {
         val imageCount: Int,
         val caption: String,
         val imageUris: List<String> = emptyList(),
-        val tileLayouts: List<TileLayout> = emptyList()
+        val tileLayouts: List<TileLayout> = emptyList(),
+        // Note-paper style (ruled notebook page vs torn note).
+        val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
     /** Field Notes (§8.5): three-section observation journal. */
@@ -96,7 +117,9 @@ sealed class CaptureData {
         // fields). Legacy entries omit them → null, guard with orEmpty().
         val observedSpans: List<TextSpan> = emptyList(),
         val surprisedSpans: List<TextSpan> = emptyList(),
-        val learnNextSpans: List<TextSpan> = emptyList()
+        val learnNextSpans: List<TextSpan> = emptyList(),
+        // Note-paper style (ruled notebook page vs torn note).
+        val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
     /**
@@ -228,5 +251,21 @@ sealed class CaptureData {
         is OpenNotebook -> subData.audioFilePaths()
         is Portfolio -> sections.flatMap { it.data.audioFilePaths() }
         else -> emptyList()
+    }
+
+    /**
+     * The note-paper style this capture wears — [NotePaperStyle.RULED] for
+     * legacy entries that predate the style field (Gson → null). OpenNotebook
+     * and Portfolio delegate to their nested data so the whole entry reads
+     * one coherent style.
+     */
+    fun notePaperStyle(): NotePaperStyle = when (this) {
+        is SoundBite -> paperStyle ?: NotePaperStyle.RULED
+        is ReelNotes -> paperStyle ?: NotePaperStyle.RULED
+        is Marginalia -> paperStyle ?: NotePaperStyle.RULED
+        is GalleryWall -> paperStyle ?: NotePaperStyle.RULED
+        is FieldNotes -> paperStyle ?: NotePaperStyle.RULED
+        is OpenNotebook -> subData.notePaperStyle()
+        is Portfolio -> sections.firstOrNull()?.data?.notePaperStyle() ?: NotePaperStyle.RULED
     }
 }

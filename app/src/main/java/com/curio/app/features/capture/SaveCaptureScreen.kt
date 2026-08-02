@@ -55,6 +55,7 @@ import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CaptureRepository
+import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
@@ -533,6 +534,8 @@ private fun FormatBodyForCategory(
                             seed = s.data
                             data = s.data
                             canSave = true
+                            // Each saved take keeps its own paper style.
+                            paperStyle = s.data.notePaperStyle()
                         })
                     }
                 initialData is CaptureData.OpenNotebook ->
@@ -540,12 +543,14 @@ private fun FormatBodyForCategory(
                         seed = initialData.subData
                         data = initialData.subData
                         canSave = true
+                        paperStyle = initialData.notePaperStyle()
                     })
                 initialData != null ->
                     add(CaptureSectionState(0, entryFormat ?: defaultFormat).apply {
                         seed = initialData
                         data = initialData
                         canSave = true
+                        paperStyle = initialData.notePaperStyle()
                     })
                 else -> add(CaptureSectionState(0, defaultFormat))
             }
@@ -616,6 +621,65 @@ private fun FormatBodyForCategory(
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
+
+        // ── Note-paper style chips — the torn-note option alongside the
+        // classic ruled page. Controls the ACTIVE section only, so each take
+        // keeps its own independent paper look.
+        val paperTarget = sections.getOrNull(activeIndex)
+        if (paperTarget != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Paper",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                NotePaperStyle.values().forEach { style ->
+                    val selected = paperTarget.paperStyle == style
+                    Surface(
+                        onClick = { paperTarget.paperStyle = style },
+                        shape = RoundedCornerShape(50),
+                        color = if (selected) category.tint
+                                else category.categorySurface(MaterialTheme.colorScheme.surface),
+                        border = if (selected) BorderStroke(
+                            1.dp,
+                            category.accent.copy(alpha = 0.5f)
+                        ) else category.categoryBorder(
+                            fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                        ),
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CurioIcon(
+                                name = if (style == NotePaperStyle.TORN) CurioIcons.Palette
+                                       else CurioIcons.MenuBook,
+                                contentDescription = null,
+                                tint = if (selected) category.accent
+                                       else MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 16.dp
+                            )
+                            Text(
+                                text = if (style == NotePaperStyle.TORN) "Torn note" else "Ruled",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
+                                ),
+                                color = if (selected) category.accent
+                                       else MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
         // ── Compact format chips — control the ACTIVE section ────────────
         val active = sections.getOrNull(activeIndex)
@@ -784,34 +848,40 @@ private fun FormatBodyForCategory(
                         category.accent, category.tint,
                         { current.canSave = it }, { current.data = it },
                         onBusyChange = { current.busy = it },
-                        initialData = current.seed as? CaptureData.SoundBite
+                        initialData = current.seed as? CaptureData.SoundBite,
+                        paperStyle = current.paperStyle
                     )
                     CaptureFormat.ReelNotes -> ReelNotesFormat(
                         category.accent, category.tint,
                         { current.canSave = it }, { current.data = it },
-                        initialData = current.seed as? CaptureData.ReelNotes
+                        initialData = current.seed as? CaptureData.ReelNotes,
+                        paperStyle = current.paperStyle
                     )
                     CaptureFormat.Marginalia -> MarginaliaFormat(
                         category.accent, category.tint,
                         { current.canSave = it }, { current.data = it },
-                        initialData = current.seed as? CaptureData.Marginalia
+                        initialData = current.seed as? CaptureData.Marginalia,
+                        paperStyle = current.paperStyle
                     )
                     CaptureFormat.GalleryWall -> GalleryWallFormat(
                         category.accent, category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.GalleryWall,
-                        boardSeed = boardSeed
+                        boardSeed = boardSeed,
+                        paperStyle = current.paperStyle
                     )
                     CaptureFormat.FieldNotes -> FieldNotesFormat(
                         category.accent, category.tint,
                         { current.canSave = it }, { current.data = it },
-                        initialData = current.seed as? CaptureData.FieldNotes
+                        initialData = current.seed as? CaptureData.FieldNotes,
+                        paperStyle = current.paperStyle
                     )
                     CaptureFormat.OpenNotebook -> OpenNotebookFormat(
                         category.accent, category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.OpenNotebook,
-                        boardSeed = boardSeed
+                        boardSeed = boardSeed,
+                        paperStyle = current.paperStyle
                     )
                 }
             }
@@ -873,6 +943,10 @@ private class CaptureSectionState(val id: Int, initialFormat: CaptureFormat) {
     // True while a live recording is in progress — format-switch confirmation
     // must also trigger here (data/canSave are null mid-recording).
     var busy by mutableStateOf(false)
+    // The note-paper style this take wears — ruled notebook page or torn
+    // note. Lives per-section so each take keeps its own look, and rides
+    // into the saved CaptureData so the detail view matches the editor.
+    var paperStyle by mutableStateOf(NotePaperStyle.RULED)
 }
 
 /** The 5 concrete format chips offered by the universal picker. */

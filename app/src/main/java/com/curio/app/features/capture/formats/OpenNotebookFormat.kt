@@ -2,6 +2,7 @@ package com.curio.app.features.capture.formats
 
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
+import com.curio.app.data.NotePaperStyle
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -63,7 +64,10 @@ fun OpenNotebookFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
     initialData: CaptureData.OpenNotebook? = null,
-    boardSeed: Int? = null
+    boardSeed: Int? = null,
+    /** Note-paper style — passed through to every sub-format so the chosen
+     *  torn / ruled look applies whichever notebook option is selected. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED
 ) {
     // Edit mode: open the picker on the saved choice instead of VOICE, and
     // seed the sub-body with the saved data. Keyed on initialData so the
@@ -119,23 +123,28 @@ fun OpenNotebookFormat(
         ) { choice ->
             when (choice) {
                 NotebookChoice.VOICE -> SoundBiteFormat(
-                    accent, tint, { subCanSave = it }, { subData = it }
+                    accent, tint, { subCanSave = it }, { subData = it },
+                    paperStyle = paperStyle
                 )
                 NotebookChoice.REVIEW -> ReelNotesFormat(
-                    accent, tint, { subCanSave = it }, { subData = it }
+                    accent, tint, { subCanSave = it }, { subData = it },
+                    paperStyle = paperStyle
                 )
                 NotebookChoice.JOURNAL -> MarginaliaFormat(
-                    accent, tint, { subCanSave = it }, { subData = it }
+                    accent, tint, { subCanSave = it }, { subData = it },
+                    paperStyle = paperStyle
                 )
                 NotebookChoice.MOODBOARD -> GalleryWallFormat(
                     accent, tint, { subCanSave = it }, { subData = it },
                     // Edit mode: preload the saved board + reuse its seed so
                     // the editor's watermark matches the saved view.
                     initialData = initialData?.subData as? CaptureData.GalleryWall,
-                    boardSeed = boardSeed
+                    boardSeed = boardSeed,
+                    paperStyle = paperStyle
                 )
                 NotebookChoice.FIELD -> FieldNotesFormat(
-                    accent, tint, { subCanSave = it }, { subData = it }
+                    accent, tint, { subCanSave = it }, { subData = it },
+                    paperStyle = paperStyle
                 )
             }
         }

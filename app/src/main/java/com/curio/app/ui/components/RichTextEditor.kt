@@ -237,6 +237,9 @@ fun RichTextEditor(
      *  the saved detail view's paper pages. Default false keeps the plain
      *  surface field. */
     paper: Boolean = false,
+    /** When [paper] is true, renders the torn-note slip ([TornPaperCard]) —
+     *  jagged ripped edges, no ruled lines — instead of the ruled page. */
+    torn: Boolean = false,
     /** Content inset of the paper card when [paper] is true. */
     paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
 ) {
@@ -486,7 +489,14 @@ fun RichTextEditor(
                 )
             }
         }
-        if (paper) {
+        if (paper && torn) {
+            TornPaperCard(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = paperContentPadding
+            ) {
+                fieldBlock()
+            }
+        } else if (paper) {
             PaperCard(
                 modifier = Modifier.fillMaxWidth(),
                 ruled = true,

@@ -1,6 +1,7 @@
 package com.curio.app.features.capture.formats
 
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +60,10 @@ fun MarginaliaFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.Marginalia? = null
+    initialData: CaptureData.Marginalia? = null,
+    /** Note-paper style — [NotePaperStyle.TORN] renders the journal page +
+     *  quote cards as torn notes instead of ruled notebook pages. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED
 ) {
     // Edit mode: restore journal text + spans + quote cards so re-saving
     // preserves the original capture instead of silently wiping it.
@@ -83,14 +87,15 @@ fun MarginaliaFormat(
     // Key on the content too: journal text typed or quotes added AFTER the
     // first character must re-emit, or saving would persist stale data
     // (later text/quotes silently dropped from the saved entry).
-    LaunchedEffect(canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList()) {
+    LaunchedEffect(canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(), paperStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.Marginalia(
                 journalText = journalText,
                 quotes = quotes.toList(),
                 journalSpans = journalSpans,
-                quoteSpans = quoteSpans.toList()
+                quoteSpans = quoteSpans.toList(),
+                paperStyle = paperStyle
             )
             else null
         )
@@ -123,6 +128,7 @@ fun MarginaliaFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
+                torn = paperStyle == NotePaperStyle.TORN,
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -158,6 +164,7 @@ fun MarginaliaFormat(
                     text = quote,
                     spans = quoteSpans.getOrElse(i) { emptyList() },
                     rotation = rotation,
+                    torn = paperStyle == NotePaperStyle.TORN,
                     onTextChange = { newText, newSpans ->
                         quotes[i] = newText
                         quoteSpans[i] = newSpans
@@ -208,6 +215,7 @@ private fun QuoteCard(
     text: String,
     spans: List<TextSpan>,
     rotation: Float,
+    torn: Boolean,
     onTextChange: (text: String, spans: List<TextSpan>) -> Unit,
     onRemove: () -> Unit
 ) {
@@ -264,6 +272,7 @@ private fun QuoteCard(
             ink = paperInk(),
             accent = MaterialTheme.colorScheme.tertiary,
             paper = true,
+            torn = torn,
             paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
         )
     }

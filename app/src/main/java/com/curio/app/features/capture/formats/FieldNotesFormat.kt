@@ -3,6 +3,7 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -59,7 +60,10 @@ fun FieldNotesFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.FieldNotes? = null
+    initialData: CaptureData.FieldNotes? = null,
+    /** Note-paper style — [NotePaperStyle.TORN] renders the three section
+     *  fields as torn notes instead of ruled notebook pages. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED
 ) {
     val context = LocalContext.current
     // Edit mode: restore the three sections + photos so re-saving preserves
@@ -95,7 +99,7 @@ fun FieldNotesFormat(
                   surprised.isNotBlank() ||
                   learnNext.isNotBlank() ||
                   imageUris.isNotEmpty()
-    LaunchedEffect(canSave, observed, observedSpans, surprised, surprisedSpans, learnNext, learnNextSpans, imageUris) {
+    LaunchedEffect(canSave, observed, observedSpans, surprised, surprisedSpans, learnNext, learnNextSpans, imageUris, paperStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.FieldNotes(
@@ -105,7 +109,8 @@ fun FieldNotesFormat(
                 imageUris = imageUris,
                 observedSpans = observedSpans,
                 surprisedSpans = surprisedSpans,
-                learnNextSpans = learnNextSpans
+                learnNextSpans = learnNextSpans,
+                paperStyle = paperStyle
             )
             else null
         )
@@ -147,6 +152,7 @@ fun FieldNotesFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
+                torn = paperStyle == NotePaperStyle.TORN,
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -180,6 +186,7 @@ fun FieldNotesFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
+                torn = paperStyle == NotePaperStyle.TORN,
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -213,6 +220,7 @@ fun FieldNotesFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
+                torn = paperStyle == NotePaperStyle.TORN,
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }

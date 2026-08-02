@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.components.PaperCard
+import com.curio.app.ui.components.TornPaperCard
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.paperInk
@@ -293,7 +294,10 @@ fun PaperLineField(
     placeholder: String = "",
     enabled: Boolean = true,
     accent: Color = MaterialTheme.colorScheme.primary,
-    imeAction: ImeAction = ImeAction.Done
+    imeAction: ImeAction = ImeAction.Done,
+    /** Renders the slip as a torn note ([TornPaperCard]) instead of the
+     *  ruled page — the torn-paper note style. */
+    torn: Boolean = false
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (label != null) {
@@ -303,34 +307,65 @@ fun PaperLineField(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        PaperCard(
-            modifier = Modifier.fillMaxWidth(),
-            ruled = true,
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                enabled = enabled,
-                singleLine = true,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
-                cursorBrush = SolidColor(accent),
-                keyboardOptions = KeyboardOptions(imeAction = imeAction),
-                decorationBox = { innerTextField ->
-                    Box {
-                        if (value.isEmpty() && placeholder.isNotEmpty()) {
-                            Text(
-                                text = placeholder,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    color = paperInk().copy(alpha = 0.45f)
+        if (torn) {
+            TornPaperCard(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+            ) {
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    enabled = enabled,
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
+                    cursorBrush = SolidColor(accent),
+                    keyboardOptions = KeyboardOptions(imeAction = imeAction),
+                    decorationBox = { innerTextField ->
+                        Box {
+                            if (value.isEmpty() && placeholder.isNotEmpty()) {
+                                Text(
+                                    text = placeholder,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        color = paperInk().copy(alpha = 0.45f)
+                                    )
                                 )
-                            )
+                            }
+                            innerTextField()
                         }
-                        innerTextField()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else {
+            PaperCard(
+                modifier = Modifier.fillMaxWidth(),
+                ruled = true,
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+            ) {
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    enabled = enabled,
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
+                    cursorBrush = SolidColor(accent),
+                    keyboardOptions = KeyboardOptions(imeAction = imeAction),
+                    decorationBox = { innerTextField ->
+                        Box {
+                            if (value.isEmpty() && placeholder.isNotEmpty()) {
+                                Text(
+                                    text = placeholder,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        color = paperInk().copy(alpha = 0.45f)
+                                    )
+                                )
+                            }
+                            innerTextField()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }

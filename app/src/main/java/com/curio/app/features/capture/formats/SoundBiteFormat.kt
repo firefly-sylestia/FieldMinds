@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import com.curio.app.features.capture.AudioRecorder
 import com.curio.app.ui.components.AudioTrimmer
@@ -85,7 +86,10 @@ fun SoundBiteFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
     onBusyChange: (Boolean) -> Unit = {},
-    initialData: CaptureData.SoundBite? = null
+    initialData: CaptureData.SoundBite? = null,
+    /** Note-paper style — [NotePaperStyle.TORN] renders the title slip + note
+     *  as torn notes instead of ruled notebook pages. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -206,7 +210,7 @@ fun SoundBiteFormat(
                   recordingSeconds > 0 &&
                   savedFilePath != null &&
                   !trimInProgress
-    LaunchedEffect(canSave, savedFilePath, title, note, noteSpans) {
+    LaunchedEffect(canSave, savedFilePath, title, note, noteSpans, paperStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.SoundBite(
@@ -214,7 +218,8 @@ fun SoundBiteFormat(
                 title = title,
                 note = note,
                 noteSpans = noteSpans,
-                audioFilePath = savedFilePath
+                audioFilePath = savedFilePath,
+                paperStyle = paperStyle
             )
             else null
         )
@@ -359,7 +364,8 @@ fun SoundBiteFormat(
             onValueChange = { title = it },
             label = "Add a quick title (optional)",
             enabled = recordingState != AudioRecorder.State.RECORDING,
-            imeAction = ImeAction.Next
+            imeAction = ImeAction.Next,
+            torn = paperStyle == NotePaperStyle.TORN
         )
 
         // Rich-text note — formatting behind a small toggle. The toolbar
@@ -381,6 +387,7 @@ fun SoundBiteFormat(
             ink = paperInk(),
             accent = MaterialTheme.colorScheme.tertiary,
             paper = true,
+            torn = paperStyle == NotePaperStyle.TORN,
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
     }

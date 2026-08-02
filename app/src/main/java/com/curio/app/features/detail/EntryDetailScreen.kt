@@ -75,7 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.curio.app.ui.components.CurioBackButton
-import com.curio.app.ui.components.PaperCard
+import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.components.WaveformExtractor
 import com.curio.app.ui.components.buildRichAnnotated
 import kotlinx.coroutines.Dispatchers
@@ -520,7 +520,8 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 
             // ── Note — shown on the same note-paper slip the editor used ──
             if (data.note.isNotBlank()) {
-                PaperCard(
+                NotePaperCard(
+                    style = data.notePaperStyle(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -933,9 +934,11 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
         
         // Review text with better styling — wears the same note-paper box
         // as the Marginalia journal, so the saved review reads as written
-        // on paper in light AND dark mode (PaperCard is theme-aware).
+        // on paper in light AND dark mode (NotePaperCard is theme-aware and
+        // renders the torn-note style when that's what was chosen).
         if (data.reviewText.isNotBlank()) {
-            PaperCard(
+            NotePaperCard(
+                style = data.notePaperStyle(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -947,7 +950,8 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             }
         } else {
             // Fallback when no review text
-            PaperCard(
+            NotePaperCard(
+                style = data.notePaperStyle(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -968,7 +972,8 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
         // ── Journal — "My thoughts" on a note-paper page ──────────────
         if (data.journalText.isNotBlank()) {
             MarginaliaSectionHeader(label = "My thoughts", category = category)
-            PaperCard(
+            NotePaperCard(
+                style = data.notePaperStyle(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -998,7 +1003,8 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                 // (keyed by index) so scrolling/recomposition never re-rolls
                 // the rotation while viewing.
                 val rotation = remember(i) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
-                PaperCard(
+                NotePaperCard(
+                    style = data.notePaperStyle(),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
                     corner = 12.dp,
                     modifier = Modifier
@@ -1228,7 +1234,8 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
 
         if (data.caption.isNotBlank()) {
             // Caption wears the same note-paper slip as the editor's field.
-            PaperCard(
+            NotePaperCard(
+                style = data.notePaperStyle(),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1441,7 +1448,8 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                PaperCard(
+                NotePaperCard(
+                    style = data.notePaperStyle(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1456,7 +1464,8 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.surprised.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                PaperCard(
+                NotePaperCard(
+                    style = data.notePaperStyle(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1471,7 +1480,8 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                PaperCard(
+                NotePaperCard(
+                    style = data.notePaperStyle(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {

@@ -3,6 +3,7 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,7 +47,10 @@ fun ReelNotesFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.ReelNotes? = null
+    initialData: CaptureData.ReelNotes? = null,
+    /** Note-paper style — [NotePaperStyle.TORN] renders the review field as
+     *  a torn note instead of a ruled notebook page. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED
 ) {
     val context = LocalContext.current
     // Edit mode: restore rating / review / images so re-saving an entry
@@ -75,7 +79,7 @@ fun ReelNotesFormat(
     // Key on every input, not just canSave: rating, review text and images
     // added AFTER the first character must re-emit, or saving would persist
     // stale data (text/rating/images silently dropped from the saved entry).
-    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris) {
+    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris, paperStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.ReelNotes(
@@ -83,7 +87,8 @@ fun ReelNotesFormat(
                 reviewText = reviewText,
                 imageCount = imageUris.size,
                 imageUris = imageUris,
-                reviewSpans = reviewSpans
+                reviewSpans = reviewSpans,
+                paperStyle = paperStyle
             )
             else null
         )
@@ -128,6 +133,7 @@ fun ReelNotesFormat(
             ink = paperInk(),
             accent = MaterialTheme.colorScheme.tertiary,
             paper = true,
+            torn = paperStyle == NotePaperStyle.TORN,
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
 
