@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -395,6 +396,10 @@ fun RichTextEditor(
         mutableStateOf(TextFieldValue(buildRichAnnotated(text, spans, effectiveHighlight)))
     }
     var toolbarExpanded by remember { mutableStateOf(false) }
+    // Paper style + color controls sit behind their own toggle button (the
+    // palette icon, mirroring the FormatText button) so fields that don't
+    // need paper styling don't look complicated.
+    var styleExpanded by remember { mutableStateOf(false) }
     // Text layout of the field — anchors the floating format bar to the
     // current selection so formatting existing text is discoverable.
     var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -640,8 +645,9 @@ fun RichTextEditor(
     Column(modifier = modifier) {
         // ── Toolbar ─────────────────────────────────────────────────────
         if (toolbarMode == RichTextToolbarMode.MAIN) {
-            // The paper-style toggle rides the same row as the format tools
-            // (per text box — never a section-level row above the field).
+            // The paper STYLE + COLOR controls sit behind their own small
+            // toggle button (like the format button) — right-aligned after
+            // the always-visible format tools.
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -662,22 +668,24 @@ fun RichTextEditor(
                     onSizeDown = { applySize(-FONT_SIZE_STEP) }
                 )
                 if (paper) {
-                    NotePaperStyleToggle(
-                        style = paperStyle,
-                        onStyleChange = onPaperStyleChange,
+                    Spacer(Modifier.weight(1f))
+                    StyleToggleButton(
+                        expanded = styleExpanded,
                         accent = effectiveAccent,
                         enabled = enabled,
-                        // The style chips now scroll (6 styles + rules chip
-                        // overflow a phone row) — weight lets the scroll row
-                        // take the leftover width after the format toolbox.
-                        modifier = Modifier.weight(1f)
+                        onToggle = { styleExpanded = !styleExpanded },
+                        modifier = Modifier.padding(bottom = 6.dp)
                     )
                 }
             }
-            if (paper) {
-                // The color swatches sit on their OWN row — the format tools
-                // + style chips already fill a phone-width row, and Rows
-                // don't wrap, so six more swatches would get clipped.
+            if (paper && styleExpanded) {
+                NotePaperStyleToggle(
+                    style = paperStyle,
+                    onStyleChange = onPaperStyleChange,
+                    accent = effectiveAccent,
+                    enabled = enabled,
+                    modifier = Modifier.fillMaxWidth()
+                )
                 NotePaperColorToggle(
                     color = paperColor,
                     onColorChange = onPaperColorChange,
@@ -693,18 +701,12 @@ fun RichTextEditor(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (paper) {
-                    // Per-field paper toggle stays visible without expanding
-                    // the format row (SoundBite note, ReelNotes, Field Notes
-                    // sections use TOGGLE mode). The chips scroll — weight
-                    // keeps the row from pushing the format button off-screen.
-                    NotePaperStyleToggle(
-                        style = paperStyle,
-                        onStyleChange = onPaperStyleChange,
+                    StyleToggleButton(
+                        expanded = styleExpanded,
                         accent = effectiveAccent,
                         enabled = enabled,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(bottom = 4.dp)
+                        onToggle = { styleExpanded = !styleExpanded },
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
                 }
                 Surface(
@@ -724,9 +726,14 @@ fun RichTextEditor(
                     )
                 }
             }
-            if (paper) {
-                // Color swatches on their OWN row below — keeps the style +
-                // format row from overflowing on narrow screens.
+            if (paper && styleExpanded) {
+                NotePaperStyleToggle(
+                    style = paperStyle,
+                    onStyleChange = onPaperStyleChange,
+                    accent = effectiveAccent,
+                    enabled = enabled,
+                    modifier = Modifier.fillMaxWidth()
+                )
                 NotePaperColorToggle(
                     color = paperColor,
                     onColorChange = onPaperColorChange,
@@ -1057,6 +1064,32 @@ private fun FormatToolbar(
             accent = accent,
             enabled = enabled,
             onClick = onSizeDown
+        )
+    }
+}
+
+@Composable
+private fun StyleToggleButton(
+    expanded: Boolean,
+    accent: Color,
+    enabled: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onToggle,
+        enabled = enabled,
+        shape = RoundedCornerShape(8.dp),
+        color = if (expanded) accent.copy(alpha = 0.15f) else Color.Transparent,
+        border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+        modifier = modifier
+    ) {
+        CurioIcon(
+            name = CurioIcons.Palette,
+            contentDescription = if (expanded) "Hide paper style" else "Paper style",
+            tint = accent,
+            size = 18.dp,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
     }
 }

@@ -62,6 +62,8 @@ import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.PinnedTopic
+import com.curio.app.data.SavedQuote
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
@@ -97,9 +99,11 @@ import java.util.Calendar
  *   5. **Categories chip row** — horizontally-scrollable color chips.
  *      Each chip shows the family color, category glyph, and label.
  *      Tapping sets the active category.
- *   6. **Recently explored** — header row + 2-col grid of recent entry
+ *   6. **Saved** — bookmarked quotes + pinned topics (hidden when empty),
+ *      each row tappable through to its entry / topic.
+ *   7. **Recently explored** — header row + 2-col grid of recent entry
  *      cards, or a beautiful empty-state card prompting the first spin.
- *   7. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
+ *   8. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
  *      card suggesting the user try a daily shuffle reminder, navigating to
  *      Settings.
  *
@@ -473,7 +477,51 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(Modifier.height(20.dp))
 
-            // ── 6. Recently explored — renders all at once (no stagger) ──
+            // ── 6. Saved — bookmarked quotes + pinned topics ───────────
+            val savedQuotes = AppPreferences.savedQuotesState
+            val pinnedTopics = AppPreferences.pinnedTopicsState
+            if (savedQuotes.isNotEmpty() || pinnedTopics.isNotEmpty()) {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    Text(
+                        "Saved",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        savedQuotes.forEach { quote ->
+                            SavedQuoteRow(
+                                quote = quote,
+                                onClick = {
+                                    navController.navigate(CurioRoutes.entryDetail(quote.entryId)) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onRemove = {
+                                    AppPreferences.removeSavedQuote(context, quote.entryId, quote.quoteText)
+                                }
+                            )
+                        }
+                        pinnedTopics.forEach { pinned ->
+                            PinnedTopicRow(
+                                pinned = pinned,
+                                onClick = {
+                                    navController.navigate(
+                                        CurioRoutes.revealFor(pinned.categoryId.routeSlug, pinned.topicName)
+                                    ) { launchSingleTop = true }
+                                },
+                                onUnpin = {
+                                    AppPreferences.unpinTopic(context, pinned.categoryId, pinned.topicName)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            // ── 7. Recently explored — renders all at once (no stagger) ──
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -523,7 +571,7 @@ fun HomeScreen(navController: NavController) {
                 Spacer(Modifier.height(12.dp))
             }
 
-            // ── 7. Reminder nudge (when reminders off) ─────────────────
+            // ── 8. Reminder nudge (when reminders off) ─────────────────
             if (!reminderEnabled) {
                 Spacer(Modifier.height(16.dp))
                 ReminderNudgeCard(
@@ -622,6 +670,134 @@ private fun CategoryChip(
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// ── Saved shelf rows — bookmarked quotes + pinned topics ───────────────
+
+@Composable
+private fun SavedQuoteRow(
+    quote: SavedQuote,
+    onClick: () -> Unit,
+    onRemove: () -> Unit
+) {
+    val cat = CurioCategories.byId(quote.categoryId)
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(cat.tint, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    name = CurioIcons.FormatQuote,
+                    contentDescription = null,
+                    tint = cat.categoryInk(),
+                    size = 18.dp
+                )
+            }
+            Spacer(Modifier.size(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "\u201C${quote.quoteText}\u201D",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "from ${quote.topicName}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Surface(
+                onClick = onRemove,
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceContainerLow
+            ) {
+                CurioIcon(
+                    CurioIcons.BookmarkBorder, "Remove bookmark",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 18.dp,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PinnedTopicRow(
+    pinned: PinnedTopic,
+    onClick: () -> Unit,
+    onUnpin: () -> Unit
+) {
+    val cat = CurioCategories.byId(pinned.categoryId)
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(cat.tint, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Bookmark,
+                    contentDescription = null,
+                    tint = cat.categoryInk(),
+                    size = 18.dp
+                )
+            }
+            Spacer(Modifier.size(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = pinned.topicName,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = cat.displayName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = cat.categoryInk()
+                )
+            }
+            Surface(
+                onClick = onUnpin,
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceContainerLow
+            ) {
+                CurioIcon(
+                    CurioIcons.BookmarkBorder, "Unpin topic",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 18.dp,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
+        }
+    }
+}
+
 // Recent entry row (compact)
 // ═══════════════════════════════════════════════════════════════════════
 

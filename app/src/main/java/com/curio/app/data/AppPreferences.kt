@@ -40,6 +40,7 @@ object AppPreferences {
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
+    private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
@@ -96,6 +97,15 @@ object AppPreferences {
     var pinnedTopicsState by mutableStateOf<List<PinnedTopic>>(emptyList())
         private set
 
+    /**
+     * Reactive saved-quotes state — updated by [saveQuote] /
+     * [removeSavedQuote] so the saved-entry bookmark buttons and the Home
+     * screen's "Saved" shelf recompose instantly. Seeded from prefs in
+     * [initThemeMode].
+     */
+    var savedQuotesState by mutableStateOf<List<SavedQuote>>(emptyList())
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         themeStyleState = getThemeStyle(context)
@@ -103,6 +113,7 @@ object AppPreferences {
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
+        savedQuotesState = getSavedQuotes(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -210,6 +221,71 @@ object AppPreferences {
         pinnedTopicsState = topics
     }
 
+    // ── Saved quotes (saved entry → bookmark icon on quote cards) ───────
+    /**
+     * Returns all bookmarked quotes, newest first. Persisted as a JSON
+     * array (same pattern as [PinnedTopic]) so quote text with any
+     * characters survives round-trips.
+     */
+    fun getSavedQuotes(context: Context): List<SavedQuote> {
+        val raw = prefs(context).getString(KEY_SAVED_QUOTES, null) ?: return emptyList()
+        return try {
+            val arr = JSONArray(raw)
+            List(arr.length()) { i ->
+                val obj = arr.getJSONObject(i)
+                val id = obj.optString("categoryId")
+                val cat = CategoryId.values().firstOrNull { it.name == id } ?: return@List null
+                SavedQuote(
+                    entryId = obj.optString("entryId"),
+                    topicName = obj.optString("topicName"),
+                    categoryId = cat,
+                    quoteText = obj.optString("quoteText"),
+                    savedAtMillis = obj.optLong("savedAtMillis", System.currentTimeMillis())
+                )
+            }.filterNotNull()
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    /**
+     * Bookmarks a quote (newest first, deduped by entry + quote text).
+     * No-op when already saved. (The saved/unsaved check in the UI reads
+     * the reactive [savedQuotesState] directly, not prefs.)
+     */
+    fun saveQuote(context: Context, entryId: String, topicName: String, categoryId: CategoryId, quoteText: String) {
+        if (entryId.isBlank() || quoteText.isBlank()) return
+        val current = getSavedQuotes(context)
+        if (current.any { it.entryId == entryId && it.quoteText == quoteText }) return
+        val updated = listOf(
+            SavedQuote(entryId, topicName, categoryId, quoteText, System.currentTimeMillis())
+        ) + current
+        saveSavedQuotes(context, updated)
+    }
+
+    fun removeSavedQuote(context: Context, entryId: String, quoteText: String) {
+        val updated = getSavedQuotes(context).filterNot {
+            it.entryId == entryId && it.quoteText == quoteText
+        }
+        saveSavedQuotes(context, updated)
+    }
+
+    private fun saveSavedQuotes(context: Context, quotes: List<SavedQuote>) {
+        val arr = JSONArray()
+        quotes.forEach {
+            arr.put(
+                JSONObject()
+                    .put("entryId", it.entryId)
+                    .put("topicName", it.topicName)
+                    .put("categoryId", it.categoryId.name)
+                    .put("quoteText", it.quoteText)
+                    .put("savedAtMillis", it.savedAtMillis)
+            )
+        }
+        prefs(context).edit().putString(KEY_SAVED_QUOTES, arr.toString()).apply()
+        savedQuotesState = quotes
+    }
+
     // ── Daily reminder ───────────────────────────────────────────────
     fun isReminderEnabled(context: Context): Boolean =
         prefs(context).getBoolean(KEY_REMINDER_ENABLED, false)
@@ -300,4 +376,17 @@ data class PinnedTopic(
     val categoryId: CategoryId,
     val topicName: String,
     val pinnedAtMillis: Long
+)
+
+/**
+ * A quote the user bookmarked from a saved entry (bookmark icon on the
+ * quote card in the entry detail view). Listed on the Home screen's
+ * "Saved" shelf together with [PinnedTopic]s.
+ */
+data class SavedQuote(
+    val entryId: String,
+    val topicName: String,
+    val categoryId: CategoryId,
+    val quoteText: String,
+    val savedAtMillis: Long
 )

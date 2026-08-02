@@ -2,6 +2,35 @@
 
 ## Latest Request (COMPLETED)
 
+**Saved quotes shelf (bookmark quote cards → Home "Saved" shelf with pinned topics) + paper style/color controls hidden behind a toggle in rich-text fields**
+
+### What was asked
+
+1. Add a feature to save/bookmark quotes after they are added.
+2. Like the text-format toggle, add a toggle for the other (paper style + color) controls so fields don't look complicated for users who don't want to format or change the style.
+
+User chose (ask_user): a saved-quotes shelf shown on the HOME screen together with the saved (pinned) topics — not Profile; always-on (no Settings toggle); the paper-style toggle applies to rich-text fields only.
+
+### What was changed
+
+- **`AppPreferences.kt`** — new `SavedQuote(entryId, topicName, categoryId, quoteText, savedAtMillis)` persisted as a JSON array (mirrors the `PinnedTopic` pattern), reactive `savedQuotesState` seeded in `initThemeMode`, plus `getSavedQuotes` / `saveQuote` (deduped by entry+quote, blank-guarded, newest first) / `removeSavedQuote`.
+- **`EntryDetailScreen.kt`** — `RenderQuoteCards` gained `entryId` + `topicName` params (all 4 call sites — SoundBite/ReelNotes/Marginalia/GalleryWall — pass `entry.id` / `entry.topic.name`); each saved quote card shows a bookmark toggle (CircleShape Surface, `Bookmark`/`BookmarkBorder` glyph, accent-filled when saved) that calls `saveQuote`/`removeSavedQuote`; state reads the reactive `savedQuotesState` so the icon flips instantly.
+- **`HomeScreen.kt`** — new **"Saved"** section between Categories and Recently explored (hidden when both empty): `SavedQuoteRow`s (category tint dot + FormatQuote glyph, 2-line ellipsis quote, "from {topicName}" caption, bookmark-border remove, tap → `entryDetail(entryId)`) and `PinnedTopicRow`s (bookmark glyph, topic name + category, unpin, tap → `revealFor(categoryId.routeSlug, topicName)` — same nav as Topic History). Doc comment section list updated (Saved = 6, renumbered 7/8).
+- **`RichTextEditor.kt`** — paper style + color controls now sit behind a new `StyleToggleButton` (palette glyph, mirrors the FormatText button) driven by a `styleExpanded` state. MAIN mode: format tools stay visible, palette button right-aligned via a weight spacer, expanded chips/swatches render below. TOGGLE mode: palette button left + format button right (SpaceBetween), same expanded section. Quote cards + all paper rich-text fields inherit the decluttered look.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass with 2 findings applied — (1) **critical**: `Spacer(Modifier.weight(1f))` in the new MAIN-mode toolbar row needed the `androidx.compose.foundation.layout.Spacer` import (the file never used Spacer before — would have failed CI); (2) removed the dead `isQuoteSaved` prefs helper (the UI checks the reactive state inline). Nits applied: HomeScreen's top doc-comment section list updated for the new Saved section. Accepted as-is: PinnedTopicRow lightly duplicates TopicHistory's private PinnedRow (private scope), and a saved quote whose entry was deleted navigates to the existing missing-entry fallback.
+
+### Follow-ups / notes
+
+- Quotes are bookmarked per exact quote text + entry; removing the entry does not auto-prune saved quotes (they still navigate to the detail fallback).
+- Always-on per user (no Settings toggle), so no experiment-closeout needed.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Entry date & mood — auto date/time display, journal mood picker, journal attachments (images + voice note), theme-aware meta card in saved entries (Settings toggle, default ON)**
 
 ### What was asked

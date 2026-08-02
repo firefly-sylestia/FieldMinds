@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -701,6 +702,8 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 styles = data.quoteStyles.orEmpty(),
                 colors = data.quoteColors.orEmpty(),
                 fallbackStyle = data.notePaperStyle(),
+                entryId = entry.id,
+                topicName = entry.topic.name,
                 category = category
             )
         }
@@ -1209,6 +1212,8 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             styles = data.quoteStyles.orEmpty(),
             colors = data.quoteColors.orEmpty(),
             fallbackStyle = data.notePaperStyle(),
+            entryId = entry.id,
+            topicName = entry.topic.name,
             category = category
         )
     }
@@ -1252,6 +1257,8 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
             styles = data.quoteStyles.orEmpty(),
             colors = data.quoteColors.orEmpty(),
             fallbackStyle = data.notePaperStyle(),
+            entryId = entry.id,
+            topicName = entry.topic.name,
             category = category
         )
 
@@ -1312,9 +1319,12 @@ private fun RenderQuoteCards(
     styles: List<NotePaperStyle>,
     colors: List<NotePaperColor>,
     fallbackStyle: NotePaperStyle,
+    entryId: String,
+    topicName: String,
     category: CurioCategory,
     label: String = "Favorite quotes"
 ) {
+    val context = LocalContext.current
     // Legacy Gson blobs decode missing Kotlin-default List fields to NULL
     // (not empty) — a null [quotes] crashed the saved mood-board detail view
     // here (.size() on null). Guard defensively so no caller can reintroduce
@@ -1378,6 +1388,33 @@ private fun RenderQuoteCards(
                         style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                         color = notePaperInk(quoteSheet)
                     )
+                    // ── Bookmark — saves the quote to the Home "Saved" shelf ──
+                    val saved = AppPreferences.savedQuotesState.any {
+                        it.entryId == entryId && it.quoteText == quote
+                    }
+                    Surface(
+                        onClick = {
+                            if (saved) {
+                                AppPreferences.removeSavedQuote(context, entryId, quote)
+                            } else {
+                                AppPreferences.saveQuote(
+                                    context, entryId, topicName, category.id, quote
+                                )
+                            }
+                        },
+                        shape = CircleShape,
+                        color = if (saved) category.themedAccent().copy(alpha = 0.16f)
+                                else Color.Transparent
+                    ) {
+                        CurioIcon(
+                            name = if (saved) CurioIcons.Bookmark else CurioIcons.BookmarkBorder,
+                            contentDescription = if (saved) "Remove bookmark" else "Bookmark quote",
+                            tint = if (saved) category.themedAccent()
+                                   else notePaperInk(quoteSheet).copy(alpha = 0.45f),
+                            size = 18.dp,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
                 }
             }
         }
@@ -1608,6 +1645,8 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             styles = data.quoteStyles.orEmpty(),
             colors = data.quoteColors.orEmpty(),
             fallbackStyle = data.notePaperStyle(),
+            entryId = entry.id,
+            topicName = entry.topic.name,
             category = category
         )
 
