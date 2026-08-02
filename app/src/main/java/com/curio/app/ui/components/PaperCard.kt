@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,19 +34,23 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.notePaperBorder
+import com.curio.app.ui.theme.notePaperInk
+import com.curio.app.ui.theme.notePaperRule
+import com.curio.app.ui.theme.notePaperSurface
 import com.curio.app.ui.theme.paperAccent
-import com.curio.app.ui.theme.paperBorder
 import com.curio.app.ui.theme.paperInk
-import com.curio.app.ui.theme.paperRule
-import com.curio.app.ui.theme.paperSurface
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
@@ -65,21 +71,22 @@ fun PaperCard(
     ruled: Boolean = true,
     rotation: Float = 0f,
     corner: Dp = 14.dp,
+    paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
     content: @Composable ColumnScope.() -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(corner),
-        color = paperSurface(),
+        color = notePaperSurface(paperColor),
         shadowElevation = 1.dp,
-        border = BorderStroke(1.dp, paperBorder()),
+        border = BorderStroke(1.dp, notePaperBorder(paperColor)),
         modifier = modifier.rotate(rotation)
     ) {
         Box {
             // Faint ruled lines behind the content — the notebook texture.
-            // (paperRule() is @Composable, so resolve it here in the
+            // (notePaperRule() is @Composable, so resolve it here in the
             // composable scope — the Canvas draw lambda is not composable.)
-            val ruleColor = if (ruled) paperRule() else Color.Unspecified
+            val ruleColor = if (ruled) notePaperRule(paperColor) else Color.Unspecified
             if (ruled) {
                 // Notebook cadence: rules spaced at the body line height,
                 // starting one cadence below the top content padding so the
@@ -322,6 +329,7 @@ fun TornPaperCard(
     rotation: Float = 0f,
     seed: Int? = null,
     ruled: Boolean = false,
+    paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -333,8 +341,8 @@ fun TornPaperCard(
     // The Shape instance is remembered — Surface would otherwise construct a
     // fresh one every recomposition, defeating the outline cache inside it.
     val tornShape = remember(effectiveSeed) { TornPaperShape(effectiveSeed) }
-    val surface = paperSurface()
-    val edge = paperBorder()
+    val surface = notePaperSurface(paperColor)
+    val edge = notePaperBorder(paperColor)
     // The tiling brush wraps the SHARED texture — one bitmap, one brush, all
     // torn cards (the seed makes each card's EDGE unique, so the generic
     // grain can be shared).
@@ -363,7 +371,7 @@ fun TornPaperCard(
     )
     // Ruled lines (\"rules on torn\"): same notebook cadence as [PaperCard].
     val density = LocalDensity.current
-    val ruleColor = if (ruled) paperRule() else Color.Unspecified
+    val ruleColor = if (ruled) notePaperRule(paperColor) else Color.Unspecified
     val ruleSpacingPx = if (ruled) with(density) {
         val lh = MaterialTheme.typography.bodyLarge.lineHeight
         if (lh == TextUnit.Unspecified) 24.dp.toPx() else lh.toPx()
@@ -422,6 +430,7 @@ fun NotePaperCard(
     ruled: Boolean = true,
     rotation: Float = 0f,
     corner: Dp = 14.dp,
+    paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -430,6 +439,7 @@ fun NotePaperCard(
             modifier = modifier,
             rotation = rotation,
             ruled = false,
+            paperColor = paperColor,
             contentPadding = contentPadding,
             content = content
         )
@@ -437,6 +447,7 @@ fun NotePaperCard(
             modifier = modifier,
             rotation = rotation,
             ruled = true,
+            paperColor = paperColor,
             contentPadding = contentPadding,
             content = content
         )
@@ -445,6 +456,7 @@ fun NotePaperCard(
             ruled = ruled,
             rotation = rotation,
             corner = corner,
+            paperColor = paperColor,
             contentPadding = contentPadding,
             content = content
         )
@@ -503,6 +515,65 @@ fun NotePaperStyleToggle(
                     )
                 }
             )
+        }
+    }
+}
+
+/**
+ * The per-text-box note-paper COLOR picker — a compact row of circular
+ * swatches (cream / butter / pink / mint / sky / lilac) shown next to the
+ * Ruled/Torn toggle in the field's toolbar. The active swatch wears a
+ * check + accent ring. Same always-cream-in-both-themes rule: the sheet
+ * color is theme-agnostic, chosen per text box and persisted per field.
+ */
+@Composable
+fun NotePaperColorToggle(
+    color: NotePaperColor,
+    onColorChange: (NotePaperColor) -> Unit,
+    accent: Color = paperAccent(),
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        NotePaperColor.entries.forEach { candidate ->
+            val selected = candidate == color
+            Surface(
+                onClick = { onColorChange(candidate) },
+                enabled = enabled,
+                shape = CircleShape,
+                color = notePaperSurface(candidate),
+                border = BorderStroke(
+                    if (selected) 2.dp else 1.dp,
+                    if (selected) accent
+                    else notePaperBorder(candidate).copy(alpha = 0.7f)
+                ),
+                // Each swatch announces itself by color name; the check icon
+                // is purely visual (no invisible-icon accessibility hack).
+                modifier = Modifier
+                    .size(if (selected) 24.dp else 20.dp)
+                    .semantics {
+                        contentDescription =
+                            "${candidate.name.lowercase()} paper" + if (selected) " (selected)" else ""
+                    }
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    if (selected) {
+                        // A tiny paper-ink check inside the active swatch —
+                        // the accent ring already marks it, this just reads
+                        // as "chosen" at a glance.
+                        CurioIcon(
+                            name = CurioIcons.Check,
+                            contentDescription = null,
+                            tint = notePaperInk(candidate),
+                            size = 13.dp
+                        )
+                    }
+                }
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.foundation.layout.Arrangement
@@ -62,6 +63,11 @@ fun ReelNotesFormat(
     var reviewStyle by remember(initialData) {
         mutableStateOf(initialData?.reviewStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
     }
+    // Note-paper color for the review box — legacy entries lack the field
+    // (Gson → null), fall back to CREAM.
+    var reviewColor by remember(initialData) {
+        mutableStateOf(initialData?.reviewColor ?: NotePaperColor.CREAM)
+    }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -81,7 +87,7 @@ fun ReelNotesFormat(
     // Key on every input, not just canSave: rating, review text and images
     // added AFTER the first character must re-emit, or saving would persist
     // stale data (text/rating/images silently dropped from the saved entry).
-    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle) {
+    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle, reviewColor) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.ReelNotes(
@@ -91,6 +97,7 @@ fun ReelNotesFormat(
                 imageUris = imageUris,
                 reviewSpans = reviewSpans,
                 reviewStyle = reviewStyle,
+                reviewColor = reviewColor,
                 // Legacy fallback — mirror the primary field's style.
                 paperStyle = reviewStyle
             )
@@ -139,6 +146,8 @@ fun ReelNotesFormat(
             paper = true,
             paperStyle = reviewStyle,
             onPaperStyleChange = { reviewStyle = it },
+            paperColor = reviewColor,
+            onPaperColorChange = { reviewColor = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
 

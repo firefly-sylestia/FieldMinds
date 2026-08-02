@@ -91,6 +91,7 @@ import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
@@ -522,6 +523,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
             if (data.note.isNotBlank()) {
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
+                    paperColor = data.noteColor ?: NotePaperColor.CREAM,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -939,6 +941,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
         if (data.reviewText.isNotBlank()) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
+                paperColor = data.reviewColor ?: NotePaperColor.CREAM,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -952,6 +955,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             // Fallback when no review text
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
+                paperColor = data.reviewColor ?: NotePaperColor.CREAM,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -974,6 +978,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
             MarginaliaSectionHeader(label = "My thoughts", category = category)
             NotePaperCard(
                 style = data.journalStyle ?: data.notePaperStyle(),
+                paperColor = data.journalColor ?: NotePaperColor.CREAM,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1012,6 +1017,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                     ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
                 NotePaperCard(
                     style = data.quoteStyles.orEmpty().getOrNull(origIndex) ?: data.notePaperStyle(),
+                    paperColor = data.quoteColors.orEmpty().getOrNull(origIndex) ?: NotePaperColor.CREAM,
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
                     corner = 12.dp,
                     modifier = Modifier
@@ -1243,6 +1249,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             // Caption wears the same note-paper slip as the editor's field.
             NotePaperCard(
                 style = data.captionStyle ?: data.notePaperStyle(),
+                paperColor = data.captionColor ?: NotePaperColor.CREAM,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1457,6 +1464,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
                 NotePaperCard(
                     style = data.observedStyle ?: data.notePaperStyle(),
+                    paperColor = data.observedColor ?: NotePaperColor.CREAM,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1473,6 +1481,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
                 NotePaperCard(
                     style = data.surprisedStyle ?: data.notePaperStyle(),
+                    paperColor = data.surprisedColor ?: NotePaperColor.CREAM,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1489,6 +1498,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
                 NotePaperCard(
                     style = data.learnNextStyle ?: data.notePaperStyle(),
+                    paperColor = data.learnNextColor ?: NotePaperColor.CREAM,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {

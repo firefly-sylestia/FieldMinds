@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import com.curio.app.features.capture.AudioRecorder
@@ -111,6 +112,14 @@ fun SoundBiteFormat(
     }
     var noteStyle by remember(initialData) {
         mutableStateOf(initialData?.noteStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    // Note-paper color per text box — legacy entries lack the per-field
+    // fields (Gson → null), fall back to CREAM.
+    var titleColor by remember(initialData) {
+        mutableStateOf(initialData?.titleColor ?: NotePaperColor.CREAM)
+    }
+    var noteColor by remember(initialData) {
+        mutableStateOf(initialData?.noteColor ?: NotePaperColor.CREAM)
     }
     var savedFilePath by remember(initialData) { mutableStateOf(initialData?.audioFilePath) }
     var permissionDenied by remember { mutableStateOf(false) }
@@ -216,7 +225,10 @@ fun SoundBiteFormat(
                   recordingSeconds > 0 &&
                   savedFilePath != null &&
                   !trimInProgress
-    LaunchedEffect(canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle) {
+    LaunchedEffect(
+        canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle,
+        titleColor, noteColor
+    ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.SoundBite(
@@ -227,6 +239,8 @@ fun SoundBiteFormat(
                 audioFilePath = savedFilePath,
                 titleStyle = titleStyle,
                 noteStyle = noteStyle,
+                titleColor = titleColor,
+                noteColor = noteColor,
                 // Legacy fallback — mirror the primary field's style.
                 paperStyle = noteStyle
             )
@@ -375,7 +389,9 @@ fun SoundBiteFormat(
             enabled = recordingState != AudioRecorder.State.RECORDING,
             imeAction = ImeAction.Next,
             paperStyle = titleStyle,
-            onPaperStyleChange = { titleStyle = it }
+            onPaperStyleChange = { titleStyle = it },
+            paperColor = titleColor,
+            onPaperColorChange = { titleColor = it }
         )
 
         // Rich-text note — formatting behind a small toggle. The toolbar
@@ -399,6 +415,8 @@ fun SoundBiteFormat(
             paper = true,
             paperStyle = noteStyle,
             onPaperStyleChange = { noteStyle = it },
+            paperColor = noteColor,
+            onPaperColorChange = { noteColor = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
     }

@@ -19,6 +19,17 @@ import com.curio.app.data.CaptureFormat
 enum class NotePaperStyle { RULED, TORN, TORN_RULED }
 
 /**
+ * The note-paper COLOR a capture's text boxes wear — a small swatch picker
+ * sits next to the Ruled/Torn toggle in each field's toolbar. [CREAM] is the
+ * classic warm note (and the default / legacy fallback); the others are
+ * pastel note colors that keep the dark warm ink readable. Chosen PER TEXT
+ * BOX and persisted per field on every [CaptureData] variant (parallel to
+ * the per-field [NotePaperStyle]), so each note keeps its own paper color
+ * across save → detail view.
+ */
+enum class NotePaperColor { CREAM, BUTTER, PINK, MINT, SKY, LILAC }
+
+/**
  * A styled run over a string of text — half-open [start, end) character
  * offsets, plus the rich-text flags that style that run. Used by the
  * formats' text fields (Marginalia journal + quotes, Reel Notes review,
@@ -63,6 +74,11 @@ sealed class CaptureData {
         // [paperStyle] → [NotePaperStyle.RULED].
         val titleStyle: NotePaperStyle? = null,
         val noteStyle: NotePaperStyle? = null,
+        // Note-paper COLOR per text box (parallel to the per-field styles).
+        // Legacy entries omit them (Gson → null) and fall back to
+        // [NotePaperColor.CREAM].
+        val titleColor: NotePaperColor? = null,
+        val noteColor: NotePaperColor? = null,
         // Take-level note-paper style — legacy fallback + the "primary"
         // field's style for old consumers. New entries set per-field styles
         // and mirror the note here so [notePaperStyle] stays meaningful.
@@ -85,6 +101,9 @@ sealed class CaptureData {
         // rules). Legacy entries omit it (Gson → null) and fall back to
         // [paperStyle] → [NotePaperStyle.RULED].
         val reviewStyle: NotePaperStyle? = null,
+        // Note-paper COLOR for the review box — legacy entries omit it
+        // (Gson → null) and fall back to [NotePaperColor.CREAM].
+        val reviewColor: NotePaperColor? = null,
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
@@ -111,6 +130,12 @@ sealed class CaptureData {
         // back to [paperStyle] → [NotePaperStyle.RULED].
         val journalStyle: NotePaperStyle? = null,
         val quoteStyles: List<NotePaperStyle> = emptyList(),
+        // Note-paper COLOR per text box — the journal page and EACH quote
+        // card wear their own color. quoteColors is parallel to quotes (one
+        // color per card). Legacy entries omit them (Gson → null / empty)
+        // and fall back to [NotePaperColor.CREAM].
+        val journalColor: NotePaperColor? = null,
+        val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
@@ -135,6 +160,9 @@ sealed class CaptureData {
         // rules). Legacy entries omit it (Gson → null) and fall back to
         // [paperStyle] → [NotePaperStyle.RULED].
         val captionStyle: NotePaperStyle? = null,
+        // Note-paper COLOR for the caption box — legacy entries omit it
+        // (Gson → null) and fall back to [NotePaperColor.CREAM].
+        val captionColor: NotePaperColor? = null,
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
@@ -157,6 +185,12 @@ sealed class CaptureData {
         val observedStyle: NotePaperStyle? = null,
         val surprisedStyle: NotePaperStyle? = null,
         val learnNextStyle: NotePaperStyle? = null,
+        // Note-paper COLOR per section (parallel to the per-field styles).
+        // Legacy entries omit them (Gson → null) and fall back to
+        // [NotePaperColor.CREAM].
+        val observedColor: NotePaperColor? = null,
+        val surprisedColor: NotePaperColor? = null,
+        val learnNextColor: NotePaperColor? = null,
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()

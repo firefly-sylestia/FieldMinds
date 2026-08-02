@@ -3,6 +3,7 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.animation.AnimatedVisibility
@@ -85,6 +86,17 @@ fun FieldNotesFormat(
     var learnNextStyle by remember(initialData) {
         mutableStateOf(initialData?.learnNextStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
     }
+    // Note-paper color per section — legacy entries lack the per-field
+    // fields (Gson → null), fall back to CREAM.
+    var observedColor by remember(initialData) {
+        mutableStateOf(initialData?.observedColor ?: NotePaperColor.CREAM)
+    }
+    var surprisedColor by remember(initialData) {
+        mutableStateOf(initialData?.surprisedColor ?: NotePaperColor.CREAM)
+    }
+    var learnNextColor by remember(initialData) {
+        mutableStateOf(initialData?.learnNextColor ?: NotePaperColor.CREAM)
+    }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -110,7 +122,8 @@ fun FieldNotesFormat(
                   imageUris.isNotEmpty()
     LaunchedEffect(
         canSave, observed, observedSpans, surprised, surprisedSpans,
-        learnNext, learnNextSpans, imageUris, observedStyle, surprisedStyle, learnNextStyle
+        learnNext, learnNextSpans, imageUris, observedStyle, surprisedStyle, learnNextStyle,
+        observedColor, surprisedColor, learnNextColor
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -125,6 +138,9 @@ fun FieldNotesFormat(
                 observedStyle = observedStyle,
                 surprisedStyle = surprisedStyle,
                 learnNextStyle = learnNextStyle,
+                observedColor = observedColor,
+                surprisedColor = surprisedColor,
+                learnNextColor = learnNextColor,
                 // Legacy fallback — mirror the first section's style.
                 paperStyle = observedStyle
             )
@@ -170,6 +186,8 @@ fun FieldNotesFormat(
                 paper = true,
                 paperStyle = observedStyle,
                 onPaperStyleChange = { observedStyle = it },
+                paperColor = observedColor,
+                onPaperColorChange = { observedColor = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -205,6 +223,8 @@ fun FieldNotesFormat(
                 paper = true,
                 paperStyle = surprisedStyle,
                 onPaperStyleChange = { surprisedStyle = it },
+                paperColor = surprisedColor,
+                onPaperColorChange = { surprisedColor = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -240,6 +260,8 @@ fun FieldNotesFormat(
                 paper = true,
                 paperStyle = learnNextStyle,
                 onPaperStyleChange = { learnNextStyle = it },
+                paperColor = learnNextColor,
+                onPaperColorChange = { learnNextColor = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }

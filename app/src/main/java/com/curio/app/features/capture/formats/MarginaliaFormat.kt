@@ -1,6 +1,7 @@
 package com.curio.app.features.capture.formats
 
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.foundation.BorderStroke
@@ -106,6 +107,20 @@ fun MarginaliaFormat(
             while (size < quotes.size) add(initialData?.paperStyle ?: NotePaperStyle.RULED)
         }
     }
+    // Note-paper color per text box — the journal page and EACH quote card
+    // wear their own color. Legacy entries lack the per-field fields (Gson
+    // → null/empty), fall back to CREAM.
+    var journalColor by remember(initialData) {
+        mutableStateOf(initialData?.journalColor ?: NotePaperColor.CREAM)
+    }
+    val quoteColors = remember(initialData) {
+        mutableStateListOf<NotePaperColor>().apply {
+            addAll(initialData?.quoteColors.orEmpty())
+            // Pad any missing per-quote colors (legacy entries) so the
+            // parallel list always matches quotes 1:1.
+            while (size < quotes.size) add(NotePaperColor.CREAM)
+        }
+    }
 
     val canSave = journalText.isNotBlank() ||
                   quotes.any { it.isNotBlank() }
@@ -114,7 +129,7 @@ fun MarginaliaFormat(
     // (later text/quotes silently dropped from the saved entry).
     LaunchedEffect(
         canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(),
-        quoteTilts.toList(), journalStyle, quoteStyles.toList()
+        quoteTilts.toList(), journalStyle, quoteStyles.toList(), journalColor, quoteColors.toList()
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -126,6 +141,8 @@ fun MarginaliaFormat(
                 quoteTilts = quoteTilts.toList(),
                 journalStyle = journalStyle,
                 quoteStyles = quoteStyles.toList(),
+                journalColor = journalColor,
+                quoteColors = quoteColors.toList(),
                 // Legacy fallback — mirror the journal's style.
                 paperStyle = journalStyle
             )
@@ -162,6 +179,8 @@ fun MarginaliaFormat(
                 paper = true,
                 paperStyle = journalStyle,
                 onPaperStyleChange = { journalStyle = it },
+                paperColor = journalColor,
+                onPaperColorChange = { journalColor = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -197,7 +216,9 @@ fun MarginaliaFormat(
                     spans = quoteSpans.getOrElse(i) { emptyList() },
                     rotation = rotation,
                     style = quoteStyles.getOrElse(i) { NotePaperStyle.RULED },
+                    color = quoteColors.getOrElse(i) { NotePaperColor.CREAM },
                     onStyleChange = { quoteStyles[i] = it },
+                    onColorChange = { quoteColors[i] = it },
                     onTextChange = { newText, newSpans ->
                         quotes[i] = newText
                         quoteSpans[i] = newSpans
@@ -207,6 +228,7 @@ fun MarginaliaFormat(
                         if (i < quoteSpans.size) quoteSpans.removeAt(i)
                         if (i < quoteTilts.size) quoteTilts.removeAt(i)
                         if (i < quoteStyles.size) quoteStyles.removeAt(i)
+                        if (i < quoteColors.size) quoteColors.removeAt(i)
                     }
                 )
             }
@@ -218,8 +240,9 @@ fun MarginaliaFormat(
                     quoteSpans.add(emptyList())
                     // A fresh card gets its own tilt — and it STAYS that way.
                     quoteTilts.add(randomTilt())
-                    // New cards inherit the journal's current paper style.
+                    // New cards inherit the journal's current paper style + color.
                     quoteStyles.add(journalStyle)
+                    quoteColors.add(journalColor)
                 },
                 shape = RoundedCornerShape(14.dp),
                 color = paperSurface().copy(alpha = 0.6f),
@@ -255,7 +278,9 @@ private fun QuoteCard(
     spans: List<TextSpan>,
     rotation: Float,
     style: NotePaperStyle,
+    color: NotePaperColor,
     onStyleChange: (NotePaperStyle) -> Unit,
+    onColorChange: (NotePaperColor) -> Unit,
     onTextChange: (text: String, spans: List<TextSpan>) -> Unit,
     onRemove: () -> Unit
 ) {
@@ -314,6 +339,8 @@ private fun QuoteCard(
             paper = true,
             paperStyle = style,
             onPaperStyleChange = onStyleChange,
+            paperColor = color,
+            onPaperColorChange = onColorChange,
             paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
         )
     }

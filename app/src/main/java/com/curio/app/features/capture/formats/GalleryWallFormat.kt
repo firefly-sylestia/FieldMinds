@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -162,13 +163,18 @@ fun GalleryWallFormat(
     var captionStyle by remember(initialData) {
         mutableStateOf(initialData?.captionStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
     }
+    // Note-paper color for the caption box — legacy entries lack the field
+    // (Gson → null), fall back to CREAM.
+    var captionColor by remember(initialData) {
+        mutableStateOf(initialData?.captionColor ?: NotePaperColor.CREAM)
+    }
     var boardExpanded by remember { mutableStateOf(false) }
     // New board: fresh random pattern. Edit mode: reuse the caller-provided
     // seed (entry-id hash) so the editor matches the saved view's backdrop.
     val seed = remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }
 
     val canSave = tiles.isNotEmpty()
-    LaunchedEffect(canSave, caption, tiles.toList(), captionStyle) {
+    LaunchedEffect(canSave, caption, tiles.toList(), captionStyle, captionColor) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.GalleryWall(
@@ -177,6 +183,7 @@ fun GalleryWallFormat(
                 imageUris = tiles.map { it.uri },
                 tileLayouts = tiles.map { CaptureData.TileLayout(it.uri, it.offsetXPx, it.offsetYPx, it.rotationDeg, it.widthPx, it.heightPx) },
                 captionStyle = captionStyle,
+                captionColor = captionColor,
                 // Legacy fallback — mirror the caption's style.
                 paperStyle = captionStyle
             )
@@ -235,7 +242,9 @@ fun GalleryWallFormat(
             onValueChange = { caption = it },
             label = "Add a caption (optional)",
             paperStyle = captionStyle,
-            onPaperStyleChange = { captionStyle = it }
+            onPaperStyleChange = { captionStyle = it },
+            paperColor = captionColor,
+            onPaperColorChange = { captionColor = it }
         )
     }
 

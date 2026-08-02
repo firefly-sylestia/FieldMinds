@@ -2,6 +2,7 @@ package com.curio.app.ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.curio.app.data.NotePaperColor
 
 /**
  * Paper palette for the quotes entry (Marginalia journal + quote cards) and
@@ -42,3 +43,48 @@ fun paperAccent(): Color = Color(0xFF9A7B2F)
  *  was effectively invisible). */
 @Composable
 fun paperBorder(): Color = Color(0xFFCBB98F)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Note-paper COLORS — a per-text-box swatch picker next to the Ruled/Torn
+// toggle. [notePaperSurface] resolves the chosen [NotePaperColor] to its
+// paper sheet; [notePaperInk] keeps the warm dark ink readable on every
+// pastel; [notePaperRule] and [notePaperBorder] derive the ruled lines and
+// hairline edge from the sheet so each color stays coherent. All are
+// theme-agnostic — the paper is the same in both modes, whatever the swatch.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+fun notePaperSurface(color: NotePaperColor): Color = when (color) {
+    NotePaperColor.CREAM -> Color(0xFFFBF4E3)
+    NotePaperColor.BUTTER -> Color(0xFFFDF0C8)
+    NotePaperColor.PINK -> Color(0xFFFBE5E0)
+    NotePaperColor.MINT -> Color(0xFFE4EFDC)
+    NotePaperColor.SKY -> Color(0xFFE0EDF5)
+    NotePaperColor.LILAC -> Color(0xFFEDE4F4)
+}
+
+/** The warm dark ink reads on every light pastel sheet. */
+@Composable
+fun notePaperInk(color: NotePaperColor): Color = Color(0xFF3B3124)
+
+/** Ruled lines derived from the sheet — slightly darker than the paper. */
+@Composable
+fun notePaperRule(color: NotePaperColor): Color = when (color) {
+    NotePaperColor.CREAM -> Color(0xFFE2D6BC)
+    NotePaperColor.BUTTER -> Color(0xFFE4D59E)
+    NotePaperColor.PINK -> Color(0xFFE5C9C0)
+    NotePaperColor.MINT -> Color(0xFFC4D5B8)
+    NotePaperColor.SKY -> Color(0xFFBFD3E2)
+    NotePaperColor.LILAC -> Color(0xFFD5C6E2)
+}
+
+/** Hairline edge derived from the sheet — a touch darker than the rules. */
+@Composable
+fun notePaperBorder(color: NotePaperColor): Color = when (color) {
+    NotePaperColor.CREAM -> Color(0xFFCBB98F)
+    NotePaperColor.BUTTER -> Color(0xFFD8C578)
+    NotePaperColor.PINK -> Color(0xFFDBB3A8)
+    NotePaperColor.MINT -> Color(0xFFAFC39F)
+    NotePaperColor.SKY -> Color(0xFFA9C2D6)
+    NotePaperColor.LILAC -> Color(0xFFC3B0D4)
+}

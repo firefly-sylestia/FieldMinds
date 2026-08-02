@@ -37,14 +37,16 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
+import com.curio.app.ui.components.NotePaperColorToggle
 import com.curio.app.ui.components.NotePaperStyleToggle
 import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.TornPaperCard
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
-import com.curio.app.ui.theme.paperInk
 import coil.compose.rememberAsyncImagePainter
 import kotlin.math.cos
 import kotlin.math.sin
@@ -304,7 +306,11 @@ fun PaperLineField(
     /** Note-paper style — ruled page / torn note / torn with ruled lines. */
     paperStyle: NotePaperStyle = NotePaperStyle.RULED,
     /** When provided, shows the per-field style toggle next to the label. */
-    onPaperStyleChange: ((NotePaperStyle) -> Unit)? = null
+    onPaperStyleChange: ((NotePaperStyle) -> Unit)? = null,
+    /** Note-paper COLOR — cream / butter / pink / mint / sky / lilac. */
+    paperColor: NotePaperColor = NotePaperColor.CREAM,
+    /** When provided, shows the per-field color swatches next to the label. */
+    onPaperColorChange: ((NotePaperColor) -> Unit)? = null
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (label != null) {
@@ -316,7 +322,8 @@ fun PaperLineField(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f)
                 )
                 if (onPaperStyleChange != null) {
                     NotePaperStyleToggle(
@@ -325,25 +332,45 @@ fun PaperLineField(
                         accent = accent
                     )
                 }
+                if (onPaperColorChange != null) {
+                    NotePaperColorToggle(
+                        color = paperColor,
+                        onColorChange = onPaperColorChange,
+                        accent = accent
+                    )
+                }
             }
-        } else if (onPaperStyleChange != null) {
+        } else if (onPaperStyleChange != null || onPaperColorChange != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                NotePaperStyleToggle(
-                    style = paperStyle,
-                    onStyleChange = onPaperStyleChange,
-                    accent = accent
-                )
+                if (onPaperStyleChange != null) {
+                    NotePaperStyleToggle(
+                        style = paperStyle,
+                        onStyleChange = onPaperStyleChange,
+                        accent = accent
+                    )
+                }
+                if (onPaperColorChange != null) {
+                    NotePaperColorToggle(
+                        color = paperColor,
+                        onColorChange = onPaperColorChange,
+                        accent = accent
+                    )
+                }
             }
         }
         val torn = paperStyle != NotePaperStyle.RULED
+        // Ink follows the chosen sheet color so text stays readable on every
+        // pastel — resolved in the composable scope, then passed in.
+        val ink = notePaperInk(paperColor)
         val card: @Composable (PaddingValues) -> Unit = { pad ->
             if (torn) {
                 TornPaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = paperStyle == NotePaperStyle.TORN_RULED,
+                    paperColor = paperColor,
                     contentPadding = pad
                 ) {
                     BasicTextField(
@@ -351,7 +378,7 @@ fun PaperLineField(
                         onValueChange = onValueChange,
                         enabled = enabled,
                         singleLine = true,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
                         cursorBrush = SolidColor(accent),
                         keyboardOptions = KeyboardOptions(imeAction = imeAction),
                         decorationBox = { innerTextField ->
@@ -360,7 +387,7 @@ fun PaperLineField(
                                     Text(
                                         text = placeholder,
                                         style = MaterialTheme.typography.bodyLarge.copy(
-                                            color = paperInk().copy(alpha = 0.45f)
+                                            color = ink.copy(alpha = 0.45f)
                                         )
                                     )
                                 }
@@ -374,6 +401,7 @@ fun PaperLineField(
                 PaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = true,
+                    paperColor = paperColor,
                     contentPadding = pad
                 ) {
                     BasicTextField(
@@ -381,7 +409,7 @@ fun PaperLineField(
                         onValueChange = onValueChange,
                         enabled = enabled,
                         singleLine = true,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
                         cursorBrush = SolidColor(accent),
                         keyboardOptions = KeyboardOptions(imeAction = imeAction),
                         decorationBox = { innerTextField ->
@@ -390,7 +418,7 @@ fun PaperLineField(
                                     Text(
                                         text = placeholder,
                                         style = MaterialTheme.typography.bodyLarge.copy(
-                                            color = paperInk().copy(alpha = 0.45f)
+                                            color = ink.copy(alpha = 0.45f)
                                         )
                                     )
                                 }

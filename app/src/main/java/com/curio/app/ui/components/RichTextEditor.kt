@@ -47,10 +47,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import kotlin.math.roundToInt
+import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperHighlight
 
@@ -292,6 +294,11 @@ fun RichTextEditor(
     paper: Boolean = false,
     paperStyle: NotePaperStyle = NotePaperStyle.RULED,
     onPaperStyleChange: (NotePaperStyle) -> Unit = {},
+    /** Note-paper COLOR of the slip when [paper] — chosen per text box via
+     *  the swatch picker next to the Ruled/Torn toggle. The ink follows the
+     *  sheet so text stays readable on every pastel. */
+    paperColor: NotePaperColor = NotePaperColor.CREAM,
+    onPaperColorChange: (NotePaperColor) -> Unit = {},
     /** Content inset of the paper card when [paper] is true. */
     paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
 ) {
@@ -316,9 +323,11 @@ fun RichTextEditor(
     // padding of its own (the card owns the margins). The toolbar + cursor
     // also switch to the warm paper accent: these controls sit on cream in
     // BOTH themes, so a theme-aware accent (e.g. the dark-mode tertiary) can
-    // read washed-out against the paper.
+    // read washed-out against the paper. The ink follows the chosen sheet
+    // color so text stays readable on every pastel.
     val effectiveFieldPadding = if (paper) PaddingValues(0.dp) else fieldPadding
     val effectiveAccent = if (paper) paperAccent() else accent
+    val effectiveInk = if (paper) notePaperInk(paperColor) else ink
 
     LaunchedEffect(text, spans) {
         if (tfv.text != text) {
@@ -480,6 +489,18 @@ fun RichTextEditor(
                     )
                 }
             }
+            if (paper) {
+                // The color swatches sit on their OWN row — the format tools
+                // + style chips already fill a phone-width row, and Rows
+                // don't wrap, so six more swatches would get clipped.
+                NotePaperColorToggle(
+                    color = paperColor,
+                    onColorChange = onPaperColorChange,
+                    accent = effectiveAccent,
+                    enabled = enabled,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
         } else {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -514,6 +535,17 @@ fun RichTextEditor(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
+            }
+            if (paper) {
+                // Color swatches on their OWN row below — keeps the style +
+                // format row from overflowing on narrow screens.
+                NotePaperColorToggle(
+                    color = paperColor,
+                    onColorChange = onPaperColorChange,
+                    accent = effectiveAccent,
+                    enabled = enabled,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
             }
             AnimatedVisibility(
                 visible = toolbarExpanded,
@@ -550,7 +582,7 @@ fun RichTextEditor(
                         value = tfv,
                         onValueChange = { emit(it) },
                         enabled = enabled,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = effectiveInk),
                         cursorBrush = SolidColor(effectiveAccent),
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Sentences,
@@ -609,7 +641,7 @@ fun RichTextEditor(
             if (tfv.text.isEmpty() && placeholder.isNotEmpty()) {
                 Text(
                     text = placeholder,
-                    style = MaterialTheme.typography.bodyLarge.copy(color = ink.copy(alpha = 0.45f)),
+                    style = MaterialTheme.typography.bodyLarge.copy(color = effectiveInk.copy(alpha = 0.45f)),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
             }
@@ -619,6 +651,7 @@ fun RichTextEditor(
                 NotePaperStyle.RULED -> PaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = true,
+                    paperColor = paperColor,
                     contentPadding = paperContentPadding
                 ) {
                     fieldBlock()
@@ -626,6 +659,7 @@ fun RichTextEditor(
                 NotePaperStyle.TORN -> TornPaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = false,
+                    paperColor = paperColor,
                     contentPadding = paperContentPadding
                 ) {
                     fieldBlock()
@@ -633,6 +667,7 @@ fun RichTextEditor(
                 NotePaperStyle.TORN_RULED -> TornPaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = true,
+                    paperColor = paperColor,
                     contentPadding = paperContentPadding
                 ) {
                     fieldBlock()
