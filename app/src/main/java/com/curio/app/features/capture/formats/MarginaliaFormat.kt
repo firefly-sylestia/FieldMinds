@@ -86,8 +86,8 @@ fun MarginaliaFormat(
     // Mood — the "How did it make you feel?" row. Optional; legacy entries
     // have none (Gson → null).
     var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
-    // Attached gallery images (up to 3) — legacy entries omit them (Gson →
-    // null, guard with orEmpty()).
+    // Attached gallery images (up to 6, same as Field Notes) — legacy
+    // entries omit them (Gson → null, guard with orEmpty()).
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val context = LocalContext.current
     val imagePicker = rememberLauncherForActivityResult(
@@ -101,7 +101,7 @@ fun MarginaliaFormat(
                 )
             }
         }
-        imageUris = (imageUris + uris.map { it.toString() }).take(3)
+        imageUris = (imageUris + uris.map { it.toString() }).take(6)
     }
 
     // ── Voice-note attachment — the shared AudioRecorder (MediaRecorder)
@@ -255,10 +255,10 @@ fun MarginaliaFormat(
                 onMoodChange = { mood = it }
             )
 
-            // Attach gallery images (up to 3) — same row as Reel Notes.
+            // Attach gallery images (up to 6) — same row as Reel Notes.
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "Attach images (optional, up to 3)",
+                    text = "Attach images (optional, up to 6)",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -278,7 +278,7 @@ fun MarginaliaFormat(
                             }
                         )
                     }
-                    if (imageUris.size < 3) {
+                    if (imageUris.size < 6) {
                         AddImageButton(
                             accent = accent,
                             tint = tint,

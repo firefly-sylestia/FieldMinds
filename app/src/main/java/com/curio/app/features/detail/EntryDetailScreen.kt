@@ -1274,13 +1274,21 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
 
         // ── Attachments — gallery images + optional voice note ─────────
         // (orEmpty() guards legacy blobs where imageUris is absent.)
+        // ALL attached images show in a scrollable strip — the journal can
+        // hold up to 6 now, and a fixed-width tile lets them all be seen
+        // (the old weight row silently dropped everything past 3).
         val attachedUris = data.imageUris.orEmpty()
         if (attachedUris.isNotEmpty()) {
+            // A lone image goes full-width (proper landscape view, matching
+            // Reel Notes); multiple images are fixed tiles in the scrollable
+            // strip so all of them are reachable (the old weight row
+            // silently dropped anything past 3).
+            val singleImage = attachedUris.size == 1
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())
             ) {
-                attachedUris.take(3).forEach { uri ->
+                attachedUris.forEach { uri ->
                     Surface(
                         onClick = {
                             navController.navigate(CurioRoutes.lightbox(uri)) {
@@ -1289,7 +1297,8 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
                         },
                         shape = RoundedCornerShape(16.dp),
                         shadowElevation = 0.dp,
-                        modifier = Modifier.weight(1f).height(120.dp)
+                        modifier = if (singleImage) Modifier.fillMaxWidth().height(280.dp)
+                                   else Modifier.size(150.dp, 120.dp)
                     ) {
                         Image(
                             painter = rememberAsyncImagePainter(uri),

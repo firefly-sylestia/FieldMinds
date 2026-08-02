@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Journal image attachments raised from 3 to 6 — saved view shows ALL images in a scrollable strip (single image still full-width)**
+
+### What was asked
+
+Allow attaching more than 3 images to a journal entry.
+
+### What was changed
+
+- **`MarginaliaFormat.kt`** — the journal editor's image cap raised 3 → 6 (matches Field Notes' existing 6-cap, so the app is consistent): `(imageUris + uris).take(3)` → `take(6)`, the "up to 3" label → "up to 6", the Add button guard `imageUris.size < 3` → `< 6`, and the state comment updated. The picker still persists URI permissions for every picked uri.
+- **`EntryDetailScreen.kt`** (`MarginaliaRender`) — the saved journal's image row no longer silently drops images past 3 (`attachedUris.take(3)` in a `weight(1f)` row). It's now a horizontally scrollable strip (`horizontalScroll(rememberScrollState())`) rendering ALL attached images as fixed `150.dp × 120.dp` tiles (tap → Lightbox, unchanged); a single image goes FULL-WIDTH at `280.dp` height, mirroring the Reel Notes `singleImage` pattern so lone-image journals don't shrink (reviewer catch).
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass after one applied fix — the reviewer flagged that the first version turned a single attached image into a small 150×120 tile (the old `weight(1f)` row showed a lone image full-width); fixed with the `singleImage` full-width branch matching Reel Notes. Noted as out-of-scope follow-up: FieldNotesRender has the SAME latent bug (its editor caps at 6 but the saved view still `take(3)`s) — the identical silent-drop the journal just fixed. Verified `Modifier.size(150.dp, 120.dp)` compiles, all imports already present, braces balanced.
+
+### Follow-ups / notes
+
+- Field Notes' saved view still caps displayed images at 3 (editor allows 6) — same silent-drop bug the journal just fixed; offered as a follow-up.
+- Edit-mode restore reads `initialData?.imageUris.orEmpty()` with no re-cap, so entries saved with >6 images keep every image if the cap ever rises again.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Mood pickers in every format — Reel Notes, Field Notes, and Sound Bite join the journal, all behind the existing "Entry date & mood" toggle**
 
 ### What was asked
