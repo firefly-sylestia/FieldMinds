@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -70,13 +74,18 @@ import com.curio.app.ui.theme.PatrickHandFontFamily
  */
 private enum class RichFlag { BOLD, ITALIC, HIGHLIGHT }
 
-// Per-letter font-size scale for the A+/A− tools: steps of 2sp above/below
-// the field's default bodyLarge size (16sp), clamped to a notebook-sane
-// range that still fits the paper's 24sp ruled-line cadence.
+// Fixed letter-size options offered by the A+/A− dropdown — 2sp steps
+// above/below the field's default bodyLarge size (16sp), clamped to a
+// notebook-sane range that still fits the paper's 24sp ruled-line cadence.
+// Picking one applies it to the selection (if any) AND arms it so the next
+// text typed carries that size.
 private const val BASE_FONT_SP = 16f
-private const val FONT_SIZE_STEP = 2f
 private const val MIN_FONT_SP = 12f
 private const val MAX_FONT_SP = 24f
+// The field default (BASE_FONT_SP) is offered separately as "Default".
+private val SIZE_OPTIONS: List<Float> =
+    (MIN_FONT_SP.toInt()..MAX_FONT_SP.toInt() step 2).map { it.toFloat() }
+        .filterNot { it == BASE_FONT_SP }
 
 /** How the formatting toolbar is presented. */
 enum class RichTextToolbarMode {
@@ -315,20 +324,23 @@ private fun setSpanSize(spans: List<TextSpan>, s: Int, e: Int, targetSp: Float):
     return out.merged()
 }
 
-/**
- * Increases (positive [deltaSp]) or decreases (negative) the font size of
- * [s, e) by one step, based on the LARGEST size already applied to the
- * selection (or the field default when nothing in it is sized) — so
- * repeated taps keep growing the same letters. Clamped to [MIN_FONT_SP]..
- * [MAX_FONT_SP].
- */
-private fun applyFontSize(spans: List<TextSpan>, s: Int, e: Int, deltaSp: Float): List<TextSpan> {
+/** Removes any per-letter size from [s, e), restoring the field default. */
+private fun clearSpanSize(spans: List<TextSpan>, s: Int, e: Int): List<TextSpan> {
     if (e <= s) return spans
-    val current = spans.filter { it.end > s && it.start < e }
-        .mapNotNull { it.fontSizeSp }
-        .maxOrNull() ?: BASE_FONT_SP
-    val target = (current + deltaSp).coerceIn(MIN_FONT_SP, MAX_FONT_SP)
-    return setSpanSize(spans, s, e, target)
+    val out = mutableListOf<TextSpan>()
+    for (sp in spans) {
+        if (sp.end <= s || sp.start >= e) {
+            out.add(sp)
+            continue
+        }
+        if (sp.start < s) out.add(sp.copy(end = s))
+        val midStart = maxOf(sp.start, s)
+        val midEnd = minOf(sp.end, e)
+        val mid = sp.copy(start = midStart, end = midEnd, fontSizeSp = null)
+        if (mid.bold || mid.italic || mid.highlight) out.add(mid)
+        if (sp.end > e) out.add(sp.copy(start = e))
+    }
+    return out.merged()
 }
 
 /**
@@ -409,8 +421,9 @@ fun RichTextEditor(
     var pendingBold by remember { mutableStateOf(false) }
     var pendingItalic by remember { mutableStateOf(false) }
     var pendingHighlight by remember { mutableStateOf(false) }
-    // Armed font-size target (sp) — like the flags, tapping A+/A− without a
-    // selection arms a FIXED size so the next characters typed carry it.
+    // Armed font-size target (sp) — picking a size from the A+/A− dropdown
+    // arms a FIXED size so the next characters typed carry it (and the
+    // dropdown icons stay lit — their true "active" state).
     var pendingSizeSp by remember { mutableStateOf<Float?>(null) }
     // Paper mode: the field floats directly on the card's paper — no inner
     // padding of its own (the card owns the margins). The toolbar + cursor
@@ -572,36 +585,27 @@ fun RichTextEditor(
         }
     }
 
-    fun applySize(deltaSp: Float) {
+    /** Applies the picked [targetSp] to the selection (if any) and arms it. */
+    fun applyExactSize(targetSp: Float) {
         val sel = tfv.selection
-        if (sel.collapsed) {
-            // No selection — arm a FIXED target size (a step from the current
-            // size under the caret, not an ever-growing one) so the next
-            // characters typed carry it.
-            val pos = sel.start
-            // Any size under the caret (max — a bold+size overlap reports the
-            // size span, not the flag span that happens to sort first).
-            val current = extractRichSpans(tfv.annotatedString)
-                .filter { it.start <= pos && pos < it.end }
-                .mapNotNull { it.fontSizeSp }
-                .maxOrNull() ?: BASE_FONT_SP
-            pendingSizeSp = (current + deltaSp).coerceIn(MIN_FONT_SP, MAX_FONT_SP)
-            return
+        if (!sel.collapsed) {
+            val s = minOf(sel.start, sel.end)
+            val e = maxOf(sel.start, sel.end)
+            val updated = if (targetSp == BASE_FONT_SP) {
+                clearSpanSize(extractRichSpans(tfv.annotatedString), s, e)
+            } else {
+                setSpanSize(extractRichSpans(tfv.annotatedString), s, e, targetSp)
+            }
+            val styled = TextFieldValue(
+                buildRichAnnotated(tfv.text, updated, effectiveHighlight),
+                selection = sel
+            )
+            tfv = styled
+            onRichTextChange(styled.text, extractRichSpans(styled.annotatedString))
         }
-        val s = minOf(sel.start, sel.end)
-        val e = maxOf(sel.start, sel.end)
-        val updated = applyFontSize(extractRichSpans(tfv.annotatedString), s, e, deltaSp)
-        val styled = TextFieldValue(
-            buildRichAnnotated(tfv.text, updated, effectiveHighlight),
-            selection = sel
-        )
-        tfv = styled
-        onRichTextChange(styled.text, extractRichSpans(styled.annotatedString))
-        // Keep typing at the newly-applied size.
-        pendingSizeSp = extractRichSpans(styled.annotatedString)
-            .filter { it.end > s && it.start < e }
-            .mapNotNull { it.fontSizeSp }
-            .maxOrNull()
+        // Picking the field default un-arms; any other size stays armed so
+        // the next characters typed carry it (the icon stays lit).
+        pendingSizeSp = if (targetSp == BASE_FONT_SP) null else targetSp
     }
 
     /** The effective font size (sp) at the caret / over the selection. */
@@ -657,15 +661,14 @@ fun RichTextEditor(
                     boldActive = hasFlagAt(RichFlag.BOLD),
                     italicActive = hasFlagAt(RichFlag.ITALIC),
                     highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                    sizeUpActive = currentSizeSp() > BASE_FONT_SP,
-                    sizeDownActive = currentSizeSp() < BASE_FONT_SP,
+                    sizeActive = pendingSizeSp != null,
                     accent = effectiveAccent,
                     enabled = enabled,
+                    currentSp = currentSizeSp(),
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
                     onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
-                    onSizeUp = { applySize(FONT_SIZE_STEP) },
-                    onSizeDown = { applySize(-FONT_SIZE_STEP) }
+                    onSizePick = { applyExactSize(it) }
                 )
                 if (paper) {
                     Spacer(Modifier.weight(1f))
@@ -751,15 +754,14 @@ fun RichTextEditor(
                     boldActive = hasFlagAt(RichFlag.BOLD),
                     italicActive = hasFlagAt(RichFlag.ITALIC),
                     highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                    sizeUpActive = currentSizeSp() > BASE_FONT_SP,
-                    sizeDownActive = currentSizeSp() < BASE_FONT_SP,
+                    sizeActive = pendingSizeSp != null,
                     accent = effectiveAccent,
                     enabled = enabled,
+                    currentSp = currentSizeSp(),
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
                     onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
-                    onSizeUp = { applySize(FONT_SIZE_STEP) },
-                    onSizeDown = { applySize(-FONT_SIZE_STEP) }
+                    onSizePick = { applyExactSize(it) }
                 )
             }
         }
@@ -840,15 +842,14 @@ fun RichTextEditor(
                                 boldActive = hasFlagAt(RichFlag.BOLD),
                                 italicActive = hasFlagAt(RichFlag.ITALIC),
                                 highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                                sizeUpActive = currentSizeSp() > BASE_FONT_SP,
-                                sizeDownActive = currentSizeSp() < BASE_FONT_SP,
+                                sizeActive = pendingSizeSp != null,
                                 accent = effectiveAccent,
                                 enabled = enabled,
+                                currentSp = currentSizeSp(),
                                 onBold = { applyFlag(RichFlag.BOLD) },
                                 onItalic = { applyFlag(RichFlag.ITALIC) },
                                 onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
-                                onSizeUp = { applySize(FONT_SIZE_STEP) },
-                                onSizeDown = { applySize(-FONT_SIZE_STEP) }
+                                onSizePick = { applyExactSize(it) }
                             )
                         }
                     }
@@ -935,15 +936,14 @@ private fun SelectionFormatBar(
     boldActive: Boolean,
     italicActive: Boolean,
     highlightActive: Boolean,
-    sizeUpActive: Boolean,
-    sizeDownActive: Boolean,
+    sizeActive: Boolean,
     accent: Color,
     enabled: Boolean,
+    currentSp: Float,
     onBold: () -> Unit,
     onItalic: () -> Unit,
     onHighlight: () -> Unit,
-    onSizeUp: () -> Unit,
-    onSizeDown: () -> Unit
+    onSizePick: (Float) -> Unit
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
@@ -981,21 +981,23 @@ private fun SelectionFormatBar(
                 enabled = enabled,
                 onClick = onHighlight
             )
-            FormatToolButton(
+            SizePickerButton(
                 icon = CurioIcons.TextIncrease,
                 label = "Bigger text",
-                active = sizeUpActive,
+                active = sizeActive,
                 accent = accent,
                 enabled = enabled,
-                onClick = onSizeUp
+                currentSp = currentSp,
+                onPick = onSizePick
             )
-            FormatToolButton(
+            SizePickerButton(
                 icon = CurioIcons.TextDecrease,
                 label = "Smaller text",
-                active = sizeDownActive,
+                active = sizeActive,
                 accent = accent,
                 enabled = enabled,
-                onClick = onSizeDown
+                currentSp = currentSp,
+                onPick = onSizePick
             )
         }
     }
@@ -1007,15 +1009,14 @@ private fun FormatToolbar(
     boldActive: Boolean,
     italicActive: Boolean,
     highlightActive: Boolean,
-    sizeUpActive: Boolean,
-    sizeDownActive: Boolean,
+    sizeActive: Boolean,
     accent: Color,
     enabled: Boolean,
+    currentSp: Float,
     onBold: () -> Unit,
     onItalic: () -> Unit,
     onHighlight: () -> Unit,
-    onSizeUp: () -> Unit,
-    onSizeDown: () -> Unit
+    onSizePick: (Float) -> Unit
 ) {
     Row(
         modifier = Modifier.padding(bottom = 6.dp),
@@ -1046,24 +1047,29 @@ private fun FormatToolbar(
             enabled = enabled,
             onClick = onHighlight
         )
-        // A+/A− — per-letter font size (NOT a toggle: each tap steps the
-        // selection's letters one size up/down; the button is lit while the
-        // current size sits above/below the field default).
-        FormatToolButton(
+        // A+/A− — per-letter font size: tapping opens a dropdown of fixed
+        // sizes; picking one applies it to the selection (if any) and arms
+        // it as the sticky size so the next text typed carries it. The
+        // button stays lit while armed — the true "active" state (the old
+        // step buttons lit from whatever size sat under the caret, armed or
+        // not).
+        SizePickerButton(
             icon = CurioIcons.TextIncrease,
             label = "Bigger text",
-            active = sizeUpActive,
+            active = sizeActive,
             accent = accent,
             enabled = enabled,
-            onClick = onSizeUp
+            currentSp = currentSp,
+            onPick = onSizePick
         )
-        FormatToolButton(
+        SizePickerButton(
             icon = CurioIcons.TextDecrease,
             label = "Smaller text",
-            active = sizeDownActive,
+            active = sizeActive,
             accent = accent,
             enabled = enabled,
-            onClick = onSizeDown
+            currentSp = currentSp,
+            onPick = onSizePick
         )
     }
 }
@@ -1122,5 +1128,86 @@ private fun FormatToolButton(
             size = 16.dp,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
         )
+    }
+}
+
+/**
+ * The A+/A− letter-size control. Tapping opens a dropdown of the fixed
+ * sizes in [SIZE_OPTIONS] (plus "Default"), and picking one applies it to
+ * the selection (if any) AND arms it as the sticky size — so the icon stays
+ * lit while armed and the next text typed carries that size. That lit state
+ * is the true "active" state (the old step buttons lit from whatever size
+ * happened to sit under the caret, armed or not). Picking "Default"
+ * restores the field's base size and un-arms.
+ */
+@Composable
+private fun SizePickerButton(
+    icon: String,
+    label: String,
+    active: Boolean,
+    accent: Color,
+    enabled: Boolean,
+    currentSp: Float,
+    onPick: (Float) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        FormatToolButton(
+            icon = icon,
+            label = label,
+            active = active,
+            accent = accent,
+            enabled = enabled,
+            onClick = { expanded = true }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            // "Default" first — the field's base size, checked when nothing
+            // is armed (or the base size is current).
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        "Default · ${BASE_FONT_SP.toInt()}sp",
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                leadingIcon = {
+                    if (currentSp == BASE_FONT_SP) {
+                        CurioIcon(
+                            name = CurioIcons.Check,
+                            contentDescription = null,
+                            tint = accent,
+                            size = 16.dp
+                        )
+                    }
+                },
+                onClick = {
+                    expanded = false
+                    onPick(BASE_FONT_SP)
+                }
+            )
+            HorizontalDivider(color = accent.copy(alpha = 0.2f))
+            SIZE_OPTIONS.forEach { sp ->
+                DropdownMenuItem(
+                    text = { Text("${sp.toInt()} sp", fontSize = sp.sp) },
+                    leadingIcon = {
+                        if (sp == currentSp) {
+                            CurioIcon(
+                                name = CurioIcons.Check,
+                                contentDescription = null,
+                                tint = accent,
+                                size = 16.dp
+                            )
+                        }
+                    },
+                    onClick = {
+                        expanded = false
+                        onPick(sp)
+                    }
+                )
+            }
+        }
     }
 }

@@ -2,6 +2,36 @@
 
 ## Latest Request (COMPLETED)
 
+**Size dropdown replaces the buggy A+/A− step buttons (icon stays lit while armed) + CI fix for MarginaliaFormat's missing padding import**
+
+### What was asked
+
+1. The text-size increase icon shows active even when it isn't (the A+/A− buttons lit from whatever size sat under the caret, not from any armed state).
+2. Turn it into a feature: making the icon active shows a dropdown with sizes; the chosen size stays active so the next text typed is that size — same for the other icon.
+3. Fix the CI failure: `Unresolved reference 'padding'` × 7 in MarginaliaFormat.kt (missing `androidx.compose.foundation.layout.padding` import after the Entry date & mood commit).
+
+### What was changed
+
+- **`MarginaliaFormat.kt`** — added the missing `import androidx.compose.foundation.layout.padding` (CI fix).
+- **`RichTextEditor.kt`** — the A+/A− step buttons became a **size dropdown**:
+  - `FONT_SIZE_STEP` / `applyFontSize` removed; `SIZE_OPTIONS` = 12..24sp in 2sp steps minus the 16sp base (computed once, top-level).
+  - `applyExactSize(targetSp)` replaces `applySize(deltaSp)`: applies the EXACT picked size to the selection via `setSpanSize` (or `clearSpanSize` when the user picks "Default" = 16sp), and always arms `pendingSizeSp = targetSp` (null for Default) so the next text typed carries that size.
+  - New `SizePickerButton` composable: `FormatToolButton` in a `Box` + `DropdownMenu` — a "Default · 16sp" item first, then `SIZE_OPTIONS` items with a `Check` glyph on the current size; picking calls `onPick(sp)`.
+  - `FormatToolbar` + `SelectionFormatBar` signatures changed `sizeUpActive/sizeDownActive/onSizeUp/onSizeDown` → `sizeActive/currentSp/onSizePick`; all 3 call sites pass `sizeActive = pendingSizeSp != null` (the TRUE active state — armed only, fixing the false-lit bug), `currentSp = currentSizeSp()`, `onSizePick = { applyExactSize(it) }`.
+  - New imports: `Box`, `DropdownMenu`, `DropdownMenuItem`, `HorizontalDivider` (FontWeight/sp/CurioIcons.Check already present).
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass, no blockers. Notes accepted as intended: (1) picking "Default" with an active selection clears the selection's size spans (via `clearSpanSize`) in addition to un-arming — consistent with the other items which also apply to the selection; (2) A+ and A− are now functionally identical (both open the same dropdown) — exactly what the user asked ("same for the other icon"). Verified: all imports added, 0 stale refs to applySize/FONT_SIZE_STEP/sizeUpActive, no dead code, braces balanced, the `leadingIcon` lambdas (block-body `if` with expected `() -> Unit`) compile, DropdownMenu nests fine inside the SelectionFormatBar's non-focusable Popup (its own popup is focusable), the "5 buttons" width comment stays accurate.
+
+### Follow-ups / notes
+
+- The armed size persists until the user picks "Default · 16sp" or a different size — mirroring the bold/italic sticky model.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Topic like/dislike on the reveal screen feeding smart shuffle weighting + explored topics excluded from the spin**
 
 ### What was asked
