@@ -51,6 +51,7 @@ import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperHighlight
 
 /**
@@ -312,8 +313,12 @@ fun RichTextEditor(
     var pendingItalic by remember { mutableStateOf(false) }
     var pendingHighlight by remember { mutableStateOf(false) }
     // Paper mode: the field floats directly on the card's paper — no inner
-    // padding of its own (the card owns the margins).
+    // padding of its own (the card owns the margins). The toolbar + cursor
+    // also switch to the warm paper accent: these controls sit on cream in
+    // BOTH themes, so a theme-aware accent (e.g. the dark-mode tertiary) can
+    // read washed-out against the paper.
     val effectiveFieldPadding = if (paper) PaddingValues(0.dp) else fieldPadding
+    val effectiveAccent = if (paper) paperAccent() else accent
 
     LaunchedEffect(text, spans) {
         if (tfv.text != text) {
@@ -460,7 +465,7 @@ fun RichTextEditor(
                     boldActive = hasFlagAt(RichFlag.BOLD),
                     italicActive = hasFlagAt(RichFlag.ITALIC),
                     highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                    accent = accent,
+                    accent = effectiveAccent,
                     enabled = enabled,
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
@@ -470,7 +475,7 @@ fun RichTextEditor(
                     NotePaperStyleToggle(
                         style = paperStyle,
                         onStyleChange = onPaperStyleChange,
-                        accent = accent,
+                        accent = effectiveAccent,
                         enabled = enabled
                     )
                 }
@@ -488,7 +493,7 @@ fun RichTextEditor(
                     NotePaperStyleToggle(
                         style = paperStyle,
                         onStyleChange = onPaperStyleChange,
-                        accent = accent,
+                        accent = effectiveAccent,
                         enabled = enabled,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
@@ -496,15 +501,15 @@ fun RichTextEditor(
                 Surface(
                     onClick = { toolbarExpanded = !toolbarExpanded },
                     shape = RoundedCornerShape(8.dp),
-                    color = if (toolbarExpanded) accent.copy(alpha = 0.15f)
+                    color = if (toolbarExpanded) effectiveAccent.copy(alpha = 0.15f)
                             else Color.Transparent,
-                    border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+                    border = BorderStroke(1.dp, effectiveAccent.copy(alpha = 0.35f)),
                     modifier = Modifier.padding(bottom = 4.dp)
                 ) {
                     CurioIcon(
                         name = CurioIcons.FormatText,
                         contentDescription = if (toolbarExpanded) "Hide formatting" else "Show formatting",
-                        tint = accent,
+                        tint = effectiveAccent,
                         size = 18.dp,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
@@ -519,7 +524,7 @@ fun RichTextEditor(
                     boldActive = hasFlagAt(RichFlag.BOLD),
                     italicActive = hasFlagAt(RichFlag.ITALIC),
                     highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                    accent = accent,
+                    accent = effectiveAccent,
                     enabled = enabled,
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
@@ -546,7 +551,7 @@ fun RichTextEditor(
                         onValueChange = { emit(it) },
                         enabled = enabled,
                         textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
-                        cursorBrush = SolidColor(accent),
+                        cursorBrush = SolidColor(effectiveAccent),
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Sentences,
                             imeAction = ImeAction.Default
@@ -591,7 +596,7 @@ fun RichTextEditor(
                                 boldActive = hasFlagAt(RichFlag.BOLD),
                                 italicActive = hasFlagAt(RichFlag.ITALIC),
                                 highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                                accent = accent,
+                                accent = effectiveAccent,
                                 enabled = enabled,
                                 onBold = { applyFlag(RichFlag.BOLD) },
                                 onItalic = { applyFlag(RichFlag.ITALIC) },
@@ -761,7 +766,9 @@ private fun FormatToolButton(
         CurioIcon(
             name = icon,
             contentDescription = label,
-            tint = if (active) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+            // Inactive buttons fade the accent itself — on cream paper (both
+            // themes) the theme's onSurfaceVariant reads washed-out/wrong.
+            tint = if (active) accent else accent.copy(alpha = 0.45f),
             size = 16.dp,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
         )

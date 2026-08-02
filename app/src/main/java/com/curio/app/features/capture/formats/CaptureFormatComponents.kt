@@ -43,6 +43,7 @@ import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.TornPaperCard
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperInk
 import coil.compose.rememberAsyncImagePainter
 import kotlin.math.cos
@@ -298,7 +299,7 @@ fun PaperLineField(
     label: String? = null,
     placeholder: String = "",
     enabled: Boolean = true,
-    accent: Color = MaterialTheme.colorScheme.primary,
+    accent: Color = paperAccent(),
     imeAction: ImeAction = ImeAction.Done,
     /** Note-paper style — ruled page / torn note / torn with ruled lines. */
     paperStyle: NotePaperStyle = NotePaperStyle.RULED,

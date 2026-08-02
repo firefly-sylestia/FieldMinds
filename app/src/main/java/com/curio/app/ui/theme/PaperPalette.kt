@@ -31,6 +31,14 @@ fun paperRule(): Color = Color(0xFFE2D6BC)
 @Composable
 fun paperHighlight(): Color = Color(0x66FFD54F)
 
-/** Soft hairline edge so paper cards read as distinct notecards. */
+/** Warm amber accent for paper-mode controls (the Ruled/Torn style chips,
+ *  format tools, cursor) — reads clearly on cream and harmonizes with the
+ *  note-paper look in both themes, unlike the theme's tertiary tint. */
 @Composable
-fun paperBorder(): Color = Color(0xFFE0D3B5)
+fun paperAccent(): Color = Color(0xFF9A7B2F)
+
+/** Hairline edge so paper cards read as distinct notecards — a warm tan
+ *  with real contrast against the cream surface (the older near-cream edge
+ *  was effectively invisible). */
+@Composable
+fun paperBorder(): Color = Color(0xFFCBB98F)

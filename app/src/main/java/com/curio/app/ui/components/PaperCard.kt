@@ -41,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperBorder
+import com.curio.app.ui.theme.paperInk
 import com.curio.app.ui.theme.paperRule
 import com.curio.app.ui.theme.paperSurface
 import kotlin.math.cos
@@ -213,8 +215,12 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
     // on purpose: the torn edge must never reach far enough into the card to
     // clip the field text (cards carry 10-14dp of padding). Fractal noise is
     // in [0,1], so (n - 0.5f) * 2 ∈ [-1,1] → worst-case inward ≈ bite + tear.
-    val bite = with(density) { 2.6.dp.toPx() }
-    val tear = with(density) { 1.4.dp.toPx() }
+    // The amplitudes were trimmed after the corner-clipping report — at the
+    // corners two edges meet, so an inward bite there compounds diagonally
+    // into the first characters; small rips still read as torn, just never
+    // into the text.
+    val bite = with(density) { 2.0.dp.toPx() }
+    val tear = with(density) { 1.0.dp.toPx() }
     val step = with(density) { 8.dp.toPx() }
     // Base frequency ~0.06 (repo tornFrequency ≈ 0.05) + an offset per edge
     // so each side tears independently.
@@ -338,18 +344,19 @@ fun TornPaperCard(
             ImageShader(sharedGrainBitmap, TileMode.Repeat, TileMode.Repeat, FilterQuality.Low)
         )
     }
-    // The torn outline can intrude up to ~4dp past the caller's inset (some
+    // The torn outline can intrude up to ~3dp past the caller's inset (some
     // callers pass as little as 10dp of vertical padding for tight quote
     // cards). Floor the inset so the ragged edge NEVER clips the field text
-    // — especially the first characters near the top-left corner.
+    // — especially the first characters near the top-left corner, where two
+    // torn edges meet and their inward bites compound diagonally.
     val safeContentPadding = PaddingValues(
         horizontal = maxOf(
             contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
-            14.dp
+            16.dp
         ),
         vertical = maxOf(
             contentPadding.calculateTopPadding(),
-            12.dp
+            14.dp
         )
     )
     // Ruled lines (\"rules on torn\"): same notebook cadence as [PaperCard].
@@ -453,7 +460,7 @@ fun NotePaperCard(
 fun NotePaperStyleToggle(
     style: NotePaperStyle,
     onStyleChange: (NotePaperStyle) -> Unit,
-    accent: Color,
+    accent: Color = paperAccent(),
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
@@ -522,16 +529,20 @@ private fun NotePaperStyleChip(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Inactive chips wear the paper ink at low alpha (not the theme's
+            // onSurfaceVariant) — the paper controls sit on cream in BOTH
+            // themes, so a theme-aware grey reads wrong against the paper.
+            val inactive = paperInk().copy(alpha = 0.55f)
             CurioIcon(
                 name = icon,
                 contentDescription = label,
-                tint = if (active) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = if (active) accent else inactive,
                 size = 14.dp
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = if (active) accent else MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (active) accent else inactive
             )
         }
     }
