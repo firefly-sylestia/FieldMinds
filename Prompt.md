@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**ReelNotes saved-entry polish: visible review stars, in-place image zoom (no Lightbox page, proper landscape), readable highlights on colored paper**
+
+### What was asked
+
+1. Fix the review stars in the saved review entry.
+2. Proper view for landscape images + proper zoom like the mood board, WITHOUT opening a new page (the old thumbnails navigated to the Lightbox route).
+3. The highlight color looks bad on colored note paper.
+
+### What was changed
+
+- **Stars — `EntryDetailScreen.kt` (`ReelNotesRender`)** — the ghost (unfilled) star color was `MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)`, but `FilledStar` ALREADY fades unfilled stars internally (0.25 fill / 0.45 stroke) — so ghosts were double-faded to ~invisible. Now full-strength `onSurfaceVariant`: visible 5-slot scale in both themes. Also cleaned the mis-indented comment block.
+- **Images — `EntryDetailScreen.kt` (`ReelNotesRender`)** — replaced the 3-thumbnail Row (`take(3)`, `ContentScale.Fit`, `navController.navigate(CurioRoutes.lightbox(uri))`) with ALL attached images in a `BoxWithConstraints` strip: single image goes FULL-WIDTH (280dp box — proper landscape view), multiple images are 170.dp tiles in a horizontally scrollable row (240dp box), all `ContentScale.Crop` (fills the tile edge-to-edge, no letterboxing). Tapping magnifies IN PLACE via the existing mood-board machinery (`rememberMoodBoardZoomState` + `MoodBoardZoomOverlay`): image springs up centered + straight, pinch/pan refine up to 8x, double-tap resets, tap closes — no navigation. Zoom wiring mirrors `GalleryWallRender` (`animateFloatAsState` with `snap()` while gestureActive else spring; `zoomIn(uri, tileW, tileH, viewW, viewH)` from `maxWidth`/`maxHeight` px inside the Density scope). Removed the now-unused `navController` param from `ReelNotesRender` + its call site (FieldNotes keeps the lightbox nav — untouched). Legacy imageCount badge fallback kept.
+- **Highlights — `PaperPalette.kt`** — `notePaperHighlight()` tones were same-hue pastels at 40% alpha (rose on pink, mint on mint...) that VANISHED against the colored paper. Each marker is now a DEEPER, more opaque stroke of its sheet's family (alpha 0x66→0x99): cream `FFC933`, butter `EE9E2D`, pink `E97E72`, mint `7FB877`, sky `6DA4D9`, lilac `A585D9` — dark ink still reads through at 60%. `paperHighlight()` (cream default, also the RichTextEditor default) bumped to `0x99FFC933` for consistency.
+
+### Review
+code-reviewer-deepseek-flash: clean pass (two rounds). Verified braces balance, `Modifier.size(Dp, Dp)` with `maxWidth`/`maxHeight` resolves inside `BoxWithConstraintsScope` (RowScope has no such properties — no ambiguity), `.toPx()` legal in the Density scope, no NEW imports needed (BoxWithConstraints, rememberMoodBoardZoomState, MoodBoardZoomOverlay, animateFloatAsState, snap, spring, size, height, fillMaxSize, horizontalScroll, rememberScrollState, ContentScale all already present), `weight` removal has no import fallout (RowScope member), `CurioRoutes.lightbox` still used by FieldNotes so no unused-import cleanup, `navController` removal complete, single-image full-width improvement applied after first pass. One accepted note: a single full-width image opens at ~1.1x (fit-based — it already fills the box; pinch reaches 8x).
+
+### Follow-ups / notes
+- FieldNotes (and any other format) still uses the Lightbox route for images — if the user wants the same in-place zoom everywhere, that's a clean follow-up.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **CI compile fix — PaperCard.safePadding now builds in Dp (calculate*Padding return Dp, not px)**
 
 ### What was asked

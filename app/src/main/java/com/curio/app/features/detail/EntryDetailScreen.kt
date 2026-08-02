@@ -400,7 +400,7 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController
     }
     when (entry.format) {
         CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
-        CaptureFormat.ReelNotes -> ReelNotesRender(entry, category, navController)
+        CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
@@ -864,7 +864,7 @@ private fun formatFileSize(bytes: Long): String {
 }
 
 @Composable
-private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
+private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.ReelNotes
     
     // Handle null or malformed data gracefully
@@ -896,7 +896,9 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
     }
     
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        // Rating section with better visual design
+        // ── Rating — Canvas stars (the Material Symbols Outlined font renders
+        // even `star` as a hollow outline, so filled stars are solid paths
+        // and the remainder ghost at low alpha as a 5-slot scale) ─────────
         if (data.rating > 0) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
@@ -908,47 +910,91 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Solid Canvas stars — the Material Symbols Outlined font
-                // renders even `star` as a hollow outline, so filled stars
-                // are drawn as solid paths (ghost fill for the remainder).
-                repeat(5) { i ->
-                    val starFilled = i < data.rating.coerceIn(0, 5)
-                    FilledStar(
-                        color = if (starFilled) category.categoryInk()
-                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.35f),
-                        filled = starFilled,
-                        starSize = 24.dp
-                    )
-                }
+                    repeat(5) { i ->
+                        val starFilled = i < data.rating.coerceIn(0, 5)
+                        FilledStar(
+                            color = if (starFilled) category.categoryInk()
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                            filled = starFilled,
+                            starSize = 24.dp
+                        )
+                    }
                 }
             }
         }
         
-        // Attached images — real thumbnails for new captures (tap opens the
-        // Lightbox); legacy entries only stored a count, so keep the badge
-        // fallback for those. orEmpty() guards legacy Gson blobs where the
-        // imageUris field is absent (missing Kotlin-default fields decode
-        // to null, not the default).
+        // Attached images — ALL of them, in a scrollable strip that fills
+        // each tile edge-to-edge (Crop, so landscape shots read properly
+        // instead of letterboxing). Tapping one magnifies it IN PLACE with
+        // the same spring zoom as the saved mood board — pinch/pan refine,
+        // tap closes, double-tap resets — no Lightbox navigation. Legacy
+        // entries only stored a count, so keep the badge fallback below.
+        // orEmpty() guards legacy Gson blobs where the imageUris field is
+        // absent (missing Kotlin-default fields decode to null, not default).
         val attachedUris = data.imageUris.orEmpty()
         if (attachedUris.isNotEmpty()) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+            val imageZoom = rememberMoodBoardZoomState()
+            // Spring-animated pan offsets — same pattern as the mood board:
+            // the values live here so the zoom springs from 1x on open and
+            // back on close.
+            val animatedImageX by animateFloatAsState(
+                targetValue = imageZoom.offsetX,
+                animationSpec = if (imageZoom.gestureActive) snap()
+                else spring(dampingRatio = 0.8f, stiffness = 280f),
+                label = "reviewImageZoomX"
+            )
+            val animatedImageY by animateFloatAsState(
+                targetValue = imageZoom.offsetY,
+                animationSpec = if (imageZoom.gestureActive) snap()
+                else spring(dampingRatio = 0.8f, stiffness = 280f),
+                label = "reviewImageZoomY"
+            )
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxWidth().height(if (attachedUris.size == 1) 280.dp else 240.dp)
             ) {
-                attachedUris.take(3).forEach { uri ->
-                    Surface(
-                        onClick = { navController.navigate(CurioRoutes.lightbox(uri)) { launchSingleTop = true } },
-                        shape = RoundedCornerShape(16.dp),
-                        shadowElevation = 0.dp,
-                        modifier = Modifier.weight(1f).height(120.dp)
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(uri),
-                            contentDescription = "Attached image",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxSize().padding(4.dp)
-                        )
+                // BoxWithConstraints is a Density scope — convert the tile
+                // and viewport sizes to px for the zoom fit math directly.
+                // A single image goes full-width (proper landscape view);
+                // multiple images are 170.dp tiles in the scrollable strip.
+                val singleImage = attachedUris.size == 1
+                val tileSize = 170.dp
+                val tileW = if (singleImage) maxWidth.toPx() else tileSize.toPx()
+                val tileH = if (singleImage) maxHeight.toPx() else tileSize.toPx()
+                val viewW = maxWidth.toPx()
+                val viewH = maxHeight.toPx()
+                Row(
+                    modifier = Modifier.fillMaxSize().horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    attachedUris.forEach { uri ->
+                        Surface(
+                            onClick = { imageZoom.zoomIn(uri, tileW, tileH, viewW, viewH) },
+                            shape = RoundedCornerShape(16.dp),
+                            shadowElevation = 0.dp,
+                            modifier = Modifier.size(if (singleImage) maxWidth else tileSize, if (singleImage) maxHeight else tileSize)
+                        ) {
+                            Image(
+                                painter = rememberAsyncImagePainter(uri),
+                                contentDescription = "Attached image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     }
+                }
+                // In-place zoom overlay — LAST child of the box (same as the
+                // saved mood board): springs the tapped image up centered +
+                // straight over the strip, pinch/pan refine, tap closes.
+                attachedUris.firstOrNull { it == imageZoom.zoomedUri }?.let { uri ->
+                    MoodBoardZoomOverlay(
+                        zoomState = imageZoom,
+                        animatedOffsetX = animatedImageX,
+                        animatedOffsetY = animatedImageY,
+                        tileUri = uri,
+                        widthPx = tileW,
+                        heightPx = tileH
+                    )
                 }
             }
         } else if (data.imageCount > 0) {

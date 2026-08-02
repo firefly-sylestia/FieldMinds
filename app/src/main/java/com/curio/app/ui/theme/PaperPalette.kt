@@ -30,7 +30,7 @@ fun paperRule(): Color = Color(0xFFE2D6BC)
 
 /** Highlighter marker color — translucent amber on the cream paper. */
 @Composable
-fun paperHighlight(): Color = Color(0x66FFD54F)
+fun paperHighlight(): Color = Color(0x99FFC933)
 
 /** Warm amber accent for paper-mode controls (the Ruled/Torn style chips,
  *  format tools, cursor) — reads clearly on cream and harmonizes with the
@@ -88,12 +88,16 @@ fun notePaperInk(color: NotePaperColor): Color = when (color) {
  *  readable through it. */
 @Composable
 fun notePaperHighlight(color: NotePaperColor): Color = when (color) {
-    NotePaperColor.CREAM -> Color(0x66FFD54F)
-    NotePaperColor.BUTTER -> Color(0x66FFD23E)
-    NotePaperColor.PINK -> Color(0x66F2A79E)
-    NotePaperColor.MINT -> Color(0x66A9D6A5)
-    NotePaperColor.SKY -> Color(0x66A7C8E8)
-    NotePaperColor.LILAC -> Color(0x66C4B0E0)
+    // Each marker is a DEEPER, more opaque tone than its sheet — a pastel
+    // page needs a clearly darker stroke to read as a highlighter. The old
+    // same-hue pale tones (rose on pink, mint on mint...) vanished against
+    // the colored paper.
+    NotePaperColor.CREAM -> Color(0x99FFC933)
+    NotePaperColor.BUTTER -> Color(0x99EE9E2D)
+    NotePaperColor.PINK -> Color(0x99E97E72)
+    NotePaperColor.MINT -> Color(0x997FB877)
+    NotePaperColor.SKY -> Color(0x996DA4D9)
+    NotePaperColor.LILAC -> Color(0x99A585D9)
 }
 
 /** Ruled lines derived from the sheet — slightly darker than the paper. */
