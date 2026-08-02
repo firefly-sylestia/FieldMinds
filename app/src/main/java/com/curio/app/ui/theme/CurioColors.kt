@@ -1,5 +1,6 @@
 package com.curio.app.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
@@ -114,7 +115,10 @@ object CurioGradients {
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
-        val end = if (isCurioDarkTheme()) Color.Black else CurioColors.SoftCream
+        // End on the ACTIVE theme's background so cards always echo the
+        // surface behind them — cream in light, midnight in dark, pure
+        // black in AMOLED, the device's dynamic background in Material.
+        val end = MaterialTheme.colorScheme.background
         val start = categoryCardFill(accent)
         return listOf(start, lerp(start, end, 0.30f))
     }

@@ -43,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
@@ -87,6 +88,7 @@ fun SettingsScreen(navController: NavController) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val locale = LocalLocale.current.platformLocale
     var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
+    var themeStyle by remember { mutableStateOf(AppPreferences.getThemeStyle(context)) }
     val reminderEnabled = AppPreferences.reminderEnabledState
     var reminderHour by remember { mutableStateOf(AppPreferences.getReminderHour(context)) }
     var audioQuality by remember { mutableStateOf(AudioQualitySettings.get(context)) }
@@ -100,6 +102,7 @@ fun SettingsScreen(navController: NavController) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 themeMode = AppPreferences.getThemeMode(context)
+                themeStyle = AppPreferences.getThemeStyle(context)
                 reminderHour = AppPreferences.getReminderHour(context)
                 audioQuality = AudioQualitySettings.get(context)
                 displayName = AppPreferences.getDisplayName(context)
@@ -164,6 +167,7 @@ fun SettingsScreen(navController: NavController) {
                 try {
                     val result = CurioBackupManager.restore(context, uri)
                     themeMode = AppPreferences.getThemeMode(context)
+                    themeStyle = AppPreferences.getThemeStyle(context)
                     reminderHour = AppPreferences.getReminderHour(context)
                     audioQuality = AudioQualitySettings.get(context)
                     displayName = AppPreferences.getDisplayName(context)
@@ -178,6 +182,24 @@ fun SettingsScreen(navController: NavController) {
 
     val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
     val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
+    val themeStyles = listOf(
+        AppPreferences.THEME_STYLE_DEFAULT,
+        AppPreferences.THEME_STYLE_AMOLED,
+        AppPreferences.THEME_STYLE_MATERIAL
+    )
+    val currentStyleIndex = themeStyles.indexOf(themeStyle).coerceAtLeast(0)
+    val styleLabel = listOf("Curio", "AMOLED", "Material")[currentStyleIndex]
+    val styleDescription = when (themeStyle) {
+        AppPreferences.THEME_STYLE_AMOLED ->
+            "True black background, always dark, category tints off."
+        AppPreferences.THEME_STYLE_MATERIAL ->
+            "Your device's Material colors. Category colors become shades " +
+            "of the device palette and tints turn off."
+        else ->
+            "Curio's warm cream palette with category colors."
+    }
+    // AMOLED ignores the Light/Dark/System pick (it is always dark).
+    val themePickerEnabled = themeStyle != AppPreferences.THEME_STYLE_AMOLED
 
     if (showNameDialog) {
         AlertDialog(
@@ -314,8 +336,51 @@ fun SettingsScreen(navController: NavController) {
                 item {
                     CurioSettingsCard {
                         CurioCardHeader(CurioIcons.DarkMode, "Appearance", "Theme and look")
+                        // ── Theme style — Curio (default) / AMOLED / Material ──
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(CurioIcons.AutoAwesome, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Theme style", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    styleLabel,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(2.dp))
+                        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                            listOf("Curio", "AMOLED", "Material").forEachIndexed { index, label ->
+                                SegmentedButton(
+                                    selected = index == currentStyleIndex,
+                                    onClick = {
+                                        themeStyle = themeStyles[index]
+                                        AppPreferences.setThemeStyle(context, themeStyles[index])
+                                    },
+                                    shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
+                                ) {
+                                    Text(label, style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                        }
+                        Text(
+                            styleDescription,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 6.dp, bottom = 2.dp)
+                        )
+                        CurioSettingsDivider()
+                        // ── Light / Dark / System — ignored while AMOLED is
+                        //    active (AMOLED is always dark).
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp)
+                                .alpha(if (themePickerEnabled) 1f else 0.4f),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -323,7 +388,10 @@ fun SettingsScreen(navController: NavController) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text("Theme", style = MaterialTheme.typography.bodyLarge)
                                 Text(
-                                    listOf("Light", "Dark", "System")[currentThemeIndex],
+                                    if (themePickerEnabled)
+                                        listOf("Light", "Dark", "System")[currentThemeIndex]
+                                    else
+                                        "AMOLED is always dark",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -338,6 +406,7 @@ fun SettingsScreen(navController: NavController) {
                                         themeMode = themes[index]
                                         AppPreferences.setThemeMode(context, themes[index])
                                     },
+                                    enabled = themePickerEnabled,
                                     shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
                                 ) {
                                     Text(label, style = MaterialTheme.typography.labelSmall)
@@ -347,6 +416,8 @@ fun SettingsScreen(navController: NavController) {
                         CurioSettingsDivider()
                         // ── Category tint toggle — off restores the plain
                         //    theme background everywhere (cream/midnight).
+                        //    AMOLED + Material force it off regardless of
+                        //    this switch (it re-enables on the Curio style).
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -360,17 +431,26 @@ fun SettingsScreen(navController: NavController) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text("Category tint", style = MaterialTheme.typography.bodyLarge)
                                 Text(
-                                    if (AppPreferences.tintWashEnabledState)
-                                        "Colorful page backgrounds"
-                                    else
-                                        "Plain theme background",
+                                    when {
+                                        !AppPreferences.tintWashEffective() &&
+                                            themeStyle == AppPreferences.THEME_STYLE_DEFAULT ->
+                                            "Plain theme background"
+                                        !AppPreferences.tintWashEffective() ->
+                                            "Off in the $styleLabel theme"
+                                        else -> "Colorful page backgrounds"
+                                    },
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Switch(
-                                checked = AppPreferences.tintWashEnabledState,
-                                onCheckedChange = { AppPreferences.setTintWashEnabled(context, it) }
+                                checked = AppPreferences.tintWashEffective(),
+                                onCheckedChange =
+                                    if (themeStyle == AppPreferences.THEME_STYLE_DEFAULT) {
+                                        // Double-brace: the outer block carries an
+                                        // inner lambda so `it` resolves as the arg.
+                                        { AppPreferences.setTintWashEnabled(context, it) }
+                                    } else null
                             )
                         }
                     }

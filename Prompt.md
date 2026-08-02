@@ -2,6 +2,37 @@
 
 ## Latest Request (COMPLETED)
 
+**AMOLED + Material theme styles — Settings → Appearance, with the default Curio theme untouched**
+
+### What was asked
+
+1. An **AMOLED** option that automatically switches to dark mode, turns off the category tint, and makes the background pure black.
+2. A **Material** theme that also turns off the tint, and turns the category colors into a shade of the device's Material palette — not fully off; each category keeps its hue, blended into the color the material theme has according to the device.
+3. Do not break the default theme in the process.
+
+### What was changed
+
+- **`AppPreferences.kt`** — new theme-style pref `theme_style` (constants THEME_STYLE_DEFAULT / THEME_STYLE_AMOLED / THEME_STYLE_MATERIAL) with reactive `themeStyleState` (seeded in `initThemeMode`), `getThemeStyle` / `setThemeStyle`, and `tintWashEffective()` = `tintWashEnabledState && themeStyleState == DEFAULT` — the single source of truth for whether washes are really on.
+- **`CurioTheme.kt`** — new `CurioAmoledColorScheme` (darkColorScheme with pure-black background/surface and near-black container steps so OLED pixels switch fully off); `isCurioDarkTheme()` forces true in AMOLED; `CurioTheme` picks the scheme by style — AMOLED → amoled scheme, Material → `dynamicDarkColorScheme` / `dynamicLightColorScheme` (device Material You colors, still honoring Light/Dark/System), default → the existing warm palettes unchanged.
+- **`CategoryInk.kt`** — new `@Composable CurioCategory.themedAccent()`: unchanged in Curio/AMOLED; in Material it lerps the accent 40% toward the device's dynamic primary (a shade of the category color with the material color); `categoryInk()` light branch uses it; all four wash helpers (`categoryBackgroundWash` / `categorySurface` / `categoryChipSurface` / `categoryBorder`) now gate on `tintWashEffective()`.
+- **`CurioColors.kt`** — `cardGradient` ends on `MaterialTheme.colorScheme.background` instead of a hardcoded cream/black so cards echo the active surface (cream light / midnight dark / pure black AMOLED / dynamic Material). Default light mode unchanged (background IS SoftCream); default dark gradient end shifts from pure black to #0B1018 (near-identical, more correct).
+- **Category-accent sweep** — every `category.accent`-driven fill/ink/gradient now reads `themedAccent()` so Material shades the category colors app-wide: SpinScreen (deck accents moved OUT of remember so the blend updates on style change), HomeScreen, CabinetScreen, ProfileScreen, EntryDetailScreen, SaveCaptureScreen (incl. the 6 format-constructor accents), TopicRevealScreen, CurioTopicCard, CurioCategoryCard, CurioCategoryChip, CurioHeroCard, CurioWatermarkBackdrop (both glyph maps de-remembered).
+- **Tint-off sweep** — wash surfaces gated on `tintWashEffective()` with plain-theme fallbacks: GalleryWallFormat board (transparent), SaveCaptureScreen strip / save-button / gradient / format-chip-selected / Add-take (accent fill + white icon/text when off), EntryDetailScreen header pill / SoundBite card / ReelNotes null card / GalleryWall image strip (surfaceVariant / surfaceContainerHigh). SaveCapture's local tintWash reads the effective value.
+- **`SettingsScreen.kt`** — new Theme style segmented row (Curio / AMOLED / Material) with a per-style description; the Light/Dark/System row dims (.alpha 0.4) and its buttons disable while AMOLED (always dark); the Category tint switch reflects `tintWashEffective()` and disables (null onCheckedChange) outside the Curio style — the stored toggle is preserved for when the user returns.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass with one critical fix applied — the Settings Category-tint Switch's `onCheckedChange = if (...) { {lambda} } else null` single-brace form parses the if-branch as a BLOCK (Kotlin grammar: a leading `{` commits to controlStructureBody = block), leaving `it` unresolved; fixed with the double-brace idiom so an inner lambda is the block value. Reviewer verified all themedAccent() call sites are composable-scope, `SegmentedButton(enabled = ...)` and the nullable Switch onCheckedChange exist in material3 1.5.0-alpha20, dynamicColorScheme imports resolve, no unused imports, and default-style equivalence (themedAccent → accent, tintWashEffective → raw toggle). Applied its second-round suggestion: a whole-tree `.accent` grep found CurioCategoryCard / CurioWatermarkBackdrop / CurioHeroCard / CurioCategoryChip / TopicRevealScreen reads the initial sweep missed — all now themed.
+
+### Follow-ups / notes
+
+- Known deliberate boundary: small decorative tint fills (selected category-chip container, confetti particles, topic-history / manage-categories dots, format-internal tint fills) keep their tint in AMOLED/Material — the same scope the existing Category tint toggle has always had (page washes + major surfaces).
+- dynamicColorScheme on API < 31 falls back to a baseline palette instead of wallpaper colors (graceful, no crash).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Per-letter font-size tool (A+/A−) in the rich-text toolbar**
 
 ### What was asked

@@ -111,6 +111,7 @@ import com.curio.app.ui.components.formatGlyph
 import com.curio.app.ui.components.moodBoardPinchZoom
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
+import com.curio.app.data.AppPreferences
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -118,6 +119,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.PatrickHandFontFamily
@@ -188,7 +190,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .fillMaxWidth()
                 .height(292.dp)
                 .background(
-                    Brush.verticalGradient(CurioGradients.cardGradient(cat.accent))
+                    Brush.verticalGradient(CurioGradients.cardGradient(cat.themedAccent()))
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -305,7 +307,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Surface(shape = RoundedCornerShape(12.dp), color = cat.tint) {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = if (AppPreferences.tintWashEffective()) cat.tint
+                                else MaterialTheme.colorScheme.surfaceVariant
+                    ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -432,7 +438,7 @@ private fun PortfolioRender(entry: CurioEntry, category: CurioCategory, navContr
                 Surface(
                     onClick = { activeIndex = i },
                     shape = RoundedCornerShape(50),
-                    color = if (selected) category.accent
+                    color = if (selected) category.themedAccent()
                             else category.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
                     border = if (selected) null else category.categoryBorder(),
                     modifier = Modifier.padding(vertical = 2.dp)
@@ -478,7 +484,8 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.SoundBite ?: return
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = category.tint,
+        color = if (AppPreferences.tintWashEffective()) category.tint
+                else MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -491,7 +498,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
             ) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = category.accent
+                    color = category.themedAccent()
                 ) {
                     CurioIcon(
                         name = CurioIcons.PlayArrow,
@@ -523,7 +530,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                         if (data.fileSizeBytes > 0) {
                             Surface(
                                 shape = RoundedCornerShape(8.dp),
-                                color = category.accent.copy(alpha = 0.12f)
+                                color = category.themedAccent().copy(alpha = 0.12f)
                             ) {
                                 Text(
                                     text = data.encodingFormat,
@@ -541,7 +548,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
             if (!data.audioFilePath.isNullOrBlank()) {
                 AudioPlayerBar(
                     audioFilePath = data.audioFilePath,
-                    accent = category.accent,
+                    accent = category.themedAccent(),
                     tint = category.tint,
                     surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                     border = category.categoryBorder()
@@ -874,7 +881,8 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
     if (data == null) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = category.tint.copy(alpha = 0.5f),
+            color = if (AppPreferences.tintWashEffective()) category.tint.copy(alpha = 0.5f)
+                    else MaterialTheme.colorScheme.surfaceContainerHigh,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -905,7 +913,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         if (data.rating > 0) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = category.accent.copy(alpha = 0.08f),
+                color = category.themedAccent().copy(alpha = 0.08f),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -1014,7 +1022,8 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         } else if (data.imageCount > 0) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = category.tint,
+                color = if (AppPreferences.tintWashEffective()) category.tint
+                        else MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -1309,7 +1318,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 // ── Theme-aware watermark backdrop (random per board) ──
                 CurioMoodBoardBackdrop(
                     seed = boardSeed,
-                    accent = category.accent,
+                    accent = category.themedAccent(),
                     modifier = Modifier.fillMaxSize()
                 )
 
@@ -1450,7 +1459,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             ExpandedMoodBoardDialog(
                 data = data,
                 seed = boardSeed,
-                accent = category.accent,
+                accent = category.themedAccent(),
                 wash = category.categoryBackgroundWash(),
                 onDismiss = { boardExpanded = false },
                 onEdit = {
@@ -1763,7 +1772,7 @@ private fun CurioShareCard(
     entry: CurioEntry,
     category: CurioCategory
 ) {
-    val bgColor = category.accent.copy(alpha = 0.9f)
+    val bgColor = category.themedAccent().copy(alpha = 0.9f)
 
     val daysAgoText = when (entry.capturedAtDaysAgo) {
         0 -> "Captured today"

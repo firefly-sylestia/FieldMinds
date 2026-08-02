@@ -84,6 +84,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -276,7 +277,7 @@ fun SaveCaptureScreen(
         // ── Topic reminder strip with gradient ───────────────────────────
         // Wears the category tint with the tint setting on; with it off it
         // falls back to a plain theme surface so the whole flow goes neutral.
-        val tintWash = AppPreferences.tintWashEnabledState
+        val tintWash = AppPreferences.tintWashEffective()
         val stripColor = if (tintWash) cat.tint else MaterialTheme.colorScheme.surfaceContainerHigh
         val stripInk = if (tintWash) cat.categoryInk() else MaterialTheme.colorScheme.onSurface
         Surface(
@@ -294,7 +295,7 @@ fun SaveCaptureScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = if (tintWash) cat.accent.copy(alpha = 0.15f)
+                    color = if (tintWash) cat.themedAccent().copy(alpha = 0.15f)
                             else MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     CurioIcon(
@@ -343,7 +344,7 @@ fun SaveCaptureScreen(
                                 .padding(vertical = 48.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(color = cat.accent)
+                            CircularProgressIndicator(color = cat.themedAccent())
                         }
                     } else {
                         FormatBodyForCategory(
@@ -381,7 +382,7 @@ fun SaveCaptureScreen(
                             Brush.horizontalGradient(
                                 colors = if (tintWash) listOf(
                                     cat.tint,
-                                    cat.accent.copy(alpha = 0.3f),
+                                    cat.themedAccent().copy(alpha = 0.3f),
                                     cat.tint
                                 ) else listOf(
                                     MaterialTheme.colorScheme.outlineVariant,
@@ -400,7 +401,7 @@ fun SaveCaptureScreen(
                         enabled = canSave && !saveInProgress,
                         shape = RoundedCornerShape(32.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (tintWash) cat.tint else cat.accent,
+                            containerColor = if (tintWash) cat.tint else cat.themedAccent(),
                             contentColor = if (tintWash) cat.categoryInk() else Color.White,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -478,7 +479,7 @@ fun SaveCaptureScreen(
     // ── Confetti + ember celebration ────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
+            colors = listOf(cat.themedAccent(), if (tintWash) cat.tint else cat.themedAccent(), CurioColors.ButterYellow),
             trigger = confettiTrigger,
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
@@ -487,7 +488,7 @@ fun SaveCaptureScreen(
     }
     if (emberTrigger > 0) {
         EmberBurst(
-            colors = listOf(cat.accent, CurioColors.ButterYellow),
+            colors = listOf(cat.themedAccent(), CurioColors.ButterYellow),
             trigger = emberTrigger,
             particleCount = 12,
             modifier = Modifier.fillMaxSize(),
@@ -641,11 +642,12 @@ private fun FormatBodyForCategory(
                             }
                         },
                         shape = RoundedCornerShape(50),
-                        color = if (active.format == fmt) category.tint
+                        color = if (AppPreferences.tintWashEffective() && active.format == fmt) category.tint
+                                else if (active.format == fmt) category.themedAccent()
                                 else category.categorySurface(MaterialTheme.colorScheme.surface),
                         border = if (active.format == fmt) BorderStroke(
                             1.dp,
-                            category.accent.copy(alpha = 0.5f)
+                            category.themedAccent().copy(alpha = 0.5f)
                         ) else category.categoryBorder(
                             fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                         ),
@@ -659,7 +661,7 @@ private fun FormatBodyForCategory(
                             CurioIcon(
                                 name = formatGlyph(fmt),
                                 contentDescription = null,
-                                tint = if (active.format == fmt) category.accent
+                                tint = if (active.format == fmt) category.themedAccent()
                                        else MaterialTheme.colorScheme.onSurfaceVariant,
                                 size = 16.dp
                             )
@@ -668,7 +670,7 @@ private fun FormatBodyForCategory(
                                 style = MaterialTheme.typography.labelLarge.copy(
                                     fontWeight = if (active.format == fmt) FontWeight.SemiBold else FontWeight.Normal
                                 ),
-                                color = if (active.format == fmt) category.accent
+                                color = if (active.format == fmt) category.themedAccent()
                                        else MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -688,7 +690,7 @@ private fun FormatBodyForCategory(
                 Surface(
                     onClick = { snapshotActive(); activeIndex = i },
                     shape = RoundedCornerShape(50),
-                    color = if (i == activeIndex) category.accent
+                    color = if (i == activeIndex) category.themedAccent()
                             else category.categorySurface(MaterialTheme.colorScheme.surfaceVariant),
                     border = if (i == activeIndex) null else category.categoryBorder(),
                     modifier = Modifier.padding(vertical = 2.dp)
@@ -752,7 +754,7 @@ private fun FormatBodyForCategory(
                     activeIndex = sections.lastIndex
                 },
                 shape = RoundedCornerShape(50),
-                color = category.tint,
+                color = if (AppPreferences.tintWashEffective()) category.tint else category.themedAccent(),
                 modifier = Modifier.padding(vertical = 2.dp)
             ) {
                 Row(
@@ -763,13 +765,13 @@ private fun FormatBodyForCategory(
                     CurioIcon(
                         name = CurioIcons.Add,
                         contentDescription = null,
-                        tint = category.accent,
+                        tint = if (AppPreferences.tintWashEffective()) category.accent else Color.White,
                         size = 16.dp
                     )
                     Text(
                         text = "Add take",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = category.accent
+                        color = if (AppPreferences.tintWashEffective()) category.accent else Color.White
                     )
                 }
             }
@@ -781,34 +783,34 @@ private fun FormatBodyForCategory(
             key(current.id) {
                 when (current.format) {
                     CaptureFormat.SoundBite -> SoundBiteFormat(
-                        category.accent, category.tint,
+                        category.themedAccent(), category.tint,
                         { current.canSave = it }, { current.data = it },
                         onBusyChange = { current.busy = it },
                         initialData = current.seed as? CaptureData.SoundBite
                     )
                     CaptureFormat.ReelNotes -> ReelNotesFormat(
-                        category.accent, category.tint,
+                        category.themedAccent(), category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.ReelNotes
                     )
                     CaptureFormat.Marginalia -> MarginaliaFormat(
-                        category.accent, category.tint,
+                        category.themedAccent(), category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.Marginalia
                     )
                     CaptureFormat.GalleryWall -> GalleryWallFormat(
-                        category.accent, category.tint,
+                        category.themedAccent(), category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.GalleryWall,
                         boardSeed = boardSeed
                     )
                     CaptureFormat.FieldNotes -> FieldNotesFormat(
-                        category.accent, category.tint,
+                        category.themedAccent(), category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.FieldNotes
                     )
                     CaptureFormat.OpenNotebook -> OpenNotebookFormat(
-                        category.accent, category.tint,
+                        category.themedAccent(), category.tint,
                         { current.canSave = it }, { current.data = it },
                         initialData = current.seed as? CaptureData.OpenNotebook,
                         boardSeed = boardSeed

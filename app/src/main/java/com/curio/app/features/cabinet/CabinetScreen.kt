@@ -54,6 +54,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryChipSurface
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
@@ -188,7 +189,7 @@ fun CabinetScreen(navController: NavController) {
             items(CurioCategories.visible) { cat ->
                 FilterChipLite(
                     label = cat.displayName,
-                    accent = cat.accent,
+                    accent = cat.themedAccent(),
                     tint = cat.tint,
                     // The button (label text) never adapts to the category —
                     // it stays on the neutral theme ink in every state, so

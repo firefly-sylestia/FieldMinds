@@ -24,7 +24,27 @@ import com.curio.app.data.CurioCategory
  */
 @Composable
 fun CurioCategory.categoryInk(): Color =
-    if (isCurioDarkTheme()) lightAccent else accent
+    if (isCurioDarkTheme()) lightAccent else themedAccent()
+
+/**
+ * The accent color a category WEARS in the active theme style.
+ *
+ *  - Curio (default) and AMOLED: the researched accent unchanged — category
+ *    identity stays exact.
+ *  - Material: the accent is blended ~40% toward the device's dynamic
+ *    Material primary, so every category keeps its hue but reads as a shade
+ *    of the palette the device generated ("the material color according to
+ *    the device"). The tint washes stay off in this style, but the category
+ *    colors themselves are NOT turned off — they harmonize with the device
+ *    theme instead of disappearing.
+ */
+@Composable
+fun CurioCategory.themedAccent(): Color =
+    if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL) {
+        lerp(accent, MaterialTheme.colorScheme.primary, 0.40f)
+    } else {
+        accent
+    }
 
 /**
  * Theme-aware wash color for a category-aware page BACKGROUND (Spin, Topic
@@ -54,7 +74,7 @@ fun CurioCategory.categoryBackgroundWash(): Color {
     // Settings toggle (v6.4): when the category tint is turned off, pages use
     // the plain theme background (cream in light, midnight in dark) exactly
     // as they did before the wash rollout.
-    if (!AppPreferences.tintWashEnabledState) return background
+    if (!AppPreferences.tintWashEffective()) return background
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
         val midTone = tuning.resolveMidTone(accent, lightAccent)
@@ -77,7 +97,7 @@ fun CurioCategory.categoryBackgroundWash(): Color {
  */
 @Composable
 fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfaceContainerLow): Color {
-    if (!AppPreferences.tintWashEnabledState) return base
+    if (!AppPreferences.tintWashEffective()) return base
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
         val midTone = tuning.resolveMidTone(accent, lightAccent)
@@ -108,7 +128,7 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
  */
 @Composable
 fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.surfaceContainerLow): Color {
-    if (!AppPreferences.tintWashEnabledState) return base
+    if (!AppPreferences.tintWashEffective()) return base
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
         val midTone = tuning.resolveMidTone(accent, lightAccent)
@@ -138,7 +158,7 @@ fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.su
  */
 @Composable
 fun CurioCategory.categoryBorder(fallback: BorderStroke? = null): BorderStroke? {
-    if (!AppPreferences.tintWashEnabledState) return fallback
+    if (!AppPreferences.tintWashEffective()) return fallback
     return BorderStroke(1.dp, categoryInk().copy(alpha = 0.30f))
 }
 

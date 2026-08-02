@@ -76,6 +76,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -254,7 +255,7 @@ fun HomeScreen(navController: NavController) {
             val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
             // Wildcard reuses the brand-primary coral, so a single elvis
             // covers both the Surprise and named-category cases.
-            val accent = chosen?.accent ?: CurioColors.CategoryCoral
+            val accent = chosen?.themedAccent() ?: CurioColors.CategoryCoral
             val questGradient = CurioGradients.cardGradient(accent)
             Surface(
                     onClick = {
@@ -457,7 +458,7 @@ fun HomeScreen(navController: NavController) {
                         if (cat.id != CategoryId.WILDCARD) {
                             CategoryChip(
                                 name = cat.displayName,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 selected = selectedCategory?.id == cat.id,
                                 surface = MaterialTheme.colorScheme.surfaceContainerLow,
                                 onClick = {
@@ -647,7 +648,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit, surface: Colo
                 modifier = Modifier
                     .size(46.dp)
                     .clip(RoundedCornerShape(14.dp))
-                    .background(cat.accent.copy(alpha = 0.32f)),
+                    .background(cat.themedAccent().copy(alpha = 0.32f)),
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(

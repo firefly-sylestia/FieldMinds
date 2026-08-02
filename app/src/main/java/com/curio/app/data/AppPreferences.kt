@@ -20,9 +20,21 @@ object AppPreferences {
     const val THEME_DARK = "dark"
     const val THEME_SYSTEM = "system"
 
+    /**
+     * Theme style constants — the visual identity Curio wears:
+     *  - [THEME_STYLE_DEFAULT] — Curio's warm cream palette + category tints.
+     *  - [THEME_STYLE_AMOLED] — forced dark, pure-black surfaces, tints off.
+     *  - [THEME_STYLE_MATERIAL] — the device's Material dynamic colors; each
+     *    category accent becomes a shade of the device palette, tints off.
+     */
+    const val THEME_STYLE_DEFAULT = "default"
+    const val THEME_STYLE_AMOLED = "amoled"
+    const val THEME_STYLE_MATERIAL = "material"
+
     private const val NAME = "curio_app_prefs"
     private const val KEY_DISPLAY_NAME = "display_name"
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
+    private const val KEY_THEME_STYLE = "theme_style"      // "default", "amoled", "material"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
@@ -46,6 +58,14 @@ object AppPreferences {
     var themeModeState by mutableStateOf(THEME_SYSTEM)
         private set
 
+    /**
+     * Reactive theme-style state — updated by [setThemeStyle] so [CurioTheme]
+     * (and every theme-aware helper) recomposes instantly when the user picks
+     * a style in Settings. Seeded from prefs in [initThemeMode].
+     */
+    var themeStyleState by mutableStateOf(THEME_STYLE_DEFAULT)
+        private set
+
     var reminderEnabledState by mutableStateOf(false)
         private set
 
@@ -67,6 +87,7 @@ object AppPreferences {
 
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
+        themeStyleState = getThemeStyle(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
@@ -81,10 +102,29 @@ object AppPreferences {
         themeModeState = mode
     }
 
+    // ── Theme style ──────────────────────────────────────────────────
+    fun getThemeStyle(context: Context): String =
+        prefs(context).getString(KEY_THEME_STYLE, THEME_STYLE_DEFAULT) ?: THEME_STYLE_DEFAULT
+
+    fun setThemeStyle(context: Context, style: String) {
+        prefs(context).edit().putString(KEY_THEME_STYLE, style).apply()
+        themeStyleState = style
+    }
+
     // ── Category tint wash ────────────────────────────────────────────
     /** Whether category-tinted page backgrounds are enabled (default on). */
     fun isTintWashEnabled(context: Context): Boolean =
         prefs(context).getBoolean(KEY_TINT_WASH_ENABLED, true)
+
+    /**
+     * Whether category-tinted backgrounds are EFFECTIVELY on: the user
+     * toggle AND the theme style must both allow them. The AMOLED and
+     * Material styles force the tint off (pure black / device colors)
+     * regardless of the toggle, so [CurioTheme] and the wash helpers read
+     * this instead of the raw toggle.
+     */
+    fun tintWashEffective(): Boolean =
+        tintWashEnabledState && themeStyleState == THEME_STYLE_DEFAULT
 
     fun setTintWashEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_TINT_WASH_ENABLED, enabled).apply()

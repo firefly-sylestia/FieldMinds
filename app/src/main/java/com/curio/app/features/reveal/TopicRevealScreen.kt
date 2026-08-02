@@ -64,6 +64,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
@@ -172,7 +173,7 @@ fun TopicRevealScreen(
                     }
                 },
                 shape = CircleShape,
-                color = if (isPinned) cat.accent else MaterialTheme.colorScheme.surfaceVariant
+                color = if (isPinned) cat.themedAccent() else MaterialTheme.colorScheme.surfaceVariant
             ) {
                 CurioIcon(
                     name = if (isPinned) CurioIcons.Bookmark else CurioIcons.BookmarkBorder,
@@ -243,7 +244,7 @@ fun TopicRevealScreen(
                         resolved.tags.take(4).forEach { tag ->
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = cat.accent.copy(alpha = 0.18f),
+                                color = cat.themedAccent().copy(alpha = 0.18f),
                                 shadowElevation = 0.dp
                             ) {
                                 Text(
@@ -288,9 +289,9 @@ fun TopicRevealScreen(
                     enabled = resolved != null,
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = cat.accent,
+                        containerColor = cat.themedAccent(),
                         contentColor = Color.White,
-                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
+                        disabledContainerColor = cat.themedAccent().copy(alpha = 0.35f),
                         disabledContentColor = Color.White.copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
@@ -336,7 +337,7 @@ fun TopicRevealScreen(
 
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
+            colors = listOf(cat.themedAccent(), if (AppPreferences.tintWashEffective()) cat.tint else cat.themedAccent(), CurioColors.ButterYellow),
             trigger = confettiTrigger,
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
@@ -356,7 +357,7 @@ private fun HeroCard(
     modifier: Modifier = Modifier
 ) {
     val action = resolved?.exploreAction
-    val heroGradient = CurioGradients.cardGradient(cat.accent)
+    val heroGradient = CurioGradients.cardGradient(cat.themedAccent())
 
     Surface(
         modifier = modifier

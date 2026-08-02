@@ -17,6 +17,7 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.isCurioDarkTheme
+import com.curio.app.ui.theme.themedAccent
 import kotlin.random.Random
 
 /**
@@ -48,9 +49,9 @@ fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifi
     // Every glyph maps to its category accent — the same colors that open
     // the main-card gradients — so the backdrop palette always matches the
     // deck. Wildcard's glyph picks up the brand coral automatically.
-    val accentByGlyph = remember {
-        CurioCategories.all.associate { it.iconGlyph to it.accent }
-    }
+    // Rebuilt in the composable body (NOT remember) so the Material style's
+    // device-color blend updates the backdrop glyphs when the style changes.
+    val accentByGlyph = CurioCategories.all.associate { it.iconGlyph to it.themedAccent() }
     Box(modifier = modifier.fillMaxSize()) {
         WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, activeCat, accentByGlyph, isDark)
         WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, activeCat, accentByGlyph, isDark)
@@ -117,9 +118,9 @@ fun CurioMoodBoardBackdrop(
     modifier: Modifier = Modifier
 ) {
     val isDark = isCurioDarkTheme()
-    val accentByGlyph = remember {
-        CurioCategories.all.associate { it.iconGlyph to it.accent }
-    }
+    // Rebuilt in the composable body (NOT remember) so the Material style's
+    // device-color blend updates the backdrop glyphs when the style changes.
+    val accentByGlyph = CurioCategories.all.associate { it.iconGlyph to it.themedAccent() }
     val glyphs = remember {
         CurioCategories.all.map { it.iconGlyph }
     }

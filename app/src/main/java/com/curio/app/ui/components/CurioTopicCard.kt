@@ -40,6 +40,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * Cabinet's entry card — used in the 2-col grid (CURIO_SPEC.md §9).
@@ -90,7 +91,7 @@ fun CurioEntryCard(
                     .fillMaxWidth()
                     .height(120.dp)
                     .background(
-                        Brush.horizontalGradient(listOf(cat.accent, cat.tint))
+                        Brush.horizontalGradient(listOf(cat.themedAccent(), cat.tint))
                     ),
                 contentAlignment = Alignment.Center
             ) {

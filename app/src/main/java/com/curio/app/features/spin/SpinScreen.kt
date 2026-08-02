@@ -102,6 +102,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -410,9 +411,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // of every chosen accent instead of the first category's color alone:
     // peek cards / spin button / confetti take the blended accent, and the
     // hero ticket takes a multi-accent gradient (Spotify-style).
-    val deckAccents = remember(activeCatIds) {
-        activeCatIds.map { CurioCategories.byId(it).accent }
-    }
+    // Resolved in the composable body (NOT remember) so the Material style's
+    // device-color blend of each accent updates when the theme style changes.
+    val deckAccents = activeCatIds.map { CurioCategories.byId(it).themedAccent() }
     val deckAccent = remember(deckAccents) {
         CurioMixedDeck.mixedDeckAccent(deckAccents)
     }
@@ -943,14 +944,14 @@ private fun FilterSheet(
                         draftSubtypes.forEach { st ->
                             ActiveFilterChip(
                                 label = st,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 onRemove = { draftSubtypes = draftSubtypes - st }
                             )
                         }
                         draftFilters.forEach { tag ->
                             ActiveFilterChip(
                                 label = tag,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 onRemove = { draftFilters = draftFilters - tag }
                             )
                         }
@@ -1001,7 +1002,7 @@ private fun FilterSheet(
                             CompactChip(
                                 label = st,
                                 selected = st in draftSubtypes,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1023,7 +1024,7 @@ private fun FilterSheet(
                             CompactChip(
                                 label = tag,
                                 selected = tag in draftFilters,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1042,7 +1043,7 @@ private fun FilterSheet(
                             CompactChip(
                                 label = era,
                                 selected = era in draftFilters,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1061,7 +1062,7 @@ private fun FilterSheet(
                             CompactChip(
                                 label = origin,
                                 selected = origin in draftFilters,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1082,7 +1083,7 @@ private fun FilterSheet(
                 onClick = { onApply(draftFilters, draftSubtypes) },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = cat.accent,
+                    containerColor = cat.themedAccent(),
                     contentColor = Color.White
                 ),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
@@ -1972,7 +1973,7 @@ private fun DeckControlButton(
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = if (selected) cat.accent else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        color = if (selected) cat.themedAccent() else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
         border = if (selected) null else cat.categoryBorder(),
         shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
@@ -2067,7 +2068,7 @@ private fun CategoryPickerSheet(
                         if (multiSelectMode) {
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = currentCat.accent.copy(alpha = 0.15f)
+                                color = currentCat.themedAccent().copy(alpha = 0.15f)
                             ) {
                                 Text(
                                     text = if (selectedSlugs.isEmpty()) "Select decks"
@@ -2080,7 +2081,7 @@ private fun CategoryPickerSheet(
                         } else {
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = currentCat.accent.copy(alpha = 0.15f)
+                                color = currentCat.themedAccent().copy(alpha = 0.15f)
                             ) {
                                 Text(
                                     text = currentCat.displayName,

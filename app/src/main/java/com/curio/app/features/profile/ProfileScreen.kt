@@ -67,6 +67,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * Profile hub — identity, stats, and a single proper Settings entry.
@@ -489,7 +490,7 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(counts.entries.sortedByDescending { it.value }.take(4)) { (categoryId, count) ->
                 val category = CurioCategories.byId(categoryId)
-                Surface(shape = RoundedCornerShape(16.dp), color = category.accent.copy(alpha = 0.14f)) {
+                Surface(shape = RoundedCornerShape(16.dp), color = category.themedAccent().copy(alpha = 0.14f)) {
                     Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
                         CurioIcon(category.iconGlyph, null, tint = MaterialTheme.colorScheme.onSurface, size = 20.dp)
                         Spacer(Modifier.height(4.dp))
@@ -538,7 +539,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Box(
-                modifier = Modifier.size(40.dp).clip(RoundedCornerShape(13.dp)).background(category.accent.copy(alpha = 0.16f)),
+                modifier = Modifier.size(40.dp).clip(RoundedCornerShape(13.dp)).background(category.themedAccent().copy(alpha = 0.16f)),
                 contentAlignment = Alignment.Center
             ) { CurioIcon(category.iconGlyph, null, tint = category.categoryInk(), size = 20.dp) }
             Column(modifier = Modifier.weight(1f)) {
