@@ -6,15 +6,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateTopPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.paperBorder
@@ -52,9 +55,21 @@ fun PaperCard(
             // composable scope — the Canvas draw lambda is not composable.)
             val ruleColor = if (ruled) paperRule() else Color.Unspecified
             if (ruled) {
+                // Notebook cadence: rules spaced at the body line height,
+                // starting one cadence below the top content padding so the
+                // first line of text sits ON the first rule (real paper).
+                val density = LocalDensity.current
+                // Guard against an Unspecified lineHeight (custom typography
+                // that omits it) — fall back to the classic 24dp cadence.
+                val bodyLineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                val ruleSpacing = with(density) {
+                    if (bodyLineHeight.isUnspecified) 24.dp.toPx() else bodyLineHeight.toPx()
+                }
+                val ruleStart = with(density) {
+                    contentPadding.calculateTopPadding().toPx()
+                } + ruleSpacing
                 Canvas(modifier = Modifier.matchParentSize()) {
-                    val spacing = 24.dp.toPx()
-                    var y = spacing
+                    var y = ruleStart
                     while (y < size.height) {
                         drawLine(
                             color = ruleColor,
@@ -62,7 +77,7 @@ fun PaperCard(
                             end = Offset(size.width, y),
                             strokeWidth = 1f
                         )
-                        y += spacing
+                        y += ruleSpacing
                     }
                 }
             }

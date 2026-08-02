@@ -926,34 +926,30 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             }
         }
         
-        // Review text with better styling
+        // Review text with better styling — wears the same note-paper box
+        // as the Marginalia journal, so the saved review reads as written
+        // on paper in light AND dark mode (PaperCard is theme-aware).
         if (data.reviewText.isNotBlank()) {
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = category.categorySurface(MaterialTheme.colorScheme.surface),
-                shadowElevation = 0.dp,
-                border = category.categoryBorder(),
+            PaperCard(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     buildRichAnnotated(data.reviewText, data.reviewSpans.orEmpty(), paperHighlight()),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(20.dp)
+                    color = paperInk()
                 )
             }
         } else {
             // Fallback when no review text
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = category.tint.copy(alpha = 0.3f),
+            PaperCard(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     "No review written yet",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(20.dp)
+                    color = paperInk().copy(alpha = 0.55f)
                 )
             }
         }

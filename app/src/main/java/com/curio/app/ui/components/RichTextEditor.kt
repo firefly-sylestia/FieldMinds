@@ -8,6 +8,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -193,6 +194,11 @@ fun RichTextEditor(
     accent: Color = MaterialTheme.colorScheme.primary,
     ink: Color = MaterialTheme.colorScheme.onSurface,
     surface: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+    /** Inner padding of the text field — zero when the editor sits directly
+     *  on note-paper (the surrounding card owns the margins). */
+    fieldPadding: PaddingValues = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+    /** Draws the field's hairline border — off when the editor sits on paper. */
+    showFieldBorder: Boolean = true,
     highlightColor: Color = paperHighlight()
 ) {
     // NOTE: NOT keyed on [text] — the parent echoes our edits back, so a
@@ -298,7 +304,7 @@ fun RichTextEditor(
         Surface(
             shape = RoundedCornerShape(14.dp),
             color = surface,
-            border = BorderStroke(1.dp, accent.copy(alpha = 0.25f)),
+            border = if (showFieldBorder) BorderStroke(1.dp, accent.copy(alpha = 0.25f)) else null,
             modifier = Modifier.fillMaxWidth()
         ) {
             BasicTextField(
@@ -314,7 +320,7 @@ fun RichTextEditor(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = minHeight)
-                    .padding(horizontal = 14.dp, vertical = 12.dp)
+                    .padding(fieldPadding)
             )
         }
         if (tfv.text.isEmpty() && placeholder.isNotEmpty()) {

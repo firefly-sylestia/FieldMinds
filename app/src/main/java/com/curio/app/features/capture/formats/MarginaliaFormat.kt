@@ -111,7 +111,7 @@ fun MarginaliaFormat(
             PaperCard(
                 modifier = Modifier.fillMaxWidth(),
                 ruled = true,
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             ) {
                 RichTextEditor(
                     text = journalText,
@@ -125,7 +125,9 @@ fun MarginaliaFormat(
                     minHeight = 140.dp,
                     ink = paperInk(),
                     surface = Color.Transparent,
-                    accent = MaterialTheme.colorScheme.tertiary
+                    accent = MaterialTheme.colorScheme.tertiary,
+                    fieldPadding = PaddingValues(0.dp),
+                    showFieldBorder = false
                 )
             }
         }
@@ -221,7 +223,7 @@ private fun QuoteCard(
         ruled = true,
         // Compact inset — quote cards stay tight so a stack of them reads
         // as a neat pile of notecards rather than heavy journal blocks.
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
     ) {
         // ── Card header — quote mark + number, Remove on the right ──
         Row(
@@ -267,7 +269,9 @@ private fun QuoteCard(
             minHeight = 64.dp,
             ink = paperInk(),
             surface = Color.Transparent,
-            accent = MaterialTheme.colorScheme.tertiary
+            accent = MaterialTheme.colorScheme.tertiary,
+            fieldPadding = PaddingValues(0.dp),
+            showFieldBorder = false
         )
     }
 }

@@ -2,31 +2,24 @@
 
 ## Latest Request (COMPLETED)
 
-**"make the quote tilt random and not just 2 same each time"**
+**"make the margins and the texts properly aligned and also use the same paper style box in dark mode too and in review boxes as well"**
 
 ### What was changed
-Quote card tilt was hardcoded to alternate ±1.5° by index (`if (i % 2 == 0) 1.5f else -1.5f`). Both places now use a **stable-per-card random tilt** of ±2.5°:
 
-1. **`MarginaliaFormat.kt`** (capture editor) — `quotes.forEachIndexed` now uses `remember(i) { kotlin.random.Random.nextFloat() * 5f - 2.5f }`.
-2. **`EntryDetailScreen.kt`** (saved detail view, MarginaliaRender) — same random rotation keyed by index, passed to `PaperCard`'s `.rotate(rotation)`.
+Paper style + alignment pass across the note-paper surfaces:
 
-Keyed on the card index so recomposition / typing / scrolling never re-rolls a card's tilt mid-edit/mid-view. `kotlin.random.Random` used fully-qualified (matches EntryDetailScreen's existing pattern, no import needed). `remember` already imported in both files.
+1. **`PaperCard.kt`** — Ruled lines now follow the notebook cadence: spaced at `bodyLarge` line-height and starting one cadence below the top content padding, so the first line of text sits ON the first rule (real-paper feel) instead of floating at a fixed 24dp from the card edge. Guarded against an Unspecified `lineHeight` (falls back to 24dp).
+
+2. **`RichTextEditor.kt`** — New `fieldPadding` (default 14/12) and `showFieldBorder` (default true) params so paper-wrapped editors can drop the inner rounded box + double margin and write directly on the paper.
+
+3. **`MarginaliaFormat.kt`** — Journal + quote-card editors now pass `fieldPadding = 0.dp` / `showFieldBorder = false` (text sits directly on the paper at the card's own content margin). Journal content padding unified to 16/14 and quote cards to 12/10 — matching the saved detail view exactly, so what you type aligns with what you see saved.
+
+4. **`ReelNotesFormat.kt`** — The review field (capture form) now wears the same note-paper box as the Marginalia journal (ruled paper, `paperInk`, transparent surface, no inner border) — light AND dark mode.
+
+5. **`EntryDetailScreen.kt`** — The saved review box (`ReelNotesRender`) switched from the category surface to `PaperCard` with `paperInk`, matching the journal's paper look in both themes; "No review written yet" fallback also wears paper.
 
 ### Review
-1 round of code-reviewer-deepseek-flash — clean. Non-blocking notes: the two call sites duplicate the formula (fine at 2 sites; a shared `randomQuoteTilt()` helper in PaperCard.kt would keep them in sync if desired), and add/remove of quote cards in the editor re-rolls tilts of cards after the changed position (inherent to index-keying; acceptable for a "random" look).
+1 round of code-reviewer-deepseek-flash — clean. Actioned its one real concern: `bodyLarge.lineHeight.toPx()` guarded against Unspecified (CurioTypography sets it to 24.sp, so safe either way). Note: in the capture editor the MAIN toolbar renders inside the PaperCard, so the ruled lines align under the field's text in the saved view (text directly in card); in the editor the toolbar shifts the field down slightly — rules remain a faint texture there.
 
 ### Follow-ups / notes
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
-
-## Previous Requests (brief)
-- Both category pickers (Spin sheet + Browse-all route) converted to the filter page's full-screen ModalBottomSheet + swipe-down dismiss pattern.
-- CI compile fix: TextFieldValue.text is String now (use annotatedString), SpanStyle.background non-null Color (use Unspecified), matchParentSize BoxScope member, hoist paperRule() out of Canvas.
-- Cabinet wash fix: 'All' page stays on plain theme background; search button always neutral (no tint).
-- Quotes entry: note-paper texture + bold/italic/highlight rich-text editing (journal + quotes always-visible toolbar; other text fields small toggle; saved view renders spans on paper cards).
-- Added ASK WHEN UNSURE rule (< ~80% understanding → ask user) to AGENTS.md + master.md.
-- Fixed CI compile failure: restored missing `gestureActive` declaration in `MoodBoardZoomState`.
-- Cabinet: filters-page category wash background + top back button to dismiss filter; dark-mode chips desaturated for contrast.
-- Shuffle peek-card cut-off fix (without design change).
-- Mood-board pinch-zoom lag fix (transform during gesture).
-- Shuffle animation made less violent (background cards animate to front).
-- Removed tinted background behind category + filter card (with clarification).
