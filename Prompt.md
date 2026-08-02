@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**CI compile fix — PaperCard.safePadding now builds in Dp (calculate*Padding return Dp, not px)**
+
+### What was asked
+
+CI failed on PaperCard.kt (`Cannot infer type for type parameter 'R'`, `No parameter with name 'top' found`, `maxOf` Dp-vs-Float mismatch, unresolved `.toDp()`, cascading `calculateTopPadding`/`compareTo` errors).
+
+### What was changed
+
+- **`PaperCard.kt`** — the `safePadding` block treated `PaddingValues.calculate*Padding()` as px Floats (called `.toDp()` on them and mixed `marginInset + 8.dp.toPx()` — Float — into `maxOf` against Dp), but in this Compose version `calculate*Padding` returns **Dp** (proven by `TornPaperCard`'s `safeContentPadding` feeding them straight into a `PaddingValues` constructor and `RichTextEditor` calling `.toPx()` on them). Rewritten to build the safe inset in Dp directly: `maxOf(contentPadding.calculateLeftPadding(LayoutDirection.Ltr), marginInsetDp + 8.dp)` with `marginInsetDp`/`foldInsetDp = 22.dp`, and top/right/bottom pass `calculate*Padding` through unchanged; the only px conversion kept is `marginInset = with(density) { marginInsetDp.toPx() }` for the red-margin Canvas rule. Removed the `with(density) { … }` wrapper (which caused the un-inferable 'R') and all `.toDp()` calls; the `foldInset` px var dropped (only used by old safePadding; `drawFoldFlap` computes its own `22.dp.toPx()`). Cascading errors at ruleStart/compareTo resolve once `safePadding` is well-typed.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified all remaining `calculate*Padding` uses are Dp-typed, `maxOf(Dp, Dp)` compiles (Dp is Comparable), no leftover `.toDp()`, no new/unused imports, `foldInset` removal safe, braces balanced.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Quote-card tilt pivot fixed — 72dp min-height hoisted BEFORE the rotate in the saved-view modifier chain**
 
 ### What was asked

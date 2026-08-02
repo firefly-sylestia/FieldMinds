@@ -111,26 +111,24 @@ fun PaperCard(
     val density = LocalDensity.current
     // Effective padding — the red margin and the folded corner need extra
     // inset so the text never runs under the margin line or the flap.
-    val marginInset = with(density) { 22.dp.toPx() }
-    val foldInset = with(density) { 22.dp.toPx() }
-    // calculate*Padding return px (Float) — convert back to Dp for the
-    // PaddingValues constructor, which takes Dp.
-    val safePadding = with(density) {
-        PaddingValues(
-            left = if (redMargin) maxOf(
-                contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
-                marginInset + 8.dp.toPx()
-            ).toDp()
-            else contentPadding.calculateLeftPadding(LayoutDirection.Ltr).toDp(),
-            top = contentPadding.calculateTopPadding().toDp(),
-            right = if (folded) maxOf(
-                contentPadding.calculateRightPadding(LayoutDirection.Ltr),
-                foldInset + 2.dp.toPx()
-            ).toDp()
-            else contentPadding.calculateRightPadding(LayoutDirection.Ltr).toDp(),
-            bottom = contentPadding.calculateBottomPadding().toDp()
-        )
-    }
+    // calculate*Padding return Dp in this Compose version, so the safe inset
+    // is built in Dp directly (no px round-trip); only the Canvas's
+    // red-margin rule needs px.
+    val marginInsetDp = 22.dp
+    val foldInsetDp = 22.dp
+    val marginInset = with(density) { marginInsetDp.toPx() }
+    val safePadding = PaddingValues(
+        left = if (redMargin) maxOf(
+            contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
+            marginInsetDp + 8.dp
+        ) else contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
+        top = contentPadding.calculateTopPadding(),
+        right = if (folded) maxOf(
+            contentPadding.calculateRightPadding(LayoutDirection.Ltr),
+            foldInsetDp + 2.dp
+        ) else contentPadding.calculateRightPadding(LayoutDirection.Ltr),
+        bottom = contentPadding.calculateBottomPadding()
+    )
     val shape = remember(corner, folded) {
         if (folded) FoldedCornerShape(corner, 22.dp) else RoundedCornerShape(corner)
     }
