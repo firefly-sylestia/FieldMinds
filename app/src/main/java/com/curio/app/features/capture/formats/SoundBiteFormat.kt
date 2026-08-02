@@ -17,12 +17,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -49,8 +47,10 @@ import com.curio.app.data.CaptureData
 import com.curio.app.data.TextSpan
 import com.curio.app.features.capture.AudioRecorder
 import com.curio.app.ui.components.AudioTrimmer
+import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
+import com.curio.app.ui.theme.paperInk
 import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.TrimWaveform
 import com.curio.app.ui.components.WaveformExtractor
@@ -354,30 +354,41 @@ fun SoundBiteFormat(
         }
 
         // ── Optional title field — show always, disabled during trim ─────
-        OutlinedTextField(
+        // Wears the note-paper slip like the other text boxes.
+        PaperLineField(
             value = title,
             onValueChange = { title = it },
-            label = { Text("Add a quick title (optional)") },
-            singleLine = true,
+            label = "Add a quick title (optional)",
             enabled = recordingState != AudioRecorder.State.RECORDING,
-            shape = RoundedCornerShape(16.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            modifier = Modifier.fillMaxWidth()
+            imeAction = ImeAction.Next
         )
 
-        // Rich-text note — formatting behind a small toggle.
-        RichTextEditor(
-            text = note,
-            spans = noteSpans,
-            onRichTextChange = { newText, newSpans ->
-                note = newText
-                noteSpans = newSpans
-            },
-            placeholder = "What did this recording capture?",
-            toolbarMode = RichTextToolbarMode.TOGGLE,
-            minHeight = 96.dp,
-            enabled = recordingState != AudioRecorder.State.RECORDING
-        )
+        // Rich-text note — formatting behind a small toggle. Sits directly
+        // on the note-paper slip (no inner box / double margin), matching
+        // the journal and review fields in light and dark mode.
+        PaperCard(
+            modifier = Modifier.fillMaxWidth(),
+            ruled = true,
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        ) {
+            RichTextEditor(
+                text = note,
+                spans = noteSpans,
+                onRichTextChange = { newText, newSpans ->
+                    note = newText
+                    noteSpans = newSpans
+                },
+                placeholder = "What did this recording capture?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 96.dp,
+                enabled = recordingState != AudioRecorder.State.RECORDING,
+                ink = paperInk(),
+                surface = Color.Transparent,
+                accent = MaterialTheme.colorScheme.tertiary,
+                fieldPadding = PaddingValues(0.dp),
+                showFieldBorder = false
+            )
+        }
     }
 }
 

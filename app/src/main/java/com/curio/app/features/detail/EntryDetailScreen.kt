@@ -518,13 +518,18 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 )
             }
 
-            // ── Note — shown with its rich-text formatting ────────────────
+            // ── Note — shown on the same note-paper slip the editor used ──
             if (data.note.isNotBlank()) {
-                Text(
-                    buildRichAnnotated(data.note, data.noteSpans.orEmpty(), paperHighlight()),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                PaperCard(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        buildRichAnnotated(data.note, data.noteSpans.orEmpty(), paperHighlight()),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = paperInk()
+                    )
+                }
             }
         }
     }
@@ -1222,16 +1227,15 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         }
 
         if (data.caption.isNotBlank()) {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = category.accent.copy(alpha = 0.08f),
+            // Caption wears the same note-paper slip as the editor's field.
+            PaperCard(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     data.caption,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(16.dp)
+                    color = paperInk()
                 )
             }
         }
@@ -1437,31 +1441,46 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                Text(
-                    buildRichAnnotated(text, data.observedSpans.orEmpty(), paperHighlight()),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                PaperCard(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        buildRichAnnotated(text, data.observedSpans.orEmpty(), paperHighlight()),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = paperInk()
+                    )
+                }
             }
         }
         data.surprised.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                Text(
-                    buildRichAnnotated(text, data.surprisedSpans.orEmpty(), paperHighlight()),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                PaperCard(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        buildRichAnnotated(text, data.surprisedSpans.orEmpty(), paperHighlight()),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = paperInk()
+                    )
+                }
             }
         }
         data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                Text(
-                    buildRichAnnotated(text, data.learnNextSpans.orEmpty(), paperHighlight()),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                PaperCard(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        buildRichAnnotated(text, data.learnNextSpans.orEmpty(), paperHighlight()),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = paperInk()
+                    )
+                }
             }
         }
         if (data.imageUris.isNotEmpty()) {

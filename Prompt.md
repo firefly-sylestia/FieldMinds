@@ -2,22 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
-**"fix the text formatting as its not properly working... make it use the selected text format change and apply the same type after too like if i select the bold and then type it will make it bold as well"**
+**"extend the paper box margin style to more text boxes"**
 
 ### What was changed
 
-All in `RichTextEditor.kt`. The old behavior silently ignored a format tap when no text was selected (`if (sel.collapsed) return`), so users couldn't discover how to format existing text. Fixed with three complementary mechanisms (existing toolbar KEPT):
+The note-paper look (warm cream paper in light mode, toned dark paper in dark mode, faint ruled lines) now covers ALL text boxes, not just the Marginalia journal/quotes and Reel Notes review. A new shared helper plus per-format edits:
 
-1. **Sticky (armed) formats** — tapping Bold/Italic/Highlight with a collapsed caret now ARMS the format instead of no-oping: the next characters typed carry it (toolbar button lights up via `hasFlagAt`). Applying a format to a selection also arms it, so "make this bold, then keep typing" works — exactly the requested behavior.
+1. **`PaperLineField`** (new, in `CaptureFormatComponents.kt`) — a single-line text field wearing the paper look: a thin label above a small `PaperCard` slip with `paperInk` text, paper-tinted placeholder, and `SolidColor(accent)` cursor. Used for short inputs (titles, captions) so they match the notebook style instead of a plain outline box.
 
-2. **Floating selection bar** — when a non-collapsed selection exists, a compact `SelectionFormatBar` (B / I / highlight) floats above the selection (Popup anchored to the caret via `TextLayoutResult`/`onTextLayout`), making it obvious how to format existing text. Falls below the selection when it's at the top of the field.
+2. **SoundBite** — the optional title field is now a `PaperLineField` (kept `ImeAction.Next` + enabled-during-recording guard); the rich-text note editor sits directly on a `PaperCard` slip (`ink=paperInk()`, `surface=Color.Transparent`, `fieldPadding=0`, `showFieldBorder=false`) matching the journal/review pattern.
 
-3. **Insertion diffing** — `findInsertedRange(oldText, newText)` (bounds-safe common-prefix/suffix, reported in new-text coordinates) applies an armed format to exactly the changed characters — including typing OVER a selection (replace) — while pure deletions and unchanged text return null. `emit` rebuilds the AnnotatedString with the added span and preserves selection + IME composition.
+3. **Field Notes** — all three section editors (What I observed / What surprised me / What I want to learn next) are now wrapped in `PaperCard` slips with the same paper params.
 
-Supporting changes: the floating bar is anchored via a `BoxWithConstraints` wrapper around the field (centered on the selection end, clamped to the field width so it never runs off-screen), pending flags reset when a different entry's text is loaded in `LaunchedEffect`, and `hasFlagAt` returns `armed || underCaret` for a collapsed caret.
+4. **Gallery Wall** — the caption field is now a `PaperLineField` (label above the paper slip).
+
+5. **Saved views** (`EntryDetailScreen`) — the SoundBite note, the three Field Notes sections, and the Gallery Wall caption all render on `PaperCard` with `paperInk` when viewing a saved entry, so the saved view mirrors what the user wrote into.
+
+Removed imports that became unused: `OutlinedTextField`/`KeyboardOptions` (SoundBite), `OutlinedTextField`/`KeyboardOptions`/`ImeAction` (GalleryWall). Imports in CaptureFormatComponents were re-verified clean after an initial import-block mishap (fixed with a full rewrite of the import block).
 
 ### Review
-2 rounds of code-reviewer-deepseek-flash — clean. Round 1 noted a dead `showSelectionBar` param (removed) and right-edge overflow (fixed with a width clamp). Round 2 verified the generalized diff is bounds-safe and covers selection-replacement; no blocking issues.
+1 round of code-reviewer-deepseek-flash — clean, no blocking issues. Only nits: three Field Notes sections duplicate the same PaperCard config (matches existing style), and `PaperLineField.placeholder` is unused at call sites (harmless default).
 
 ### Follow-ups / notes
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
