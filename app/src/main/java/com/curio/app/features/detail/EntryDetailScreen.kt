@@ -252,6 +252,22 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 },
                                 leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
                             )
+                        } else {
+                            // Every other saved format (SoundBite, ReelNotes,
+                            // Marginalia, FieldNotes, non-moodboard OpenNotebook)
+                            // reopens in the universal editor preloaded with its
+                            // saved data — the editEntry route already dispatches
+                            // on the entry's own format.
+                            DropdownMenuItem(
+                                text = { Text("Edit entry") },
+                                onClick = {
+                                    menuExpanded = false
+                                    navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
+                            )
                         }
                         DropdownMenuItem(
                             text = { Text("Delete", color = MaterialTheme.colorScheme.error) },

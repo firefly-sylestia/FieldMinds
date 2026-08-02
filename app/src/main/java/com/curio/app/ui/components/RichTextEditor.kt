@@ -585,7 +585,13 @@ fun RichTextEditor(
         val fieldBlock: @Composable () -> Unit = {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    // Paper mode: a SQUARE shape. M3 Surface clips its
+                    // content to the shape, and in paper mode the field
+                    // padding is 0 — a rounded corner would slice the first
+                    // characters' tops (the "text hides behind the corner"
+                    // bug during entry). The paper card already owns the
+                    // margins; the field must not clip at all.
+                    shape = if (paper) RoundedCornerShape(0.dp) else RoundedCornerShape(14.dp),
                     color = if (paper) Color.Transparent else surface,
                     border = if (paper || !showFieldBorder) null
                             else BorderStroke(1.dp, accent.copy(alpha = 0.25f)),

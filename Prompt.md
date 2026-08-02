@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**Paper-corner clipping during entry fixed (both ruled + torn) + 'Edit entry' available on EVERY saved entry**
+
+### What was asked
+
+1. The paper boxes in both styles still have a corner issue — text hides behind the corner during entry.
+2. Add Edit to all saved entries.
+
+### What was changed
+
+- **Corner clipping — `RichTextEditor.kt`** — root cause: the field's inner `Surface(shape = RoundedCornerShape(14.dp))` CLIPS its content (M3 Surface clips to shape), and in paper mode the field padding is 0 — so the first characters sat at the rounded corner and their tops were sliced. The outer paper card already owns the margins (16/14 or 12/10), so paper mode now uses a SQUARE shape (`RoundedCornerShape(0.dp)`) — no clip at all. Non-paper mode (14dp + fieldPadding 14/12) unchanged.
+- **Edit everywhere — `EntryDetailScreen.kt`** — the overflow menu gained an `else` branch: every saved format (SoundBite, ReelNotes, Marginalia, FieldNotes, non-moodboard OpenNotebook) now shows "Edit entry" → `CurioRoutes.editEntry(id)`. The editEntry route already preloads ANY entry's data (SaveCaptureScreen dispatches on `editingEntry?.format` with `initialData = editingEntry?.captureData`), so all formats reopen with their saved content. Portfolio + mood-board branches keep priority.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified M3 Surface clip semantics (outer cards' own shapes don't clip text because their contentPadding clears the corners; the inner field Surface was the only offender), the if/else-if/else chain is balanced and can't shadow the Portfolio/mood-board branches (a Portfolio whose first section is a GalleryWall still routes to the Portfolio "Edit entry"), `editEntry` with `launchSingleTop` matches the existing pattern and preloads via the entry's own format.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
 **Torn-paper texture polish (softer, less grainy) + rich-text formatting finally survives typing AND save**
 
 ### What was asked
