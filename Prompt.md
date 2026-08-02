@@ -2,38 +2,39 @@
 
 ## Status: COMPLETED — committed and pushed to `revamp`
 
-"when it animated in shuffle the peek cards look weird like its cutt off or
-something, so fix that without chnaging the design."
+"restore the backgroud tint iin cabinet categories excpet the all one and dont
+make the button adat just the backgroud"
 
-## Root cause
+## Root cause / context
 
-During the Spin shuffle reel (v6.6 wipe), the peek cards' `AnimatedContent`
-slides content ±height/3, and `togetherWith` defaults to
-`SizeTransform(clip = true)` — the sliding card is hard-clipped at the
-card's own top/bottom edge, so the peek looks sliced in half mid-wipe. The
-same artifact existed on the hero content reel (title/tags/teaser, ±height/3
-and /4 slides). It only became visible after the v6.6 wipe went from 90ms
-linear to 200ms eased — long enough to actually see the clip.
+Commit f1ec0d19 ("cabinet filter chips get neutral inactive colors") had
+removed the tinted idle backgrounds because the old code used the SELECTED
+filter's `filterCat.categorySurface(...)` — tapping a category re-tinted ALL
+chips with that color. The fix isn't to keep chips flat neutral; it's to give
+each chip its OWN category tint so no tap re-tints its neighbors.
 
-## Fix (design untouched — motion identical, clipping only)
+## Change (`app/src/main/java/com/curio/app/features/cabinet/CabinetScreen.kt`)
 
-**`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
-- Added `using SizeTransform(clip = false)` to all four `AnimatedContent`
-  transitionSpec branches:
-  - Peek card shuffling (200/180ms)
-  - Peek card non-shuffling (240/200ms)
-  - Hero content shuffling (200/180ms)
-  - Hero content non-shuffling (260/240ms)
-- `import androidx.compose.animation.SizeTransform` added (alphabetical).
-- v6.8 comments added to both transitionSpecs explaining the unclip.
+- Category chips now pass
+  `chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))`
+  — each chip wears its own category's tinted surface when idle (per-`cat`,
+  not the old `filterCat`), and still pops to the full `cat.tint` when
+  selected (FilterChipLite `color = if (selected) tint else chipSurface`).
+- `ink` pinned to `MaterialTheme.colorScheme.onSurfaceVariant` for category
+  chips so the label text NEVER adapts to the category color — only the
+  background carries the tint (FilterChipLite `if (selected) ink else
+  onSurfaceVariant`).
+- The "All" chip is untouched (neutral surfaceVariant idle + primaryContainer
+  selected) — "except the all one".
+- Filter-chip-row comment rewritten to describe the new behavior.
 
-Unclipped overflow is benign: zIndex ordering (back peek 2 < front peek 5 <
-hero 10) keeps overlap clean, and the hero's outer rounded clip still
-bounds the card edge.
+`categorySurface` honors the Settings tint toggle: when off, chips fall back
+to the flat neutral surface (pre-change look), consistent with the rest of
+the app.
 
 ## Review
-- code-reviewer-deepseek-flash (x2): clean. All four branches verified,
-  `using` precedence correct (`+` binds tighter than infix, left-assoc →
-  SizeTransform attaches to the whole ContentTransform), single alphabetical
-  import, durations/easings/directions untouched.
+- code-reviewer-deepseek-flash: clean. Two minor non-blocking notes:
+  pre-existing unused `accent` param in FilterChipLite; idle-vs-selected is
+  a hue-vs-grey-blend + border-removal cue (matches intended pre-f1ec0d19
+  structure).
 - Per AGENTS.md no local Gradle build — CI validates compilation on push.

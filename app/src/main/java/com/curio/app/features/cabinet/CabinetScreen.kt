@@ -129,9 +129,11 @@ fun CabinetScreen(navController: NavController) {
         }
 
         // ── Filter chip row ─────────────────────────────────────────────────
-        // Inactive chips wear a neutral theme surface — NOT the selected
-        // filter's tint — so tapping a category never re-tints the other
-        // options. Each chip keeps its own category color only when active.
+        // Each category chip wears its OWN category tint in the background
+        // (soft idle surface, brighter when active) — never the selected
+        // filter's color, so tapping one chip can't re-tint the others.
+        // The label text stays neutral in every state; only the background
+        // carries the color. "All" keeps its plain neutral treatment.
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -154,8 +156,11 @@ fun CabinetScreen(navController: NavController) {
                     label = cat.displayName,
                     accent = cat.accent,
                     tint = cat.tint,
-                    ink = cat.categoryInk(),
-                    chipSurface = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                    // The button (label text) never adapts to the category —
+                    // it stays on the neutral theme ink in every state, so
+                    // only the background carries the tint.
+                    ink = MaterialTheme.colorScheme.onSurfaceVariant,
+                    chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
                     chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     selected = selectedFilter == cat.id,
                     onClick = { selectedFilter = cat.id }
