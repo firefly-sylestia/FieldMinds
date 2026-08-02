@@ -479,7 +479,7 @@ fun SaveCaptureScreen(
     // ── Confetti + ember celebration ────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            colors = listOf(cat.themedAccent(), if (tintWash) cat.tint else cat.themedAccent(), CurioColors.ButterYellow),
+            colors = listOf(cat.themedAccent(), if (AppPreferences.tintWashEffective()) cat.tint else cat.themedAccent(), CurioColors.ButterYellow),
             trigger = confettiTrigger,
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
