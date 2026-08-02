@@ -123,6 +123,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.categorySurfaceMoodBoard
 import com.curio.app.ui.theme.themedAccent
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.glyph
@@ -1506,7 +1507,14 @@ private fun RenderQuoteCards(
                     }
                     Surface(
                         onClick = {
-                            if (saved) {
+                            // Re-read the LATEST saved state on tap instead of
+                            // trusting the composition-time snapshot, so the
+                            // toggle always flips exactly ONE card's bookmark
+                            // (each card is keyed by entryId + its own text).
+                            val isSavedNow = AppPreferences.savedQuotesState.any {
+                                it.entryId == entryId && it.quoteText == quote
+                            }
+                            if (isSavedNow) {
                                 AppPreferences.removeSavedQuote(context, entryId, quote)
                             } else {
                                 AppPreferences.saveQuote(
@@ -1601,14 +1609,16 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
         val boardSeed = remember(entry.id) { entry.id.hashCode() }
         Surface(
             shape = RoundedCornerShape(28.dp),
-            // The saved board wears an OPAQUE category-tinted card surface
-            // ([categorySurface] — the same card language as the rest of the
-            // page, honoring the Settings tint toggle). The old 20%-alpha
-            // [CurioCategory.tint] let the page-level watermark glyphs bleed
-            // through and collide with the board's own seeded glyph pattern
-            // (two overlapping watermarks); an opaque surface hides the page
-            // watermark so only the board's [CurioMoodBoardBackdrop] shows.
-            color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        // The saved board wears an OPAQUE category-tinted card surface
+        // ([categorySurfaceMoodBoard] — the same card language as the rest
+        // of the page, honoring the manual Settings tint toggle but NOT the
+        // AMOLED theme style, so the board keeps its tint on pure black).
+        // The old 20%-alpha [CurioCategory.tint] let the page-level
+        // watermark glyphs bleed through and collide with the board's own
+        // seeded glyph pattern (two overlapping watermarks); an opaque
+        // surface hides the page watermark so only the board's
+        // [CurioMoodBoardBackdrop] shows.
+        color = category.categorySurfaceMoodBoard(),
             shadowElevation = 0.dp,
             // Faint category rule — the saved board sits on the tinted page,
             // so a slim theme-aware border (accent in light, light twin in

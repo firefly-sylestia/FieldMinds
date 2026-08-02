@@ -418,7 +418,10 @@ private fun MoodBoardCanvas(
         // The board background wears the category tint so the collage reads
         // as a tinted surface (same wash language as the page around it);
         // with the tint setting off it returns to a plain transparent board.
-        color = if (AppPreferences.tintWashEffective()) tint else Color.Transparent,
+        // The AMOLED theme style does NOT black this out — the mood board's
+        // tinted canvas is its identity, so only the manual Settings toggle
+        // turns it off (tintWashEnabledState, not tintWashEffective).
+        color = if (AppPreferences.tintWashEnabledState) tint else Color.Transparent,
         tonalElevation = 0.dp,
         // Faint accent rule — the board sits on the tinted page, so a slim
         // category-colored border keeps it from visually blending into the

@@ -80,8 +80,14 @@ fun CurioEntryCard(
         },
         modifier = modifier.scale(pressScale),
         shape = RoundedCornerShape(20.dp),
-        color = cat.categorySurface(MaterialTheme.colorScheme.surface),
-        border = cat.categoryBorder(),
+        // surfaceContainerHigh (not plain surface): in the AMOLED style
+        // `surface` is pure black, which made the whole Cabinet grid of
+        // cards invisible on the black page. The high container step keeps
+        // a faint grey lift so cards read as boxes in every theme.
+        color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = cat.categoryBorder(
+            fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        ),
         shadowElevation = 0.dp,
         tonalElevation = 1.dp
     ) {

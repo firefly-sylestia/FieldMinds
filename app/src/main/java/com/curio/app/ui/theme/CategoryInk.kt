@@ -113,6 +113,26 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
 }
 
 /**
+ * The mood board's tinted canvas — same resolution as [categorySurface]
+ * but NOT gated by the theme STYLE: the AMOLED style blacks out category
+ * tints app-wide, and the mood board's tinted surface is its identity, so
+ * it keeps wearing the category mid-tone even on the pure-black style.
+ * The manual Settings tint toggle is still honored — turning it off here
+ * returns [base] unchanged just like [categorySurface].
+ */
+@Composable
+fun CurioCategory.categorySurfaceMoodBoard(base: Color = MaterialTheme.colorScheme.surfaceContainerHigh): Color {
+    if (!AppPreferences.tintWashEnabledState) return base
+    return if (isCurioDarkTheme()) {
+        val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
+        val midTone = tuning.resolveMidTone(accent, lightAccent)
+        lerp(base, midTone, tuning.blendFraction + 0.30f)
+    } else {
+        lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
+    }
+}
+
+/**
  * Theme-aware surface color for SMALL CATEGORY CHIPS (Cabinet filter pills).
  *
  * Chips sit directly on the washed page, so they need to read as distinct

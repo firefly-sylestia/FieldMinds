@@ -26,6 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
@@ -36,6 +37,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -144,6 +146,9 @@ fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
     val displayName = remember { AppPreferences.getDisplayName(context) }
     var selectedCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf<CurioCategory?>(null) }
+    // Saved-shelf unsave confirmation — set when the user taps the remove
+    // bookmark on a saved quote row; the dialog confirms before removal.
+    var pendingUnsave by remember { mutableStateOf<SavedQuote?>(null) }
     val streakDays = StreakTracker.getStreak(context)
     val reminderEnabled = AppPreferences.reminderEnabledState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -534,9 +539,7 @@ fun HomeScreen(navController: NavController) {
                                         launchSingleTop = true
                                     }
                                 },
-                                onRemove = {
-                                    AppPreferences.removeSavedQuote(context, quote.entryId, quote.quoteText)
-                                }
+                                onRemove = { pendingUnsave = quote }
                             )
                         }
                         pinnedTopics.forEach { pinned ->
@@ -670,6 +673,24 @@ fun HomeScreen(navController: NavController) {
             }
         }
     }
+
+    // ── Unsave-quote confirmation — never remove a bookmark silently ──
+    pendingUnsave?.let { quote ->
+        AlertDialog(
+            onDismissRequest = { pendingUnsave = null },
+            title = { Text("Remove saved quote?") },
+            text = { Text("This removes \u201C${quote.quoteText}\u201D from your Saved shelf. The entry itself stays in the Cabinet.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    AppPreferences.removeSavedQuote(context, quote.entryId, quote.quoteText)
+                    pendingUnsave = null
+                }) { Text("Remove") }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingUnsave = null }) { Text("Keep") }
+            }
+        )
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -779,7 +800,10 @@ private fun SavedQuoteRow(
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surface,
+        // surfaceContainerHigh + hairline: in the AMOLED style `surface` is
+        // pure black on a pure-black page, so the shelf rows vanished.
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -842,7 +866,10 @@ private fun PinnedTopicRow(
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surface,
+        // Same AMOLED-visibility treatment as [SavedQuoteRow]: a faint
+        // grey lift + hairline so rows read on the pure-black page.
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
