@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Note-paper polish: torn pages get the rigid-surface sheen, coffee stains and the folded corner redone to actually look good**
+
+### What was asked
+
+1. The torn pages don't have the rigid-surface effect in the background.
+2. The coffee and folded note-paper styles look bad — fix them properly.
+
+### What was changed
+
+- **`PaperCard.kt`** — three fixes:
+  - NEW shared `rigidCardSheen()` brush (White 0.10 → transparent → Black 0.06, slightly stronger than the old inline 0.08/0.05). `PaperCard` keeps it as the inner Box background; `TornPaperCard`'s Box background was REMOVED and the sheen is now drawn as the LAST `drawRect` inside its Canvas — ON TOP of the grain texture (and any torn ruled lines). Root cause: under the grain, the vertical light gradient was visually flattened, so torn slips looked flat while ruled pages showed the sheen. The sheen brush is hoisted into a `remember` in the torn composable so it isn't reallocated per frame (this file's per-frame history).
+  - `drawCoffeeStains` rewritten from 5 near-invisible 7–12dp blotches at 5–11% alpha into real dried-cup rings: 4 main stains (14–24dp radius, seeded size fractions near edges/corners, writing area clean) each with a faint radial wet body, a classic darker rim ring (Stroke 2.0–3.6dp at 14–24% warm coffee brown 0xFF6B4226), a second fainter inner ring on alternating stains, and 3 satellite drip dots around alternating stains (1.2–2.6dp, canvas-bounded).
+  - `drawFoldFlap` rewritten (param `size` → `canvasSize` per the naming rule): the flap is no longer a flat 7%-darker triangle (effectively invisible) — it now wears a `linearGradient` from lerp(surface, black, 0.20) at the crease to lerp(surface, black, 0.05) at the tip (the paper back catching light), a soft 2dp drop-shadow wedge mirrors it toward the page interior (alpha 0.10), and the crease gets a soft 2.6dp halo plus the crisp 1dp fold line (lerp(paperEdge, black, 0.32)). The call site is positional so the rename is safe.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass with one applied improvement — hoisted the torn-canvas sheen brush into `remember { rigidCardSheen() }` (the torn canvas redraws every frame and per-frame Brush allocation was an earlier lag source in this file). Verified `DrawScope.drawPath(path, brush)` / `drawCircle(brush)` overloads exist in this Compose version, `rigidCardSheen()` is not @Composable so it is safe inside draw lambdas, no unused imports (background/Brush/Stroke/lerp/cos/sin all still used), comment-aware paren check balances exactly (422/422), the fold shadow wedge geometry stays inside the card on the page side of the crease diagonal, and the torn canvas order (grain → rules → sheen) keeps the ruled cadence intact.
+
+### Follow-ups / notes
+
+- All six paper styles share the one component set, so the fixes apply in the editor AND the saved entry views (NotePaperCard dispatch) with no call-site changes.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **AMOLED + Material theme styles — Settings → Appearance, with the default Curio theme untouched**
 
 ### What was asked
