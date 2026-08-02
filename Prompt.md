@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**CI fix: confetti block in SaveCaptureScreen referenced `tintWash` out of scope**
+
+### What was asked
+
+CI failed: `SaveCaptureScreen.kt:482:53 Unresolved reference 'tintWash'` after the AMOLED/Material theme commit.
+
+### What was changed
+
+- **`SaveCaptureScreen.kt`** — root cause: the topic-strip `val tintWash = AppPreferences.tintWashEffective()` is a LOCAL declared inside the top-bar composable (line 280, scope ends ~477), but the confetti burst lives in the main `SaveCaptureScreen` body (line 482) and read the out-of-scope local. Fixed by calling `AppPreferences.tintWashEffective()` directly there, matching the file's other call sites (lines 645/757/768/774). Remaining bare `tintWash` refs are all inside the declaring function.
+
+### Review
+
+Trivial one-line fix; verified remaining refs are in-scope and braces balance.
+
+### Follow-ups / notes
+
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Agent rule: when ADDING a new feature, ask the user whether it should be toggleable or always-on (refinements/fixes ship without the ask)**
 
 ### What was asked
