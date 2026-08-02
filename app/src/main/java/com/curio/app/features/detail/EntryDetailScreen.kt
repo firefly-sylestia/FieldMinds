@@ -194,11 +194,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .verticalScroll(rememberScrollState())
         ) {
         // ── Expressive hero banner — one composed card: category glyph
-        // watermark with the topic title UNDER it, both on the gradient.
+        // watermark with the topic title UNDER it, both on the gradient,
+        // plus a frosted (blurred-glass) date + type bar below the title.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(360.dp)
+                .height(392.dp)
                 .background(
                     Brush.verticalGradient(CurioGradients.cardGradient(cat.themedAccent()))
                 ),
@@ -225,6 +226,46 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(Modifier.height(18.dp))
+
+                // ── Frosted date + type bar — the meta card's date and
+                // type segments moved into the hero, on translucent glass
+                // so the gradient glows through behind them. The date's
+                // label reads "Date" right under the value.
+                val heroTypeLabel = if (resolvedEntry.captureData is CaptureData.Portfolio)
+                    "Portfolio" else resolvedEntry.format.shortName
+                val heroTypeGlyph = if (resolvedEntry.captureData is CaptureData.Portfolio)
+                    CurioIcons.Inventory2 else formatGlyph(resolvedEntry.format)
+                Surface(
+                    shape = RoundedCornerShape(18.dp),
+                    // 0.20 fill keeps white-on-glass readable even where the
+                    // gradient lightens toward the theme background.
+                    color = Color.White.copy(alpha = 0.20f),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.34f)),
+                    shadowElevation = 0.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        FrostedSegment(
+                            icon = CurioIcons.CalendarToday,
+                            title = formatCapturedDate(resolvedEntry.capturedAtMillis),
+                            subtitle = "Date",
+                            modifier = Modifier.weight(1f)
+                        )
+                        VerticalDivider(
+                            modifier = Modifier.height(30.dp),
+                            color = Color.White.copy(alpha = 0.34f)
+                        )
+                        FrostedSegment(
+                            icon = heroTypeGlyph,
+                            title = heroTypeLabel,
+                            subtitle = "Type",
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
             }
 
             Row(
@@ -443,10 +484,10 @@ private fun formatCapturedDate(millis: Long): String =
 
 /**
  * Theme-aware entry meta card — sits right below the "Captured today ·
- * 3:42 PM" line and above the format body. Segments: date & time, mood
- * (journals only, with its icon), and the entry type — 3 segments when a
- * mood exists, 2 otherwise. Plain theme surfaces only (no category tint),
- * so it stays neutral in every theme style (Curio / AMOLED / Material).
+ * 3:42 PM" line and above the format body. The date and type segments now
+ * live in the hero's frosted bar, so this card keeps ONLY the mood (with
+ * its icon) and hides entirely when there's no mood. Plain theme surface
+ * (no category tint), so it stays neutral in every theme style.
  */
 @Composable
 private fun EntryMetaCard(entry: CurioEntry) {
@@ -467,11 +508,7 @@ private fun EntryMetaCard(entry: CurioEntry) {
         }
         else -> null
     }
-    val timeLabel = formatCapturedTime(entry.capturedAtMillis)
-    val typeLabel = if (entry.captureData is CaptureData.Portfolio) "Portfolio"
-                    else entry.format.shortName
-    val typeGlyph = if (entry.captureData is CaptureData.Portfolio) CurioIcons.Inventory2
-                    else formatGlyph(entry.format)
+    if (mood == null) return
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -483,25 +520,48 @@ private fun EntryMetaCard(entry: CurioEntry) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             MetaSegment(
-                icon = CurioIcons.CalendarToday,
-                title = formatCapturedDate(entry.capturedAtMillis),
-                subtitle = timeLabel
-            )
-            MetaDivider()
-            if (mood != null) {
-                MetaSegment(
-                    icon = mood.glyph,
-                    title = mood.label,
-                    subtitle = "Mood"
-                )
-                MetaDivider()
-            }
-            MetaSegment(
-                icon = typeGlyph,
-                title = typeLabel,
-                subtitle = "Type"
+                icon = mood.glyph,
+                title = mood.label,
+                subtitle = "Mood"
             )
         }
+    }
+}
+
+/**
+ * One half of the hero's frosted date/type bar — icon over value over a
+ * "Date"/"Type" label, all in white so it reads on the gradient glass.
+ */
+@Composable
+private fun FrostedSegment(
+    icon: String,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        CurioIcon(
+            name = icon,
+            contentDescription = null,
+            tint = Color.White.copy(alpha = 0.95f),
+            size = 18.dp
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+            color = Color.White,
+            maxLines = 1,
+            softWrap = false
+        )
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.labelSmall,
+            color = Color.White.copy(alpha = 0.85f)
+        )
     }
 }
 
@@ -536,15 +596,6 @@ private fun RowScope.MetaSegment(icon: String, title: String, subtitle: String) 
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
-}
-
-/** Short vertical divider between [EntryMetaCard] segments. */
-@Composable
-private fun RowScope.MetaDivider() {
-    VerticalDivider(
-        modifier = Modifier.height(36.dp),
-        color = MaterialTheme.colorScheme.outlineVariant
-    )
 }
 
 @Composable
