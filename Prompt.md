@@ -2,6 +2,15 @@
 
 ## Latest Request (COMPLETED)
 
+**CI fix: HomeScreen.kt compile errors**
+
+- `unexploredTopics` (and `exploredTopics`) were declared inside the "Recently explored" section's Column but the "Recently unexplored" section referenced them outside that scope — hoisted both declarations to the outer scrollable Column (shared scope for sections 7 + 7b).
+- `ExploreTopicRow` called `CurioForwardArrow(label = …)` but the component's parameter is `contentDescription` — renamed the named arg.
+
+Pushed; CI re-validates on push.
+
+## Latest Request (COMPLETED)
+
 **'Currently exploring' card on Home (live elapsed time + Done / Keep exploring)**
 
 - HomeScreen: when `ExploreSessionStore.activeSessionState` is non-null, a new `CurrentlyExploringCard` renders between the stats strip and Categories — accent-bordered card with Timer glyph, "Currently exploring" label, topic name, and a live elapsed line ticking every second (remember(startMillis) + LaunchedEffect 1s loop, auto-cancelled on dismiss).

@@ -557,6 +557,8 @@ fun HomeScreen(navController: NavController) {
             Spacer(Modifier.height(20.dp))
 
             // ── 7. Recently explored — renders all at once (no stagger) ──
+            val exploredTopics = ExploreSessionStore.recentlyExploredState
+            val unexploredTopics = ExploreSessionStore.recentlyUnexploredState
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -583,9 +585,6 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
                 Spacer(Modifier.height(10.dp))
-
-                val exploredTopics = ExploreSessionStore.recentlyExploredState
-                val unexploredTopics = ExploreSessionStore.recentlyUnexploredState
 
                 if (recentEntries.isEmpty() && exploredTopics.isEmpty()) {
                     FirstTimeEmpty(
@@ -1320,7 +1319,7 @@ private fun ExploreTopicRow(
                 )
             }
             CurioForwardArrow(
-                label = subtitle,
+                contentDescription = subtitle,
                 tint = accent,
                 modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
             )
