@@ -205,6 +205,20 @@ import kotlin.random.Random
  * 21. **Gentler hero bounce** — smaller per-tick kick (1.035), half the
  *     tilt (40° factor), a softer hop, and a lower landing rest scale so
  *     the shuffle pulses instead of slamming the card.
+ *
+ * v6.6 changes:
+ * 22. **Calm reel cadence** — the spin window lengthens slightly
+ *     (2.8–3.6s) and the tick interval glides from ~200ms to ~520ms on a
+ *     plain sine ease instead of the old squared-sine whip (105→400ms),
+ *     so the wheel reads as a graceful reel slowing down.
+ * 23. **Hero content reels** — the ticket's title/tags/teaser now animate
+ *     through an eased upward slide + fade on every tick (mimicking a
+ *     background card rising to the front) instead of snapping instantly.
+ * 24. **Softer tick pulse** — per-tick kick drops to 1.02 on a heavily
+ *     damped low-stiffness spring, the rock halves to a 16° tilt, and the
+ *     landing settle uses the controlled Deliberate spring (no Elastic
+ *     bounce). Peek wipes switch from 90ms linear blurs to ~200ms
+ *     FastOutSlowInEasing slides.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -475,15 +489,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val elapsed = System.currentTimeMillis() - start
             if (elapsed >= durationMs) break
             val progress = (elapsed.toFloat() / durationMs).coerceIn(0f, 1f)
-            // Sharper sinusoidal ease-out: squaring progress inside the sine
-            // keeps the ticks fast through most of the spin, then the
-            // deceleration kicks in hard at the tail — a snappy whip instead
-            // of a long drawn-out slowdown. The ~105ms floor matches the
-            // 90ms deck slide so even the fastest ticks complete their wipe
-            // (a pure 90ms blur was unreadable; slightly slower = smoother).
-            // Intervals ~105ms -> ~400ms.
-            val eased = sin(progress * progress * Math.PI.toFloat() / 2f)
-            val interval = (105L + (295L * eased).toLong()).coerceAtMost(400L)
+            // Smooth reel deceleration: a plain sine ease (no squaring) so
+            // the wheel starts at a readable cadence and glides gently to a
+            // stop — a graceful slow-down instead of a snappy whip. The
+            // ~200ms floor keeps even the fastest early ticks readable and
+            // matches the 200ms deck wipe so every transition completes
+            // before the next tick lands. Intervals ~200ms -> ~520ms.
+            val eased = sin(progress * Math.PI.toFloat() / 2f)
+            val interval = (200L + (320L * eased).toLong()).coerceAtMost(520L)
             cycleIndex = ++tick
             // Slot-machine ratchet: haptic intensity escalates as the wheel
             // decelerates — a light tick while blurring fast (fast ticks
@@ -1320,10 +1333,11 @@ private fun HeroTicketCard(
     LaunchedEffect(topic?.id, shuffling) {
         if (!shuffling || topic == null) return@LaunchedEffect
         tickDir = -tickDir
-        // v6.5 — gentler kick: the card pulses instead of slamming. A
-        // slightly more damped spring keeps the overshoot tiny.
-        tickPulse.snapTo(1.035f)
-        tickPulse.animateTo(1f, spring(dampingRatio = 0.7f, stiffness = 1000f))
+        // v6.6 — calm breath instead of a kick: the card lifts barely
+        // (1.02) and glides back on a heavily damped, low-stiffness
+        // spring, so each tick reads as a soft pulse, never a slam.
+        tickPulse.snapTo(1.02f)
+        tickPulse.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = 420f))
     }
 
     // ── Category switch — one welcoming bounce as the deck re-fans to the
@@ -1347,7 +1361,7 @@ private fun HeroTicketCard(
     LaunchedEffect(landed) {
         if (landed) {
             settleScale.snapTo(tickPulse.value)
-            settleY.snapTo(-(tickPulse.value - 1f) * 18f)
+            settleY.snapTo(-(tickPulse.value - 1f) * 12f)
         } else {
             settleScale.snapTo(1f)
             settleY.snapTo(0f)
@@ -1355,12 +1369,15 @@ private fun HeroTicketCard(
     }
 
     // Settle scale + vertical position in parallel (separate coroutines)
-    // so the card lands as one unified bounce, not two sequential springs.
+    // so the card lands as one unified glide, not two sequential springs.
+    // v6.6 — the landing settle uses the controlled Deliberate spring (85%
+    // damping, no bounce) instead of the extreme Elastic overshoot, so the
+    // wheel's stop reads as a confident rest, not a violent bounce.
     LaunchedEffect(landed) {
-        if (landed) settleScale.animateTo(LandedRestScale, CurioMotion.Springs.Elastic)
+        if (landed) settleScale.animateTo(LandedRestScale, CurioMotion.Springs.Deliberate)
     }
     LaunchedEffect(landed) {
-        if (landed) settleY.animateTo(0f, CurioMotion.Springs.Elastic)
+        if (landed) settleY.animateTo(0f, CurioMotion.Springs.Deliberate)
     }
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
@@ -1374,8 +1391,11 @@ private fun HeroTicketCard(
                 // landing handoff snaps to whatever value it left off at.
                 scaleX = if (landed) settleScale.value else tickPulse.value
                 scaleY = if (landed) settleScale.value else tickPulse.value
-                rotationZ = if (shuffling) (tickPulse.value - 1f) * 40f * tickDir else 0f
-                translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 18f
+                // v6.6 — the per-tick rock is a gentle tilt now (16° vs the
+                // old 40°) so the card breathes instead of whipping side to
+                // side, and the vertical hop shrinks to match.
+                rotationZ = if (shuffling) (tickPulse.value - 1f) * 16f * tickDir else 0f
+                translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 12f
             }
             .zIndex(10f)
             .then(
@@ -1459,10 +1479,44 @@ private fun HeroTicketCard(
                             }
                         }
 
-                        // Name + tags + teaser
+                        // Name + tags + teaser — v6.6: reels with the deck.
+                        // Previously the hero content snapped instantly on
+                        // every tick; now it glides like a card rising from
+                        // the back of the deck to the front — incoming
+                        // content slides up from the lower edge while the
+                        // outgoing exits upward, eased so each tick is a
+                        // readable glide instead of a hard cut.
+                        AnimatedContent(
+                            targetState = topic,
+                            transitionSpec = {
+                                if (shuffling) {
+                                    // 200/180ms matches the peek wipes and
+                                    // the 200ms tick floor so even the
+                                    // fastest early ticks complete the reel.
+                                    (slideInVertically(
+                                        animationSpec = tween(200, easing = FastOutSlowInEasing)
+                                    ) { height -> height / 3 } +
+                                        fadeIn(animationSpec = tween(200, easing = FastOutSlowInEasing))) togetherWith
+                                    (slideOutVertically(
+                                        animationSpec = tween(180, easing = FastOutSlowInEasing)
+                                    ) { height -> -height / 3 } +
+                                        fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing)))
+                                } else {
+                                    (slideInVertically(
+                                        animationSpec = tween(260, easing = FastOutSlowInEasing)
+                                    ) { height -> height / 4 } +
+                                        fadeIn(animationSpec = tween(260, easing = FastOutSlowInEasing))) togetherWith
+                                    (slideOutVertically(
+                                        animationSpec = tween(240, easing = FastOutSlowInEasing)
+                                    ) { height -> -height / 4 } +
+                                        fadeOut(animationSpec = tween(240, easing = FastOutSlowInEasing)))
+                                }
+                            },
+                            label = "heroContentReel"
+                        ) { currentTopic ->
                         Column {
                             Text(
-                                text = topic?.name ?: "Ready when you are",
+                                text = currentTopic?.name ?: "Ready when you are",
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.ExtraBold,
                                     lineHeight = 34.sp
@@ -1472,10 +1526,10 @@ private fun HeroTicketCard(
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            if (topic != null && topic.tags.isNotEmpty()) {
+                            if (currentTopic != null && currentTopic.tags.isNotEmpty()) {
                                 Spacer(Modifier.height(10.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                    topic.tags.take(2).forEach { tag ->
+                                    currentTopic.tags.take(2).forEach { tag ->
                                         Surface(
                                             shape = RoundedCornerShape(50),
                                 color = Color.White.copy(alpha = 0.22f)
@@ -1490,16 +1544,17 @@ private fun HeroTicketCard(
                                     }
                                 }
                             }
-                            if (topic != null && landed) {
+                            if (currentTopic != null && landed) {
                                 Spacer(Modifier.height(8.dp))
                                 Text(
-                                    text = topic.teaser,
+                                    text = currentTopic.teaser,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = Color.White.copy(alpha = 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
+                        }
                         }
 
                         // Tap hint — "tap to spin" idle, "tap to open" once
@@ -1599,19 +1654,20 @@ private fun PeekCard(
             targetState = topic,
             transitionSpec = {
                 if (shuffling) {
-                    // Rapid cycling — short directional slide + fade so the
-                    // deck visibly REELS past on every tick instead of a
-                    // blurry crossfade. ~90ms matches the fastest tick
-                    // cadence so the wipe completes even on early ticks;
-                    // the slower deceleration ticks read as clean slides.
+                    // v6.6 — smooth reel wipe: eased directional slide + fade
+                    // so the deck glides past on every tick instead of a
+                    // 90ms linear blur. ~200ms matches the new tick floor
+                    // (200ms) so even the fastest early ticks complete their
+                    // wipe; the slower deceleration ticks read as full,
+                    // graceful slides.
                     slideInVertically(
-                        animationSpec = tween(90, easing = LinearEasing)
+                        animationSpec = tween(200, easing = FastOutSlowInEasing)
                     ) { height -> if (isTop) -height / 3 else height / 3 } +
-                    fadeIn(animationSpec = tween(90, easing = LinearEasing)) togetherWith
+                    fadeIn(animationSpec = tween(200, easing = FastOutSlowInEasing)) togetherWith
                     slideOutVertically(
-                        animationSpec = tween(80, easing = LinearEasing)
+                        animationSpec = tween(180, easing = FastOutSlowInEasing)
                     ) { height -> if (isTop) height / 3 else -height / 3 } +
-                    fadeOut(animationSpec = tween(80, easing = LinearEasing))
+                    fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing))
                 } else {
                     slideInVertically(
                         animationSpec = tween(240, easing = FastOutSlowInEasing)
