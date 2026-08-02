@@ -47,10 +47,7 @@ fun ReelNotesFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.ReelNotes? = null,
-    /** Note-paper style — [NotePaperStyle.TORN] renders the review field as
-     *  a torn note instead of a ruled notebook page. */
-    paperStyle: NotePaperStyle = NotePaperStyle.RULED
+    initialData: CaptureData.ReelNotes? = null
 ) {
     val context = LocalContext.current
     // Edit mode: restore rating / review / images so re-saving an entry
@@ -60,6 +57,11 @@ fun ReelNotesFormat(
     // Rich-text formatting for the review — legacy entries lack it (Gson →
     // null), guard with orEmpty().
     var reviewSpans by remember(initialData) { mutableStateOf(initialData?.reviewSpans.orEmpty()) }
+    // Note-paper style for the review box — legacy entries lack the field
+    // (Gson → null), fall back to the take-level paperStyle → RULED.
+    var reviewStyle by remember(initialData) {
+        mutableStateOf(initialData?.reviewStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -79,7 +81,7 @@ fun ReelNotesFormat(
     // Key on every input, not just canSave: rating, review text and images
     // added AFTER the first character must re-emit, or saving would persist
     // stale data (text/rating/images silently dropped from the saved entry).
-    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris, paperStyle) {
+    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.ReelNotes(
@@ -88,7 +90,9 @@ fun ReelNotesFormat(
                 imageCount = imageUris.size,
                 imageUris = imageUris,
                 reviewSpans = reviewSpans,
-                paperStyle = paperStyle
+                reviewStyle = reviewStyle,
+                // Legacy fallback — mirror the primary field's style.
+                paperStyle = reviewStyle
             )
             else null
         )
@@ -133,7 +137,8 @@ fun ReelNotesFormat(
             ink = paperInk(),
             accent = MaterialTheme.colorScheme.tertiary,
             paper = true,
-            torn = paperStyle == NotePaperStyle.TORN,
+            paperStyle = reviewStyle,
+            onPaperStyleChange = { reviewStyle = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
 

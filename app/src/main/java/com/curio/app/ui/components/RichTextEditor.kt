@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import kotlin.math.roundToInt
+import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -279,15 +280,17 @@ fun RichTextEditor(
     /** Draws the field's hairline border — off when the editor sits on paper. */
     showFieldBorder: Boolean = true,
     highlightColor: Color = paperHighlight(),
-    /** Renders the field on a note-paper [PaperCard] (theme-aware cream /
-     *  toned paper with ruled lines) with the toolbar OUTSIDE the card, so
-     *  the ruled lines line up under the field text while typing — matching
-     *  the saved detail view's paper pages. Default false keeps the plain
-     *  surface field. */
+    /** Renders the field on a note-paper card with the toolbar OUTSIDE the
+     *  card, so the ruled lines line up under the field text while typing —
+     *  matching the saved detail view's paper pages. [paperStyle] chooses
+     *  the slip: [NotePaperStyle.RULED] classic ruled page,
+     *  [NotePaperStyle.TORN] torn note, [NotePaperStyle.TORN_RULED] torn
+     *  note with ruled lines. When [onPaperStyleChange] is provided, a
+     *  compact Ruled/Torn/rules toggle appears in this field's own toolbar.
+     *  Default false keeps the plain surface field. */
     paper: Boolean = false,
-    /** When [paper] is true, renders the torn-note slip ([TornPaperCard]) —
-     *  jagged ripped edges, no ruled lines — instead of the ruled page. */
-    torn: Boolean = false,
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED,
+    onPaperStyleChange: (NotePaperStyle) -> Unit = {},
     /** Content inset of the paper card when [paper] is true. */
     paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
 ) {
@@ -446,21 +449,50 @@ fun RichTextEditor(
     Column(modifier = modifier) {
         // ── Toolbar ─────────────────────────────────────────────────────
         if (toolbarMode == RichTextToolbarMode.MAIN) {
-            FormatToolbar(
-                boldActive = hasFlagAt(RichFlag.BOLD),
-                italicActive = hasFlagAt(RichFlag.ITALIC),
-                highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                accent = accent,
-                enabled = enabled,
-                onBold = { applyFlag(RichFlag.BOLD) },
-                onItalic = { applyFlag(RichFlag.ITALIC) },
-                onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
-            )
+            // The paper-style toggle rides the same row as the format tools
+            // (per text box — never a section-level row above the field).
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                FormatToolbar(
+                    boldActive = hasFlagAt(RichFlag.BOLD),
+                    italicActive = hasFlagAt(RichFlag.ITALIC),
+                    highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
+                    accent = accent,
+                    enabled = enabled,
+                    onBold = { applyFlag(RichFlag.BOLD) },
+                    onItalic = { applyFlag(RichFlag.ITALIC) },
+                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) }
+                )
+                if (paper) {
+                    NotePaperStyleToggle(
+                        style = paperStyle,
+                        onStyleChange = onPaperStyleChange,
+                        accent = accent,
+                        enabled = enabled
+                    )
+                }
+            }
         } else {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = if (paper) Arrangement.SpaceBetween else Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                if (paper) {
+                    // Per-field paper toggle stays visible without expanding
+                    // the format row (SoundBite note, ReelNotes, Field Notes
+                    // sections use TOGGLE mode).
+                    NotePaperStyleToggle(
+                        style = paperStyle,
+                        onStyleChange = onPaperStyleChange,
+                        accent = accent,
+                        enabled = enabled,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
                 Surface(
                     onClick = { toolbarExpanded = !toolbarExpanded },
                     shape = RoundedCornerShape(8.dp),
@@ -577,20 +609,29 @@ fun RichTextEditor(
                 )
             }
         }
-        if (paper && torn) {
-            TornPaperCard(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = paperContentPadding
-            ) {
-                fieldBlock()
-            }
-        } else if (paper) {
-            PaperCard(
-                modifier = Modifier.fillMaxWidth(),
-                ruled = true,
-                contentPadding = paperContentPadding
-            ) {
-                fieldBlock()
+        if (paper) {
+            when (paperStyle) {
+                NotePaperStyle.RULED -> PaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = true,
+                    contentPadding = paperContentPadding
+                ) {
+                    fieldBlock()
+                }
+                NotePaperStyle.TORN -> TornPaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = false,
+                    contentPadding = paperContentPadding
+                ) {
+                    fieldBlock()
+                }
+                NotePaperStyle.TORN_RULED -> TornPaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = true,
+                    contentPadding = paperContentPadding
+                ) {
+                    fieldBlock()
+                }
             }
         } else {
             fieldBlock()

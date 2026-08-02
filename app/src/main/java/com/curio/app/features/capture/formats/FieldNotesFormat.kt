@@ -60,10 +60,7 @@ fun FieldNotesFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.FieldNotes? = null,
-    /** Note-paper style — [NotePaperStyle.TORN] renders the three section
-     *  fields as torn notes instead of ruled notebook pages. */
-    paperStyle: NotePaperStyle = NotePaperStyle.RULED
+    initialData: CaptureData.FieldNotes? = null
 ) {
     val context = LocalContext.current
     // Edit mode: restore the three sections + photos so re-saving preserves
@@ -76,6 +73,18 @@ fun FieldNotesFormat(
     var observedSpans by remember(initialData) { mutableStateOf(initialData?.observedSpans.orEmpty()) }
     var surprisedSpans by remember(initialData) { mutableStateOf(initialData?.surprisedSpans.orEmpty()) }
     var learnNextSpans by remember(initialData) { mutableStateOf(initialData?.learnNextSpans.orEmpty()) }
+    // Note-paper style per section — each of the three field-journal boxes
+    // wears its own choice. Legacy entries lack the per-field fields (Gson
+    // → null), fall back to the take-level paperStyle → RULED.
+    var observedStyle by remember(initialData) {
+        mutableStateOf(initialData?.observedStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    var surprisedStyle by remember(initialData) {
+        mutableStateOf(initialData?.surprisedStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    var learnNextStyle by remember(initialData) {
+        mutableStateOf(initialData?.learnNextStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -99,7 +108,10 @@ fun FieldNotesFormat(
                   surprised.isNotBlank() ||
                   learnNext.isNotBlank() ||
                   imageUris.isNotEmpty()
-    LaunchedEffect(canSave, observed, observedSpans, surprised, surprisedSpans, learnNext, learnNextSpans, imageUris, paperStyle) {
+    LaunchedEffect(
+        canSave, observed, observedSpans, surprised, surprisedSpans,
+        learnNext, learnNextSpans, imageUris, observedStyle, surprisedStyle, learnNextStyle
+    ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.FieldNotes(
@@ -110,7 +122,11 @@ fun FieldNotesFormat(
                 observedSpans = observedSpans,
                 surprisedSpans = surprisedSpans,
                 learnNextSpans = learnNextSpans,
-                paperStyle = paperStyle
+                observedStyle = observedStyle,
+                surprisedStyle = surprisedStyle,
+                learnNextStyle = learnNextStyle,
+                // Legacy fallback — mirror the first section's style.
+                paperStyle = observedStyle
             )
             else null
         )
@@ -152,7 +168,8 @@ fun FieldNotesFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
-                torn = paperStyle == NotePaperStyle.TORN,
+                paperStyle = observedStyle,
+                onPaperStyleChange = { observedStyle = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -186,7 +203,8 @@ fun FieldNotesFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
-                torn = paperStyle == NotePaperStyle.TORN,
+                paperStyle = surprisedStyle,
+                onPaperStyleChange = { surprisedStyle = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -220,7 +238,8 @@ fun FieldNotesFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
-                torn = paperStyle == NotePaperStyle.TORN,
+                paperStyle = learnNextStyle,
+                onPaperStyleChange = { learnNextStyle = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }

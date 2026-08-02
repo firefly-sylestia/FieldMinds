@@ -6,13 +6,17 @@ import com.curio.app.data.CaptureFormat
  * The note-paper look a capture's text boxes wear. [RULED] is the classic
  * notebook page (cream paper + ruled lines, toned paper in dark mode);
  * [TORN] is the torn-note style — a properly ripped paper slip with jagged
- * edges, no ruled lines, slight rotation for a hand-placed feel.
+ * edges, no ruled lines, slight rotation for a hand-placed feel;
+ * [TORN_RULED] is a torn slip that ALSO carries ruled lines (the "rules on
+ * torn" toggle) — ripped edge, notebook cadence inside.
  *
- * Persisted on every [CaptureData] variant so each note keeps its own
- * style ("behave its own individual") across save → detail view. Legacy
- * entries omit the field (Gson → null) and read as [RULED].
+ * Chosen PER TEXT BOX (each field's toolbar holds a Ruled/Torn toggle +
+ * rules-on-torn toggle) and persisted per field on every [CaptureData]
+ * variant, so each note keeps its own look across save → detail view.
+ * Legacy entries omit the per-field fields (Gson → null) and resolve to
+ * the take-level [CaptureData.paperStyle] or [RULED].
  */
-enum class NotePaperStyle { RULED, TORN }
+enum class NotePaperStyle { RULED, TORN, TORN_RULED }
 
 /**
  * A styled run over a string of text — half-open [start, end) character
@@ -53,8 +57,15 @@ sealed class CaptureData {
         // Optional rich-text formatting for the note field (bold/italic/
         // highlight). Legacy entries omit it → null, guard with orEmpty().
         val noteSpans: List<TextSpan> = emptyList(),
-        // Note-paper style (ruled notebook page vs torn note). Legacy entries
-        // omit it → null, resolved via [notePaperStyle].
+        // Note-paper style per text box — the title slip and the note wear
+        // their OWN choice (ruled page / torn note / torn with rules).
+        // Legacy entries omit them (Gson → null) and fall back to
+        // [paperStyle] → [NotePaperStyle.RULED].
+        val titleStyle: NotePaperStyle? = null,
+        val noteStyle: NotePaperStyle? = null,
+        // Take-level note-paper style — legacy fallback + the "primary"
+        // field's style for old consumers. New entries set per-field styles
+        // and mirror the note here so [notePaperStyle] stays meaningful.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
@@ -70,7 +81,11 @@ sealed class CaptureData {
         // Optional rich-text formatting for the review field. Legacy entries
         // omit it → null, guard with orEmpty().
         val reviewSpans: List<TextSpan> = emptyList(),
-        // Note-paper style (ruled notebook page vs torn note).
+        // Note-paper style for the review box (ruled / torn / torn with
+        // rules). Legacy entries omit it (Gson → null) and fall back to
+        // [paperStyle] → [NotePaperStyle.RULED].
+        val reviewStyle: NotePaperStyle? = null,
+        // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
@@ -89,7 +104,14 @@ sealed class CaptureData {
         // recomposition / section switch / revisit. Legacy entries omit it →
         // empty, callers fall back to a stable random tilt.
         val quoteTilts: List<Float> = emptyList(),
-        // Note-paper style (ruled notebook page vs torn note).
+        // Note-paper style per text box — the journal page and EACH quote
+        // card wear their own choice (ruled / torn / torn with rules).
+        // quoteStyles is parallel to quotes (one style per card). Legacy
+        // entries omit them (Gson → null, guard with orEmpty()) and fall
+        // back to [paperStyle] → [NotePaperStyle.RULED].
+        val journalStyle: NotePaperStyle? = null,
+        val quoteStyles: List<NotePaperStyle> = emptyList(),
+        // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
@@ -109,7 +131,11 @@ sealed class CaptureData {
         val caption: String,
         val imageUris: List<String> = emptyList(),
         val tileLayouts: List<TileLayout> = emptyList(),
-        // Note-paper style (ruled notebook page vs torn note).
+        // Note-paper style for the caption box (ruled / torn / torn with
+        // rules). Legacy entries omit it (Gson → null) and fall back to
+        // [paperStyle] → [NotePaperStyle.RULED].
+        val captionStyle: NotePaperStyle? = null,
+        // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 
@@ -124,7 +150,14 @@ sealed class CaptureData {
         val observedSpans: List<TextSpan> = emptyList(),
         val surprisedSpans: List<TextSpan> = emptyList(),
         val learnNextSpans: List<TextSpan> = emptyList(),
-        // Note-paper style (ruled notebook page vs torn note).
+        // Note-paper style per section — each of the three field-journal
+        // sections wears its own choice (ruled / torn / torn with rules).
+        // Legacy entries omit them (Gson → null) and fall back to
+        // [paperStyle] → [NotePaperStyle.RULED].
+        val observedStyle: NotePaperStyle? = null,
+        val surprisedStyle: NotePaperStyle? = null,
+        val learnNextStyle: NotePaperStyle? = null,
+        // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
 

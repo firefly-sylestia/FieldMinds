@@ -63,10 +63,7 @@ fun MarginaliaFormat(
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
-    initialData: CaptureData.Marginalia? = null,
-    /** Note-paper style — [NotePaperStyle.TORN] renders the journal page +
-     *  quote cards as torn notes instead of ruled notebook pages. */
-    paperStyle: NotePaperStyle = NotePaperStyle.RULED
+    initialData: CaptureData.Marginalia? = null
 ) {
     // Edit mode: restore journal text + spans + quote cards so re-saving
     // preserves the original capture instead of silently wiping it.
@@ -95,13 +92,30 @@ fun MarginaliaFormat(
             while (size < quotes.size) add(randomTilt())
         }
     }
+    // Note-paper style per text box — the journal page and EACH quote card
+    // wear their own choice. Legacy entries lack the per-field fields (Gson
+    // → null), fall back to the take-level paperStyle → RULED.
+    var journalStyle by remember(initialData) {
+        mutableStateOf(initialData?.journalStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    val quoteStyles = remember(initialData) {
+        mutableStateListOf<NotePaperStyle>().apply {
+            addAll(initialData?.quoteStyles.orEmpty())
+            // Pad any missing per-quote styles (legacy entries) so the
+            // parallel list always matches quotes 1:1.
+            while (size < quotes.size) add(initialData?.paperStyle ?: NotePaperStyle.RULED)
+        }
+    }
 
     val canSave = journalText.isNotBlank() ||
                   quotes.any { it.isNotBlank() }
     // Key on the content too: journal text typed or quotes added AFTER the
     // first character must re-emit, or saving would persist stale data
     // (later text/quotes silently dropped from the saved entry).
-    LaunchedEffect(canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(), quoteTilts.toList(), paperStyle) {
+    LaunchedEffect(
+        canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(),
+        quoteTilts.toList(), journalStyle, quoteStyles.toList()
+    ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.Marginalia(
@@ -110,7 +124,10 @@ fun MarginaliaFormat(
                 journalSpans = journalSpans,
                 quoteSpans = quoteSpans.toList(),
                 quoteTilts = quoteTilts.toList(),
-                paperStyle = paperStyle
+                journalStyle = journalStyle,
+                quoteStyles = quoteStyles.toList(),
+                // Legacy fallback — mirror the journal's style.
+                paperStyle = journalStyle
             )
             else null
         )
@@ -143,7 +160,8 @@ fun MarginaliaFormat(
                 ink = paperInk(),
                 accent = MaterialTheme.colorScheme.tertiary,
                 paper = true,
-                torn = paperStyle == NotePaperStyle.TORN,
+                paperStyle = journalStyle,
+                onPaperStyleChange = { journalStyle = it },
                 paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
             )
         }
@@ -178,7 +196,8 @@ fun MarginaliaFormat(
                     text = quote,
                     spans = quoteSpans.getOrElse(i) { emptyList() },
                     rotation = rotation,
-                    torn = paperStyle == NotePaperStyle.TORN,
+                    style = quoteStyles.getOrElse(i) { NotePaperStyle.RULED },
+                    onStyleChange = { quoteStyles[i] = it },
                     onTextChange = { newText, newSpans ->
                         quotes[i] = newText
                         quoteSpans[i] = newSpans
@@ -187,6 +206,7 @@ fun MarginaliaFormat(
                         quotes.removeAt(i)
                         if (i < quoteSpans.size) quoteSpans.removeAt(i)
                         if (i < quoteTilts.size) quoteTilts.removeAt(i)
+                        if (i < quoteStyles.size) quoteStyles.removeAt(i)
                     }
                 )
             }
@@ -198,6 +218,8 @@ fun MarginaliaFormat(
                     quoteSpans.add(emptyList())
                     // A fresh card gets its own tilt — and it STAYS that way.
                     quoteTilts.add(randomTilt())
+                    // New cards inherit the journal's current paper style.
+                    quoteStyles.add(journalStyle)
                 },
                 shape = RoundedCornerShape(14.dp),
                 color = paperSurface().copy(alpha = 0.6f),
@@ -232,7 +254,8 @@ private fun QuoteCard(
     text: String,
     spans: List<TextSpan>,
     rotation: Float,
-    torn: Boolean,
+    style: NotePaperStyle,
+    onStyleChange: (NotePaperStyle) -> Unit,
     onTextChange: (text: String, spans: List<TextSpan>) -> Unit,
     onRemove: () -> Unit
 ) {
@@ -289,7 +312,8 @@ private fun QuoteCard(
             ink = paperInk(),
             accent = MaterialTheme.colorScheme.tertiary,
             paper = true,
-            torn = torn,
+            paperStyle = style,
+            onPaperStyleChange = onStyleChange,
             paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
         )
     }

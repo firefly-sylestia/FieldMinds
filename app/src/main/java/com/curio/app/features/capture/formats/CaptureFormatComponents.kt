@@ -37,6 +37,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.NotePaperStyle
+import com.curio.app.ui.components.NotePaperStyleToggle
 import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.TornPaperCard
 import com.curio.app.ui.theme.CurioIcon
@@ -278,12 +280,15 @@ fun CollapsibleSectionHeader(
 }
 
 /**
- * A single-line text field that wears the note-paper look — a small
- * [PaperCard] slip with the text written in paper ink (cream in light mode,
- * warm toned paper in dark), so short inputs like titles and captions match
- * the notebook style of the rich-text fields instead of a plain outline box.
+ * A single-line text field that wears the note-paper look — a small paper
+ * slip with the text written in paper ink (cream in both themes), so short
+ * inputs like titles and captions match the notebook style of the rich-text
+ * fields instead of a plain outline box. [paperStyle] picks the slip: the
+ * classic ruled [PaperCard], a torn note, or a torn note with ruled lines.
  * A thin [label] sits above the slip (same label language as the other
  * format fields); the field itself is the paper, no inner box or borders.
+ * When [onPaperStyleChange] is provided, a compact Ruled/Torn/rules toggle
+ * renders next to the label so the field keeps its own paper style.
  */
 @Composable
 fun PaperLineField(
@@ -295,77 +300,107 @@ fun PaperLineField(
     enabled: Boolean = true,
     accent: Color = MaterialTheme.colorScheme.primary,
     imeAction: ImeAction = ImeAction.Done,
-    /** Renders the slip as a torn note ([TornPaperCard]) instead of the
-     *  ruled page — the torn-paper note style. */
-    torn: Boolean = false
+    /** Note-paper style — ruled page / torn note / torn with ruled lines. */
+    paperStyle: NotePaperStyle = NotePaperStyle.RULED,
+    /** When provided, shows the per-field style toggle next to the label. */
+    onPaperStyleChange: ((NotePaperStyle) -> Unit)? = null
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (label != null) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        if (torn) {
-            TornPaperCard(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                BasicTextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    enabled = enabled,
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
-                    cursorBrush = SolidColor(accent),
-                    keyboardOptions = KeyboardOptions(imeAction = imeAction),
-                    decorationBox = { innerTextField ->
-                        Box {
-                            if (value.isEmpty() && placeholder.isNotEmpty()) {
-                                Text(
-                                    text = placeholder,
-                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                        color = paperInk().copy(alpha = 0.45f)
-                                    )
-                                )
-                            }
-                            innerTextField()
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                if (onPaperStyleChange != null) {
+                    NotePaperStyleToggle(
+                        style = paperStyle,
+                        onStyleChange = onPaperStyleChange,
+                        accent = accent
+                    )
+                }
             }
-        } else {
-            PaperCard(
+        } else if (onPaperStyleChange != null) {
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                ruled = true,
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+                horizontalArrangement = Arrangement.End
             ) {
-                BasicTextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    enabled = enabled,
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
-                    cursorBrush = SolidColor(accent),
-                    keyboardOptions = KeyboardOptions(imeAction = imeAction),
-                    decorationBox = { innerTextField ->
-                        Box {
-                            if (value.isEmpty() && placeholder.isNotEmpty()) {
-                                Text(
-                                    text = placeholder,
-                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                        color = paperInk().copy(alpha = 0.45f)
-                                    )
-                                )
-                            }
-                            innerTextField()
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                NotePaperStyleToggle(
+                    style = paperStyle,
+                    onStyleChange = onPaperStyleChange,
+                    accent = accent
                 )
             }
         }
+        val torn = paperStyle != NotePaperStyle.RULED
+        val card: @Composable (PaddingValues) -> Unit = { pad ->
+            if (torn) {
+                TornPaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = paperStyle == NotePaperStyle.TORN_RULED,
+                    contentPadding = pad
+                ) {
+                    BasicTextField(
+                        value = value,
+                        onValueChange = onValueChange,
+                        enabled = enabled,
+                        singleLine = true,
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
+                        cursorBrush = SolidColor(accent),
+                        keyboardOptions = KeyboardOptions(imeAction = imeAction),
+                        decorationBox = { innerTextField ->
+                            Box {
+                                if (value.isEmpty() && placeholder.isNotEmpty()) {
+                                    Text(
+                                        text = placeholder,
+                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                            color = paperInk().copy(alpha = 0.45f)
+                                        )
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            } else {
+                PaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = true,
+                    contentPadding = pad
+                ) {
+                    BasicTextField(
+                        value = value,
+                        onValueChange = onValueChange,
+                        enabled = enabled,
+                        singleLine = true,
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = paperInk()),
+                        cursorBrush = SolidColor(accent),
+                        keyboardOptions = KeyboardOptions(imeAction = imeAction),
+                        decorationBox = { innerTextField ->
+                            Box {
+                                if (value.isEmpty() && placeholder.isNotEmpty()) {
+                                    Text(
+                                        text = placeholder,
+                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                            color = paperInk().copy(alpha = 0.45f)
+                                        )
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        }
+        card(PaddingValues(horizontal = 14.dp, vertical = 12.dp))
     }
 }

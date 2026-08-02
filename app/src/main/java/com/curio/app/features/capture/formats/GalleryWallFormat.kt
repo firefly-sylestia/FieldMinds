@@ -137,10 +137,7 @@ fun GalleryWallFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
     initialData: CaptureData.GalleryWall? = null,
-    boardSeed: Int? = null,
-    /** Note-paper style — [NotePaperStyle.TORN] renders the caption as a
-     *  torn note instead of a ruled notebook slip. */
-    paperStyle: NotePaperStyle = NotePaperStyle.RULED
+    boardSeed: Int? = null
 ) {
     val tiles = remember(initialData) {
         mutableStateListOf<MoodTile>().apply {
@@ -160,13 +157,18 @@ fun GalleryWallFormat(
         }
     }
     var caption by remember(initialData) { mutableStateOf(initialData?.caption ?: "") }
+    // Note-paper style for the caption box — legacy entries lack the field
+    // (Gson → null), fall back to the take-level paperStyle → RULED.
+    var captionStyle by remember(initialData) {
+        mutableStateOf(initialData?.captionStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
     var boardExpanded by remember { mutableStateOf(false) }
     // New board: fresh random pattern. Edit mode: reuse the caller-provided
     // seed (entry-id hash) so the editor matches the saved view's backdrop.
     val seed = remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }
 
     val canSave = tiles.isNotEmpty()
-    LaunchedEffect(canSave, caption, tiles.toList(), paperStyle) {
+    LaunchedEffect(canSave, caption, tiles.toList(), captionStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.GalleryWall(
@@ -174,7 +176,9 @@ fun GalleryWallFormat(
                 caption = caption,
                 imageUris = tiles.map { it.uri },
                 tileLayouts = tiles.map { CaptureData.TileLayout(it.uri, it.offsetXPx, it.offsetYPx, it.rotationDeg, it.widthPx, it.heightPx) },
-                paperStyle = paperStyle
+                captionStyle = captionStyle,
+                // Legacy fallback — mirror the caption's style.
+                paperStyle = captionStyle
             )
             else null
         )
@@ -225,12 +229,13 @@ fun GalleryWallFormat(
         )
 
         // ── Caption field — wears the note-paper slip like the other text
-        //    boxes (cream paper light / toned paper dark).
+        //    boxes, with its own per-field paper-style toggle.
         PaperLineField(
             value = caption,
             onValueChange = { caption = it },
             label = "Add a caption (optional)",
-            torn = paperStyle == NotePaperStyle.TORN
+            paperStyle = captionStyle,
+            onPaperStyleChange = { captionStyle = it }
         )
     }
 

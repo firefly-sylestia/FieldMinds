@@ -86,10 +86,7 @@ fun SoundBiteFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
     onBusyChange: (Boolean) -> Unit = {},
-    initialData: CaptureData.SoundBite? = null,
-    /** Note-paper style — [NotePaperStyle.TORN] renders the title slip + note
-     *  as torn notes instead of ruled notebook pages. */
-    paperStyle: NotePaperStyle = NotePaperStyle.RULED
+    initialData: CaptureData.SoundBite? = null
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -106,6 +103,15 @@ fun SoundBiteFormat(
     // Rich-text formatting for the note — legacy entries lack it (Gson →
     // null), guard with orEmpty().
     var noteSpans by remember(initialData) { mutableStateOf(initialData?.noteSpans.orEmpty()) }
+    // Note-paper style per text box — the title slip and the note wear
+    // their OWN choice. Legacy entries lack the per-field fields (Gson →
+    // null), fall back to the take-level paperStyle → RULED.
+    var titleStyle by remember(initialData) {
+        mutableStateOf(initialData?.titleStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    var noteStyle by remember(initialData) {
+        mutableStateOf(initialData?.noteStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
     var savedFilePath by remember(initialData) { mutableStateOf(initialData?.audioFilePath) }
     var permissionDenied by remember { mutableStateOf(false) }
     // Edit-mode restore: a restored recording must NOT auto-open the trimmer —
@@ -210,7 +216,7 @@ fun SoundBiteFormat(
                   recordingSeconds > 0 &&
                   savedFilePath != null &&
                   !trimInProgress
-    LaunchedEffect(canSave, savedFilePath, title, note, noteSpans, paperStyle) {
+    LaunchedEffect(canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.SoundBite(
@@ -219,7 +225,10 @@ fun SoundBiteFormat(
                 note = note,
                 noteSpans = noteSpans,
                 audioFilePath = savedFilePath,
-                paperStyle = paperStyle
+                titleStyle = titleStyle,
+                noteStyle = noteStyle,
+                // Legacy fallback — mirror the primary field's style.
+                paperStyle = noteStyle
             )
             else null
         )
@@ -365,7 +374,8 @@ fun SoundBiteFormat(
             label = "Add a quick title (optional)",
             enabled = recordingState != AudioRecorder.State.RECORDING,
             imeAction = ImeAction.Next,
-            torn = paperStyle == NotePaperStyle.TORN
+            paperStyle = titleStyle,
+            onPaperStyleChange = { titleStyle = it }
         )
 
         // Rich-text note — formatting behind a small toggle. The toolbar
@@ -387,7 +397,8 @@ fun SoundBiteFormat(
             ink = paperInk(),
             accent = MaterialTheme.colorScheme.tertiary,
             paper = true,
-            torn = paperStyle == NotePaperStyle.TORN,
+            paperStyle = noteStyle,
+            onPaperStyleChange = { noteStyle = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
     }

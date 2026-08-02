@@ -2,7 +2,6 @@ package com.curio.app.features.capture.formats
 
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
-import com.curio.app.data.NotePaperStyle
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -64,20 +63,17 @@ fun OpenNotebookFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {},
     initialData: CaptureData.OpenNotebook? = null,
-    boardSeed: Int? = null,
-    /** Note-paper style — passed through to every sub-format so the chosen
-     *  torn / ruled look applies whichever notebook option is selected. */
-    paperStyle: NotePaperStyle = NotePaperStyle.RULED
+    boardSeed: Int? = null
 ) {
     // Edit mode: open the picker on the saved choice instead of VOICE, and
     // seed the sub-body with the saved data. Keyed on initialData so the
     // async edit-entry load re-initializes state when it arrives.
     val initialChoice = initialData?.let { fromCaptureFormat(it.subFormat) } ?: NotebookChoice.VOICE
     var selectedFormat by remember(initialData) { mutableStateOf(initialChoice) }
-    // Only preload when the saved sub-format actually supports [initialData]
-    // (mood boards do). Other sub-bodies start blank so re-saving an entry
-    // that can't be preloaded never silently wipes its stored content.
-    val canPreload = initialData?.subFormat == CaptureFormat.GalleryWall
+    // Every sub-format supports [initialData] (they all restore text, spans
+    // and per-field paper styles), so preload whenever a saved sub-data
+    // exists — re-saving an entry preserves its content and paper look.
+    val canPreload = initialData != null
     var subCanSave by remember(initialData) { mutableStateOf(canPreload) }
     var subData by remember(initialData) { mutableStateOf<CaptureData?>(initialData?.subData) }
 
@@ -124,27 +120,26 @@ fun OpenNotebookFormat(
             when (choice) {
                 NotebookChoice.VOICE -> SoundBiteFormat(
                     accent, tint, { subCanSave = it }, { subData = it },
-                    paperStyle = paperStyle
+                    initialData = initialData?.subData as? CaptureData.SoundBite
                 )
                 NotebookChoice.REVIEW -> ReelNotesFormat(
                     accent, tint, { subCanSave = it }, { subData = it },
-                    paperStyle = paperStyle
+                    initialData = initialData?.subData as? CaptureData.ReelNotes
                 )
                 NotebookChoice.JOURNAL -> MarginaliaFormat(
                     accent, tint, { subCanSave = it }, { subData = it },
-                    paperStyle = paperStyle
+                    initialData = initialData?.subData as? CaptureData.Marginalia
                 )
                 NotebookChoice.MOODBOARD -> GalleryWallFormat(
                     accent, tint, { subCanSave = it }, { subData = it },
                     // Edit mode: preload the saved board + reuse its seed so
                     // the editor's watermark matches the saved view.
                     initialData = initialData?.subData as? CaptureData.GalleryWall,
-                    boardSeed = boardSeed,
-                    paperStyle = paperStyle
+                    boardSeed = boardSeed
                 )
                 NotebookChoice.FIELD -> FieldNotesFormat(
                     accent, tint, { subCanSave = it }, { subData = it },
-                    paperStyle = paperStyle
+                    initialData = initialData?.subData as? CaptureData.FieldNotes
                 )
             }
         }
