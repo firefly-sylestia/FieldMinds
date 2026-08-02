@@ -2,6 +2,23 @@
 
 ## Latest Request (COMPLETED)
 
+**Paper text boxes are no longer theme-aware — same cream paper (dark ink, faint rules, amber highlight, soft edge) in dark mode as in light mode**
+
+### What was asked
+
+Use the same paper color in dark mode as in light mode — don't make the text box theme aware.
+
+### What was changed
+
+**`PaperPalette.kt`** — all five paper colors pinned to the light-mode constants unconditionally (no `isCurioDarkTheme()` branch): `paperSurface` = cream `0xFFFBF4E3`, `paperInk` = warm dark `0xFF3B3124` (kept DARK so text stays readable on the always-cream paper), `paperRule` = `0xFFE2D6BC`, `paperHighlight` = `0x66FFD54F`, `paperBorder` = `0xFFE0D3B5`. The `@Composable` signatures were kept, so all ~45 call sites (PaperCard, TornPaperCard, RichTextEditor, EntryDetailScreen, CaptureFormatComponents, and the format editors) are unchanged.
+
+### Review
+code-reviewer-deepseek-flash: pending.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
 **Three capture-editor bug fixes: quote tilt no longer re-rolls, bold/italic/highlight formatting survives typing, torn-paper corners no longer clip the text**
 
 ### What was asked
