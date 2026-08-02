@@ -165,6 +165,54 @@ private fun findInsertedRange(oldText: String, newText: String): IntRange? {
 }
 
 /**
+ * Rebases [spans] (in OLD-text coordinates) onto [newText] after an edit,
+ * using the same common-prefix / common-suffix diff as [findInsertedRange].
+ * A span fully before the changed region keeps its offsets; a span fully
+ * after it shifts by the length delta; a span overlapping the changed region
+ * is clipped to its untouched head/tail parts (the replaced text inside the
+ * diff is dropped — the armed sticky format re-applies to exactly the typed
+ * range). The result is what OUR editor state should carry; BasicTextField's
+ * own reported AnnotatedString is NOT used because it can silently drop the
+ * styles we set programmatically.
+ */
+private fun rebaseSpans(oldText: String, newText: String, spans: List<TextSpan>): List<TextSpan> {
+    if (spans.isEmpty()) return emptyList()
+    if (oldText == newText) return spans
+    var prefix = 0
+    while (prefix < oldText.length && prefix < newText.length &&
+        oldText[prefix] == newText[prefix]
+    ) prefix++
+    var suffix = 0
+    while (suffix < oldText.length - prefix && suffix < newText.length - prefix &&
+        oldText[oldText.length - 1 - suffix] == newText[newText.length - 1 - suffix]
+    ) suffix++
+    val oldEnd = oldText.length - suffix
+    val newEnd = newText.length - suffix
+    val delta = newEnd - oldEnd
+    val out = mutableListOf<TextSpan>()
+    for (sp in spans) {
+        val s = sp.start.coerceIn(0, oldText.length)
+        val e = sp.end.coerceIn(s, oldText.length)
+        when {
+            // Fully before the changed region — same coordinates.
+            e <= prefix -> out.add(sp)
+            // Fully after the changed region — shift by the length delta.
+            s >= oldEnd -> out.add(
+                TextSpan(s + delta, e + delta, sp.bold, sp.italic, sp.highlight)
+            )
+            // Overlaps the changed region — keep only the untouched parts.
+            else -> {
+                if (s < prefix) out.add(TextSpan(s, prefix, sp.bold, sp.italic, sp.highlight))
+                if (e > oldEnd) out.add(
+                    TextSpan(maxOf(s, oldEnd) + delta, e + delta, sp.bold, sp.italic, sp.highlight)
+                )
+            }
+        }
+    }
+    return out.merged()
+}
+
+/**
  * Adds or removes [flag] over [s, e). Adding merges a new span in; removing
  * splits every overlapping span so the un-styled middle drops its flag while
  * the parts outside the selection keep theirs.
@@ -276,16 +324,56 @@ fun RichTextEditor(
     }
 
     fun emit(new: TextFieldValue) {
-        var result = new
         val oldText = tfv.text
+        // The text itself changed (a real user edit) — NEVER trust what
+        // BasicTextField reports back as its AnnotatedString: it can silently
+        // drop the styles we set programmatically, which made bold/italic/
+        // highlight vanish moments after applying. Instead rebase OUR OWN
+        // spans (from tfv, which we always build ourselves) across the edit,
+        // then merge in any caret-inherited styles the field DID report for
+        // the new characters (e.g. typing inside an existing bold span keeps
+        // inheriting bold without an explicit arm).
+        val textChanged = new.text != oldText
+        var spans = if (textChanged) {
+            rebaseSpans(oldText, new.text, extractRichSpans(tfv.annotatedString))
+        } else {
+            // Same text — a programmatic restyle (e.g. applyFlag toggling a
+            // selection). The caller supplied the exact spans; trust those.
+            extractRichSpans(new.annotatedString)
+        }
+        // Caret inheritance from OUR spans: typing inside an already-styled
+        // run (e.g. mid-bold word) — or immediately after one — must keep
+        // that style on the new characters. BasicTextField's reported
+        // AnnotatedString can silently drop the styles we set programmatically,
+        // so we can't rely on it to re-add them — emulate inheritance from
+        // our own tracked spans instead (the caret sits at the diff's start ==
+        // old/new common prefix, which is unchanged by the edit). Inclusive
+        // at the span END so typing right after a styled word continues it.
+        val insertedRange = if (textChanged) findInsertedRange(oldText, new.text) else null
+        if (insertedRange != null) {
+            val caret = insertedRange.first
+            val inherited = extractRichSpans(tfv.annotatedString).filter { sp ->
+                sp.start <= caret && caret <= sp.end
+            }
+            for (sp in inherited) {
+                if (sp.bold) {
+                    spans = toggleSpanFlag(spans, caret, insertedRange.last + 1, RichFlag.BOLD, true)
+                }
+                if (sp.italic) {
+                    spans = toggleSpanFlag(spans, caret, insertedRange.last + 1, RichFlag.ITALIC, true)
+                }
+                if (sp.highlight) {
+                    spans = toggleSpanFlag(spans, caret, insertedRange.last + 1, RichFlag.HIGHLIGHT, true)
+                }
+            }
+        }
         // Sticky format: when a format is armed and the user just typed
         // (or typed over a selection), apply it to exactly the changed
         // characters so typing continues in that style (BasicTextField only
         // inherits the style under the caret, so an armed format needs
         // explicit application). Pure deletions diff to null and are skipped.
         if (pendingBold || pendingItalic || pendingHighlight) {
-            findInsertedRange(oldText, new.text)?.let { range ->
-                var spans = extractRichSpans(new.annotatedString)
+            insertedRange?.let { range ->
                 if (pendingBold) {
                     spans = toggleSpanFlag(spans, range.first, range.last + 1, RichFlag.BOLD, true)
                 }
@@ -295,13 +383,13 @@ fun RichTextEditor(
                 if (pendingHighlight) {
                     spans = toggleSpanFlag(spans, range.first, range.last + 1, RichFlag.HIGHLIGHT, true)
                 }
-                result = TextFieldValue(
-                    buildRichAnnotated(new.text, spans, highlightColor),
-                    selection = new.selection,
-                    composition = new.composition
-                )
             }
         }
+        val result = TextFieldValue(
+            buildRichAnnotated(new.text, spans, highlightColor),
+            selection = new.selection,
+            composition = new.composition
+        )
         tfv = result
         // `text` is plain String in this Compose version; the styled
         // AnnotatedString lives on `annotatedString`.

@@ -83,6 +83,12 @@ sealed class CaptureData {
         // quote). Legacy entries omit both → null, guard with orEmpty().
         val journalSpans: List<TextSpan> = emptyList(),
         val quoteSpans: List<List<TextSpan>> = emptyList(),
+        // Hand-placed tilt (degrees) per quote card — generated ONCE when a
+        // card is created and saved with the entry, so the angle you saw while
+        // adding persists into the saved view instead of re-rolling every
+        // recomposition / section switch / revisit. Legacy entries omit it →
+        // empty, callers fall back to a stable random tilt.
+        val quoteTilts: List<Float> = emptyList(),
         // Note-paper style (ruled notebook page vs torn note).
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()

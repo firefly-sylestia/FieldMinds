@@ -37,6 +37,9 @@ import com.curio.app.ui.theme.paperBorder
 import com.curio.app.ui.theme.paperInk
 import com.curio.app.ui.theme.paperSurface
 
+/** Hand-placed tilt in degrees (−2.5°..2.5°) for a quote card. */
+private fun randomTilt(): Float = kotlin.random.Random.nextFloat() * 5f - 2.5f
+
 /**
  * Marginalia format body — CURIO_SPEC §8.3 (Books / Authors).
  *
@@ -81,13 +84,24 @@ fun MarginaliaFormat(
             while (size < quotes.size) add(emptyList())
         }
     }
+    // Hand-placed tilt per quote card — generated ONCE when a card is born
+    // and SAVED with the entry ([CaptureData.Marginalia.quoteTilts]), so the
+    // angle you add with is the angle that persists. Never re-rolled by
+    // recomposition, section switches, or revisits (legacy entries lack the
+    // field → fresh tilts, padded parallel to quotes).
+    val quoteTilts = remember(initialData) {
+        mutableStateListOf<Float>().apply {
+            addAll(initialData?.quoteTilts.orEmpty())
+            while (size < quotes.size) add(randomTilt())
+        }
+    }
 
     val canSave = journalText.isNotBlank() ||
                   quotes.any { it.isNotBlank() }
     // Key on the content too: journal text typed or quotes added AFTER the
     // first character must re-emit, or saving would persist stale data
     // (later text/quotes silently dropped from the saved entry).
-    LaunchedEffect(canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(), paperStyle) {
+    LaunchedEffect(canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(), quoteTilts.toList(), paperStyle) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.Marginalia(
@@ -95,6 +109,7 @@ fun MarginaliaFormat(
                 quotes = quotes.toList(),
                 journalSpans = journalSpans,
                 quoteSpans = quoteSpans.toList(),
+                quoteTilts = quoteTilts.toList(),
                 paperStyle = paperStyle
             )
             else null
@@ -155,10 +170,9 @@ fun MarginaliaFormat(
             }
 
             quotes.forEachIndexed { i, quote ->
-                // Random hand-placed tilt (−2.5°..2.5°), stable per card
-                // (keyed by index) so recomposition and typing never
-                // re-roll the rotation mid-edit.
-                val rotation = remember(i) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
+                // The tilt SAVED with this card — generated at creation, never
+                // re-rolled by recomposition, typing, or section switches.
+                val rotation = quoteTilts.getOrElse(i) { randomTilt() }
                 QuoteCard(
                     index = i,
                     text = quote,
@@ -172,6 +186,7 @@ fun MarginaliaFormat(
                     onRemove = {
                         quotes.removeAt(i)
                         if (i < quoteSpans.size) quoteSpans.removeAt(i)
+                        if (i < quoteTilts.size) quoteTilts.removeAt(i)
                     }
                 )
             }
@@ -181,6 +196,8 @@ fun MarginaliaFormat(
                 onClick = {
                     quotes.add("")
                     quoteSpans.add(emptyList())
+                    // A fresh card gets its own tilt — and it STAYS that way.
+                    quoteTilts.add(randomTilt())
                 },
                 shape = RoundedCornerShape(14.dp),
                 color = paperSurface().copy(alpha = 0.6f),

@@ -992,17 +992,24 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
         // ── Favorite quotes — hand-placed paper notecards with quote marks ──
         // Pad quoteSpans to the quotes length first (legacy Gson blobs may
         // carry fewer/absent span lists), then zip so the spans stay aligned
-        // with their quote even when blank cards are filtered out.
+        // with their quote even when blank cards are filtered out. Keep the
+        // ORIGINAL index through the blank filter so each card can find its
+        // saved tilt (quoteTilts parallels data.quotes 1:1).
         val spansPadded = data.quoteSpans.orEmpty().toMutableList()
         while (spansPadded.size < data.quotes.size) spansPadded.add(emptyList())
-        val quotePairs = data.quotes.zip(spansPadded).filter { (q, _) -> !q.isNullOrBlank() }
+        val quotePairs = data.quotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
+            if (pair.first.isNullOrBlank()) null else i to pair
+        }
         if (quotePairs.isNotEmpty()) {
             MarginaliaSectionHeader(label = "Favorite quotes", category = category, count = quotePairs.size)
-            quotePairs.forEachIndexed { i, (quote, spans) ->
-                // Random hand-placed tilt (−2.5°..2.5°), stable per quote
-                // (keyed by index) so scrolling/recomposition never re-rolls
-                // the rotation while viewing.
-                val rotation = remember(i) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
+            quotePairs.forEach { (origIndex, pair) ->
+                val (quote, spans) = pair
+                // The tilt SAVED with this card (the exact angle the user
+                // added with — never re-rolled). Legacy entries lack the
+                // field → fall back to a stable random tilt keyed by the
+                // original index so viewing never re-rolls it either.
+                val rotation = data.quoteTilts.orEmpty().getOrNull(origIndex)
+                    ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
                 NotePaperCard(
                     style = data.notePaperStyle(),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),

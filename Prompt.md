@@ -2,33 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
-**New torn-paper note style — an option inside the note-add flow, independent of the current ruled paper, per-note persistent**
+**Three capture-editor bug fixes: quote tilt no longer re-rolls, bold/italic/highlight formatting survives typing, torn-paper corners no longer clip the text**
 
 ### What was asked
 
-Add a new full-paper-textured style for the note text boxes: a "proper torn note" look with torn edges/sides, WITHOUT changing the current ruled paper style. Introduce it as an option alongside the current one, selectable inside the note-add options (SaveCaptureScreen's universal capture picker), behaving as its own individual style per take ("behave its own individual"). Note paper colors come next (out of scope).
+1. The tilt that shows during entry addition (quote cards) keeps changing every time — save it so it doesn't change.
+2. The bold text format shows when applied or while typing, but moments later it's gone — formatting isn't surviving/staying.
+3. The corner of the paper text box is cutting off the beginning text.
 
 ### What was changed
 
-**Data layer — `CaptureData.kt`**
-- New `NotePaperStyle` enum (`RULED` / `TORN`).
-- `paperStyle: NotePaperStyle? = null` field on all 5 leaf variants (SoundBite, ReelNotes, Marginalia, GalleryWall, FieldNotes). Legacy entries omit it (Gson → null) and resolve as `RULED`.
-- `CaptureData.notePaperStyle()` member — exhaustive `when`; OpenNotebook → `subData`, Portfolio → first section's data.
+**Tilt persistence — `CaptureData.kt` + `MarginaliaFormat.kt` + `EntryDetailScreen.kt`**
+- `CaptureData.Marginalia` gained `quoteTilts: List<Float> = emptyList()` — the hand-placed angle per quote card, generated ONCE at card creation and saved with the entry. Legacy entries omit it (Gson → empty), callers fall back to a stable per-index random tilt.
+- `MarginaliaFormat` — `quoteTilts` mutableStateListOf seeded from `initialData` and padded parallel to quotes; each card reads `quoteTilts.getOrElse(i)`; Remove deletes the tilt; "+ Add quote" adds a fresh one; `quoteTilts.toList()` is a `LaunchedEffect` key so saved tilts persist. `randomTilt()` helper defined AFTER the import block (was briefly inserted mid-imports — a compile error — fixed before commit).
+- `EntryDetailScreen.MarginaliaRender` — quote pairs carry their ORIGINAL index through the blank filter, and rotation reads `data.quoteTilts.orEmpty().getOrNull(origIndex) ?: remember(origIndex) { random }` — saved angle wins, legacy entries get a stable-per-card fallback.
 
-**Rendering — `PaperCard.kt`**
-- `TornPaperShape : Shape` — walks the perimeter and jitters each edge with `tornNoise()` (a pure function of seed + coordinate), producing a jagged ripped outline that is deterministic → typing/recomposition never re-rolls the tears, and cheap to recompute per size change.
-- `TornPaperCard` — theme-aware torn note: paper surface (cream light / toned dark), soft shadow that follows the ragged outline, hairline torn-edge border, subtle deterministic paper-grain speckles, NO ruled lines, per-card remembered random seed (stable per composition; optional explicit seed pin).
-- `NotePaperCard` — dispatch helper: `TORN` → `TornPaperCard`, else classic `PaperCard` (ruled + corner). Used by the saved detail views.
+**Formatting survival — `RichTextEditor.kt`**
+- Root cause: `emit()` trusted the AnnotatedString BasicTextField reports back, which can silently drop styles we set programmatically — so bold/italic/highlight vanished moments after applying.
+- Fix: rebase OUR OWN tracked spans across each edit (`rebaseSpans(oldText, newText, ...)` — common-prefix/suffix diff, spans before the change keep offsets, after shift by delta, overlapping clip to untouched parts), then emulate caret inheritance from our own spans at the diff start (`sp.start <= caret && caret <= sp.end`, inclusive at span END so typing right after a styled word continues it). The field's reported AnnotatedString is no longer merged in.
+- `insertedRange` (findInsertedRange) computed ONCE and shared by the caret-inheritance block and the sticky pending-format block.
 
-**Wiring**
-- `RichTextEditor` — new `torn: Boolean = false`; `paper && torn` → `TornPaperCard`, else `PaperCard`.
-- `PaperLineField` — new `torn: Boolean = false` (torn slip branch).
-- All 6 format composables (SoundBite, ReelNotes, Marginalia incl. QuoteCard, FieldNotes ×3, GalleryWall caption, OpenNotebook pass-through) gained `paperStyle: NotePaperStyle = RULED`, added to their emit `LaunchedEffect` keys AND into the emitted `CaptureData`, plus `torn =` flags on editors.
-- `SaveCaptureScreen` — `CaptureSectionState.paperStyle`; section init reads `initialData.notePaperStyle()` (Portfolio / OpenNotebook / bare all covered); a "Paper" chip row (Ruled / Torn note, palette vs menu_book glyphs) inside the note-add options controlling the ACTIVE section; `paperStyle` passed to every format call.
-- `EntryDetailScreen` — all 9 saved-view `PaperCard` sites dispatch via `NotePaperCard(style = data.notePaperStyle(), ...)` (SoundBite note, ReelNotes review + fallback, Marginalia journal + quotes, GalleryWall caption, FieldNotes ×3); `PaperCard` import replaced with `NotePaperCard`, unused `NotePaperStyle` import removed.
+**Torn corner clipping — `PaperCard.kt`**
+- `TornPaperShape` amplitudes kept modest (2.5dp bite + 1.5dp tear ≈ 4dp worst-case inward) so the ragged edge never reaches the text.
+- `TornPaperCard` floors the content inset: `maxOf(horizontal, 14.dp)` / `maxOf(vertical, 12.dp)` so even the tight 10dp quote-card padding can't let a tear clip the first characters near the top-left corner.
 
 ### Review
-code-reviewer-deepseek-flash: clean pass. Verified exhaustive `when`, Gson-null-safe legacy decode, no @Composable calls inside Canvas lambdas, no `size` shadowing, valid `Outline.Rectangle` (fully-qualified), `TornPaperCard` import added in CaptureFormatComponents, `paperStyle` keying re-emits on style flip, chips/icons exist, no lingering `PaperCard` references. One OPTIONAL polish note (not a bug): saved-view torn cards use a fresh random seed per composition so the tear pattern differs between editor and saved view — acceptable/organic; could pin to entry-id hash later if consistency is desired.
+code-reviewer-deepseek-flash: clean pass (two rounds). Verified no declarations between imports, `calculateLeftPadding`/`calculateTopPadding` resolve as PaddingValues member functions (no import needed), inclusive-end caret inheritance is correct half-open math with no out-of-bounds spans, `remember(origIndex)` is a valid composable call inside the inline forEachIndexed, and no @Composable calls leak into non-composable lambdas. Both review notes (hoist insertedRange, inclusive span-end inheritance) applied.
 
 ### Follow-ups / notes
 - Next per user: note-paper COLORS (new palette per style) — the `NotePaperStyle` field is already persisted, so a color companion is a clean follow-up.

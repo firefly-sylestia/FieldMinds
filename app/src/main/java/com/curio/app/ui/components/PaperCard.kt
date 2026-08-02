@@ -133,8 +133,12 @@ private class TornPaperShape(private val seed: Int = 7) : Shape {
         }
         val path = Path()
         // Ragged bite amplitude + the slow deeper-tear amplitude, in px.
-        val bite = with(density) { 5.dp.toPx() }
-        val tear = with(density) { 3.dp.toPx() }
+        // Kept MODEST on purpose: the torn edge must never reach far enough
+        // into the card to clip the field text (quote cards carry only 10dp
+        // of vertical padding). 2.5dp bite + 1.5dp tear ≈ 4dp worst-case
+        // inward intrusion, well inside the smallest content inset.
+        val bite = with(density) { 2.5.dp.toPx() }
+        val tear = with(density) { 1.5.dp.toPx() }
         fun jitter(coord: Float): Float = (tornNoise(seed, coord) - 0.5f) * 2f * bite +
             (tornNoise(seed + 31, coord) - 0.5f) * 2f * tear
 
@@ -201,6 +205,20 @@ fun TornPaperCard(
     val grain = paperInk()
     val surface = paperSurface()
     val edge = paperBorder()
+    // The torn outline can intrude up to ~4dp past the caller's inset (some
+    // callers pass as little as 10dp of vertical padding for tight quote
+    // cards). Floor the inset so the ragged edge NEVER clips the field text
+    // — especially the first characters near the top-left corner.
+    val safeContentPadding = PaddingValues(
+        horizontal = maxOf(
+            contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
+            14.dp
+        ),
+        vertical = maxOf(
+            contentPadding.calculateTopPadding(),
+            12.dp
+        )
+    )
     Surface(
         shape = TornPaperShape(effectiveSeed),
         color = surface,
@@ -233,7 +251,7 @@ fun TornPaperCard(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding),
+                    .padding(safeContentPadding),
                 content = content
             )
         }
