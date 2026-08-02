@@ -452,19 +452,22 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
         path.close()
         return path
     }
-    // Ragged bite amplitude + the slow deeper-tear layer, in px. Kept MODEST
-    // on purpose: the torn edge must never reach far enough into the card to
-    // clip the field text (cards carry 10-14dp of padding). Fractal noise is
-    // in [0,1], so (n - 0.5f) * 2 ∈ [-1,1] → worst-case inward ≈ bite + tear.
-    // The amplitudes were trimmed after the corner-clipping report — at the
-    // corners two edges meet, so an inward bite there compounds diagonally
-    // into the first characters; small rips still read as torn, just never
-    // into the text.
-    val bite = with(density) { 2.0.dp.toPx() }
-    val tear = with(density) { 1.0.dp.toPx() }
-    val step = with(density) { 8.dp.toPx() }
+    // Ragged bite amplitude + the slow deeper-tear layer, in px. The torn
+    // edge must never reach far enough into the card to clip the field text:
+    // TornPaperCard floors its content inset at 16dp horizontal / 14dp
+    // vertical, and fractal noise is in [0,1] so (n - 0.5f) * 2 ∈ [-1,1] →
+    // worst-case inward ≈ bite + tear. The amplitudes were trimmed after the
+    // corner-clipping report (two edges meet at corners, compounding the
+    // inward bite diagonally), then raised again for a rougher rip — the
+    // current worst case (~4.6dp) still sits well inside the 16/14dp floor,
+    // so the rips read rough without ever reaching the text.
+    val bite = with(density) { 3.0.dp.toPx() }
+    val tear = with(density) { 1.6.dp.toPx() }
+    val step = with(density) { 6.dp.toPx() }
     // Base frequency ~0.06 (repo tornFrequency ≈ 0.05) + an offset per edge
-    // so each side tears independently.
+    // so each side tears independently. The finer step (6dp vs 8dp) puts more
+    // vertices on the perimeter, so the edge reads jagged and fibrous rather
+    // than softly undulating.
     fun jitter(coord: Float, edgePhase: Float): Float =
         (fractalNoise(seed, coord * 0.06f, edgePhase) - 0.5f) * 2f * bite +
             (fractalNoise(seed + 31, coord * 0.013f, edgePhase + 7f) - 0.5f) * 2f * tear

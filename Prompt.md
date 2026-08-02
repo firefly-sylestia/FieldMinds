@@ -2,7 +2,22 @@
 
 ## Latest Request (COMPLETED)
 
-**Three new note-paper styles — coffee-stain edge, folded-corner page, red-margin notebook — as extra toggle options**
+**Rougher torn-page edges**
+
+### What was asked
+
+Make the torn pages' sides more rough.
+
+### What was changed
+
+- **`PaperCard.kt`** — `buildTornPath` jitter amplitudes raised for a rougher rip: bite 2.0→3.0dp, tear 1.0→1.6dp, and the perimeter step 8→6dp (more vertices on the edge → jagged + fibrous instead of softly undulating). Worst-case inward ≈ bite + tear ≈ 4.6dp, still well inside TornPaperCard's 16/14dp content-inset floor, so the rips read rough without ever clipping text.
+
+### Review
+code-reviewer-deepseek-flash: clean pass — edit is only the three constants + comment, no type errors, math matches the 16/14dp safety floor, grain/shadow/padding untouched.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
 
 ### What was asked
 
