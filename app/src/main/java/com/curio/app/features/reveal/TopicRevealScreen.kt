@@ -455,7 +455,19 @@ fun TopicRevealScreen(
         val topic = resolved
         val action = topic.exploreAction
         AlertDialog(
-            onDismissRequest = { showExploreDialog = false },
+            onDismissRequest = {
+                // A dismiss gesture (tap-outside / back / swipe) with no
+                // action picked = "backed out without exploring" — record
+                // the topic as recently-unexplored immediately so Home can
+                // offer to resume it, instead of only after the user
+                // presses back a second time to leave the screen. The
+                // "Explore now" / "Write about it" paths set engaged=true
+                // before dismissing, so they never trip this.
+                if (!engaged) {
+                    ExploreSessionStore.recordUnexplored(context, cat.id, topic.name)
+                }
+                showExploreDialog = false
+            },
             title = { Text("Explore ${topic.name}?") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
