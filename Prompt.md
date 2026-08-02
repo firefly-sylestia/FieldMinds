@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Quote cards added to Reel Notes (review), Sound Bite (voice) and Mood Board (GalleryWall) — extracted Marginalia's "Favorite quotes" into a shared component**
+
+### What was asked
+
+Add a quote field option in more places — such as review, voice, and mood board — like Marginalia already has.
+
+### What was changed
+
+- **`CaptureData.kt`** — `SoundBite`, `ReelNotes` and `GalleryWall` each gained the 5 quote fields (`quotes`, `quoteSpans: List<List<TextSpan>>`, `quoteTilts`, `quoteStyles`, `quoteColors`) with `emptyList()` defaults (Gson legacy-safe — old entries keep their shape). `toFullContent()` now appends the quotes for all three.
+- **`CaptureFormatComponents.kt`** — NEW shared machinery extracted from Marginalia: `QuoteCardsState` (parallel `SnapshotStateList`s for text/spans/tilt/style/color with `addCard`/`removeCard`/`setText`/`setStyle`/`setColor`/`hasContent` — tilt generated once at card creation, never re-rolled), `rememberQuoteCardsState(...)` (seeded from `initialData` with legacy padding), public `QuoteCardsSection` (header + count, per-card `QuoteCard`, dashed "Add quote" button inheriting `newCardStyle`/`newCardColor`), private `QuoteCard` (rotated paper card w/ rich-text toolbar + style/color toggles + Remove, toolbar OUTSIDE the paper slip), and `randomQuoteTilt()`.
+- **`MarginaliaFormat.kt`** — refactored onto the shared `rememberQuoteCardsState` + `QuoteCardsSection` (removed the inline lists, the private `QuoteCard`, `randomTilt()`, and the now-unused imports). Behavior identical.
+- **`ReelNotesFormat.kt`** — quote state seeded from `initialData`; `canSave = reviewText.isNotBlank() || quoteCards.hasContent`; `LaunchedEffect` keys + emit include all 5 lists; `QuoteCardsSection` sits after the review field, before the image row.
+- **`SoundBiteFormat.kt`** — same wiring; `canSave` unchanged (recording-based); section after the note field, `enabled = recordingState != RECORDING` (frozen mid-capture like the note).
+- **`GalleryWallFormat.kt`** — same wiring; `canSave = tiles.isNotEmpty() || quoteCards.hasContent`; section after the caption.
+- **`EntryDetailScreen.kt`** — NEW shared private `RenderQuoteCards(quotes, spans, tilts, styles, colors, fallbackStyle, category, label)` extracted from MarginaliaRender (pads spans to quotes length, keeps ORIGINAL index through the blank filter so saved tilts stay aligned, curly-quote wrap with +1 span shift, `remember(origIndex)` fallback tilt); MarginaliaRender + SoundBiteRender + ReelNotesRender + GalleryWallRender all call it. Added `NotePaperStyle` + `TextSpan` imports.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified all new imports resolve, removed MarginaliaFormat imports aren't referenced by remaining code, `weight()` used in RowScope, `rememberQuoteCardsState` keys stable, `remember(origIndex)` valid, all CaptureData constructors use named args so the new fields can't break call sites. Nits applied: removed the now-unused `TextSpan` import from MarginaliaFormat and unified the redundant `if (data.quotes.any { it.isNotBlank() })` guards in the three saved renders (RenderQuoteCards already no-ops on empty — MarginaliaRender was already unguarded). One behavioral note accepted: GalleryWall can now save a quote-only board (0 tiles) — consistent with Marginalia's quote-or-primary philosophy.
+
+### Follow-ups / notes
+- OpenNotebook (wildcard) automatically passes `initialData` to all sub-formats, so quotes preload in edit mode with no extra wiring.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Saved-entry paper text boxes no longer collapse — every paper slip gets a min-height floor**
 
 ### What was asked

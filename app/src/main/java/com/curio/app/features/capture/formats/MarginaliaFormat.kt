@@ -3,43 +3,24 @@ package com.curio.app.features.capture.formats
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
-import com.curio.app.data.TextSpan
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
-import com.curio.app.ui.theme.CurioIcon
-import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.paperBorder
 import com.curio.app.ui.theme.paperInk
-import com.curio.app.ui.theme.paperSurface
-
-/** Hand-placed tilt in degrees (−2.5°..2.5°) for a quote card. */
-private fun randomTilt(): Float = kotlin.random.Random.nextFloat() * 5f - 2.5f
 
 /**
  * Marginalia format body — CURIO_SPEC §8.3 (Books / Authors).
@@ -71,41 +52,11 @@ fun MarginaliaFormat(
     // Legacy entries lack the span fields (Gson → null), guard with orEmpty().
     var journalText by remember(initialData) { mutableStateOf(initialData?.journalText ?: "") }
     var journalSpans by remember(initialData) { mutableStateOf(initialData?.journalSpans.orEmpty()) }
-    val quotes = remember(initialData) {
-        mutableStateListOf<String>().apply { addAll(initialData?.quotes.orEmpty()) }
-    }
-    val quoteSpans = remember(initialData) {
-        mutableStateListOf<List<TextSpan>>().apply {
-            addAll(initialData?.quoteSpans.orEmpty())
-            // Pad any missing per-quote span lists (legacy entries) so the
-            // parallel list always matches quotes 1:1.
-            while (size < quotes.size) add(emptyList())
-        }
-    }
-    // Hand-placed tilt per quote card — generated ONCE when a card is born
-    // and SAVED with the entry ([CaptureData.Marginalia.quoteTilts]), so the
-    // angle you add with is the angle that persists. Never re-rolled by
-    // recomposition, section switches, or revisits (legacy entries lack the
-    // field → fresh tilts, padded parallel to quotes).
-    val quoteTilts = remember(initialData) {
-        mutableStateListOf<Float>().apply {
-            addAll(initialData?.quoteTilts.orEmpty())
-            while (size < quotes.size) add(randomTilt())
-        }
-    }
     // Note-paper style per text box — the journal page and EACH quote card
     // wear their own choice. Legacy entries lack the per-field fields (Gson
     // → null), fall back to the take-level paperStyle → RULED.
     var journalStyle by remember(initialData) {
         mutableStateOf(initialData?.journalStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
-    }
-    val quoteStyles = remember(initialData) {
-        mutableStateListOf<NotePaperStyle>().apply {
-            addAll(initialData?.quoteStyles.orEmpty())
-            // Pad any missing per-quote styles (legacy entries) so the
-            // parallel list always matches quotes 1:1.
-            while (size < quotes.size) add(initialData?.paperStyle ?: NotePaperStyle.RULED)
-        }
     }
     // Note-paper color per text box — the journal page and EACH quote card
     // wear their own color. Legacy entries lack the per-field fields (Gson
@@ -113,36 +64,41 @@ fun MarginaliaFormat(
     var journalColor by remember(initialData) {
         mutableStateOf(initialData?.journalColor ?: NotePaperColor.CREAM)
     }
-    val quoteColors = remember(initialData) {
-        mutableStateListOf<NotePaperColor>().apply {
-            addAll(initialData?.quoteColors.orEmpty())
-            // Pad any missing per-quote colors (legacy entries) so the
-            // parallel list always matches quotes 1:1.
-            while (size < quotes.size) add(NotePaperColor.CREAM)
-        }
-    }
+    // Quote cards — the SHARED hand-placed paper notecard section (same
+    // component Reel Notes / Sound Bite / Mood Board use). Owns the parallel
+    // lists (text / spans / tilt / style / color) and never re-rolls a
+    // card's tilt after it's created.
+    val quoteCards = rememberQuoteCardsState(
+        initialQuotes = initialData?.quotes.orEmpty(),
+        initialSpans = initialData?.quoteSpans.orEmpty(),
+        initialTilts = initialData?.quoteTilts.orEmpty(),
+        initialStyles = initialData?.quoteStyles.orEmpty(),
+        initialColors = initialData?.quoteColors.orEmpty(),
+        defaultStyle = initialData?.paperStyle ?: NotePaperStyle.RULED,
+        defaultColor = NotePaperColor.CREAM
+    )
 
-    val canSave = journalText.isNotBlank() ||
-                  quotes.any { it.isNotBlank() }
+    val canSave = journalText.isNotBlank() || quoteCards.hasContent
     // Key on the content too: journal text typed or quotes added AFTER the
     // first character must re-emit, or saving would persist stale data
     // (later text/quotes silently dropped from the saved entry).
     LaunchedEffect(
-        canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList(),
-        quoteTilts.toList(), journalStyle, quoteStyles.toList(), journalColor, quoteColors.toList()
+        canSave, journalText, journalSpans, quoteCards.quotes.toList(),
+        quoteCards.spans.toList(), quoteCards.tilts.toList(), journalStyle,
+        quoteCards.styles.toList(), journalColor, quoteCards.colors.toList()
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.Marginalia(
                 journalText = journalText,
-                quotes = quotes.toList(),
+                quotes = quoteCards.quotes.toList(),
                 journalSpans = journalSpans,
-                quoteSpans = quoteSpans.toList(),
-                quoteTilts = quoteTilts.toList(),
+                quoteSpans = quoteCards.spans.toList(),
+                quoteTilts = quoteCards.tilts.toList(),
                 journalStyle = journalStyle,
-                quoteStyles = quoteStyles.toList(),
+                quoteStyles = quoteCards.styles.toList(),
                 journalColor = journalColor,
-                quoteColors = quoteColors.toList(),
+                quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the journal's style.
                 paperStyle = journalStyle
             )
@@ -185,163 +141,12 @@ fun MarginaliaFormat(
             )
         }
 
-        // ── Quote cards ───────────────────────────────────────────────────
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Favorite quotes",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                if (quotes.isNotEmpty()) {
-                    Text(
-                        text = "${quotes.size}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-
-            quotes.forEachIndexed { i, quote ->
-                // The tilt SAVED with this card — generated at creation, never
-                // re-rolled by recomposition, typing, or section switches.
-                val rotation = quoteTilts.getOrElse(i) { randomTilt() }
-                QuoteCard(
-                    index = i,
-                    text = quote,
-                    spans = quoteSpans.getOrElse(i) { emptyList() },
-                    rotation = rotation,
-                    style = quoteStyles.getOrElse(i) { NotePaperStyle.RULED },
-                    color = quoteColors.getOrElse(i) { NotePaperColor.CREAM },
-                    onStyleChange = { quoteStyles[i] = it },
-                    onColorChange = { quoteColors[i] = it },
-                    onTextChange = { newText, newSpans ->
-                        quotes[i] = newText
-                        quoteSpans[i] = newSpans
-                    },
-                    onRemove = {
-                        quotes.removeAt(i)
-                        if (i < quoteSpans.size) quoteSpans.removeAt(i)
-                        if (i < quoteTilts.size) quoteTilts.removeAt(i)
-                        if (i < quoteStyles.size) quoteStyles.removeAt(i)
-                        if (i < quoteColors.size) quoteColors.removeAt(i)
-                    }
-                )
-            }
-
-            // Add-quote button (dashed-outline placeholder style)
-            Surface(
-                onClick = {
-                    quotes.add("")
-                    quoteSpans.add(emptyList())
-                    // A fresh card gets its own tilt — and it STAYS that way.
-                    quoteTilts.add(randomTilt())
-                    // New cards inherit the journal's current paper style + color.
-                    quoteStyles.add(journalStyle)
-                    quoteColors.add(journalColor)
-                },
-                shape = RoundedCornerShape(14.dp),
-                color = paperSurface().copy(alpha = 0.6f),
-                border = BorderStroke(1.dp, paperBorder()),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.padding(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.Add,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        size = 18.dp
-                    )
-                    Text(
-                        text = "Add quote",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun QuoteCard(
-    index: Int,
-    text: String,
-    spans: List<TextSpan>,
-    rotation: Float,
-    style: NotePaperStyle,
-    color: NotePaperColor,
-    onStyleChange: (NotePaperStyle) -> Unit,
-    onColorChange: (NotePaperColor) -> Unit,
-    onTextChange: (text: String, spans: List<TextSpan>) -> Unit,
-    onRemove: () -> Unit
-) {
-    // The header row + toolbar render ABOVE the paper slip (the card holds
-    // only the field), so the ruled lines line up under the quote text.
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .rotate(rotation)
-    ) {
-        // ── Card header — quote mark + number, Remove on the right ──
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CurioIcon(
-                name = CurioIcons.FormatQuote,
-                contentDescription = null,
-                tint = paperInk().copy(alpha = 0.55f),
-                size = 16.dp
-            )
-            Spacer(Modifier.width(6.dp))
-            Text(
-                text = "Quote ${index + 1}",
-                style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                ),
-                color = paperInk().copy(alpha = 0.7f),
-                modifier = Modifier.weight(1f)
-            )
-            Surface(
-                onClick = onRemove,
-                shape = RoundedCornerShape(8.dp),
-                color = Color.Transparent
-            ) {
-                Text(
-                    text = "Remove",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                )
-            }
-        }
-        RichTextEditor(
-            modifier = Modifier.fillMaxWidth(),
-            text = text,
-            spans = spans,
-            onRichTextChange = onTextChange,
-            placeholder = "\u201C...\u201D",
-            toolbarMode = RichTextToolbarMode.MAIN,
-            minHeight = 64.dp,
-            ink = paperInk(),
-            accent = MaterialTheme.colorScheme.tertiary,
-            paper = true,
-            paperStyle = style,
-            onPaperStyleChange = onStyleChange,
-            paperColor = color,
-            onPaperColorChange = onColorChange,
-            paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // New cards inherit the journal's current paper style + color.
+        QuoteCardsSection(
+            state = quoteCards,
+            newCardStyle = { journalStyle },
+            newCardColor = { journalColor }
         )
     }
 }

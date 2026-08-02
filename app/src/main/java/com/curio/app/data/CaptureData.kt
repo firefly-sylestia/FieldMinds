@@ -82,6 +82,14 @@ sealed class CaptureData {
         // [NotePaperColor.CREAM].
         val titleColor: NotePaperColor? = null,
         val noteColor: NotePaperColor? = null,
+        // Optional quote cards — the same hand-placed paper slips as
+        // Marginalia's "Favorite quotes". Legacy entries omit them (Gson →
+        // empty) so saved voice notes keep their shape.
+        val quotes: List<String> = emptyList(),
+        val quoteSpans: List<List<TextSpan>> = emptyList(),
+        val quoteTilts: List<Float> = emptyList(),
+        val quoteStyles: List<NotePaperStyle> = emptyList(),
+        val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback + the "primary"
         // field's style for old consumers. New entries set per-field styles
         // and mirror the note here so [notePaperStyle] stays meaningful.
@@ -107,6 +115,14 @@ sealed class CaptureData {
         // Note-paper COLOR for the review box — legacy entries omit it
         // (Gson → null) and fall back to [NotePaperColor.CREAM].
         val reviewColor: NotePaperColor? = null,
+        // Optional quote cards — the same hand-placed paper slips as
+        // Marginalia's "Favorite quotes". Legacy entries omit them (Gson →
+        // empty) so saved reviews keep their shape.
+        val quotes: List<String> = emptyList(),
+        val quoteSpans: List<List<TextSpan>> = emptyList(),
+        val quoteTilts: List<Float> = emptyList(),
+        val quoteStyles: List<NotePaperStyle> = emptyList(),
+        val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
@@ -166,6 +182,14 @@ sealed class CaptureData {
         // Note-paper COLOR for the caption box — legacy entries omit it
         // (Gson → null) and fall back to [NotePaperColor.CREAM].
         val captionColor: NotePaperColor? = null,
+        // Optional quote cards — the same hand-placed paper slips as
+        // Marginalia's "Favorite quotes", pinned under the collage. Legacy
+        // entries omit them (Gson → empty) so saved boards keep their shape.
+        val quotes: List<String> = emptyList(),
+        val quoteSpans: List<List<TextSpan>> = emptyList(),
+        val quoteTilts: List<Float> = emptyList(),
+        val quoteStyles: List<NotePaperStyle> = emptyList(),
+        val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null
     ) : CaptureData()
@@ -264,10 +288,15 @@ sealed class CaptureData {
             appendLine("Voice note · ${durationSeconds}s")
             if (title.isNotBlank()) appendLine("\"$title\"")
             if (note.isNotBlank()) appendLine(note)
+            quotes.filter { it.isNotBlank() }.forEach { appendLine("\"$it\"") }
         }
         is ReelNotes -> buildString {
             if (rating > 0) appendLine("★".repeat(rating))
-            append(reviewText)
+            if (reviewText.isNotBlank()) {
+                appendLine(reviewText)
+                if (quotes.any { it.isNotBlank() }) appendLine()
+            }
+            quotes.filter { it.isNotBlank() }.forEach { appendLine("\"$it\"") }
         }
         is Marginalia -> buildString {
             if (journalText.isNotBlank()) {
@@ -281,6 +310,7 @@ sealed class CaptureData {
         is GalleryWall -> buildString {
             appendLine("Moodboard · $imageCount image${if (imageCount != 1) "s" else ""}")
             if (caption.isNotBlank()) appendLine(caption)
+            quotes.filter { it.isNotBlank() }.forEach { appendLine("\"$it\"") }
             imageUris.forEach { appendLine(it) }
         }
         is FieldNotes -> buildString {

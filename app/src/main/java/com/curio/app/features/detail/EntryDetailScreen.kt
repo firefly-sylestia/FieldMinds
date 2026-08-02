@@ -94,6 +94,8 @@ import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.NotePaperColor
+import com.curio.app.data.NotePaperStyle
+import com.curio.app.data.TextSpan
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
@@ -564,6 +566,17 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     )
                 }
             }
+
+            // ── Quote cards — shared hand-placed paper notecards ─────────
+            RenderQuoteCards(
+                quotes = data.quotes,
+                spans = data.quoteSpans.orEmpty(),
+                tilts = data.quoteTilts.orEmpty(),
+                styles = data.quoteStyles.orEmpty(),
+                colors = data.quoteColors.orEmpty(),
+                fallbackStyle = data.notePaperStyle(),
+                category = category
+            )
         }
     }
 }
@@ -999,6 +1012,17 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                 )
             }
         }
+
+        // ── Quote cards — shared hand-placed paper notecards ─────────────
+        RenderQuoteCards(
+            quotes = data.quotes,
+            spans = data.quoteSpans.orEmpty(),
+            tilts = data.quoteTilts.orEmpty(),
+            styles = data.quoteStyles.orEmpty(),
+            colors = data.quoteColors.orEmpty(),
+            fallbackStyle = data.notePaperStyle(),
+            category = category
+        )
     }
 }
 
@@ -1029,61 +1053,90 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
             }
         }
 
-        // ── Favorite quotes — hand-placed paper notecards with quote marks ──
-        // Pad quoteSpans to the quotes length first (legacy Gson blobs may
-        // carry fewer/absent span lists), then zip so the spans stay aligned
-        // with their quote even when blank cards are filtered out. Keep the
-        // ORIGINAL index through the blank filter so each card can find its
-        // saved tilt (quoteTilts parallels data.quotes 1:1).
-        val spansPadded = data.quoteSpans.orEmpty().toMutableList()
-        while (spansPadded.size < data.quotes.size) spansPadded.add(emptyList())
-        val quotePairs = data.quotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
-            if (pair.first.isNullOrBlank()) null else i to pair
-        }
-        if (quotePairs.isNotEmpty()) {
-            MarginaliaSectionHeader(label = "Favorite quotes", category = category, count = quotePairs.size)
-            quotePairs.forEach { (origIndex, pair) ->
-                val (quote, spans) = pair
-                // The tilt SAVED with this card (the exact angle the user
-                // added with — never re-rolled). Legacy entries lack the
-                // field → fall back to a stable random tilt keyed by the
-                // original index so viewing never re-rolls it either.
-                val rotation = data.quoteTilts.orEmpty().getOrNull(origIndex)
-                    ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
-                val quoteSheet = data.quoteColors.orEmpty().getOrNull(origIndex) ?: NotePaperColor.CREAM
-                NotePaperCard(
-                    style = data.quoteStyles.orEmpty().getOrNull(origIndex) ?: data.notePaperStyle(),
-                    paperColor = quoteSheet,
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
-                    corner = 12.dp,
-                    minHeight = 72.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .rotate(rotation)
+        // ── Favorite quotes — shared hand-placed paper notecards ─────────
+        RenderQuoteCards(
+            quotes = data.quotes,
+            spans = data.quoteSpans.orEmpty(),
+            tilts = data.quoteTilts.orEmpty(),
+            styles = data.quoteStyles.orEmpty(),
+            colors = data.quoteColors.orEmpty(),
+            fallbackStyle = data.notePaperStyle(),
+            category = category
+        )
+    }
+}
+
+/**
+ * Shared saved-view quote cards — the hand-placed paper notecards used by
+ * Marginalia, Reel Notes, Sound Bite and the Mood Board detail pages. Pads
+ * quoteSpans to the quotes length (legacy Gson blobs may carry fewer/absent
+ * span lists), keeps the ORIGINAL index through the blank filter so each
+ * card can find its saved tilt (quoteTilts parallels quotes 1:1), and
+ * renders the section header + a rotated paper card per non-blank quote.
+ */
+@Composable
+private fun RenderQuoteCards(
+    quotes: List<String>,
+    spans: List<List<TextSpan>>,
+    tilts: List<Float>,
+    styles: List<NotePaperStyle>,
+    colors: List<NotePaperColor>,
+    fallbackStyle: NotePaperStyle,
+    category: CurioCategory,
+    label: String = "Favorite quotes"
+) {
+    // Pad spans to the quotes length first (legacy Gson blobs may carry
+    // fewer/absent span lists), then zip so the spans stay aligned with
+    // their quote even when blank cards are filtered out. Keep the ORIGINAL
+    // index through the blank filter so each card can find its saved tilt.
+    val spansPadded = spans.toMutableList()
+    while (spansPadded.size < quotes.size) spansPadded.add(emptyList())
+    val quotePairs = quotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
+        if (pair.first.isNullOrBlank()) null else i to pair
+    }
+    if (quotePairs.isNotEmpty()) {
+        MarginaliaSectionHeader(label = label, category = category, count = quotePairs.size)
+        quotePairs.forEach { (origIndex, pair) ->
+            val (quote, cardSpans) = pair
+            // The tilt SAVED with this card (the exact angle the user added
+            // with — never re-rolled). Legacy entries lack the field → fall
+            // back to a stable random tilt keyed by the original index so
+            // viewing never re-rolls it either.
+            val rotation = tilts.getOrNull(origIndex)
+                ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
+            val quoteSheet = colors.getOrNull(origIndex) ?: NotePaperColor.CREAM
+            NotePaperCard(
+                style = styles.getOrNull(origIndex) ?: fallbackStyle,
+                paperColor = quoteSheet,
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
+                corner = 12.dp,
+                minHeight = 72.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .rotate(rotation)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        CurioIcon(
-                            name = CurioIcons.FormatQuote,
-                            contentDescription = null,
-                            tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
-                            size = 20.dp
-                        )
-                        Text(
-                            // Spans shift +1 to account for the curly-quote
-                            // wrapper added around the saved quote text.
-                            text = buildRichAnnotated(
-                                "\u201C$quote\u201D",
-                                spans.map { it.copy(start = it.start + 1, end = it.end + 1) },
-                                notePaperHighlight(quoteSheet)
-                            ),
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
-                            color = notePaperInk(quoteSheet)
-                        )
-                    }
+                    CurioIcon(
+                        name = CurioIcons.FormatQuote,
+                        contentDescription = null,
+                        tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
+                        size = 20.dp
+                    )
+                    Text(
+                        // Spans shift +1 to account for the curly-quote
+                        // wrapper added around the saved quote text.
+                        text = buildRichAnnotated(
+                            "\u201C$quote\u201D",
+                            cardSpans.map { it.copy(start = it.start + 1, end = it.end + 1) },
+                            notePaperHighlight(quoteSheet)
+                        ),
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                        color = notePaperInk(quoteSheet)
+                    )
                 }
             }
         }
@@ -1299,6 +1352,17 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 )
             }
         }
+
+        // ── Quote cards — shared hand-placed paper notecards ─────────────
+        RenderQuoteCards(
+            quotes = data.quotes,
+            spans = data.quoteSpans.orEmpty(),
+            tilts = data.quoteTilts.orEmpty(),
+            styles = data.quoteStyles.orEmpty(),
+            colors = data.quoteColors.orEmpty(),
+            fallbackStyle = data.notePaperStyle(),
+            category = category
+        )
 
         if (boardExpanded) {
             ExpandedMoodBoardDialog(

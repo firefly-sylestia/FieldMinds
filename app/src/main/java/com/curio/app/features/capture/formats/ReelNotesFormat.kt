@@ -68,6 +68,19 @@ fun ReelNotesFormat(
     var reviewColor by remember(initialData) {
         mutableStateOf(initialData?.reviewColor ?: NotePaperColor.CREAM)
     }
+    // Quote cards — the SHARED hand-placed paper notecard section (same
+    // component Marginalia / Sound Bite / Mood Board use). Owns the parallel
+    // lists (text / spans / tilt / style / color); new cards inherit the
+    // review box's current paper style + color.
+    val quoteCards = rememberQuoteCardsState(
+        initialQuotes = initialData?.quotes.orEmpty(),
+        initialSpans = initialData?.quoteSpans.orEmpty(),
+        initialTilts = initialData?.quoteTilts.orEmpty(),
+        initialStyles = initialData?.quoteStyles.orEmpty(),
+        initialColors = initialData?.quoteColors.orEmpty(),
+        defaultStyle = initialData?.reviewStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED,
+        defaultColor = initialData?.reviewColor ?: NotePaperColor.CREAM
+    )
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -83,11 +96,16 @@ fun ReelNotesFormat(
         imageUris = (imageUris + uris.map { it.toString() }).take(3)
     }
 
-    val canSave = reviewText.isNotBlank()
-    // Key on every input, not just canSave: rating, review text and images
-    // added AFTER the first character must re-emit, or saving would persist
-    // stale data (text/rating/images silently dropped from the saved entry).
-    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle, reviewColor) {
+    val canSave = reviewText.isNotBlank() || quoteCards.hasContent
+    // Key on every input, not just canSave: rating, review text, quotes and
+    // images added AFTER the first character must re-emit, or saving would
+    // persist stale data (text/rating/quotes/images silently dropped from
+    // the saved entry).
+    LaunchedEffect(
+        canSave, rating, reviewText, reviewSpans, imageUris, reviewStyle, reviewColor,
+        quoteCards.quotes.toList(), quoteCards.spans.toList(), quoteCards.tilts.toList(),
+        quoteCards.styles.toList(), quoteCards.colors.toList()
+    ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.ReelNotes(
@@ -98,6 +116,11 @@ fun ReelNotesFormat(
                 reviewSpans = reviewSpans,
                 reviewStyle = reviewStyle,
                 reviewColor = reviewColor,
+                quotes = quoteCards.quotes.toList(),
+                quoteSpans = quoteCards.spans.toList(),
+                quoteTilts = quoteCards.tilts.toList(),
+                quoteStyles = quoteCards.styles.toList(),
+                quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the primary field's style.
                 paperStyle = reviewStyle
             )
@@ -149,6 +172,14 @@ fun ReelNotesFormat(
             paperColor = reviewColor,
             onPaperColorChange = { reviewColor = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        )
+
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // New cards inherit the review box's current paper style + color.
+        QuoteCardsSection(
+            state = quoteCards,
+            newCardStyle = { reviewStyle },
+            newCardColor = { reviewColor }
         )
 
         // ── Image attach row ───────────────────────────────────────────────

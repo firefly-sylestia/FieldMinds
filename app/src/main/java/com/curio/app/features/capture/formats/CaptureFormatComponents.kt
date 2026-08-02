@@ -23,9 +23,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -34,18 +37,25 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
+import com.curio.app.data.TextSpan
 import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.components.NotePaperColorToggle
 import com.curio.app.ui.components.NotePaperStyleToggle
+import com.curio.app.ui.components.RichTextEditor
+import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
+import com.curio.app.ui.theme.paperBorder
+import com.curio.app.ui.theme.paperInk
+import com.curio.app.ui.theme.paperSurface
 import com.curio.app.ui.theme.PatrickHandFontFamily
 import coil.compose.rememberAsyncImagePainter
 import kotlin.math.cos
@@ -378,5 +388,276 @@ fun PaperLineField(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Quote cards — the hand-placed paper notecards (originally Marginalia's
+// "Favorite quotes") extracted into a SHARED section so Reel Notes, Sound
+// Bite and the Mood Board can offer the same quote field without copying
+// the machinery. One [QuoteCardsState] per format body owns the parallel
+// lists (text / spans / tilt / style / color); [QuoteCardsSection] renders
+// the header + cards + add button; [RenderQuoteCards] is the saved-view
+// counterpart in EntryDetailScreen.
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Hand-placed tilt in degrees (−2.5°..2.5°) for a quote card. */
+private fun randomQuoteTilt(): Float = kotlin.random.Random.nextFloat() * 5f - 2.5f
+
+/**
+ * State holder for the reusable "Favorite quotes" section — owns the five
+ * PARALLEL lists that describe every card (text, rich-text spans, hand-
+ * placed tilt, per-card paper style, per-card paper color). All mutations
+ * go through [addCard] / [removeCard] / [setText] / [setStyle] / [setColor]
+ * so the lists never drift out of sync.
+ */
+class QuoteCardsState(
+    initialQuotes: List<String>,
+    initialSpans: List<List<TextSpan>>,
+    initialTilts: List<Float>,
+    initialStyles: List<NotePaperStyle>,
+    initialColors: List<NotePaperColor>,
+    defaultStyle: NotePaperStyle,
+    defaultColor: NotePaperColor
+) {
+    val quotes = mutableStateListOf<String>().apply { addAll(initialQuotes) }
+    val spans = mutableStateListOf<List<TextSpan>>().apply {
+        addAll(initialSpans)
+        // Pad any missing per-quote span lists (legacy entries) so the
+        // parallel list always matches quotes 1:1.
+        while (size < quotes.size) add(emptyList())
+    }
+    // Hand-placed tilt per card — generated ONCE when a card is born and
+    // saved with the entry, so the angle the user adds with is the angle
+    // that persists (never re-rolled by recomposition or revisits).
+    val tilts = mutableStateListOf<Float>().apply {
+        addAll(initialTilts)
+        while (size < quotes.size) add(randomQuoteTilt())
+    }
+    val styles = mutableStateListOf<NotePaperStyle>().apply {
+        addAll(initialStyles)
+        // Pad any missing per-quote styles so the list matches 1:1.
+        while (size < quotes.size) add(defaultStyle)
+    }
+    val colors = mutableStateListOf<NotePaperColor>().apply {
+        addAll(initialColors)
+        // Pad any missing per-quote colors so the list matches 1:1.
+        while (size < quotes.size) add(defaultColor)
+    }
+
+    /** Whether any card has real text — drives the format's canSave. */
+    val hasContent: Boolean get() = quotes.any { it.isNotBlank() }
+
+    fun addCard(style: NotePaperStyle, color: NotePaperColor) {
+        quotes.add("")
+        spans.add(emptyList())
+        // A fresh card gets its own tilt — and it STAYS that way.
+        tilts.add(randomQuoteTilt())
+        styles.add(style)
+        colors.add(color)
+    }
+
+    fun removeCard(index: Int) {
+        if (index !in quotes.indices) return
+        quotes.removeAt(index)
+        if (index < spans.size) spans.removeAt(index)
+        if (index < tilts.size) tilts.removeAt(index)
+        if (index < styles.size) styles.removeAt(index)
+        if (index < colors.size) colors.removeAt(index)
+    }
+
+    fun setText(index: Int, text: String, cardSpans: List<TextSpan>) {
+        if (index !in quotes.indices) return
+        quotes[index] = text
+        spans[index] = cardSpans
+    }
+
+    fun setStyle(index: Int, style: NotePaperStyle) {
+        if (index in styles.indices) styles[index] = style
+    }
+
+    fun setColor(index: Int, color: NotePaperColor) {
+        if (index in colors.indices) colors[index] = color
+    }
+}
+
+/**
+ * Creates the [QuoteCardsState] for a format body, seeded from saved
+ * [CaptureData] (edit mode) with [defaultStyle]/[defaultColor] as the
+ * fallback paper look for legacy entries that predate per-card styles.
+ */
+@Composable
+fun rememberQuoteCardsState(
+    initialQuotes: List<String>,
+    initialSpans: List<List<TextSpan>>,
+    initialTilts: List<Float>,
+    initialStyles: List<NotePaperStyle>,
+    initialColors: List<NotePaperColor>,
+    defaultStyle: NotePaperStyle,
+    defaultColor: NotePaperColor
+): QuoteCardsState = remember(
+    initialQuotes, initialSpans, initialTilts, initialStyles, initialColors,
+    defaultStyle, defaultColor
+) {
+    QuoteCardsState(initialQuotes, initialSpans, initialTilts, initialStyles, initialColors, defaultStyle, defaultColor)
+}
+
+/**
+ * The shared "Favorite quotes" editor section — a header row with the card
+ * count, one hand-placed paper notecard per quote (each with its own
+ * rich-text toolbar + Ruled/Torn/color toggles + Remove), and a dashed
+ * "Add quote" button. [newCardStyle]/[newCardColor] supply the paper look
+ * NEW cards inherit (e.g. the format's primary field), and [enabled] lets
+ * recording formats freeze the cards mid-capture.
+ */
+@Composable
+fun QuoteCardsSection(
+    state: QuoteCardsState,
+    modifier: Modifier = Modifier,
+    header: String = "Favorite quotes",
+    placeholder: String = "\u201C...\u201D",
+    enabled: Boolean = true,
+    accent: Color = paperAccent(),
+    newCardStyle: () -> NotePaperStyle = { NotePaperStyle.RULED },
+    newCardColor: () -> NotePaperColor = { NotePaperColor.CREAM }
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = header,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (state.quotes.isNotEmpty()) {
+                Text(
+                    text = "${state.quotes.size}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        state.quotes.forEachIndexed { i, _ ->
+            QuoteCard(
+                index = i,
+                state = state,
+                enabled = enabled,
+                accent = accent,
+                placeholder = placeholder
+            )
+        }
+
+        // Add-quote button (dashed-outline placeholder style)
+        Surface(
+            onClick = { state.addCard(newCardStyle(), newCardColor()) },
+            enabled = enabled,
+            shape = RoundedCornerShape(14.dp),
+            color = paperSurface().copy(alpha = 0.6f),
+            border = BorderStroke(1.dp, paperBorder()),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.padding(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Add,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 18.dp
+                )
+                Text(
+                    text = "Add quote",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+/**
+ * One quote card — a hand-placed paper notecard (rotated a few degrees)
+ * with its own rich-text toolbar + paper-style/color toggles. The header
+ * row + toolbar render ABOVE the paper slip so the ruled lines line up
+ * under the text while typing.
+ */
+@Composable
+private fun QuoteCard(
+    index: Int,
+    state: QuoteCardsState,
+    enabled: Boolean,
+    accent: Color,
+    placeholder: String
+) {
+    // The tilt SAVED with this card — generated at creation, never re-rolled
+    // by recomposition, typing, or section switches.
+    val rotation = state.tilts.getOrElse(index) { randomQuoteTilt() }
+    val style = state.styles.getOrElse(index) { NotePaperStyle.RULED }
+    val color = state.colors.getOrElse(index) { NotePaperColor.CREAM }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .rotate(rotation)
+    ) {
+        // ── Card header — quote mark + number, Remove on the right ──
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CurioIcon(
+                name = CurioIcons.FormatQuote,
+                contentDescription = null,
+                tint = paperInk().copy(alpha = 0.55f),
+                size = 16.dp
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                text = "Quote ${index + 1}",
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                color = paperInk().copy(alpha = 0.7f),
+                modifier = Modifier.weight(1f)
+            )
+            Surface(
+                onClick = { state.removeCard(index) },
+                enabled = enabled,
+                shape = RoundedCornerShape(8.dp),
+                color = Color.Transparent
+            ) {
+                Text(
+                    text = "Remove",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                )
+            }
+        }
+        RichTextEditor(
+            modifier = Modifier.fillMaxWidth(),
+            text = state.quotes.getOrElse(index) { "" },
+            spans = state.spans.getOrElse(index) { emptyList() },
+            onRichTextChange = { newText, newSpans -> state.setText(index, newText, newSpans) },
+            placeholder = placeholder,
+            toolbarMode = RichTextToolbarMode.MAIN,
+            minHeight = 64.dp,
+            enabled = enabled,
+            ink = paperInk(),
+            accent = accent,
+            paper = true,
+            paperStyle = style,
+            onPaperStyleChange = { state.setStyle(index, it) },
+            paperColor = color,
+            onPaperColorChange = { state.setColor(index, it) },
+            paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
+        )
     }
 }

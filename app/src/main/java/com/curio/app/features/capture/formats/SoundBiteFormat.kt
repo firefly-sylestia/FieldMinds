@@ -121,6 +121,19 @@ fun SoundBiteFormat(
     var noteColor by remember(initialData) {
         mutableStateOf(initialData?.noteColor ?: NotePaperColor.CREAM)
     }
+    // Quote cards — the SHARED hand-placed paper notecard section (same
+    // component Marginalia / Reel Notes / Mood Board use). Owns the parallel
+    // lists (text / spans / tilt / style / color); new cards inherit the
+    // note box's current paper style + color.
+    val quoteCards = rememberQuoteCardsState(
+        initialQuotes = initialData?.quotes.orEmpty(),
+        initialSpans = initialData?.quoteSpans.orEmpty(),
+        initialTilts = initialData?.quoteTilts.orEmpty(),
+        initialStyles = initialData?.quoteStyles.orEmpty(),
+        initialColors = initialData?.quoteColors.orEmpty(),
+        defaultStyle = initialData?.noteStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED,
+        defaultColor = initialData?.noteColor ?: NotePaperColor.CREAM
+    )
     var savedFilePath by remember(initialData) { mutableStateOf(initialData?.audioFilePath) }
     var permissionDenied by remember { mutableStateOf(false) }
     // Edit-mode restore: a restored recording must NOT auto-open the trimmer —
@@ -227,7 +240,8 @@ fun SoundBiteFormat(
                   !trimInProgress
     LaunchedEffect(
         canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle,
-        titleColor, noteColor
+        titleColor, noteColor, quoteCards.quotes.toList(), quoteCards.spans.toList(),
+        quoteCards.tilts.toList(), quoteCards.styles.toList(), quoteCards.colors.toList()
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -241,6 +255,11 @@ fun SoundBiteFormat(
                 noteStyle = noteStyle,
                 titleColor = titleColor,
                 noteColor = noteColor,
+                quotes = quoteCards.quotes.toList(),
+                quoteSpans = quoteCards.spans.toList(),
+                quoteTilts = quoteCards.tilts.toList(),
+                quoteStyles = quoteCards.styles.toList(),
+                quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the primary field's style.
                 paperStyle = noteStyle
             )
@@ -418,6 +437,15 @@ fun SoundBiteFormat(
             paperColor = noteColor,
             onPaperColorChange = { noteColor = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        )
+
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // Frozen while actively recording (the cards need the keyboard).
+        QuoteCardsSection(
+            state = quoteCards,
+            enabled = recordingState != AudioRecorder.State.RECORDING,
+            newCardStyle = { noteStyle },
+            newCardColor = { noteColor }
         )
     }
 }

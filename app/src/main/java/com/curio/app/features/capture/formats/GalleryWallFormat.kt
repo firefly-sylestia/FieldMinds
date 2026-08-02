@@ -168,13 +168,30 @@ fun GalleryWallFormat(
     var captionColor by remember(initialData) {
         mutableStateOf(initialData?.captionColor ?: NotePaperColor.CREAM)
     }
+    // Quote cards — the SHARED hand-placed paper notecard section (same
+    // component Marginalia / Reel Notes / Sound Bite use). Owns the parallel
+    // lists (text / spans / tilt / style / color); new cards inherit the
+    // caption's current paper style + color.
+    val quoteCards = rememberQuoteCardsState(
+        initialQuotes = initialData?.quotes.orEmpty(),
+        initialSpans = initialData?.quoteSpans.orEmpty(),
+        initialTilts = initialData?.quoteTilts.orEmpty(),
+        initialStyles = initialData?.quoteStyles.orEmpty(),
+        initialColors = initialData?.quoteColors.orEmpty(),
+        defaultStyle = initialData?.captionStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED,
+        defaultColor = initialData?.captionColor ?: NotePaperColor.CREAM
+    )
     var boardExpanded by remember { mutableStateOf(false) }
     // New board: fresh random pattern. Edit mode: reuse the caller-provided
     // seed (entry-id hash) so the editor matches the saved view's backdrop.
     val seed = remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }
 
-    val canSave = tiles.isNotEmpty()
-    LaunchedEffect(canSave, caption, tiles.toList(), captionStyle, captionColor) {
+    val canSave = tiles.isNotEmpty() || quoteCards.hasContent
+    LaunchedEffect(
+        canSave, caption, tiles.toList(), captionStyle, captionColor,
+        quoteCards.quotes.toList(), quoteCards.spans.toList(), quoteCards.tilts.toList(),
+        quoteCards.styles.toList(), quoteCards.colors.toList()
+    ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.GalleryWall(
@@ -184,6 +201,11 @@ fun GalleryWallFormat(
                 tileLayouts = tiles.map { CaptureData.TileLayout(it.uri, it.offsetXPx, it.offsetYPx, it.rotationDeg, it.widthPx, it.heightPx) },
                 captionStyle = captionStyle,
                 captionColor = captionColor,
+                quotes = quoteCards.quotes.toList(),
+                quoteSpans = quoteCards.spans.toList(),
+                quoteTilts = quoteCards.tilts.toList(),
+                quoteStyles = quoteCards.styles.toList(),
+                quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the caption's style.
                 paperStyle = captionStyle
             )
@@ -245,6 +267,14 @@ fun GalleryWallFormat(
             onPaperStyleChange = { captionStyle = it },
             paperColor = captionColor,
             onPaperColorChange = { captionColor = it }
+        )
+
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // New cards inherit the caption's current paper style + color.
+        QuoteCardsSection(
+            state = quoteCards,
+            newCardStyle = { captionStyle },
+            newCardColor = { captionColor }
         )
     }
 
