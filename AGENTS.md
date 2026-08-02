@@ -140,6 +140,12 @@ Use the ask_user tool BEFORE implementing and follow their answer. This
 ask does NOT apply to refinements or fixes of existing behavior — those
 ship as-is without the toggleable question.
 
+**Reminder — the toggle is NOT permanent.** Once a toggleable feature is
+decided/settled (the experiment concludes, the winning path is clear),
+REMOVE the toggle and hardcode the winning behavior — see rule 3 of the
+🧪 EXPERIMENTAL CHANGES section below. A toggle decided at ask-time is a
+ship vehicle, not a permanent Settings fixture.
+
 ### 🧪 EXPERIMENTAL CHANGES — MUST BE SETTINGS-OPTIONAL
 
 Whenever a change is **experimental or being tested** (a visual A/B, a new

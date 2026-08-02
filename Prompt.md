@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Agent rule reminder: a toggle decided at ask-time is NOT permanent — remove it per the experiment-closeout rule**
+
+### What was asked
+
+Add a reminder to the agent instructions: once a toggleable feature is decided, the toggle can be removed per the experiment-closeout rule.
+
+### What was changed
+
+- **`AGENTS.md` (root)** — the "🆕 NEW FEATURES — ASK THE USER: TOGGLEABLE OR NOT?" section gained a **Reminder** paragraph: a toggleable choice is NOT permanent — once the feature is decided/settled, REMOVE the toggle and hardcode the winning behavior (rule 3 of the 🧪 EXPERIMENTAL CHANGES section); a toggle decided at ask-time is a ship vehicle, not a permanent Settings fixture.
+- **`app/AGENTS.md`** — the new-measures bullet in "Experimental features (A/B testing)" mirrors it: the toggle is NOT permanent — remove it and hardcode the winning behavior once the feature is decided (experiment-closeout rule).
+
+### Review
+
+Not applicable — small agent-instruction doc change (no code).
+
+### Follow-ups / notes
+
+- Agent instruction changes are committed and pushed immediately so every agent sees them (per root AGENTS.md).
+
+
+## Previous Requests
+
 **CI fix: confetti block in SaveCaptureScreen referenced `tintWash` out of scope**
 
 ### What was asked
