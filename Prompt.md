@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**Backup/restore now restores photo attachments (moodboard + all image attachments)**
+
+### Bug
+
+Backup & restore only bundled audio bytes; image attachments were exported as bare URI strings. Since photos come from a document picker (content:// with persisted permission, never copied to app storage), restored captures pointed at dead URIs — moodboard photos and other attachments didn't come back.
+
+### Fix (backup format v3, mirrors the existing v2 audio bundling)
+
+- `CaptureData.kt` — `imageUrisAll()` (recursive through OpenNotebook/Portfolio) + `withImageUris(remap)`; GalleryWall remaps BOTH flat `imageUris` and `tileLayouts[].uri` so the board renders from stored positions.
+- `data/ImageStorageManager.kt` (new) — restores images to `filesDir/images/{entryId}/{n}.img`, per-entry delete, wipe-all; **path-traversal hardening** (rejects separators/dot segments from user-supplied backup + canonical-path containment check).
+- `CurioBackupManager.kt` — `FORMAT_VERSION 2→3`; `BackupPayload.imageFiles: Map<String, ByteArray>` keyed by original URI (deduped); export reads each image via `contentResolver.openInputStream` (unreadable → skipped); restore wipes images dir, writes bundled photos, rewrites URIs to `file://` paths; legacy v1/v2 backups degrade gracefully (URIs unchanged); skips JSON rewrite when nothing was remapped.
+- `EntryDetailScreen.kt` — entry delete also cleans the entry's restored image files.
+
+### Review
+
+Reviewer pass: fixed path-traversal in `restoreImage` + pointless re-serialization guard. CI validates on push.
+
+## Latest Request (COMPLETED)
+
 **Explore-system revamp: timed explore sessions with notifications, done-prompt, and recently-explored/unexplored tracking**
 
 ### What was asked

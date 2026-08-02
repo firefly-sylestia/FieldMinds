@@ -409,6 +409,42 @@ sealed class CaptureData {
     }
 
     /**
+     * Every attached image URI string nested inside this data — recurses
+     * through OpenNotebook wrappers and Portfolio sections so backup / delete
+     * flows cover all attachments, not just top-level ones.
+     */
+    fun imageUrisAll(): List<String> = when (this) {
+        is SoundBite -> emptyList()
+        is ReelNotes -> imageUris
+        is Marginalia -> imageUris
+        is GalleryWall -> imageUris
+        is FieldNotes -> imageUris
+        is OpenNotebook -> subData.imageUrisAll()
+        is Portfolio -> sections.flatMap { it.data.imageUrisAll() }
+    }
+
+    /**
+     * Returns a copy of [this] data with every attached image URI rewritten
+     * by [remap] — used by restore-from-backup to point attachments at the
+     * image files re-homed into app storage. Recurses through OpenNotebook
+     * wrappers and Portfolio sections. GalleryWall rewrites BOTH its flat
+     * [CaptureData.GalleryWall.imageUris] and the per-tile layout URIs so the
+     * mood board renders from its stored positions.
+     */
+    fun withImageUris(remap: (String) -> String): CaptureData = when (this) {
+        is SoundBite -> this
+        is ReelNotes -> copy(imageUris = imageUris.map(remap))
+        is Marginalia -> copy(imageUris = imageUris.map(remap))
+        is GalleryWall -> copy(
+            imageUris = imageUris.map(remap),
+            tileLayouts = tileLayouts.map { it.copy(uri = remap(it.uri)) }
+        )
+        is FieldNotes -> copy(imageUris = imageUris.map(remap))
+        is OpenNotebook -> copy(subData = subData.withImageUris(remap))
+        is Portfolio -> copy(sections = sections.map { it.copy(data = it.data.withImageUris(remap)) })
+    }
+
+    /**
      * The note-paper style this capture wears — [NotePaperStyle.RULED] for
      * legacy entries that predate the style field (Gson → null). OpenNotebook
      * and Portfolio delegate to their nested data so the whole entry reads

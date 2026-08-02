@@ -25,6 +25,12 @@ import kotlinx.coroutines.withContext
  *  - SoundBite audio recordings, embedded base64 in the JSON keyed by
  *    capture id (v2). Restore writes them back to `filesDir/audio/{id}.m4a`
  *    and rewrites each capture's `audioFilePath` to the restored location.
+ *  - image attachments (Reel Notes / Marginalia / Field Notes photos and
+ *    the whole Gallery Wall mood board), embedded base64 in the JSON keyed
+ *    by their URI string (v3). Restore writes them to
+ *    `filesDir/images/{id}/{n}.img` and rewrites every image URI in the
+ *    capture to the restored file path — provider URIs from a document
+ *    picker would otherwise be dead on a new device.
  *  - the user-facing prefs: [AppPreferences], [AudioQualitySettings],
  *    [StreakTracker] and the onboarding-completed flag
  *
@@ -45,7 +51,7 @@ import kotlinx.coroutines.withContext
 object CurioBackupManager {
 
     /** Bump when the payload shape changes. Restore accepts version <= this. */
-    const val FORMAT_VERSION = 2
+    const val FORMAT_VERSION = 3
 
     /** MIME type used by the file pickers. */
     const val MIME_TYPE = "application/json"
@@ -117,6 +123,27 @@ object CurioBackupManager {
             }
             files
         }
+        // Bundle image attachments (v3): read each capture's image bytes,
+        // keyed by the URI string (deduped — the same photo attached to
+        // several entries is stored once). Missing/unreadable sources are
+        // skipped — the capture still backs up, just without that photo.
+        val imageFiles = withContext(Dispatchers.IO) {
+            val files = mutableMapOf<String, ByteArray>()
+            captures.forEach { capture ->
+                val uris = runCatching {
+                    CaptureConverters.deserializeCaptureData(capture.formatDataJson)
+                }.getOrNull()?.imageUrisAll().orEmpty()
+                uris.forEach { uri ->
+                    if (!files.containsKey(uri)) {
+                        runCatching {
+                            context.contentResolver.openInputStream(Uri.parse(uri))
+                                ?.use { input -> input.readBytes() }
+                        }.getOrNull()?.let { files[uri] = it }
+                    }
+                }
+            }
+            files
+        }
 
         val payload = BackupPayload(
             format = FORMAT_NAME,
@@ -124,7 +151,8 @@ object CurioBackupManager {
             exportedAtMillis = System.currentTimeMillis(),
             captures = captures,
             preferences = prefs,
-            audioFiles = audioFiles
+            audioFiles = audioFiles,
+            imageFiles = imageFiles
         )
         // With audio bundled, the base64 JSON can be tens of MB — serialize
         // and write off the main thread (v2.1).
@@ -174,18 +202,53 @@ object CurioBackupManager {
         // capture itself still restores (missing audio degrades gracefully
         // in EntryDetail).
         val audioFiles = payload.audioFiles.orEmpty()
+        val imageFiles = payload.imageFiles.orEmpty()
         val restoredCaptures = withContext(Dispatchers.IO) {
             AudioStorageManager.deleteAllAudio(context)
+            ImageStorageManager.deleteAllImages(context)
             payload.captures.map { capture ->
-                val bytes = audioFiles[capture.id] ?: return@map capture
-                val newPath = runCatching {
-                    AudioStorageManager.restoreAudio(context, capture.id, bytes)
-                }.getOrNull() ?: return@map capture
-                val updatedData = runCatching {
-                    CaptureConverters.deserializeCaptureData(capture.formatDataJson)
-                        .withAudioPath(newPath)
-                }.getOrNull() ?: return@map capture
-                capture.copy(formatDataJson = Gson().toJson(updatedData))
+                // Audio (v2): write the recording and point the capture at it.
+                var updated = capture
+                audioFiles[capture.id]?.let { bytes ->
+                    val newPath = runCatching {
+                        AudioStorageManager.restoreAudio(context, capture.id, bytes)
+                    }.getOrNull()
+                    if (newPath != null) {
+                        runCatching {
+                            CaptureConverters.deserializeCaptureData(capture.formatDataJson)
+                                .withAudioPath(newPath)
+                        }.getOrNull()?.let { updated = capture.copy(formatDataJson = Gson().toJson(it)) }
+                    }
+                }
+                // Images (v3): write each bundled photo and rewrite every
+                // image URI in the capture (flat lists + mood-board tile
+                // layouts) to the restored file path. Same URI twice in one
+                // entry reuses one stored file.
+                runCatching {
+                    val data = CaptureConverters.deserializeCaptureData(updated.formatDataJson)
+                    if (data.imageUrisAll().isNotEmpty()) {
+                        val indexByUri = mutableMapOf<String, Int>()
+                        var remappedAny = false
+                        val remapped = data.withImageUris { uri ->
+                            val bytes = imageFiles[uri]
+                            if (bytes != null) {
+                                remappedAny = true
+                                val idx = indexByUri.getOrPut(uri) { indexByUri.size }
+                                Uri.fromFile(
+                                    File(ImageStorageManager.restoreImage(context, capture.id, idx, bytes))
+                                ).toString()
+                            } else {
+                                uri
+                            }
+                        }
+                        // Only rewrite the JSON when a photo actually moved
+                        // (skips pointless round-trips on legacy backups).
+                        if (remappedAny) {
+                            updated = capture.copy(formatDataJson = Gson().toJson(remapped))
+                        }
+                    }
+                }
+                updated
             }
         }
 
@@ -270,7 +333,9 @@ data class BackupPayload(
     val captures: List<CaptureEntity>,
     val preferences: Map<String, Map<String, PrefEntry>>,
     /** SoundBite audio bytes keyed by capture id (v2). Gson encodes ByteArray as base64. */
-    val audioFiles: Map<String, ByteArray> = emptyMap()
+    val audioFiles: Map<String, ByteArray> = emptyMap(),
+    /** Image-attachment bytes keyed by their original URI string (v3). */
+    val imageFiles: Map<String, ByteArray> = emptyMap()
 )
 
 /**

@@ -93,6 +93,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
+import com.curio.app.data.ImageStorageManager
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.NotePaperColor
@@ -378,6 +379,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         resolvedEntry.captureData.audioFilePaths().forEach { path ->
                             AudioStorageManager.deleteAudio(context, path)
                         }
+                        // Delete restored-from-backup image files for this
+                        // entry (provider-picked photos live in their source
+                        // app and need no cleanup here).
+                        ImageStorageManager.deleteImagesForEntry(context, resolvedEntry.id)
                         runCatching { CurioRepositoryHolder.repo.deleteById(resolvedEntry.id) }
                         navController.popBackStack()
                     }
