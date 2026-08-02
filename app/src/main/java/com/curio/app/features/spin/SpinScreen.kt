@@ -1846,12 +1846,12 @@ private fun BottomCta(
 ) {
     val hasFilters = filterActiveCount > 0
 
-    // Anchored paper tray. v6.2 — it wears the SAME category-tint wash as
-    // the page background (theme-aware: deep accent over cream in light,
-    // pastel twin over midnight in dark), so the tray blends with the Spin
-    // page instead of reading as a separate odd-colored bar.
+    // Anchored paper tray. v6.2 — it wore the SAME category-tint wash as
+    // the page background; now transparent so the Categories/Filter buttons
+    // sit directly on the Spin page background with no tinted band between
+    // them and the nav bar.
     Surface(
-        color = cat.categoryBackgroundWash(),
+        color = Color.Transparent,
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
