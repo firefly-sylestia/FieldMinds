@@ -4,7 +4,6 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.curio.app.R
@@ -42,17 +41,23 @@ val MaterialSymbolsFontFamily: FontFamily = FontFamily(
  * Patrick Hand — the handwritten note font for the paper text fields
  * (journal, quotes, review, notes, captions, field notes). Google Fonts
  * ships Patrick Hand as a SINGLE regular file (there is no bold or italic
- * TTF), so all four style entries map to the same [R.font.patrick_hand_regular]
- * and the Android text stack SYNTHESIZES bold (fake-bold stroke) and italic
- * (oblique) from it — matching the MaterialSymbolsFontFamily pattern. The
- * ruled-line cadence stays on `bodyLarge.lineHeight` (24sp), so notes keep
- * their notebook alignment on paper.
+ * TTF), so the family declares ONLY that one face — and Compose's font
+ * matcher therefore can never find an exact match for a Bold / Italic
+ * request. When a request mismatches the loaded font, the text stack's
+ * `fontSynthesis` (set explicitly on styled spans in `buildRichAnnotated`)
+ * applies FAKE BOLD (stroke) and OBLIQUE from the single file.
+ *
+ * This must stay a single entry: declaring Bold / Italic entries that all
+ * point at the SAME regular TTF makes every request match an "exact"
+ * descriptor whose glyphs are the regular face — the mismatch that triggers
+ * synthesis never happens, and bold/italic silently render as regular
+ * (the "bold/italic stopped working" regression).
+ *
+ * The ruled-line cadence stays on `bodyLarge.lineHeight` (24sp), so notes
+ * keep their notebook alignment on paper.
  */
 val PatrickHandFontFamily: FontFamily = FontFamily(
-    Font(R.font.patrick_hand_regular, FontWeight.Normal, FontStyle.Normal),
-    Font(R.font.patrick_hand_regular, FontWeight.Normal, FontStyle.Italic),
-    Font(R.font.patrick_hand_regular, FontWeight.Bold, FontStyle.Normal),
-    Font(R.font.patrick_hand_regular, FontWeight.Bold, FontStyle.Italic)
+    Font(R.font.patrick_hand_regular)
 )
 
 /**

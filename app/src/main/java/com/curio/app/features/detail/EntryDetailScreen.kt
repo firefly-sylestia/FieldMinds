@@ -568,7 +568,10 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 
             // ── Quote cards — shared hand-placed paper notecards ─────────
             RenderQuoteCards(
-                quotes = data.quotes,
+                // orEmpty() guards legacy Gson blobs where the quotes field is
+            // absent — missing Kotlin-default List fields decode to null, not
+            // empty (the mood-board crash).
+            quotes = data.quotes.orEmpty(),
                 spans = data.quoteSpans.orEmpty(),
                 tilts = data.quoteTilts.orEmpty(),
                 styles = data.quoteStyles.orEmpty(),
@@ -1071,7 +1074,10 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
 
         // ── Quote cards — shared hand-placed paper notecards ─────────────
         RenderQuoteCards(
-            quotes = data.quotes,
+            // orEmpty() guards legacy Gson blobs where the quotes field is
+            // absent — missing Kotlin-default List fields decode to null, not
+            // empty (the mood-board crash).
+            quotes = data.quotes.orEmpty(),
             spans = data.quoteSpans.orEmpty(),
             tilts = data.quoteTilts.orEmpty(),
             styles = data.quoteStyles.orEmpty(),
@@ -1111,7 +1117,10 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 
         // ── Favorite quotes — shared hand-placed paper notecards ─────────
         RenderQuoteCards(
-            quotes = data.quotes,
+            // orEmpty() guards legacy Gson blobs where the quotes field is
+            // absent — missing Kotlin-default List fields decode to null, not
+            // empty (the mood-board crash).
+            quotes = data.quotes.orEmpty(),
             spans = data.quoteSpans.orEmpty(),
             tilts = data.quoteTilts.orEmpty(),
             styles = data.quoteStyles.orEmpty(),
@@ -1141,13 +1150,18 @@ private fun RenderQuoteCards(
     category: CurioCategory,
     label: String = "Favorite quotes"
 ) {
+    // Legacy Gson blobs decode missing Kotlin-default List fields to NULL
+    // (not empty) — a null [quotes] crashed the saved mood-board detail view
+    // here (.size() on null). Guard defensively so no caller can reintroduce
+    // the crash.
+    val safeQuotes = quotes.orEmpty()
     // Pad spans to the quotes length first (legacy Gson blobs may carry
     // fewer/absent span lists), then zip so the spans stay aligned with
     // their quote even when blank cards are filtered out. Keep the ORIGINAL
     // index through the blank filter so each card can find its saved tilt.
     val spansPadded = spans.toMutableList()
-    while (spansPadded.size < quotes.size) spansPadded.add(emptyList())
-    val quotePairs = quotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
+    while (spansPadded.size < safeQuotes.size) spansPadded.add(emptyList())
+    val quotePairs = safeQuotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
         if (pair.first.isNullOrBlank()) null else i to pair
     }
     if (quotePairs.isNotEmpty()) {
@@ -1420,7 +1434,10 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
 
         // ── Quote cards — shared hand-placed paper notecards ─────────────
         RenderQuoteCards(
-            quotes = data.quotes,
+            // orEmpty() guards legacy Gson blobs where the quotes field is
+            // absent — missing Kotlin-default List fields decode to null, not
+            // empty (the mood-board crash).
+            quotes = data.quotes.orEmpty(),
             spans = data.quoteSpans.orEmpty(),
             tilts = data.quoteTilts.orEmpty(),
             styles = data.quoteStyles.orEmpty(),

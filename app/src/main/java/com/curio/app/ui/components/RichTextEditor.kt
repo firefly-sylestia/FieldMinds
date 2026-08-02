@@ -36,6 +36,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
@@ -90,6 +91,15 @@ fun buildRichAnnotated(text: String, spans: List<TextSpan>, highlightColor: Colo
                     SpanStyle(
                         fontWeight = if (sp.bold) FontWeight.Bold else null,
                         fontStyle = if (sp.italic) FontStyle.Italic else null,
+                        // Patrick Hand ships ONE regular file (no bold/italic
+                        // TTF exists), so bold/italic only render because the
+                        // text stack SYNTHESIZES them. The platform default
+                        // may not apply synthesis, so request it explicitly:
+                        // with the family declaring just the regular face, a
+                        // Bold/Italic request mismatches the loaded font and
+                        // FontSynthesis.All turns that mismatch into fake
+                        // bold / oblique in the editor AND the saved view.
+                        fontSynthesis = FontSynthesis.All,
                         // Non-null Color in this Compose version — the "no
                         // highlight" sentinel is Color.Unspecified.
                         background = if (sp.highlight) highlightColor else Color.Unspecified
@@ -386,19 +396,25 @@ fun RichTextEditor(
             // typing a space. Keep OUR spans — tfv is always built by us.
             extractRichSpans(tfv.annotatedString)
         }
-        // Caret inheritance from OUR spans: typing inside an already-styled
-        // run (e.g. mid-bold word) — or immediately after one — must keep
-        // that style on the new characters. BasicTextField's reported
-        // AnnotatedString can silently drop the styles we set programmatically,
-        // so we can't rely on it to re-add them — emulate inheritance from
-        // our own tracked spans instead (the caret sits at the diff's start ==
-        // old/new common prefix, which is unchanged by the edit). Inclusive
-        // at the span END so typing right after a styled word continues it.
+        // Caret inheritance from OUR spans: typing INSIDE an already-styled
+        // run (e.g. mid-bold word, or at the very start of one so the new
+        // char joins the word) keeps that style on the new characters.
+        // BasicTextField's reported AnnotatedString can silently drop the
+        // styles we set programmatically, so we can't rely on it to re-add
+        // them — emulate inheritance from our own tracked spans instead (the
+        // caret sits at the diff's start == old/new common prefix, which is
+        // unchanged by the edit). The end boundary is EXCLUSIVE (caret <
+        // sp.end): typing right AFTER a styled run starts a NEW un-styled
+        // run, so toggling a format off actually stops it — an inclusive end
+        // made highlight/bold stick forever to everything typed next to a
+        // styled word even when the toolbar was turned off. Continuing a
+        // style after an explicit apply is handled by the armed (sticky)
+        // pending flags, which the user can toggle off.
         val insertedRange = if (textChanged) findInsertedRange(oldText, new.text) else null
         if (insertedRange != null) {
             val caret = insertedRange.first
             val inherited = extractRichSpans(tfv.annotatedString).filter { sp ->
-                sp.start <= caret && caret <= sp.end
+                sp.start <= caret && caret < sp.end
             }
             for (sp in inherited) {
                 if (sp.bold) {

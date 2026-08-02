@@ -2,6 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
+**Bold/italic rendering, highlight-sticking, and a saved mood-board crash**
+
+### What was asked
+
+1. Bold / italic (etc.) formatting stopped rendering in the paper text fields.
+2. Highlight (and bold) kept applying to newly typed text even after toggling it off, whenever the caret touched an existing highlight.
+3. Crash: `NullPointerException: ... int java.util.List.size() ... on a null object reference` at `EntryDetailScreenKt.RenderQuoteCards` (EntryDetailScreen.kt:1149) ← `GalleryWallRender` (:1422) when opening a saved mood board saved before quote cards existed.
+
+### What was changed
+
+- **`CurioTypography.kt`** — `PatrickHandFontFamily` collapsed from four `Font()` entries (all pointing at the same regular Patrick Hand TTF) to a SINGLE regular entry. Root cause of #1: declaring Bold/Italic entries against one regular file made Compose's `FontMatcher` return an "exact" match for every weight/style request, so the mismatch that triggers `FontSynthesis.synthesizeTypeface` (fake-bold stroke / oblique) never fired — every style rendered as the regular face (the "bold/italic stopped working" regression from the Patrick Hand commit). With one entry the requests always mismatch and synthesis kicks in. Removed the now-unused `FontStyle` import.
+- **`RichTextEditor.kt`** — `buildRichAnnotated` (shared by the editor AND the saved detail view) now sets `fontSynthesis = FontSynthesis.All` on every styled span, so the platform applies fake bold / oblique from the single-weight font instead of relying on the unreliable default.
+- **`RichTextEditor.kt`** — `emit()`'s caret inheritance is now exclusive at the span end (`sp.start <= caret && caret < sp.end`): typing INSIDE a styled run (or at its start) still continues the style, but typing right AFTER it starts a fresh un-styled run — so toggling bold/highlight OFF actually stops it. Continuing after an explicit apply is still handled by the armed (sticky) pending flags.
+- **`EntryDetailScreen.kt`** — crash fix: `RenderQuoteCards`' `quotes` argument is now `data.quotes.orEmpty()` at all 4 call sites (SoundBite / ReelNotes / Marginalia / GalleryWall), and the function itself guards `val safeQuotes = quotes.orEmpty()` — legacy Gson blobs decode missing Kotlin-default List fields to null, and a mood board saved before quote cards existed had no `quotes` field → `.size()` on null.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass. Verified `FontSynthesis.All` is a valid `SpanStyle` arg in Compose 1.11.x, the new import is used, `extractRichSpans` only reads fontWeight/fontStyle/background (the added span property can't break it), the single-entry family can't crash `FontMatcher` (closest-weight fallback, never empty), the exclusive-end inheritance is sound (a boundary between two styled runs still inherits the right-hand run via `sp.start <= caret`), and the call sites + internal guard cover the crash. Applied its one suggestion: the defensive `quotes.orEmpty()` inside `RenderQuoteCards` itself.
+
+### Follow-ups / notes
+
+- Existing saved entries with bold/italic spans will now render bold/italic again — their span data was always saved; only rendering was broken.
+- Fake bold/oblique quality depends on the platform synthesizer; if the stroke reads too thin on some devices, bundling real bold/italic Patrick Hand files is the upgrade path (Google Fonts currently ships only the regular face).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **CI fix: ReelNotes image-strip zoom block — BoxWithConstraintsScope is NOT a Density here, and maxWidth/maxHeight aren't reachable inside the Row lambda**
 
 ### What was asked
