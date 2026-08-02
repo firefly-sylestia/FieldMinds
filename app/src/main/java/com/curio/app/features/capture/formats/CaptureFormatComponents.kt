@@ -578,13 +578,16 @@ fun QuoteCardsSection(
                 CurioIcon(
                     name = CurioIcons.Add,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    // NOT theme-aware: the cream button keeps the warm paper
+                    // ink in both themes — the theme's onSurfaceVariant turns
+                    // light-gray in dark mode and washes out on the cream.
+                    tint = paperInk(),
                     size = 18.dp
                 )
                 Text(
                     text = "Add quote",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = paperInk()
                 )
             }
         }

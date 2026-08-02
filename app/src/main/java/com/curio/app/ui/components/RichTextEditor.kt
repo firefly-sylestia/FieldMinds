@@ -1116,15 +1116,19 @@ private fun FormatToolButton(
         color = if (active) accent.copy(alpha = 0.18f) else Color.Transparent,
         border = BorderStroke(
             1.dp,
-            if (active) accent.copy(alpha = 0.6f) else accent.copy(alpha = 0.25f)
+            if (active) accent.copy(alpha = 0.6f) else accent.copy(alpha = 0.45f)
         )
     ) {
         CurioIcon(
             name = icon,
             contentDescription = label,
-            // Inactive buttons fade the accent itself — on cream paper (both
-            // themes) the theme's onSurfaceVariant reads washed-out/wrong.
-            tint = if (active) accent else accent.copy(alpha = 0.45f),
+            // Inactive buttons fade the accent — on cream paper (both themes)
+            // the theme's onSurfaceVariant reads washed-out/wrong, and the
+            // old 0.45 alpha vanished on the dark page background in dark
+            // mode (the toolbar row sits OUTSIDE the paper slip). The
+            // stronger alpha keeps the same hue legible on both cream and
+            // midnight.
+            tint = if (active) accent else accent.copy(alpha = 0.75f),
             size = 16.dp,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
         )
