@@ -332,34 +332,28 @@ fun PaperLineField(
                         accent = accent
                     )
                 }
-                if (onPaperColorChange != null) {
-                    NotePaperColorToggle(
-                        color = paperColor,
-                        onColorChange = onPaperColorChange,
-                        accent = accent
-                    )
-                }
             }
-        } else if (onPaperStyleChange != null || onPaperColorChange != null) {
+        } else if (onPaperStyleChange != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                if (onPaperStyleChange != null) {
-                    NotePaperStyleToggle(
-                        style = paperStyle,
-                        onStyleChange = onPaperStyleChange,
-                        accent = accent
-                    )
-                }
-                if (onPaperColorChange != null) {
-                    NotePaperColorToggle(
-                        color = paperColor,
-                        onColorChange = onPaperColorChange,
-                        accent = accent
-                    )
-                }
+                NotePaperStyleToggle(
+                    style = paperStyle,
+                    onStyleChange = onPaperStyleChange,
+                    accent = accent
+                )
             }
+        }
+        // The color swatches live on their OWN row behind a toggle chip —
+        // the label row already holds the style chips, and six swatches would
+        // overflow a phone-width row (Rows don't wrap).
+        if (onPaperColorChange != null) {
+            NotePaperColorToggle(
+                color = paperColor,
+                onColorChange = onPaperColorChange,
+                accent = accent
+            )
         }
         val torn = paperStyle != NotePaperStyle.RULED
         // Ink follows the chosen sheet color so text stays readable on every

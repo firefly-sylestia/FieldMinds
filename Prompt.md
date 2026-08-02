@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Paper polish: collapsible color swatches, subtle rigid-card sheen on papers, taller saved-view papers, watermark on detail + Cabinet pages**
+
+### What was asked
+
+1. Make the colors have a toggle which opens it.
+2. Add a subtle rigid surface look to the papers.
+3. In saved entries the paper looks better a little taller / less slim.
+4. Add the watermark in detail saved-entry pages.
+5. Also in the Cabinet page.
+
+### What was changed
+
+- **`PaperCard.kt`** — `NotePaperColorToggle` is now COLLAPSIBLE: a compact "Color" chip (Palette icon + a live 14dp dot of the current paper color + label) that expands a 6-swatch row below it via `remember { mutableStateOf(false) }`. `PaperCard` + `TornPaperCard` inner Boxes gained a subtle rigid-card sheen — `Modifier.background(Brush.verticalGradient(White 0.08, Transparent, Black 0.05))` — so the slip reads as stiff paper stock instead of a flat fill. Imports added: `background`, `border`, `Brush`, `getValue`/`mutableStateOf`/`setValue`.
+- **`CaptureFormatComponents.kt`** — `PaperLineField`: the color toggle moved OUT of the label row (which keeps the style chips) onto its OWN row below, because `NotePaperColorToggle` is now a Column (chip + expandable) and the SpaceBetween label row can't hold it.
+- **`EntryDetailScreen.kt`** — root Column wrapped in a Box: the Box owns the category wash background, `CurioWatermarkBackdrop(activeCat = cat)` floats behind, and the inner Column keeps `fillMaxSize + verticalScroll`. Saved-view `NotePaperCard` contentPadding bumped 16/14 → 16/16 and quote cards 12/10 → 14/14 so the papers aren't slim.
+- **`CabinetScreen.kt`** — root Column wrapped in a Box with `CurioWatermarkBackdrop(activeCat = filterCat ?: WILDCARD)` behind the grid (`statusBarsPadding` moved to the Box; `Box` import added).
+
+### Review
+code-reviewer-deepseek-flash: clean pass with one applied nit — the chip's current-color dot used `Modifier.border(1.dp, color)` which defaults to `RectangleShape`, drawing a square outline over the circular fill; fixed with `border(1.dp, color, CircleShape)`. Verified brace balance of both Box wrappers, `CurioWatermarkBackdrop` signature `(activeCat, modifier)`, `PaperLineField` label/style/color combination logic preserved, no unused imports, and both gradients share the same subtle sheen.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
 **Paper-corner clipping during entry fixed (both ruled + torn) + 'Edit entry' available on EVERY saved entry**
 
 ### What was asked

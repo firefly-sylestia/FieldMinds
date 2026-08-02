@@ -3,6 +3,8 @@ package com.curio.app.ui.components
 import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +20,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
@@ -82,7 +88,19 @@ fun PaperCard(
         border = BorderStroke(1.dp, notePaperBorder(paperColor)),
         modifier = modifier.rotate(rotation)
     ) {
-        Box {
+        Box(
+            // Subtle rigid-card sheen — a whisper of top light + bottom
+            // depth so the slip reads as stiff paper stock, not a flat fill.
+            modifier = Modifier.background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = 0.08f),
+                        Color.Transparent,
+                        Color.Black.copy(alpha = 0.05f)
+                    )
+                )
+            )
+        ) {
             // Faint ruled lines behind the content — the notebook texture.
             // (notePaperRule() is @Composable, so resolve it here in the
             // composable scope — the Canvas draw lambda is not composable.)
@@ -388,7 +406,19 @@ fun TornPaperCard(
         border = BorderStroke(1.dp, edge),
         modifier = modifier.rotate(rotation)
     ) {
-        Box {
+        Box(
+            // Subtle rigid-card sheen — matches PaperCard so torn + ruled
+            // slips share the same stiff-paper feel.
+            modifier = Modifier.background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = 0.08f),
+                        Color.Transparent,
+                        Color.Black.copy(alpha = 0.05f)
+                    )
+                )
+            )
+        ) {
             // One Canvas: the grunge shader rect + (optionally) the ruled
             // lines. Both are single draw calls per frame — cheap even while
             // typing.
@@ -535,43 +565,86 @@ fun NotePaperColorToggle(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        NotePaperColor.entries.forEach { candidate ->
-            val selected = candidate == color
-            Surface(
-                onClick = { onColorChange(candidate) },
-                enabled = enabled,
-                shape = CircleShape,
-                color = notePaperSurface(candidate),
-                border = BorderStroke(
-                    if (selected) 2.dp else 1.dp,
-                    if (selected) accent
-                    else notePaperBorder(candidate).copy(alpha = 0.7f)
-                ),
-                // Each swatch announces itself by color name; the check icon
-                // is purely visual (no invisible-icon accessibility hack).
-                modifier = Modifier
-                    .size(if (selected) 24.dp else 20.dp)
-                    .semantics {
-                        contentDescription =
-                            "${candidate.name.lowercase()} paper" + if (selected) " (selected)" else ""
-                    }
+    // Collapsible: the six swatches hide behind a compact "Color" chip so
+    // the toolbar rows stay clean; the chip's own dot shows the current
+    // paper color, and tapping expands the swatch row below it.
+    var expanded by remember { mutableStateOf(false) }
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Surface(
+            onClick = { expanded = !expanded },
+            enabled = enabled,
+            shape = RoundedCornerShape(8.dp),
+            color = if (expanded) accent.copy(alpha = 0.18f) else Color.Transparent,
+            border = BorderStroke(
+                1.dp,
+                if (expanded) accent.copy(alpha = 0.6f) else accent.copy(alpha = 0.25f)
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    if (selected) {
-                        // A tiny paper-ink check inside the active swatch —
-                        // the accent ring already marks it, this just reads
-                        // as "chosen" at a glance.
-                        CurioIcon(
-                            name = CurioIcons.Check,
-                            contentDescription = null,
-                            tint = notePaperInk(candidate),
-                            size = 13.dp
-                        )
+                // Live swatch of the current paper color — the border must
+                // use CircleShape too, or a square outline would draw over
+                // the circular fill (border defaults to RectangleShape).
+                Box(
+                    modifier = Modifier
+                        .size(14.dp)
+                        .background(notePaperSurface(color), CircleShape)
+                        .border(1.dp, notePaperBorder(color), CircleShape)
+                )
+                CurioIcon(
+                    name = CurioIcons.Palette,
+                    contentDescription = null,
+                    tint = if (expanded) accent else paperInk().copy(alpha = 0.55f),
+                    size = 14.dp
+                )
+                Text(
+                    text = "Color",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (expanded) accent else paperInk().copy(alpha = 0.55f)
+                )
+            }
+        }
+        if (expanded) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NotePaperColor.entries.forEach { candidate ->
+                    val selected = candidate == color
+                    Surface(
+                        onClick = { onColorChange(candidate) },
+                        enabled = enabled,
+                        shape = CircleShape,
+                        color = notePaperSurface(candidate),
+                        border = BorderStroke(
+                            if (selected) 2.dp else 1.dp,
+                            if (selected) accent
+                            else notePaperBorder(candidate).copy(alpha = 0.7f)
+                        ),
+                        // Each swatch announces itself by color name; the
+                        // check icon is purely visual (no invisible-icon hack).
+                        modifier = Modifier
+                            .size(if (selected) 24.dp else 20.dp)
+                            .semantics {
+                                contentDescription =
+                                    "${candidate.name.lowercase()} paper" + if (selected) " (selected)" else ""
+                            }
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            if (selected) {
+                                // A tiny paper-ink check inside the active
+                                // swatch — the accent ring already marks it.
+                                CurioIcon(
+                                    name = CurioIcons.Check,
+                                    contentDescription = null,
+                                    tint = notePaperInk(candidate),
+                                    size = 13.dp
+                                )
+                            }
+                        }
                     }
                 }
             }

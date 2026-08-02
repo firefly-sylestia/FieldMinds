@@ -75,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.components.WaveformExtractor
 import com.curio.app.ui.components.buildRichAnnotated
@@ -160,7 +161,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
     var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             // Category tint wash — the saved-entry page wears the entry's
@@ -168,8 +169,16 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             // Cabinet), so a capture from the Cabinet reads in its category's
             // color story instead of a plain patch.
             .background(cat.categoryBackgroundWash())
-            .verticalScroll(rememberScrollState())
     ) {
+        // Muted category-glyph watermark behind the content — the same
+        // backdrop language as Home / Spin / the mood boards, so a saved
+        // entry reads as part of the app's paper-and-glyph world.
+        CurioWatermarkBackdrop(activeCat = cat, modifier = Modifier.fillMaxSize())
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
         // ── Expressive hero banner ─────────────────────────────────────
         Box(
             modifier = Modifier
@@ -332,6 +341,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
 
         Spacer(Modifier.height(32.dp))
+        }
     }
 
     if (deleteDialogVisible) {
@@ -540,7 +550,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
                     paperColor = data.noteColor ?: NotePaperColor.CREAM,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -958,7 +968,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = data.reviewColor ?: NotePaperColor.CREAM,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -972,7 +982,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = data.reviewColor ?: NotePaperColor.CREAM,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -995,7 +1005,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
             NotePaperCard(
                 style = data.journalStyle ?: data.notePaperStyle(),
                 paperColor = data.journalColor ?: NotePaperColor.CREAM,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -1034,7 +1044,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                 NotePaperCard(
                     style = data.quoteStyles.orEmpty().getOrNull(origIndex) ?: data.notePaperStyle(),
                     paperColor = data.quoteColors.orEmpty().getOrNull(origIndex) ?: NotePaperColor.CREAM,
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
                     corner = 12.dp,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -1266,7 +1276,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             NotePaperCard(
                 style = data.captionStyle ?: data.notePaperStyle(),
                 paperColor = data.captionColor ?: NotePaperColor.CREAM,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -1481,7 +1491,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.observedStyle ?: data.notePaperStyle(),
                     paperColor = data.observedColor ?: NotePaperColor.CREAM,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -1498,7 +1508,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.surprisedStyle ?: data.notePaperStyle(),
                     paperColor = data.surprisedColor ?: NotePaperColor.CREAM,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -1515,7 +1525,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.learnNextStyle ?: data.notePaperStyle(),
                     paperColor = data.learnNextColor ?: NotePaperColor.CREAM,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(

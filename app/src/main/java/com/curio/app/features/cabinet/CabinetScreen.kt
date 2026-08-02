@@ -3,6 +3,7 @@ package com.curio.app.features.cabinet
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,6 +45,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioEmptyState
+import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
@@ -97,12 +99,24 @@ fun CabinetScreen(navController: NavController) {
     // and the search button keeps its neutral look in every state.
     val filterCat = selectedFilter?.let { CurioCategories.byId(it) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(filterCat?.categoryBackgroundWash() ?: MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
+        // Muted category-glyph watermark behind the grid — the same
+        // backdrop language as Home / Spin / the saved-entry page, so the
+        // Cabinet reads as part of the app's paper-and-glyph world. The
+        // active filter's category gets the stronger whisper; "All" falls
+        // back to a neutral scatter.
+        CurioWatermarkBackdrop(
+            activeCat = filterCat ?: CurioCategories.byId(CategoryId.WILDCARD),
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
         // ── Top bar ────────────────────────────────────────────────────────
         Row(
             modifier = Modifier
@@ -252,6 +266,7 @@ fun CabinetScreen(navController: NavController) {
                     )
                 }
             }
+        }
         }
     }
 }
