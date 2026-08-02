@@ -165,6 +165,7 @@ fun TopicRevealScreen(
 
     /** Starts a timed explore session, opens the Google search, back to Home. */
     fun startExploreSession(topic: CurioTopic) {
+        engaged = true
         val action = topic.exploreAction
         val session = ExploreSession(
             categoryId = cat.id,
@@ -379,7 +380,11 @@ fun TopicRevealScreen(
                 Button(
                     onClick = {
                         val topic = resolved ?: return@Button
-                        engaged = true
+                        // NOTE: engaged is NOT set here — merely tapping the
+                        // CTA isn't engaging. It's set only when the user picks
+                        // "Explore now" or "Write about it", so a user who
+                        // dismisses the dialog and backs out still gets the
+                        // topic recorded as recently-UNexplored.
                         ExploreSessionStore.recordExplored(context, cat.id, topic.name)
                         ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
                         showExploreDialog = true
@@ -471,6 +476,7 @@ fun TopicRevealScreen(
             dismissButton = {
                 TextButton(
                     onClick = {
+                        engaged = true
                         showExploreDialog = false
                         navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, topic.name)) {
                             launchSingleTop = true
