@@ -2,6 +2,7 @@ package com.curio.app.features.spin
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -1493,6 +1494,9 @@ private fun HeroTicketCard(
                                     // 200/180ms matches the peek wipes and
                                     // the 200ms tick floor so even the
                                     // fastest early ticks complete the reel.
+                                    // v6.8 — SizeTransform(clip = false), same
+                                    // unclip as the peek cards, so the title
+                                    // reel isn't sliced mid-slide.
                                     (slideInVertically(
                                         animationSpec = tween(200, easing = FastOutSlowInEasing)
                                     ) { height -> height / 3 } +
@@ -1500,7 +1504,7 @@ private fun HeroTicketCard(
                                     (slideOutVertically(
                                         animationSpec = tween(180, easing = FastOutSlowInEasing)
                                     ) { height -> -height / 3 } +
-                                        fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing)))
+                                        fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
                                 } else {
                                     (slideInVertically(
                                         animationSpec = tween(260, easing = FastOutSlowInEasing)
@@ -1509,7 +1513,7 @@ private fun HeroTicketCard(
                                     (slideOutVertically(
                                         animationSpec = tween(240, easing = FastOutSlowInEasing)
                                     ) { height -> -height / 4 } +
-                                        fadeOut(animationSpec = tween(240, easing = FastOutSlowInEasing)))
+                                        fadeOut(animationSpec = tween(240, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
                                 }
                             },
                             label = "heroContentReel"
@@ -1660,6 +1664,11 @@ private fun PeekCard(
                     // (200ms) so even the fastest early ticks complete their
                     // wipe; the slower deceleration ticks read as full,
                     // graceful slides.
+                    // v6.8 — `SizeTransform(clip = false)`: without it the
+                    // default clip=true hard-cuts the sliding card at the
+                    // card's own top/bottom edge, so the peek looks sliced
+                    // in half mid-wipe. Unclipping lets the slide read as a
+                    // continuous glide (motion unchanged, nothing else moved).
                     slideInVertically(
                         animationSpec = tween(200, easing = FastOutSlowInEasing)
                     ) { height -> if (isTop) -height / 3 else height / 3 } +
@@ -1667,7 +1676,7 @@ private fun PeekCard(
                     slideOutVertically(
                         animationSpec = tween(180, easing = FastOutSlowInEasing)
                     ) { height -> if (isTop) height / 3 else -height / 3 } +
-                    fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing))
+                    fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
                 } else {
                     slideInVertically(
                         animationSpec = tween(240, easing = FastOutSlowInEasing)
@@ -1676,7 +1685,7 @@ private fun PeekCard(
                     slideOutVertically(
                         animationSpec = tween(200, easing = FastOutSlowInEasing)
                     ) { height -> if (isTop) height / 3 else -height / 3 } +
-                    fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
+                    fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
                 }
             },
             label = "peekSlot_$slot"

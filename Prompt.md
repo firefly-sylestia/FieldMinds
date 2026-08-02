@@ -2,52 +2,38 @@
 
 ## Status: COMPLETED — committed and pushed to `revamp`
 
-"The mood board pinch-to-zoom is delayed — it only zooms/minimizes after I
-stop the gesture. Fix it without breaking anything else."
+"when it animated in shuffle the peek cards look weird like its cutt off or
+something, so fix that without chnaging the design."
 
 ## Root cause
 
-The zoom overlays rendered scale through an internal **spring chase**:
-`overlayScale` was animated toward `zoomState.scaleTarget` on a stiffness-280
-spring (`LaunchedEffect(scaleTarget) { animate(...) }`), and the call-site
-pan offsets used `animateFloatAsState` with the same spring. During a pinch,
-every pointer event retargeted the spring, so the render lagged behind the
-fingers and only caught up after the gesture stopped — the reported delay.
+During the Spin shuffle reel (v6.6 wipe), the peek cards' `AnimatedContent`
+slides content ±height/3, and `togetherWith` defaults to
+`SizeTransform(clip = true)` — the sliding card is hard-clipped at the
+card's own top/bottom edge, so the peek looks sliced in half mid-wipe. The
+same artifact existed on the hero content reel (title/tags/teaser, ±height/3
+and /4 slides). It only became visible after the v6.6 wipe went from 90ms
+linear to 200ms eased — long enough to actually see the clip.
 
-## Change (3 files)
+## Fix (design untouched — motion identical, clipping only)
 
-**`app/src/main/java/com/curio/app/ui/components/MoodBoardZoom.kt`**
-- `MoodBoardZoomState` gains `gestureActive: Boolean` — set `true` in
-  `applyPinch` only on a real move (`zoom != 1f || pan != Offset.Zero`) so
-  the landing/engage event stays clear and the open spring still plays;
-  cleared (`false`) in `zoomIn`/`zoomBoard`/`zoomOut`/`resetZoom` so
-  open/close/reset still spring.
-- `applyPinch` gains optional `visualScale` — the first real move of a fresh
-  gesture re-anchors to the caller's live on-screen scale before
-  compounding, so a pinch that starts while the open/close spring is still
-  settling continues smoothly from where the image actually is (no jump).
-- `MoodBoardZoomOverlay` + `MoodBoardZoomCanvas`: the `overlayScale`
-  `LaunchedEffect` keys on `(scaleTarget, gestureActive)` — **SNAPS**
-  `overlayScale = scaleTarget` while pinching (1:1 finger tracking), springs
-  otherwise. Both pass their `liveScale` (`rememberUpdatedState`) into
-  `applyPinch`.
+**`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
+- Added `using SizeTransform(clip = false)` to all four `AnimatedContent`
+  transitionSpec branches:
+  - Peek card shuffling (200/180ms)
+  - Peek card non-shuffling (240/200ms)
+  - Hero content shuffling (200/180ms)
+  - Hero content non-shuffling (260/240ms)
+- `import androidx.compose.animation.SizeTransform` added (alphabetical).
+- v6.8 comments added to both transitionSpecs explaining the unclip.
 
-**`app/src/main/java/com/curio/app/features/capture/formats/GalleryWallFormat.kt`**
-- Editor zoom offsets: `animationSpec = if (gestureActive) snap() else
-  spring(0.8, 280)`; `snap` imported.
-
-**`app/src/main/java/com/curio/app/features/detail/EntryDetailScreen.kt`**
-- Saved board + expanded board zoom offsets: same `snap()`-while-pinching
-  spec (x2 offset pairs); `snap` imported.
+Unclipped overflow is benign: zIndex ordering (back peek 2 < front peek 5 <
+hero 10) keeps overlap clean, and the hero's outer rounded clip still
+bounds the card edge.
 
 ## Review
-- code-reviewer-deepseek-flash (x2): clean. Verified `snap()` valid for BOM
-  2026.05.01, closing latch + board auto-close still fire, engage event
-  leaves `gestureActive` false so the open spring plays, no dead imports.
-  Non-blocking notes (accepted): the board-canvas pinch via
-  `moodBoardPinchZoom` (a Modifier extension) can't pass `liveScale`, and a
-  landing event with `calculateZoom() != 1f` could skip the board open
-  spring — both cosmetic, consistent with pre-existing landing math.
-
-## CI
-- Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).
+- code-reviewer-deepseek-flash (x2): clean. All four branches verified,
+  `using` precedence correct (`+` binds tighter than infix, left-assoc →
+  SizeTransform attaches to the whole ContentTransform), single alphabetical
+  import, durations/easings/directions untouched.
+- Per AGENTS.md no local Gradle build — CI validates compilation on push.

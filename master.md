@@ -88,6 +88,17 @@ Agents MUST commit and push all changes before the task is complete. Do not leav
 
 This is mandatory — do not skip unless the user explicitly says not to push.
 
+### 📝 Small Text-Only Changes — Do NOT Push
+
+Small text-only changes that do **not** affect app functionality (comment
+rewordings, doc tweaks, formatting fixes) must NOT be committed and pushed
+on their own — leave them uncommitted so they ride along with the next real
+change. This does NOT apply to: changes to agent instructions (AGENTS.md,
+master.md) or the Prompt.md request log; changes to user-visible text
+(strings, What's New, changelogs); or any change that alters behavior,
+layout, or compiled output — those still get pushed. See root
+`AGENTS.md` "SMALL TEXT-ONLY CHANGES — DO NOT PUSH".
+
 ## DOX Tree Diagram
 
 See [`DOX_TREE.md`](DOX_TREE.md) for a visual Mermaid diagram and ASCII tree of the complete AGENTS.md hierarchy.

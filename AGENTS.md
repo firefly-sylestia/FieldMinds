@@ -101,6 +101,21 @@ Use this git workflow:
 
 Follow conventional commit format: `feat:`, `fix:`, `refactor:`, `docs:`, `style:`, `chore:`, etc.
 
+### 📝 SMALL TEXT-ONLY CHANGES — DO NOT PUSH
+
+Small text-only changes that do **not** affect app functionality — comment
+rewordings, doc tweaks, formatting fixes, dead-comment cleanups — must
+**NOT** be committed and pushed on their own. They add noise to git history
+and trigger a CI build for zero behavior change. Leave them uncommitted in
+the working tree so they ride along with the next real change (or get
+dropped). This does NOT apply to:
+
+- Changes to agent instructions (AGENTS.md files, master.md) or the
+  Prompt.md request log — those MUST be committed and pushed so every
+  agent sees them.
+- Changes to user-visible text (strings, What's New, changelogs).
+- Any change that alters behavior, layout, or compiled output.
+
 ### 🧪 EXPERIMENTAL CHANGES — MUST BE SETTINGS-OPTIONAL
 
 Whenever a change is **experimental or being tested** (a visual A/B, a new
@@ -138,7 +153,9 @@ applies to settings-gated experiments.
 5. **Implement** — make targeted, minimal changes
 6. **Review** — spawn code-reviewer-deepseek-flash for non-trivial changes
 7. **DOX pass** — update nearest owning AGENTS.md if change affects purpose, ownership, contracts, workflows, or structure (see `master.md` "Update After Editing")
-8. **Commit & push** — stage, commit with descriptive message, push
+8. **Commit & push** — stage, commit with descriptive message, push (skip
+   for small text-only changes that don't affect app functionality — see
+   "SMALL TEXT-ONLY CHANGES — DO NOT PUSH" above)
 9. **Update Prompt.md** — with completion summary and any follow-up notes
 
 ## Updating "What's New" (In-App Changelog)
