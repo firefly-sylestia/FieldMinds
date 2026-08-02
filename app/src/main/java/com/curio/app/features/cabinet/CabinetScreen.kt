@@ -1,6 +1,7 @@
 package com.curio.app.features.cabinet
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -41,12 +42,15 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
+import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
+import com.curio.app.ui.theme.categoryChipSurface
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 
@@ -88,13 +92,15 @@ fun CabinetScreen(navController: NavController) {
         else entries.filter { it.topic.categoryId == selectedFilter }
     }
 
-    // The Cabinet sits on the plain theme background — the page-level
-    // category wash is removed; the chips and cards keep their surfaces.
+    // The Cabinet wears the active filter's category wash — the same tinted
+    // background as the filters page — so a selected category colors the
+    // whole page, and the top back button dismisses the filter back to "All".
     val filterCat = CurioCategories.byId(selectedFilter ?: CategoryId.WILDCARD)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(filterCat.categoryBackgroundWash())
             .statusBarsPadding()
     ) {
         // ── Top bar ────────────────────────────────────────────────────────
@@ -105,13 +111,23 @@ fun CabinetScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "The Cabinet",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (selectedFilter != null) {
+                    // Same top back button as the filters page — tapping it
+                    // dismisses the active category filter back to "All".
+                    CurioBackButton(onClick = { selectedFilter = null })
+                }
+                Text(
+                    text = "The Cabinet",
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
             Surface(
                 onClick = { /* TODO Phase 4: expand search bar */ },
                 shape = RoundedCornerShape(50),
@@ -133,7 +149,9 @@ fun CabinetScreen(navController: NavController) {
         // (soft idle surface, brighter when active) — never the selected
         // filter's color, so tapping one chip can't re-tint the others.
         // The label text stays neutral in every state; only the background
-        // carries the color. "All" keeps its plain neutral treatment.
+        // carries the color. In dark mode the idle fill is desaturated
+        // (less muddy) and the hairline picks up the light twin for
+        // contrast. "All" keeps its plain neutral treatment.
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -160,8 +178,10 @@ fun CabinetScreen(navController: NavController) {
                     // it stays on the neutral theme ink in every state, so
                     // only the background carries the tint.
                     ink = MaterialTheme.colorScheme.onSurfaceVariant,
-                    chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
-                    chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    chipSurface = cat.categoryChipSurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+                    chipBorder = cat.categoryBorder(
+                        fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    ),
                     selected = selectedFilter == cat.id,
                     onClick = { selectedFilter = cat.id }
                 )

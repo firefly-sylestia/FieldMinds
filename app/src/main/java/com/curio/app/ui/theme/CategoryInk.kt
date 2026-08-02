@@ -93,6 +93,36 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
 }
 
 /**
+ * Theme-aware surface color for SMALL CATEGORY CHIPS (Cabinet filter pills).
+ *
+ * Chips sit directly on the washed page, so they need to read as distinct
+ * tappable pills without shouting. Light mode matches [categorySurface]'s
+ * soft cream tint. Dark mode deliberately differs from cards: the family
+ * mid-tone is desaturated toward a neutral grey (deep accents otherwise
+ * read muddy over midnight) and blended a touch stronger than the page wash
+ * so the chip LIFTS off the tinted background instead of sinking into it —
+ * less saturated, more contrast. The crisp edge comes from
+ * [categoryBorder]'s light-twin hairline. Honors the Settings tint toggle —
+ * when it's off, [base] is returned unchanged so chips go back to the plain
+ * theme surface.
+ */
+@Composable
+fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.surfaceContainerLow): Color {
+    if (!AppPreferences.tintWashEnabledState) return base
+    return if (isCurioDarkTheme()) {
+        val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
+        val midTone = tuning.resolveMidTone(accent, lightAccent)
+        // Pull the mid-tone toward neutral grey (less saturated), then blend
+        // harder than the page wash (which uses blendFraction) so the chip
+        // reads brighter than the tinted background for contrast.
+        val desaturated = lerp(midTone, Color(0xFF9AA3B0), 0.40f)
+        lerp(base, desaturated, tuning.blendFraction + 0.40f)
+    } else {
+        lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
+    }
+}
+
+/**
  * Theme-aware border for CARDS and BUTTONS that wear a tinted surface on a
  * tinted page background.
  *

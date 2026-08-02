@@ -2,39 +2,41 @@
 
 ## Status: COMPLETED — committed and pushed to `revamp`
 
-"restore the backgroud tint iin cabinet categories excpet the all one and dont
-make the button adat just the backgroud"
+"use the same backgroud and and the back fucntion with a top button to make
+the category tab dismiss like its in filters page, and in dark mode make the
+category chips be more less saturated but more contrast"
 
-## Root cause / context
+## Change 1 — Cabinet wears the filters-page background + top back button
 
-Commit f1ec0d19 ("cabinet filter chips get neutral inactive colors") had
-removed the tinted idle backgrounds because the old code used the SELECTED
-filter's `filterCat.categorySurface(...)` — tapping a category re-tinted ALL
-chips with that color. The fix isn't to keep chips flat neutral; it's to give
-each chip its OWN category tint so no tap re-tints its neighbors.
+**`app/src/main/java/com/curio/app/features/cabinet/CabinetScreen.kt`**
+- Root Column now wears `filterCat.categoryBackgroundWash()` — the same
+  theme-aware category wash as the filters page (CategoryPicker). Selecting
+  a category colors the whole page (wildcard coral when "All" is active,
+  restoring the pre-0ad3af3c behavior).
+- Top bar: when `selectedFilter != null`, a `CurioBackButton` appears before
+  the title and dismisses the active category filter back to "All" — the
+  same back affordance as the filters page (no popBackStack since Cabinet
+  is a bottom-nav tab).
 
-## Change (`app/src/main/java/com/curio/app/features/cabinet/CabinetScreen.kt`)
+## Change 2 — dark-mode chips: less saturated, more contrast
 
-- Category chips now pass
-  `chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))`
-  — each chip wears its own category's tinted surface when idle (per-`cat`,
-  not the old `filterCat`), and still pops to the full `cat.tint` when
-  selected (FilterChipLite `color = if (selected) tint else chipSurface`).
-- `ink` pinned to `MaterialTheme.colorScheme.onSurfaceVariant` for category
-  chips so the label text NEVER adapts to the category color — only the
-  background carries the tint (FilterChipLite `if (selected) ink else
-  onSurfaceVariant`).
-- The "All" chip is untouched (neutral surfaceVariant idle + primaryContainer
-  selected) — "except the all one".
-- Filter-chip-row comment rewritten to describe the new behavior.
+**`app/src/main/java/com/curio/app/ui/theme/CategoryInk.kt`**
+- New `categoryChipSurface()`: light mode identical to `categorySurface`'s
+  soft cream tint; dark mode pulls the family mid-tone toward neutral grey
+  (`lerp(midTone, Color(0xFF9AA3B0), 0.40f)`) then blends at
+  `blendFraction + 0.40f` (max 0.64 < 1) — desaturated so deep accents stop
+  reading muddy, but blended harder than the page wash so the chip lifts off
+  the dark background (more contrast). Honors the Settings tint toggle.
 
-`categorySurface` honors the Settings tint toggle: when off, chips fall back
-to the flat neutral surface (pre-change look), consistent with the rest of
-the app.
+**`CabinetScreen.kt`** — category chips now use `categoryChipSurface` and
+`categoryBorder(fallback = outlineVariant)` (same border pattern as
+FilterSheet's CompactChip — light-twin hairline in dark adds the crisp edge).
+All chip unchanged.
 
 ## Review
-- code-reviewer-deepseek-flash: clean. Two minor non-blocking notes:
-  pre-existing unused `accent` param in FilterChipLite; idle-vs-selected is
-  a hue-vs-grey-blend + border-removal cue (matches intended pre-f1ec0d19
-  structure).
+- code-reviewer-deepseek-flash (x2): clean. Braces balanced (nested top-bar
+  Row), imports all live (`categorySurface` stays via the search button),
+  dark-mode blend math coherent, wash + back button correctly mirror the
+  filters page. One optional note (light-branch duplication in
+  categoryChipSurface) left as-is — matches the codebase's per-helper style.
 - Per AGENTS.md no local Gradle build — CI validates compilation on push.
