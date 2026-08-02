@@ -2,6 +2,16 @@
 
 ## Latest Request (COMPLETED)
 
+**CI fix: lint NewApi error in CurioTheme**
+
+- `dynamicDarkColorScheme`/`dynamicLightColorScheme` (API 31) were called unconditionally at CurioTheme.kt:172 — lint's 2 errors (one per call) aborted the build (minSdk 26).
+- Guarded with `Build.VERSION.SDK_INT >= S`, falling back to the Curio palettes below API 31.
+- Non-blocking deprecation warnings (LocalLifecycleOwner in Onboarding/NavHost) left as-is.
+
+Pushed; CI re-validates on push.
+
+## Latest Request (COMPLETED)
+
 **CI fix: HomeScreen.kt compile errors**
 
 - `unexploredTopics` (and `exploredTopics`) were declared inside the "Recently explored" section's Column but the "Recently unexplored" section referenced them outside that scope — hoisted both declarations to the outer scrollable Column (shared scope for sections 7 + 7b).

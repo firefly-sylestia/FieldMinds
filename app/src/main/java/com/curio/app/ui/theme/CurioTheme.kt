@@ -1,6 +1,7 @@
 package com.curio.app.ui.theme
 
 import android.app.Activity
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -169,7 +170,14 @@ fun CurioTheme(
     val colorScheme = when (AppPreferences.themeStyleState) {
         AppPreferences.THEME_STYLE_AMOLED -> CurioAmoledColorScheme
         AppPreferences.THEME_STYLE_MATERIAL ->
-            if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            // Material You's dynamic palette requires API 31 (Android 12);
+            // on older devices fall back to the Curio palettes so the
+            // style toggle stays harmless everywhere.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            } else {
+                if (isDark) CurioDarkColorScheme else CurioLightColorScheme
+            }
         else -> if (isDark) CurioDarkColorScheme else CurioLightColorScheme
     }
 
