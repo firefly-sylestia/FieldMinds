@@ -3,6 +3,7 @@ package com.curio.app.features.home
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,7 +88,6 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
-import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -149,6 +149,9 @@ fun HomeScreen(navController: NavController) {
     // Saved-shelf unsave confirmation — set when the user taps the remove
     // bookmark on a saved quote row; the dialog confirms before removal.
     var pendingUnsave by remember { mutableStateOf<SavedQuote?>(null) }
+    // Unpin-topic confirmation — set when the user taps unpin on a pinned
+    // topic row; the dialog confirms before the pin is dropped.
+    var pendingUnpin by remember { mutableStateOf<PinnedTopic?>(null) }
     val streakDays = StreakTracker.getStreak(context)
     val reminderEnabled = AppPreferences.reminderEnabledState
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -550,9 +553,7 @@ fun HomeScreen(navController: NavController) {
                                         CurioRoutes.revealFor(pinned.categoryId.routeSlug, pinned.topicName)
                                     ) { launchSingleTop = true }
                                 },
-                                onUnpin = {
-                                    AppPreferences.unpinTopic(context, pinned.categoryId, pinned.topicName)
-                                }
+                                onUnpin = { pendingUnpin = pinned }
                             )
                         }
                     }
@@ -618,7 +619,6 @@ fun HomeScreen(navController: NavController) {
                         recentEntries.forEach { entry ->
                             RecentEntryRow(
                                 entry = entry,
-                                surface = MaterialTheme.colorScheme.surface,
                                 onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) { launchSingleTop = true } }
                             )
                         }
@@ -688,6 +688,24 @@ fun HomeScreen(navController: NavController) {
             },
             dismissButton = {
                 TextButton(onClick = { pendingUnsave = null }) { Text("Keep") }
+            }
+        )
+    }
+
+    // ── Unpin-topic confirmation — never drop a pin silently ──
+    pendingUnpin?.let { pinned ->
+        AlertDialog(
+            onDismissRequest = { pendingUnpin = null },
+            title = { Text("Unpin ${pinned.topicName}?") },
+            text = { Text("This removes ${pinned.topicName} from your Saved shelf. The topic stays in the deck — you can pin it again anytime.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    AppPreferences.unpinTopic(context, pinned.categoryId, pinned.topicName)
+                    pendingUnpin = null
+                }) { Text("Unpin") }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingUnpin = null }) { Text("Keep") }
             }
         )
     }
@@ -797,35 +815,24 @@ private fun SavedQuoteRow(
     onRemove: () -> Unit
 ) {
     val cat = CurioCategories.byId(quote.categoryId)
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
-        // surfaceContainerHigh + hairline: in the AMOLED style `surface` is
-        // pure black on a pure-black page, so the shelf rows vanished.
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth()
+    // Backgroundless row — the Saved shelf is a plain list now: no card
+    // fill, no icon box — just a bare category glyph, the quote text and
+    // the remove affordance.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(cat.tint, shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = CurioIcons.FormatQuote,
-                    contentDescription = null,
-                    tint = cat.categoryInk(),
-                    size = 18.dp
-                )
-            }
-            Spacer(Modifier.size(12.dp))
+        CurioIcon(
+            name = CurioIcons.FormatQuote,
+            contentDescription = null,
+            tint = cat.themedAccent(),
+            size = 22.dp
+        )
+        Spacer(Modifier.size(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "\u201C${quote.quoteText}\u201D",
@@ -853,7 +860,6 @@ private fun SavedQuoteRow(
                 )
             }
         }
-    }
 }
 
 @Composable
@@ -863,35 +869,22 @@ private fun PinnedTopicRow(
     onUnpin: () -> Unit
 ) {
     val cat = CurioCategories.byId(pinned.categoryId)
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
-        // Same AMOLED-visibility treatment as [SavedQuoteRow]: a faint
-        // grey lift + hairline so rows read on the pure-black page.
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth()
+    // Backgroundless row — matches the plain Saved-shelf list style.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(cat.tint, shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = CurioIcons.Bookmark,
-                    contentDescription = null,
-                    tint = cat.categoryInk(),
-                    size = 18.dp
-                )
-            }
-            Spacer(Modifier.size(12.dp))
+        CurioIcon(
+            name = CurioIcons.Bookmark,
+            contentDescription = null,
+            tint = cat.themedAccent(),
+            size = 22.dp
+        )
+        Spacer(Modifier.size(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = pinned.topicName,
@@ -903,7 +896,7 @@ private fun PinnedTopicRow(
                 Text(
                     text = cat.displayName,
                     style = MaterialTheme.typography.bodySmall,
-                    color = cat.categoryInk()
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Surface(
@@ -919,43 +912,28 @@ private fun PinnedTopicRow(
                 )
             }
         }
-    }
 }
 
 // Recent entry row (compact)
 // ═══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit, surface: Color = MaterialTheme.colorScheme.surface) {
+private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
     val cat = CurioCategories.byId(entry.topic.categoryId)
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        color = surface,
-        shadowElevation = 0.dp,
-        tonalElevation = 2.dp,
-        modifier = Modifier.fillMaxWidth()
+    // Backgroundless row — recent entries read as a plain list on Home.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+            .padding(14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            // Color swatch with category glyph — bolder accent
-            Box(
-                modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(cat.themedAccent().copy(alpha = 0.32f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    cat.iconGlyph, null, tint = cat.categoryInk(), size = 22.dp
-                )
-            }
-            Column(modifier = Modifier.weight(1f)) {
+        CurioIcon(
+            cat.iconGlyph, null, tint = cat.themedAccent(), size = 24.dp
+        )
+        Column(modifier = Modifier.weight(1f)) {
                 Text(
                     entry.topic.name,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -975,7 +953,6 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit, surface: Colo
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
         }
-    }
 }
 
 private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = capturedAtDaysAgo) {
@@ -1321,29 +1298,19 @@ private fun ExploreTopicRow(
     onClick: () -> Unit
 ) {
     val accent = category.themedAccent()
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 0.dp,
-        tonalElevation = 2.dp,
-        modifier = Modifier.fillMaxWidth()
+    // Backgroundless row — explored/unexplored topics read as a plain
+    // list on Home; the bare accent glyph keeps the category identity.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(accent.copy(alpha = 0.16f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(category.iconGlyph, null, tint = accent, size = 20.dp)
-            }
-            Column(modifier = Modifier.weight(1f)) {
+        CurioIcon(category.iconGlyph, null, tint = accent, size = 24.dp)
+        Column(modifier = Modifier.weight(1f)) {
                 Text(
                     topicName,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -1365,7 +1332,6 @@ private fun ExploreTopicRow(
                 modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
             )
         }
-    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
