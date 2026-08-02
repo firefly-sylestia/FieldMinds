@@ -75,6 +75,7 @@ class MoodBoardZoomState {
     // and only spring between targets when it's clear (open/close/reset) —
     // without this, a spring chase on every pinch event lags behind the
     // fingers and the zoom only catches up after the gesture stops.
+    var gestureActive by mutableStateOf(false)
     // The zoom level [zoomIn] opens at for the CURRENT tile — fit-based so a
     // small tile opens large enough to read while a big tile doesn't blow
     // past the screen. [resetZoom] springs back to this.
