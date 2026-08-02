@@ -2,7 +2,6 @@ package com.curio.app.features.capture.formats
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -178,16 +177,6 @@ fun ReelNotesFormat(
             onPaperColorChange = { reviewColor = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
-
-        // ── Mood — right under the review field, ABOVE the quote cards ──
-        // (behind the "Entry date & mood" setting).
-        if (AppPreferences.entryMetaEnabledState) {
-            MoodChipsRow(
-                mood = mood,
-                accent = accent,
-                onMoodChange = { mood = it }
-            )
-        }
 
         // ── Quote cards — the SHARED hand-placed paper notecard section ──
         // New cards inherit the review box's current paper style + color.

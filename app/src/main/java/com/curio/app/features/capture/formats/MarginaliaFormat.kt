@@ -237,18 +237,6 @@ fun MarginaliaFormat(
             )
         }
 
-        // ── Mood — right under the journal page, ABOVE the quote cards ──
-        // (behind the "Entry date & mood" setting).
-        if (AppPreferences.entryMetaEnabledState) {
-            // Mood row — tap a mood to set it, tap again to clear. Shared
-            // across all capture formats via the MoodChipsRow component.
-            MoodChipsRow(
-                mood = mood,
-                accent = accent,
-                onMoodChange = { mood = it }
-            )
-        }
-
         // ── Quote cards — the SHARED hand-placed paper notecard section ──
         // New cards inherit the journal's current paper style + color.
         QuoteCardsSection(

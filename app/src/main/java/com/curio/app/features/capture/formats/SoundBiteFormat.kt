@@ -43,7 +43,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -443,16 +442,6 @@ fun SoundBiteFormat(
             onPaperColorChange = { noteColor = it },
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         )
-
-        // ── Mood — right under the note field, ABOVE the quote cards ────
-        // (behind the "Entry date & mood" setting).
-        if (AppPreferences.entryMetaEnabledState) {
-            MoodChipsRow(
-                mood = mood,
-                accent = accent,
-                onMoodChange = { mood = it }
-            )
-        }
 
         // ── Quote cards — the SHARED hand-placed paper notecard section ──
         // Frozen while actively recording (the cards need the keyboard).

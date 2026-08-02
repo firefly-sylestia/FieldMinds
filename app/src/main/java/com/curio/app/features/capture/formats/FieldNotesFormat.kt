@@ -2,7 +2,6 @@ package com.curio.app.features.capture.formats
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -272,16 +271,6 @@ fun FieldNotesFormat(
         }
 
         Spacer(Modifier.height(8.dp))
-
-        // ── Mood — right under the fields, ABOVE the photo attach ────────
-        // (behind the "Entry date & mood" setting).
-        if (AppPreferences.entryMetaEnabledState) {
-            MoodChipsRow(
-                mood = mood,
-                accent = accent,
-                onMoodChange = { mood = it }
-            )
-        }
 
         Spacer(Modifier.height(8.dp))
 

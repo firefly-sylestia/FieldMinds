@@ -2,6 +2,35 @@
 
 ## Latest Request (COMPLETED)
 
+**Universal 'How did it make you feel?' mood row — right above the capture options, animated**
+
+### What was asked
+
+The mood row was previously rendered inside each format editor (Marginalia, ReelNotes, SoundBite, FieldNotes), each with its own `var mood` state. The user wanted it **universal**: ONE shared row sitting right above the 'How do you want to capture this one?' format options, with proper animation when the mood changes.
+
+### What was done
+
+1. **Animated `MoodChipsRow`** (CaptureFormatComponents.kt) — selected chip now springs to 1.08x (`animateFloatAsState` + `CurioMotion.Springs.Bouncy` + `Modifier.scale`) and its fill + ink crossfade to the accent (`animateColorAsState` tween). Unselected chips stay at 1x and crossfade back.
+2. **Removed the per-editor mood rows** from Marginalia, ReelNotes, SoundBite, FieldNotes — each editor's `MoodChipsRow` block deleted (plus now-unused `AppPreferences` imports in three of them).
+3. **Hoisted mood to section state** in SaveCaptureScreen — `CaptureSectionState` gains `var mood`; one universal `MoodChipsRow` renders in `FormatBodyForCategory` above the 'How do you want to capture this one?' options, driven by the ACTIVE take's mood, and stamps the pick into the live data via the new `CaptureData.withMood()` helper (recurses into OpenNotebook's subData) on every change + editor emit. `moodOf` reads it back for seeding.
+4. **GalleryWall gate** — mood-board takes carry no mood field, so the row hides for them (and for OpenNotebook-wrapped mood boards); otherwise a pick would animate and silently vanish. The row shows only when the 'Entry date & mood' setting is on.
+
+### Reviewer feedback addressed
+
+- Silent mood drop on GalleryWall → row hidden for mood-incapable takes.
+- Dead editor mood state kept intentionally (minimal diff; the section stamp always wins).
+- Stamping loop risk checked — one-way assignment, no re-entrancy; `key(current.id)` dispatch means mood changes don't recreate editors.
+
+### Files touched
+
+- `app/src/main/java/com/curio/app/features/capture/SaveCaptureScreen.kt` (hoist + universal row + stamping + gate)
+- `app/src/main/java/com/curio/app/features/capture/formats/CaptureFormatComponents.kt` (animation)
+- `app/src/main/java/com/curio/app/features/capture/formats/MarginaliaFormat.kt`, `ReelNotesFormat.kt`, `SoundBiteFormat.kt`, `FieldNotesFormat.kt` (row removal, import cleanup)
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Dark/AMOLED visual fixes — creamy icons, invisible format-chip text, mood row moved above**
 
 ### What was asked

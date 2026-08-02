@@ -21,16 +21,21 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -54,6 +59,7 @@ import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.glyph
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
@@ -669,10 +675,13 @@ private fun QuoteCard(
 /**
  * The shared "How did it make you feel?" mood row — a horizontally
  * scrollable chip row of every [JournalMood]. Tap a mood to set it, tap
- * again to clear. Used by ALL capture formats (Marginalia journal, Reel
- * Notes review, Sound Bite note, Field Notes) so every entry can carry a
- * mood; the saved-entry meta card reads it. Callers gate this behind the
- * "Entry date & mood" setting themselves.
+ * again to clear. Rendered ONCE per capture screen (right above the format
+ * options, by the caller) so every format/take shares the same picker; the
+ * saved-entry meta card reads the stored mood.
+ *
+ * Selection is animated: the chosen chip pops up on a bouncy spring while
+ * its fill + ink crossfade to the accent, so changing moods reads as a
+ * physical press-and-settle instead of a hard state snap.
  */
 @Composable
 fun MoodChipsRow(
@@ -694,12 +703,33 @@ fun MoodChipsRow(
         ) {
             JournalMood.entries.forEach { m ->
                 val selected = mood == m
+                // Selected chip springs up (gummy overshoot) + its fill and
+                // ink crossfade to the accent — the change animates instead
+                // of snapping, matching Curio's chip-selection language.
+                val chipScale by animateFloatAsState(
+                    targetValue = if (selected) 1.08f else 1f,
+                    animationSpec = CurioMotion.Springs.Bouncy,
+                    label = "moodChipScale"
+                )
+                val chipBg by animateColorAsState(
+                    targetValue = if (selected) accent
+                                  else MaterialTheme.colorScheme.surfaceVariant,
+                    animationSpec = tween(CurioMotion.Durations.Standard),
+                    label = "moodChipBg"
+                )
+                val chipInk by animateColorAsState(
+                    targetValue = if (selected) Color.White
+                                  else MaterialTheme.colorScheme.onSurfaceVariant,
+                    animationSpec = tween(CurioMotion.Durations.Standard),
+                    label = "moodChipInk"
+                )
                 Surface(
                     onClick = { onMoodChange(if (selected) null else m) },
                     shape = RoundedCornerShape(50),
-                    color = if (selected) accent else MaterialTheme.colorScheme.surfaceVariant,
+                    color = chipBg,
                     border = if (selected) null
-                            else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                            else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    modifier = Modifier.scale(chipScale)
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -709,15 +739,13 @@ fun MoodChipsRow(
                         CurioIcon(
                             name = m.glyph,
                             contentDescription = null,
-                            tint = if (selected) Color.White
-                                   else MaterialTheme.colorScheme.onSurfaceVariant,
+                            tint = chipInk,
                             size = 16.dp
                         )
                         Text(
                             text = m.label,
                             style = MaterialTheme.typography.labelMedium,
-                            color = if (selected) Color.White
-                                   else MaterialTheme.colorScheme.onSurfaceVariant
+                            color = chipInk
                         )
                     }
                 }

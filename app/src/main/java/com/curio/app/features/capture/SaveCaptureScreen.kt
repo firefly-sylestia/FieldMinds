@@ -55,6 +55,7 @@ import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CaptureRepository
+import com.curio.app.data.JournalMood
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
@@ -68,6 +69,7 @@ import com.curio.app.data.shortName
 import com.curio.app.features.capture.formats.FieldNotesFormat
 import com.curio.app.features.capture.formats.GalleryWallFormat
 import com.curio.app.features.capture.formats.MarginaliaFormat
+import com.curio.app.features.capture.formats.MoodChipsRow
 import com.curio.app.features.capture.formats.OpenNotebookFormat
 import com.curio.app.features.capture.formats.ReelNotesFormat
 import com.curio.app.features.capture.formats.SoundBiteFormat
@@ -533,6 +535,7 @@ private fun FormatBodyForCategory(
                         add(CaptureSectionState(i, s.format).apply {
                             seed = s.data
                             data = s.data
+                            mood = s.data.moodOf()
                             canSave = true
                         })
                     }
@@ -540,12 +543,14 @@ private fun FormatBodyForCategory(
                     add(CaptureSectionState(0, initialData.subFormat).apply {
                         seed = initialData.subData
                         data = initialData.subData
+                        mood = initialData.subData.moodOf()
                         canSave = true
                     })
                 initialData != null ->
                     add(CaptureSectionState(0, entryFormat ?: defaultFormat).apply {
                         seed = initialData
                         data = initialData
+                        mood = initialData.moodOf()
                         canSave = true
                     })
                 else -> add(CaptureSectionState(0, defaultFormat))
@@ -612,6 +617,34 @@ private fun FormatBodyForCategory(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // ── Universal mood — ONE "How did it make you feel?" row for every
+        // format, sitting right above the capture options. It reflects the
+        // ACTIVE take's mood; picking one writes it into that take's data
+        // (behind the "Entry date & mood" setting).
+        val active = sections.getOrNull(activeIndex)
+        // Mood-board (GalleryWall) takes have no mood field, so the row is
+        // hidden for them — otherwise a picked mood would animate and then
+        // silently not persist. OpenNotebook wraps a sub-format, so check
+        // what it actually contains.
+        val moodCapable = when (active?.format) {
+            CaptureFormat.GalleryWall -> false
+            CaptureFormat.OpenNotebook ->
+                (active.data as? CaptureData.OpenNotebook)?.subData !is CaptureData.GalleryWall
+            else -> true
+        }
+        if (AppPreferences.entryMetaEnabledState && active != null && moodCapable) {
+            MoodChipsRow(
+                mood = active.mood,
+                accent = category.themedAccent(),
+                onMoodChange = { m ->
+                    active.mood = m
+                    // Stamp into the take's live data so the saved entry +
+                    // meta card see it even before the editor re-emits.
+                    active.data = active.data?.withMood(m)
+                }
+            )
+        }
+
         Text(
             text = "How do you want to capture this one?",
             style = MaterialTheme.typography.titleSmall,
@@ -619,7 +652,6 @@ private fun FormatBodyForCategory(
         )
 
         // ── Compact format chips — control the ACTIVE section ────────────
-        val active = sections.getOrNull(activeIndex)
         if (active != null) {
             Row(
                 modifier = Modifier
@@ -793,34 +825,43 @@ private fun FormatBodyForCategory(
                 when (current.format) {
                     CaptureFormat.SoundBite -> SoundBiteFormat(
                         category.themedAccent(), category.tint,
-                        { current.canSave = it }, { current.data = it },
+                        { current.canSave = it },
+                        // Stamp the universal mood into whatever the editor
+                        // emits — the row lives above the options, not in the
+                        // format body, so the take's mood is applied here.
+                        { current.data = it?.withMood(current.mood) },
                         onBusyChange = { current.busy = it },
                         initialData = current.seed as? CaptureData.SoundBite
                     )
                     CaptureFormat.ReelNotes -> ReelNotesFormat(
                         category.themedAccent(), category.tint,
-                        { current.canSave = it }, { current.data = it },
+                        { current.canSave = it },
+                        { current.data = it?.withMood(current.mood) },
                         initialData = current.seed as? CaptureData.ReelNotes
                     )
                     CaptureFormat.Marginalia -> MarginaliaFormat(
                         category.themedAccent(), category.tint,
-                        { current.canSave = it }, { current.data = it },
+                        { current.canSave = it },
+                        { current.data = it?.withMood(current.mood) },
                         initialData = current.seed as? CaptureData.Marginalia
                     )
                     CaptureFormat.GalleryWall -> GalleryWallFormat(
                         category.themedAccent(), category.tint,
-                        { current.canSave = it }, { current.data = it },
+                        { current.canSave = it },
+                        { current.data = it?.withMood(current.mood) },
                         initialData = current.seed as? CaptureData.GalleryWall,
                         boardSeed = boardSeed
                     )
                     CaptureFormat.FieldNotes -> FieldNotesFormat(
                         category.themedAccent(), category.tint,
-                        { current.canSave = it }, { current.data = it },
+                        { current.canSave = it },
+                        { current.data = it?.withMood(current.mood) },
                         initialData = current.seed as? CaptureData.FieldNotes
                     )
                     CaptureFormat.OpenNotebook -> OpenNotebookFormat(
                         category.themedAccent(), category.tint,
-                        { current.canSave = it }, { current.data = it },
+                        { current.canSave = it },
+                        { current.data = it?.withMood(current.mood) },
                         initialData = current.seed as? CaptureData.OpenNotebook,
                         boardSeed = boardSeed
                     )
@@ -881,6 +922,10 @@ private class CaptureSectionState(val id: Int, initialFormat: CaptureFormat) {
     var canSave by mutableStateOf(false)
     var data by mutableStateOf<CaptureData?>(null)
     var seed by mutableStateOf<CaptureData?>(null)
+    // The take's mood — held HERE (one universal row above the format
+    // options drives it) and stamped into the section's data on every
+    // editor emit + mood change, so all formats share one picker.
+    var mood by mutableStateOf<JournalMood?>(null)
     // True while a live recording is in progress — format-switch confirmation
     // must also trigger here (data/canSave are null mid-recording).
     var busy by mutableStateOf(false)
@@ -894,6 +939,26 @@ private val CAPTURE_FORMATS = listOf(
     CaptureFormat.GalleryWall,
     CaptureFormat.FieldNotes
 )
+
+/** The mood stored on [data] (recursing into OpenNotebook wrappers). */
+private fun CaptureData?.moodOf(): JournalMood? = when (this) {
+    is CaptureData.SoundBite -> mood
+    is CaptureData.ReelNotes -> mood
+    is CaptureData.Marginalia -> mood
+    is CaptureData.FieldNotes -> mood
+    is CaptureData.OpenNotebook -> subData.moodOf()
+    else -> null // GalleryWall carries no mood
+}
+
+/** Returns [this] with [mood] stamped on (recursing into OpenNotebook). */
+private fun CaptureData.withMood(mood: JournalMood?): CaptureData = when (this) {
+    is CaptureData.SoundBite -> copy(mood = mood)
+    is CaptureData.ReelNotes -> copy(mood = mood)
+    is CaptureData.Marginalia -> copy(mood = mood)
+    is CaptureData.FieldNotes -> copy(mood = mood)
+    is CaptureData.OpenNotebook -> copy(subData = subData.withMood(mood))
+    else -> this // GalleryWall carries no mood
+}
 
 /**
  * Recursively persists every SoundBite audio file inside [data] (through
