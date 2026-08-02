@@ -74,6 +74,8 @@ object CurioIcons {
     const val StarOutline = "star_outline"
     const val Bookmark    = "bookmark"           // filled — pinned topic
     const val BookmarkBorder = "bookmark_border" // outline — not pinned
+    const val ThumbUp     = "thumb_up"            // 👍 — liked topic
+    const val ThumbDown   = "thumb_down"          // 👎 — disliked topic
     const val FormatQuote = "format_quote"
     // ── Rich-text formatting (Marginalia journal/quotes + format fields)
     const val FormatBold = "format_bold"           // B — bold

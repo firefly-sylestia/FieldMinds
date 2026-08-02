@@ -84,6 +84,7 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
+import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.CurioTopic
 import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicJsonLoader
@@ -516,8 +517,19 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         }
         shuffling = false
 
-        // Pick a single topic
-        val primary = pickFrom(filteredPool, recentTopicIds)
+        // Pick a single topic — tier-biased, sentiment-weighted (liked /
+        // disliked topics + category affinity), and never an already-
+        // explored topic while alternatives remain.
+        val exploredIds = runCatching {
+            CurioRepositoryHolder.repo.getAll().map { it.topic.id }.toSet()
+        }.getOrDefault(emptySet())
+        val primary = pickFrom(
+            filteredPool,
+            recentTopicIds,
+            exploredIds,
+            AppPreferences.topicSentimentsState,
+            AppPreferences.categoryAffinityMap()
+        )
         landedTopicName = primary?.name
         if (primary != null) {
             val idx = displayPool.indexOfFirst { it.id == primary.id }
@@ -2241,23 +2253,63 @@ private fun resolveTopicForSlot(
 }
 
 /**
- * Weighted picker — favours tier 1 (human-curated marquee), then tier 2,
- * then tier 3, while excluding any topics in [recentIds].
+ * Weighted picker — tier bias (tier 1 human-curated marquee first), then
+ * tier 2, tier 3, while excluding topics in [recentIds] and any topic the
+ * user already explored (captured). Sentiment further skews the weights:
+ * liked topics get 2x, disliked drop to 0.25x, and each topic's CATEGORY
+ * affinity (net likes − dislikes in that category) boosts or dampens the
+ * whole genre — never fully blocked. Falls back gracefully when the pool
+ * is all-recent or all-explored.
  */
-private fun pickFrom(pool: List<CurioTopic>, recentIds: Set<String>): CurioTopic? {
+private fun pickFrom(
+    pool: List<CurioTopic>,
+    recentIds: Set<String>,
+    exploredIds: Set<String>,
+    sentiments: Map<String, String>,
+    categoryAffinity: Map<String, Int>
+): CurioTopic? {
     if (pool.isEmpty()) return null
-    val withoutRecents = pool.filterNot { it.id in recentIds }
-    val candidates = if (withoutRecents.isNotEmpty()) withoutRecents else pool
+    var candidates = pool.filterNot { it.id in recentIds }
+    // Explored topics (already captured) are excluded entirely — falling
+    // back to the full candidate pool only when everything is explored so
+    // the shuffle never runs dry.
+    val unvisited = candidates.filterNot { it.id in exploredIds }
+    if (unvisited.isNotEmpty()) candidates = unvisited
     if (candidates.isEmpty()) return null
     if (candidates.size == 1) return candidates[0]
 
-    val totalWeight = candidates.sumOf { t ->
-        when (t.tier) { 1 -> 100; 2 -> 60; 3 -> 20; else -> 30 }
+    fun baseWeight(t: CurioTopic): Double = when (t.tier) {
+        1 -> 100.0
+        2 -> 60.0
+        3 -> 20.0
+        else -> 30.0
     }
-    if (totalWeight <= 0) return candidates.random()
-    var target = Random.nextInt(totalWeight)
+
+    fun weight(t: CurioTopic): Double {
+        // Per-topic sentiment: a liked topic gets 2x, a disliked one drops
+        // to 0.25x — it can still appear, just far less often.
+        val topicFactor = when (sentiments["${t.categoryId.name}:${t.id}"]) {
+            AppPreferences.SENTIMENT_LIKE -> 2.0
+            AppPreferences.SENTIMENT_DISLIKE -> 0.25
+            else -> 1.0
+        }
+        // Category affinity (net likes − dislikes in the category): a liked
+        // genre shows more (up to 2.5x), a disliked genre shows less (down
+        // to 0.25x) — never fully blocked.
+        val aff = categoryAffinity[t.categoryId.name] ?: 0
+        val categoryFactor = when {
+            aff > 0 -> 1.0 + 0.5 * aff.coerceAtMost(3)
+            aff < 0 -> (1.0 + 0.4 * aff).coerceAtLeast(0.25)
+            else -> 1.0
+        }
+        return baseWeight(t) * topicFactor * categoryFactor
+    }
+
+    val totalWeight = candidates.sumOf { weight(it) }
+    if (totalWeight <= 0.0) return candidates.random()
+    var target = Random.nextDouble(totalWeight)
     for (topic in candidates) {
-        target -= when (topic.tier) { 1 -> 100; 2 -> 60; 3 -> 20; else -> 30 }
+        target -= weight(topic)
         if (target < 0) return topic
     }
     return candidates.random()

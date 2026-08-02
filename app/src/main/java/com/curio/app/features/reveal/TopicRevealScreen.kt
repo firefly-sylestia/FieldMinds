@@ -1,6 +1,7 @@
 package com.curio.app.features.reveal
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -140,6 +141,10 @@ fun TopicRevealScreen(
     // immediately when the user taps pin/unpin.
     val isPinned = resolved != null &&
         AppPreferences.pinnedTopicsState.any { it.categoryId == cat.id && it.topicName == resolved.name }
+    // v7 — like/dislike teaches the shuffle: liked topics (and their whole
+    // category) get more weight, disliked get less — never fully blocked.
+    // Reads the REACTIVE sentiment state so the buttons toggle instantly.
+    val sentiment = resolved?.let { AppPreferences.topicSentiment(cat.id, it.id) }
 
     Column(
         modifier = Modifier
@@ -276,6 +281,46 @@ fun TopicRevealScreen(
                         subtype = resolved.subtype,
                         modifier = Modifier.padding(top = 14.dp)
                     )
+                }
+
+                // ── 6.5 Like / dislike — feeds the shuffle weighting ──
+                if (resolved != null) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SentimentButton(
+                            icon = CurioIcons.ThumbDown,
+                            label = "Dislike",
+                            active = sentiment == AppPreferences.SENTIMENT_DISLIKE,
+                            accent = cat.themedAccent(),
+                            onClick = {
+                                AppPreferences.setTopicSentiment(
+                                    context, cat.id, resolved.id,
+                                    if (sentiment == AppPreferences.SENTIMENT_DISLIKE)
+                                        AppPreferences.SENTIMENT_NONE
+                                    else AppPreferences.SENTIMENT_DISLIKE
+                                )
+                            }
+                        )
+                        SentimentButton(
+                            icon = CurioIcons.ThumbUp,
+                            label = "Like",
+                            active = sentiment == AppPreferences.SENTIMENT_LIKE,
+                            accent = cat.themedAccent(),
+                            onClick = {
+                                AppPreferences.setTopicSentiment(
+                                    context, cat.id, resolved.id,
+                                    if (sentiment == AppPreferences.SENTIMENT_LIKE)
+                                        AppPreferences.SENTIMENT_NONE
+                                    else AppPreferences.SENTIMENT_LIKE
+                                )
+                            }
+                        )
+                    }
                 }
 
                 // ── 7. Primary CTA ─────────────────────────────────────────
@@ -562,4 +607,40 @@ private fun verbIcon(verb: String): String = when (verb.lowercase().trim()) {
     "write" -> "edit"
     "play" -> "play_arrow"
     else -> "auto_awesome"
+}
+
+/** Circular like/dislike toggle — active state fills with the category accent. */
+@Composable
+private fun SentimentButton(
+    icon: String,
+    label: String,
+    active: Boolean,
+    accent: Color,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = if (active) accent else MaterialTheme.colorScheme.surfaceVariant,
+        border = if (active) null
+                else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            CurioIcon(
+                name = icon,
+                contentDescription = label,
+                tint = if (active) Color.White else MaterialTheme.colorScheme.onSurface,
+                size = 18.dp
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                color = if (active) Color.White else MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
 }

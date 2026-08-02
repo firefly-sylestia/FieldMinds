@@ -2,6 +2,37 @@
 
 ## Latest Request (COMPLETED)
 
+**Topic like/dislike on the reveal screen feeding smart shuffle weighting + explored topics excluded from the spin**
+
+### What was asked
+
+1. Add like/dislike for topics on the Topic Reveal screen.
+2. Use that data to show less of a disliked genre (without fully stopping it) and show more of a liked category.
+3. If a topic is already explored (captured), don't show it again in shuffle.
+
+User chose (ask_user): always-on (no Settings toggle).
+
+### What was changed
+
+- **`AppPreferences.kt`** — topic sentiment storage: `SENTIMENT_LIKE`/`SENTIMENT_DISLIKE`/`SENTIMENT_NONE` constants; JSON-object pref `topic_sentiments` keyed `"CATEGORY:topicId"` → "like"/"dislike" (PinnedTopic-style pattern); reactive `topicSentimentsState` seeded in `initThemeMode`; `topicSentiment(categoryId, topicId)` reactive lookup; `setTopicSentiment` (SENTIMENT_NONE removes the vote); `categoryAffinityMap()` = net likes − dislikes per category name.
+- **`CurioIcons.kt`** — `ThumbUp`/`ThumbDown` glyphs (thumb_up / thumb_down).
+- **`TopicRevealScreen.kt`** — new "Like / Dislike" row (section 6.5, between the action prompt and the CTA) with two circular `SentimentButton`s — active state fills with the category accent, tap again clears, votes write reactively so the buttons flip instantly.
+- **`SpinScreen.kt`** — `pickFrom` now takes `exploredIds` + sentiment map + category affinity. It excludes recent AND already-explored topics (repo.getAll() called inside the LaunchedEffect, runCatching fallback to no-exclusion), falling back to the full pool only when everything is seen/explored so the shuffle never runs dry. Per-topic weight = tier base (100/60/20/30) × topic factor (liked 2.0, disliked 0.25 — never zero) × category factor (affinity > 0 → up to 2.5×, affinity < 0 → down to a 0.25× floor) — so a disliked genre shows less but is never fully blocked, and a liked genre surfaces more.
+
+### Review
+
+code-reviewer-deepseek-flash: clean pass, no blockers. Noted: (1) "genre" is weighted at the CATEGORY (family) level rather than the genre/era tags shown on the reveal — matches "make the liked category be more shown"; per-tag weighting is a possible follow-up, (2) the two sentiment toggle lambdas are mildly duplicated (acceptable), (3) only the actual pick is filtered/weighted — the peek fan (displayPool) can still show explored topics (stated boundary, "in shuffle" = the pick). Verified the suspend repo call inside LaunchedEffect, `Random.nextDouble(Double)` exists, JSON-iterator `buildMap` compiles, key format consistency, no dead code, braces balance.
+
+### Follow-ups / notes
+
+- Explored exclusion re-queries the repo on every spin, so a freshly captured topic is excluded immediately after saving.
+- The explored fallback guarantees the shuffle can never run dry (single-candidate pools still resolve).
+- If the user wants per-genre-tag weighting instead of per-category, that's a clean follow-up (affinity keyed by tag rather than category).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Saved quotes shelf (bookmark quote cards → Home "Saved" shelf with pinned topics) + paper style/color controls hidden behind a toggle in rich-text fields**
 
 ### What was asked

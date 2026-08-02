@@ -31,6 +31,13 @@ object AppPreferences {
     const val THEME_STYLE_AMOLED = "amoled"
     const val THEME_STYLE_MATERIAL = "material"
 
+    /** Topic sentiment constants — like/dislike from Topic Reveal feeds the
+     *  Spin shuffle weighting (liked topics + their category get more weight,
+     *  disliked get less — never fully blocked). [SENTIMENT_NONE] clears. */
+    const val SENTIMENT_LIKE = "like"
+    const val SENTIMENT_DISLIKE = "dislike"
+    const val SENTIMENT_NONE = "none"
+
     private const val NAME = "curio_app_prefs"
     private const val KEY_DISPLAY_NAME = "display_name"
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
@@ -41,6 +48,7 @@ object AppPreferences {
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
+    private const val KEY_TOPIC_SENTIMENTS = "topic_sentiments"  // JSON object: "CATEGORY:topicId" -> "like"/"dislike"
     private const val KEY_LAST_SPIN_CATEGORY = "last_spin_category"
     private const val KEY_LAST_SPIN_CATEGORIES = "last_spin_categories"   // comma-joined set
     private const val KEY_LANDED_TOPIC_PREFIX = "landed_topic_"
@@ -106,6 +114,15 @@ object AppPreferences {
     var savedQuotesState by mutableStateOf<List<SavedQuote>>(emptyList())
         private set
 
+    /**
+     * Reactive topic-sentiment state — keyed "CATEGORY:topicId" → "like" /
+     * "dislike". Updated by [setTopicSentiment] so the Topic Reveal buttons
+     * and the Spin shuffle recompose/pick with the latest votes. Seeded from
+     * prefs in [initThemeMode].
+     */
+    var topicSentimentsState by mutableStateOf<Map<String, String>>(emptyMap())
+        private set
+
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         themeStyleState = getThemeStyle(context)
@@ -114,6 +131,7 @@ object AppPreferences {
         entryMetaEnabledState = isEntryMetaEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
         savedQuotesState = getSavedQuotes(context)
+        topicSentimentsState = getTopicSentiments(context)
     }
 
     // ── Theme ────────────────────────────────────────────────────────
@@ -284,6 +302,60 @@ object AppPreferences {
         }
         prefs(context).edit().putString(KEY_SAVED_QUOTES, arr.toString()).apply()
         savedQuotesState = quotes
+    }
+
+    // ── Topic sentiment (Topic Reveal → like/dislike feeds the shuffle) ──
+    /**
+     * Returns all topic sentiments keyed "CATEGORY:topicId" → "like" /
+     * "dislike". Persisted as a JSON object so any topic id survives.
+     */
+    fun getTopicSentiments(context: Context): Map<String, String> {
+        val raw = prefs(context).getString(KEY_TOPIC_SENTIMENTS, null) ?: return emptyMap()
+        return try {
+            val obj = JSONObject(raw)
+            buildMap { obj.keys().forEach { key -> put(key, obj.optString(key)) } }
+        } catch (_: Exception) {
+            emptyMap()
+        }
+    }
+
+    /** Reactive sentiment for a topic — null / [SENTIMENT_LIKE] / [SENTIMENT_DISLIKE]. */
+    fun topicSentiment(categoryId: CategoryId, topicId: String): String? =
+        topicSentimentsState["${categoryId.name}:$topicId"]
+
+    /** Sets or clears a topic's sentiment ([SENTIMENT_NONE] removes it). */
+    fun setTopicSentiment(context: Context, categoryId: CategoryId, topicId: String, sentiment: String) {
+        if (topicId.isBlank()) return
+        val key = "${categoryId.name}:$topicId"
+        val updated = getTopicSentiments(context).toMutableMap()
+        if (sentiment == SENTIMENT_NONE) updated.remove(key) else updated[key] = sentiment
+        saveTopicSentiments(context, updated)
+    }
+
+    private fun saveTopicSentiments(context: Context, sentiments: Map<String, String>) {
+        val obj = JSONObject()
+        sentiments.forEach { (k, v) -> obj.put(k, v) }
+        prefs(context).edit().putString(KEY_TOPIC_SENTIMENTS, obj.toString()).apply()
+        topicSentimentsState = sentiments
+    }
+
+    /**
+     * Net like-minus-dislike count per CATEGORY name — drives the shuffle's
+     * category factor (a category with more likes shows more, more dislikes
+     * shows less, never zero). Computed from the reactive state.
+     */
+    fun categoryAffinityMap(): Map<String, Int> {
+        val acc = mutableMapOf<String, Int>()
+        topicSentimentsState.forEach { (key, sentiment) ->
+            val catName = key.substringBefore(':')
+            val delta = when (sentiment) {
+                SENTIMENT_LIKE -> 1
+                SENTIMENT_DISLIKE -> -1
+                else -> 0
+            }
+            if (delta != 0) acc[catName] = (acc[catName] ?: 0) + delta
+        }
+        return acc
     }
 
     // ── Daily reminder ───────────────────────────────────────────────
