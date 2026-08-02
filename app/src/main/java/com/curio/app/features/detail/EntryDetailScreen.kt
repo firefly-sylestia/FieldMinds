@@ -1109,9 +1109,15 @@ private fun RenderQuoteCards(
                 paperColor = quoteSheet,
                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
                 corner = 12.dp,
-                minHeight = 72.dp,
+                // Hoist the 72dp floor INTO the modifier chain BEFORE the tilt
+                // rotate: passing it as NotePaperCard's minHeight param appends
+                // heightIn AFTER the call-site rotate (the card layer grew to
+                // 72dp and the rotation pivot shifted for single-line quotes).
+                // With heightIn first, the tilt pivots around the CONTENT's
+                // center and stays put whether the quote is one line or five.
                 modifier = Modifier
                     .fillMaxWidth()
+                    .heightIn(min = 72.dp)
                     .rotate(rotation)
             ) {
                 Row(

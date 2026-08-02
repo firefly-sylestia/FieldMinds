@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**Quote-card tilt pivot fixed — 72dp min-height hoisted BEFORE the rotate in the saved-view modifier chain**
+
+### What was asked
+
+Hoist heightIn before the quote cards' rotate so the tilt pivot stays centered when a single-line quote grows to 72dp.
+
+### What was changed
+
+- **`EntryDetailScreen.kt`** (`RenderQuoteCards`) — the saved quote-card `NotePaperCard` call previously passed `minHeight = 72.dp` as a param; `NotePaperCard`'s dispatch appends `modifier.heightIn(min = minHeight)` AFTER the call-site modifier, so the chain was `fillMaxWidth → rotate(rotation) → heightIn(72)` — the rotation layer grew to 72dp and the tilt pivot shifted for short single-line quotes. Fix: hoisted the floor INTO the call-site chain before the tilt — `modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp).rotate(rotation)` and dropped the `minHeight` param (defaults to 0.dp → no-op in `NotePaperCard` and the concrete cards). Final chain: `fillMaxWidth → heightIn(72) → rotate` — the tilt now pivots around the fixed 72dp card center, stable whether the quote is one line or five.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified the old chain (rotate before heightIn = the pivot-shift bug) vs new (heightIn before rotate), only one effective heightIn remains (appended `heightIn(min=0)` are no-ops), `heightIn` import already present (line 24) and now genuinely used, braces balanced, and the editor's `QuoteCard` in CaptureFormatComponents.kt correctly untouched (it rotates a naturally-growing Column with no post-rotate floor).
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **Mood board detail page: overlapping watermarks fixed — saved board surface is now opaque**
 
 ### What was asked
