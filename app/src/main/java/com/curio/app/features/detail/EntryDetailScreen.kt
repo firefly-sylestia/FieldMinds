@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,7 +75,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.PaperCard
 import com.curio.app.ui.components.WaveformExtractor
+import com.curio.app.ui.components.buildRichAnnotated
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.media3.common.AudioAttributes
@@ -111,6 +114,8 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.paperHighlight
+import com.curio.app.ui.theme.paperInk
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import kotlin.math.roundToInt
@@ -510,6 +515,15 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     tint = category.tint,
                     surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                     border = category.categoryBorder()
+                )
+            }
+
+            // ── Note — shown with its rich-text formatting ────────────────
+            if (data.note.isNotBlank()) {
+                Text(
+                    buildRichAnnotated(data.note, data.noteSpans.orEmpty(), paperHighlight()),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -922,7 +936,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    data.reviewText,
+                    buildRichAnnotated(data.reviewText, data.reviewSpans.orEmpty(), paperHighlight()),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(20.dp)
@@ -950,56 +964,63 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
 private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.Marginalia ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        // ── Journal — "My thoughts" section with a real header ───────
+        // ── Journal — "My thoughts" on a note-paper page ──────────────
         if (data.journalText.isNotBlank()) {
             MarginaliaSectionHeader(label = "My thoughts", category = category)
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
-                border = category.categoryBorder(),
+            PaperCard(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    data.journalText,
-                    modifier = Modifier.padding(20.dp),
+                    buildRichAnnotated(
+                        data.journalText,
+                        data.journalSpans.orEmpty(),
+                        paperHighlight()
+                    ),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = paperInk()
                 )
             }
         }
 
-        // ── Favorite quotes — hand-placed notecards with quote marks ──
-        val quotes = data.quotes.filter { it.isNotBlank() }
-        if (quotes.isNotEmpty()) {
-            MarginaliaSectionHeader(label = "Favorite quotes", category = category, count = quotes.size)
-            quotes.forEachIndexed { i, quote ->
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
-                    // Slim accent rule + a soft lift so each quote reads as
-                    // a placed notecard — matches the capture form's cards.
-                    border = BorderStroke(1.dp, category.categoryInk().copy(alpha = 0.22f)),
-                    shadowElevation = 1.dp,
+        // ── Favorite quotes — hand-placed paper notecards with quote marks ──
+        // Pad quoteSpans to the quotes length first (legacy Gson blobs may
+        // carry fewer/absent span lists), then zip so the spans stay aligned
+        // with their quote even when blank cards are filtered out.
+        val spansPadded = data.quoteSpans.orEmpty().toMutableList()
+        while (spansPadded.size < data.quotes.size) spansPadded.add(emptyList())
+        val quotePairs = data.quotes.zip(spansPadded).filter { (q, _) -> !q.isNullOrBlank() }
+        if (quotePairs.isNotEmpty()) {
+            MarginaliaSectionHeader(label = "Favorite quotes", category = category, count = quotePairs.size)
+            quotePairs.forEachIndexed { i, (quote, spans) ->
+                PaperCard(
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
+                    corner = 12.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .rotate(if (i % 2 == 0) 1.5f else -1.5f)
                 ) {
                     Row(
-                        modifier = Modifier.padding(16.dp),
                         verticalAlignment = Alignment.Top,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         CurioIcon(
                             name = CurioIcons.FormatQuote,
                             contentDescription = null,
-                            tint = category.categoryInk().copy(alpha = 0.55f),
-                            size = 22.dp
+                            tint = paperInk().copy(alpha = 0.45f),
+                            size = 20.dp
                         )
                         Text(
-                            text = "\u201C$quote\u201D",
+                            // Spans shift +1 to account for the curly-quote
+                            // wrapper added around the saved quote text.
+                            text = buildRichAnnotated(
+                                "\u201C$quote\u201D",
+                                spans.map { it.copy(start = it.start + 1, end = it.end + 1) },
+                                paperHighlight()
+                            ),
                             modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = paperInk()
                         )
                     }
                 }
@@ -1416,19 +1437,31 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    buildRichAnnotated(text, data.observedSpans.orEmpty(), paperHighlight()),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
         data.surprised.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    buildRichAnnotated(text, data.surprisedSpans.orEmpty(), paperHighlight()),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
         data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
-                Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    buildRichAnnotated(text, data.learnNextSpans.orEmpty(), paperHighlight()),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
         if (data.imageUris.isNotEmpty()) {

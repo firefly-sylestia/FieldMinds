@@ -46,8 +46,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.curio.app.data.CaptureData
+import com.curio.app.data.TextSpan
 import com.curio.app.features.capture.AudioRecorder
 import com.curio.app.ui.components.AudioTrimmer
+import com.curio.app.ui.components.RichTextEditor
+import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.TrimWaveform
 import com.curio.app.ui.components.WaveformExtractor
@@ -97,6 +100,9 @@ fun SoundBiteFormat(
     var recordingSeconds by remember(initialData) { mutableIntStateOf(initialData?.durationSeconds ?: 0) }
     var title by remember(initialData) { mutableStateOf(initialData?.title ?: "") }
     var note by remember(initialData) { mutableStateOf(initialData?.note ?: "") }
+    // Rich-text formatting for the note — legacy entries lack it (Gson →
+    // null), guard with orEmpty().
+    var noteSpans by remember(initialData) { mutableStateOf(initialData?.noteSpans.orEmpty()) }
     var savedFilePath by remember(initialData) { mutableStateOf(initialData?.audioFilePath) }
     var permissionDenied by remember { mutableStateOf(false) }
     // Edit-mode restore: a restored recording must NOT auto-open the trimmer —
@@ -201,13 +207,14 @@ fun SoundBiteFormat(
                   recordingSeconds > 0 &&
                   savedFilePath != null &&
                   !trimInProgress
-    LaunchedEffect(canSave, savedFilePath, title, note) {
+    LaunchedEffect(canSave, savedFilePath, title, note, noteSpans) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.SoundBite(
                 durationSeconds = recordingSeconds,
                 title = title,
                 note = note,
+                noteSpans = noteSpans,
                 audioFilePath = savedFilePath
             )
             else null
@@ -358,17 +365,18 @@ fun SoundBiteFormat(
             modifier = Modifier.fillMaxWidth()
         )
 
-        OutlinedTextField(
-            value = note,
-            onValueChange = { note = it },
-            label = { Text("Add notes or context (optional)") },
-            placeholder = { Text("What did this recording capture?") },
-            enabled = recordingState != AudioRecorder.State.RECORDING,
-            shape = RoundedCornerShape(16.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
+        // Rich-text note — formatting behind a small toggle.
+        RichTextEditor(
+            text = note,
+            spans = noteSpans,
+            onRichTextChange = { newText, newSpans ->
+                note = newText
+                noteSpans = newSpans
+            },
+            placeholder = "What did this recording capture?",
+            toolbarMode = RichTextToolbarMode.TOGGLE,
+            minHeight = 96.dp,
+            enabled = recordingState != AudioRecorder.State.RECORDING
         )
     }
 }

@@ -74,6 +74,12 @@ object CurioIcons {
     const val Bookmark    = "bookmark"           // filled — pinned topic
     const val BookmarkBorder = "bookmark_border" // outline — not pinned
     const val FormatQuote = "format_quote"
+    // ── Rich-text formatting (Marginalia journal/quotes + format fields)
+    const val FormatBold = "format_bold"           // B — bold
+    const val FormatItalic = "format_italic"       // I — italic
+    const val FormatUnderline = "format_underline" // U — underline
+    const val FormatHighlight = "format_color_fill" // highlighter marker
+    const val FormatText = "text_fields"           // small toggle for other fields
     const val Mic         = "mic"
     const val MicNone     = "mic_none"
     const val Image       = "image"

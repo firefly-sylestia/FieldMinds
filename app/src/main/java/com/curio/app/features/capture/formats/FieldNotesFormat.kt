@@ -3,6 +3,7 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import com.curio.app.data.TextSpan
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -14,12 +15,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,9 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import com.curio.app.ui.components.RichTextEditor
+import com.curio.app.ui.components.RichTextToolbarMode
 
 /**
  * Field Notes format body — CURIO_SPEC §8.5 (Science & Nature).
@@ -68,6 +65,11 @@ fun FieldNotesFormat(
     var observed by remember(initialData) { mutableStateOf(initialData?.observed ?: "") }
     var surprised by remember(initialData) { mutableStateOf(initialData?.surprised ?: "") }
     var learnNext by remember(initialData) { mutableStateOf(initialData?.learnNext ?: "") }
+    // Rich-text formatting per section — legacy entries lack them (Gson →
+    // null), guard with orEmpty().
+    var observedSpans by remember(initialData) { mutableStateOf(initialData?.observedSpans.orEmpty()) }
+    var surprisedSpans by remember(initialData) { mutableStateOf(initialData?.surprisedSpans.orEmpty()) }
+    var learnNextSpans by remember(initialData) { mutableStateOf(initialData?.learnNextSpans.orEmpty()) }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -91,10 +93,18 @@ fun FieldNotesFormat(
                   surprised.isNotBlank() ||
                   learnNext.isNotBlank() ||
                   imageUris.isNotEmpty()
-    LaunchedEffect(canSave, observed, surprised, learnNext, imageUris) {
+    LaunchedEffect(canSave, observed, observedSpans, surprised, surprisedSpans, learnNext, learnNextSpans, imageUris) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.FieldNotes(observed, surprised, learnNext, imageUris)
+            if (canSave) CaptureData.FieldNotes(
+                observed = observed,
+                surprised = surprised,
+                learnNext = learnNext,
+                imageUris = imageUris,
+                observedSpans = observedSpans,
+                surprisedSpans = surprisedSpans,
+                learnNextSpans = learnNextSpans
+            )
             else null
         )
     }
@@ -116,21 +126,17 @@ fun FieldNotesFormat(
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            OutlinedTextField(
-                value = observed,
-                onValueChange = { observed = it },
-                placeholder = {
-                    Text("What did you see, hear, notice?")
+            RichTextEditor(
+                text = observed,
+                spans = observedSpans,
+                onRichTextChange = { newText, newSpans ->
+                    observed = newText
+                    observedSpans = newSpans
                 },
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Default
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .heightIn(min = 100.dp)
+                placeholder = "What did you see, hear, notice?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 100.dp,
+                modifier = Modifier.padding(top = 8.dp)
             )
         }
 
@@ -147,21 +153,17 @@ fun FieldNotesFormat(
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            OutlinedTextField(
-                value = surprised,
-                onValueChange = { surprised = it },
-                placeholder = {
-                    Text("What was unexpected or delightful?")
+            RichTextEditor(
+                text = surprised,
+                spans = surprisedSpans,
+                onRichTextChange = { newText, newSpans ->
+                    surprised = newText
+                    surprisedSpans = newSpans
                 },
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Default
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .heightIn(min = 100.dp)
+                placeholder = "What was unexpected or delightful?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 100.dp,
+                modifier = Modifier.padding(top = 8.dp)
             )
         }
 
@@ -178,21 +180,17 @@ fun FieldNotesFormat(
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            OutlinedTextField(
-                value = learnNext,
-                onValueChange = { learnNext = it },
-                placeholder = {
-                    Text("Where does this lead?")
+            RichTextEditor(
+                text = learnNext,
+                spans = learnNextSpans,
+                onRichTextChange = { newText, newSpans ->
+                    learnNext = newText
+                    learnNextSpans = newSpans
                 },
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Default
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .heightIn(min = 100.dp)
+                placeholder = "Where does this lead?",
+                toolbarMode = RichTextToolbarMode.TOGGLE,
+                minHeight = 100.dp,
+                modifier = Modifier.padding(top = 8.dp)
             )
         }
 

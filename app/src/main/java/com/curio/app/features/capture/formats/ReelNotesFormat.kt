@@ -3,15 +3,13 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import com.curio.app.data.TextSpan
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,9 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import com.curio.app.ui.components.RichTextEditor
+import com.curio.app.ui.components.RichTextToolbarMode
 
 /**
  * Reel Notes format body — CURIO_SPEC §8.2 (Movies / Directors).
@@ -53,6 +51,9 @@ fun ReelNotesFormat(
     // preserves the original capture instead of silently wiping it.
     var rating by remember(initialData) { mutableStateOf(initialData?.rating ?: 0) }
     var reviewText by remember(initialData) { mutableStateOf(initialData?.reviewText ?: "") }
+    // Rich-text formatting for the review — legacy entries lack it (Gson →
+    // null), guard with orEmpty().
+    var reviewSpans by remember(initialData) { mutableStateOf(initialData?.reviewSpans.orEmpty()) }
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -72,10 +73,16 @@ fun ReelNotesFormat(
     // Key on every input, not just canSave: rating, review text and images
     // added AFTER the first character must re-emit, or saving would persist
     // stale data (text/rating/images silently dropped from the saved entry).
-    LaunchedEffect(canSave, rating, reviewText, imageUris) {
+    LaunchedEffect(canSave, rating, reviewText, reviewSpans, imageUris) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.ReelNotes(rating, reviewText, imageUris.size, imageUris)
+            if (canSave) CaptureData.ReelNotes(
+                rating = rating,
+                reviewText = reviewText,
+                imageCount = imageUris.size,
+                imageUris = imageUris,
+                reviewSpans = reviewSpans
+            )
             else null
         )
     }
@@ -100,20 +107,17 @@ fun ReelNotesFormat(
             )
         }
 
-        // ── Review text field ──────────────────────────────────────────────
-        OutlinedTextField(
-            value = reviewText,
-            onValueChange = { reviewText = it },
-            label = { Text("Write your review") },
-            placeholder = { Text("What did you think of the film?") },
-            shape = RoundedCornerShape(16.dp),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Default
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 140.dp)
+        // ── Review text field — rich text behind a small format toggle ──
+        RichTextEditor(
+            text = reviewText,
+            spans = reviewSpans,
+            onRichTextChange = { newText, newSpans ->
+                reviewText = newText
+                reviewSpans = newSpans
+            },
+            placeholder = "What did you think of the film?",
+            toolbarMode = RichTextToolbarMode.TOGGLE,
+            minHeight = 140.dp
         )
 
         // ── Image attach row ───────────────────────────────────────────────

@@ -3,6 +3,25 @@ package com.curio.app.data
 import com.curio.app.data.CaptureFormat
 
 /**
+ * A styled run over a string of text — half-open [start, end) character
+ * offsets, plus the rich-text flags that style that run. Used by the
+ * formats' text fields (Marginalia journal + quotes, Reel Notes review,
+ * Field Notes sections, Sound Bite note) so saved captures keep their
+ * bold / italic / highlight formatting.
+ *
+ * Offsets are into the ORIGINAL plain text (the `*Text`/`*Spans` parallel
+ * fields in [CaptureData]), so legacy entries without spans decode fine and
+ * any consumer can build an AnnotatedString from the pair.
+ */
+data class TextSpan(
+    val start: Int,
+    val end: Int,
+    val bold: Boolean = false,
+    val italic: Boolean = false,
+    val highlight: Boolean = false
+)
+
+/**
  * Sealed class hierarchy for structured capture data produced by each format.
  *
  * Each format produces its own typed data object. When saving, the data is
@@ -18,7 +37,10 @@ sealed class CaptureData {
         val note: String = "",
         val audioFilePath: String? = null,
         val fileSizeBytes: Long = 0,
-        val encodingFormat: String = "AAC"
+        val encodingFormat: String = "AAC",
+        // Optional rich-text formatting for the note field (bold/italic/
+        // highlight). Legacy entries omit it → null, guard with orEmpty().
+        val noteSpans: List<TextSpan> = emptyList()
     ) : CaptureData()
 
     /** Reel Notes (§8.2): review with rating, text, and attached images. */
@@ -29,13 +51,21 @@ sealed class CaptureData {
         // Real attached image URIs (poster / stills) so saved entries can show
         // the actual images — legacy entries only stored a count, so this
         // defaults to empty and stays backward-compatible.
-        val imageUris: List<String> = emptyList()
+        val imageUris: List<String> = emptyList(),
+        // Optional rich-text formatting for the review field. Legacy entries
+        // omit it → null, guard with orEmpty().
+        val reviewSpans: List<TextSpan> = emptyList()
     ) : CaptureData()
 
     /** Marginalia (§8.3): journal entry with favorite quotes. */
     data class Marginalia(
         val journalText: String,
-        val quotes: List<String>
+        val quotes: List<String>,
+        // Rich-text formatting (bold/italic/highlight). journalSpans maps 1:1
+        // to journalText; quoteSpans is parallel to quotes (one span list per
+        // quote). Legacy entries omit both → null, guard with orEmpty().
+        val journalSpans: List<TextSpan> = emptyList(),
+        val quoteSpans: List<List<TextSpan>> = emptyList()
     ) : CaptureData()
 
     /** A single tile's layout on the mood board canvas. */
@@ -61,7 +91,12 @@ sealed class CaptureData {
         val observed: String,
         val surprised: String,
         val learnNext: String,
-        val imageUris: List<String> = emptyList()
+        val imageUris: List<String> = emptyList(),
+        // Rich-text formatting for the three sections (parallel to the text
+        // fields). Legacy entries omit them → null, guard with orEmpty().
+        val observedSpans: List<TextSpan> = emptyList(),
+        val surprisedSpans: List<TextSpan> = emptyList(),
+        val learnNextSpans: List<TextSpan> = emptyList()
     ) : CaptureData()
 
     /**

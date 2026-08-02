@@ -1,6 +1,7 @@
 package com.curio.app.features.capture.formats
 
 import com.curio.app.data.CaptureData
+import com.curio.app.data.TextSpan
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +13,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,24 +27,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import com.curio.app.ui.components.PaperCard
+import com.curio.app.ui.components.RichTextEditor
+import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.paperBorder
+import com.curio.app.ui.theme.paperInk
+import com.curio.app.ui.theme.paperSurface
 
 /**
  * Marginalia format body — CURIO_SPEC §8.3 (Books / Authors).
  *
+ * The quotes entry wears a NOTE-PAPER look instead of the category tint:
+ * journal + quote cards sit on warm cream paper (warm off-black toned paper
+ * in dark mode) with faint ruled lines, and each field carries a compact
+ * rich-text toolbar (B / I / highlighter) over the current selection.
+ *
  * Layout:
- *   - "My thoughts" — journal text field (full multi-line, sentences
- *     capitalization, rich text via soft-keyboard toolbar)
- *   - "Favorite quotes" — quote "cards" each its own mini text field,
- *     styled like a torn notecard with subtle rotation (±2° alternating)
- *     for a hand-placed feel. Tap "+ Add quote" below to create a new
- *     blank card. Tap "Remove" on a card to delete it (slides the
- *     remaining cards reflow smoothly via the AnimatedContent-style
- *     recomposition).
+ *   - "My thoughts" — paper journal page with an always-visible toolbar
+ *   - "Favorite quotes" — compact paper quote cards, each with its own
+ *     toolbar, slightly rotated (±1.5°) for a hand-placed feel. Tap
+ *     "+ Add quote" below to create a new blank card; "Remove" deletes it.
  *
  * [onCanSaveChange] fires true when journal OR at least one quote card
  * has content.
@@ -59,11 +62,21 @@ fun MarginaliaFormat(
     onDataChanged: (CaptureData?) -> Unit = {},
     initialData: CaptureData.Marginalia? = null
 ) {
-    // Edit mode: restore journal text + quote cards so re-saving preserves
-    // the original capture instead of silently wiping it.
+    // Edit mode: restore journal text + spans + quote cards so re-saving
+    // preserves the original capture instead of silently wiping it.
+    // Legacy entries lack the span fields (Gson → null), guard with orEmpty().
     var journalText by remember(initialData) { mutableStateOf(initialData?.journalText ?: "") }
+    var journalSpans by remember(initialData) { mutableStateOf(initialData?.journalSpans.orEmpty()) }
     val quotes = remember(initialData) {
         mutableStateListOf<String>().apply { addAll(initialData?.quotes.orEmpty()) }
+    }
+    val quoteSpans = remember(initialData) {
+        mutableStateListOf<List<TextSpan>>().apply {
+            addAll(initialData?.quoteSpans.orEmpty())
+            // Pad any missing per-quote span lists (legacy entries) so the
+            // parallel list always matches quotes 1:1.
+            while (size < quotes.size) add(emptyList())
+        }
     }
 
     val canSave = journalText.isNotBlank() ||
@@ -71,10 +84,15 @@ fun MarginaliaFormat(
     // Key on the content too: journal text typed or quotes added AFTER the
     // first character must re-emit, or saving would persist stale data
     // (later text/quotes silently dropped from the saved entry).
-    LaunchedEffect(canSave, journalText, quotes.toList()) {
+    LaunchedEffect(canSave, journalText, journalSpans, quotes.toList(), quoteSpans.toList()) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.Marginalia(journalText, quotes.toList())
+            if (canSave) CaptureData.Marginalia(
+                journalText = journalText,
+                quotes = quotes.toList(),
+                journalSpans = journalSpans,
+                quoteSpans = quoteSpans.toList()
+            )
             else null
         )
     }
@@ -83,32 +101,37 @@ fun MarginaliaFormat(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // ── Journal field ──────────────────────────────────────────────────
+        // ── Journal page ──────────────────────────────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = "My thoughts",
                 style = MaterialTheme.typography.titleSmall,
-                color = accent
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            OutlinedTextField(
-                value = journalText,
-                onValueChange = { journalText = it },
-                placeholder = {
-                    Text("What did this book make you think about?")
-                },
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Default
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 120.dp)
-            )
+            PaperCard(
+                modifier = Modifier.fillMaxWidth(),
+                ruled = true,
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+            ) {
+                RichTextEditor(
+                    text = journalText,
+                    spans = journalSpans,
+                    onRichTextChange = { newText, newSpans ->
+                        journalText = newText
+                        journalSpans = newSpans
+                    },
+                    placeholder = "What did this book make you think about?",
+                    toolbarMode = RichTextToolbarMode.MAIN,
+                    minHeight = 140.dp,
+                    ink = paperInk(),
+                    surface = Color.Transparent,
+                    accent = MaterialTheme.colorScheme.tertiary
+                )
+            }
         }
 
-        // ── Quote cards ────────────────────────────────────────────────────
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        // ── Quote cards ───────────────────────────────────────────────────
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -117,7 +140,7 @@ fun MarginaliaFormat(
                 Text(
                     text = "Favorite quotes",
                     style = MaterialTheme.typography.titleSmall,
-                    color = accent
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 if (quotes.isNotEmpty()) {
                     Text(
@@ -129,44 +152,49 @@ fun MarginaliaFormat(
             }
 
             quotes.forEachIndexed { i, quote ->
-                val rotation = if (i % 2 == 0) 2f else -2f
+                val rotation = if (i % 2 == 0) 1.5f else -1.5f
                 QuoteCard(
                     index = i,
                     text = quote,
-                    accent = accent,
-                    tint = tint,
+                    spans = quoteSpans.getOrElse(i) { emptyList() },
                     rotation = rotation,
-                    onTextChange = { quotes[i] = it },
-                    onRemove = { quotes.removeAt(i) }
+                    onTextChange = { newText, newSpans ->
+                        quotes[i] = newText
+                        quoteSpans[i] = newSpans
+                    },
+                    onRemove = {
+                        quotes.removeAt(i)
+                        if (i < quoteSpans.size) quoteSpans.removeAt(i)
+                    }
                 )
             }
 
             // Add-quote button (dashed-outline placeholder style)
             Surface(
-                onClick = { quotes.add("") },
-                shape = RoundedCornerShape(16.dp),
-                color = tint,
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = accent.copy(alpha = 0.4f)
-                ),
+                onClick = {
+                    quotes.add("")
+                    quoteSpans.add(emptyList())
+                },
+                shape = RoundedCornerShape(14.dp),
+                color = paperSurface().copy(alpha = 0.6f),
+                border = BorderStroke(1.dp, paperBorder()),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(12.dp),
+                    modifier = Modifier.padding(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CurioIcon(
                         name = CurioIcons.Add,
                         contentDescription = null,
-                        tint = accent,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         size = 18.dp
                     )
                     Text(
                         text = "Add quote",
                         style = MaterialTheme.typography.labelLarge,
-                        color = accent
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -178,76 +206,65 @@ fun MarginaliaFormat(
 private fun QuoteCard(
     index: Int,
     text: String,
-    accent: Color,
-    tint: Color,
+    spans: List<TextSpan>,
     rotation: Float,
-    onTextChange: (String) -> Unit,
+    onTextChange: (text: String, spans: List<TextSpan>) -> Unit,
     onRemove: () -> Unit
 ) {
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = tint,
-        // Slim accent rule + a soft lift so each card reads as a placed
-        // notecard, not a flat field floating on the page.
-        border = BorderStroke(1.dp, accent.copy(alpha = 0.28f)),
-        shadowElevation = 2.dp,
+    PaperCard(
         modifier = Modifier
             .fillMaxWidth()
-            .rotate(rotation)
+            .rotate(rotation),
+        ruled = true,
+        // Compact inset — quote cards stay tight so a stack of them reads
+        // as a neat pile of notecards rather than heavy journal blocks.
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            // ── Card header — quote mark + number, Remove on the right ──
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CurioIcon(
-                    name = CurioIcons.FormatQuote,
-                    contentDescription = null,
-                    tint = accent,
-                    size = 18.dp
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "Quote ${index + 1}",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                    ),
-                    color = accent,
-                    modifier = Modifier.weight(1f)
-                )
-                TextButton(
-                    onClick = onRemove,
-                    contentPadding = PaddingValues(
-                        horizontal = 8.dp,
-                        vertical = 2.dp
-                    )
-                ) {
-                    Text(
-                        text = "Remove",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = accent
-                    )
-                }
-            }
-            OutlinedTextField(
-                value = text,
-                onValueChange = onTextChange,
-                placeholder = {
-                    Text(
-                        text = "\u201C...\u201D",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                shape = RoundedCornerShape(12.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Default
-                ),
-                modifier = Modifier.fillMaxWidth()
+        // ── Card header — quote mark + number, Remove on the right ──
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CurioIcon(
+                name = CurioIcons.FormatQuote,
+                contentDescription = null,
+                tint = paperInk().copy(alpha = 0.55f),
+                size = 16.dp
             )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                text = "Quote ${index + 1}",
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                ),
+                color = paperInk().copy(alpha = 0.7f),
+                modifier = Modifier.weight(1f)
+            )
+            Surface(
+                onClick = onRemove,
+                shape = RoundedCornerShape(8.dp),
+                color = Color.Transparent
+            ) {
+                Text(
+                    text = "Remove",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                )
+            }
         }
+        RichTextEditor(
+            text = text,
+            spans = spans,
+            onRichTextChange = onTextChange,
+            placeholder = "\u201C...\u201D",
+            toolbarMode = RichTextToolbarMode.MAIN,
+            minHeight = 64.dp,
+            ink = paperInk(),
+            surface = Color.Transparent,
+            accent = MaterialTheme.colorScheme.tertiary
+        )
     }
 }
