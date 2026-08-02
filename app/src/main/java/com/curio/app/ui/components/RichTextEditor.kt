@@ -354,9 +354,13 @@ fun RichTextEditor(
         var spans = if (textChanged) {
             rebaseSpans(oldText, new.text, extractRichSpans(tfv.annotatedString))
         } else {
-            // Same text — a programmatic restyle (e.g. applyFlag toggling a
-            // selection). The caller supplied the exact spans; trust those.
-            extractRichSpans(new.annotatedString)
+            // Text unchanged — a caret/selection move or an IME re-report
+            // (e.g. the extra event that follows committing a space). NEVER
+            // trust the field's reported AnnotatedString here: BasicTextField
+            // can silently drop the styles we set programmatically, which is
+            // exactly how bold/italic/highlight used to vanish right after
+            // typing a space. Keep OUR spans — tfv is always built by us.
+            extractRichSpans(tfv.annotatedString)
         }
         // Caret inheritance from OUR spans: typing inside an already-styled
         // run (e.g. mid-bold word) — or immediately after one — must keep
@@ -430,7 +434,16 @@ fun RichTextEditor(
         val current = extractRichSpans(tfv.annotatedString)
         val add = !spansFullyCovered(current, s, e, flag)
         val updated = toggleSpanFlag(current, s, e, flag, add)
-        emit(TextFieldValue(buildRichAnnotated(tfv.text, updated, highlightColor), selection = sel))
+        // Apply directly (not via emit): emit derives spans from OUR tracked
+        // tfv, which isn't updated yet at this point — we built the styled
+        // value ourselves, so set it and report it here. This also avoids
+        // trusting any field-reported AnnotatedString for span content.
+        val styled = TextFieldValue(
+            buildRichAnnotated(tfv.text, updated, highlightColor),
+            selection = sel
+        )
+        tfv = styled
+        onRichTextChange(styled.text, extractRichSpans(styled.annotatedString))
         // Apply the format you just used to the selection to the NEXT text
         // typed, so "make this bold, then keep typing" works.
         when (flag) {

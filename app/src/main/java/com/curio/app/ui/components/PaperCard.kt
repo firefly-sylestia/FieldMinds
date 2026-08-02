@@ -287,23 +287,24 @@ private fun buildGrainBitmap(seed: Int): ImageBitmap {
     val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
     val rnd = Random(seed)
     val inkArgb = 0xFF3B3124.toInt()
-    // Faint speckle clusters — the paper grain.
-    repeat(360) {
+    // Faint speckle clusters — the paper grain. Kept sparse + low-alpha:
+    // dense, high-alpha specks read as "dirty" rather than paper tooth.
+    repeat(150) {
         val x = rnd.nextFloat() * sizePx
         val y = rnd.nextFloat() * sizePx
-        val r = 0.5f + rnd.nextFloat() * 1.6f
-        val alpha = (6 + rnd.nextInt(30)).coerceAtMost(55)
+        val r = 0.5f + rnd.nextFloat() * 1.2f
+        val alpha = (3 + rnd.nextInt(14)).coerceAtMost(22)
         paint.color = (alpha shl 24) or (inkArgb and 0xFFFFFF)
         canvas.drawCircle(x, y, r, paint)
     }
-    // Sparse fiber dashes — the torn-sheet tooth.
+    // Sparse fiber dashes — the torn-sheet tooth, also kept faint.
     paint.strokeWidth = 1f
-    repeat(44) {
+    repeat(18) {
         val x = rnd.nextFloat() * sizePx
         val y = rnd.nextFloat() * sizePx
-        val len = 4f + rnd.nextFloat() * 10f
+        val len = 4f + rnd.nextFloat() * 8f
         val ang = rnd.nextFloat() * (Math.PI * 2).toFloat()
-        val alpha = (5 + rnd.nextInt(14)).coerceAtMost(34)
+        val alpha = (3 + rnd.nextInt(8)).coerceAtMost(16)
         paint.color = (alpha shl 24) or (inkArgb and 0xFFFFFF)
         canvas.drawLine(x, y, x + cos(ang) * len, y + sin(ang) * len, paint)
     }
