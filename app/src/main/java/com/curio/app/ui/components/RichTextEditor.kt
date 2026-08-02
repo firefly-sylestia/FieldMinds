@@ -45,6 +45,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
@@ -102,7 +103,10 @@ fun buildRichAnnotated(text: String, spans: List<TextSpan>, highlightColor: Colo
                         fontWeight = if (sp.bold) FontWeight.Bold else null,
                         fontStyle = if (sp.italic) FontStyle.Italic else null,
                         // Per-letter size (sp) — only spans the styled letters.
-                        fontSize = sp.fontSizeSp?.sp,
+                        // SpanStyle.fontSize is NON-null TextUnit in this
+                        // Compose version, so the nullable Float must resolve
+                        // to TextUnit.Unspecified when the span has no size.
+                        fontSize = sp.fontSizeSp?.sp ?: TextUnit.Unspecified,
                         // Patrick Hand ships ONE regular file (no bold/italic
                         // TTF exists), so bold/italic only render because the
                         // text stack SYNTHESIZES them. The platform default
