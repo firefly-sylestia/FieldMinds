@@ -952,16 +952,24 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             BoxWithConstraints(
                 modifier = Modifier.fillMaxWidth().height(if (attachedUris.size == 1) 280.dp else 240.dp)
             ) {
-                // BoxWithConstraints is a Density scope — convert the tile
-                // and viewport sizes to px for the zoom fit math directly.
+                // This Compose version's BoxWithConstraintsScope is NOT a
+                // Density (maxWidth.toPx() doesn't resolve), and its
+                // maxWidth/maxHeight aren't reachable inside the Row lambda
+                // (implicit receiver is RowScope there) — so capture the box
+                // size as Dp here and convert px via LocalDensity explicitly.
+                val density = LocalDensity.current
+                val boxMaxWidth = maxWidth
+                val boxMaxHeight = maxHeight
                 // A single image goes full-width (proper landscape view);
                 // multiple images are 170.dp tiles in the scrollable strip.
                 val singleImage = attachedUris.size == 1
                 val tileSize = 170.dp
-                val tileW = if (singleImage) maxWidth.toPx() else tileSize.toPx()
-                val tileH = if (singleImage) maxHeight.toPx() else tileSize.toPx()
-                val viewW = maxWidth.toPx()
-                val viewH = maxHeight.toPx()
+                val tileW = if (singleImage) with(density) { boxMaxWidth.toPx() }
+                else with(density) { tileSize.toPx() }
+                val tileH = if (singleImage) with(density) { boxMaxHeight.toPx() }
+                else with(density) { tileSize.toPx() }
+                val viewW = with(density) { boxMaxWidth.toPx() }
+                val viewH = with(density) { boxMaxHeight.toPx() }
                 Row(
                     modifier = Modifier.fillMaxSize().horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -972,7 +980,10 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                             onClick = { imageZoom.zoomIn(uri, tileW, tileH, viewW, viewH) },
                             shape = RoundedCornerShape(16.dp),
                             shadowElevation = 0.dp,
-                            modifier = Modifier.size(if (singleImage) maxWidth else tileSize, if (singleImage) maxHeight else tileSize)
+                            modifier = Modifier.size(
+                                if (singleImage) boxMaxWidth else tileSize,
+                                if (singleImage) boxMaxHeight else tileSize
+                            )
                         ) {
                             Image(
                                 painter = rememberAsyncImagePainter(uri),

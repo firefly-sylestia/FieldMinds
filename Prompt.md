@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**CI fix: ReelNotes image-strip zoom block — BoxWithConstraintsScope is NOT a Density here, and maxWidth/maxHeight aren't reachable inside the Row lambda**
+
+### What was asked
+
+CI failed on EntryDetailScreen.kt (ReelNotesRender image strip, the c64fa044 zoom block): `Unresolved reference 'toPx'` at lines 961-964 (`maxWidth.toPx()`, `tileSize.toPx()`, `maxHeight.toPx()`) and `'val maxWidth: Dp' cannot be called in this context with an implicit receiver` at 975 (the `Modifier.size(if (singleImage) maxWidth else tileSize, ...)` inside the Row content lambda).
+
+### What was changed
+
+- **`EntryDetailScreen.kt`** — root causes: (1) this Compose version's `BoxWithConstraintsScope` is NOT a `Density`, so `Dp.toPx()` on `maxWidth`/`tileSize` can't resolve (my earlier comment's assumption was wrong); (2) inside the `Row { }` content lambda the implicit receiver is `RowScope`, so the outer scope's `maxWidth`/`maxHeight` are unreachable by implicit receiver. Fix: at the TOP of the `BoxWithConstraints` scope (where the scope IS the receiver) capture `val density = LocalDensity.current`, `val boxMaxWidth = maxWidth`, `val boxMaxHeight = maxHeight`; compute `tileW`/`tileH`/`viewW`/`viewH` with `with(density) { boxMaxWidth.toPx() }` etc.; and the Surface modifier uses the captured Dp vals — `Modifier.size(if (singleImage) boxMaxWidth else tileSize, if (singleImage) boxMaxHeight else tileSize)`. Corrected the comment to state the real constraint. The existing `with(density) { maxWidth.toPx() }` sites (GalleryWallRender line ~1292, dialog ~1501) confirm this is the file's established pattern.
+
+### Review
+code-reviewer-deepseek-flash: clean pass. Verified LocalDensity imported (line 68), `maxWidth`/`maxHeight` access at the top of the scope is legal (scope is the implicit receiver there), no bare `.toPx()` on Dp remains (all conversions inside `with(density)`; the remaining grep hits at 1292/1501 are pre-existing `with(density)`-wrapped sites), `Modifier.size(Dp, Dp)` compiles, braces balanced, `onClick` captures the precomputed Float vals fine, all imports present. One cosmetic nit (duplicated `if (singleImage) boxMaxWidth else tileSize` expression — DRY-able but fine as-is).
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+
+## Previous Requests
+
 **CI fix: PaperCard.safePadding re-broken — `PaddingValues` has no `left`/`right` parameters (previous e3482999 "fix" introduced the bug)**
 
 ### What was asked
