@@ -2,7 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
-**Rougher torn-page edges**
+**Patrick Hand handwritten font for the paper text fields (quotes, journal, review, notes, captions, field notes)**
+
+### What was asked
+
+Use the Patrick Hand Google font (designed by Patrick Wagesreiter) for the text fields, quotes, etc. Make sure bold/italic etc. still work with this font — if not, include the italic version too for formatting.
+
+### What was changed
+
+- **New asset** — `app/src/main/res/font/patrick_hand_regular.ttf` (214KB TrueType, downloaded from google/fonts `ofl/patrickhand`). Google Fonts ships Patrick Hand as a SINGLE regular file — no italic/bold TTF exists (404 verified) — so the font registers all four style entries against that one file and the Android text stack SYNTHESIZES bold (fake-bold) and italic (oblique), the same pattern MaterialSymbolsFontFamily already uses.
+- **`CurioTypography.kt`** — new `PatrickHandFontFamily` (Normal/Italic/Bold/BoldItalic → same file); `FontStyle` import added.
+- **`RichTextEditor.kt`** — paper-mode field textStyle + placeholder now use `fontFamily = if (paper) PatrickHandFontFamily else FontFamily.Default`; imports added. Non-paper fields keep the neutral sans.
+- **`CaptureFormatComponents.kt`** — `PaperLineField` (always paper) textStyle + placeholder use Patrick Hand.
+- **`EntryDetailScreen.kt`** — all 8 saved-view paper Text sites (SoundBite note, ReelNotes review, Marginalia journal + quote, GalleryWall caption, FieldNotes ×3) use `bodyLarge.copy(fontFamily = PatrickHandFontFamily)`. Share-card teaser left on the default sans (it's not on paper).
+
+### Review
+code-reviewer-deepseek-flash: (pending — spawned in parallel).
+
+### Follow-ups / notes
+- `bodyLarge.copy()` preserves lineHeight 24sp, so the paper ruled-line cadence stays aligned.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
 
 ### What was asked
 

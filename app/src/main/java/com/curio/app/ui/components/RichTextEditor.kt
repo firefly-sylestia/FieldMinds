@@ -37,6 +37,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -56,6 +57,7 @@ import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperHighlight
+import com.curio.app.ui.theme.PatrickHandFontFamily
 
 /**
  * The rich-text flags the toolbar can apply. [TextSpan] stores each as a
@@ -630,7 +632,12 @@ fun RichTextEditor(
                         value = tfv,
                         onValueChange = { emit(it) },
                         enabled = enabled,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = effectiveInk),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            // Paper notes wear the handwritten Patrick Hand;
+                            // plain (non-paper) fields keep the neutral sans.
+                            fontFamily = if (paper) PatrickHandFontFamily else FontFamily.Default,
+                            color = effectiveInk
+                        ),
                         cursorBrush = SolidColor(effectiveAccent),
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Sentences,
@@ -689,7 +696,10 @@ fun RichTextEditor(
             if (tfv.text.isEmpty() && placeholder.isNotEmpty()) {
                 Text(
                     text = placeholder,
-                    style = MaterialTheme.typography.bodyLarge.copy(color = effectiveInk.copy(alpha = 0.45f)),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = if (paper) PatrickHandFontFamily else FontFamily.Default,
+                        color = effectiveInk.copy(alpha = 0.45f)
+                    ),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
             }

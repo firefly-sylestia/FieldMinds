@@ -118,6 +118,7 @@ import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
+import com.curio.app.ui.theme.PatrickHandFontFamily
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import kotlin.math.roundToInt
@@ -556,7 +557,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 ) {
                     Text(
                         buildRichAnnotated(data.note, data.noteSpans.orEmpty(), notePaperHighlight(noteSheet)),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                         color = notePaperInk(noteSheet)
                     )
                 }
@@ -975,7 +976,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             ) {
                 Text(
                     buildRichAnnotated(data.reviewText, data.reviewSpans.orEmpty(), notePaperHighlight(reviewSheet)),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                     color = notePaperInk(reviewSheet)
                 )
             }
@@ -989,7 +990,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory, navContr
             ) {
                 Text(
                     "No review written yet",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontFamily = PatrickHandFontFamily),
                     color = notePaperInk(reviewSheet).copy(alpha = 0.55f)
                 )
             }
@@ -1017,7 +1018,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                         data.journalSpans.orEmpty(),
                         notePaperHighlight(journalSheet)
                     ),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                     color = notePaperInk(journalSheet)
                 )
             }
@@ -1073,7 +1074,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
                                 notePaperHighlight(quoteSheet)
                             ),
                             modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                             color = notePaperInk(quoteSheet)
                         )
                     }
@@ -1286,7 +1287,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             ) {
                 Text(
                     data.caption,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                     color = notePaperInk(captionSheet)
                 )
             }
@@ -1502,7 +1503,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 ) {
                     Text(
                         buildRichAnnotated(text, data.observedSpans.orEmpty(), notePaperHighlight(observedSheet)),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                         color = notePaperInk(observedSheet)
                     )
                 }
@@ -1520,7 +1521,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 ) {
                     Text(
                         buildRichAnnotated(text, data.surprisedSpans.orEmpty(), notePaperHighlight(surprisedSheet)),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                         color = notePaperInk(surprisedSheet)
                     )
                 }
@@ -1538,7 +1539,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 ) {
                     Text(
                         buildRichAnnotated(text, data.learnNextSpans.orEmpty(), notePaperHighlight(learnNextSheet)),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
                         color = notePaperInk(learnNextSheet)
                     )
                 }

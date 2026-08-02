@@ -4,6 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.curio.app.R
@@ -35,6 +36,23 @@ val GeomFontFamily: FontFamily = FontFamily(
 val MaterialSymbolsFontFamily: FontFamily = FontFamily(
     Font(R.font.material_symbols_outlined, FontWeight.Normal),
     Font(R.font.material_symbols_outlined, FontWeight.Bold)
+)
+
+/**
+ * Patrick Hand — the handwritten note font for the paper text fields
+ * (journal, quotes, review, notes, captions, field notes). Google Fonts
+ * ships Patrick Hand as a SINGLE regular file (there is no bold or italic
+ * TTF), so all four style entries map to the same [R.font.patrick_hand_regular]
+ * and the Android text stack SYNTHESIZES bold (fake-bold stroke) and italic
+ * (oblique) from it — matching the MaterialSymbolsFontFamily pattern. The
+ * ruled-line cadence stays on `bodyLarge.lineHeight` (24sp), so notes keep
+ * their notebook alignment on paper.
+ */
+val PatrickHandFontFamily: FontFamily = FontFamily(
+    Font(R.font.patrick_hand_regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.patrick_hand_regular, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.patrick_hand_regular, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.patrick_hand_regular, FontWeight.Bold, FontStyle.Italic)
 )
 
 /**

@@ -46,6 +46,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
+import com.curio.app.ui.theme.PatrickHandFontFamily
 import coil.compose.rememberAsyncImagePainter
 import kotlin.math.cos
 import kotlin.math.sin
@@ -355,17 +356,20 @@ fun PaperLineField(
                 onValueChange = onValueChange,
                 enabled = enabled,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = ink),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = PatrickHandFontFamily,
+                    color = ink
+                ),
                 cursorBrush = SolidColor(accent),
                 keyboardOptions = KeyboardOptions(imeAction = imeAction),
                 decorationBox = { innerTextField ->
                     Box {
                         if (value.isEmpty() && placeholder.isNotEmpty()) {
                             Text(
-                                text = placeholder,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    color = ink.copy(alpha = 0.45f)
-                                )
+                                text = placeholder,                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                            fontFamily = PatrickHandFontFamily,
+                                            color = ink.copy(alpha = 0.45f)
+                                        )
                             )
                         }
                         innerTextField()
