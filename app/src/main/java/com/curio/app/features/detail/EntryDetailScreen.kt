@@ -2,6 +2,7 @@ package com.curio.app.features.detail
 
 import android.net.Uri
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -1052,14 +1053,19 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
     // Lightbox page. Animated values live here so the spring interpolates
     // from 1x on open and back on close.
     val zoomState = rememberMoodBoardZoomState()
+    // v6.7 — offsets snap 1:1 while a pinch is live so panning tracks the
+    // fingers; the spring only runs for open/close/reset (avoids the old
+    // delayed-pan feel where the image caught up only after the gesture).
     val animatedOffsetX by animateFloatAsState(
         targetValue = zoomState.offsetX,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        animationSpec = if (zoomState.gestureActive) snap()
+        else spring(dampingRatio = 0.8f, stiffness = 280f),
         label = "moodBoardZoomOffsetX"
     )
     val animatedOffsetY by animateFloatAsState(
         targetValue = zoomState.offsetY,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        animationSpec = if (zoomState.gestureActive) snap()
+        else spring(dampingRatio = 0.8f, stiffness = 280f),
         label = "moodBoardZoomOffsetY"
     )
 
@@ -1242,14 +1248,18 @@ private fun ExpandedMoodBoardDialog(
     val density = LocalDensity.current
     // In-place tile zoom inside the expanded board — pinch/tap, no Lightbox.
     val zoomState = rememberMoodBoardZoomState()
+    // v6.7 — offsets snap 1:1 while a pinch is live so panning tracks the
+    // fingers; the spring only runs for open/close/reset.
     val animatedOffsetX by animateFloatAsState(
         targetValue = zoomState.offsetX,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        animationSpec = if (zoomState.gestureActive) snap()
+        else spring(dampingRatio = 0.8f, stiffness = 280f),
         label = "expandedMoodZoomOffsetX"
     )
     val animatedOffsetY by animateFloatAsState(
         targetValue = zoomState.offsetY,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        animationSpec = if (zoomState.gestureActive) snap()
+        else spring(dampingRatio = 0.8f, stiffness = 280f),
         label = "expandedMoodZoomOffsetY"
     )
     Dialog(

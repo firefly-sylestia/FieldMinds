@@ -70,6 +70,11 @@ class MoodBoardZoomState {
     var offsetX by mutableFloatStateOf(0f)
     var offsetY by mutableFloatStateOf(0f)
     var closing by mutableStateOf(false)
+    // True while a two-finger gesture is actively feeding deltas. The zoom
+    // overlays SNAP to [scaleTarget] while this is set (1:1 finger tracking)
+    // and only spring between targets when it's clear (open/close/reset) —
+    // without this, a spring chase on every pinch event lags behind the
+    // fingers and the zoom only catches up after the gesture stops.
     // The zoom level [zoomIn] opens at for the CURRENT tile — fit-based so a
     // small tile opens large enough to read while a big tile doesn't blow
     // past the screen. [resetZoom] springs back to this.
@@ -86,6 +91,7 @@ class MoodBoardZoomState {
      */
     fun zoomIn(uri: String, tileW: Float = 0f, tileH: Float = 0f, viewW: Float = 0f, viewH: Float = 0f) {
         closing = false
+        gestureActive = false
         boardZoomed = false
         if (zoomedUri != uri) {
             zoomedUri = uri
@@ -112,6 +118,7 @@ class MoodBoardZoomState {
     /** Two-finger pinch on the board itself: magnify the whole collage. */
     fun zoomBoard() {
         closing = false
+        gestureActive = false
         zoomedUri = null
         boardZoomed = true
         scaleTarget = 2.4f
@@ -122,6 +129,7 @@ class MoodBoardZoomState {
     /** Zoom back out to 1x; the overlay clears itself once the spring settles. */
     fun zoomOut() {
         closing = true
+        gestureActive = false
         scaleTarget = 1f
         offsetX = 0f
         offsetY = 0f
@@ -135,6 +143,7 @@ class MoodBoardZoomState {
      */
     fun resetZoom() {
         closing = false
+        gestureActive = false
         scaleTarget = defaultScale
         offsetX = 0f
         offsetY = 0f
@@ -143,8 +152,14 @@ class MoodBoardZoomState {
     /**
      * Pinch/pan update — [uri] is the tile being refined (null = the whole
      * board). Clamps scale so the content can't vanish or explode.
+     *
+     * [visualScale] is the CURRENT on-screen scale (optional). A fresh
+     * gesture re-anchors to it before compounding the first delta, so a
+     * pinch that starts while the open/close spring is still settling
+     * continues smoothly from where the image actually is instead of
+     * snapping/jumping to the (ahead) spring target.
      */
-    fun applyPinch(uri: String?, pan: Offset, zoom: Float) {
+    fun applyPinch(uri: String?, pan: Offset, zoom: Float, visualScale: Float? = null) {
         closing = false
         if (uri != null && zoomedUri != uri) {
             zoomedUri = uri
@@ -153,7 +168,17 @@ class MoodBoardZoomState {
             offsetX = 0f
             offsetY = 0f
         }
-        scaleTarget = (scaleTarget * zoom).coerceIn(1f, 8f)
+        // A real move (zoom/pan delta) engages 1:1 tracking; the landing
+        // event (zoom == 1f, pan == zero) leaves it clear so the open
+        // spring still plays on engage instead of popping straight to
+        // the target.
+        val wasActive = gestureActive
+        gestureActive = zoom != 1f || pan != Offset.Zero
+        // First real move of a fresh gesture compounds from the live visual
+        // scale (if the caller knows it) rather than the spring target.
+        val base = if (gestureActive && !wasActive && visualScale != null) visualScale
+                   else scaleTarget
+        scaleTarget = (base * zoom).coerceIn(1f, 8f)
         offsetX = (offsetX + pan.x).coerceIn(-900f, 900f)
         offsetY = (offsetY + pan.y).coerceIn(-900f, 900f)
     }
@@ -322,14 +347,21 @@ fun MoodBoardZoomOverlay(
     // The call-site springs initialize to their target on first composition,
     // so an overlay that composes already at 2.4x would POP in instead of
     // springing. Animate our own scale from the initial 1x toward the live
-    // target so open AND close spring smoothly (pinch retargets mid-flight).
+    // target so open AND close spring smoothly. While a pinch is actively
+    // feeding deltas (gestureActive) SNAP 1:1 to the target instead, so the
+    // image tracks the fingers live — the old spring-chase on every event
+    // lagged behind and only caught up after the gesture stopped.
     var overlayScale by remember { mutableFloatStateOf(1f) }
-    LaunchedEffect(zoomState.scaleTarget) {
-        animate(
-            initialValue = overlayScale,
-            targetValue = zoomState.scaleTarget,
-            animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f)
-        ) { value, _ -> overlayScale = value }
+    LaunchedEffect(zoomState.scaleTarget, zoomState.gestureActive) {
+        if (zoomState.gestureActive) {
+            overlayScale = zoomState.scaleTarget
+        } else {
+            animate(
+                initialValue = overlayScale,
+                targetValue = zoomState.scaleTarget,
+                animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f)
+            ) { value, _ -> overlayScale = value }
+        }
     }
 
     // Remove the overlay once the close spring settles back at 1x. The
@@ -359,7 +391,10 @@ fun MoodBoardZoomOverlay(
             .zIndex(1000f)
             .pointerInput(tileUri) {
                 detectTransformGestures { _, pan, zoom, _ ->
-                    zoomState.applyPinch(tileUri, pan, zoom)
+                    // Pass the live visual scale so a pinch that starts
+                    // while the open/close spring is still settling
+                    // continues from where the image actually is (no jump).
+                    zoomState.applyPinch(tileUri, pan, zoom, liveScale)
                 }
             }
             .pointerInput(tileUri) {
@@ -456,14 +491,20 @@ fun MoodBoardZoomCanvas(
     val density = LocalDensity.current
 
     // Same in-place spring as the tile overlay: compose at 1x and animate
-    // toward the live target so open and close both spring smoothly.
+    // toward the live target so open and close both spring smoothly. While
+    // a pinch is live (gestureActive) SNAP 1:1 to the target so the board
+    // tracks the fingers instead of chasing a lagging spring.
     var overlayScale by remember { mutableFloatStateOf(1f) }
-    LaunchedEffect(zoomState.scaleTarget) {
-        animate(
-            initialValue = overlayScale,
-            targetValue = zoomState.scaleTarget,
-            animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f)
-        ) { value, _ -> overlayScale = value }
+    LaunchedEffect(zoomState.scaleTarget, zoomState.gestureActive) {
+        if (zoomState.gestureActive) {
+            overlayScale = zoomState.scaleTarget
+        } else {
+            animate(
+                initialValue = overlayScale,
+                targetValue = zoomState.scaleTarget,
+                animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f)
+            ) { value, _ -> overlayScale = value }
+        }
     }
 
     // Auto-close when the user pinches the board back down to 1x.
@@ -480,6 +521,10 @@ fun MoodBoardZoomCanvas(
         }
     }
 
+    // Live visual scale for the pinch handler — lets a pinch that starts
+    // mid-open-spring continue from where the board actually is (no jump).
+    val liveScale by rememberUpdatedState(overlayScale)
+
     // ONE box owns the whole overlay: gestures + the collage as a CHILD, so
     // a pinch anywhere over the board magnifier reaches the same transform
     // handler. No dark scrim; a dismiss button sits at the top.
@@ -489,7 +534,7 @@ fun MoodBoardZoomCanvas(
             .zIndex(1000f)
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
-                    zoomState.applyPinch(null, pan, zoom)
+                    zoomState.applyPinch(null, pan, zoom, liveScale)
                 }
             }
             .pointerInput(Unit) {

@@ -2,58 +2,52 @@
 
 ## Status: COMPLETED — committed and pushed to `revamp`
 
-"The shuffle animation looks too violent — properly research animation so
-it's not too fast, use smooth animation to mimic background cards coming to
-the front after animating. Don't touch the design, just the animation."
+"The mood board pinch-to-zoom is delayed — it only zooms/minimizes after I
+stop the gesture. Fix it without breaking anything else."
 
-## Research
+## Root cause
 
-Web + docs research on Compose card-deck/slot-machine animation:
-- Use physics springs with higher damping / lower stiffness for a luxurious
-  glide (Spring.DampingRatio ~0.85, low stiffness).
-- Use `FastOutSlowInEasing` instead of `LinearEasing` for transitions; avoid
-  short 90ms linear blurs.
-- Prefer eased tweens (200–260ms) for fan-deck back-to-front swaps; apply
-  scale/translation via `graphicsLayer`; use `AnimatedContent` for discrete
-  slot content swaps so the incoming item glides in rather than snapping.
+The zoom overlays rendered scale through an internal **spring chase**:
+`overlayScale` was animated toward `zoomState.scaleTarget` on a stiffness-280
+spring (`LaunchedEffect(scaleTarget) { animate(...) }`), and the call-site
+pan offsets used `animateFloatAsState` with the same spring. During a pinch,
+every pointer event retargeted the spring, so the render lagged behind the
+fingers and only caught up after the gesture stopped — the reported delay.
 
-## Root causes of "violent" shuffle (before)
+## Change (3 files)
 
-1. Cadence: squared-sine ease `sin(progress²·π/2)` with 105→400ms intervals
-   = "whip fast then slam".
-2. Hero tick pulse: snap to 1.035 on a stiffness-1000 spring, 40° tilt
-   factor, 18dp hop per tick.
-3. Peek card wipes: 90/80ms `LinearEasing` slides = blur.
-4. Hero content (title/tags/teaser) snapped instantly every tick (no
-   transition at all); landing settled with the extreme `Elastic` spring.
+**`app/src/main/java/com/curio/app/ui/components/MoodBoardZoom.kt`**
+- `MoodBoardZoomState` gains `gestureActive: Boolean` — set `true` in
+  `applyPinch` only on a real move (`zoom != 1f || pan != Offset.Zero`) so
+  the landing/engage event stays clear and the open spring still plays;
+  cleared (`false`) in `zoomIn`/`zoomBoard`/`zoomOut`/`resetZoom` so
+  open/close/reset still spring.
+- `applyPinch` gains optional `visualScale` — the first real move of a fresh
+  gesture re-anchors to the caller's live on-screen scale before
+  compounding, so a pinch that starts while the open/close spring is still
+  settling continues smoothly from where the image actually is (no jump).
+- `MoodBoardZoomOverlay` + `MoodBoardZoomCanvas`: the `overlayScale`
+  `LaunchedEffect` keys on `(scaleTarget, gestureActive)` — **SNAPS**
+  `overlayScale = scaleTarget` while pinching (1:1 finger tracking), springs
+  otherwise. Both pass their `liveScale` (`rememberUpdatedState`) into
+  `applyPinch`.
 
-## Change (2 files)
+**`app/src/main/java/com/curio/app/features/capture/formats/GalleryWallFormat.kt`**
+- Editor zoom offsets: `animationSpec = if (gestureActive) snap() else
+  spring(0.8, 280)`; `snap` imported.
 
-**`app/src/main/java/com/curio/app/ui/theme/CurioMotion.kt`**
-- `SpinMin`/`SpinMax` 2400/3200 → 2800/3600ms (slightly longer, unhurried
-  window). Header docblock updated to match (was stale at 2400/3200).
-
-**`app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`**
-- Shuffle cadence: plain sine ease `sin(progress·π/2)`, intervals
-  200→520ms — graceful reel slow-down instead of a whip.
-- Hero tick pulse: kick 1.035 → 1.02 on a heavily damped low-stiffness
-  spring (damping 0.85, stiffness 420); rock 40° → 16°; hop 18dp → 12dp.
-- Landing settle: `Elastic` → `Deliberate` spring (no violent bounce).
-- Hero content (name/tags/teaser) wrapped in `AnimatedContent` keyed on
-  `topic` — incoming content slides up from the lower edge + fades
-  (200/180ms when shuffling, 260/240ms otherwise), mimicking a background
-  card rising to the front.
-- Peek card wipes: 90/80ms `LinearEasing` → 200/180ms `FastOutSlowInEasing`.
-- v6.6 KDoc entry added. Design (sizes, colors, layout) untouched.
+**`app/src/main/java/com/curio/app/features/detail/EntryDetailScreen.kt`**
+- Saved board + expanded board zoom offsets: same `snap()`-while-pinching
+  spec (x2 offset pairs); `snap` imported.
 
 ## Review
-- code-reviewer-deepseek-flash (x2): clean. One concrete nit — stale
-  SpinMin/SpinMax header docblock — fixed. Noted non-blocking: `AnimatedContent`
-  default `SizeTransform(clip = true)` may clip the height/3 slide on the
-  hero; consistent with existing peek cards, only worth addressing if it
-  reads as a visible cut. Imports safe (`LinearEasing` still used by
-  OrbitRing + dice tumble); braces balanced; `height / 3` Int division
-  matches peek style.
+- code-reviewer-deepseek-flash (x2): clean. Verified `snap()` valid for BOM
+  2026.05.01, closing latch + board auto-close still fire, engage event
+  leaves `gestureActive` false so the open spring plays, no dead imports.
+  Non-blocking notes (accepted): the board-canvas pinch via
+  `moodBoardPinchZoom` (a Modifier extension) can't pass `liveScale`, and a
+  landing event with `calculateZoom() != 1f` could skip the board open
+  spring — both cosmetic, consistent with pre-existing landing math.
 
 ## CI
 - Compile gate = GitHub Actions on push (per AGENTS.md — no local Gradle).

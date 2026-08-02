@@ -3,6 +3,7 @@ package com.curio.app.features.capture.formats
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
 import androidx.compose.foundation.BorderStroke
@@ -295,14 +296,19 @@ private fun MoodBoardCanvas(
     // In-place tile zoom: double-tap springs the image up over the canvas —
     // no separate dialog page. Pinch/pan continue on the zoom overlay.
     val zoomState = rememberMoodBoardZoomState()
+    // v6.7 — offsets snap 1:1 while a pinch is live so panning tracks the
+    // fingers; the spring only runs for open/close/reset (avoids the old
+    // delayed-pan feel where the image caught up only after the gesture).
     val animatedOffsetX by animateFloatAsState(
         targetValue = zoomState.offsetX,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        animationSpec = if (zoomState.gestureActive) snap()
+        else spring(dampingRatio = 0.8f, stiffness = 280f),
         label = "editorMoodZoomOffsetX"
     )
     val animatedOffsetY by animateFloatAsState(
         targetValue = zoomState.offsetY,
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f),
+        animationSpec = if (zoomState.gestureActive) snap()
+        else spring(dampingRatio = 0.8f, stiffness = 280f),
         label = "editorMoodZoomOffsetY"
     )
     val pinZoneHeightPx = with(density) { 52.dp.toPx() }
