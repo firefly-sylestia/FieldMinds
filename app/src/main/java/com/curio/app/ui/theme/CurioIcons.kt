@@ -95,6 +95,8 @@ object CurioIcons {
     const val Timer       = "timer"
     const val KeyboardArrowDown = "keyboard_arrow_down"  // ▼ — chevron
     const val KeyboardArrowUp   = "keyboard_arrow_up"    // ▲ — chevron
+    const val ArrowUpward   = "arrow_upward"    // ⬆ — sort oldest-first
+    const val ArrowDownward = "arrow_downward"  // ⬇ — sort newest-first
     const val Casino      = "casino"
     const val Album       = "album"
     const val Movie       = "movie"

@@ -193,22 +193,39 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-        // ── Expressive hero banner ─────────────────────────────────────
+        // ── Expressive hero banner — one composed card: category glyph
+        // watermark with the topic title UNDER it, both on the gradient.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(292.dp)
+                .height(360.dp)
                 .background(
                     Brush.verticalGradient(CurioGradients.cardGradient(cat.themedAccent()))
                 ),
             contentAlignment = Alignment.Center
         ) {
-            CurioIcon(
-                name = cat.iconGlyph,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.9f),
-                size = 96.dp
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(horizontal = 28.dp)
+            ) {
+                CurioIcon(
+                    name = cat.iconGlyph,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.92f),
+                    size = 76.dp
+                )
+                Spacer(Modifier.height(14.dp))
+                Text(
+                    text = resolvedEntry.topic.name,
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
 
             Row(
                 modifier = Modifier
@@ -307,14 +324,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             }
         }
 
-        // ── Topic meta ─────────────────────────────────────────────────
+        // ── Topic meta — the title now lives INSIDE the hero above, so
+        // this block keeps the chips + captured-at + meta card only.
         MorphEntrance {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = resolvedEntry.topic.name,
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Surface(
                         shape = RoundedCornerShape(12.dp),

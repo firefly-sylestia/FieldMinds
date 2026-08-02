@@ -20,10 +20,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -33,8 +38,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
@@ -81,6 +89,19 @@ fun CabinetScreen(navController: NavController) {
     // Saveable-backed scroll state — the grid keeps its position on rotation.
     val gridState = rememberLazyGridState()
 
+    // Search + sort — the search button expands into a real filter bar
+    // (matches by topic name or custom title, case-insensitive), and the
+    // sort button toggles newest-first / oldest-first by capture time.
+    var searchActive by rememberSaveable { mutableStateOf(false) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var sortNewestFirst by rememberSaveable { mutableStateOf(true) }
+    val searchFocus = remember { FocusRequester() }
+    LaunchedEffect(searchActive) {
+        if (searchActive) {
+            searchFocus.requestFocus()
+        }
+    }
+
     val entries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
         try {
             CurioRepositoryHolder.repo.observeAll().collect { value = it }
@@ -89,9 +110,18 @@ fun CabinetScreen(navController: NavController) {
         }
     }
 
-    val visibleEntries = remember(entries, selectedFilter) {
-        if (selectedFilter == null) entries
-        else entries.filter { it.topic.categoryId == selectedFilter }
+    val visibleEntries = remember(entries, selectedFilter, searchQuery, sortNewestFirst) {
+        val q = searchQuery.trim()
+        var result = if (selectedFilter == null) entries
+            else entries.filter { it.topic.categoryId == selectedFilter }
+        if (q.isNotEmpty()) {
+            result = result.filter {
+                it.topic.name.contains(q, ignoreCase = true) ||
+                    it.title?.contains(q, ignoreCase = true) == true
+            }
+        }
+        if (sortNewestFirst) result.sortedByDescending { it.capturedAtMillis }
+        else result.sortedBy { it.capturedAtMillis }
     }
 
     // The Cabinet wears the active filter's category wash — the same tinted
@@ -119,45 +149,130 @@ fun CabinetScreen(navController: NavController) {
             modifier = Modifier.fillMaxSize()
         ) {
         // ── Top bar ────────────────────────────────────────────────────────
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 0.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        if (searchActive) {
+            // Search mode — the title row is replaced by a real filter bar
+            // that narrows the grid by topic name / custom title. Auto-focus
+            // pulls the keyboard up the moment it expands.
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                if (selectedFilter != null) {
-                    // Same top back button as the filters page — tapping it
-                    // dismisses the active category filter back to "All".
-                    CurioBackButton(onClick = { selectedFilter = null })
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text("Search captures…") },
+                    leadingIcon = {
+                        CurioIcon(CurioIcons.Search, null, size = 20.dp)
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                CurioIcon(CurioIcons.Close, "Clear search", size = 20.dp)
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(50),
+                    // Filtering trims the query itself, so the IME search key
+                    // only needs to dismiss the keyboard — no state write.
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = {}),
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(searchFocus)
+                )
+                Surface(
+                    onClick = {
+                        searchActive = false
+                        searchQuery = ""
+                    },
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.Close,
+                        contentDescription = "Close search",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        size = 24.dp,
+                        modifier = Modifier.padding(8.dp)
+                    )
                 }
-                Text(
-                    text = "The Cabinet",
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
             }
-            Surface(
-                onClick = { /* TODO Phase 4: expand search bar */ },
-                shape = RoundedCornerShape(50),
-                // Always neutral — the search button never wears the category
-                // tint, only the page background does (when a filter is set).
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 0.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CurioIcon(
-                    name = CurioIcons.Search,
-                    contentDescription = "Search captures",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 24.dp,
-                    modifier = Modifier.padding(8.dp)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (selectedFilter != null) {
+                        // Same top back button as the filters page — tapping it
+                        // dismisses the active category filter back to "All".
+                        CurioBackButton(onClick = { selectedFilter = null })
+                    }
+                    Text(
+                        text = "The Cabinet",
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Sort toggle — newest-first (⬇) / oldest-first (⬆). The
+                    // arrow points in the direction the list now runs.
+                    Surface(
+                        onClick = { sortNewestFirst = !sortNewestFirst },
+                        shape = RoundedCornerShape(50),
+                        color = if (sortNewestFirst) {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        },
+                        border = if (sortNewestFirst) null
+                                else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    ) {
+                        CurioIcon(
+                            name = if (sortNewestFirst) CurioIcons.ArrowDownward else CurioIcons.ArrowUpward,
+                            contentDescription = if (sortNewestFirst) "Newest first — tap for oldest" else "Oldest first — tap for newest",
+                            tint = if (sortNewestFirst) {
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            },
+                            size = 22.dp,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
+                    Surface(
+                        onClick = { searchActive = true },
+                        shape = RoundedCornerShape(50),
+                        // Always neutral — the search button never wears the category
+                        // tint, only the page background does (when a filter is set).
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                    ) {
+                        CurioIcon(
+                            name = CurioIcons.Search,
+                            contentDescription = "Search captures",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            size = 24.dp,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
             }
         }
 
@@ -210,7 +325,21 @@ fun CabinetScreen(navController: NavController) {
         // ── Grid or empty state ────────────────────────────────────────────
         if (visibleEntries.isEmpty()) {
             MorphEntrance {
-                if (selectedFilter == null) {
+                if (searchActive && searchQuery.isNotBlank()) {
+                    // Live search came up empty — tell the user what didn't
+                    // match (and that the keyboard is still up, ready to edit).
+                    CurioEmptyState(
+                        glyph = CurioIcons.SearchOff,
+                        headline = "No captures match",
+                        subtext = "Nothing in the Cabinet matches \"${searchQuery.trim()}\". Try a different name.",
+                        tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
+                        ctaLabel = "Clear search",
+                        onCtaClick = {
+                            searchQuery = ""
+                            searchActive = false
+                        }
+                    )
+                } else if (selectedFilter == null) {
                     CurioEmptyState(
                         glyph = CurioIcons.Inventory2,
                         headline = "Your Cabinet is empty",

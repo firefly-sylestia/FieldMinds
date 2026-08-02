@@ -35,6 +35,7 @@ import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -85,31 +86,38 @@ fun CurioEntryCard(
         tonalElevation = 1.dp
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            // Image placeholder
+            // Image placeholder — richer theme-aware gradient that ends on
+            // the ACTIVE background (cream / midnight / pure black / dynamic)
+            // so the header melts into the surface behind the card, with the
+            // category glyph as a bright watermark.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(128.dp)
                     .background(
-                        Brush.horizontalGradient(listOf(cat.themedAccent(), cat.tint))
+                        Brush.verticalGradient(
+                            CurioGradients.cardGradient(cat.themedAccent())
+                        )
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(
                     name = cat.iconGlyph,
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.85f),
-                    size = 56.dp
+                    tint = Color.White.copy(alpha = 0.9f),
+                    size = 60.dp
                 )
             }
 
             Column(
-                modifier = Modifier.padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier.padding(14.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 Text(
                     text = entry.topic.name,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
