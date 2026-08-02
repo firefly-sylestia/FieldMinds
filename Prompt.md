@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Setup revamp — onboarding now includes a permissions step**
+
+### What was asked
+
+Revamp the first-run setup “with permissions etc”. Previously onboarding was 3 informational slides with ZERO permission requests (mic was requested on first record tap; notifications only in Settings).
+
+### Decisions (from ask_user)
+
+- One setup slide with both toggles (Notifications + Microphone), each with its own Allow button / Granted badge.
+- Ask in setup whether to turn the daily shuffle reminder on (not auto-on).
+
+### Implementation (OnboardingScreen.kt)
+
+- Pager grows to 4 pages; the final page is an interactive Setup slide: “Make Curio yours” with a Notifications permission card + Microphone permission card (Allow button → system prompt, “Granted ✓” badge once granted), and a “Daily shuffle reminder” Switch row that only appears once notifications are granted (toggling it calls AppPreferences.setReminderEnabled immediately).
+- State: hasNotificationPermission (API<33 → true) / hasMicPermission via ContextCompat; RequestPermission launchers for each; DisposableEffect ON_RESUME observer re-reads grants when returning from system Settings.
+- Page dots hidden on the last page (empty row keeps layout stable); setup content centered-when-fits, scrollable on small screens.
+- Skip / Let's go both mark onboarding complete; reminder choice applied at toggle time.
+
+### Review
+
+Reviewer pass: added missing `material3.Surface` import (compile fix), fixed SetupSlide centering with verticalScroll (Box contentAlignment wrapper), kept dots-row height stable on the last page. CI validates on push.
+
+## Latest Request (COMPLETED)
+
 **Backup/restore now restores photo attachments (moodboard + all image attachments)**
 
 ### Bug

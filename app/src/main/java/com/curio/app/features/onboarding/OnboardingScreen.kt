@@ -1,10 +1,17 @@
 package com.curio.app.features.onboarding
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +21,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,21 +30,35 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import android.content.Context
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.theme.CurioGradients
@@ -53,10 +76,45 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun OnboardingScreen(navController: NavController) {
-    val pagerState = rememberPagerState(pageCount = { OnboardingSlides.size })
+    val pagerState = rememberPagerState(pageCount = { OnboardingSlides.size + 1 })
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val isLastSlide = pagerState.currentPage == OnboardingSlides.lastIndex
+    val isLastSlide = pagerState.currentPage == OnboardingSlides.size
+
+    // ── Setup-step permission state ───────────────────────────────────
+    var notificationGranted by remember { mutableStateOf(hasNotificationPermission(context)) }
+    var micGranted by remember { mutableStateOf(hasMicPermission(context)) }
+    // "Want the daily shuffle reminder on?" — only reachable once
+    // notifications are granted; applied to prefs the moment it flips.
+    var reminderWanted by rememberSaveable { mutableStateOf(false) }
+
+    val requestNotifications = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        notificationGranted = granted
+        // If they asked for the reminder before granting, it lands now.
+        if (granted && reminderWanted) {
+            AppPreferences.setReminderEnabled(context, true)
+        }
+    }
+    val requestMic = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted -> micGranted = granted }
+
+    // Re-read permission state when returning from the system Settings
+    // screen — users can flip grants mid-session and the cards should
+    // reflect reality the moment they come back.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                notificationGranted = hasNotificationPermission(context)
+                micGranted = hasMicPermission(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     Column(
         modifier = Modifier
@@ -73,25 +131,46 @@ fun OnboardingScreen(navController: NavController) {
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { pageIndex ->
-                MorphEntrance {
-                    OnboardingSlide(slide = OnboardingSlides[pageIndex])
+                if (pageIndex == OnboardingSlides.size) {
+                    // Final step: permission setup, not an intro slide.
+                    SetupSlide(
+                        notificationGranted = notificationGranted,
+                        micGranted = micGranted,
+                        reminderWanted = reminderWanted,
+                        onReminderChange = { wanted ->
+                            reminderWanted = wanted
+                            AppPreferences.setReminderEnabled(context, wanted)
+                        },
+                        onRequestNotifications = {
+                            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        },
+                        onRequestMic = {
+                            requestMic.launch(Manifest.permission.RECORD_AUDIO)
+                        }
+                    )
+                } else {
+                    MorphEntrance {
+                        OnboardingSlide(slide = OnboardingSlides[pageIndex])
+                    }
                 }
             }
         }
 
-        // ── Page dots ──────────────────────────────────────────────────────
+        // ── Page dots (empty on the final setup step — keeps layout stable) ─
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            OnboardingSlides.forEachIndexed { index, _ ->
-                val selected = pagerState.currentPage == index
-                PageDot(
-                    selected = selected,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
-                )
+            if (!isLastSlide) {
+                OnboardingSlides.forEachIndexed { index, _ ->
+                    val selected = pagerState.currentPage == index
+                    PageDot(
+                        selected = selected,
+                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
+                    )
+                }
             }
         }
 
@@ -182,6 +261,232 @@ private fun OnboardingSlide(slide: OnboardingSlideData) {
         )
     }
 }
+
+@Composable
+private fun SetupSlide(
+    notificationGranted: Boolean,
+    micGranted: Boolean,
+    reminderWanted: Boolean,
+    onReminderChange: (Boolean) -> Unit,
+    onRequestNotifications: () -> Unit,
+    onRequestMic: () -> Unit
+) {
+    // Centered when the content fits, scrollable on very small screens —
+    // the Box centers the scrollable column as a whole, so short content
+    // stays vertically centered like the intro slides.
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp, vertical = 24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+        // ── Illustration glyph block ───────────────────────────────────
+        Box(
+            modifier = Modifier
+                .size(140.dp)
+                .background(
+                    Brush.horizontalGradient(CurioGradients.WildcardGradientStops),
+                    shape = RoundedCornerShape(44.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            CurioIcon(
+                name = CurioIcons.Settings,
+                contentDescription = null,
+                tint = Color.White,
+                size = 64.dp
+            )
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        Text(
+            text = "Make Curio yours",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = "Grant what you like — you can change it anytime in Settings.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        // ── Notifications ─────────────────────────────────────────────
+        PermissionCard(
+            glyph = CurioIcons.Notifications,
+            title = "Notifications",
+            subtitle = "Explore-session timer & reminders, plus the daily shuffle nudge",
+            granted = notificationGranted,
+            onRequest = onRequestNotifications
+        )
+
+        // Ask whether the daily shuffle reminder should be on — only once
+        // notifications are actually granted (it can't work without them).
+        if (notificationGranted) {
+            ReminderRow(
+                reminderWanted = reminderWanted,
+                onReminderChange = onReminderChange
+            )
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        // ── Microphone ────────────────────────────────────────────────
+        PermissionCard(
+            glyph = CurioIcons.Mic,
+            title = "Microphone",
+            subtitle = "Voice notes (Sound Bite) & voice attachments in your journal",
+            granted = micGranted,
+            onRequest = onRequestMic
+        )
+        }
+    }
+}
+
+@Composable
+private fun PermissionCard(
+    glyph: String,
+    title: String,
+    subtitle: String,
+    granted: Boolean,
+    onRequest: () -> Unit
+) {
+    val accent = MaterialTheme.colorScheme.primary
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        shadowElevation = 0.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(
+                        if (granted) accent.copy(alpha = 0.15f)
+                        else MaterialTheme.colorScheme.surfaceContainerHighest
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    name = glyph,
+                    contentDescription = null,
+                    tint = if (granted) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 20.dp
+                )
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (granted) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.Check,
+                        contentDescription = null,
+                        tint = accent,
+                        size = 16.dp
+                    )
+                    Text(
+                        "Granted",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = accent
+                    )
+                }
+            } else {
+                Button(
+                    onClick = onRequest,
+                    shape = RoundedCornerShape(18.dp),
+                    contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = accent,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+                    Text(
+                        "Allow",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReminderRow(
+    reminderWanted: Boolean,
+    onReminderChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 4.dp, top = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        CurioIcon(
+            name = CurioIcons.Schedule,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            size = 18.dp
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                "Daily shuffle reminder",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                "A gentle nudge to discover something new",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Switch(checked = reminderWanted, onCheckedChange = onReminderChange)
+    }
+}
+
+/** POST_NOTIFICATIONS is a no-op below API 33 — treated as granted. */
+private fun hasNotificationPermission(context: Context): Boolean =
+    Build.VERSION.SDK_INT < 33 ||
+        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED
+
+private fun hasMicPermission(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+        PackageManager.PERMISSION_GRANTED
 
 @Composable
 private fun PageDot(selected: Boolean, onClick: () -> Unit) {
