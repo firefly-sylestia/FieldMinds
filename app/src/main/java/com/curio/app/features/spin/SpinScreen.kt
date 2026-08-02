@@ -1,6 +1,5 @@
 package com.curio.app.features.spin
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
@@ -79,8 +78,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
@@ -2006,6 +2003,7 @@ private fun DeckControlButton(
 // Full-screen category picker dialog — immersive tile grid
 // ═══════════════════════════════════════════════════════════════════════════
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoryPickerSheet(
     currentCat: CurioCategory,
@@ -2015,44 +2013,29 @@ private fun CategoryPickerSheet(
     onBrowseAll: () -> Unit
 ) {
     val categories = remember { CurioCategories.visible }
-    var visible by remember { mutableStateOf(false) }
     // Default = tap-to-open (single). Long-press enters multi-select mode.
     var multiSelectMode by remember { mutableStateOf(false) }
     var selectedSlugs by remember { mutableStateOf(setOf<String>()) }
 
-    LaunchedEffect(Unit) { visible = true }
+    // Same full-screen + swipe-down-dismiss pattern as the filter page — a
+    // ModalBottomSheet expanded to full height with a drag handle.
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    Dialog(
-        onDismissRequest = { visible = false },
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            dismissOnClickOutside = false
-        )
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        // v6.6 — the full-screen category selection page wears the
+        // same category tint wash as the Spin page it sits on, so
+        // the picker never flashes a foreign plain background.
+        containerColor = currentCat.categoryBackgroundWash(),
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = slideInVertically(
-                initialOffsetY = { it },
-                animationSpec = tween(350, easing = FastOutSlowInEasing)
-            ) + fadeIn(animationSpec = tween(280)),
-            exit = slideOutVertically(
-                targetOffsetY = { it },
-                animationSpec = tween(240, easing = FastOutSlowInEasing)
-            ) + fadeOut(animationSpec = tween(180))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
         ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                // v6.6 — the full-screen category selection page wears the
-                // same category tint wash as the Spin page it sits on, so
-                // the picker never flashes a foreign plain background.
-                color = currentCat.categoryBackgroundWash()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .statusBarsPadding()
-                        .navigationBarsPadding()
-                ) {
                     // ── Close button + header ────────────────────────
                     Row(
                         modifier = Modifier
@@ -2061,7 +2044,7 @@ private fun CategoryPickerSheet(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Surface(
-                            onClick = { visible = false },
+                            onClick = onDismiss,
                             shape = CircleShape,
                             color = MaterialTheme.colorScheme.surfaceVariant
                         ) {
@@ -2221,16 +2204,6 @@ private fun CategoryPickerSheet(
                     }
 
                     Spacer(Modifier.height(8.dp))
-                }
-            }
-        }
-    }
-
-    // ── Dismiss after animation completes ──────────────────────────
-    LaunchedEffect(visible) {
-        if (!visible) {
-            delay(260)
-            onDismiss()
         }
     }
 }

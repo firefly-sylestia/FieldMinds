@@ -2,22 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
-**CI compile failure on the quotes-entry rich-text feature** — `:app:compileDebugKotlin FAILED` with 10 errors in `PaperCard.kt` + `RichTextEditor.kt`.
+**"use the same full screen and swipe down fucntion as in filter page use the same in category page too"**
 
-### Root causes (verified against androidx source, composeBom 2026.05.01)
-1. **`import androidx.compose.foundation.layout.matchParentSize` was invalid** — `matchParentSize` is a `BoxScope` MEMBER function, not importable as a top-level symbol. Removed the import; `Modifier.matchParentSize()` inside `Box { }` resolves via the BoxScope receiver.
-2. **`paperRule()` (@Composable) was called inside the Canvas draw lambda** (a non-composable `DrawScope`). Hoisted to `val ruleColor = if (ruled) paperRule() else Color.Unspecified` in the composable Box scope, captured by the draw lambda. Added the missing `androidx.compose.ui.graphics.Color` import.
-3. **`TextFieldValue.text` is now plain `String`** in this Compose version (`text` is a getter over `annotatedString.text`); the styled content lives on **`TextFieldValue.annotatedString: AnnotatedString`**. All `.text.text` reads → `.text` (plain String), and `extractRichSpans(.text)` → `extractRichSpans(.annotatedString)`.
-4. **`SpanStyle.background` is now NON-NULL `Color`** — the no-highlight sentinel is `Color.Unspecified` (was `null`). Fixed `background = ... else null` → `else Color.Unspecified`, and `extractRichSpans` check `background != null` → `!= Color.Unspecified`.
+### Clarification (via ask_user)
+User confirmed **BOTH** category pickers should get the filter page's full-screen + swipe-down-to-dismiss behavior.
+
+### What was changed
+Both pickers now use the exact FilterSheet pattern — a `ModalBottomSheet` expanded to full height (`rememberModalBottomSheetState(skipPartiallyExpanded = true)`) with a drag handle, rounded top corners, and swipe-down dismiss:
+
+1. **`SpinScreen.kt` — `CategoryPickerSheet`** (was a full-screen `Dialog` with `AnimatedVisibility` slide-in + a `visible` state + delayed dismiss): converted to `ModalBottomSheet` with `onDismissRequest = onDismiss`, `containerColor = currentCat.categoryBackgroundWash()` (kept), `dragHandle`, `shape = top 28dp`. Close button now calls `onDismiss` directly. Removed the `visible` state machinery and the now-unused `AnimatedVisibility` / `Dialog` / `DialogProperties` imports (verified no other usages).
+
+2. **`CategoryPickerScreen.kt`** (nav route): wrapped its existing content in a `ModalBottomSheet` with `onDismissRequest = { navController.popBackStack() }`, same wash container, drag handle, and top-28dp shape — so swipe-down AND system back both dismiss. Column changed from `fillMaxSize + statusBarsPadding` to `fillMaxWidth + navigationBarsPadding`. Added `@OptIn(ExperimentalMaterial3Api::class)` and imports; removed now-unused `background` / `fillMaxSize` / `statusBarsPadding` imports. The `CurioBackButton` in the header is kept (redundant with swipe-down but harmless).
 
 ### Review
-1 round of code-reviewer-deepseek-flash on the final state — clean; all 10 CI errors map to an addressed root cause; buildRichAnnotated ↔ extractRichSpans round-trip stays symmetric with the Color.Unspecified sentinel. One cosmetic nit noted (ruleColor could move inside the `if (ruled)` block) — not applied, current form works.
+1 round of code-reviewer-deepseek-flash — clean on the final state (verified in parallel with brace-balance + dead-import checks: 304/304 and 28/28 balanced, no dead imports). Non-blocking nits: `navigationBarsPadding()` on sheet content may double-pad vs FilterSheet (kept as defensive bottom clearance for the action rows); stale indentation in converted blocks (cosmetic).
 
 ### Follow-ups / notes
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
-- Watch the next CI run to confirm green; if new errors appear in files not touched, the fix may be incomplete (VERIFY-ONE-CYCLE rule).
+- The wash colors/design of each picker were intentionally preserved (only the container/dismiss behavior changed).
 
 ## Previous Requests (brief)
+- CI compile fix: TextFieldValue.text is String now (use annotatedString), SpanStyle.background non-null Color (use Unspecified), matchParentSize BoxScope member, hoist paperRule() out of Canvas.
 - Cabinet wash fix: 'All' page stays on plain theme background; search button always neutral (no tint).
 - Quotes entry: note-paper texture + bold/italic/highlight rich-text editing (journal + quotes always-visible toolbar; other text fields small toggle; saved view renders spans on paper cards).
 - Added ASK WHEN UNSURE rule (< ~80% understanding → ask user) to AGENTS.md + master.md.

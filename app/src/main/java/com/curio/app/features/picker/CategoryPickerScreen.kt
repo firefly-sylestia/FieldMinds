@@ -1,24 +1,26 @@
 package com.curio.app.features.picker
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +53,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
  * every chosen deck. Cards carry a topic count so as many decks as possible
  * fit on screen at once.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
     val context = LocalContext.current
@@ -72,15 +75,25 @@ fun CategoryPickerScreen(navController: NavController) {
         selectedSlugs = if (slug in selectedSlugs) selectedSlugs - slug else selectedSlugs + slug
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            // Theme-aware category wash — deep accent over cream in light,
-            // pastel twin glow over midnight in dark.
-            .background(washCat.categoryBackgroundWash())
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp)
+    // Same full-screen + swipe-down-dismiss pattern as the filter page — a
+    // ModalBottomSheet expanded to full height with a drag handle.
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = { navController.popBackStack() },
+        sheetState = sheetState,
+        // Theme-aware category wash — deep accent over cream in light,
+        // pastel twin glow over midnight in dark.
+        containerColor = washCat.categoryBackgroundWash(),
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 16.dp)
+        ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -196,5 +209,6 @@ fun CategoryPickerScreen(navController: NavController) {
                 }
             }
         }
+    }
     }
 }
