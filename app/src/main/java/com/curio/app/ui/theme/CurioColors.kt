@@ -88,10 +88,11 @@ object CurioColors {
 }
 
 /**
- * HSL components of a color, computed from its RGBA channels. File-level
- * (shared by [CurioMixedDeck]'s premium blends and [CurioGradients.hslGradientStops]).
+ * HSL components of a color, computed from its RGBA channels. Internal
+ * (shared by [CurioMixedDeck]'s premium blends, [CurioGradients.hslGradientStops],
+ * and the pastel-mode ink helpers in CategoryInk.kt — [pastelFillInk], [deepHueInk]).
  */
-private data class Hsl(val h: Float, val s: Float, val l: Float)
+internal data class Hsl(val h: Float, val s: Float, val l: Float)
 
 /** Standard RGB → HSL conversion (channels in [0,1], hue in degrees). */
 internal fun toHsl(color: Color): Hsl {
