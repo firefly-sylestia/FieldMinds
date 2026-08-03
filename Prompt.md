@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Mixed-deck page wash now genuinely wears THE blend color — decks visibly repaint the page**
+
+### What was asked
+
+The mixed gradient's background tint is not different across mixes — it should be THE color the mix resolves to.
+
+### What was done
+
+- **`CurioColors.kt` / `CurioMixedDeck.mixedDeckWash`** — the wash was `lerp(background, lerp(blend, White, 0.30f), 0.32f)` light / `lerp(background, lerp(blend, White, 0.22f), 0.24f)` dark — i.e. ~70% of the final color was still the theme background, so every mix washed to nearly the same cream/midnight and decks looked identical. Now the blend DOMINATES:
+  - Light: `lerp(background, lerp(blend, White, 0.40f), 0.85f)` — a strong pastel twin of the blend (e.g. indigo↔rose → soft lilac, amber↔sky → light mint), light enough for the dark maroon onSurface ink to keep reading.
+  - Dark: `lerp(background, blend, 0.70f)` — the pure blend over midnight (deep plum, deep jade…), close to the literal blend color; blends are WCAG-AA vs white by design and midnight only darkens, so near-white ink stays crisp.
+  - Still honors the Settings tint toggle (off → plain theme background) and AMOLED/Material styles (via `isCurioDarkTheme` + `MaterialTheme.colorScheme.background`).
+- **`SpinScreen.kt`** — background comment under `.background(pageWash)` updated to describe the mixed deck's high-strength blended-color wash.
+
+### Validation
+
+- Brace/paren balance on both files (node script) — balanced.
+- Code-reviewer pass: light-mode pastel keeps maroon ink readable (~#E2E7E7 luminance), dark-mode 70% blend keeps white ink AA-clear, AMOLED/Material/tint-off paths unchanged, no dead code/import issues. Two non-blocking watch-notes accepted as-is: peek cards (`categorySurface`, 24% tint in light) may sit closer in lightness to the now-stronger page — still distinct since they tint with the blend accent too; and light mode is a pastel twin rather than the literal blend (readability tradeoff, defensible).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Saved-entry hero gains a category-symbol watermark scatter (hero only, no overlap)**
 
 ### What was asked

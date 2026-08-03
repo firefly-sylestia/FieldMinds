@@ -259,23 +259,28 @@ object CurioMixedDeck {
     /**
      * The mixed deck's page wash — the Spin screen wears THE blended color
      * the mix resolves to (not the first category's wash), so the whole page
-     * reads in the deck's mixed color story. A stronger tint than the
-     * single-category wash, purely derived from the blend in both themes.
-     * Honors the manual tint toggle and theme style like the category wash.
+     * reads in the deck's mixed color story. Unlike the faint single-category
+     * wash, this is a strong, unmistakable tint: the page is DOMINATED by the
+     * blend color — a soft pastel twin in light mode so the maroon ink stays
+     * readable, the deep blend over midnight in dark so white ink pops — so
+     * switching mixes visibly repaints the page (two different decks never
+     * wash to the same near-background color). Honors the manual tint toggle
+     * and theme style like the category wash.
      */
     @Composable
     fun mixedDeckWash(blend: Color): Color {
         val background = MaterialTheme.colorScheme.background
         if (!AppPreferences.tintWashEffective()) return background
         return if (isCurioDarkTheme()) {
-            // A pastel twin of the blend over midnight — a clear, deep tint
-            // so the mixed page visibly wears the hue while staying dark
-            // enough for the paper cards to read.
-            lerp(background, lerp(blend, Color.White, 0.22f), 0.24f)
+            // The blend itself over midnight, darkened only enough that the
+            // near-white ink and paper cards read — the page plainly wears
+            // the mix color, deep and vivid.
+            lerp(background, blend, 0.70f)
         } else {
-            // A lightened blend over cream, markedly stronger than the
-            // category wash so the mixed page plainly wears the mix.
-            lerp(background, lerp(blend, Color.White, 0.30f), 0.32f)
+            // A pastel twin of the blend over cream at high strength — the
+            // hue is unmistakable per mix while staying light enough for the
+            // dark maroon ink on top.
+            lerp(background, lerp(blend, Color.White, 0.40f), 0.85f)
         }
     }
 

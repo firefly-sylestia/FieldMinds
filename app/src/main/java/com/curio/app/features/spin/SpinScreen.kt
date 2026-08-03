@@ -592,11 +592,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            // Category tint wash — the Spin page wears a faint wash of the
-            // deck's color over the theme background (same wash language as
-            // Topic Reveal / Save / Cabinet). Mixed decks wear THE blended
-            // color the mix resolves to (pageWash), so the page visibly reads
-            // in the deck's mixed color story.
+            // Category tint wash — the Spin page wears a wash of the deck's
+            // color over the theme background (same wash language as Topic
+            // Reveal / Save / Cabinet). Mixed decks wear THE blended color
+            // the mix resolves to (pageWash) at high strength, so each mix
+            // visibly repaints the page in its own blended color story.
             .background(pageWash)
     ) {
         // ── Watermark backdrop — every category glyph scattered around ──
