@@ -2,6 +2,38 @@
 
 ## Latest Request (COMPLETED)
 
+**Profile + Settings full revamp — quest-card hero, identity & stats Profile, Settings grouped into sections with an Experimental area, dead shared components deleted**
+
+### What was asked
+
+“the profile and settings feel out of place like its not consistent with the app design. and also its hero card of profile. fully redesign it. from the base like actually entire profile and settings revamp with experimental settings on.” ask_user: hero = **Quest-card style** (like Home's quest card); Experimental = **move existing experiments** (Smart Spin layout toggle); **Profile = identity & stats** only.
+
+### Root cause
+
+The old Profile used a fixed coral/peach/yellow gradient hero + deep-plum text that belonged to no other screen; Settings was a flat generic card list. Neither followed the app's shared language (category-tinted gradient heroes, paper cards with hairline borders, solid surface stat pills, watermark glyphs, icon-chip card headers).
+
+### What was done
+
+**Profile — `features/profile/ProfileScreen.kt` (full rewrite):**
+- **Quest-card hero** — vertical `cardGradient(accent)` where accent + watermark glyph follow your most-explored lane (brand coral + sparkles before first save), letter-spaced “YOUR PROFILE” kicker, initial avatar, white-glass Edit + streak pills. Matches Home's quest card.
+- **Stats strip** — solid `surfaceContainerLow` pills (streak / saved / lanes) in Home's stat-pill language instead of the old gradient-and-plum boxes. Lanes counts USED lanes once entries exist (falls back to visible count pre-save).
+- **Level card** — gradient level medallion + progress bar; **Lanes card** — category chips + “Open the Cabinet”; **Settings nav card** — single entry (gear glyph + forward arrow); **Support & diagnostics** — report bug / crash logs / test crash.
+- Removed the old duplicate Theme + Settings cards; personalization lives only in Settings now. Stats reload on composition entry AND ON_RESUME (app-switcher return) via `rememberCoroutineScope`.
+
+**Settings — `features/settings/SettingsScreen.kt`:** reorganized into **General** (Profile → display name, Appearance), **Preferences** (Recording, Notifications, Categories), **Data** (Backup & restore), **Experimental** (Smart Spin layout toggle — moved out of Appearance, exactly as chosen), **Support** (About Curio). Card language unchanged and consistent with Profile.
+
+**Cleanup — `ui/components/CurioSettingsComponents.kt`:** stripped to the only live symbol (`CurioSectionLabel`); deleted the dead 3-param `CurioSettingsRow`, `CurioToggleRow`, `CurioTimePickerRow`, `CurioStepButton`, and `CurioThemeMode` (zero external references confirmed).
+
+### Validation
+
+- `check_braces.py` BALANCED on all 3 touched files; every symbol the rewrite references verified to exist (`CurioGradients` in CurioColors.kt, `CurioCategories` in Category.kt, `CurioForwardArrow` in CurioTopBar.kt, all 13 icons, routes, streak/crash APIs).
+- Code-reviewer pass: clean — all imports used, 4-arg `CurioSettingsRow` resolves, BOM-safe `LinearProgressIndicator` lambda. Two nits accepted & fixed: lanes stat semantics + ON_RESUME stats refresh.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **CI compile fix for the bubble unfurl + Spin smart-layout system (low-density + short-screen compact tiers with vertical edge buttons, toggleable)**
 
 ### What was asked
@@ -33,8 +65,6 @@
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
 
 ---
-
-## Previous Requests (COMPLETED)
 
 **Peek-card reel fixed (direction, cut-off, speed) + “Done exploring” on the notification now opens the app at the write-it-down entry page with a HOME-anchored back stack**
 

@@ -540,35 +540,6 @@ fun SettingsScreen(navController: NavController) {
                                 onCheckedChange = { AppPreferences.setEntryMetaEnabled(context, it) }
                             )
                         }
-                        CurioSettingsDivider()
-                        // ── Smart Spin layout — the DIMENSION rule of the
-                        //    Spin page's smart compact system: short screens
-                        //    get the compact (or extra-compact) layout so the
-                        //    deck fits. Low-density devices (under 440 dpi)
-                        //    always compact regardless of this switch.
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            CurioIcon(
-                                CurioIcons.AspectRatio, null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 22.dp
-                            )
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Smart Spin layout", style = MaterialTheme.typography.bodyLarge)
-                                Text(
-                                    "Fits the Spin page on short screens · low-density phones always compact",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Switch(
-                                checked = AppPreferences.smartSpinLayoutState,
-                                onCheckedChange = { AppPreferences.setSmartSpinLayoutEnabled(context, it) }
-                            )
-                        }
                     }
                 }
 
@@ -773,6 +744,53 @@ fun SettingsScreen(navController: NavController) {
                                 .format(Date(lastBackupAt))
                         } else "Never"
                         CurioSettingsInfoRow(CurioIcons.History, "Last backup", whenLast)
+                    }
+                }
+
+                // ── Experimental: new ideas in testing
+                item { CurioSectionLabel("Experimental") }
+
+                item {
+                    CurioSettingsCard {
+                        CurioCardHeader(CurioIcons.ScienceGlyph, "Experimental", "New ideas in testing")
+                        // ── Smart Spin layout — the DIMENSION rule of the
+                        //    Spin page's smart compact system: short screens
+                        //    get the compact (or extra-compact) layout so the
+                        //    deck fits. Low-density devices (under 440 dpi)
+                        //    always compact regardless of this switch. It
+                        //    lives here (not in Appearance) while it's
+                        //    experimental — once the winning layout is
+                        //    decided, the toggle is removed and the behavior
+                        //    hardcoded.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.AspectRatio, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Smart Spin layout", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    "Fits the Spin page on short screens · low-density phones always compact",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.smartSpinLayoutState,
+                                onCheckedChange = { AppPreferences.setSmartSpinLayoutEnabled(context, it) }
+                            )
+                        }
+                        Text(
+                            "These features are still finding their shape — they may change in future updates.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
+                        )
                     }
                 }
 

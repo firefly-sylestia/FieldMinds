@@ -21,15 +21,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,10 +34,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -51,6 +46,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
@@ -71,17 +67,19 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.themedAccent
+import kotlinx.coroutines.launch
 
 /**
- * Profile hub — identity, stats, and a single proper Settings entry.
+ * Profile hub — identity + stats only (v7.3 revamp).
  *
- * Personalization settings (audio quality, reminders, categories, backup)
- * live in the Settings screen; Profile keeps a hero, glanceable stats, lanes,
- * an inline Theme card (style + mode pickers), and a Settings card that opens
- * that screen. Every row that looks interactive either opens a dialog or
- * navigates; informational values are rendered as text instead of dead buttons.
+ * Personalization lives entirely in Settings (appearance, notifications,
+ * categories, backup — plus the Experimental section). Profile keeps the
+ * quest-card hero, glanceable stats, the level tracker, your lanes, a single
+ * Settings entry card, and the support/diagnostics card. Every visual
+ * follows the app's shared language: paper cards with hairline borders,
+ * solid surface stat pills, and a category-tinted gradient hero (the accent
+ * of your most-explored lane, brand coral before your first save).
  */
 @Composable
 fun ProfileScreen(navController: NavController) {
@@ -93,35 +91,52 @@ fun ProfileScreen(navController: NavController) {
     var crashCount by remember { mutableIntStateOf(0) }
     var totalSaved by remember { mutableIntStateOf(0) }
     var categoryCounts by remember { mutableStateOf<Map<CategoryId, Int>>(emptyMap()) }
-    // Theme pickers — refreshed on resume so external changes (Settings)
-    // reflect here too. The Theme card writes prefs + local state directly.
-    var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
-    var themeStyle by remember { mutableStateOf(AppPreferences.getThemeStyle(context)) }
+    val scope = rememberCoroutineScope()
+
+    // Reloads stats on composition entry (nav return) AND on ON_RESUME
+    // (returning from the app switcher), so the hero, pills, and lanes
+    // always match the journal.
+    fun refreshStats() {
+        scope.launch {
+            runCatching {
+                val entries = CurioRepositoryHolder.repo.getAll()
+                totalSaved = entries.size
+                categoryCounts = entries.groupingBy { it.topic.categoryId }.eachCount()
+            }.onFailure { android.util.Log.e("ProfileScreen", "Failed to load entries", it) }
+            crashCount = CurioCrashReporter.getCrashHistory(context).size
+        }
+    }
+
+    LaunchedEffect(Unit) { refreshStats() }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 displayName = AppPreferences.getDisplayName(context)
-                themeMode = AppPreferences.getThemeMode(context)
-                themeStyle = AppPreferences.getThemeStyle(context)
+                refreshStats()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    LaunchedEffect(Unit) {
-        runCatching {
-            val entries = CurioRepositoryHolder.repo.getAll()
-            totalSaved = entries.size
-            categoryCounts = entries.groupingBy { it.topic.categoryId }.eachCount()
-        }.onFailure { android.util.Log.e("ProfileScreen", "Failed to load entries", it) }
-        crashCount = CurioCrashReporter.getCrashHistory(context).size
-    }
-
     val streakDays = StreakTracker.getStreak(context)
     val level = levelFor(totalSaved)
     val progress = progressTowardsNextLevel(totalSaved)
+
+    // Hero accent/glyph follow your most-explored lane; brand coral +
+    // sparkles before the first save (mirrors the Home quest card's
+    // wildcard treatment).
+    val heroAccent = remember(categoryCounts) {
+        categoryCounts.maxByOrNull { it.value }?.key
+            ?.let { CurioCategories.byId(it).themedAccent() }
+            ?: CurioColors.CategoryCoral
+    }
+    val heroGlyph = remember(categoryCounts) {
+        categoryCounts.maxByOrNull { it.value }?.key
+            ?.let { CurioCategories.byId(it).iconGlyph }
+            ?: CurioIcons.AutoAwesome
+    }
 
     ProfileDialogs(
         showNameDialog = showNameDialog,
@@ -161,9 +176,9 @@ fun ProfileScreen(navController: NavController) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            // Gear entry → full Settings screen (backup & restore, categories,
-            // theme, etc.). Mirror of CurioBackButton so the top bar stays
-            // balanced: back arrow left, gear right.
+            // Gear entry → full Settings screen (appearance, notifications,
+            // categories, backup, experimental). Mirror of CurioBackButton so
+            // the top bar stays balanced: back arrow left, gear right.
             Surface(
                 onClick = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } },
                 shape = RoundedCornerShape(50),
@@ -188,6 +203,8 @@ fun ProfileScreen(navController: NavController) {
                 ProfileHero(
                     name = displayName,
                     streakDays = streakDays,
+                    accent = heroAccent,
+                    glyph = heroGlyph,
                     onEditName = {
                         nameInput = displayName
                         showNameDialog = true
@@ -198,7 +215,9 @@ fun ProfileScreen(navController: NavController) {
                 StatsStrip(
                     streak = streakDays,
                     saved = totalSaved,
-                    lanes = CurioCategories.visible.size
+                    // Used lanes once entries exist (matches the Lanes card);
+                    // the visible lane count before the first save.
+                    lanes = if (categoryCounts.isEmpty()) CurioCategories.visible.size else categoryCounts.size
                 )
             }
             item {
@@ -210,37 +229,21 @@ fun ProfileScreen(navController: NavController) {
                     isMaxLevel = level >= 9
                 )
             }
-            item {
-                SettingsCard(
-                    onOpenSettings = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
-                )
-            }
-            item {
-                ThemeCard(
-                    themeMode = themeMode,
-                    themeStyle = themeStyle,
-                    onModeChange = { mode ->
-                        themeMode = mode
-                        AppPreferences.setThemeMode(context, mode)
-                    },
-                    onStyleChange = { style ->
-                        themeStyle = style
-                        AppPreferences.setThemeStyle(context, style)
-                    },
-                    onTintChange = { enabled -> AppPreferences.setTintWashEnabled(context, enabled) }
-                )
-            }
             if (categoryCounts.isNotEmpty()) {
                 item {
-                    CategoriesCard(
+                    LanesCard(
                         counts = categoryCounts,
                         onCabinet = { navController.navigate(CurioRoutes.CABINET) { launchSingleTop = true } }
                     )
                 }
             }
-
             item {
-                DeveloperCard(
+                SettingsNavCard(
+                    onOpenSettings = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
+                )
+            }
+            item {
+                SupportCard(
                     crashCount = crashCount,
                     onTestCrash = { CurioCrashReporter.testCrash() },
                     onCrashLogs = { navController.navigate(CurioRoutes.CRASH) { launchSingleTop = true } },
@@ -283,9 +286,22 @@ private fun ProfileDialogs(
     }
 }
 
+/**
+ * Quest-card hero (v7.3) — same treatment as Home's quest card so Profile
+ * reads as part of the family: category-tinted gradient (your most-explored
+ * lane's accent), a watermark glyph in the corner, a letter-spaced kicker,
+ * and white content. Edit + streak ride as white-glass pills.
+ */
 @Composable
-private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
+private fun ProfileHero(
+    name: String,
+    streakDays: Int,
+    accent: Color,
+    glyph: String,
+    onEditName: () -> Unit
+) {
     val initial = name.firstOrNull()?.uppercase().orEmpty()
+    val gradient = CurioGradients.cardGradient(accent)
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
@@ -295,25 +311,40 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            CurioColors.CoralBlush,
-                            CurioColors.Peach,
-                            CurioColors.ButterYellow
-                        )
-                    )
-                )
-                .padding(18.dp)
+                .background(Brush.verticalGradient(gradient), RoundedCornerShape(28.dp))
+                .padding(20.dp)
         ) {
+            // Watermark glyph — the lane you explore most (sparkles before
+            // your first save), always a whisper behind the content.
             CurioIcon(
-                CurioIcons.AutoAwesome,
+                glyph,
                 null,
                 tint = Color.White.copy(alpha = 0.20f),
-                size = 116.dp,
+                size = 120.dp,
                 modifier = Modifier.align(Alignment.BottomEnd)
             )
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                // ── Kicker — mirrors the quest card's "TODAY'S QUEST" ──
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(3.dp)
+                            .height(16.dp)
+                            .background(Color.White.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
+                    )
+                    Text(
+                        "YOUR PROFILE",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 1.2.sp
+                        ),
+                        color = Color.White.copy(alpha = 0.88f)
+                    )
+                }
+                // ── Avatar + name ──────────────────────────────────────
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(14.dp)
@@ -322,32 +353,33 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(Brush.linearGradient(listOf(CurioColors.CoralBlush, CurioColors.Peach))),
+                            .background(Color.White.copy(alpha = 0.22f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             initial,
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
-                            color = CurioColors.DeepPlum
+                            color = Color.White
                         )
                     }
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             name,
                             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = CurioColors.DeepPlum,
+                            color = Color.White,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             taglineForStreak(streakDays),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = CurioColors.DeepPlum.copy(alpha = 0.76f),
+                            color = Color.White.copy(alpha = 0.78f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
+                // ── Edit + streak — white-glass pills like the quest CTA ──
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -356,7 +388,7 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                     Surface(
                         onClick = onEditName,
                         shape = RoundedCornerShape(50),
-                        color = CurioColors.DeepPlum,
+                        color = Color.White.copy(alpha = 0.22f),
                         contentColor = Color.White,
                         shadowElevation = 0.dp
                     ) {
@@ -372,15 +404,15 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
                     if (streakDays > 0) {
                         Surface(
                             shape = RoundedCornerShape(50.dp),
-                            color = CurioColors.ButterYellow.copy(alpha = 0.32f)
+                            color = Color.White.copy(alpha = 0.22f)
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(5.dp)
                             ) {
-                                CurioIcon(CurioIcons.LocalFire, null, tint = CurioColors.DeepPlum, size = 16.dp)
-                                Text("$streakDays-day streak", style = MaterialTheme.typography.labelMedium, color = CurioColors.DeepPlum, fontWeight = FontWeight.Bold)
+                                CurioIcon(CurioIcons.LocalFire, null, tint = Color.White, size = 16.dp)
+                                Text("$streakDays-day streak", style = MaterialTheme.typography.labelMedium, color = Color.White, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -390,6 +422,11 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
     }
 }
 
+/**
+ * Solid stat pills — the same language as Home's stat strip (surface pill,
+ * tinted icon, onSurface value + label) instead of the old gradient-and-
+ * plum treatment that didn't belong to the app.
+ */
 @Composable
 private fun StatsStrip(streak: Int, saved: Int, lanes: Int) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -403,24 +440,18 @@ private fun StatsStrip(streak: Int, saved: Int, lanes: Int) {
 private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: String, tint: Color) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(22.dp),
-        color = Color.Transparent,
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         shadowElevation = 0.dp
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Brush.verticalGradient(CurioGradients.cardGradient(tint)))
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(3.dp)
-            ) {
-                CurioIcon(icon, null, tint = CurioColors.DeepPlum.copy(alpha = 0.82f), size = 18.dp)
-                Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = CurioColors.DeepPlum)
-                Text(label, style = MaterialTheme.typography.labelSmall, color = CurioColors.DeepPlum.copy(alpha = 0.72f))
-            }
+            CurioIcon(icon, null, tint = tint, size = 18.dp)
+            Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -460,8 +491,9 @@ private fun LevelCard(level: Int, saved: Int, progress: Float, nextThreshold: In
     }
 }
 
+/** Single Settings entry — Profile owns identity/stats, Settings owns every preference. */
 @Composable
-private fun SettingsCard(onOpenSettings: () -> Unit) {
+private fun SettingsNavCard(onOpenSettings: () -> Unit) {
     CurioSettingsCard {
         Surface(
             onClick = onOpenSettings,
@@ -478,15 +510,15 @@ private fun SettingsCard(onOpenSettings: () -> Unit) {
                     modifier = Modifier
                         .size(46.dp)
                         .clip(RoundedCornerShape(15.dp))
-                        .background(Brush.linearGradient(listOf(CurioColors.CoralBlush, CurioColors.Peach))),
+                        .background(Brush.verticalGradient(CurioGradients.cardGradient(CurioColors.CoralBlush))),
                     contentAlignment = Alignment.Center
                 ) {
                     CurioIcon(CurioIcons.Settings, null, tint = Color.White, size = 23.dp)
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Settings", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                    Text("Settings & preferences", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
                     Text(
-                        "Reminders · audio · backup",
+                        "Appearance · notifications · backup",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -498,16 +530,20 @@ private fun SettingsCard(onOpenSettings: () -> Unit) {
 }
 
 @Composable
-private fun CategoriesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) {
+private fun LanesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) {
     CurioSettingsCard {
         CurioCardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring")
         Spacer(Modifier.height(8.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(counts.entries.sortedByDescending { it.value }.take(4)) { (categoryId, count) ->
                 val category = CurioCategories.byId(categoryId)
-                Surface(shape = RoundedCornerShape(16.dp), color = category.themedAccent().copy(alpha = 0.14f)) {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = category.themedAccent().copy(alpha = 0.14f),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, category.themedAccent().copy(alpha = 0.20f))
+                ) {
                     Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                        CurioIcon(category.iconGlyph, null, tint = MaterialTheme.colorScheme.onSurface, size = 20.dp)
+                        CurioIcon(category.iconGlyph, null, tint = category.themedAccent(), size = 20.dp)
                         Spacer(Modifier.height(4.dp))
                         Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1)
                         Text("$count saved", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -523,7 +559,7 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) 
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                CurioIcon(CurioIcons.Inventory2, null, size = 18.dp)
+                CurioIcon(CurioIcons.Inventory2, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                 Spacer(Modifier.width(8.dp))
                 Text("Open the Cabinet", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
                 CurioForwardArrow(size = 16.dp)
@@ -532,10 +568,8 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) 
     }
 }
 
-
-
 @Composable
-private fun DeveloperCard(
+private fun SupportCard(
     crashCount: Int,
     onTestCrash: () -> Unit,
     onCrashLogs: () -> Unit,
@@ -550,129 +584,6 @@ private fun DeveloperCard(
         }
         CurioSettingsDivider()
         CurioSettingsRow(CurioIcons.ErrorOutline, "Test crash", "Diagnostic tool", onTestCrash)
-    }
-}
-
-
-
-/**
- * Inline theme switcher — style (Curio/AMOLED/Material) + Light/Dark/System
- * mode pickers + the category-tint toggle, mirroring Settings → Appearance
- * so the theme can be changed right on Profile. Writes prefs immediately so
- * [CurioTheme] recomposes app-wide.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ThemeCard(
-    themeMode: String,
-    themeStyle: String,
-    onModeChange: (String) -> Unit,
-    onStyleChange: (String) -> Unit,
-    onTintChange: (Boolean) -> Unit
-) {
-    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
-    val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
-    val themeStyles = listOf(
-        AppPreferences.THEME_STYLE_DEFAULT,
-        AppPreferences.THEME_STYLE_AMOLED,
-        AppPreferences.THEME_STYLE_MATERIAL
-    )
-    val currentStyleIndex = themeStyles.indexOf(themeStyle).coerceAtLeast(0)
-    val styleLabel = listOf("Curio", "AMOLED", "Material")[currentStyleIndex]
-    // AMOLED is always dark — the Light/Dark/System pick is ignored while it's on.
-    val themePickerEnabled = themeStyle != AppPreferences.THEME_STYLE_AMOLED
-
-    CurioSettingsCard {
-        CurioCardHeader(CurioIcons.DarkMode, "Theme", "Applies instantly")
-        // ── Theme style — Curio (default) / AMOLED / Material ──
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            CurioIcon(CurioIcons.AutoAwesome, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Theme style", style = MaterialTheme.typography.bodyLarge)
-                Text(styleLabel, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-        Spacer(Modifier.height(2.dp))
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            listOf("Curio", "AMOLED", "Material").forEachIndexed { index, label ->
-                SegmentedButton(
-                    selected = index == currentStyleIndex,
-                    onClick = { onStyleChange(themeStyles[index]) },
-                    shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
-                ) {
-                    Text(label, style = MaterialTheme.typography.labelSmall)
-                }
-            }
-        }
-        CurioSettingsDivider()
-        // ── Light / Dark / System — ignored while AMOLED is active ──
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp)
-                .alpha(if (themePickerEnabled) 1f else 0.4f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            CurioIcon(CurioIcons.DarkMode, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Theme mode", style = MaterialTheme.typography.bodyLarge)
-                Text(
-                    if (themePickerEnabled) listOf("Light", "Dark", "System")[currentThemeIndex]
-                    else "AMOLED is always dark",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-        Spacer(Modifier.height(2.dp))
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            listOf("Light", "Dark", "System").forEachIndexed { index, label ->
-                SegmentedButton(
-                    selected = index == currentThemeIndex,
-                    onClick = { onModeChange(themes[index]) },
-                    enabled = themePickerEnabled,
-                    shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
-                ) {
-                    Text(label, style = MaterialTheme.typography.labelSmall)
-                }
-            }
-        }
-        CurioSettingsDivider()
-        // ── Category tint toggle — off restores the plain theme background.
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Category tint", style = MaterialTheme.typography.bodyLarge)
-                Text(
-                    when {
-                        !AppPreferences.tintWashEffective() &&
-                            themeStyle == AppPreferences.THEME_STYLE_DEFAULT -> "Plain theme background"
-                        !AppPreferences.tintWashEffective() -> "Off in the $styleLabel theme"
-                        else -> "Colorful page backgrounds"
-                    },
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Switch(
-                checked = AppPreferences.tintWashEffective(),
-                onCheckedChange =
-                    if (themeStyle == AppPreferences.THEME_STYLE_DEFAULT) {
-                        // Double-brace: the outer block carries an inner
-                        // lambda so `it` resolves as the arg.
-                        { onTintChange(it) }
-                    } else null
-            )
-        }
     }
 }
 
