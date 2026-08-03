@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Modern batches in Albums & Artists — 50 contemporary artists + 50 modern albums (2010s–2020s), The 1975 included**
+
+### What was asked
+
+“add modern batches in albums and artists” — ask_user: scope = **all of it** (2020s current wave + 2010s icons + my pick, with **The 1975 explicitly requested**); size = **50 each**.
+
+### What was done
+
+- **`scripts/add_modern_batches.py`** (new, idempotent): appends the batch to `artists.json` + `albums.json` (dedupes by id + name cross-file), then self-checks every new entry (schema fields, name ≤ 80, teaser ≤ 280, instruction ≤ 280, duration ≤ 90, kebab ids).
+- **50 artists added** (304 → 354): The 1975, Sabrina Carpenter, Harry Styles, Doja Cat, Lil Nas X, Tate McRae, Gracie Abrams, Noah Kahan, Zach Bryan, Teddy Swims, Benson Boone, Sleep Token, Hozier, Lana Del Rey, Travis Scott, Future, 21 Savage, Playboi Carti, Lil Uzi Vert, Young Thug, Denzel Curry, JPEGMAFIA, JID, Little Simz, Kali Uchis, Rauw Alejandro, Feid, Peso Pluma, Ice Spice, Tems, Ayra Starr, Raye, FKA twigs, Caroline Polachek, Beabadoobee, girl in red, Conan Gray, Steve Lacy, Glass Animals, Wednesday, Indigo De Souza, Big Thief, Arca, Danny Brown, Earl Sweatshirt, Killer Mike, A$AP Rocky, Gunna, Bicep, Porter Robinson.
+- **50 albums added** (448 → 498): two The 1975 records (A Brief Inquiry Into Online Relationships, I Like It When You Sleep…), Short n' Sweet, Harry's House, Planet Her, Montero, Think Later, The Secret of Us, Stick Season, American Heartbreak, I've Tried Everything but Therapy (Part 1), Fireworks & Rollerblades, Take Me Back to Eden, Unreal Unearth, Norman Fucking Rockwell!, Utopia, I Never Liked You, Savage Mode II, Whole Lotta Red, Eternal Atake, So Much Fun, Melt My Eyez See Your Future, Veteran, The Forever Story, Sometimes I Might Be Introvert, Orquídeas, Vice Versa, Mor No Le Temas a la Oscuridad, Génesis, Born in the Wild, The Year I Turned 21, My 21st Century Blues, Magdalene, Desire I Want to Turn Into You, Beatopia, If I Could Make It Go Quiet, Superache, Gemini Rights, Dreamland, Rat Saw God, Any Shape You Take, Dragon New Warm Mountain I Believe in You, Kick I, uknowhatimsayin¿, Some Rap Songs, Michael, Testing, Wunna, Currents, Nurture.
+- **Every entry** meets SCHEMA.md: real verifiable acts, quirky 1–2-sentence teasers, `Listen` exploreActions naming specific tracks/albums, genre + origin + decade tags (the origin tag feeds the Spin filter's Origin bucket), tier 1. Album bylines = artist.
+- **Docs:** fastlane changelog `20260807.txt`; app/AGENTS.md one-liner (data plan §5.2 step 4); Prompt.md.
+
+### Validation
+
+- `python3 scripts/add_modern_batches.py` — 50+50 appended, 0 skipped, all 100 self-checks passed (≤280 teaser/instruction).
+- `git diff`: **2144 insertions, 0 deletions** — pure additions, no reformatting of existing entries.
+- `scripts/validate_topics.py` — my entries are all clean; it reports 470 PRE-EXISTING instruction-length flags in old data because the local mirror enforces **280** while the real Gradle `validateTopics` gate (app/build.gradle.kts:237) enforces **450** — old entries were authored to the 450 limit. My batch meets the stricter 280 bar, so it passes under ANY limit; CI stays green (pre-existing flags are out of scope — noted as a possible follow-up).
+- Cross-file id uniqueness: validator reports 1962 unique ids = 1962 topics (no collisions).
+- Code-reviewer pass: clean. NO local Gradle build (per AGENTS.md) — CI validates on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Peek-deck redesign (v7.6, EXPERIMENTAL, Settings toggle, OFF by default) + CI compile fixes for the pastel commit**
 
 ### What was asked

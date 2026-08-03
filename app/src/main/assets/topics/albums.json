@@ -9900,5 +9900,1102 @@
       "2000s"
     ],
     "tier": 1
+  },
+  {
+    "id": "album-the-1975-a-brief-inquiry",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "A Brief Inquiry Into Online Relationships",
+    "teaser": "The 1975 2018 — the album that made them critics' darlings, tackling the internet, addiction and modern loneliness. Every song is a different genre, and the closer is a four-minute instrumental that ends with a choir.",
+    "imageUrl": "",
+    "byline": "The 1975",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Brief Inquiry Into Online Relationships (2018) end-to-end",
+      "durationMinutes": 61,
+      "instruction": "Listen to 'Love It If We Made It' — a literal list of 2018 news headlines set to a euphoric chorus. Then 'The Man Who Married a Robot / Love Theme' — a spoken-word song narrated by Siri about a man who marries his phone. The album's title is a joke about the internet."
+    },
+    "tags": [
+      "Art Pop",
+      "Indie Rock",
+      "British",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-the-1975-i-like-it-when-you-sleep",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "I Like It When You Sleep, for You Are So Beautiful yet So Unaware of It",
+    "teaser": "The 1975 2016 — the 74-minute double album that made them stars, a maximalist sprawl of 17 songs that jumps from Motown pastiche to ambient soundscapes. It debuted at #1 in the UK, and its title is the longest ever to top the chart.",
+    "imageUrl": "",
+    "byline": "The 1975",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "I Like It When You Sleep, for You Are So Beautiful yet So Unaware of It (2016) end-to-end",
+      "durationMinutes": 74,
+      "instruction": "Listen to 'Love Me' — the funk opener satirizes celebrity before the band had really hit fame. Then 'Somebody Else' — the heartbreak anthem whose chorus is a single repeated line. Skip nothing: the album deliberately refuses to stay in one genre, and the sequencing is the joke."
+    },
+    "tags": [
+      "Art Pop",
+      "Indie Rock",
+      "British",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-sabrina-carpenter-short-n-sweet",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Short n' Sweet",
+    "teaser": "Sabrina Carpenter 2024 — the 36-minute album that turned a Disney actress into the biggest pop star of the year. Recorded in just a few months, it's a country-tinged, innuendo-loaded pop record that spent weeks at #1.",
+    "imageUrl": "",
+    "byline": "Sabrina Carpenter",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Short n' Sweet (2024) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Listen to 'Espresso' — the song has no real chorus, just a hook on a loop, and the 'screaming' backing vocals are pitched-down scream takes. Then 'Taste' — the opener, a breakup anthem with a horror-comedy video. The whole album is 12 songs in 36 minutes: no filler."
+    },
+    "tags": [
+      "Pop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-harry-styles-harrys-house",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Harry's House",
+    "teaser": "Harry Styles 2022 — his third solo album, named after a Joni Mitchell lyric, designed to sound like walking through the rooms of a home. It won Album of the Year at the Grammys, and 'As It Was' became his first #1 single.",
+    "imageUrl": "",
+    "byline": "Harry Styles",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Harry's House (2022) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to 'As It Was' — the lyrics are about loneliness at a party, the music is pure pop joy, and the music video was shot in the real Harry's House. Then 'Cinema' — the title track's subtitle references the Joni Mitchell lyric the album is named for. Each song is a room."
+    },
+    "tags": [
+      "Pop",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-doja-cat-planet-her",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Planet Her",
+    "teaser": "Doja Cat 2021 — a concept album about a fictional planet where women rule, and the record that made her a global star. It spawned three top-10 hits and mixes pop, R&B, Afrobeats and rap. The album's sci-fi aesthetic runs through every video.",
+    "imageUrl": "",
+    "byline": "Doja Cat",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Planet Her (2021) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Kiss Me More' — the SZA duet whose chorus samples an old Olivia Newton-John song, and which won a Grammy. Then 'Woman' — the opener, an ode to women's power built on an African vocal sample. The album is Planet Her; the interludes are her radio broadcasts."
+    },
+    "tags": [
+      "Pop",
+      "R&B",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-lil-nas-x-montero",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Montero",
+    "teaser": "Lil Nas X 2021 — the debut album that turned a meme rapper into a pop visionary. Its title track, named for his birth name, became the first song to hit #1 with an openly queer message and a video that sparked global outrage. The album is a coming-of-age story in 15 tracks.",
+    "imageUrl": "",
+    "byline": "Lil Nas X",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Montero (2021) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'MONTERO (Call Me by Your Name)' — a letter to his younger self, with a video where he gives the devil a lap dance. Then 'Sun Goes Down' — about the bullying he endured as a closeted teen. The album ends with a Miley Cyrus duet."
+    },
+    "tags": [
+      "Pop",
+      "Hip-Hop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-tate-mcrae-think-later",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Think Later",
+    "teaser": "Tate McRae 2023 — the debut album from the Canadian dancer-singer, a 14-song pop record whose title is her motto for impulsive decisions. It debuted at #3 in the US and made 'Greedy' her first global hit.",
+    "imageUrl": "",
+    "byline": "Tate McRae",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Think Later (2023) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Listen to 'Greedy' — built on a two-note bass loop, with a hook she wrote in one take. Then 'Exes' — the sequel to 'Greedy', with a bridge that drops to just her voice and a kick drum. She choreographed every video; watch her hands in 'Greedy'."
+    },
+    "tags": [
+      "Pop",
+      "Canadian",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-gracie-abrams-the-secret-of-us",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Secret of Us",
+    "teaser": "Gracie Abrams 2024 — her second album, written after a year of touring, a diary of friendship and self-destruction. It features a duet with Taylor Swift recorded live in one take, and 'I Love You, I'm Sorry' became a global hit.",
+    "imageUrl": "",
+    "byline": "Gracie Abrams",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Secret of Us (2024) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Listen to 'I Love You, I'm Sorry' — the title is the whole apology and the song never says it in the chorus. Then 'us.' — the Taylor Swift duet, recorded in one take, both in the same room. The album's secret: every song is about a real person she's never named."
+    },
+    "tags": [
+      "Pop",
+      "Indie Pop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-noah-kahan-stick-season",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Stick Season",
+    "teaser": "Noah Kahan 2022 — a Vermont folk-pop album named for the bleak weeks between autumn and snow, written during lockdown in his hometown. It became one of the biggest folk records of the decade after TikTok rediscovered it, spawning an entire 'Stick Season' cover phenomenon.",
+    "imageUrl": "",
+    "byline": "Noah Kahan",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Stick Season (2022) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to 'Stick Season' — the title track about leaving a small town and the guilt of staying. Then 'Northern Attitude' — the fiddle-and-banjo opener. The album's genius is how specific it is: his Vermont references became anthems for everyone who left home."
+    },
+    "tags": [
+      "Folk",
+      "Indie Folk",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-zach-bryan-american-heartbreak",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "American Heartbreak",
+    "teaser": "Zach Bryan 2022 — a 34-song double album recorded in 12 days with a live band in a cabin, released with almost no promotion. It became the biggest country record of the year, and turned the Navy veteran into a folk-country superstar.",
+    "imageUrl": "",
+    "byline": "Zach Bryan",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "American Heartbreak (2022) end-to-end",
+      "durationMinutes": 70,
+      "instruction": "Listen to 'Something in the Orange' — the viral demo version exists and is worth hearing too; the studio version is the song about a sunset he watched while a relationship faded. Then 'Burn, Burn, Burn' — the closer, recorded live in the room. 34 songs, no skips."
+    },
+    "tags": [
+      "Country",
+      "Americana",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-teddy-swims-ive-tried-everything-but-therapy",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "I've Tried Everything but Therapy (Part 1)",
+    "teaser": "Teddy Swims 2023 — a debut EP from a YouTube cover singer whose gospel-and-soul voice made 'Lose Control' his first #1. The title is a joke about his therapy-themed album rollout; Part 2 came later. Eight songs that show off a voice that shouldn't fit in any one genre.",
+    "imageUrl": "",
+    "byline": "Teddy Swims",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "I've Tried Everything but Therapy (Part 1) (2023) end-to-end",
+      "durationMinutes": 24,
+      "instruction": "Listen to 'Lose Control' — the chorus scream is a note he'd never hit until the final take, and the raw vocal was kept. Then 'The Door' — a soul-pop breakup song whose falsetto bridge was recorded in a closet. He's a cover artist by origin; these are the originals."
+    },
+    "tags": [
+      "Soul",
+      "Pop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-benson-boone-fireworks-and-rollerblades",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Fireworks & Rollerblades",
+    "teaser": "Benson Boone 2024 — a debut album from the singer who quit American Idol mid-season. It's a rock-leaning pop record anchored by 'Beautiful Things', one of the biggest songs of 2024, which he nearly didn't include.",
+    "imageUrl": "",
+    "byline": "Benson Boone",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Fireworks & Rollerblades (2024) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Beautiful Things' — the quiet-verse-to-screaming-chorus structure is the whole trick; the fear-of-loss lyrics are real. Then 'Slow It Down' — the piano intro was written the night his grandmother died. He quit a TV show to gamble on his own sound; it paid off."
+    },
+    "tags": [
+      "Pop",
+      "Rock",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-sleep-token-take-me-back-to-eden",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Take Me Back to Eden",
+    "teaser": "Sleep Token 2023 — the third album from the anonymous masked band, a 63-minute epic that refuses to stay in one genre: metal, pop, R&B and gospel all appear. It's the conclusion of a trilogy about the singer's relationship with the deity Sleep.",
+    "imageUrl": "",
+    "byline": "Sleep Token",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Take Me Back to Eden (2023) end-to-end",
+      "durationMinutes": 63,
+      "instruction": "Listen to 'The Summoning' — the song that made them famous when its second half turned from metal into a funk groove into gospel. Then 'Chokehold' — the opener, soft-loud-soft personified. The lore matters: the whole album is a letter to a god."
+    },
+    "tags": [
+      "Metal",
+      "Progressive",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-hozier-unreal-unearth",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Unreal Unearth",
+    "teaser": "Hozier 2023 — his third album, structured around Dante's nine circles of Hell, one song per circle. Recorded with a folk ensemble and a string section, it became his first #1 album in the US, and 'Eat Your Young' a viral hit.",
+    "imageUrl": "",
+    "byline": "Hozier",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Unreal Unearth (2023) end-to-end",
+      "durationMinutes": 62,
+      "instruction": "Listen to 'Eat Your Young' — the church-organ opener hides a trap beat, and the title is a Greek myth reference. Then 'Francesca' — the second circle of Hell, where the damned lovers say even damnation was worth it. The whole album is a descent; start at the top and go down."
+    },
+    "tags": [
+      "Folk",
+      "Soul",
+      "Irish",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-lana-del-rey-norman-fucking-rockwell",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Norman Fucking Rockwell!",
+    "teaser": "Lana Del Rey 2019 — the album critics called the best of the decade, a 67-minute piano-and-guitar epic produced by Jack Antonoff. The title is a joke about American culture, and the closing track 'Hope Is a Dangerous Thing for a Woman Like Me to Have' is a one-woman requiem.",
+    "imageUrl": "",
+    "byline": "Lana Del Rey",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Norman Fucking Rockwell! (2019) end-to-end",
+      "durationMinutes": 68,
+      "instruction": "Listen to 'Venice Bitch' — a 9-minute song that spends its last four minutes as a psychedelic guitar jam. Then 'The Greatest' — the line 'the culture is lit, and I had a ball' is a farewell to a dying California. The album is a love letter to a country she's already mourning."
+    },
+    "tags": [
+      "Pop",
+      "Alternative",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-travis-scott-utopia",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Utopia",
+    "teaser": "Travis Scott 2023 — his fourth album, a 73-minute odyssey built around the concept of a utopia he couldn't reach. Recorded with a rotating cast of 20+ producers, it debuted at #1 and its desert-set rollout included a live album premiere at the Pyramids of Giza.",
+    "imageUrl": "",
+    "byline": "Travis Scott",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Utopia (2023) end-to-end",
+      "durationMinutes": 73,
+      "instruction": "Listen to 'FE!N' — no hook, just a chant, over a single distorted synth. Then 'MELTDOWN' — the Drake feature that dissects their feud. The album is sequenced like a journey through a desert; notice how the second half turns psychedelic."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Trap",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-future-i-never-liked-you",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "I Never Liked You",
+    "teaser": "Future 2022 — his ninth studio album, a 16-track set that debuted at #1 and featured Tems, Gunna and Young Thug. Its lead single 'Wait for U' won a Grammy. The title is a direct diss to the industry that doubted him.",
+    "imageUrl": "",
+    "byline": "Future",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "I Never Liked You (2022) end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Listen to 'Wait for U' — the Tems-sampled song that won a Grammy, with Drake trading verses. Then 'PUFFIN ON ZOOTIEZ' — the album's centerpiece, named for his ad-lib. Future's genius is melodic repetition: every hook is built on a phrase you can't stop humming."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Trap",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-21-savage-savage-mode-2",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Savage Mode II",
+    "teaser": "21 Savage & Metro Boomin 2020 — the sequel to their 2016 breakout, a 15-track horror-movie of a trap album. It debuted at #1 and 'Runnin' and 'Mr. Right Now' became anthems. Metro's beats are the star: cinematic, string-laden, menacing.",
+    "imageUrl": "",
+    "byline": "21 Savage",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Savage Mode II (2020) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Runnin' — the beat switches from a warped vocal sample into a soul loop mid-song. Then 'Mr. Right Now' — the Drake feature recorded over FaceTime during lockdown. The album's horror-movie interludes are the thread: it's a trap slasher film."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Trap",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-playboi-carti-whole-lotta-red",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Whole Lotta Red",
+    "teaser": "Playboi Carti 2020 — a 24-song, 62-minute album of chaos that fans waited four years for. It's the sound of a rapper abandoning melody for pure rhythm and texture, and it became a template for the next decade of underground rap.",
+    "imageUrl": "",
+    "byline": "Playboi Carti",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Whole Lotta Red (2020) end-to-end",
+      "durationMinutes": 62,
+      "instruction": "Listen to 'Sky' — the synth loop never changes while Carti's voice morphs from deep to baby-high. Then 'New Tank' — notice the verses are made of sounds, not words. The album is deliberately exhausting; it's named for the luxury store that banned him."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Experimental",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-lil-uzi-vert-eternal-atake",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Eternal Atake",
+    "teaser": "Lil Uzi Vert 2020 — the long-delayed third album, named after a UFO-cult philosophy Uzi made up. It debuted at #1 and its first three songs all hit the top 10. The album's sci-fi aesthetic — including a fake religion — is the point.",
+    "imageUrl": "",
+    "byline": "Lil Uzi Vert",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Eternal Atake (2020) end-to-end",
+      "durationMinutes": 64,
+      "instruction": "Listen to 'Baby Pluto' — the song that reveals the album's fiction: Pluto is Uzi's alien alter ego. Then 'Silly Watch' — the deadpan flex anthem. The album opens with a fake church sermon and ends with a 2-minute piano ballad; the range is the joke."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Trap",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-young-thug-so-much-fun",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "So Much Fun",
+    "teaser": "Young Thug 2019 — his first album, and his first #1, after a decade of mixtapes. It's a 16-track showcase of the most imitated voice in modern rap, with features from Travis Scott, Lil Baby and Future.",
+    "imageUrl": "",
+    "byline": "Young Thug",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "So Much Fun (2019) end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Listen to 'Hot' — a single piano loop under Thug's pure-melody verse; the song is 3 minutes of him singing in tongues. Then 'The London' — the Travis Scott and J. Cole feature, recorded after a chance meeting in London. Try counting how many distinct voices he uses in one song."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Trap",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-denzel-curry-melt-mye-eyez-see-your-future",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Melt My Eyez See Your Future",
+    "teaser": "Denzel Curry 2022 — a jazz-rap meditation on mortality and growth, recorded after his grandmother's death and a life-threatening health scare. It features Thundercat, Robert Glasper and T-Pain, and it's his most mature, most collaborative album.",
+    "imageUrl": "",
+    "byline": "Denzel Curry",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Melt My Eyez See Your Future (2022) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to 'Walkin' — the song that changes genre mid-track as it shifts from rage to hope. Then 'Troubles' — the T-Pain duet about therapy. The album's title is a mantra: look at your mortality, and use it to grow. The jazz is real — Glasper plays keys throughout."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Jazz Rap",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-jpegmafia-veteran",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Veteran",
+    "teaser": "JPEGMAFIA 2018 — the album that made Peggy the king of glitch-rap, a 44-minute collage of broken beats, alarm bells, and pure confrontation. It was recorded in a year where he also produced for others and toured constantly.",
+    "imageUrl": "",
+    "byline": "JPEGMAFIA",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Veteran (2018) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to '1539 N. Calvert' — the song named after a Baltimore address, built on a broken drum machine. Then 'Baby I'm Bleeding' — the stalker voicemail sample is real. The album is designed to be uncomfortable: turn it up and notice the audio clipping is intentional."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Experimental",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-jid-the-forever-story",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Forever Story",
+    "teaser": "JID 2022 — his second album, named for his late grandmother, a 15-track epic that moves from boom-bap to trap to soul. It's considered one of the best rap albums of the 2020s, and its production credits read like a who's-who of the genre.",
+    "imageUrl": "",
+    "byline": "JID",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Forever Story (2022) end-to-end",
+      "durationMinutes": 65,
+      "instruction": "Listen to 'Surround Sound' — the chopped soul sample and the title's metaphor: his family's voices surrounding him as a kid. Then 'Kody Blu 31' — named for his grandmother's birthday, a sung hook that breaks the rap flow. The whole album is a family tree in song form."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Rap",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-little-simz-sometimes-i-might-be-introvert",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Sometimes I Might Be Introvert",
+    "teaser": "Little Simz 2021 — the acronym album (SIMBI) that won the Mercury Prize, a 19-track epic mixing orchestral hip-hop with soul and funk. It's a portrait of an introvert navigating fame, and it made Simz the voice of British rap.",
+    "imageUrl": "",
+    "byline": "Little Simz",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sometimes I Might Be Introvert (2021) end-to-end",
+      "durationMinutes": 66,
+      "instruction": "Listen to 'Introvert' — the 5-minute opener with no hook, just an orchestral declaration. Then 'Woman' — the video features over 100 real British women. The album's drama is its point: it swings from full orchestra to bare boom-bap, mirroring an introvert's social battery."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Rap",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-kali-uchis-orquideas",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Orquídeas",
+    "teaser": "Kali Uchis 2024 — her first all-Spanish album, named for the orchid, Colombia's national flower. It debuted at #2 in the US, the highest chart position ever for an all-Spanish album by a woman, and mixes reggaetón, cumbia and bolero.",
+    "imageUrl": "",
+    "byline": "Kali Uchis",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Orquídeas (2024) end-to-end",
+      "durationMinutes": 32,
+      "instruction": "Listen to 'Igual Que un Ángel' — the Peso Pluma duet that sets corrido vocals over dream-pop. Then 'Muñekita' — reggaetón meets cumbia, the album's strangest and best track. The album is 12 songs in 32 minutes, and every one is in Spanish; she wrote them with her own lyrics book."
+    },
+    "tags": [
+      "R&B",
+      "Latin",
+      "Colombian",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-rauw-alejandro-vice-versa",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Vice Versa",
+    "teaser": "Rauw Alejandro 2021 — the album that broke reggaetón's mold, mixing the genre with synth-pop, disco and even house. 'Todo de Ti' was the biggest Latin song of the year, and the album's title reflects its dualities: sweet and dark, old and new.",
+    "imageUrl": "",
+    "byline": "Rauw Alejandro",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vice Versa (2021) end-to-end",
+      "durationMinutes": 38,
+      "instruction": "Listen to 'Todo de Ti' — the 80s funk bassline and the total absence of reggaetón rhythm; that's why it stood out. Then '2:00 AM' — the Rosalía duet, recorded during lockdown, a late-night ballad. The album flips between two moods — vice, versa — as its title promises."
+    },
+    "tags": [
+      "Reggaetón",
+      "Pop",
+      "Puerto Rican",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-feid-mor-no-le-temas-a-la-oscuridad",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Mor, No Le Temas a la Oscuridad",
+    "teaser": "Feid 2023 — the album that turned 'Ferxxo' into a Latin superstar, a reggaetón record full of emo heartbreak anthems. Its title means 'Love, Don't Fear the Darkness', and its green-eyed emo aesthetic took over Latin pop.",
+    "imageUrl": "",
+    "byline": "Feid",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mor, No Le Temas a la Oscuridad (2023) end-to-end",
+      "durationMinutes": 33,
+      "instruction": "Listen to 'Normal' — the TikTok phenomenon about realizing a breakup is just normal. Then 'Luna' — the nursery-rhyme-simple chorus that became a stadium singalong. The album is 14 songs of heartbreak; Feid's whole persona — Ferxxo — is the emo kid who grew up to rule the club."
+    },
+    "tags": [
+      "Reggaetón",
+      "Latin Pop",
+      "Colombian",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-peso-pluma-genesis",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Génesis",
+    "teaser": "Peso Pluma 2023 — the album that took corridos tumbados global, a 15-track record of narcocorridos with trap beats and traditional sierreño guitars. 'Ella Baila Sola' became the first Mexican song to crack Spotify's global top 10.",
+    "imageUrl": "",
+    "byline": "Peso Pluma",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Génesis (2023) end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Listen to 'Ella Baila Sola' — the Eslabon Armado duet that made history; the guitar is pure sierreño over a trap groove. Then 'Lagunas' — the accordion solo is the emotional peak. The album is a genesis story: the corrido tradition reborn with a nasal, deadpan new voice."
+    },
+    "tags": [
+      "Corridos",
+      "Regional Mexican",
+      "Mexican",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-tems-born-in-the-wild",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Born in the Wild",
+    "teaser": "Tems 2024 — the long-awaited debut from Nigeria's most in-demand voice, a 16-track album that moves between Afrobeats, R&B and alternative soul. It features Asake and J. Cole, and was recorded over four years between tours.",
+    "imageUrl": "",
+    "byline": "Tems",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Born in the Wild (2024) end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Listen to 'Free Mind' — the anxiety-born anthem that spent years climbing charts before it peaked. Then 'Burning' — the opener she wrote to process her mother's death. Tems's voice is the album's instrument: it floats above every beat, never forcing anything."
+    },
+    "tags": [
+      "Afrobeats",
+      "R&B",
+      "Nigerian",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-ayra-starr-the-year-i-turned-21",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Year I Turned 21",
+    "teaser": "Ayra Starr 2024 — her second album, recorded between sold-out tours, a 17-track record that captures the chaos of being 21 and famous. It debuted at #3 on the Billboard World Albums chart and confirmed her as the new face of Afrobeats.",
+    "imageUrl": "",
+    "byline": "Ayra Starr",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Year I Turned 21 (2024) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Commas' — the opener, a statement of arrival with a beat that hits like a victory lap. Then 'Control' — the album's most personal track, about the cost of fame. She was 21 while making it, and the album sounds like that: restless, hungry, unapologetic."
+    },
+    "tags": [
+      "Afrobeats",
+      "Pop",
+      "Nigerian",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-raye-my-21st-century-blues",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "My 21st Century Blues",
+    "teaser": "Raye 2023 — the debut album from the songwriter who spent six years writing for other people, released independently after her label refused to put it out. It won the Brit Award for Album of the Year, and its 15 tracks are a therapy session set to music.",
+    "imageUrl": "",
+    "byline": "Raye",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "My 21st Century Blues (2023) end-to-end",
+      "durationMinutes": 46,
+      "instruction": "Listen to 'Escapism' — spoken-word verses over a jazz-swing hook that became her first #1. Then 'Ice Cream Man' — the devastating account of assault in the industry. She funded it herself after leaving a major label; it's her revenge and confession."
+    },
+    "tags": [
+      "Pop",
+      "R&B",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-fka-twigs-magdalene",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Magdalene",
+    "teaser": "FKA twigs 2019 — her second album, named after Mary Magdalene, a 39-minute art-pop epic about womanhood, faith and heartbreak. Co-produced with Nicolas Jaar and Daniel Lopatin, it's built on her signature mix of operatic vocals and brutalist beats.",
+    "imageUrl": "",
+    "byline": "FKA twigs",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Magdalene (2019) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Cellophane' — about being treated like glass, with a pole-dancing video that's a fall-and-rise metaphor. Then 'Mirrored Heart' — giving everything to someone who reflects nothing back. The album reframes Magdalene as every woman who's been written off."
+    },
+    "tags": [
+      "Art Pop",
+      "Electronic",
+      "British",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-caroline-polachek-desire-i-want-to-turn-into-you",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Desire, I Want to Turn Into You",
+    "teaser": "Caroline Polachek 2023 — her third solo album, a maximalist pop record with bagpipes, opera, and a 6-minute guitar solo. It was named album of the year by several major critics, and it sounds like nothing else released that year.",
+    "imageUrl": "",
+    "byline": "Caroline Polachek",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Desire, I Want to Turn Into You (2023) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Welcome to My Island' — bagpipe-like synth and a real guitar solo, about wanting to be consumed. Then 'Bunny Is a Rider' — the hit whose title is nonsense she invented. Her whistle register appears mid-song without warning."
+    },
+    "tags": [
+      "Art Pop",
+      "Electronic",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-beabadoobee-beatopia",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Beatopia",
+    "teaser": "Beabadoobee 2022 — her second album, named after the imaginary world she invented as a 7-year-old to escape school bullying. It's a bedroom-pop record that stretches into shoegaze, bossa nova and folk, with the 90s sound she's famous for.",
+    "imageUrl": "",
+    "byline": "Beabadoobee",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Beatopia (2022) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'the perfect pair' — the song about a relationship too perfect to last. Then '10:36' — named for the timestamp when she wrote the hook. The album's title is a real place she drew as a kid; the music is what that place sounds like grown up."
+    },
+    "tags": [
+      "Indie Pop",
+      "Bedroom Pop",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-girl-in-red-if-i-could-make-it-go-quiet",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "If I Could Make It Go Quiet",
+    "teaser": "girl in red 2021 — the debut album from the Norwegian bedroom-pop artist, a 10-song record about anxiety, heartbreak and queer joy. It made her a global star and an icon for a generation of queer listeners.",
+    "imageUrl": "",
+    "byline": "girl in red",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "If I Could Make It Go Quiet (2021) end-to-end",
+      "durationMinutes": 27,
+      "instruction": "Listen to 'Serotonin' — the song about intrusive thoughts that literally glitches and distorts when the thoughts win. Then 'we fell in love in october' — the gentle anthem that became a queer coming-out soundtrack. The album is 27 minutes: short, and every second counts."
+    },
+    "tags": [
+      "Indie Pop",
+      "Bedroom Pop",
+      "Norwegian",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-conan-gray-superache",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Superache",
+    "teaser": "Conan Gray 2022 — his second album, a 12-track pop record about grief, friendship and growing up in a small Texas town. The title means 'super-pain', and the album's heartbreak anthems made him one of the defining voices of sad-pop.",
+    "imageUrl": "",
+    "byline": "Conan Gray",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Superache (2022) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Memories' — the song about losing a friend who's still alive. Then 'The Exit' — the album's thesis, about a relationship that ended before it started. He wrote the album in his childhood bedroom; the small-town loneliness is the thread running through every song."
+    },
+    "tags": [
+      "Pop",
+      "Indie Pop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-steve-lacy-gemini-rights",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Gemini Rights",
+    "teaser": "Steve Lacy 2022 — his second solo album, 10 songs made largely on his iPhone and laptop. It won a Grammy for Best Progressive R&B Album, and 'Bad Habit' became the biggest song of the year — a song recorded on a phone.",
+    "imageUrl": "",
+    "byline": "Steve Lacy",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Gemini Rights (2022) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to 'Bad Habit' — the GarageBand-made hit; listen for the phone-quality textures in the drums. Then 'Mercury' — the bassline is the hook. The album's title is a joke about astrology; the songs are a post-breakup rebound set to neo-soul."
+    },
+    "tags": [
+      "R&B",
+      "Neo-Soul",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-glass-animals-dreamland",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Dreamland",
+    "teaser": "Glass Animals 2020 — their third album, a memory-palace of frontman Dave Bayley's childhood, made during his sister's illness and after the band's drummer nearly died. It features 'Heat Waves', the slowest-burning #1 hit in chart history, and 'Tokyo Drifting' with Denzel Curry.",
+    "imageUrl": "",
+    "byline": "Glass Animals",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Dreamland (2020) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Heat Waves' — the flooded-world video and the lyrics about missing someone until it feels like drowning. Then 'Space Ghost Coast to Coast' — the song about a friendship ended by conspiracy theories. The album's interludes are real audio from Bayley's childhood tapes."
+    },
+    "tags": [
+      "Indie Pop",
+      "Alternative",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-wednesday-rat-saw-god",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Rat Saw God",
+    "teaser": "Wednesday 2023 — the Asheville band's fourth album, a 47-minute collision of shoegaze and country that made them the most talked-about indie band of the year. Frontwoman Karly Hartzman screams over pedal steel; it shouldn't work, and it does.",
+    "imageUrl": "",
+    "byline": "Wednesday",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Rat Saw God (2023) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Listen to 'Bull Believer' — the 8-minute closer that builds to a wordless scream of catharsis. Then 'Chosen to Deserve' — the pedal steel cutting through distortion. The album is named after a tattoo Hartzman saw on a stranger; the title is a promise: no mercy for the mediocre."
+    },
+    "tags": [
+      "Shoegaze",
+      "Country",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-indigo-de-souza-any-shape-you-take",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Any Shape You Take",
+    "teaser": "Indigo De Souza 2021 — her breakthrough second album, a 13-song set of raw, confessional indie rock recorded in Asheville. 'Kill Me' became an anthem for the heartbroken, and the album made her a hero of the new American sad-rock scene.",
+    "imageUrl": "",
+    "byline": "Indigo De Souza",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Any Shape You Take (2021) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to 'Kill Me' — the country-tinged diary entry that builds into a scream; the title is a joke about a breakup. Then 'Real Pain' — the song about a friend's car accident, written years later. Her voice cracks on purpose; the imperfection is the performance."
+    },
+    "tags": [
+      "Indie Rock",
+      "Alternative",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-big-thief-dragon-new-warm-mountain",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Dragon New Warm Mountain I Believe in You",
+    "teaser": "Big Thief 2022 — a 20-song double album recorded in five locations over five months, from a cabin to a rock club. It's a sprawling American folk record that deliberately refuses a single style, and it won Album of the Year at the 2023 Libera Awards.",
+    "imageUrl": "",
+    "byline": "Big Thief",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Dragon New Warm Mountain I Believe in You (2022) end-to-end",
+      "durationMinutes": 80,
+      "instruction": "Listen to 'Simulation Swarm' — the 6-minute song with four guitar solos, recorded live in one take. Then 'Not' — the song that dissolves into noise at the end. The album is 80 minutes; treat it like a long conversation, not a single record."
+    },
+    "tags": [
+      "Folk",
+      "Indie Rock",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-arca-kick-i",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Kick I",
+    "teaser": "Arca 2020 — the first of four albums she released in a year, a 40-minute set that reimagines reggaetón as avant-garde art. With guests Rosalía, Björk, Shygirl and SOPHIE, it's the sound of a producer at the peak of her powers refusing every genre rule.",
+    "imageUrl": "",
+    "byline": "Arca",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kick I (2020) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'KLK' — the Rosalía collab that sets flamenco-adjacent vocals over a brutalist reggaetón beat. Then 'Mequetrefe' — a Spanish insult turned into an anthem. The album's four 'Kick' siblings exist because she had too much material; this one is the statement of intent."
+    },
+    "tags": [
+      "Electronic",
+      "Experimental",
+      "Venezuelan",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-danny-brown-uknowhatimsayin",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "uknowhatimsayin¿",
+    "teaser": "Danny Brown 2019 — his fifth album, produced entirely by Q-Tip of A Tribe Called Quest, a 32-minute set of surrealist, funky rap. It's the most accessible Danny Brown album and one of the strangest; both are true at once.",
+    "imageUrl": "",
+    "byline": "Danny Brown",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "uknowhatimsayin¿ (2019) end-to-end",
+      "durationMinutes": 32,
+      "instruction": "Listen to '3 Tearz' — the Run-DMC-style posse cut produced by Q-Tip, whose hand is all over the album's clean funk. Then 'Negro Spiritual' — the jazz sample and the album's emotional core. Q-Tip made Danny keep his weirdest instincts; the title is his shrug."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Experimental",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-earl-sweatshirt-some-rap-songs",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Some Rap Songs",
+    "teaser": "Earl Sweatshirt 2018 — his third album, 24 minutes of grief made after his father's death. The beats are warped, the raps are whispers, and it's one of the most devastating albums in hip-hop. It's best listened to as a single poem.",
+    "imageUrl": "",
+    "byline": "Earl Sweatshirt",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Some Rap Songs (2018) end-to-end",
+      "durationMinutes": 24,
+      "instruction": "Listen to 'Nowhere2go' — the warped soul sample and the barely-there verse, a whisper of grief. Then 'December 24' — named for his father's death date, the closing elegy. The album is 24 minutes and 15 songs; listen to it straight through, once."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Abstract",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-killer-mike-michael",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Michael",
+    "teaser": "Killer Mike 2023 — his first solo album in 11 years, named for his birth name, a 40-minute soul-rap record about the Black men who raised him. It won a Grammy for Best Rap Album, and its features include André 3000 and CeeLo Green.",
+    "imageUrl": "",
+    "byline": "Killer Mike",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Michael (2023) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Scientists & Engineers' — the André 3000 feature that's his first rap verse in years, a prayer-like meditation on Black excellence. Then 'Motherless' — the title track's emotional core, about his mother's death. The album is a eulogy that's also a celebration."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Soul",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-asap-rocky-testing",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Testing",
+    "teaser": "A$AP Rocky 2018 — his third album, an experimental record whose title is literal: he's testing new sounds. From gospel choir samples to grime beats, it's Rocky's most adventurous album, and 'Praise the Lord' with Skepta became a global hit.",
+    "imageUrl": "",
+    "byline": "A$AP Rocky",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Testing (2018) end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Listen to 'Praise the Lord (Da Shine)' — the Skepta collab made from a beat a stranger sent as a joke. Then 'A$AP Forever' — the choir sample and the video featuring his late friend A$AP Yams. The album's genre-hopping is the test; nothing repeats."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Cloud Rap",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-gunna-wunna",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Wunna",
+    "teaser": "Gunna 2020 — his second studio album, a 50-minute masterclass in melodic trap. The title is 'winner' in his family's dialect, and the album's warm, syrupy production became the sound of Atlanta's next generation.",
+    "imageUrl": "",
+    "byline": "Gunna",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Wunna (2020) end-to-end",
+      "durationMinutes": 50,
+      "instruction": "Listen to 'Skybox' — the opener that sounds like a stadium filling up. Then 'Dollaz on My Head' — the Young Thug collab that shows his lineage. Gunna's verses are more melody than rap; count how many words he actually raps in a verse, then how many melodies he hums."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Trap",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-tame-impala-currents",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Currents",
+    "teaser": "Tame Impala 2015 — the album that turned Kevin Parker's bedroom recordings into a global phenomenon, a psych-pop masterpiece about change and growth. 'The Less I Know the Better' and 'Let It Happen' made it the defining indie album of the mid-2010s.",
+    "imageUrl": "",
+    "byline": "Tame Impala",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Currents (2015) end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Listen to 'Let It Happen' — the 8-minute opener that glitches and stutters in the middle, a metaphor for letting go. Then 'The Less I Know the Better' — the disco-funk hit. Parker plays every instrument on the album himself; it's a one-man band's diary of a breakup."
+    },
+    "tags": [
+      "Psych-Pop",
+      "Alternative",
+      "Australian",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-porter-robinson-nurture",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Nurture",
+    "teaser": "Porter Robinson 2021 — the long-awaited second album from the EDM prodigy, made over five years while he recovered from depression. It samples his own voice as an instrument, uses real rain and birdsong, and turns grief into a euphoric, hopeful pop record.",
+    "imageUrl": "",
+    "byline": "Porter Robinson",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Nurture (2021) end-to-end",
+      "durationMinutes": 59,
+      "instruction": "Listen to 'Something Comforting' — the song about finding comfort in art while depressed. Then 'Look at the Sky' — the turning point where the album finds hope. He recorded field sounds and his own voice as textures; the album is a garden grown out of a dark room."
+    },
+    "tags": [
+      "Electronic",
+      "Hyperpop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
   }
 ]
