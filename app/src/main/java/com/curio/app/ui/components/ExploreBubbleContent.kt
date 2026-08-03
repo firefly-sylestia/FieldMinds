@@ -183,19 +183,24 @@ fun ExploreBubbleContent(
         shadowElevation = 0.dp,
         modifier = modifier
             .then(dragModifier)
-            .onSizeChanged { w, h ->
+            .onSizeChanged { size ->
                 // Only while the expand/collapse transition runs — timer
                 // ticks change the pill width by a pixel and must not move
                 // the window.
-                if (sizeAnimating) onSizeChanged(w, h)
+                if (sizeAnimating) onSizeChanged(size.width, size.height)
             }
             // The minimized pill is tappable anywhere to expand; the expanded
             // bubble's buttons handle their own input. Applied conditionally
             // so the expanded bubble carries no dead clickable semantics.
             .then(if (minimized) Modifier.clickable { minimized = false } else Modifier)
     ) {
+        // targetState overload (NOT transitionState — that overload doesn't
+        // exist in the resolved animation version and fails CI). The
+        // updateTransition above still drives the corner morph + isRunning
+        // gate; both animate on the same `minimized` flip, so the size and
+        // shape stay in sync.
         AnimatedContent(
-            transitionState = transition,
+            targetState = minimized,
             transitionSpec = {
                 // The incoming state rises in from just below as the outgoing
                 // glides up and fades — reads as the bubble unfurling when it
