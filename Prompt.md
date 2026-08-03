@@ -2,30 +2,38 @@
 
 ## Latest Request (COMPLETED)
 
-**Spin shuffle reel is now fluid + glitch-free at start; peek cards wipe like a slot reel; dice tumbles properly and settles instead of stopping**
+**Light-mode + Material gradient fixes (detail hero + washes), peek-card design suggestions file, and a small-screen adaptive system for the Shuffle page**
 
 ### What was asked
 
-"the shuffle spin page animations are fine its just the peek cards animation is not fluid and smooth to make user feel like its shuffling and also when the animation starts it looks glitchy so fix it. and also make the dice animation proper loop and not just stops and turns into a dice but a proper smooth animation."
+"in light mode the red color the green teal and the sky blue blend gradient in the detail page doesnt mat ch the color it should be and it looks off. and also in metaril theme all of the blended colors look bad. so find me a solution for the material theme too. and give a suggestion in a file for the peek card colors for making them more beautiful and maybe also suggest a design and text size chnage for that. and lastly the shuffle page looks too big that in a small screen with category and filters gets hidden so add a system that detects small screen and adjust itsel without chnaging the current look and size."
+
+### Root causes
+
+1. **Light-mode wash was on-hue but almost colorless.** `lightAccentTint` defaults (0.22 sat / 0.88 light) produced pastels within a few RGB points of each other for red/teal/sky (verified: #E7DADD / #DAE7E6 / #DAE2E7) — so Movies, Visual Art and Science detail pages all wore the same near-white beige wash and the hero blend melted into it instead of into the category color. HSL math confirmed the previous hue fix held (hues 345°/175°/201° constant through the glide) — the remaining problem was saturation.
+2. **Material theme polluted every category hue.** `themedAccent()` RGB-lerped each accent 40% toward the dynamic primary — with a blue wallpaper red (Movies) turned purple (#8A2F8A) and amber mauve; with an orange wallpaper teal and sky sank to grey-olive (#6B7842 / #647161). Every blended gradient/card in Material style looked muddy.
+3. **Shuffle page overflows on short screens.** Fixed stack ≈ 830dp (top bar + 44dp spacer + 444dp carousel + spin button + Categories/Filter bar); on small phones the NavHost grants ~510–650dp, the weight spacer collapses to zero and the BottomCta is pushed off-screen — "category and filters gets hidden".
 
 ### What was done
 
-1. **No more glitchy start (the big one)** — the fan was re-shuffled EVERY spin (`remember(shuffleCount, filteredPool)`), so at spin start all five cards jumped to arbitrary topics in one frame before the reel began. Now the fan is a stable **hand** dealt once per pool (`buildDeckHand`, centered on the front topic — or the restored landed topic after nav-return) and the reel rotates through it: `cycleIndex` persists across spins (no longer keyed on shuffleCount) and the idle fan reads the SAME window as the spinning reel (`resolveTopicForSlot` is now a single cycleIndex+slot lookup; the old idle branch used a different fixed window). A spin therefore starts from the current spread as a seamless +1 continuation — zero jump. The hand re-deals around the landed topic at landing (masked by the confetti) so the deck stops on a coherent spread and the next spin starts from it.
-2. **Peek cards wipe like a slot reel** — every slot now rises THROUGH the card window at full height (in from below, out the top) clipped to the card, with **no fades** so the incoming cleanly covers the outgoing. Fixes: the old 1/3-height slide with an inverted top-peek direction (top card glided BACKWARDS while the bottom went forward — incoherent), and wipe durations that matched the 200ms tick floor exactly (every wipe got interrupted — the jitter). Durations now sit UNDER the tick floor (190/160ms) so each step completes before the next tick. Hero content reel synced to the same rhythm (190/160, height/2 rise).
-3. **Dice tumbles properly and settles** — the in-button tumble now loops seamlessly (rotationally symmetric dot pattern makes the 360° wrap invisible; added a slow vertical bob so it reads as a die shaking in a cup). At landing the dots **morph** into the resting dice via AnimatedContent (spring scale-in + fade) instead of a hard swap — and the resting die gets a slow idle breathe so it never looks frozen.
-
-**`SpinScreen.kt` only** — state + animation changes; no data/API changes.
+1. **Light mode — the wash now READS its category (`CurioColors.kt`).** `lightAccentTint` defaults raised 0.22/0.88 → 0.32/0.85; `lightSurfaceTint` (cards/chips) 0.28/0.89 → 0.36/0.86. New washes: rose #E5CDD2, teal #CDE5E3, sky #CDDCE5 — clearly distinct pastels, DeepPlum ink ≥10.8:1 everywhere. The detail hero's final stop IS the wash, so its blend now ends on the real category color app-wide (Spin/Reveal/Cabinet/Save too).
+2. **Material theme — category accents stay true (`CategoryInk.kt`).** `themedAccent()` now returns the canonical accent in every style (the 40% RGB blend toward the dynamic primary removed). The Material style keeps its device identity through the dynamic color scheme (surfaces/backgrounds/controls come from the wallpaper); category colors stay the researched hues, so cards, heroes and mixed-deck blends stay vivid. KDocs + Settings description + `app/AGENTS.md` + `AppPreferences` stale "~40% shade" text updated.
+3. **Small-screen system (`SpinScreen.kt`, v6.11).** Root layout is now `BoxWithConstraints`; when the granted height < `SpinCompactThresholdHeight` (680dp) the page switches to a compact layout: the deck + spin button move into a vertically scrollable middle band pinned between the top bar and the pinned Categories/Filter bar (controls never hidden), and every fixed size steps down (`SpinCompactDeckScale` 0.88: carousel 444→390, hero ticket 286×310→252×273, peek cards + fan offsets ×0.88, spin button 126/108→112/96 with orbit box 176→156, spacers/paddings tightened). New `ColumnScope.SpinDeckSection` shares the deck between branches. Above the threshold the layout is byte-for-byte the original — normal screens unchanged.
+4. **Peek-card suggestions file (`app/PEEK_CARD_DESIGN_SUGGESTIONS.md`, new).** Concrete proposals — top-lit two-stop gradient fill, category-tinted hairlines (reuse `categoryBorder()`), soft shadows, one-point fan bias, two-line 16sp near titles vs 13sp far hints — marked SUGGESTIONS ONLY pending user review (design direction comes from the user).
 
 ### Validation
 
-- `check_braces.py` BALANCED.
-- Grep: zero stale `displayPool` val refs outside the Carousel param; `resolveTopicForSlot` has no leftover `shuffling` callers.
-- Code-reviewer pass (no blockers): state ordering verified (hand/cycleIndex declared after landedTopic, both before the shuffle effect), spin-start seamlessness verified (front resolves to hand[0] == landed topic → no transition fires), applied its refinements: hand's initial deal centers on the restored landed topic (keyed on filteredPool only so spin-start's landedTopicName=null never re-deals) + dropped the shuffling-branch fades for a crisp wipe line.
+- `check_braces.py` BALANCED on all 6 edited Kotlin files.
+- Python HSL verification: new washes on-hue (345/175/201/245/26/349°) with ≥10.8:1 ink contrast; the Material 40%-blend damage quantified (red→purple, teal→olive) before removal.
+- Grep: zero stale `return@Carousel`, old fixed heights, or remaining accent×primary blends (remaining `colorScheme.primary` uses are generic M3 controls); docs no longer describe the ~40% shade.
+- Code-reviewer pass: compile-safe (BoxWithConstraints/maxHeight, Dp×Float, ColumnScope extension, verticalScroll in a weight(1f) column), normal-screen path verified byte-identical, hoisted tap lambda equivalent.
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
 
 ---
 
 ## Previous Requests (COMPLETED)
+
+**Spin shuffle reel fluidity + peek wipe + dice tumble** — fan dealt once per pool (no start glitch), peek wipes rise through the card window at full height (190/160ms, no fades), dice tumbles on a seamless loop and morphs into the resting die. See the `feat: fluid shuffle reel…` commit.
 
 **Floating pill + explore notification trimmed to the essentials; expanded pill redesigned (no more circle look); topic slow-scrolls (marquee)**
 

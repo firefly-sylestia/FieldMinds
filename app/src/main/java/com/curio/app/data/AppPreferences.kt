@@ -25,8 +25,10 @@ object AppPreferences {
      * Theme style constants — the visual identity Curio wears:
      *  - [THEME_STYLE_DEFAULT] — Curio's warm cream palette + category tints.
      *  - [THEME_STYLE_AMOLED] — forced dark, pure-black surfaces, tints off.
-     *  - [THEME_STYLE_MATERIAL] — the device's Material dynamic colors; each
-     *    category accent becomes a shade of the device palette, tints off.
+     *  - [THEME_STYLE_MATERIAL] — the device's Material dynamic colors for
+     *    surfaces/backgrounds/controls; category accents stay the true
+     *    researched colors (the old ~40% blend toward the dynamic primary
+     *    made reds turn purple and teals turn olive — dropped), tints off.
      */
     const val THEME_STYLE_DEFAULT = "default"
     const val THEME_STYLE_AMOLED = "amoled"

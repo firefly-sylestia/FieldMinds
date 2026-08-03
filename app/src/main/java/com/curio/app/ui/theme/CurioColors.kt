@@ -141,14 +141,23 @@ private fun fromHsl(h: Float, s: Float, l: Float): Color {
  * hue family, so the hero's accent → wash fade stays on-hue (deep teal →
  * pale teal, sky → pale azure, red → rose) with no foreign-color band.
  *
+ * The defaults were raised from the original (0.22/0.88) so the pastel
+ * actually READS as its category color: at the old values red/teal/sky
+ * washes all landed within a few RGB points of each other (near-white
+ * beige), so a Movies page, a Visual Art page and a Science page looked
+ * the same pale wash and the detail hero's blend melted into it instead
+ * of into the category color. (0.32/0.85) keeps each family visibly
+ * distinct — rose, mint, azure — while staying light enough for the dark
+ * maroon ink on top (≥ 10.8:1 contrast everywhere).
+ *
  * @param saturation Saturation of the pastel tint (0..1).
  * @param lightness  Lightness of the pastel tint (0..1) — airy like the
  *   cream paper, so tinted pages stay light for the maroon ink on top.
  */
 internal fun lightAccentTint(
     accent: Color,
-    saturation: Float = 0.22f,
-    lightness: Float = 0.88f
+    saturation: Float = 0.32f,
+    lightness: Float = 0.85f
 ): Color {
     val a = toHsl(accent)
     return fromHsl(a.h, saturation.coerceIn(0f, 1f), lightness.coerceIn(0f, 1f))

@@ -23,9 +23,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
@@ -622,10 +626,34 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         animationSpec = CurioMotion.Springs.Snappy,
         label = "buttonPulse"
     )
+
+    // ── Deck interaction callbacks — shared by the normal and compact
+    //    layout branches (the Carousel call lives in SpinDeckSection) ─
+    val onDeckCardTap: () -> Unit = {
+        if (!shuffling && filteredPool.isNotEmpty()) {
+            val resolved = landedTopic
+                ?: landedTopicName?.let { name ->
+                    TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
+                }
+            if (resolved != null) {
+                landingAlreadyOpened = true
+                navController.navigate(CurioRoutes.revealFor(resolved.categoryId.routeSlug, resolved.name)) {
+                    launchSingleTop = true
+                }
+            }
+        }
+    }
+    val onSpinClick: () -> Unit = {
+        if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++
+    }
+
     // ── Overall layout ─────────────────────────────────────────────────
     // Paper surfaces sit directly on the quiet theme background. All depth
     // comes from opaque cards, crisp rules, and elevation—not ambient washes.
-    Box(
+    // v6.11 — BoxWithConstraints measures the height this screen is actually
+    // granted (see [SpinCompactThresholdHeight]): short screens switch to
+    // the compact layout below, normal screens keep this exact layout.
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             // Category tint wash — the Spin page wears a wash of the deck's
@@ -635,6 +663,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // visibly repaints the page in its own blended color story.
             .background(pageWash)
     ) {
+        // True when the granted height is too short for the full fixed
+        // stack — the deck/button band then scrolls between pinned bars.
+        val compactHeight = maxHeight < SpinCompactThresholdHeight
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
         //    space around the deck still carries a whisper of the Curio
@@ -659,60 +690,60 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         )
 
-        // ── Breathing room — keeps the header off the deck ────────────
-        Spacer(Modifier.height(44.dp))
-
-        // ── 2. Carousel (interactive cards) ─────────────────────────
-        // Tapping the center card opens a landed topic only; the bottom
-        // Shuffle CTA owns starting or re-starting the shuffle.
-        Carousel(
-            cat = deckCat,
-            deckAccent = deckAccent,
-            deckGradient = deckGradient,
-            isMixed = isMixedDeck,
-            mixSeed = mixSeed,
-            displayPool = hand,
-            cycleIndex = cycleIndex,
-            shuffling = shuffling,
-            landedTopic = landedTopic,
-            opening = isOpening,
-            enabled = filteredPool.isNotEmpty() && !shuffling,
-            onCardTap = {
-                if (shuffling || filteredPool.isEmpty()) return@Carousel
-                val resolved = landedTopic
-                    ?: landedTopicName?.let { name ->
-                        TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
-                    }
-                if (resolved != null) {
-                    landingAlreadyOpened = true
-                    navController.navigate(CurioRoutes.revealFor(resolved.categoryId.routeSlug, resolved.name)) {
-                        launchSingleTop = true
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // ── 3. Center spin button — the ONLY shuffle CTA (v6) ──────
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp, bottom = 20.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            SpinButton(
-                tint = deckAccent,
-                isShuffling = shuffling,
+        if (compactHeight) {
+            // ── Compact layout (small screens) ────────────────────────
+            // The deck + spin button scroll inside the space between the
+            // pinned top bar and the pinned Categories/Filter bar, so the
+            // controls are never pushed off-screen; sizes step down via
+            // SpinDeckSection(compact = true).
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                SpinDeckSection(
+                    compact = true,
+                    cat = deckCat,
+                    deckAccent = deckAccent,
+                    deckGradient = deckGradient,
+                    isMixed = isMixedDeck,
+                    mixSeed = mixSeed,
+                    displayPool = hand,
+                    cycleIndex = cycleIndex,
+                    shuffling = shuffling,
+                    landedTopic = landedTopic,
+                    opening = isOpening,
+                    enabled = filteredPool.isNotEmpty() && !shuffling,
+                    buttonPulse = buttonPulse,
+                    onCardTap = onDeckCardTap,
+                    onSpinClick = onSpinClick
+                )
+                // Breathing room under the spin button before the CTA.
+                Spacer(Modifier.height(10.dp))
+            }
+        } else {
+            // ── Normal layout — the exact pre-compact stack ──────────
+            SpinDeckSection(
+                compact = false,
+                cat = deckCat,
+                deckAccent = deckAccent,
+                deckGradient = deckGradient,
+                isMixed = isMixedDeck,
+                mixSeed = mixSeed,
+                displayPool = hand,
+                cycleIndex = cycleIndex,
+                shuffling = shuffling,
                 landedTopic = landedTopic,
-                pulseScale = buttonPulse,
-                enabled = filteredPool.isNotEmpty(),
-                onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ }
+                opening = isOpening,
+                enabled = filteredPool.isNotEmpty() && !shuffling,
+                buttonPulse = buttonPulse,
+                onCardTap = onDeckCardTap,
+                onSpinClick = onSpinClick
             )
+            // ── 4. Breathing room — keeps the bottom bar pinned to the
+            //    screen edge instead of leaving dead space below it ─────
+            Spacer(Modifier.weight(1f))
         }
-
-        // ── 4. Breathing room — keeps the bottom bar pinned to the
-        //    screen edge instead of leaving dead space below it ─────
-        Spacer(Modifier.weight(1f))
 
         // ── 5. Bottom bar — Categories · Filter (controls only) ────
         // No duplicate shuffle button: the big center SpinButton above
@@ -780,6 +811,79 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
             onComplete = {}
+        )
+    }
+}
+
+/**
+ * The deck section of the Spin layout — breathing spacer, card carousel and
+ * center spin button — shared by the normal and compact layout branches.
+ *
+ * [compact] switches between the two size variants: normal keeps the exact
+ * pre-v6.11 measurements (44dp spacer, 444dp carousel, 32/20dp button
+ * padding); compact tightens them (20dp spacer, 390dp carousel, 16/10dp
+ * padding) and scales the deck itself down via the carousel's compact flag.
+ */
+@Composable
+private fun ColumnScope.SpinDeckSection(
+    compact: Boolean,
+    cat: CurioCategory,
+    deckAccent: Color,
+    deckGradient: List<Color>,
+    isMixed: Boolean,
+    mixSeed: Int,
+    displayPool: List<CurioTopic>,
+    cycleIndex: Int,
+    shuffling: Boolean,
+    landedTopic: CurioTopic?,
+    opening: Boolean,
+    enabled: Boolean,
+    buttonPulse: Float,
+    onCardTap: () -> Unit,
+    onSpinClick: () -> Unit
+) {
+    // ── Breathing room — keeps the header off the deck (tighter when the
+    //    screen is short so the deck fits between the pinned bars) ─────
+    Spacer(Modifier.height(if (compact) 20.dp else 44.dp))
+
+    // ── Carousel (interactive cards) ───────────────────────────────
+    // Tapping the center card opens a landed topic only; the bottom
+    // Shuffle CTA owns starting or re-starting the shuffle.
+    Carousel(
+        cat = cat,
+        deckAccent = deckAccent,
+        deckGradient = deckGradient,
+        isMixed = isMixed,
+        mixSeed = mixSeed,
+        displayPool = displayPool,
+        cycleIndex = cycleIndex,
+        shuffling = shuffling,
+        landedTopic = landedTopic,
+        opening = opening,
+        enabled = enabled,
+        compact = compact,
+        onCardTap = onCardTap,
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    // ── Center spin button — the ONLY shuffle CTA (v6) ──────────────
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = if (compact) 16.dp else 32.dp,
+                bottom = if (compact) 10.dp else 20.dp
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        SpinButton(
+            tint = deckAccent,
+            isShuffling = shuffling,
+            landedTopic = landedTopic,
+            pulseScale = buttonPulse,
+            enabled = enabled,
+            compact = compact,
+            onClick = onSpinClick
         )
     }
 }
@@ -1259,6 +1363,22 @@ private fun CompactChip(
 /** Rest scale the hero card settles to after a shuffle lands. */
 private const val LandedRestScale = 1.02f
 
+/**
+ * Small-screen adaptive layout (v6.11). The Spin stack — top bar + 44dp
+ * spacer + 444dp deck + spin button + Categories/Filter bar — needs ~830dp;
+ * on short screens the bottom CTA gets pushed off-screen. When the height
+ * the NavHost actually grants this screen (after status bar, bottom nav and
+ * gesture insets) drops below this threshold, the page switches to the
+ * compact layout: the deck + button move into a vertically scrollable
+ * middle band pinned between the top bar and the bottom CTA, and every
+ * fixed size steps down by [SpinCompactDeckScale]. Above the threshold the
+ * layout is byte-for-byte the original — normal screens never change.
+ */
+private val SpinCompactThresholdHeight = 680.dp
+
+/** Deck scale factor applied in compact (short-screen) mode. */
+private const val SpinCompactDeckScale = 0.88f
+
 @Composable
 private fun Carousel(
     cat: CurioCategory,
@@ -1272,14 +1392,18 @@ private fun Carousel(
     landedTopic: CurioTopic?,
     opening: Boolean,
     enabled: Boolean,
+    compact: Boolean = false,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val poolSize = displayPool.size
+    // v6.11 — compact screens shrink the whole fan ~12% so the deck keeps
+    // its proportions inside the shorter box.
+    val deckScale = if (compact) SpinCompactDeckScale else 1f
     Box(
         // v6.3 — grew with the hero ticket so the bigger card keeps its
         // breathing room above/below.
-        modifier = modifier.height(444.dp),
+        modifier = modifier.height(if (compact) 390.dp else 444.dp),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -1299,6 +1423,7 @@ private fun Carousel(
                         gradient = deckGradient,
                         isMixed = isMixed,
                         mixSeed = mixSeed,
+                        scale = deckScale,
                         glyph = cat.iconGlyph,
                         topic = topic,
                         cat = cat,
@@ -1311,6 +1436,7 @@ private fun Carousel(
                 } else {
                     PeekCard(
                         slot = slot,
+                        scale = deckScale,
                         accent = deckAccent,
                         cat = cat,
                         topic = topic,
@@ -1371,6 +1497,7 @@ private fun HeroTicketCard(
     gradient: List<Color>,
     isMixed: Boolean,
     mixSeed: Int,
+    scale: Float = 1f,
     glyph: String,
     topic: CurioTopic?,
     cat: CurioCategory,
@@ -1382,8 +1509,10 @@ private fun HeroTicketCard(
 ) {
     // v6.3 — slightly bigger ticket (~6% up) so the hero card reads a
     // touch more prominent on the deck.
-    val w = 286.dp
-    val h = 310.dp
+    // v6.11 — compact screens scale the whole ticket down (small phones);
+    // proportions and internal paddings stay identical.
+    val w = 286.dp * scale
+    val h = 310.dp * scale
     // Mixed decks render the multi-accent stops in a non-linear arrangement
     // (diagonal sweep / reversed diagonal / radial glow, keyed off the
     // deck's category set); single decks keep the plain vertical theme-aware
@@ -1684,6 +1813,7 @@ private fun HeroTicketCard(
 @Composable
 private fun PeekCard(
     slot: Int,
+    scale: Float = 1f,
     accent: Color,
     cat: CurioCategory,
     topic: CurioTopic?,
@@ -1694,20 +1824,22 @@ private fun PeekCard(
     // Slightly lower + wider fan: the whole deck sits a few px closer to
     // the spin button and the far pair is spread a touch more so each
     // layer reads as a separate card instead of one blurred pile.
+    // v6.11 — compact screens scale the fan offsets + card sizes down so
+    // the deck keeps the same look, just tighter on short screens.
     val yOff = when (slot) {
-        -2 -> -178f
-        -1 -> -134f
-        1 -> 146f
-        else -> 188f
+        -2 -> -178f * scale
+        -1 -> -134f * scale
+        1 -> 146f * scale
+        else -> 188f * scale
     }
     // v6.5 — peek cards grew ~13% so the topic title inside each background
     // card has room to read instead of hiding behind the fan. Proportions
     // are kept — only the overall size went up, never the shape.
-    val w = if (far) 328.dp else 360.dp
-    val h = if (far) 96.dp else 116.dp
+    val w = (if (far) 328.dp else 360.dp) * scale
+    val h = (if (far) 96.dp else 116.dp) * scale
     // Corner radius scales with card height so the slim far deck cards
     // keep crisp, proportional corners instead of over-rounded ones.
-    val corner = if (far) 15.dp else 19.dp
+    val corner = (if (far) 15.dp else 19.dp) * scale
     // Level-based shading — near cards step one shade down from the hero,
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.
@@ -1825,12 +1957,19 @@ private fun SpinButton(
     landedTopic: CurioTopic?,
     pulseScale: Float,
     enabled: Boolean,
+    compact: Boolean = false,
     onClick: () -> Unit
 ) {
     // v6.3 — button grew a little (~7% up): 126dp idle, 108dp landed.
-    val buttonSize = if (landedTopic != null) 108.dp else 126.dp
+    // v6.11 — compact screens step the button + orbit down ~11% so the
+    // pinned Categories/Filter bar always stays on screen.
+    val buttonSize = if (compact) {
+        if (landedTopic != null) 96.dp else 112.dp
+    } else {
+        if (landedTopic != null) 108.dp else 126.dp
+    }
     Box(
-        modifier = Modifier.size(176.dp),
+        modifier = Modifier.size(if (compact) 156.dp else 176.dp),
         contentAlignment = Alignment.Center
     ) {
         OrbitRing(active = isShuffling, color = tint, modifier = Modifier.fillMaxSize())

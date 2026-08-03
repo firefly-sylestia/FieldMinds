@@ -253,8 +253,8 @@ fun SettingsScreen(navController: NavController) {
         AppPreferences.THEME_STYLE_AMOLED ->
             "True black background, always dark, category tints off."
         AppPreferences.THEME_STYLE_MATERIAL ->
-            "Your device's Material colors. Category colors become shades " +
-            "of the device palette and tints turn off."
+            "Your device's Material colors for backgrounds and controls; " +
+            "category colors stay true and tints turn off."
         else ->
             "Curio's warm cream palette with category colors."
     }

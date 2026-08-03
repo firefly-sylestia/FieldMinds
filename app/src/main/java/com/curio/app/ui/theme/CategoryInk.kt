@@ -31,20 +31,20 @@ fun CurioCategory.categoryInk(): Color =
  *
  *  - Curio (default) and AMOLED: the researched accent unchanged — category
  *    identity stays exact.
- *  - Material: the accent is blended ~40% toward the device's dynamic
- *    Material primary, so every category keeps its hue but reads as a shade
- *    of the palette the device generated ("the material color according to
- *    the device"). The tint washes stay off in this style, but the category
- *    colors themselves are NOT turned off — they harmonize with the device
- *    theme instead of disappearing.
+ *  - Material: the category accent is used UNCHANGED too. It used to be
+ *    blended ~40% toward the device's dynamic Material primary so accents
+ *    would "read as a shade of the device palette" — but an RGB lerp toward
+ *    a different-hue primary does NOT keep the hue: with a blue wallpaper
+ *    the red (Movies) accent turned purple, amber turned mauve, and with an
+ *    orange wallpaper teal and sky sank to grey-olive — every blended
+ *    gradient in the Material style looked muddy and wrong. The Material
+ *    style now keeps its device identity through the dynamic color scheme
+ *    (surfaces, backgrounds, controls come from the wallpaper) while every
+ *    category keeps its true researched color, so cards, heroes and
+ *    gradients stay vivid and recognizable.
  */
 @Composable
-fun CurioCategory.themedAccent(): Color =
-    if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL) {
-        lerp(accent, MaterialTheme.colorScheme.primary, 0.40f)
-    } else {
-        accent
-    }
+fun CurioCategory.themedAccent(): Color = accent
 
 /**
  * Theme-aware wash color for a category-aware page BACKGROUND (Spin, Topic
@@ -55,7 +55,10 @@ fun CurioCategory.themedAccent(): Color =
  * old cream-blended recipe let cream's warm hue dominate, so cool accents
  * drifted off-family (teal/sky pages washed grey-GREEN and the detail hero's
  * glide swung through green/yellow); the on-hue tint keeps the page AND the
- * hero's fade-into-it exactly on the category's color story.
+ * hero's fade-into-it exactly on the category's color story. The pastel is
+ * strong enough to READ (0.32/0.85 — see [lightAccentTint]) so a red page, a
+ * teal page and a sky page are visibly different and the hero's blend ends
+ * on the real category color, never a near-white beige.
  *
  * Dark mode: the deep Tailwind-700 accent alone at 20% reads muddy (amber
  * goes brown, teal goes grey-green), while its light 300-level twin at any
@@ -169,10 +172,11 @@ fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.su
  * Light-mode surface tint for CARDS and CHIPS — the page wash's stronger
  * sibling: a touch more saturated than [lightAccentTint]'s defaults so the
  * surface reads as an elevated card on the tinted page rather than melting
- * into it. Single definition keeps the three surface families in sync.
+ * into it (and slightly lighter, so cards lift off the wash). Single
+ * definition keeps the three surface families in sync.
  */
 private fun lightSurfaceTint(accent: Color): Color =
-    lightAccentTint(accent, saturation = 0.28f, lightness = 0.89f)
+    lightAccentTint(accent, saturation = 0.36f, lightness = 0.86f)
 
 /**
  * Theme-aware border for CARDS and BUTTONS that wear a tinted surface on a
