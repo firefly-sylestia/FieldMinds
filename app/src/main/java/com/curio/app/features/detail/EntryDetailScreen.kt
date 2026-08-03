@@ -195,7 +195,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // Muted category-glyph watermark behind the content — the same
         // backdrop language as Home / Spin / the mood boards, so a saved
         // entry reads as part of the app's paper-and-glyph world.
-        CurioWatermarkBackdrop(activeCat = cat, modifier = Modifier.fillMaxSize())
+        // Every glyph stays BELOW the hero banner: the hero's gradient
+        // blend used to chop the top glyphs at its bottom edge (the "cut"
+        // look). [EntryDetailHeroClearance] clears the hero with a small
+        // gap; the hero card's own symbol scatter is untouched.
+        CurioWatermarkBackdrop(
+            activeCat = cat,
+            topClearance = EntryDetailHeroClearance,
+            modifier = Modifier.fillMaxSize()
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -262,7 +270,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(380.dp)
+                .height(EntryDetailHeroHeight)
                 // This Compose version's verticalGradient only offers the
                 // vararg overload — the named `colorStops` List form doesn't
                 // exist, so spread the sampled stops as an array.
@@ -534,6 +542,17 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         )
     }
 }
+
+/**
+ * The hero banner's height — the page watermark must stay entirely below
+ * it (the backdrop's [com.curio.app.ui.components.CurioWatermarkBackdrop]
+ * call passes [EntryDetailHeroClearance]), so the two are defined together
+ * here and a hero-height change can't silently put glyphs back behind it.
+ */
+private val EntryDetailHeroHeight = 380.dp
+
+/** Hero height + a small gap — the watermark's top clearance on this page. */
+private val EntryDetailHeroClearance = EntryDetailHeroHeight + 20.dp
 
 /**
  * Decorative watermark for the saved-entry hero — a scatter of the entry's

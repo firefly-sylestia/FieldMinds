@@ -3,6 +3,7 @@ package com.curio.app.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -40,6 +41,11 @@ import kotlin.random.Random
  * stays inside the screen on any device; the center is left free for the
  * main content.
  *
+ * When [topClearance] is set (screens with a hero banner), the layout
+ * switches to a LOWER-BAND mode: the glyphs are offset-placed and sized
+ * within the area below the clearance so none can cross it or the screen
+ * edges, and the active category's glyph is always present.
+ *
  * Glyphs mirror `CurioCategories.all` in data/Category.kt (11 categories,
  * verified 1:1 at startup) — if the catalog ever grows, add a tile here.
  *
@@ -49,7 +55,14 @@ import kotlin.random.Random
  * cream surface.
  */
 @Composable
-fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifier) {
+fun CurioWatermarkBackdrop(
+    activeCat: CurioCategory,
+    modifier: Modifier = Modifier,
+    // When set, every glyph stays ENTIRELY below this line (e.g. below a
+    // hero banner) — the layout switches to a lower-band slot set tuned so
+    // no glyph crosses the clearance or the screen edges on any screen.
+    topClearance: Dp = 0.dp
+) {
     val isDark = isCurioDarkTheme()
     // Every glyph maps to its category accent — the same colors that open
     // the main-card gradients — so the backdrop palette always matches the
@@ -57,18 +70,61 @@ fun CurioWatermarkBackdrop(activeCat: CurioCategory, modifier: Modifier = Modifi
     // Rebuilt in the composable body (NOT remember) so the Material style's
     // device-color blend updates the backdrop glyphs when the style changes.
     val accentByGlyph = CurioCategories.all.associate { it.iconGlyph to it.themedAccent() }
-    Box(modifier = modifier.fillMaxSize()) {
-        WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("videocam", BiasAlignment(0.95f, -0.55f), 108.dp, -8f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("movie", BiasAlignment(0.82f, -0.15f), 56.dp, 16f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("edit_note", BiasAlignment(0.9f, 0.38f), 80.dp, -14f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("menu_book", BiasAlignment(-0.88f, -0.38f), 72.dp, 8f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("brush", BiasAlignment(-0.92f, 0.15f), 96.dp, -6f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("palette", BiasAlignment(-0.78f, 0.68f), 88.dp, 12f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("science", BiasAlignment(0.75f, 0.62f), 104.dp, -12f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("lightbulb", BiasAlignment(0.05f, 0.92f), 76.dp, 6f, activeCat, accentByGlyph, isDark)
-        WatermarkGlyph("casino", BiasAlignment(0.3f, -0.2f), 92.dp, -4f, activeCat, accentByGlyph, isDark)
+
+    if (topClearance > 0.dp) {
+        // Lower-band layout (screens with a hero banner): the glyphs are
+        // distributed through the area below [topClearance] and sized from
+        // the band, so a fixed bias set can't clip at the clearance line or
+        // the screen edges, and none can overlap (verified across band
+        // sizes). The active category's glyph is always present, boosted.
+        BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+            val bandHeight = (maxHeight - topClearance).coerceAtLeast(0.dp)
+            if (bandHeight <= 0.dp) return@BoxWithConstraints
+            val shortSide = minOf(maxWidth, bandHeight)
+            val glyphs = listOf(
+                activeCat.iconGlyph, "album", "videocam", "movie",
+                "edit_note", "brush", "science", "casino"
+            ).distinct()
+            val slots = listOf(
+                LowerBandSlot(-0.93f, -0.86f, 0.20f, -12f),
+                LowerBandSlot(0.93f, -0.84f, 0.17f, 10f),
+                LowerBandSlot(-0.95f, 0.34f, 0.21f, -8f),
+                LowerBandSlot(0.94f, -0.28f, 0.22f, -14f),
+                LowerBandSlot(-0.40f, 0.22f, 0.19f, 8f),
+                LowerBandSlot(0.92f, 0.45f, 0.16f, -6f),
+                LowerBandSlot(-0.85f, 0.78f, 0.18f, 12f),
+                LowerBandSlot(0.15f, 0.95f, 0.14f, -10f)
+            )
+            glyphs.forEachIndexed { i, glyph ->
+                val s = slots[i % slots.size]
+                LowerBandGlyph(
+                    glyph = glyph,
+                    biasX = s.biasX,
+                    biasY = s.biasY,
+                    sizeFactor = s.sizeFactor,
+                    rotation = s.rotation,
+                    shortSide = shortSide,
+                    bandTop = topClearance,
+                    activeCat = activeCat,
+                    accentByGlyph = accentByGlyph,
+                    isDark = isDark
+                )
+            }
+        }
+    } else {
+        Box(modifier = modifier.fillMaxSize()) {
+            WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("videocam", BiasAlignment(0.95f, -0.55f), 108.dp, -8f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("movie", BiasAlignment(0.82f, -0.15f), 56.dp, 16f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("edit_note", BiasAlignment(0.9f, 0.38f), 80.dp, -14f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("menu_book", BiasAlignment(-0.88f, -0.38f), 72.dp, 8f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("brush", BiasAlignment(-0.92f, 0.15f), 96.dp, -6f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("palette", BiasAlignment(-0.78f, 0.68f), 88.dp, 12f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("science", BiasAlignment(0.75f, 0.62f), 104.dp, -12f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("lightbulb", BiasAlignment(0.05f, 0.92f), 76.dp, 6f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("casino", BiasAlignment(0.3f, -0.2f), 92.dp, -4f, activeCat, accentByGlyph, isDark)
+        }
     }
 }
 
@@ -102,6 +158,63 @@ private fun BoxScope.WatermarkGlyph(
         size = size,
         modifier = Modifier
             .align(alignment)
+            .graphicsLayer { rotationZ = rotation }
+    )
+}
+
+/** One lower-band slot: bias -1..1 across the band, size as a fraction of
+ *  the band's short side, and a rotation. */
+private data class LowerBandSlot(
+    val biasX: Float,
+    val biasY: Float,
+    val sizeFactor: Float,
+    val rotation: Float
+)
+
+/**
+ * One glyph in the lower-band layout — offset math keeps it strictly inside
+ * the band below [bandTop] (it can never cross the clearance line or the
+ * screen edges), and its size derives from the band's short side so the
+ * collage adapts to any screen height without overlapping. Same muted
+ * accent-tinted styling as [WatermarkGlyph].
+ */
+@Composable
+private fun BoxWithConstraintsScope.LowerBandGlyph(
+    glyph: String,
+    biasX: Float,
+    biasY: Float,
+    sizeFactor: Float,
+    rotation: Float,
+    shortSide: Dp,
+    bandTop: Dp,
+    activeCat: CurioCategory,
+    accentByGlyph: Map<String, Color>,
+    isDark: Boolean
+) {
+    val active = glyph == activeCat.iconGlyph
+    val accent = accentByGlyph[glyph] ?: CurioColors.WarmWatermarkInk
+    val alpha = when {
+        active -> if (isDark) 0.22f else 0.30f
+        else -> if (isDark) 0.11f else 0.15f
+    }
+    val size = (shortSide * sizeFactor).coerceIn(36.dp, 88.dp)
+    val density = LocalDensity.current
+    val sizePx = with(density) { size.toPx() }
+    val bandTopPx = with(density) { bandTop.toPx() }
+    val bandWpx = with(density) { maxWidth.toPx() }
+    val bandHpx = with(density) { (maxHeight - bandTop).toPx() }
+    // Offset shifts the icon's top-left; (band - size) * (1 + bias) / 2
+    // places it inside the band biased -1..1 — the extremes sit flush at
+    // the band's edges, never past them.
+    val x = ((bandWpx - sizePx) * (1f + biasX) / 2f).roundToInt()
+    val y = (bandTopPx + (bandHpx - sizePx) * (1f + biasY) / 2f).roundToInt()
+    CurioIcon(
+        name = glyph,
+        contentDescription = null,
+        tint = accent.copy(alpha = alpha),
+        size = size,
+        modifier = Modifier
+            .offset { IntOffset(x, y) }
             .graphicsLayer { rotationZ = rotation }
     )
 }

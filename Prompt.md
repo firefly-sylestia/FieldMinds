@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Saved-entry detail: background watermark glyphs padded below the hero — no more "cut" glyphs at the gradient blend (hero card untouched)**
+
+### What was asked
+
+"In detail view saved entry add a padding for the background watermark glyph — for the background, not the hero card, just that — so it doesn't get between the blend and shows cut." ask_user: glyphs are **cut at the hero's color fade**, and the user wants them **all below the hero card**.
+
+### Root cause
+
+On the saved-entry page the background watermark (`CurioWatermarkBackdrop`) scatter uses fixed `BiasAlignment` slots across the FULL screen, while the 380dp hero banner sits on top. On the user's device (384×832dp) the "movie" and "casino" slots straddle the hero's bottom edge — their slivers poke out below the gradient blend and look chopped. (Hero card's own `HeroSymbolScatter` was fine — untouched.)
+
+### What was done
+
+- **`CurioWatermarkBackdrop.kt` — new `topClearance: Dp = 0.dp` param.** When > 0 the layout switches from the full-screen Box+BiasAlignment set to a **lower-band mode**: `BoxWithConstraints` + offset math places glyphs strictly inside the band below the clearance (`x = (bandW - size)·(1+biasX)/2`, `y = bandTop + (bandH - size)·(1+biasY)/2`) so none can cross the line or the screen edges on any screen. Glyph sizes derive from the band's short side (`coerceIn(36..88.dp)`) so the collage adapts and the hand-tuned 8-slot set stays non-overlapping (pairwise-verified on 384×432 and ~300dp bands; active category's glyph always present + boosted, `distinct()` keeps 7-8 entries safe against `slots[i % 8]`). Default `0.dp` → Home / Spin / Reveal / Cabinet pixel-identical (grep-verified all 5 callers).
+- **`EntryDetailScreen.kt`** — backdrop call passes `topClearance = EntryDetailHeroClearance`; new file-level `EntryDetailHeroHeight = 380.dp` + `EntryDetailHeroClearance = height + 20.dp` pair, and the hero Box now uses `EntryDetailHeroHeight` too, so the coupling is explicit and a future hero-height change can't silently put glyphs back behind it.
+
+### Validation
+
+- `check_braces.py` BALANCED on both files.
+- Code-reviewer pass: confirmed all APIs compile (Dp×Float, Dp.coerceIn, minOf(Dp,Dp) — already used by the mood-board pattern, BoxWithConstraintsScope import, offset{IntOffset}, LocalDensity), bounds math keeps glyphs inside the band for any bias ∈ [-1,1], zero overlaps on the target band (a ~3dp graze only on ≤300dp bands — imperceptible), else-branch byte-identical, no unused imports/params. Applied its 2 nits: named hero-height constants + KDoc now documents the lower-band mode.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Always-on crash-loop guard: repeated crashes flip "safe mode" — stops the explore service + reminder, routes to the crash-log screen, and restarts cleanly**
 
 ### What was asked
