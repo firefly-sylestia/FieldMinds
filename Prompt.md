@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Saved-entry detail polish: roomier text boxes, 'Rate quality' caption, lighter star card, mirrored (non-random) hero watermark**
+
+### What was asked
+
+"The text box feels cramped—give it more padding inside. Add subtle help text under the star rating ('Rate quality'). Star section background could be slightly lighter to match the palette better. Tighten the decorative icons—some feel randomly placed. do these in detail view"
+
+### What was done (all in `EntryDetailScreen.kt`)
+
+1. **Roomier text boxes** — every saved-entry `NotePaperCard` (SoundBite note, ReelNotes review + fallback, Marginalia journal, GalleryWall caption, FieldNotes observed/surprised/learn-next) bumped `contentPadding` 16/16 → 20/18 (8 cards). Ruled-line alignment is padding-anchored, so the shift is safe.
+2. **'Rate quality' caption** — the saved star-rating card now wraps stars + a subtle `labelSmall` caption (`onSurfaceVariant` @ 0.75 alpha) in a Column (6dp spacing) — same help language as the capture editor's rating row.
+3. **Lighter star card** — background is now `lightAccentTint(accent, 0.18, 0.93)` in light (a soft, barely-there whisper — lighter + less saturated than the other cards) and the palette-matched `categorySurface` mid-tone in dark/AMOLED where a pale tint would be invisible. New import `com.curio.app.ui.theme.lightAccentTint` (internal, same module).
+4. **Tightened hero watermark** — `HeroSymbolScatter` reworked from 10 irregular slots to 5 MIRRORED pairs (left glyph at (-biasX, biasY) with -rotation, right at (+biasX, biasY) with +rotation, equal size/alpha; per-tier alphas 0.16/0.19/0.21/0.19/0.16). Reads as a deliberate symmetric frame instead of randomly placed icons. `HeroWatermarkSlot` → `HeroWatermarkPair` + `HeroWatermarkGlyph` helper.
+
+### Validation
+
+- `check_braces.py` BALANCED; grep confirms 8 cards at 20dp and zero stale `HeroWatermarkSlot` refs.
+- Code-reviewer pass: compile-safe (import + `category.accent` public, `internal` helper legal across packages in-module), mirrored pairs keep every glyph clear of each other + centered column + top buttons (pairwise distances 83–145dp vs 46–53dp radius sums), dark/AMOLED rating path untouched. Applied its one nit: `forEachIndexed { i, pair -> }` idiom.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board watermark rework: expanded board is no longer sparse — interior ring fills the middle, denser counts keep the same density on big canvases**
 
 ### What was asked

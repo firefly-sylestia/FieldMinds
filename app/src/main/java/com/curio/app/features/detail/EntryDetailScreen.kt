@@ -129,6 +129,7 @@ import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.categorySurfaceMoodBoard
+import com.curio.app.ui.theme.lightAccentTint
 import com.curio.app.ui.theme.themedAccent
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.glyph
@@ -558,53 +559,67 @@ private val EntryDetailHeroClearance = EntryDetailHeroHeight + 20.dp
  * Decorative watermark for the saved-entry hero — a scatter of the entry's
  * category-family symbols (instruments for Music, camera kit for Movies,
  * books for Books, art tools for Visual Art, lab symbols for Science,
- * curiosities for Wildcard) pinned around the banner's perimeter. Fixed,
- * well-spaced slots keep the glyphs from overlapping each other or the
- * centered title / frosted bar / top buttons, and they're drawn in solid
- * white at a soft alpha so they read clearly against the vivid gradient
- * (never a transparent wash).
+ * curiosities for Wildcard) pinned around the banner's perimeter as
+ * MIRRORED PAIRS — each glyph on the left is mirrored by an equal glyph on
+ * the right (same size, same alpha, opposite rotation), so the scatter
+ * reads as a deliberate symmetric frame around the title instead of
+ * randomly placed icons. Five tiers keep the glyphs clear of each other,
+ * the centered content column (icon + title + frosted bar) and the top
+ * back/more buttons, drawn in solid white at a soft alpha so they read
+ * clearly against the vivid gradient (never a transparent wash).
  */
 @Composable
 private fun BoxScope.HeroSymbolScatter(cat: CurioCategory) {
     val symbols = CurioIcons.heroWatermarkSymbols(cat.family)
-    // Sparse perimeter slots (BiasAlignment -1..1 across the hero box) —
-    // corners + edge midpoints, deliberately clear of the centered column
-    // (icon + title + frosted bar) and the top back/more buttons.
-    val slots = listOf(
-        // Top corners sit just below the status-bar band (the banner runs
-        // under the system icons) and above the back/more buttons.
-        HeroWatermarkSlot(BiasAlignment(-0.93f, -0.84f), 42.dp, -14f),
-        HeroWatermarkSlot(BiasAlignment(0.93f, -0.84f), 42.dp, 12f),
-        HeroWatermarkSlot(BiasAlignment(-0.56f, -0.66f), 50.dp, 8f),
-        HeroWatermarkSlot(BiasAlignment(0.58f, -0.60f), 46.dp, -10f),
-        HeroWatermarkSlot(BiasAlignment(-0.92f, -0.18f), 56.dp, 16f),
-        HeroWatermarkSlot(BiasAlignment(0.92f, -0.12f), 60.dp, -12f),
-        HeroWatermarkSlot(BiasAlignment(-0.58f, 0.52f), 52.dp, -16f),
-        HeroWatermarkSlot(BiasAlignment(0.60f, 0.55f), 54.dp, 10f),
-        HeroWatermarkSlot(BiasAlignment(-0.94f, 0.96f), 46.dp, 6f),
-        HeroWatermarkSlot(BiasAlignment(0.94f, 0.96f), 46.dp, -8f)
+    // Mirrored pairs: biasX magnitude + biasY (-1..1), glyph size, rotation
+    // magnitude, alpha. The left glyph is drawn at (-biasX, biasY) with
+    // -rotation, the right at (+biasX, biasY) with +rotation.
+    val pairs = listOf(
+        // Top corners — just below the status-bar band, above the buttons.
+        HeroWatermarkPair(biasX = 0.93f, biasY = -0.85f, size = 44.dp, rotation = 12f, alpha = 0.16f),
+        // Inner pair under the corners — clear of the centered icon.
+        HeroWatermarkPair(biasX = 0.55f, biasY = -0.64f, size = 48.dp, rotation = 8f, alpha = 0.19f),
+        // Mid-edge pair — the widest, at the title's height, outside its width.
+        HeroWatermarkPair(biasX = 0.94f, biasY = -0.12f, size = 56.dp, rotation = 14f, alpha = 0.21f),
+        // Lower inner pair — outside the frosted bar's width.
+        HeroWatermarkPair(biasX = 0.56f, biasY = 0.54f, size = 50.dp, rotation = 10f, alpha = 0.19f),
+        // Bottom corners.
+        HeroWatermarkPair(biasX = 0.94f, biasY = 0.95f, size = 44.dp, rotation = 6f, alpha = 0.16f)
     )
-    slots.forEachIndexed { i, s ->
-        CurioIcon(
-            // One glyph per slot — the 10-symbol family list maps 1:1.
-            name = symbols[i],
-            contentDescription = null,
-            // Solid white at a soft alpha — clearly visible on the vivid
-            // gradient, alternating slightly so the scatter breathes.
-            tint = Color.White.copy(alpha = if (i % 2 == 0) 0.16f else 0.20f),
-            size = s.size,
-            modifier = Modifier
-                .align(s.alignment)
-                .graphicsLayer { rotationZ = s.rotation }
-        )
+    pairs.forEachIndexed { i, pair ->
+        // The 10-symbol family list maps 1:1 onto the 5 mirrored pairs.
+        HeroWatermarkGlyph(symbols[i * 2], BiasAlignment(-pair.biasX, pair.biasY), pair.size, -pair.rotation, pair.alpha)
+        HeroWatermarkGlyph(symbols[i * 2 + 1], BiasAlignment(pair.biasX, pair.biasY), pair.size, pair.rotation, pair.alpha)
     }
 }
 
-/** One hero watermark slot: bias alignment, glyph size, rotation. */
-private data class HeroWatermarkSlot(
-    val alignment: Alignment,
+/** One mirrored hero watermark glyph — solid white at a soft alpha. */
+@Composable
+private fun BoxScope.HeroWatermarkGlyph(
+    glyph: String,
+    alignment: Alignment,
+    size: Dp,
+    rotation: Float,
+    alpha: Float
+) {
+    CurioIcon(
+        name = glyph,
+        contentDescription = null,
+        tint = Color.White.copy(alpha = alpha),
+        size = size,
+        modifier = Modifier
+            .align(alignment)
+            .graphicsLayer { rotationZ = rotation }
+    )
+}
+
+/** One mirrored hero watermark pair — the left glyph mirrors the right. */
+private data class HeroWatermarkPair(
+    val biasX: Float,
+    val biasY: Float,
     val size: Dp,
-    val rotation: Float
+    val rotation: Float,
+    val alpha: Float
 )
 
 /**
@@ -931,7 +946,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
                     paperColor = noteSheet,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                     minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1286,26 +1301,44 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         if (data.rating > 0) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                // Palette-matched tinted surface — lighter and warmer than
-                // the old 8% deep-accent wash, and it reads properly in
-                // dark/AMOLED where 8% of a deep accent was near-invisible.
-                color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                // Soft pastel card that matches the app's palette — a light,
+                // barely-there whisper of the category in light mode (lighter
+                // and less saturated than the other cards on the page), and
+                // the palette-matched mid-tone in dark/AMOLED where a pale
+                // tint would be near-invisible.
+                color = if (isCurioDarkTheme()) {
+                    category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh)
+                } else {
+                    lightAccentTint(category.accent, saturation = 0.18f, lightness = 0.93f)
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
+                Column(
                     modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    repeat(5) { i ->
-                        val starFilled = i < data.rating.coerceIn(0, 5)
-                        FilledStar(
-                            color = if (starFilled) category.categoryInk()
-                                    else MaterialTheme.colorScheme.onSurfaceVariant,
-                            filled = starFilled,
-                            starSize = 24.dp
-                        )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        repeat(5) { i ->
+                            val starFilled = i < data.rating.coerceIn(0, 5)
+                            FilledStar(
+                                color = if (starFilled) category.categoryInk()
+                                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                                filled = starFilled,
+                                starSize = 24.dp
+                            )
+                        }
                     }
+                    // Subtle caption under the stars — the same help language
+                    // as the capture editor's rating row, so the saved card
+                    // reads as the rating's label.
+                    Text(
+                        text = "Rate quality",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
+                    )
                 }
             }
         }
@@ -1430,7 +1463,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                 minHeight = 96.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1445,7 +1478,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                 minHeight = 96.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1486,7 +1519,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
             NotePaperCard(
                 style = data.journalStyle ?: data.notePaperStyle(),
                 paperColor = journalSheet,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                 minHeight = 96.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1899,7 +1932,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             NotePaperCard(
                 style = data.captionStyle ?: data.notePaperStyle(),
                 paperColor = captionSheet,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                 minHeight = 72.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -2138,7 +2171,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.observedStyle ?: data.notePaperStyle(),
                     paperColor = observedSheet,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                     minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -2157,7 +2190,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.surprisedStyle ?: data.notePaperStyle(),
                     paperColor = surprisedSheet,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                     minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -2176,7 +2209,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.learnNextStyle ?: data.notePaperStyle(),
                     paperColor = learnNextSheet,
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
                     minHeight = 96.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
