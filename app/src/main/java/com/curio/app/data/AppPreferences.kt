@@ -67,6 +67,7 @@ object AppPreferences {
     private const val KEY_PEEK_HAIRLINE = "peek_hairline"
     private const val KEY_PEEK_SHADOWS = "peek_shadows"
     private const val KEY_PEEK_TITLES = "peek_titles"
+    private const val KEY_MATERIAL_CARD_BLENDS = "material_card_blends"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
@@ -131,6 +132,16 @@ object AppPreferences {
     var peekShadowsState by mutableStateOf(false)
         private set
     var peekTitlesState by mutableStateOf(false)
+        private set
+
+    // Material card blends (v7.8, EXPERIMENTAL) — when ON, cards in the
+    // Material theme style wear a MIXED gradient of the category accent + the
+    // device's dynamic Material colors (primary / secondary / tertiary) in the
+    // same multi-stop style as the mixed deck, so the card reads as a category
+    // × device blend. Default ON (the Material style's headline look); only
+    // takes effect while the Material style is active. When the experiment
+    // settles, hardcode the winner and remove the toggle.
+    var materialCardBlendsState by mutableStateOf(true)
         private set
 
     var reminderEnabledState by mutableStateOf(false)
@@ -217,6 +228,7 @@ object AppPreferences {
         peekHairlineState = isPeekHairlineEnabled(context)
         peekShadowsState = isPeekShadowsEnabled(context)
         peekTitlesState = isPeekTitlesEnabled(context)
+        materialCardBlendsState = isMaterialCardBlendsEnabled(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
@@ -293,6 +305,16 @@ object AppPreferences {
     fun setPeekTitlesEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_PEEK_TITLES, enabled).apply()
         peekTitlesState = enabled
+    }
+
+    // ── Material card blends (v7.8 experimental) ───────────────────────
+    /** Whether Material-style cards mix the category accent with the device's dynamic colors (default on). */
+    fun isMaterialCardBlendsEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_MATERIAL_CARD_BLENDS, true)
+
+    fun setMaterialCardBlendsEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_MATERIAL_CARD_BLENDS, enabled).apply()
+        materialCardBlendsState = enabled
     }
 
     // ── Category tint wash ────────────────────────────────────────────

@@ -244,14 +244,60 @@ object CurioGradients {
      * cream background in light mode, black in dark — so the card background
      * always matches the app's background shade (the hero card must not
      * wash out to pure white on the cream surface).
+     *
+     * v7.8 — Material style: when the "Material card blends" setting is on
+     * (default), the card wears a MIXED gradient of the category accent and
+     * the device's dynamic Material colors (primary / secondary / tertiary)
+     * in the same multi-stop style as the mixed deck, so the card reads as
+     * a category × device blend — the device palette leads (3 of 4 stops).
+     * Pastel mode pastel-izes the device stops so the whole glide stays
+     * pastel; dark mode uses the device's dynamic dark palette.
+     *
+     * v7.8 — light-mode fix: the standard fallback now ends on an ON-HUE
+     * tint of the accent instead of the raw warm background, so cool accents
+     * (rose / teal / sky) glide through proper blended colors instead of
+     * muddy grey-green / orange bands on the reveal hero (RGB-lerping toward
+     * warm cream pulled them off-family).
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
+        // v7.8 — Material style + "Material card blends": mix the category
+        // accent with the device's dynamic colors (all three — primary,
+        // secondary, tertiary — so the device palette leads) through the
+        // same mixed-deck mechanism. Guarded: mixedDeckGradient recurses
+        // back into cardGradient for a single distinct accent, so only take
+        // this branch when the mix has at least two distinct colors.
+        if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
+            AppPreferences.materialCardBlendsState
+        ) {
+            val scheme = MaterialTheme.colorScheme
+            val pastel = AppPreferences.pastelColorsState
+            val dark = isCurioDarkTheme()
+            // Pastel-ize the device stops AND the accent stop (mixedDeckGradient
+            // only softens its internal seams — it assumes stops already arrive
+            // pastel). Idempotent for themed pastel accents; keeps raw-accent
+            // callers (e.g. wildcard coral) on-pastel too.
+            val accentStop = if (pastel) pastelAccent(accent, dark) else accent
+            val deviceStops = listOf(scheme.primary, scheme.secondary, scheme.tertiary)
+                .map { if (pastel) pastelAccent(it, dark) else it }
+            val accents = (listOf(accentStop) + deviceStops).distinct()
+            if (accents.size >= 2) {
+                return CurioMixedDeck.mixedDeckGradient(accents)
+            }
+        }
         // End on the ACTIVE theme's background so cards always echo the
         // surface behind them — cream in light, midnight in dark, pure
         // black in AMOLED, the device's dynamic background in Material.
-        val end = MaterialTheme.colorScheme.background
         val start = categoryCardFill(accent)
+        // v7.8 — on tint-washed Curio pages the card melts into the washed
+        // background on the category's OWN hue (same recipe as the page
+        // wash), not the raw cream that dragged cool accents off-family.
+        val end = if (AppPreferences.tintWashEffective() && !isCurioDarkTheme()) {
+            if (AppPreferences.pastelColorsState) lightAccentTint(accent, saturation = 0.20f, lightness = 0.90f)
+            else lightAccentTint(accent)
+        } else {
+            MaterialTheme.colorScheme.background
+        }
         return listOf(start, lerp(start, end, 0.30f))
     }
 }

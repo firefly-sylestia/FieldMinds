@@ -546,6 +546,41 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
+                        // ── Material card blends (v7.8, EXPERIMENTAL) — in the
+                        //    Material theme style, cards wear a MIXED gradient
+                        //    of the category accent + the device's dynamic
+                        //    Material colors (primary / secondary / tertiary),
+                        //    in the same multi-stop style as the mixed deck so
+                        //    the device palette leads. Default ON; only takes
+                        //    effect while the Material style is active.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.AutoAwesome, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Material card blends", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    when (themeStyle) {
+                                        AppPreferences.THEME_STYLE_MATERIAL ->
+                                            "Cards mix your category colors with your device's palette"
+                                        else -> "Only takes effect in the Material theme style"
+                                    },
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.materialCardBlendsState,
+                                onCheckedChange = { AppPreferences.setMaterialCardBlendsEnabled(context, it) }
+                            )
+                        }
+                        CurioSettingsDivider()
                         // ── Deck cards (v7.7, EXPERIMENTAL) — the Spin deck's
                         //    peek-card look is four independent toggles so each
                         //    upgrade can be A/B'd on its own: top-lit gradient

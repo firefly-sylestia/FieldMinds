@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Material card blends (v7.8) + light-mode detail-screen gradient fix for rose/teal/sky**
+
+### What was asked
+
+“lets add a new material color gradients for the cards and all the material color of the device will be higher and using the same mixed gradient style the color of the cards will show mixed with material gradients along with pastel dark mode etc also in curio theme light mode can u please fix the blending color of red sky blue and teal color in detail screen…it's showing totally different gradient.” ask_user: gating = **behind a Settings toggle** (“Material card blends”, default ON for the Material style).
+
+### What was done
+
+- **Material card blends (v7.8)** — `CurioGradients.cardGradient()` now, when the Material style is active AND the new “Material card blends” toggle is on (default), returns a MIXED gradient of `accent + device primary/secondary/tertiary` (3 of 4 stops are device colors → the device palette leads) via `CurioMixedDeck.mixedDeckGradient()` — the same multi-stop style as the mixed deck. Device stops are pastel-ized with `pastelAccent()` in pastel mode (whole glide stays pastel); dark mode uses the dynamic dark palette. Guarded against `mixedDeckGradient`'s single-accent recursion (only taken when ≥2 distinct colors). Fixes every card in one place (topic cards, category cards, Home/Profile heroes, reveal hero) because they all share `cardGradient()`.
+- **Light-mode detail-screen gradient fix (v7.8)** — the fallback gradient used to end on the raw warm cream background via RGB lerp, dragging cool accents (rose / teal / sky) through muddy grey-green/orange bands on the `TopicRevealScreen` hero. It now ends on an ON-HUE tint of the accent (`lightAccentTint()`, same recipe as the page wash; the pastel whisper in pastel mode) whenever the category tint wash is active in light mode — the hero melts into the washed page on the category's own hue. `EntryDetailScreen` was already HSL-on-hue (`hslGradientStops`), so this closes the last off-hue hero.
+- **AppPreferences** — `materialCardBlendsState` (default ON) + `KEY_MATERIAL_CARD_BLENDS` + accessors + seed in `initThemeMode`.
+- **Settings → Appearance** — “Material card blends” toggle row after “Pastel colors” (subtitle adapts: active style vs “only takes effect in the Material theme style”).
+- **Docs:** fastlane changelog `20260809.txt`; Prompt.md.
+
+### Validation
+
+- Braces balanced on all touched files; code-reviewer pass; NO local Gradle build per AGENTS.md — CI validates on push. Committed & pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Color fixes: pastel watermark visibility, pastel peek-card colors, and per-feature Deck-cards toggles (v7.7)**
 
 ### What was asked
