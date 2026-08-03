@@ -841,7 +841,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (data.title.isNotBlank()) {
+                        if (!data.title.isNullOrBlank()) {
                             Text(
                                 data.title,
                                 style = MaterialTheme.typography.bodySmall,
@@ -886,7 +886,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
             }
 
             // ── Note — shown on the same note-paper slip the editor used ──
-            if (data.note.isNotBlank()) {
+            if (!data.note.isNullOrBlank()) {
                 val noteSheet = data.noteColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
@@ -1386,7 +1386,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         // on paper in light AND dark mode (NotePaperCard is theme-aware and
         // renders the torn-note style when that's what was chosen).
         val reviewSheet = data.reviewColor ?: NotePaperColor.CREAM
-        if (data.reviewText.isNotBlank()) {
+        if (!data.reviewText.isNullOrBlank()) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
@@ -1440,7 +1440,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
     val data = entry.captureData as? CaptureData.Marginalia ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         // ── Journal — "My thoughts" on a note-paper page ──────────────
-        if (data.journalText.isNotBlank()) {
+        if (!data.journalText.isNullOrBlank()) {
             MarginaliaSectionHeader(label = "My thoughts", category = category)
             val journalSheet = data.journalColor ?: NotePaperColor.CREAM
             NotePaperCard(
@@ -1853,7 +1853,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             }
         }
 
-        if (data.caption.isNotBlank()) {
+        if (!data.caption.isNullOrBlank()) {
             // Caption wears the same note-paper slip as the editor's field.
             val captionSheet = data.captionColor ?: NotePaperColor.CREAM
             NotePaperCard(

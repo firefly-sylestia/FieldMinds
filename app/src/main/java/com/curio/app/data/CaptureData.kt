@@ -302,99 +302,131 @@ sealed class CaptureData {
         val sections: List<CaptureSection>
     ) : CaptureData()
 
-    /** Returns a human-readable one-line preview for Cabinet cards. */
+    /**
+     * Returns a human-readable one-line preview for Cabinet cards.
+     *
+     * NULL-SAFE by design: legacy entries decode missing Kotlin-default
+     * fields to NULL (Gson allocates via Unsafe, skipping constructor
+     * defaults), so every String/List field is guarded with
+     * `orEmpty()` / `isNullOrBlank()`. A legacy entry must NEVER take down
+     * the Cabinet grid with an NPE — that exact crash (StringsKt.isBlank on
+     * a null field, 2026-08-03) blanked the whole Cabinet, mood boards
+     * included.
+     */
     fun toPreview(): String = when (this) {
         is SoundBite -> "Voice note · ${durationSeconds}s" +
-            if (title.isNotBlank()) " — $title" else ""
+            if (!title.isNullOrBlank()) " — $title" else ""
         is ReelNotes -> buildString {
             if (rating > 0) append("★".repeat(rating) + " ")
-            append(reviewText.take(80))
-            if (reviewText.length > 80) append("…")
+            val text = reviewText.orEmpty()
+            append(text.take(80))
+            if (text.length > 80) append("…")
         }
         is Marginalia -> buildString {
-            val source = if (journalText.isNotBlank()) journalText else quotes.firstOrNull().orEmpty()
+            val journal = journalText.orEmpty()
+            val source = if (journal.isNotBlank()) journal
+                         else quotes.orEmpty().firstOrNull().orEmpty()
             append(source.take(80))
             if (source.length > 80) append("…")
         }
         is GalleryWall -> "Moodboard · $imageCount image${if (imageCount != 1) "s" else ""}" +
-            if (caption.isNotBlank()) " — ${caption.take(40)}" else ""
+            if (!caption.isNullOrBlank()) " — ${caption.take(40)}" else ""
         is FieldNotes -> buildString {
-            val parts = listOf(observed, surprised, learnNext).filter { it.isNotBlank() }
+            val parts = listOf(observed.orEmpty(), surprised.orEmpty(), learnNext.orEmpty())
+                .filter { it.isNotBlank() }
             append(parts.firstOrNull()?.take(80) ?: "Empty field notes")
             if ((parts.firstOrNull()?.length ?: 0) > 80) append("…")
             if (parts.size > 1) append(" +${parts.size - 1} more")
         }
-        is OpenNotebook -> "Wildcard · ${subFormat.name} — ${subData.toPreview().take(60)}"
+        is OpenNotebook -> buildString {
+            // subFormat/subData are non-null by type, but a corrupt legacy
+            // blob could decode either to null — degrade instead of crashing.
+            append("Wildcard · ${subFormat?.name ?: "Wildcard"}")
+            val inner = subData?.toPreview().orEmpty()
+            if (inner.isNotBlank()) append(" — ${inner.take(60)}")
+        }
         is Portfolio -> buildString {
-            append("${sections.size} take${if (sections.size != 1) "s" else ""}")
-            if (sections.isNotEmpty()) {
+            val secs = sections.orEmpty()
+            append("${secs.size} take${if (secs.size != 1) "s" else ""}")
+            if (secs.isNotEmpty()) {
                 append(" · ")
-                append(sections.joinToString(" + ") { it.format.shortName })
+                append(secs.joinToString(" + ") { it.format.shortName })
             }
         }
     }
 
-    /** Returns full multi-line content for EntryDetail rendering. */
+    /**
+     * Returns full multi-line content for EntryDetail rendering.
+     *
+     * Same null-safety contract as [toPreview] — legacy Gson blobs decode
+     * missing Kotlin-default fields to null, so every access is guarded.
+     */
     fun toFullContent(): String = when (this) {
         is SoundBite -> buildString {
             appendLine("Voice note · ${durationSeconds}s")
-            if (title.isNotBlank()) appendLine("\"$title\"")
-            if (note.isNotBlank()) appendLine(note)
-            quotes.filter { it.isNotBlank() }.forEach { appendLine("\"$it\"") }
+            if (!title.isNullOrBlank()) appendLine("\"$title\"")
+            if (!note.isNullOrBlank()) appendLine(note)
+            quotes.orEmpty().filter { !it.isNullOrBlank() }.forEach { appendLine("\"$it\"") }
         }
         is ReelNotes -> buildString {
             if (rating > 0) appendLine("★".repeat(rating))
-            if (reviewText.isNotBlank()) {
-                appendLine(reviewText)
-                if (quotes.any { it.isNotBlank() }) appendLine()
+            val text = reviewText.orEmpty()
+            if (text.isNotBlank()) {
+                appendLine(text)
+                if (quotes.orEmpty().any { !it.isNullOrBlank() }) appendLine()
             }
-            quotes.filter { it.isNotBlank() }.forEach { appendLine("\"$it\"") }
+            quotes.orEmpty().filter { !it.isNullOrBlank() }.forEach { appendLine("\"$it\"") }
         }
         is Marginalia -> buildString {
-            if (journalText.isNotBlank()) {
-                appendLine(journalText)
-                if (quotes.isNotEmpty()) appendLine()
+            val journal = journalText.orEmpty()
+            if (journal.isNotBlank()) {
+                appendLine(journal)
+                if (quotes.orEmpty().isNotEmpty()) appendLine()
             }
-            quotes.forEachIndexed { i, q ->
-                if (q.isNotBlank()) appendLine("\"$q\"")
+            quotes.orEmpty().forEachIndexed { i, q ->
+                if (!q.isNullOrBlank()) appendLine("\"$q\"")
             }
         }
         is GalleryWall -> buildString {
             appendLine("Moodboard · $imageCount image${if (imageCount != 1) "s" else ""}")
-            if (caption.isNotBlank()) appendLine(caption)
-            quotes.filter { it.isNotBlank() }.forEach { appendLine("\"$it\"") }
-            imageUris.forEach { appendLine(it) }
+            if (!caption.isNullOrBlank()) appendLine(caption)
+            quotes.orEmpty().filter { !it.isNullOrBlank() }.forEach { appendLine("\"$it\"") }
+            imageUris.orEmpty().forEach { appendLine(it) }
         }
         is FieldNotes -> buildString {
-            if (observed.isNotBlank()) {
+            val o = observed.orEmpty()
+            val s = surprised.orEmpty()
+            val l = learnNext.orEmpty()
+            if (o.isNotBlank()) {
                 appendLine("Observed:")
-                appendLine(observed)
+                appendLine(o)
             }
-            if (surprised.isNotBlank()) {
-                if (observed.isNotBlank()) appendLine()
+            if (s.isNotBlank()) {
+                if (o.isNotBlank()) appendLine()
                 appendLine("Surprised me:")
-                appendLine(surprised)
+                appendLine(s)
             }
-            if (learnNext.isNotBlank()) {
-                if (observed.isNotBlank() || surprised.isNotBlank()) appendLine()
+            if (l.isNotBlank()) {
+                if (o.isNotBlank() || s.isNotBlank()) appendLine()
                 appendLine("Want to learn next:")
-                appendLine(learnNext)
+                appendLine(l)
             }
-            if (imageUris.isNotEmpty()) {
-                if (observed.isNotBlank() || surprised.isNotBlank() || learnNext.isNotBlank()) appendLine()
+            if (imageUris.orEmpty().isNotEmpty()) {
+                if (o.isNotBlank() || s.isNotBlank() || l.isNotBlank()) appendLine()
                 appendLine("Attached images:")
-                imageUris.forEach { appendLine(it) }
+                imageUris.orEmpty().forEach { appendLine(it) }
             }
         }
         is OpenNotebook -> buildString {
-            appendLine("Format: ${subFormat.name}")
-            append(subData.toFullContent())
+            appendLine("Format: ${subFormat?.name ?: "Wildcard"}")
+            append(subData?.toFullContent().orEmpty())
         }
         is Portfolio -> buildString {
-            sections.forEachIndexed { i, section ->
+            val secs = sections.orEmpty()
+            secs.forEachIndexed { i, section ->
                 appendLine("— ${section.format.shortName} —")
                 append(section.data.toFullContent())
-                if (i != sections.lastIndex) appendLine()
+                if (i != secs.lastIndex) appendLine()
             }
         }
     }
@@ -407,8 +439,8 @@ sealed class CaptureData {
     fun audioFilePaths(): List<String> = when (this) {
         is SoundBite -> listOfNotNull(audioFilePath)
         is Marginalia -> listOfNotNull(audioFilePath)
-        is OpenNotebook -> subData.audioFilePaths()
-        is Portfolio -> sections.flatMap { it.data.audioFilePaths() }
+        is OpenNotebook -> subData?.audioFilePaths().orEmpty()
+        is Portfolio -> sections.orEmpty().flatMap { it.data.audioFilePaths() }
         else -> emptyList()
     }
 
@@ -419,12 +451,12 @@ sealed class CaptureData {
      */
     fun imageUrisAll(): List<String> = when (this) {
         is SoundBite -> emptyList()
-        is ReelNotes -> imageUris
-        is Marginalia -> imageUris
-        is GalleryWall -> imageUris
-        is FieldNotes -> imageUris
-        is OpenNotebook -> subData.imageUrisAll()
-        is Portfolio -> sections.flatMap { it.data.imageUrisAll() }
+        is ReelNotes -> imageUris.orEmpty()
+        is Marginalia -> imageUris.orEmpty()
+        is GalleryWall -> imageUris.orEmpty()
+        is FieldNotes -> imageUris.orEmpty()
+        is OpenNotebook -> subData?.imageUrisAll().orEmpty()
+        is Portfolio -> sections.orEmpty().flatMap { it.data.imageUrisAll() }
     }
 
     /**
@@ -437,15 +469,15 @@ sealed class CaptureData {
      */
     fun withImageUris(remap: (String) -> String): CaptureData = when (this) {
         is SoundBite -> this
-        is ReelNotes -> copy(imageUris = imageUris.map(remap))
-        is Marginalia -> copy(imageUris = imageUris.map(remap))
+        is ReelNotes -> copy(imageUris = imageUris.orEmpty().map(remap))
+        is Marginalia -> copy(imageUris = imageUris.orEmpty().map(remap))
         is GalleryWall -> copy(
-            imageUris = imageUris.map(remap),
-            tileLayouts = tileLayouts.map { it.copy(uri = remap(it.uri)) }
+            imageUris = imageUris.orEmpty().map(remap),
+            tileLayouts = tileLayouts.orEmpty().map { it.copy(uri = remap(it.uri)) }
         )
-        is FieldNotes -> copy(imageUris = imageUris.map(remap))
-        is OpenNotebook -> copy(subData = subData.withImageUris(remap))
-        is Portfolio -> copy(sections = sections.map { it.copy(data = it.data.withImageUris(remap)) })
+        is FieldNotes -> copy(imageUris = imageUris.orEmpty().map(remap))
+        is OpenNotebook -> subData?.let { copy(subData = it.withImageUris(remap)) } ?: this
+        is Portfolio -> copy(sections = sections.orEmpty().map { it.copy(data = it.data.withImageUris(remap)) })
     }
 
     /**
@@ -460,7 +492,7 @@ sealed class CaptureData {
         is Marginalia -> paperStyle ?: NotePaperStyle.RULED
         is GalleryWall -> paperStyle ?: NotePaperStyle.RULED
         is FieldNotes -> paperStyle ?: NotePaperStyle.RULED
-        is OpenNotebook -> subData.notePaperStyle()
-        is Portfolio -> sections.firstOrNull()?.data?.notePaperStyle() ?: NotePaperStyle.RULED
+        is OpenNotebook -> subData?.notePaperStyle() ?: NotePaperStyle.RULED
+        is Portfolio -> sections.orEmpty().firstOrNull()?.data?.notePaperStyle() ?: NotePaperStyle.RULED
     }
 }
