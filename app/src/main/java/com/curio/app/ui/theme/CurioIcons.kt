@@ -90,6 +90,7 @@ object CurioIcons {
     const val MicNone     = "mic_none"
     const val Image       = "image"
     const val Fullscreen  = "fullscreen"   // ⤢ — expand mood board
+    const val AspectRatio = "aspect_ratio" // ▭ — Smart Spin layout (small-screen fit)
     const val PlayArrow   = "play_arrow"
     const val Pause       = "pause"
     const val Stop        = "stop"

@@ -2,6 +2,40 @@
 
 ## Latest Request (COMPLETED)
 
+**CI compile fix for the bubble unfurl + Spin smart-layout system (low-density + short-screen compact tiers with vertical edge buttons, toggleable)**
+
+### What was asked
+
+“fix these also the compact mode doesnt trigger with dpi below 440 but also create a smart system where below 440 dpi it gets compact mode and also when the screen length is smaller according to the dimension it gets even smaller or maybe the category button goes to the left vertically and filters goes to the right vertically. add this as an option to turn off as well. not the smart system for dpi but the dimension. so each screen properly fits” — plus the pasted CI log: `ExploreBubbleContent.kt` fails to compile (2-param `onSizeChanged` lambda; `AnimatedContent(transitionState=…)` overload missing in the resolved animation version). ask_user: extra-small tier = **BOTH** (shrink the deck AND vertical edge buttons); toggle lives in the **Appearance card**.
+
+### Root causes
+
+1. **CI failure (blocking)** — the v6.12 bubble unfurl used `Modifier.onSizeChanged { w, h -> … }` (the modifier takes a single `(IntSize) -> Unit`) and `AnimatedContent(transitionState = transition, …)` — the `transitionState` overload doesn’t exist in the resolved animation version, so the whole call (and the `togetherWith`/`SizeTransform` inside its transitionSpec) failed to resolve.
+2. **Compact mode never triggered on low density** — `SpinCompactThresholdHeight` keyed compact mode on screen HEIGHT only; a low-dpi device with a tall layout never compacted.
+3. **No “even smaller” tier** — a single compact scale (0.88) was the only fallback, and the bottom bar always stayed a horizontal row.
+
+### What was done
+
+**CI fix — `ui/components/ExploreBubbleContent.kt`:** `onSizeChanged` now takes the single `IntSize` and forwards `size.width / size.height`; `AnimatedContent` switched to the `targetState = minimized` overload (the `updateTransition` still drives the corner morph + `isRunning` size-gate — both animate on the same `minimized` flip). The bubble expand/collapse unfurl is otherwise unchanged.
+
+**Spin smart layout — `SpinScreen.kt` (v7.2):**
+- **Low-density rule (always on):** `densityDpi < 440` → compact layout no matter the height (`SpinLowDensityDpi`).
+- **Dimension rule (toggleable):** new `AppPreferences.smartSpinLayoutState` (default ON) gates the height tiers: `< 680dp` compact (scrollable band + 0.88 deck), `< 600dp` extra-compact (`SpinExtraCompactThresholdHeight`) — deck scales 0.78 / carousel 350dp / tighter paddings.
+- **Vertical edge buttons (extra-compact):** `BottomCta(vertical = true)` renders Categories left / Filter right as tall 54×112dp pills (`VerticalDeckButton`) pinned `CenterStart/CenterEnd`, leaving the middle clear.
+- `SpinDeckSection` + `Carousel` gained `extraCompact` params (default false — normal layout byte-identical).
+
+**Settings — `SettingsScreen.kt` + `AppPreferences.kt` + `CurioIcons.kt`:** Appearance card gained a “Smart Spin layout” Switch (AspectRatio glyph, `KEY_SMART_SPIN_LAYOUT`, seeded in `initThemeMode`, reactive state read by Spin).
+
+### Validation
+
+- `check_braces.py` BALANCED on all 5 touched files.
+- Code-reviewer pass: clean — the CI fix addresses every error line in the pasted log; tier logic matches the spec exactly (extra-compact implies compact since 600 < 680; the toggle gates only the height rules); no missing imports / dead code. Two non-blocking nits accepted (state var `private set` consistency; fixed 112dp pill height fine at the threshold).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Peek-card reel fixed (direction, cut-off, speed) + “Done exploring” on the notification now opens the app at the write-it-down entry page with a HOME-anchored back stack**
 
 ### What was asked

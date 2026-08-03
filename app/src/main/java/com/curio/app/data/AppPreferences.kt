@@ -49,6 +49,7 @@ object AppPreferences {
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
+    private const val KEY_SMART_SPIN_LAYOUT = "smart_spin_layout"
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
     private const val KEY_OVERLAY_BUBBLE_ENABLED = "overlay_bubble_enabled"
@@ -101,6 +102,12 @@ object AppPreferences {
      * Seeded from prefs in [initThemeMode].
      */
     var entryMetaEnabledState by mutableStateOf(true)
+    // Smart Spin layout — the DIMENSION rule of the Spin page's smart
+    // compact system: short screens get the compact (or extra-compact)
+    // layout. Low-density devices (under 440 dpi) ALWAYS compact regardless
+    // of this switch — only the screen-height fitting is toggleable. Default
+    // ON. Seeded from prefs in [initThemeMode].
+    var smartSpinLayoutState by mutableStateOf(true)
     // Explore sessions — the explore-now timer/reminder/done flow. Default
     // ON; off disables the timer notification + reminder + done prompt while
     // Explore-now still opens the browser and records recently-explored.
@@ -153,6 +160,7 @@ object AppPreferences {
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
+        smartSpinLayoutState = isSmartSpinLayoutEnabled(context)
         exploreSessionsEnabledState = isExploreSessionsEnabled(context)
         liveNotificationsEnabledState = isLiveNotificationsEnabled(context)
         overlayBubbleEnabledState = isOverlayBubbleEnabled(context)
@@ -205,6 +213,14 @@ object AppPreferences {
     fun setEntryMetaEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_ENTRY_META_ENABLED, enabled).apply()
         entryMetaEnabledState = enabled
+    }
+
+    fun isSmartSpinLayoutEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SMART_SPIN_LAYOUT, true)
+
+    fun setSmartSpinLayoutEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_SMART_SPIN_LAYOUT, enabled).apply()
+        smartSpinLayoutState = enabled
     }
 
     /** Whether the explore-session flow (timer/reminder/done prompt) is on. */

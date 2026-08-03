@@ -675,9 +675,23 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // visibly repaints the page in its own blended color story.
             .background(pageWash)
     ) {
-        // True when the granted height is too short for the full fixed
-        // stack — the deck/button band then scrolls between pinned bars.
-        val compactHeight = maxHeight < SpinCompactThresholdHeight
+        // ── Smart layout tiers (v7.2) ────────────────────────────────
+        // 1. LOW-DENSITY — devices under [SpinLowDensityDpi] get the
+        //    compact (scrollable-band) layout no matter the height. This
+        //    rule is ALWAYS on (not toggleable).
+        // 2. DIMENSION — the screen-height rule is toggleable via Settings
+        //    → Smart Spin layout: heights under [SpinCompactThresholdHeight]
+        //    switch to the compact layout, and heights under
+        //    [SpinExtraCompactThresholdHeight] get the EXTRA-compact tier —
+        //    a smaller deck AND Categories/Filter as tall vertical pills
+        //    pinned to the left/right screen edges.
+        val lowDensity = context.resources.displayMetrics.densityDpi < SpinLowDensityDpi
+        val smartLayout = AppPreferences.smartSpinLayoutState
+        val heightCompact = maxHeight < SpinCompactThresholdHeight
+        val extraCompact = smartLayout && maxHeight < SpinExtraCompactThresholdHeight
+        // Extra-compact implies heightCompact (600 < 680), so this stays
+        // true whenever the smaller tier is active.
+        val compactHeight = lowDensity || (smartLayout && heightCompact)
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
         //    space around the deck still carries a whisper of the Curio
@@ -715,6 +729,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             ) {
                 SpinDeckSection(
                     compact = true,
+                    extraCompact = extraCompact,
                     cat = deckCat,
                     deckAccent = deckAccent,
                     deckGradient = deckGradient,
@@ -759,11 +774,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
         // ── 5. Bottom bar — Categories · Filter (controls only) ────
         // No duplicate shuffle button: the big center SpinButton above
-        // owns all spin starts, so the bottom bar is controls only.
+        // owns all spin starts, so the bottom bar is controls only. On the
+        // extra-compact tier the two pills move to the left/right screen
+        // edges and stand vertically, so the middle stays clear.
         BottomCta(
             cat = deckCat,
             mixedCount = activeCatIds.distinct().size,
             filterActiveCount = activeFilters.size + activeSubtypes.size,
+            vertical = extraCompact,
             onCategories = { showCategoryPicker = true },
             onFilter = { showFilters = true }
         )
@@ -839,6 +857,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 @Composable
 private fun ColumnScope.SpinDeckSection(
     compact: Boolean,
+    extraCompact: Boolean = false,
     cat: CurioCategory,
     deckAccent: Color,
     deckGradient: List<Color>,
@@ -856,7 +875,7 @@ private fun ColumnScope.SpinDeckSection(
 ) {
     // ── Breathing room — keeps the header off the deck (tighter when the
     //    screen is short so the deck fits between the pinned bars) ─────
-    Spacer(Modifier.height(if (compact) 20.dp else 44.dp))
+    Spacer(Modifier.height(if (compact) (if (extraCompact) 12.dp else 20.dp) else 44.dp))
 
     // ── Carousel (interactive cards) ───────────────────────────────
     // Tapping the center card opens a landed topic only; the bottom
@@ -874,6 +893,7 @@ private fun ColumnScope.SpinDeckSection(
         opening = opening,
         enabled = enabled,
         compact = compact,
+        extraCompact = extraCompact,
         onCardTap = onCardTap,
         modifier = Modifier.fillMaxWidth()
     )
@@ -883,8 +903,8 @@ private fun ColumnScope.SpinDeckSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = if (compact) 16.dp else 32.dp,
-                bottom = if (compact) 10.dp else 20.dp
+                top = if (compact) (if (extraCompact) 12.dp else 16.dp) else 32.dp,
+                bottom = if (compact) (if (extraCompact) 8.dp else 10.dp) else 20.dp
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -1399,8 +1419,25 @@ private const val PeekWipeTravel = 0.45f
  */
 private val SpinCompactThresholdHeight = 680.dp
 
+/**
+ * Extra-compact threshold — screens shorter than this get the smallest
+ * Spin tier (v7.2): a smaller deck AND Categories/Filter as tall vertical
+ * pills pinned to the left/right screen edges. Implies compact.
+ */
+private val SpinExtraCompactThresholdHeight = 600.dp
+
+/**
+ * Low-density threshold (v7.2) — devices under this density ALWAYS get the
+ * compact layout regardless of height (not toggleable; the screen-height
+ * rule is the toggleable "Smart Spin layout" setting).
+ */
+private const val SpinLowDensityDpi = 440
+
 /** Deck scale factor applied in compact (short-screen) mode. */
 private const val SpinCompactDeckScale = 0.88f
+
+/** Deck scale factor applied in extra-compact mode. */
+private const val SpinExtraCompactDeckScale = 0.78f
 
 @Composable
 private fun Carousel(
@@ -1416,17 +1453,30 @@ private fun Carousel(
     opening: Boolean,
     enabled: Boolean,
     compact: Boolean = false,
+    extraCompact: Boolean = false,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val poolSize = displayPool.size
     // v6.11 — compact screens shrink the whole fan ~12% so the deck keeps
-    // its proportions inside the shorter box.
-    val deckScale = if (compact) SpinCompactDeckScale else 1f
+    // its proportions inside the shorter box; v7.2 — extra-compact scales
+    // a further step (~22% total) so the whole fan fits very short screens.
+    val deckScale = when {
+        extraCompact -> SpinExtraCompactDeckScale
+        compact -> SpinCompactDeckScale
+        else -> 1f
+    }
     Box(
         // v6.3 — grew with the hero ticket so the bigger card keeps its
-        // breathing room above/below.
-        modifier = modifier.height(if (compact) 390.dp else 444.dp),
+        // breathing room above/below. The extra-compact box scales with the
+        // fan so proportions stay identical.
+        modifier = modifier.height(
+            when {
+                extraCompact -> 350.dp
+                compact -> 390.dp
+                else -> 444.dp
+            }
+        ),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -2196,7 +2246,8 @@ private fun BottomCta(
     mixedCount: Int = 1,
     filterActiveCount: Int,
     onCategories: () -> Unit,
-    onFilter: () -> Unit
+    onFilter: () -> Unit,
+    vertical: Boolean = false
 ) {
     val hasFilters = filterActiveCount > 0
 
@@ -2209,40 +2260,118 @@ private fun BottomCta(
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            // ── Categories · Filter — image-led deck buttons ────────
-            Row(
+        if (vertical) {
+            // ── Extra-compact edge buttons (v7.2) — on very short screens
+            //    the bottom Categories/Filter row becomes two TALL pills
+            //    pinned to the left/right screen edges, so the middle stays
+            //    clear for the deck band and everything fits.
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 12.dp, vertical = 10.dp)
             ) {
-                DeckControlButton(
-                    // A multi-select deck names itself "Mixed · N" so the
-                    // mix is obvious at a glance instead of the first
-                    // category's name.
+                VerticalDeckButton(
                     label = if (mixedCount > 1) "Mixed · $mixedCount" else cat.displayName,
                     icon = cat.iconGlyph,
                     cat = cat,
                     selected = true,
                     onClick = onCategories,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.align(Alignment.CenterStart)
                 )
-                DeckControlButton(
+                VerticalDeckButton(
                     label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
                     icon = CurioIcons.Search,
                     cat = cat,
                     selected = hasFilters,
                     onClick = onFilter,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.align(Alignment.CenterEnd)
                 )
             }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                // ── Categories · Filter — image-led deck buttons ────────
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    DeckControlButton(
+                        // A multi-select deck names itself "Mixed · N" so the
+                        // mix is obvious at a glance instead of the first
+                        // category's name.
+                        label = if (mixedCount > 1) "Mixed · $mixedCount" else cat.displayName,
+                        icon = cat.iconGlyph,
+                        cat = cat,
+                        selected = true,
+                        onClick = onCategories,
+                        modifier = Modifier.weight(1f)
+                    )
+                    DeckControlButton(
+                        label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
+                        icon = CurioIcons.Search,
+                        cat = cat,
+                        selected = hasFilters,
+                        onClick = onFilter,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Tall vertical pill used by the extra-compact bottom bar (v7.2) — icon
+ * over a stacked label, pinned to the left/right screen edge (Categories
+ * left, Filter right) so the middle of a very short screen stays clear for
+ * the deck band. Same fill/border language as [DeckControlButton].
+ */
+@Composable
+private fun VerticalDeckButton(
+    label: String,
+    icon: String,
+    cat: CurioCategory,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(24.dp),
+        color = if (selected) cat.themedAccent() else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = if (selected) null else cat.categoryBorder(),
+        shadowElevation = 0.dp,
+        modifier = modifier.size(width = 54.dp, height = 112.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 6.dp, vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CurioIcon(
+                icon, null,
+                tint = if (selected) Color.White else cat.categoryInk(),
+                size = 22.dp
+            )
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                color = if (selected) Color.White else cat.categoryInk(),
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
