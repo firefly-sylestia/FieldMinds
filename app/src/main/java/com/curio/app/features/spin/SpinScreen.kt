@@ -2121,7 +2121,6 @@ private fun PeekCard(
             Surface(
                 shape = RoundedCornerShape(corner),
                 color = if (redesign) Color.Transparent else cardColor,
-                brush = if (redesign) fillBrush else null,
                 // 2 — soft ambient shadows lift the deck off the tinted page
                 // (near cards sit higher than the far pair).
                 shadowElevation = if (redesign) (if (far) 1.dp else 3.dp) else 0.dp,
@@ -2130,7 +2129,15 @@ private fun PeekCard(
                 // stroke stays crisp instead of aliasing into pixel noise —
                 // lets each deck layer read as a distinct card.
                 border = BorderStroke(width = 1.dp, color = hairline),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (redesign && fillBrush != null) {
+                            Modifier.background(brush = fillBrush, shape = RoundedCornerShape(corner))
+                        } else {
+                            Modifier
+                        }
+                    )
             ) {
                 Column(
                     modifier = Modifier
