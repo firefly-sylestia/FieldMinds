@@ -25,6 +25,10 @@
 - Code-reviewer: clean after one fix — it caught that `roomy` gated on the toggle-gated `compactHeight` could fire on a SHORT high-dpi screen when Smart Spin layout is off; keyed to raw `heightCompact` instead.
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
 
+### Follow-up — CI fix (Profile revamp compile error)
+
+CI failed on the PROFILE rewrite (`8d1806f9` build): `ProfileScreen.kt:132:46 — @Composable invocations can only happen from the context of a @Composable function`. Cause: `CurioCategory.themedAccent()` is `@Composable` (CategoryInk.kt:46) and was called inside a `remember(categoryCounts) { … }` block (not a composable context). Fix: the hero accent/glyph are now computed as plain vals in the composable body (`topLane` → `themedAccent()` / `iconGlyph` with coral/sparkle fallbacks), still re-deriving from `categoryCounts`. Other `themedAccent()` call sites in the file were already in composable contexts (Surface/CurioIcon params). Braces balanced; committed + pushed.
+
 ### Next
 
 Paper-texture redesign (real crumpled/torn texture, torn + folded/coffee combos, coffee/folded quality pass) — sequenced next per ask_user.

@@ -126,17 +126,13 @@ fun ProfileScreen(navController: NavController) {
 
     // Hero accent/glyph follow your most-explored lane; brand coral +
     // sparkles before the first save (mirrors the Home quest card's
-    // wildcard treatment).
-    val heroAccent = remember(categoryCounts) {
-        categoryCounts.maxByOrNull { it.value }?.key
-            ?.let { CurioCategories.byId(it).themedAccent() }
-            ?: CurioColors.CategoryCoral
-    }
-    val heroGlyph = remember(categoryCounts) {
-        categoryCounts.maxByOrNull { it.value }?.key
-            ?.let { CurioCategories.byId(it).iconGlyph }
-            ?: CurioIcons.AutoAwesome
-    }
+    // wildcard treatment). themedAccent() is @Composable, so these live
+    // in the body (not a remember block).
+    val topLane = categoryCounts.maxByOrNull { it.value }?.key
+    val heroAccent = topLane?.let { CurioCategories.byId(it).themedAccent() }
+        ?: CurioColors.CategoryCoral
+    val heroGlyph = topLane?.let { CurioCategories.byId(it).iconGlyph }
+        ?: CurioIcons.AutoAwesome
 
     ProfileDialogs(
         showNameDialog = showNameDialog,
