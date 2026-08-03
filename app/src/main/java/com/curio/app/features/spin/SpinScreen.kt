@@ -14,6 +14,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -220,6 +222,26 @@ import kotlin.random.Random
  *     landing settle uses the controlled Deliberate spring (no Elastic
  *     bounce). Peek wipes switch from 90ms linear blurs to ~200ms
  *     FastOutSlowInEasing slides.
+ *
+ * v6.10 changes:
+ * 25. **Coherent reel (no more glitchy start)** — the fan is dealt as a
+ *     stable hand and the reel rotates through it (+1 per tick), with the
+ *     idle fan and the spinning reel reading the SAME window. A spin now
+ *     starts from the current spread as a seamless continuation; the old
+ *     per-spin re-shuffle made all five cards jump to arbitrary topics in
+ *     one frame. The hand re-deals around the landed topic when a spin
+ *     settles (masked by the confetti).
+ * 26. **Fluid peek wipes** — every slot now rises THROUGH the card window
+ *     at full height (in from below, out the top), all in the same
+ *     direction (the old top-peek inverted slide glided backwards), and
+ *     the wipe duration sits UNDER the 200ms tick floor so each step
+ *     completes before the next tick lands — a clean slot-reel instead of
+ *     an interrupted blur.
+ * 27. **Dice settles instead of stopping** — the tumbling dots morph into
+ *     the resting dice (spring scale + fade, then a gentle idle breathe on
+ *     the landed die) instead of hard-swapping, and the tumble gains a
+ *     slow vertical bob so the loop reads as a die shaking — seamless,
+ *     and it never just stops.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -396,16 +418,26 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         mutableStateOf(setOf<String>())
     }
 
-    // Re-shuffled EVERY spin so the fan (and the hero cycle) shows a fresh
-    // spread of topics instead of the same handful in the same order.
-    val displayPool = remember(shuffleCount, filteredPool) {
-        if (filteredPool.isEmpty()) emptyList()
-        else {
-            val s = filteredPool.shuffled()
-            if (s.size >= 6) s.take(6) else s
-        }
-    }
-    var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
+    // ── Spin hand — the 6-topic fan window (v6.10) ─────────────────────
+    // A stable "hand" reels during a spin: it's dealt ONCE (a random
+    // spread, centered on the current front topic) and the reel advances by
+    // rotating cycleIndex through it — so every tick is a clean +1 shift
+    // and the deck visibly streams past. The OLD per-spin re-shuffle made
+    // the start of every spin glitch: all five cards swapped to arbitrary
+    // topics in a single frame before the reel even began.
+    // The initial deal centers on the RESTORED landed topic when one
+    // exists (nav-return from Reveal), so the idle fan reads coherent even
+    // after the back-stack drops the composition. Keyed on filteredPool
+    // ONLY — not on landedTopicName — so the spin start (which nulls the
+    // landed topic) never re-deals the hand mid-flow.
+    var hand by remember(filteredPool) { mutableStateOf(buildDeckHand(filteredPool, landedTopic)) }
+    // cycleIndex is NOT reset per spin — the reel starts from wherever the
+    // deck stopped (the landed topic sits at hand[0]), so the first tick is
+    // a seamless continuation instead of a jump cut.
+    var cycleIndex by remember { mutableIntStateOf(0) }
+    // Keep the reel position in sync whenever the hand is re-dealt by a
+    // pool change (filters/category), so the fan always fronts hand[0].
+    LaunchedEffect(filteredPool) { cycleIndex = 0 }
     val cat = activeCategory
 
     // ── Mixed-deck colors (v5.12) ───────────────────────────────────────
@@ -543,8 +575,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
         landedTopicName = primary?.name
         if (primary != null) {
-            val idx = displayPool.indexOfFirst { it.id == primary.id }
-            if (idx >= 0) cycleIndex = idx
+            // Re-deal the hand around the landed topic — the front becomes
+            // the pick and its neighbors fill the fan — so the deck stops
+            // on a coherent spread and the NEXT spin starts from it
+            // seamlessly. This re-deal is masked by the confetti burst.
+            hand = buildDeckHand(filteredPool, primary)
+            cycleIndex = 0
             recentTopicIds = (recentTopicIds + primary.id).toList().takeLast(20).toSet()
             StreakTracker.recordActivity(context)
             // Final reel clunk — strong confirmation the wheel locked in.
@@ -635,7 +671,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             deckGradient = deckGradient,
             isMixed = isMixedDeck,
             mixSeed = mixSeed,
-            displayPool = displayPool,
+            displayPool = hand,
             cycleIndex = cycleIndex,
             shuffling = shuffling,
             landedTopic = landedTopic,
@@ -1255,7 +1291,6 @@ private fun Carousel(
                     slot = slot,
                     pool = displayPool,
                     cycleIndex = cycleIndex,
-                    shuffling = shuffling,
                     landedTopic = landedTopic
                 )
                 if (slot == 0) {
@@ -1533,20 +1568,20 @@ private fun HeroTicketCard(
                             targetState = topic,
                             transitionSpec = {
                                 if (shuffling) {
-                                    // 200/180ms matches the peek wipes and
-                                    // the 200ms tick floor so even the
-                                    // fastest early ticks complete the reel.
-                                    // v6.8 — SizeTransform(clip = false), same
-                                    // unclip as the peek cards, so the title
-                                    // reel isn't sliced mid-slide.
+                                    // v6.10 — same rhythm as the peek wipes
+                                    // (under the 200ms tick floor) with a
+                                    // stronger height/2 rise so the front
+                                    // content visibly glides up as the deck
+                                    // streams. clip=false keeps the title
+                                    // reel from being sliced mid-slide.
                                     (slideInVertically(
-                                        animationSpec = tween(200, easing = FastOutSlowInEasing)
-                                    ) { height -> height / 3 } +
-                                        fadeIn(animationSpec = tween(200, easing = FastOutSlowInEasing))) togetherWith
+                                        animationSpec = tween(190, easing = FastOutSlowInEasing)
+                                    ) { height -> height / 2 } +
+                                        fadeIn(animationSpec = tween(190, easing = FastOutSlowInEasing))) togetherWith
                                     (slideOutVertically(
-                                        animationSpec = tween(180, easing = FastOutSlowInEasing)
-                                    ) { height -> -height / 3 } +
-                                        fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
+                                        animationSpec = tween(160, easing = FastOutSlowInEasing)
+                                    ) { height -> -height / 2 } +
+                                        fadeOut(animationSpec = tween(160, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
                                 } else {
                                     (slideInVertically(
                                         animationSpec = tween(260, easing = FastOutSlowInEasing)
@@ -1700,34 +1735,36 @@ private fun PeekCard(
             targetState = topic,
             transitionSpec = {
                 if (shuffling) {
-                    // v6.6 — smooth reel wipe: eased directional slide + fade
-                    // so the deck glides past on every tick instead of a
-                    // 90ms linear blur. ~200ms matches the new tick floor
-                    // (200ms) so even the fastest early ticks complete their
-                    // wipe; the slower deceleration ticks read as full,
-                    // graceful slides.
-                    // v6.8 — `SizeTransform(clip = false)`: without it the
-                    // default clip=true hard-cuts the sliding card at the
-                    // card's own top/bottom edge, so the peek looks sliced
-                    // in half mid-wipe. Unclipping lets the slide read as a
-                    // continuous glide (motion unchanged, nothing else moved).
+                    // v6.10 — a proper reel: every slot's content rises
+                    // THROUGH the card window at full height (in from below,
+                    // out the top) clipped to the card, so the deck streams
+                    // upward like a slot-machine reel. No fades — the
+                    // incoming covers the outgoing as it rises, so the wipe
+                    // line stays crisp instead of muddying both halves. The
+                    // old 1/3-height slide with an inverted top-peek
+                    // direction made the top card glide BACKWARDS while the
+                    // bottom went forward — incoherent — and wipes that
+                    // matched the 200ms tick floor exactly got interrupted
+                    // every tick, which read as glitchy. Durations now sit
+                    // UNDER the tick floor so each step completes before
+                    // the next one lands.
                     slideInVertically(
-                        animationSpec = tween(200, easing = FastOutSlowInEasing)
-                    ) { height -> if (isTop) -height / 3 else height / 3 } +
-                    fadeIn(animationSpec = tween(200, easing = FastOutSlowInEasing)) togetherWith
+                        animationSpec = tween(190, easing = FastOutSlowInEasing)
+                    ) { height -> height } togetherWith
                     slideOutVertically(
-                        animationSpec = tween(180, easing = FastOutSlowInEasing)
-                    ) { height -> if (isTop) height / 3 else -height / 3 } +
-                    fadeOut(animationSpec = tween(180, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
+                        animationSpec = tween(160, easing = FastOutSlowInEasing)
+                    ) { height -> -height } using SizeTransform(clip = true)
                 } else {
+                    // Idle re-fan (landing re-deal / category switch) — a
+                    // slower, softer pass in the same upward direction.
                     slideInVertically(
-                        animationSpec = tween(240, easing = FastOutSlowInEasing)
-                    ) { height -> if (isTop) -height / 3 else height / 3 } +
-                    fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
+                        animationSpec = tween(260, easing = FastOutSlowInEasing)
+                    ) { height -> height } +
+                    fadeIn(animationSpec = tween(260, easing = FastOutSlowInEasing)) togetherWith
                     slideOutVertically(
-                        animationSpec = tween(200, easing = FastOutSlowInEasing)
-                    ) { height -> if (isTop) height / 3 else -height / 3 } +
-                    fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
+                        animationSpec = tween(220, easing = FastOutSlowInEasing)
+                    ) { height -> -height } +
+                    fadeOut(animationSpec = tween(220, easing = FastOutSlowInEasing)) using SizeTransform(clip = true)
                 }
             },
             label = "peekSlot_$slot"
@@ -1816,14 +1853,48 @@ private fun SpinButton(
             ) {
                 // v5.10 — the dice shows in EVERY state: tumbling while
                 // shuffling, a steady white dice on the filled accent.
-                if (isShuffling) {
-                    ShuffleGlyph(tint = Color.White, modifier = Modifier.size(72.dp))
-                } else {
-                    CurioIcon(
-                        CurioIcons.Casino, null,
-                        tint = Color.White,
-                        size = if (landedTopic != null) 52.dp else 60.dp
-                    )
+                // v6.10 — the tumble MORPHS into the resting dice (spring
+                // scale + fade) instead of hard-swapping, so the end of a
+                // spin reads as the die settling — never an abrupt stop.
+                AnimatedContent(
+                    targetState = isShuffling,
+                    transitionSpec = {
+                        (scaleIn(
+                            initialScale = 0.55f,
+                            animationSpec = spring(dampingRatio = 0.55f, stiffness = 380f)
+                        ) + fadeIn(animationSpec = tween(170))) togetherWith
+                        (scaleOut(
+                            targetScale = 0.55f,
+                            animationSpec = tween(150)
+                        ) + fadeOut(animationSpec = tween(150)))
+                    },
+                    label = "diceMorph"
+                ) { shuffling ->
+                    if (shuffling) {
+                        ShuffleGlyph(tint = Color.White, modifier = Modifier.size(72.dp))
+                    } else {
+                        // Gentle idle breathe on the resting die — a slow,
+                        // even pulse so the settled dice stays alive.
+                        val idleBreathe = rememberInfiniteTransition(label = "diceIdle")
+                        val breathe by idleBreathe.animateFloat(
+                            initialValue = 0f,
+                            targetValue = 1f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(1800, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "diceIdleBreathe"
+                        )
+                        CurioIcon(
+                            CurioIcons.Casino, null,
+                            tint = Color.White,
+                            size = if (landedTopic != null) 52.dp else 60.dp,
+                            modifier = Modifier.graphicsLayer {
+                                scaleX = 1f + breathe * 0.05f
+                                scaleY = 1f + breathe * 0.05f
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -1871,9 +1942,10 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
     val infinite = rememberInfiniteTransition(label = "shuffleGlyph")
     // v5.10 — smooth, unhurried tumble: LinearEasing wraps 360°→0° with no
     // visible snap (the old FastOutSlowIn + Restart eased out then jumped
-    // back, which read as fast and janky). 1600ms per turn completes ~1.5–2
-    // rotations inside the 2.4–3.2s shuffle window — fluid, never frantic,
-    // and never stalled.
+    // back, which read as fast and janky). The dot pattern is rotationally
+    // symmetric, so the wrap-around is invisible — a true seamless loop.
+    // 1600ms per turn completes ~1.5–2 rotations inside the 2.4–3.2s
+    // shuffle window — fluid, never frantic, and never stalled.
     val angle by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
@@ -1892,10 +1964,23 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
         ),
         label = "shufflePulse"
     )
+    // v6.10 — a slow vertical bob so the die reads as shaking in the cup
+    // while it rolls, not just spinning in place.
+    val bob by infinite.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1300, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shuffleBob"
+    )
     Canvas(modifier = modifier) {
         val r = size.minDimension / 2f
         val cx = size.width / 2f
-        val cy = size.height / 2f
+        // cy lifts while the breathe is at rest, so the bob and the pulse
+        // rock through a gentle, non-fighting loop.
+        val cy = size.height / 2f - bob * r * 0.08f
         val breathe = 1f + pulse * 0.06f
         rotate(degrees = angle, pivot = Offset(cx, cy)) {
             for (i in 0 until 6) {
@@ -2269,28 +2354,28 @@ private fun resolveTopicForSlot(
     slot: Int,
     pool: List<CurioTopic>,
     cycleIndex: Int,
-    shuffling: Boolean,
     landedTopic: CurioTopic?
 ): CurioTopic? {
     if (pool.isEmpty()) return null
+    if (landedTopic != null && slot == 0) return landedTopic
+    // v6.10 — the idle fan and the spinning reel are the SAME window into
+    // the hand (front = hand[cycleIndex], neighbors fanned around it), so
+    // a spin starts as a seamless +1 continuation — never a jump cut.
     val idxOf = { pos: Int -> ((pos % pool.size) + pool.size) % pool.size }
-    return when {
-        landedTopic != null && slot == 0 -> landedTopic
-        !shuffling -> when (slot) {
-            -2 -> pool[idxOf(pool.size - 2)]
-            -1 -> pool[idxOf(pool.size - 1)]
-            0 -> pool[0]
-            1 -> pool[idxOf(1)]
-            else -> pool[idxOf(2)]
-        }
-        else -> when (slot) {
-            -2 -> pool[idxOf(cycleIndex - 2)]
-            -1 -> pool[idxOf(cycleIndex - 1)]
-            0 -> pool[idxOf(cycleIndex)]
-            1 -> pool[idxOf(cycleIndex + 1)]
-            else -> pool[idxOf(cycleIndex + 2)]
-        }
-    }
+    return pool[idxOf(cycleIndex + slot)]
+}
+
+/**
+ * Deals a spin hand — up to 6 topics for the fan. With [center] the landed
+ * topic sits at the front (hand[0]) and its neighbors fill the rest; without
+ * one the hand is a plain random spread. Stable across a spin: the reel
+ * rotates through it via cycleIndex instead of re-shuffling mid-spin.
+ */
+private fun buildDeckHand(pool: List<CurioTopic>, center: CurioTopic?): List<CurioTopic> {
+    if (pool.isEmpty()) return emptyList()
+    val head = if (center != null && pool.any { it.id == center.id }) listOf(center) else emptyList()
+    val rest = (if (center == null) pool else pool.filterNot { it.id == center.id }).shuffled()
+    return (head + rest).take(6)
 }
 
 /**

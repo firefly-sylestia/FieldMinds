@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Spin shuffle reel is now fluid + glitch-free at start; peek cards wipe like a slot reel; dice tumbles properly and settles instead of stopping**
+
+### What was asked
+
+"the shuffle spin page animations are fine its just the peek cards animation is not fluid and smooth to make user feel like its shuffling and also when the animation starts it looks glitchy so fix it. and also make the dice animation proper loop and not just stops and turns into a dice but a proper smooth animation."
+
+### What was done
+
+1. **No more glitchy start (the big one)** — the fan was re-shuffled EVERY spin (`remember(shuffleCount, filteredPool)`), so at spin start all five cards jumped to arbitrary topics in one frame before the reel began. Now the fan is a stable **hand** dealt once per pool (`buildDeckHand`, centered on the front topic — or the restored landed topic after nav-return) and the reel rotates through it: `cycleIndex` persists across spins (no longer keyed on shuffleCount) and the idle fan reads the SAME window as the spinning reel (`resolveTopicForSlot` is now a single cycleIndex+slot lookup; the old idle branch used a different fixed window). A spin therefore starts from the current spread as a seamless +1 continuation — zero jump. The hand re-deals around the landed topic at landing (masked by the confetti) so the deck stops on a coherent spread and the next spin starts from it.
+2. **Peek cards wipe like a slot reel** — every slot now rises THROUGH the card window at full height (in from below, out the top) clipped to the card, with **no fades** so the incoming cleanly covers the outgoing. Fixes: the old 1/3-height slide with an inverted top-peek direction (top card glided BACKWARDS while the bottom went forward — incoherent), and wipe durations that matched the 200ms tick floor exactly (every wipe got interrupted — the jitter). Durations now sit UNDER the tick floor (190/160ms) so each step completes before the next tick. Hero content reel synced to the same rhythm (190/160, height/2 rise).
+3. **Dice tumbles properly and settles** — the in-button tumble now loops seamlessly (rotationally symmetric dot pattern makes the 360° wrap invisible; added a slow vertical bob so it reads as a die shaking in a cup). At landing the dots **morph** into the resting dice via AnimatedContent (spring scale-in + fade) instead of a hard swap — and the resting die gets a slow idle breathe so it never looks frozen.
+
+**`SpinScreen.kt` only** — state + animation changes; no data/API changes.
+
+### Validation
+
+- `check_braces.py` BALANCED.
+- Grep: zero stale `displayPool` val refs outside the Carousel param; `resolveTopicForSlot` has no leftover `shuffling` callers.
+- Code-reviewer pass (no blockers): state ordering verified (hand/cycleIndex declared after landedTopic, both before the shuffle effect), spin-start seamlessness verified (front resolves to hand[0] == landed topic → no transition fires), applied its refinements: hand's initial deal centers on the restored landed topic (keyed on filteredPool only so spin-start's landedTopicName=null never re-deals) + dropped the shuffling-branch fades for a crisp wipe line.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Floating pill + explore notification trimmed to the essentials; expanded pill redesigned (no more circle look); topic slow-scrolls (marquee)**
 
 ### What was asked
