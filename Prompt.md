@@ -2,6 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
+**Crash fix: tapping Explore crashed the whole app — overlay-owner init order (`Restarter must be created only during owner's initialization stage`)**
+
+### What was asked
+
+"Still crashing after i tap explore now it opens up the browser and after that the app wont open it keeps crashing and nothing even shows up in notification" + logcat (`FATAL EXCEPTION: main` — `Unable to create service com.curio.app.infrastructure.ExploreSessionService`, `IllegalStateException: Restarter must be created only during owner's initialization stage` at `ExploreSessionService$OverlayOwner.<init>`).
+
+### Root cause
+
+Regression from the "unified overlay owner" commit. `OverlayOwner`'s property initializers ran in this order: `LifecycleRegistry.createUnsafe(this).apply { currentState = RESUMED }` FIRST, then `SavedStateRegistryController.create(this).apply { performRestore(null) }`. `performRestore` → `performAttach` REQUIRES the owner's lifecycle to still be `INITIALIZED`; because the registry was already advanced to RESUMED, it threw. The owner is a property initializer on the Service, so the throw happened in the SERVICE CONSTRUCTOR → `handleCreateService` failed → the whole process died.
+
+Why it matched the report exactly: (1) browser opened fine (the search intent fires before/independent of the service), (2) the app then "keeps crashing / won't open" because the session is persisted — every relaunch re-arms the service via the CurioNavHost startup `LaunchedEffect` + ON_RESUME observer + boot receiver + settings toggles, each re-triggering the constructor crash, and (3) "nothing shows up in notification" — the FGS notification is only promoted inside `onStartCommand` (`render()`), which never ran.
+
+### What was done
+
+**`ExploreSessionService.kt`** —
+- **Ordering fix (THE fix):** `OverlayOwner` now declares `store` → `registry = LifecycleRegistry.createUnsafe(this)` (still INITIALIZED) → `controller = SavedStateRegistryController.create(this).apply { performRestore(null) }` → `init { registry.currentState = RESUMED }` — restore attaches while INITIALIZED, then the state advances. `registry` stays non-private (`val`, class itself is private) so `onDestroy()` can still move it to DESTROYED (reviewer caught that `private val` would have been a compile error — private nested-class members aren't visible to the enclosing class).
+- **Hardening:** `overlayOwner` is now `by lazy { OverlayOwner() }` — a throw here can never take down service CREATION again (constructor crash = process death + crash loop); the owner is only created when the bubble actually shows.
+
+### Validation
+
+- `check_braces.py` BALANCED on the touched file.
+- Code-reviewer pass: confirmed the ordering contract (performRestore needs INITIALIZED, advancing to RESUMED dispatches ON_CREATE→ON_RESUME normally), lazy safe (both call sites on main thread), no imports needed (`by lazy` stdlib), and caught + fixed the `private val registry` compile break.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Crash + permission fixes: explore bubble no longer crashes (overlay ViewTree owners), "Display over other apps" asked in setup & on Explore now, and newly saved mood boards no longer render blank**
 
 ### What was asked

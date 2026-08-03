@@ -92,7 +92,10 @@ class ExploreSessionService : Service() {
     // SavedStateRegistryOwner extend LifecycleOwner, so the owner must
     // supply lifecycle + viewModelStore + savedStateRegistry) and keeps
     // its lifecycle RESUMED for the window's lifetime.
-    private val overlayOwner = OverlayOwner()
+    // Lazy: the owner is only needed while the bubble window lives, and a
+    // throw here must never take down service CREATION — a constructor
+    // crash kills the whole process (the "app won't open" crash loop).
+    private val overlayOwner by lazy { OverlayOwner() }
 
     /**
      * Service-owned ViewTree owner for the overlay bubble's ComposeView.
@@ -101,12 +104,22 @@ class ExploreSessionService : Service() {
      */
     private class OverlayOwner :
         LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
-        val registry: LifecycleRegistry = LifecycleRegistry.createUnsafe(this).apply {
-            currentState = Lifecycle.State.RESUMED
-        }
+        // Field-initializer order matters: SavedStateRegistryController's
+        // performRestore requires the owner's lifecycle to STILL be
+        // INITIALIZED, so restore must run before the registry advances to
+        // RESUMED. Setting RESUMED first threw "Restarter must be created
+        // only during owner's initialization stage" from the service
+        // constructor — the FATAL crash on tapping Explore.
         private val store = ViewModelStore()
+        // Non-private (the class itself is private): onDestroy() moves the
+        // registry to DESTROYED via overlayOwner.registry.
+        val registry: LifecycleRegistry = LifecycleRegistry.createUnsafe(this)
         private val controller = SavedStateRegistryController.create(this).apply {
             performRestore(null)
+        }
+        init {
+            // Advance to RESUMED only after performRestore has attached.
+            registry.currentState = Lifecycle.State.RESUMED
         }
         override val lifecycle: Lifecycle get() = registry
         override val viewModelStore: ViewModelStore get() = store
