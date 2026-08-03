@@ -130,6 +130,31 @@ private fun fromHsl(h: Float, s: Float, l: Float): Color {
 }
 
 /**
+ * Hue-preserving light tint of a category accent, for LIGHT-mode page washes
+ * and tinted surfaces.
+ *
+ * The old RGB recipe (cream blended with a splash of the accent) let the
+ * cream's warm hue dominate the mix, so cool accents drifted off-family:
+ * teal and sky washes turned grey-GREEN and the detail hero's red glide
+ * passed through a yellow band before settling on the wash. Building the
+ * tint from the accent's OWN hue in HSL keeps every shade on the accent's
+ * hue family, so the hero's accent → wash fade stays on-hue (deep teal →
+ * pale teal, sky → pale azure, red → rose) with no foreign-color band.
+ *
+ * @param saturation Saturation of the pastel tint (0..1).
+ * @param lightness  Lightness of the pastel tint (0..1) — airy like the
+ *   cream paper, so tinted pages stay light for the maroon ink on top.
+ */
+internal fun lightAccentTint(
+    accent: Color,
+    saturation: Float = 0.22f,
+    lightness: Float = 0.88f
+): Color {
+    val a = toHsl(accent)
+    return fromHsl(a.h, saturation.coerceIn(0f, 1f), lightness.coerceIn(0f, 1f))
+}
+
+/**
  * Solid gradient definitions for card surfaces. Every card gradient opens on
  * the same deepened accent used by the flat category cards ([categoryCardFill])
  * and fades toward the active theme's background — white in light mode, black

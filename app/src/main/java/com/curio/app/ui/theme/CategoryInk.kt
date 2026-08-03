@@ -50,9 +50,12 @@ fun CurioCategory.themedAccent(): Color =
  * Theme-aware wash color for a category-aware page BACKGROUND (Spin, Topic
  * Reveal, Save/Capture, Cabinet filter).
  *
- * Light mode: the accent is first softened toward white (30%) then blended
- * at a gentler 14% over the cream background — lighter and whiter than the
- * original 20% wash, so the tint reads airy instead of dark.
+ * Light mode: a hue-preserving pastel of the accent (see [lightAccentTint]) —
+ * airy like the cream paper, but built from the accent's OWN hue family. The
+ * old cream-blended recipe let cream's warm hue dominate, so cool accents
+ * drifted off-family (teal/sky pages washed grey-GREEN and the detail hero's
+ * glide swung through green/yellow); the on-hue tint keeps the page AND the
+ * hero's fade-into-it exactly on the category's color story.
  *
  * Dark mode: the deep Tailwind-700 accent alone at 20% reads muddy (amber
  * goes brown, teal goes grey-green), while its light 300-level twin at any
@@ -80,7 +83,7 @@ fun CurioCategory.categoryBackgroundWash(): Color {
         val midTone = tuning.resolveMidTone(accent, lightAccent)
         lerp(background, midTone, tuning.blendFraction)
     } else {
-        lerp(background, lerp(accent, Color.White, 0.30f), 0.14f)
+        lightAccentTint(accent)
     }
 }
 
@@ -108,7 +111,7 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
         // into a near-invisible +0.10 whisper.
         lerp(base, midTone, tuning.blendFraction + 0.30f)
     } else {
-        lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
+        lightSurfaceTint(accent)
     }
 }
 
@@ -128,7 +131,7 @@ fun CurioCategory.categorySurfaceMoodBoard(base: Color = MaterialTheme.colorSche
         val midTone = tuning.resolveMidTone(accent, lightAccent)
         lerp(base, midTone, tuning.blendFraction + 0.30f)
     } else {
-        lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
+        lightSurfaceTint(accent)
     }
 }
 
@@ -158,9 +161,18 @@ fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.su
         val desaturated = lerp(midTone, Color(0xFF9AA3B0), 0.40f)
         lerp(base, desaturated, tuning.blendFraction + 0.40f)
     } else {
-        lerp(base, lerp(accent, Color.White, 0.30f), 0.24f)
+        lightSurfaceTint(accent)
     }
 }
+
+/**
+ * Light-mode surface tint for CARDS and CHIPS — the page wash's stronger
+ * sibling: a touch more saturated than [lightAccentTint]'s defaults so the
+ * surface reads as an elevated card on the tinted page rather than melting
+ * into it. Single definition keeps the three surface families in sync.
+ */
+private fun lightSurfaceTint(accent: Color): Color =
+    lightAccentTint(accent, saturation = 0.28f, lightness = 0.89f)
 
 /**
  * Theme-aware border for CARDS and BUTTONS that wear a tinted surface on a

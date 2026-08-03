@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Light-mode gradient fix: teal / light-blue / red detail heroes no longer blend through foreign colors — the light wash is now a hue-preserving pastel of the accent**
+
+### What was asked
+
+"the red teal and light blue have gradient issue in light mode they show entirely some differnt blending gradient in detail screen"
+
+### Root cause
+
+The light-mode category page wash was `lerp(cream, lerp(accent, White, 0.30f), 0.14f)` — ~86% cream + 14% accent tint, and cream's warm hue (~38°) dominates the mix. Teal (hue ≈175°) and sky (≈201°) washes therefore landed in the GREEN zone (~82°/110°), and the detail hero's HSL glide (accent → wash) swung through green for teal/light-blue and through a yellow band for red before settling on the wash — the "entirely different blending gradient" in light mode. (Indigo/amber/coral sit near cream's hue, so they never showed it.)
+
+### What was done
+
+- **`CurioColors.kt`** — new `internal fun lightAccentTint(accent, saturation = 0.22f, lightness = 0.88f)`: builds the pastel from the accent's OWN hue via the existing private `toHsl`/`fromHsl`, so every shade stays on the accent's hue family.
+- **`CategoryInk.kt`** — the 4 light-mode tint formulas (`categoryBackgroundWash`, `categorySurface`, `categoryChipSurface`, `categorySurfaceMoodBoard`) now use `lightAccentTint` instead of the cream blend; a shared private `lightSurfaceTint(accent)` (0.28f / 0.89f) keeps the three surface families in sync. Dark / AMOLED / Material paths untouched.
+- The detail hero's final stop is `categoryBackgroundWash`, so both HSL-gradient endpoints now share the accent hue (dh = 0): deep teal → pale teal, sky → pale azure, red → rose. By root cause, Spin / Reveal / Cabinet / Save teal & sky pages also now wear a pale category tint instead of grey-green.
+
+### Validation
+
+- `check_braces.py` BALANCED on both files; grep confirms the old cream-blend pattern exists nowhere else (the mixed-deck wash uses an 0.85 pastel fraction — hue-dominant, untouched).
+- Code-reviewer pass: compiles (internal same-package, no unused imports — `lerp`/`Color`/`background`/`base` still used by toggle-off + dark paths), HSL math on-hue; applied its nit by extracting the duplicated (0.28f, 0.89f) tuning into `lightSurfaceTint`.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Explore service start is now crash-proof at the choke point — synchronous start failures are logged and swallowed instead of killing the app**
 
 ### What was asked
