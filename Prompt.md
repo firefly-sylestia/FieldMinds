@@ -2,6 +2,17 @@
 
 ## Latest Request (COMPLETED)
 
+**CI fix: CurioTheme unresolved `isDark` (compile error)**
+
+- The bubble-theme refactor moved `isDark` into `curioColorScheme()`, but `CurioTheme`'s `SideEffect` still referenced it → `Unresolved reference 'isDark'` at CurioTheme.kt:206-207.
+- Fix: `val isDark = isCurioDarkTheme()` recomputed in `CurioTheme`'s composable scope (the SideEffect block is not a @Composable context). Quick fix, no review (per user).
+
+Pushed; CI re-validates on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Crash fix: Cabinet NPE on legacy entries — null-hardened CaptureData preview/content + detail renders (mood board now shows)**
 
 ### What was asked

@@ -193,6 +193,9 @@ fun CurioTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = curioColorScheme()
+    // The SideEffect block below is NOT a @Composable context, so resolve
+    // the theme-mode dark check here (isCurioDarkTheme is @Composable).
+    val isDark = isCurioDarkTheme()
 
     val view = LocalView.current
     if (!view.isInEditMode) {
