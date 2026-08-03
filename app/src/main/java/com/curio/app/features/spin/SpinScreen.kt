@@ -286,6 +286,13 @@ import kotlin.random.Random
  *     the pastel spin button all read as one pastel story. Mixed decks
  *     already carried pure pastel stops; dark mode and non-pastel keep the
  *     classic card gradient.
+ *
+ * v7.8.1 changes:
+ * 33. **Pastel brightness** — pastel card fills open on the full pastel
+ *     accent (no black deepen) with a richer pastel saturation, so the
+ *     shuffle main card no longer reads dimmed in either mode; pastel peek
+ *     cards sit a step darker than the hero again (near 0.16 / far 0.28
+ *     black-lerp in light) instead of glowing brighter than it.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -515,10 +522,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ticket on the pastel-family crown (a whisper of the pastel accent,
     // melting into the on-hue page wash) instead of categoryCardFill's
     // black-darkened start, so the front card wears the same pastel story
-    // as the pale peek cards behind it (which fade toward the wash) and
-    // the pastel spin button. Mixed decks already carry pure pastel stops
-    // + pastel seams; dark mode and non-pastel keep the classic card
-    // gradient (the muted pastel twins already match the dark peeks).
+    // as the peek cards and the pastel spin button. v7.8.1 — the peeks
+    // behind it now sit a step DEEPER (black-lerp near 0.16 / far 0.28)
+    // so the hero's crown reads as the brightest card of the deck. Mixed
+    // decks already carry pure pastel stops + pastel seams; dark mode and
+    // non-pastel keep the classic card gradient (the muted pastel twins
+    // already match the dark peeks).
     val deckGradient = if (pastelMode && !darkMode && !isMixedDeck) {
         listOf(
             lerp(deckAccent, Color.White, 0.04f),
@@ -2058,16 +2067,22 @@ private fun PeekCard(
     // distinct layers. White content stays readable on the dimmed fill.
     // Mixed decks shade the blended accent so the whole deck reads mixed.
     // v7.7 — pastel mode keeps the peeks in the pastel CARD family instead
-    // of the old lerp-toward-black mid-tones (which read neither pastel nor
-    // deep accent): light mode fades toward white (airy pastel layers, the
-    // far pair drifting toward the pale wash), dark mode only gently
-    // deepens the muted pastel twin so the layers stay soft over midnight.
+    // of the old flat mid-tones (which read neither pastel nor deep accent).
+    // v7.8.1 — they sit a step DARKER than the hero ticket (which opens on
+    // the pure pastel accent) so the classic level hierarchy holds: light
+    // mode deepens toward black (near 0.16 / far 0.28), dark mode deepens
+    // the muted pastel twin (near 0.14 / far 0.26).
     val pastelMode = AppPreferences.pastelColorsState
     val darkMode = isCurioDarkTheme()
     val cardColor = remember(accent, far, pastelMode, darkMode) {
         when {
-            pastelMode && !darkMode -> lerp(accent, Color.White, if (far) 0.35f else 0.10f)
-            pastelMode -> lerp(accent, Color.Black, if (far) 0.22f else 0.12f)
+            // v7.8.1 — pastel peeks sit a step DARKER than the hero ticket
+            // (which opens on the pure pastel accent now), so the deck keeps
+            // the classic level hierarchy. The old white-fade (0.10/0.35)
+            // made the peeks BRIGHTER than the main card — the hero looked
+            // dimmed by contrast and the far pair read near-white.
+            pastelMode && !darkMode -> lerp(accent, Color.Black, if (far) 0.28f else 0.16f)
+            pastelMode -> lerp(accent, Color.Black, if (far) 0.26f else 0.14f)
             else -> lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
         }
     }

@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**v7.8.1 pastel brightness — shuffle main card no longer dimmed; pastel peeks re-balanced darker than the hero**
+
+### What was asked
+
+“the fixes u did here was right but somehow the pastel colors looked dimmed after this can u fix it like a little also some pastel peek cards are also too bright” → clarification: “the dimmer card i mean is by the shuffle main card”.
+
+### What was done
+
+- **Root cause** — v7.7 made pastel peek fills fade toward WHITE (light near ≈0.82, far ≈0.87 luminance) while the hero opened at ~0.73 (10% black deepen over the pastel accent). The peeks read BRIGHTER than the main card → the hero looked dimmed by contrast and the far pair read near-white. (v7.9 had already brightened the pastel-light hero crown to ≈0.82.)
+- **`categoryCardFill` (CurioColors.kt)** — in pastel mode it now returns the PURE pastel accent (no 10% black deepen), so every pastel card fill — including the shuffle main card — opens brighter and airier (light hero 0.73–0.83 vs old ≈0.66; dark hero 0.44 vs 0.38).
+- **`pastelAccent`** — saturation bumped “a little”: light 0.80→0.90 factor (cap 0.72→0.78); dark 0.55→0.65 factor (cap 0.55→0.62) + lightness 0.42→0.44, so the muted dark pastels read as color over midnight instead of dimmed dusk tones.
+- **`PeekCard` pastel fills (SpinScreen.kt)** — flipped back to the classic level hierarchy, a step DARKER than the hero: light near `lerp(accent, Black, 0.16)` / far `0.28`; dark near `0.14` / far `0.26`. Verified numerically for Indigo/Rose/Teal/Sky/Amber in both modes: hero > near > far. Updated the v7.9 deckGradient comment + added a v7.8.1 header note.
+- **Docs:** fastlane changelog `20260810.txt` (merged with the v7.9 entry); Prompt.md.
+
+### Validation
+
+- Python hierarchy check: hero > near > far luminance holds for all five accent families in light AND dark pastel. Braces balanced; code-reviewer pass; NO local Gradle build per AGENTS.md — CI validates on push. Committed & pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Pastel hero-ticket unification (v7.9) — the Spin deck reads as one pastel story**
 
 ### What was asked

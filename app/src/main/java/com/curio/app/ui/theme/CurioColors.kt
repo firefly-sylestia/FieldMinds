@@ -179,9 +179,13 @@ internal fun lightAccentTint(
 internal fun pastelAccent(accent: Color, dark: Boolean): Color {
     val a = toHsl(accent)
     return if (dark) {
-        fromHsl(a.h, (a.s * 0.55f).coerceIn(0f, 0.55f), 0.42f)
+        // v7.8.1 — a touch more saturation + lightness so the muted deep
+        // pastels read as color over midnight instead of dimmed dusk tones.
+        fromHsl(a.h, (a.s * 0.65f).coerceIn(0f, 0.62f), 0.44f)
     } else {
-        fromHsl(a.h, (a.s * 0.80f).coerceIn(0f, 0.72f), 0.80f)
+        // v7.8.1 — saturation raised 0.80→0.90 (cap 0.72→0.78) so light-mode
+        // pastels stay airy but stop looking washed/dimmed.
+        fromHsl(a.h, (a.s * 0.90f).coerceIn(0f, 0.78f), 0.80f)
     }
 }
 
@@ -204,8 +208,14 @@ object CurioGradients {
      * gradient opens on, so tiles and big cards can never drift apart. A
      * shallow deepen toward black keeps the hue rich while softening
      * brightness for the full-width tile treatment.
+     *
+     * v7.8.1 — pastel mode keeps the PURE pastel accent (no black deepen):
+     * the 10% deepen on an already-airy pastel dulled the fill and made the
+     * pastel deck read dimmer than it should (especially the shuffle main
+     * card). The pastel accent is already soft enough for white-free ink.
      */
-    fun categoryCardFill(accent: Color): Color = lerp(accent, Color.Black, 0.10f)
+    fun categoryCardFill(accent: Color): Color =
+        if (AppPreferences.pastelColorsState) accent else lerp(accent, Color.Black, 0.10f)
 
     /**
      * Interpolates [from] → [to] in HSL space (shortest hue path) and
