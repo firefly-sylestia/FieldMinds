@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.curio.app.data.CurioCategory
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * A Curio category chip — used in Home's category chip row (§3), Category
@@ -50,7 +51,7 @@ fun CurioCategoryChip(
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = if (selected) category.accent
+                tint = if (selected) category.themedAccent()
                        else MaterialTheme.colorScheme.onSurfaceVariant,
                 size = 18.dp
             )
@@ -59,13 +60,13 @@ fun CurioCategoryChip(
         colors = FilterChipDefaults.filterChipColors(
             containerColor = if (selected) category.tint
                              else MaterialTheme.colorScheme.surface,
-            labelColor = if (selected) category.accent
+            labelColor = if (selected) category.themedAccent()
                          else MaterialTheme.colorScheme.onSurfaceVariant,
-            iconColor = if (selected) category.accent
+            iconColor = if (selected) category.themedAccent()
                        else MaterialTheme.colorScheme.onSurfaceVariant,
             selectedContainerColor = category.tint,
-            selectedLabelColor = category.accent,
-            selectedLeadingIconColor = category.accent
+            selectedLabelColor = category.themedAccent(),
+            selectedLeadingIconColor = category.themedAccent()
         ),
         border = FilterChipDefaults.filterChipBorder(
             enabled = true,

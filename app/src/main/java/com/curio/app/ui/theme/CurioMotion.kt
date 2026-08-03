@@ -39,8 +39,8 @@ import androidx.compose.animation.core.spring
  *  - [Durations.Deliberate]   — 500ms (larger movements)
  *  - [Durations.Morph]        — 700ms (shape morphing transitions)
  *  - [Durations.Reveal]       — 900ms (dramatic reveal moments)
- *  - [Durations.SpinMin]      — 3500ms (low end of The Spin rotation)
- *  - [Durations.SpinMax]      — 4800ms (high end of The Spin rotation)
+ *  - [Durations.SpinMin]      — 2800ms (low end of The Spin rotation)
+ *  - [Durations.SpinMax]      — 3600ms (high end of The Spin rotation)
  *  - [Durations.Confetti]     — 600ms (reward burst lifetime)
  *  - [Durations.ConfettiLong] — 1200ms (extended burst for save success)
  *  - [Durations.RevealHold]   — 400ms (pause after landing before nav to Reveal)
@@ -64,12 +64,6 @@ object CurioMotion {
         val Deliberate: SpringSpec<Float> = spring(
             dampingRatio = 0.85f,
             stiffness = 250f
-        )
-
-        /** Used by SpinScreen's dial rotation — strong overshoot for the "settling" feel. */
-        val WheelLanding: SpringSpec<Float> = spring(
-            dampingRatio = 0.40f,
-            stiffness = 80f
         )
 
         /**
@@ -114,9 +108,12 @@ object CurioMotion {
         /** Dramatic reveal moments (splash → home, topic landing). */
         const val Reveal: Int = 900
 
-        /** The Spin rotation window — deliberate, premium feel. */
-        const val SpinMin: Int = 3500
-        const val SpinMax: Int = 4800
+        /** The Spin rotation window — premium and unhurried: the wheel
+         *  glides for a touch longer (2.8–3.6s) so the deceleration reads
+         *  as a graceful reel slowing down rather than a fast whip, paired
+         *  with a smooth sine deceleration curve. */
+        const val SpinMin: Int = 2800
+        const val SpinMax: Int = 3600
 
         /** Confetti / sparkle burst lifetime (per section 0.5: ~600ms total). */
         const val Confetti: Int = 600
@@ -142,9 +139,6 @@ object CurioMotion {
 
     /** Extended particle count for big reward moments. */
     const val ConfettiParticleCountLarge: Int = 18
-
-    /** Default dial wedge count (per section 5: 6 to 8 visual segments). */
-    const val DialWedgeCount: Int = 6
 
     /** Number of full rotations per Spin (per section 5: 3 to 5). */
     const val MinSpinTurns: Int = 3

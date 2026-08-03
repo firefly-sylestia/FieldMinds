@@ -1,7 +1,8 @@
 package com.curio.app.features.spin
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -9,9 +10,12 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -19,19 +23,21 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -50,13 +56,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -72,14 +78,13 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
@@ -93,11 +98,19 @@ import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioCategoryCard
+import com.curio.app.ui.components.CurioNavTint
+import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioMixedDeck
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBackgroundWash
+import com.curio.app.ui.theme.categoryBorder
+import com.curio.app.ui.theme.categoryInk
+import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -144,7 +157,7 @@ import kotlin.random.Random
  *
  * v5.4 changes:
  * 10. **Spec-timed spin window** — the shuffle duration is now randomized
- *     inside [CurioMotion.Durations.SpinMin]..[SpinMax] (3.5–4.8s) instead
+ *     inside [CurioMotion.Durations.SpinMin]..[SpinMax] (2.4–3.2s) instead
  *     of a fixed loop, so every spin settles at a slightly different
  *     moment. The landed ticket swaps its helper copy while shuffling and
  *     then returns to the intentional "Tap to open" state.
@@ -165,20 +178,96 @@ import kotlin.random.Random
  *     paper ticket with a category-color rule, crisp border, and layered
  *     elevation. The top-bar and bottom controls use solid paper containers;
  *     no ambient halo or glossy surface treatment is used on this screen.
+ *
+ * v5.9–v5.10 changes:
+ * 14. The optional Spin page feature toggles (roulette dial, ritual &
+ *     anticipation, deck enrichment, screen furniture) were removed — the
+ *     screen keeps the fan-deck carousel and simple spacing as its
+ *     permanent design. In their place a muted watermark backdrop of all
+ *     the category glyphs sits behind the content, so the quiet space
+ *     around the deck carries a whisper of the Curio world.
+ * 15. **Bigger dice button** — the center CTA grew to 118dp idle / 100dp
+ *     landed (176dp container) with a larger dice glyph inside.
+ * 16. **Dice in every state** — the Casino dice shows even in the "Spin
+ *     again" state (previously a Refresh icon); accent-tinted on the
+ *     neutral landed surface.
+ * 17. **Fluid dice tumble** — the in-button dice animation was slowed from
+ *     980ms to 1600ms per turn with LinearEasing (no restart snap) plus a
+ *     breathing pulse on the orbiting pips.
+ *
+ * v6.3 changes:
+ * 18. **Bigger deck + CTA** — the hero ticket grew to 286×310dp (carousel
+ *     444dp) and the dice button to 126dp idle / 108dp landed, with the
+ *     dice glyphs scaled up to match.
+ *
+ * v6.4 changes:
+ * 19. **Peek cards catch up** — the slim background cards grew ~6%
+ *     (318×102dp near, 288×84dp far) so the whole fan scales with the
+ *     hero ticket instead of the peeks staying small behind the big card.
+ *
+ * v6.5 changes:
+ * 20. **Peek cards grow again (~13%)** — the topic title inside each
+ *     background card now has room to read instead of hiding behind the
+ *     fan (360×116dp near, 328×96dp far; proportions kept, only size up).
+ * 21. **Gentler hero bounce** — smaller per-tick kick (1.035), half the
+ *     tilt (40° factor), a softer hop, and a lower landing rest scale so
+ *     the shuffle pulses instead of slamming the card.
+ *
+ * v6.6 changes:
+ * 22. **Calm reel cadence** — the spin window lengthens slightly
+ *     (2.8–3.6s) and the tick interval glides from ~200ms to ~520ms on a
+ *     plain sine ease instead of the old squared-sine whip (105→400ms),
+ *     so the wheel reads as a graceful reel slowing down.
+ * 23. **Hero content reels** — the ticket's title/tags/teaser now animate
+ *     through an eased upward slide + fade on every tick (mimicking a
+ *     background card rising to the front) instead of snapping instantly.
+ * 24. **Softer tick pulse** — per-tick kick drops to 1.02 on a heavily
+ *     damped low-stiffness spring, the rock halves to a 16° tilt, and the
+ *     landing settle uses the controlled Deliberate spring (no Elastic
+ *     bounce). Peek wipes switch from 90ms linear blurs to ~200ms
+ *     FastOutSlowInEasing slides.
+ *
+ * v6.10 changes:
+ * 25. **Coherent reel (no more glitchy start)** — the fan is dealt as a
+ *     stable hand and the reel rotates through it (+1 per tick), with the
+ *     idle fan and the spinning reel reading the SAME window. A spin now
+ *     starts from the current spread as a seamless continuation; the old
+ *     per-spin re-shuffle made all five cards jump to arbitrary topics in
+ *     one frame. The hand re-deals around the landed topic when a spin
+ *     settles (masked by the confetti).
+ * 26. **Fluid peek wipes** — every slot now rises THROUGH the card window
+ *     at full height (in from below, out the top), all in the same
+ *     direction (the old top-peek inverted slide glided backwards), and
+ *     the wipe duration sits UNDER the 200ms tick floor so each step
+ *     completes before the next tick lands — a clean slot-reel instead of
+ *     an interrupted blur.
+ * 27. **Dice settles instead of stopping** — the tumbling dots morph into
+ *     the resting dice (spring scale + fade, then a gentle idle breathe on
+ *     the landed die) instead of hard-swapping, and the tumble gains a
+ *     slow vertical bob so the loop reads as a die shaking — seamless,
+ *     and it never just stops.
+ *
+ * v7.1 changes:
+ * 28. **Directional peek wipes** — top peek cards now feed the deck from
+ *     ABOVE (their content drops DOWN into the card) while bottom peeks
+ *     rise up, so the fan streams toward the hero from both ends and a
+ *     top card's title is never sliced off the top edge by the old
+ *     upward wipe.
+ * 29. **Soft glides, not hard cuts** — the full-height slot wipe (which
+ *     sliced the title mid-slide and read as cut off) is replaced by a
+ *     partial-height glide + fade at ~320ms (under the ~340ms tick floor),
+ *     so each step completes before the next tick and the reel reads as
+ *     calm and smooth instead of fast and glitchy.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
 // lists (Set<String> has no built-in Bundle saver).
 // ═══════════════════════════════════════════════════════════════════════════
 
-/** Saves the active category by its enum name; falls back to Wildcard. */
-private val CategorySaver = Saver<CurioCategory, String>(
-    save = { it.id.name },
-    restore = { name ->
-        CategoryId.values().firstOrNull { it.name == name }
-            ?.let { CurioCategories.byId(it) }
-            ?: CurioCategories.byId(CategoryId.WILDCARD)
-    }
+/** Serializes a List<CategoryId> (single or multi-category launch set) by enum name. */
+private val CategoryIdListSaver = listSaver<List<CategoryId>, String>(
+    save = { it.map { id -> id.name } },
+    restore = { names -> names.mapNotNull { name -> CategoryId.values().firstOrNull { it.name == name } } }
 )
 
 /** Serializes a Set<String> (filter chips, recent ids) as a saveable list. */
@@ -196,29 +285,90 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // a CategoryId, so resolve it through byId(...) to keep BOTH elvis
     // branches CurioCategory (mixing them inferred Any → MutableState<Any>
     // vs the saver's MutableState<CurioCategory> → CI compile failure).
-    val initialCat = remember(categorySlug) {
-        categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: CurioCategories.byId(AppPreferences.getLastSpinCategory(context))
+    // v5.11 — multi-category launch: the category picker's Mix button can
+    // pass a comma-joined slug list ("artists,albums"). Resolve each part; fall
+    // back to the last-used single category when the slug is absent or
+    // unresolvable.
+    val initialCats = remember(categorySlug) {
+        val resolved = categorySlug
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.mapNotNull { CurioCategories.byRouteSlug(it) }
+            .orEmpty()
+        if (resolved.isNotEmpty()) resolved
+        else AppPreferences.getLastSpinCategories(context).map { CurioCategories.byId(it) }
     }
 
     // v5.5 — remember which category this session opened in, so the plain
-    // Spin tab opens where the user left off on the next launch. byRouteSlug
-    // is nullable — only persist when the slug actually resolves (v5.7.1).
+    // Spin tab opens where the user left off on the next launch. Persist the
+    // FULL launch set (single or mixed) when a slug (single or multi) is
+    // present so multi-select decks survive too.
     LaunchedEffect(Unit) {
-        categorySlug?.let { slug ->
-            CurioCategories.byRouteSlug(slug)?.let { resolved ->
-                AppPreferences.setLastSpinCategory(context, resolved.id)
-            }
+        if (categorySlug != null) {
+            AppPreferences.setLastSpinCategories(context, initialCats.map { it.id })
         }
     }
 
     // ── Saveable screen state — survives nav away/back, rotation and ──
-    //    process death (v5.3). activeCategory persists across all of them;
-    //    filters + recent history are keyed per category so switching
-    //    categories still resets them to fresh.
-    var activeCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf(initialCat) }
-    val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), activeCategory.id) {
-        value = TopicJsonLoader.load(activeCategory.id)
+    //    process death (v5.3). The active category SET persists across all
+    //    of them; filters + recent history are keyed per first category so
+    //    switching categories still resets them to fresh.
+    var activeCatIds by rememberSaveable(
+        initialCats.map { it.id },
+        stateSaver = CategoryIdListSaver
+    ) { mutableStateOf(initialCats.map { it.id }) }
+    // v5.14 — a SLUG launch is authoritative. navigateToTab restores saved
+    // state for the same route pattern, which could resurrect a stale
+    // session (e.g. an in-screen category switch made inside an earlier
+    // spin/artists visit) — picking "Artists" then reopened the deck with
+    // Albums' pool. Whenever a slug is present, re-derive the category set
+    // from it on arrival; user switches made AFTER arrival (picker sheet)
+    // still win because this effect keys only on the slug.
+    val slugCatIds: List<CategoryId>? = remember(categorySlug) {
+        categorySlug
+            ?.split(",")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.mapNotNull { CurioCategories.byRouteSlug(it)?.id }
+            ?.takeIf { it.isNotEmpty() }
+    }
+    LaunchedEffect(categorySlug) {
+        // Guard: on a normal fresh launch the value already matches; only
+        // write when restoreState resurrected a stale set.
+        if (slugCatIds != null && activeCatIds != slugCatIds) {
+            activeCatIds = slugCatIds
+        }
+        // v5.15 — the plain Shuffle tab is equally authoritative from
+        // prefs: the category picker ("What are we exploring?") now lands
+        // here via navigateToTab(SPIN) after persisting its (possibly
+        // mixed) selection, and restoreState could otherwise resurrect the
+        // previous deck. Every in-screen switch also persists, so prefs
+        // always reflect the user's latest deck.
+        if (categorySlug == null) {
+            val persisted = AppPreferences.getLastSpinCategories(context)
+            if (persisted.isNotEmpty() && activeCatIds != persisted) {
+                activeCatIds = persisted
+            }
+        }
+    }
+    // The first selected category drives chrome (top bar name, watermark
+    // accent, confetti tint); the pool below merges every selected
+    // category's topics so a multi-select launch spins across all of them.
+    val activeCategory = remember(activeCatIds) {
+        val id = activeCatIds.firstOrNull() ?: AppPreferences.getLastSpinCategory(context)
+        CurioCategories.byId(id)
+    }
+    // Defensive: a corrupted saved state could restore an empty category
+    // set — fall back to the last-used category so the pool still loads.
+    val poolIds = if (activeCatIds.isEmpty()) listOf(AppPreferences.getLastSpinCategory(context)) else activeCatIds
+    val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), poolIds) {
+        val merged = mutableListOf<CurioTopic>()
+        val seen = mutableSetOf<String>()
+        poolIds.forEach { id ->
+            TopicJsonLoader.load(id).forEach { t -> if (seen.add(t.id)) merged.add(t) }
+        }
+        value = merged
     }
 
     // ── Multi-select filter state (per-category, saveable) ────────────
@@ -256,7 +406,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── Landed topic — persisted by NAME (v5.6) so closing Reveal without
     //    saving keeps it on the card, tappable, until explored or spun
     //    again. The full CurioTopic is re-derived from the pool below.
-    var landedTopicName by rememberSaveable(activeCategory.id) { mutableStateOf<String?>(null) }
+    var landedTopicName by rememberSaveable(activeCategory.id) {
+        // Seeded from AppPreferences (v6): rememberSaveable survives tab
+        // switches (saveState/restoreState) but dies when the Spin entry is
+        // popped — e.g. the top-bar back arrow to Home. The prefs mirror
+        // restores the landed card the next time Spin is composed.
+        mutableStateOf(AppPreferences.getLandedTopic(context, activeCategory.id))
+    }
     // v5.6 — true once THIS landing has already opened by tap; reset per spin.
     var landingAlreadyOpened by rememberSaveable(activeCategory.id) { mutableStateOf(false) }
     val landedTopic: CurioTopic? = remember(landedTopicName, filteredPool) {
@@ -265,6 +421,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 ?: TopicJsonLoader.cached(activeCategory.id)?.firstOrNull { it.name == name }
         }
     }
+    // v6 — mirror the landed topic to AppPreferences whenever it changes
+    // (landed on spin end, cleared on the next spin start), so it survives
+    // ANY navigation — including popping the Spin back-stack entry.
+    LaunchedEffect(activeCategory.id, landedTopicName) {
+        AppPreferences.setLandedTopic(context, activeCategory.id, landedTopicName)
+    }
     // True only during an explicit opening handoff; keeps copy flexible if
     // a future shared-element transition delays navigation.
     var isOpening by remember { mutableStateOf(false) }
@@ -272,23 +434,97 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         mutableStateOf(setOf<String>())
     }
 
-    val displayPool = remember(filteredPool) {
-        if (filteredPool.isEmpty()) emptyList()
-        else {
-            val s = filteredPool.shuffled()
-            if (s.size >= 6) s.take(6) else s
-        }
-    }
-    var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
+    // ── Spin hand — the 6-topic fan window (v6.10) ─────────────────────
+    // A stable "hand" reels during a spin: it's dealt ONCE (a random
+    // spread, centered on the current front topic) and the reel advances by
+    // rotating cycleIndex through it — so every tick is a clean +1 shift
+    // and the deck visibly streams past. The OLD per-spin re-shuffle made
+    // the start of every spin glitch: all five cards swapped to arbitrary
+    // topics in a single frame before the reel even began.
+    // The initial deal centers on the RESTORED landed topic when one
+    // exists (nav-return from Reveal), so the idle fan reads coherent even
+    // after the back-stack drops the composition. Keyed on filteredPool
+    // ONLY — not on landedTopicName — so the spin start (which nulls the
+    // landed topic) never re-deals the hand mid-flow.
+    var hand by remember(filteredPool) { mutableStateOf(buildDeckHand(filteredPool, landedTopic)) }
+    // cycleIndex is NOT reset per spin — the reel starts from wherever the
+    // deck stopped (the landed topic sits at hand[0]), so the first tick is
+    // a seamless continuation instead of a jump cut.
+    var cycleIndex by remember { mutableIntStateOf(0) }
+    // Keep the reel position in sync whenever the hand is re-dealt by a
+    // pool change (filters/category), so the fan always fronts hand[0].
+    LaunchedEffect(filteredPool) { cycleIndex = 0 }
     val cat = activeCategory
 
-    // Category switch resets transient landing state. Filter chips reset
-    // implicitly via rememberSaveable's per-category input key — they must
-    // NOT be cleared here, or restored state would be wiped on the first
-    // composition after process death.
+    // ── Mixed-deck colors (v5.12) ───────────────────────────────────────
+    // When several categories are selected, the deck wears a curated blend
+    // of every chosen accent instead of the first category's color alone:
+    // peek cards / spin button / confetti take the blended accent, and the
+    // hero ticket takes a multi-accent gradient (Spotify-style).
+    // Resolved in the composable body (NOT remember) so the Material style's
+    // device-color blend of each accent updates when the theme style changes.
+    val deckAccents = activeCatIds.map { CurioCategories.byId(it).themedAccent() }
+    val deckAccent = remember(deckAccents) {
+        CurioMixedDeck.mixedDeckAccent(deckAccents)
+    }
+    val deckGradient = CurioMixedDeck.mixedDeckGradient(deckAccents)
+
+    // ── Mixed-deck identity (v5.13) ───────────────────────────────────────
+    // A multi-select deck presents as ONE "Mixed" category instead of
+    // wearing the first selected category's name/glyph: sparkles glyph,
+    // blended accent + tint, and the merged topic pool. The synthetic
+    // deckCat is display-only — its id stays the first category's id, so
+    // logic keys (landed topic, filters, reveal guard, last-used prefs)
+    // keep operating on the real category set.
+    val isMixedDeck = remember(activeCatIds) { activeCatIds.distinct().size > 1 }
+    val deckCat = remember(activeCatIds, deckAccent, activeCategory) {
+        if (isMixedDeck) {
+            activeCategory.copy(
+                displayName = "Mixed",
+                iconGlyph = CurioIcons.AutoAwesome,
+                accent = deckAccent,
+                // Pastel twin of the blend so categoryInk() stays readable on
+                // dark surfaces (ink = lightAccent in dark mode).
+                lightAccent = lerp(deckAccent, Color.White, 0.45f),
+                tint = deckAccent.copy(alpha = 0.20f)
+            )
+        } else {
+            activeCategory
+        }
+    }
+
+    // ── Mixed-deck arrangement seed (v6.9) ───────────────────────────────
+    // A deck's hero-gradient arrangement is keyed off its sorted category
+    // ids, so different mixes get different non-linear treatments (diagonal
+    // sweep / reversed diagonal / radial glow) while a given deck stays
+    // stable. Single decks keep the plain vertical card gradient.
+    val mixSeed = remember(activeCatIds) { activeCatIds.sorted().hashCode() }
+
+    // Publish the page wash so the bottom nav bar (rendered by the NavHost
+    // scaffold, outside this screen) can blend with the tinted Spin page. The
+    // bar gates on its own route (spin prefix only), so publishing here never
+    // tints Home or Cabinet. Keys on the resolved color so theme/dark-mode
+    // and category changes republish automatically. A mixed deck wears THE
+    // blended color the mix resolves to (mixedDeckWash) instead of the first
+    // category's wash, so the page reads in the deck's mixed color story.
+    val pageWash = if (isMixedDeck) CurioMixedDeck.mixedDeckWash(deckAccent)
+                   else deckCat.categoryBackgroundWash()
+    LaunchedEffect(pageWash) {
+        CurioNavTint.publishSpinWash(pageWash)
+    }
+    // Hygiene: clear the handoff when Spin leaves composition so a stale wash
+    // never lingers for a future route that might share the tint.
+    DisposableEffect(Unit) {
+        onDispose { CurioNavTint.publishSpinWash(null) }
+    }
+
+    // Category switch resets transient animation state. The landed card is
+    // deliberately NOT cleared here: landedTopicName is keyed by
+    // activeCategory.id in rememberSaveable, so switching categories resets
+    // it automatically — nulling it here would ALSO wipe the landed card on
+    // every return from Topic Reveal (v5.6: stays tappable until spun again
+    // or explored).
     LaunchedEffect(activeCategory.id) {
-        landedTopicName = null
-        landingAlreadyOpened = false
         shuffling = false
         isOpening = false
     }
@@ -312,129 +548,253 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val elapsed = System.currentTimeMillis() - start
             if (elapsed >= durationMs) break
             val progress = (elapsed.toFloat() / durationMs).coerceIn(0f, 1f)
-            // Sinusoidal ease-out: slows down with a natural curve, not
-            // an abrupt cubic halt.
-            val eased = sin((1f - progress) * Math.PI.toFloat() / 2f)
-            val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
+            // Smooth reel deceleration: a plain sine ease (no squaring) so
+            // the wheel starts at a readable cadence and glides gently to a
+            // stop — a graceful slow-down instead of a snappy whip. The
+            // ~340ms floor keeps the fastest early ticks readable and sits
+            // ABOVE the ~320ms peek wipe, so every transition completes
+            // before the next tick lands. Intervals ~340ms -> ~520ms.
+            val eased = sin(progress * Math.PI.toFloat() / 2f)
+            val interval = (340L + (180L * eased).toLong()).coerceAtMost(520L)
             cycleIndex = ++tick
-            // Soft ratcheting tick — light haptic on each card cycle.
-            // As intervals lengthen, ticks naturally space out like a
-            // prize wheel settling.
-            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            // Slot-machine ratchet: haptic intensity escalates as the wheel
+            // decelerates — a light tick at the brisk opening cadence, a
+            // firmer segment tick through the slowdown, and a solid
+            // keyboard-tap click in the final settle phase. As intervals
+            // lengthen, ticks naturally space out like a prize wheel
+            // locking in. NOTE: SegmentFrequentTick / KeyboardTap are
+            // the renamed equivalents of the old ClockTick / Keypress
+            // constants (Compose UI 1.12) — do NOT revert them.
+            val ratchet = when {
+                progress < 0.5f -> HapticFeedbackType.TextHandleMove
+                progress < 0.85f -> HapticFeedbackType.SegmentFrequentTick
+                else -> HapticFeedbackType.KeyboardTap
+            }
+            haptics.performHapticFeedback(ratchet)
             delay(interval)
             if (System.currentTimeMillis() - start >= durationMs) break
         }
         shuffling = false
 
-        // Pick a single topic
-        val primary = pickFrom(filteredPool, recentTopicIds)
+        // Pick a single topic — tier-biased, sentiment-weighted (liked /
+        // disliked topics + category affinity), and never an already-
+        // explored topic while alternatives remain.
+        val exploredIds = runCatching {
+            CurioRepositoryHolder.repo.getAll().map { it.topic.id }.toSet()
+        }.getOrDefault(emptySet())
+        val primary = pickFrom(
+            filteredPool,
+            recentTopicIds,
+            exploredIds,
+            AppPreferences.topicSentimentsState,
+            AppPreferences.categoryAffinityMap()
+        )
         landedTopicName = primary?.name
         if (primary != null) {
-            val idx = displayPool.indexOfFirst { it.id == primary.id }
-            if (idx >= 0) cycleIndex = idx
+            // Re-deal the hand around the landed topic — the front becomes
+            // the pick and its neighbors fill the fan — so the deck stops
+            // on a coherent spread and the NEXT spin starts from it
+            // seamlessly. This re-deal is masked by the confetti burst.
+            hand = buildDeckHand(filteredPool, primary)
+            cycleIndex = 0
             recentTopicIds = (recentTopicIds + primary.id).toList().takeLast(20).toSet()
             StreakTracker.recordActivity(context)
+            // Final reel clunk — strong confirmation the wheel locked in.
+            haptics.performHapticFeedback(HapticFeedbackType.Confirm)
         }
         confettiTrigger++
+
+        // Auto-open the landed topic: once the wheel settles, reveal it
+        // immediately. The landed card state is preserved (landedTopicName +
+        // landingAlreadyOpened), so returning from Reveal keeps it tappable
+        // until spun again — nothing else about the flow changes. A short
+        // pause lets the settle + confetti read before navigating; spinning
+        // again within that window cancels this effect (keyed on
+        // shuffleCount) and no navigation happens.
+        if (primary != null) {
+            landingAlreadyOpened = true
+            delay(600)
+            // Guard against a category switch during the pause: the effect
+            // captured `cat` at launch, so only navigate if it's still the
+            // active category.
+            if (cat.id != activeCategory.id) return@LaunchedEffect
+            navController.navigate(CurioRoutes.revealFor(primary.categoryId.routeSlug, primary.name)) {
+                launchSingleTop = true
+            }
+        }
     }
 
-    // ── Landed topics open only by user intent ───────────────────────
-    // The center card is no longer a spin trigger: it opens an already
-    // landed topic, while the Shuffle CTA owns all spin/shuffle starts.
+    // ── Landed topic auto-opens on landing ───────────────────────────
+    // The wheel now reveals its landed topic automatically; the center card
+    // is no longer a spin trigger — it opens an already landed topic, while
+    // the Shuffle CTA owns all spin/shuffle starts.
 
     // ── v5.9 — landed card stays tappable until the user explicitly
     //    spins/shuffles again.  No longer auto-clears when explored.
 
     // ── Animations ────────────────────────────────────────────────────
-    val landScale by animateFloatAsState(
-        targetValue = if (landedTopic != null) 1.04f else 1f,
-        animationSpec = CurioMotion.Springs.Elastic,
-        label = "landScale"
-    )
     val buttonPulse by animateFloatAsState(
         targetValue = if (shuffling) 1.06f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
         label = "buttonPulse"
     )
+
+    // ── Deck interaction callbacks — shared by the normal and compact
+    //    layout branches (the Carousel call lives in SpinDeckSection) ─
+    val onDeckCardTap: () -> Unit = {
+        if (!shuffling && filteredPool.isNotEmpty()) {
+            val resolved = landedTopic
+                ?: landedTopicName?.let { name ->
+                    TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
+                }
+            if (resolved != null) {
+                landingAlreadyOpened = true
+                navController.navigate(CurioRoutes.revealFor(resolved.categoryId.routeSlug, resolved.name)) {
+                    launchSingleTop = true
+                }
+            }
+        }
+    }
+    val onSpinClick: () -> Unit = {
+        if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++
+    }
+
     // ── Overall layout ─────────────────────────────────────────────────
     // Paper surfaces sit directly on the quiet theme background. All depth
     // comes from opaque cards, crisp rules, and elevation—not ambient washes.
-    Box(
+    // v6.11 — BoxWithConstraints measures the height this screen is actually
+    // granted (see [SpinCompactThresholdHeight]): short screens switch to
+    // the compact layout below, normal screens keep this exact layout.
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            // Category tint wash — the Spin page wears a wash of the deck's
+            // color over the theme background (same wash language as Topic
+            // Reveal / Save / Cabinet). Mixed decks wear THE blended color
+            // the mix resolves to (pageWash) at high strength, so each mix
+            // visibly repaints the page in its own blended color story.
+            .background(pageWash)
     ) {
+        // ── Smart layout tiers (v7.3) ────────────────────────────────
+        // 1. DENSITY (two-way, toggleable via Settings → Smart density
+        //    layout) — devices under [SpinLowDensityDpi] get the compact
+        //    (scrollable-band) layout no matter the height, and devices at
+        //    or above [SpinHighDensityDpi] get a roomier deck (slightly
+        //    LARGER scale), so low-dpi screens feel smaller and high-dpi
+        //    screens feel bigger. The whole rule is gated by one switch.
+        // 2. DIMENSION (toggleable via Settings → Smart Spin layout) —
+        //    heights under [SpinCompactThresholdHeight] switch to the
+        //    compact layout, and heights under
+        //    [SpinExtraCompactThresholdHeight] get the EXTRA-compact tier —
+        //    a smaller deck AND Categories/Filter as tall vertical pills
+        //    pinned to the left/right screen edges.
+        val densityEnabled = AppPreferences.smartDensityLayoutState
+        val densityDpi = context.resources.displayMetrics.densityDpi
+        val lowDensity = densityEnabled && densityDpi < SpinLowDensityDpi
+        val highDensity = densityEnabled && densityDpi >= SpinHighDensityDpi
+        val smartLayout = AppPreferences.smartSpinLayoutState
+        val heightCompact = maxHeight < SpinCompactThresholdHeight
+        val extraCompact = smartLayout && maxHeight < SpinExtraCompactThresholdHeight
+        // Extra-compact implies heightCompact (600 < 680), so this stays
+        // true whenever the smaller tier is active.
+        val compactHeight = lowDensity || (smartLayout && heightCompact)
+        // Roomy tier — high-density screens get a slightly LARGER deck so
+        // the density rule works both ways. Keyed off the RAW height (not
+        // the toggle-gated compactHeight) so a short high-density screen
+        // never gets the bigger deck even when the dimension rule is off.
+        val roomy = highDensity && !heightCompact
+        // ── Watermark backdrop — every category glyph scattered around ──
+        //    the screen in a muted shade, behind all content, so the quiet
+        //    space around the deck still carries a whisper of the Curio
+        //    world. The active category's glyph gets a faint accent tint.
+        CurioWatermarkBackdrop(activeCat = deckCat)
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-        // ── 1. Top bar — back, category name, topic count ───────────
+        // ── 1. Top bar — back, category name, topic count (pinned) ──
         TopBar(
-            cat = cat,
+            cat = deckCat,
             poolCount = pool.size,
             filteredCount = filteredPool.size,
             modifier = Modifier.statusBarsPadding(),
-            onBack = { navController.popBackStack() }
-        )
-
-        // ── 2. Carousel (interactive cards) ─────────────────────────
-        // Tapping the center card opens a landed topic only; the bottom
-        // Shuffle CTA owns starting or re-starting the shuffle.
-        Carousel(
-            cat = cat,
-            displayPool = displayPool,
-            cycleIndex = cycleIndex,
-            shuffling = shuffling,
-            landedTopic = landedTopic,
-            opening = isOpening,
-            landScale = landScale,
-            enabled = filteredPool.isNotEmpty() && !shuffling,
-            onCardTap = {
-                if (shuffling || filteredPool.isEmpty()) return@Carousel
-                val resolved = landedTopic
-                    ?: landedTopicName?.let { name ->
-                        TopicJsonLoader.cached(cat.id)?.firstOrNull { it.name == name }
-                    }
-                if (resolved != null) {
-                    landingAlreadyOpened = true
-                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, resolved.name)) {
-                        launchSingleTop = true
-                    }
+            onBack = {
+                // Edge case — Spin can be a root destination (deep link or
+                // restored tab) with nothing to pop; fall back to Home.
+                if (!navController.popBackStack()) {
+                    navController.navigate(CurioRoutes.HOME) { launchSingleTop = true }
                 }
-            },
-            modifier = Modifier.fillMaxWidth()
+            }
         )
 
-        // ── 3. Center spin button ───────────────────────────────────
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 6.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            SpinButton(
-                tint = cat.accent,
-                isShuffling = shuffling,
+        if (compactHeight) {
+            // ── Compact layout (small screens) ────────────────────────
+            // The deck + spin button scroll inside the space between the
+            // pinned top bar and the pinned Categories/Filter bar, so the
+            // controls are never pushed off-screen; sizes step down via
+            // SpinDeckSection(compact = true).
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                SpinDeckSection(
+                    compact = true,
+                    extraCompact = extraCompact,
+                    roomy = false,
+                    cat = deckCat,
+                    deckAccent = deckAccent,
+                    deckGradient = deckGradient,
+                    isMixed = isMixedDeck,
+                    mixSeed = mixSeed,
+                    displayPool = hand,
+                    cycleIndex = cycleIndex,
+                    shuffling = shuffling,
+                    landedTopic = landedTopic,
+                    opening = isOpening,
+                    enabled = filteredPool.isNotEmpty() && !shuffling,
+                    buttonPulse = buttonPulse,
+                    onCardTap = onDeckCardTap,
+                    onSpinClick = onSpinClick
+                )
+                // Breathing room under the spin button before the CTA.
+                Spacer(Modifier.height(10.dp))
+            }
+        } else {
+            // ── Normal layout — the exact pre-compact stack ──────────
+            SpinDeckSection(
+                compact = false,
+                roomy = roomy,
+                cat = deckCat,
+                deckAccent = deckAccent,
+                deckGradient = deckGradient,
+                isMixed = isMixedDeck,
+                mixSeed = mixSeed,
+                displayPool = hand,
+                cycleIndex = cycleIndex,
+                shuffling = shuffling,
                 landedTopic = landedTopic,
-                pulseScale = buttonPulse,
-                enabled = filteredPool.isNotEmpty(),
-                onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ }
+                opening = isOpening,
+                enabled = filteredPool.isNotEmpty() && !shuffling,
+                buttonPulse = buttonPulse,
+                onCardTap = onDeckCardTap,
+                onSpinClick = onSpinClick
             )
+            // ── 4. Breathing room — keeps the bottom bar pinned to the
+            //    screen edge instead of leaving dead space below it ─────
+            Spacer(Modifier.weight(1f))
         }
 
-        // ── 4. Breathing room — keeps the bottom bar pinned to the
-        //    screen edge instead of leaving dead space below it ─────
-        Spacer(Modifier.weight(1f))
-
-        // ── 5. Bottom bar — Categories · Filter · CTA ──────────────
-        // No Explore button: the landed card itself opens the topic, so
-        // the primary CTA becomes "Spin again" after landing.
+        // ── 5. Bottom bar — Categories · Filter (controls only) ────
+        // No duplicate shuffle button: the big center SpinButton above
+        // owns all spin starts, so the bottom bar is controls only. On the
+        // extra-compact tier the two pills move to the left/right screen
+        // edges and stand vertically, so the middle stays clear.
         BottomCta(
-            cat = cat,
-            landedTopic = landedTopic,
-            shuffling = shuffling,
-            canSpin = filteredPool.isNotEmpty(),
+            cat = deckCat,
+            mixedCount = activeCatIds.distinct().size,
             filterActiveCount = activeFilters.size + activeSubtypes.size,
-            onSpin = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
+            vertical = extraCompact,
             onCategories = { showCategoryPicker = true },
             onFilter = { showFilters = true }
         )
@@ -446,18 +806,26 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── CategoryPickerSheet ───────────────────────────────────────────
     if (showCategoryPicker) {
         CategoryPickerSheet(
-            currentCat = cat,
+            currentCat = deckCat,
             onDismiss = { showCategoryPicker = false },
             onCategorySelected = { c ->
-                activeCategory = c
+                activeCatIds = listOf(c.id)
                 // v5.5 — persist so the Spin tab reopens on this category
                 // after the app is killed and relaunched.
-                AppPreferences.setLastSpinCategory(context, c.id)
+                AppPreferences.setLastSpinCategories(context, listOf(c.id))
+                showCategoryPicker = false
+            },
+            onCategoriesSelected = { cats ->
+                activeCatIds = cats.map { it.id }
+                // v5.15 — persist the FULL mixed set (not just the first)
+                // so a multi-select deck survives back navigation, tab
+                // switches and app restarts.
+                AppPreferences.setLastSpinCategories(context, cats.map { it.id })
                 showCategoryPicker = false
             },
             onBrowseAll = {
                 showCategoryPicker = false
-                navController.navigate(CurioRoutes.PICKER)
+                navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true }
             }
         )
     }
@@ -465,7 +833,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── ModalBottomSheet — compact multi-select filter dialog ──────────
     if (showFilters) {
         FilterSheet(
-            cat = cat,
+            cat = deckCat,
             groups = filterGroups,
             initialSubtypes = activeSubtypes,
             initialFilters = activeFilters,
@@ -481,11 +849,98 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // ── Confetti on landing ────────────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
+            colors = listOf(deckAccent, deckCat.tint, CurioColors.ButterYellow),
             trigger = confettiTrigger,
             particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
             onComplete = {}
+        )
+    }
+}
+
+/**
+ * The deck section of the Spin layout — breathing spacer, card carousel and
+ * center spin button — shared by the normal and compact layout branches.
+ *
+ * [compact] switches between the two size variants: normal keeps the exact
+ * pre-v6.11 measurements (44dp spacer, 444dp carousel, 32/20dp button
+ * padding); compact tightens them (20dp spacer, 390dp carousel, 16/10dp
+ * padding) and scales the deck itself down via the carousel's compact flag.
+ */
+@Composable
+private fun ColumnScope.SpinDeckSection(
+    compact: Boolean,
+    extraCompact: Boolean = false,
+    roomy: Boolean = false,
+    cat: CurioCategory,
+    deckAccent: Color,
+    deckGradient: List<Color>,
+    isMixed: Boolean,
+    mixSeed: Int,
+    displayPool: List<CurioTopic>,
+    cycleIndex: Int,
+    shuffling: Boolean,
+    landedTopic: CurioTopic?,
+    opening: Boolean,
+    enabled: Boolean,
+    buttonPulse: Float,
+    onCardTap: () -> Unit,
+    onSpinClick: () -> Unit
+) {
+    // ── Breathing room — keeps the header off the deck (tighter when the
+    //    screen is short so the deck fits between the pinned bars; roomier
+    //    on high-density screens so the bigger deck has space) ─────────
+    Spacer(
+        Modifier.height(
+            when {
+                extraCompact -> 12.dp
+                compact -> 20.dp
+                roomy -> 56.dp
+                else -> 44.dp
+            }
+        )
+    )
+
+    // ── Carousel (interactive cards) ───────────────────────────────
+    // Tapping the center card opens a landed topic only; the bottom
+    // Shuffle CTA owns starting or re-starting the shuffle.
+    Carousel(
+        cat = cat,
+        deckAccent = deckAccent,
+        deckGradient = deckGradient,
+        isMixed = isMixed,
+        mixSeed = mixSeed,
+        displayPool = displayPool,
+        cycleIndex = cycleIndex,
+        shuffling = shuffling,
+        landedTopic = landedTopic,
+        opening = opening,
+        enabled = enabled,
+        compact = compact,
+        extraCompact = extraCompact,
+        roomy = roomy,
+        onCardTap = onCardTap,
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    // ── Center spin button — the ONLY shuffle CTA (v6) ──────────────
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = if (compact) (if (extraCompact) 12.dp else 16.dp) else if (roomy) 40.dp else 32.dp,
+                bottom = if (compact) (if (extraCompact) 8.dp else 10.dp) else if (roomy) 26.dp else 20.dp
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        SpinButton(
+            tint = deckAccent,
+            isShuffling = shuffling,
+            landedTopic = landedTopic,
+            pulseScale = buttonPulse,
+            enabled = enabled,
+            compact = compact,
+            onClick = onSpinClick
         )
     }
 }
@@ -505,54 +960,40 @@ private fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CurioBackButton(onClick = onBack)
 
         Spacer(Modifier.width(10.dp))
 
-        // ── Category label — accent chip (v5.7; switching moves to the
-        //    bottom bar Categories button) ────────────────────────────
-        Surface(
-            shape = RoundedCornerShape(50),
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
-            shadowElevation = 1.dp
+        // ── Category label — plain title text, no pill container ────
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(start = 10.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(7.dp)
-            ) {
-                CurioIcon(
-                    cat.iconGlyph, null,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 16.dp
-                )
-                Text(
-                    text = cat.displayName,
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1
-                )
-            }
+            CurioIcon(
+                cat.iconGlyph, null,
+                tint = cat.categoryInk(),
+                size = 18.dp
+            )
+            Text(
+                text = cat.displayName,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1
+            )
         }
 
         Spacer(Modifier.weight(1f))
 
-        // ── Right-side topic count pill ─────────────────────────────
+        // ── Right-side topic count — plain text, no pill ────────────
         if (poolCount > 0) {
-            Surface(
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh
-            ) {
-                Text(
-                    text = "$filteredCount / $poolCount",
-                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-            }
+            Text(
+                text = "$filteredCount / $poolCount",
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -588,6 +1029,10 @@ private val NationalityTags = setOf(
     "Ecuadorian", "Bolivian", "Uruguayan", "Croatian", "Serbian", "Bulgarian", "Slovak",
     "Estonian", "Lithuanian", "New Zealand", "New Zealander", "Taiwanese", "Hong Kong",
     "Cape Verdean", "Barbadian", "Beninese", "African", "European", "Soviet", "Tuareg",
+    // Film/TV industry regions — Hollywood (US studio system) and Bollywood
+    // (Hindi cinema) read as origin tags on Films/Directors, so the Origin
+    // bucket offers them alongside British / French / Korean / Indian…
+    "Hollywood", "Bollywood",
     "Congolese", "Panamanian", "Chilean", "Argentine", "Puerto Rican",
     "American-British", "British-Nigerian", "American-Canadian", "French-Algerian",
     "Italian-American", "British-Irish", "African-American", "British-Canadian",
@@ -659,7 +1104,7 @@ private fun FilterSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        containerColor = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
         dragHandle = { BottomSheetDefaults.DragHandle() },
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
@@ -675,11 +1120,11 @@ private fun FilterSheet(
                     .padding(horizontal = 20.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CurioIcon(cat.iconGlyph, null, tint = cat.accent, size = 22.dp)
+                CurioIcon(cat.iconGlyph, null, tint = cat.categoryInk(), size = 22.dp)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = cat.displayName,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
                 )
@@ -693,7 +1138,7 @@ private fun FilterSheet(
                     ) {
                         Text(
                             "Clear all",
-                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -709,7 +1154,7 @@ private fun FilterSheet(
                 ) {
                     Text(
                         text = "Active filters",
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.5.sp
                         ),
@@ -724,14 +1169,14 @@ private fun FilterSheet(
                         draftSubtypes.forEach { st ->
                             ActiveFilterChip(
                                 label = st,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 onRemove = { draftSubtypes = draftSubtypes - st }
                             )
                         }
                         draftFilters.forEach { tag ->
                             ActiveFilterChip(
                                 label = tag,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
                                 onRemove = { draftFilters = draftFilters - tag }
                             )
                         }
@@ -747,7 +1192,7 @@ private fun FilterSheet(
             if (!hasAny) {
                 Text(
                     text = "No filters for this category yet.",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -782,7 +1227,11 @@ private fun FilterSheet(
                             CompactChip(
                                 label = st,
                                 selected = st in draftSubtypes,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
+                                chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftSubtypes = if (st in draftSubtypes) draftSubtypes - st else draftSubtypes + st
                                 }
@@ -800,7 +1249,11 @@ private fun FilterSheet(
                             CompactChip(
                                 label = tag,
                                 selected = tag in draftFilters,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
+                                chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftFilters = if (tag in draftFilters) draftFilters - tag else draftFilters + tag
                                 }
@@ -815,7 +1268,11 @@ private fun FilterSheet(
                             CompactChip(
                                 label = era,
                                 selected = era in draftFilters,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
+                                chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftFilters = if (era in draftFilters) draftFilters - era else draftFilters + era
                                 }
@@ -830,7 +1287,11 @@ private fun FilterSheet(
                             CompactChip(
                                 label = origin,
                                 selected = origin in draftFilters,
-                                accent = cat.accent,
+                                accent = cat.themedAccent(),
+                                chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+                                chipBorder = cat.categoryBorder(
+                                    fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                ),
                                 onClick = {
                                     draftFilters = if (origin in draftFilters) draftFilters - origin else draftFilters + origin
                                 }
@@ -847,19 +1308,19 @@ private fun FilterSheet(
                 onClick = { onApply(draftFilters, draftSubtypes) },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = cat.accent,
-                    contentColor = CurioColors.DeepPlum
+                    containerColor = cat.themedAccent(),
+                    contentColor = Color.White
                 ),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                CurioIcon(CurioIcons.Check, null, tint = CurioColors.DeepPlum, size = 18.dp)
+                CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                 )
             }
         }
@@ -876,7 +1337,7 @@ private fun ActiveFilterChip(
     Surface(
         shape = RoundedCornerShape(50),
         color = accent,
-        shadowElevation = 1.dp
+        shadowElevation = 0.dp
     ) {
         Row(
             modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
@@ -885,8 +1346,8 @@ private fun ActiveFilterChip(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = CurioColors.DeepPlum
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                color = Color.White
             )
             Surface(
                 shape = CircleShape,
@@ -908,7 +1369,7 @@ private fun ActiveFilterChip(
 private fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium.copy(
+        style = MaterialTheme.typography.titleSmall.copy(
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.2.sp
         ),
@@ -922,14 +1383,16 @@ private fun CompactChip(
     label: String,
     selected: Boolean,
     accent: Color,
+    chipSurface: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    chipBorder: BorderStroke? = null,
     onClick: () -> Unit
 ) {
     // Plain Surface + clickable (no M3 minimum touch-target inflation) keeps
     // the chips compact even with 100+ tags in the sheet.
     Surface(
         shape = RoundedCornerShape(50),
-        color = if (selected) accent else MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        color = if (selected) accent else chipSurface,
+        border = if (selected) null else chipBorder,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(50))
@@ -937,10 +1400,10 @@ private fun CompactChip(
     ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(
+                style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
                 ),
-                color = if (selected) CurioColors.DeepPlum else MaterialTheme.colorScheme.onSurface,
+                color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -954,22 +1417,107 @@ private fun CompactChip(
 // Fan-deck carousel — hero "ticket" card + slim prev/next peek cards
 // ═══════════════════════════════════════════════════════════════════════════
 
+/** Rest scale the hero card settles to after a shuffle lands. */
+private const val LandedRestScale = 1.02f
+
+// v7.1 — peek wipe timings. Soft partial-height glides + fades (no hard
+// slot cut), all under the ~340ms tick floor so each step completes before
+// the next tick lands.
+private const val PeekWipeInMs = 320
+private const val PeekWipeOutMs = 300
+private const val PeekIdleInMs = 300
+private const val PeekIdleOutMs = 280
+
+/** Fraction of the card height a peek wipe travels (partial = soft glide). */
+private const val PeekWipeTravel = 0.45f
+
+/**
+ * Small-screen adaptive layout (v6.11). The Spin stack — top bar + 44dp
+ * spacer + 444dp deck + spin button + Categories/Filter bar — needs ~830dp;
+ * on short screens the bottom CTA gets pushed off-screen. When the height
+ * the NavHost actually grants this screen (after status bar, bottom nav and
+ * gesture insets) drops below this threshold, the page switches to the
+ * compact layout: the deck + button move into a vertically scrollable
+ * middle band pinned between the top bar and the bottom CTA, and every
+ * fixed size steps down by [SpinCompactDeckScale]. Above the threshold the
+ * layout is byte-for-byte the original — normal screens never change.
+ */
+private val SpinCompactThresholdHeight = 680.dp
+
+/**
+ * Extra-compact threshold — screens shorter than this get the smallest
+ * Spin tier (v7.2): a smaller deck AND Categories/Filter as tall vertical
+ * pills pinned to the left/right screen edges. Implies compact.
+ */
+private val SpinExtraCompactThresholdHeight = 600.dp
+
+/**
+ * Low-density threshold (v7.2) — devices under this density get the
+ * compact layout regardless of height (gated by the "Smart density
+ * layout" setting since v7.3).
+ */
+private const val SpinLowDensityDpi = 440
+
+/**
+ * High-density threshold (v7.3) — devices at or above this density get the
+ * roomy tier (a slightly LARGER deck), so the density rule scales both
+ * ways: low dpi → smaller, high dpi → larger.
+ */
+private const val SpinHighDensityDpi = 440
+
+/** Deck scale factor applied in compact (short-screen) mode. */
+private const val SpinCompactDeckScale = 0.88f
+
+/** Deck scale factor applied in extra-compact mode. */
+private const val SpinExtraCompactDeckScale = 0.78f
+
+/** Deck scale factor applied in roomy (high-density) mode. */
+private const val SpinRoomyDeckScale = 1.05f
+
 @Composable
 private fun Carousel(
     cat: CurioCategory,
+    deckAccent: Color,
+    deckGradient: List<Color>,
+    isMixed: Boolean,
+    mixSeed: Int,
     displayPool: List<CurioTopic>,
     cycleIndex: Int,
     shuffling: Boolean,
     landedTopic: CurioTopic?,
     opening: Boolean,
-    landScale: Float,
     enabled: Boolean,
+    compact: Boolean = false,
+    extraCompact: Boolean = false,
+    roomy: Boolean = false,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val poolSize = displayPool.size
+    // v6.11 — compact screens shrink the whole fan ~12% so the deck keeps
+    // its proportions inside the shorter box; v7.2 — extra-compact scales
+    // a further step (~22% total) so the whole fan fits very short screens;
+    // v7.3 — roomy scales the fan UP ~5% on high-density screens so the
+    // density rule works both ways (low → smaller, high → larger).
+    val deckScale = when {
+        extraCompact -> SpinExtraCompactDeckScale
+        compact -> SpinCompactDeckScale
+        roomy -> SpinRoomyDeckScale
+        else -> 1f
+    }
     Box(
-        modifier = modifier.height(396.dp),
+        // v6.3 — grew with the hero ticket so the bigger card keeps its
+        // breathing room above/below. The extra-compact box scales with the
+        // fan so proportions stay identical; the roomy box grows ~6% to
+        // match the up-scaled fan.
+        modifier = modifier.height(
+            when {
+                extraCompact -> 350.dp
+                compact -> 390.dp
+                roomy -> 470.dp
+                else -> 444.dp
+            }
+        ),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -981,29 +1529,31 @@ private fun Carousel(
                     slot = slot,
                     pool = displayPool,
                     cycleIndex = cycleIndex,
-                    shuffling = shuffling,
                     landedTopic = landedTopic
                 )
                 if (slot == 0) {
                     HeroTicketCard(
-                        accent = cat.accent,
+                        accent = deckAccent,
+                        gradient = deckGradient,
+                        isMixed = isMixed,
+                        mixSeed = mixSeed,
+                        scale = deckScale,
                         glyph = cat.iconGlyph,
                         topic = topic,
                         cat = cat,
                         landed = landedTopic != null,
                         shuffling = shuffling,
                         opening = opening,
-                        landScale = landScale,
                         enabled = enabled && landedTopic != null,
                         onTap = onCardTap
                     )
                 } else {
                     PeekCard(
                         slot = slot,
-                        accent = cat.accent,
-                        glyph = cat.iconGlyph,
+                        scale = deckScale,
+                        accent = deckAccent,
+                        cat = cat,
                         topic = topic,
-                        landed = landedTopic != null,
                         shuffling = shuffling
                     )
                 }
@@ -1020,8 +1570,9 @@ private fun EmptyPoolHint(cat: CurioCategory) {
     ) {
         Surface(
             shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerLow),
             shadowElevation = 0.dp,
+            border = cat.categoryBorder(),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
@@ -1033,7 +1584,7 @@ private fun EmptyPoolHint(cat: CurioCategory) {
             ) {
                 CurioIcon(
                     cat.iconGlyph, null,
-                    tint = cat.accent.copy(alpha = 0.5f),
+                    tint = cat.categoryInk().copy(alpha = 0.5f),
                     size = 56.dp
                 )
                 Spacer(Modifier.height(14.dp))
@@ -1057,21 +1608,97 @@ private fun EmptyPoolHint(cat: CurioCategory) {
 @Composable
 private fun HeroTicketCard(
     accent: Color,
+    gradient: List<Color>,
+    isMixed: Boolean,
+    mixSeed: Int,
+    scale: Float = 1f,
     glyph: String,
     topic: CurioTopic?,
     cat: CurioCategory,
     landed: Boolean,
     shuffling: Boolean,
     opening: Boolean,
-    landScale: Float,
     enabled: Boolean,
     onTap: () -> Unit
 ) {
-    val w = 270.dp
-    val h = 292.dp
-    val ticketGradient = remember(cat.id) {
-        if (cat.id == CategoryId.WILDCARD) CurioGradients.wildcardCardGradient()
-        else CurioGradients.cardGradient(accent)
+    // v6.3 — slightly bigger ticket (~6% up) so the hero card reads a
+    // touch more prominent on the deck.
+    // v6.11 — compact screens scale the whole ticket down (small phones);
+    // proportions and internal paddings stay identical.
+    val w = 286.dp * scale
+    val h = 310.dp * scale
+    // Mixed decks render the multi-accent stops in a non-linear arrangement
+    // (diagonal sweep / reversed diagonal / radial glow, keyed off the
+    // deck's category set); single decks keep the plain vertical theme-aware
+    // card gradient. Built at the card's pixel size so the brush geometry
+    // matches the ticket exactly.
+    val density = LocalDensity.current
+    val wPx = with(density) { w.toPx() }
+    val hPx = with(density) { h.toPx() }
+    val ticketBrush = if (isMixed) {
+        CurioMixedDeck.mixedDeckHeroBrush(gradient, wPx, hPx, mixSeed)
+    } else {
+        Brush.verticalGradient(gradient)
+    }
+
+    // ── Per-tick shuffle pulse — the front card bounces in sync with the
+    //    wheel: every time the displayed topic switches, the card kicks
+    //    instantly to peak scale then springs back down, rocking side to
+    //    side. Even the fastest early ticks visibly jump (rhythmic pulse);
+    //    the slower deceleration ticks ring out as full, readable bounces.
+    //    The tilt alternates direction each tick so the rock feels organic
+    //    instead of a one-way drift (the old per-topic hash rotation jumped
+    //    randomly, which read as jitter).
+    val tickPulse = remember { Animatable(1f) }
+    var tickDir by remember { mutableStateOf(1f) }
+    LaunchedEffect(topic?.id, shuffling) {
+        if (!shuffling || topic == null) return@LaunchedEffect
+        tickDir = -tickDir
+        // v6.6 — calm breath instead of a kick: the card lifts barely
+        // (1.02) and glides back on a heavily damped, low-stiffness
+        // spring, so each tick reads as a soft pulse, never a slam.
+        tickPulse.snapTo(1.02f)
+        tickPulse.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = 420f))
+    }
+
+    // ── Category switch — one welcoming bounce as the deck re-fans to the
+    //    new category's topics (also fires on first mount).
+    LaunchedEffect(cat.id) {
+        if (!shuffling && !landed) {
+            tickPulse.snapTo(1f)
+            tickPulse.animateTo(1.025f, CurioMotion.Springs.Bouncy)
+            tickPulse.animateTo(1f, CurioMotion.Springs.Elastic)
+        }
+    }
+
+    // ── Landing settle — seamless handoff from the shuffle tick pulse to
+    //    the elastic rest spring. On landing, snap to wherever the pulse
+    //    left off (zero visual jump) then spring down to rest scale.
+    val settleScale = remember { Animatable(1f) }
+    val settleY = remember { Animatable(0f) }
+
+    // Snap both to the pulse's last position on landing (zero visual jump),
+    // reset to rest when a new shuffle begins.
+    LaunchedEffect(landed) {
+        if (landed) {
+            settleScale.snapTo(tickPulse.value)
+            settleY.snapTo(-(tickPulse.value - 1f) * 12f)
+        } else {
+            settleScale.snapTo(1f)
+            settleY.snapTo(0f)
+        }
+    }
+
+    // Settle scale + vertical position in parallel (separate coroutines)
+    // so the card lands as one unified glide, not two sequential springs.
+    // v6.6 — the landing settle uses the controlled Deliberate spring (85%
+    // damping, no bounce) instead of the extreme Elastic overshoot, so the
+    // wheel's stop reads as a confident rest, not a violent bounce.
+    LaunchedEffect(landed) {
+        if (landed) settleScale.animateTo(LandedRestScale, CurioMotion.Springs.Deliberate)
+    }
+    LaunchedEffect(landed) {
+        if (landed) settleY.animateTo(0f, CurioMotion.Springs.Deliberate)
     }
 
     // Outer Box padded 12dp beyond card for shadow breathing room.
@@ -1080,10 +1707,16 @@ private fun HeroTicketCard(
         modifier = Modifier
             .size(w + 24.dp, h + 24.dp)
             .graphicsLayer {
-                scaleX = if (landed) landScale else 1f
-                scaleY = if (landed) landScale else 1f
-                rotationZ = if (shuffling) ((cycleIndexPulse(glyph, topic?.id) - 0.5f) * 3.5f) else 0f
-                translationY = if (shuffling) -6f else 0f
+                // Idle and shuffling both track tickPulse (rest = exactly 1f);
+                // the category-switch + per-tick bounces ride on it, and the
+                // landing handoff snaps to whatever value it left off at.
+                scaleX = if (landed) settleScale.value else tickPulse.value
+                scaleY = if (landed) settleScale.value else tickPulse.value
+                // v6.6 — the per-tick rock is a gentle tilt now (16° vs the
+                // old 40°) so the card breathes instead of whipping side to
+                // side, and the vertical hop shrinks to match.
+                rotationZ = if (shuffling) (tickPulse.value - 1f) * 16f * tickDir else 0f
+                translationY = if (landed) settleY.value else -(tickPulse.value - 1f) * 12f
             }
             .zIndex(10f)
             .then(
@@ -1104,14 +1737,18 @@ private fun HeroTicketCard(
             Surface(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
-                shadowElevation = if (landed) 16.dp else 10.dp,
+                shadowElevation = 0.dp,
+                // Subtle outline — a slim white edge that traces the ticket
+                // silhouette so the hero card reads as a distinct surface
+                // above the dimmer peek cards behind it.
+                border = BorderStroke(1.5.dp, Color.White.copy(alpha = 0.35f)),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            Brush.verticalGradient(ticketGradient),
+                            ticketBrush,
                             RoundedCornerShape(30.dp)
                         )
                 ) {
@@ -1163,10 +1800,47 @@ private fun HeroTicketCard(
                             }
                         }
 
-                        // Name + tags + teaser
+                        // Name + tags + teaser — v6.6: reels with the deck.
+                        // Previously the hero content snapped instantly on
+                        // every tick; now it glides like a card rising from
+                        // the back of the deck to the front — incoming
+                        // content slides up from the lower edge while the
+                        // outgoing exits upward, eased so each tick is a
+                        // readable glide instead of a hard cut.
+                        AnimatedContent(
+                            targetState = topic,
+                            transitionSpec = {
+                                if (shuffling) {
+                                    // v6.10 — same rhythm as the peek wipes
+                                    // (under the 200ms tick floor) with a
+                                    // stronger height/2 rise so the front
+                                    // content visibly glides up as the deck
+                                    // streams. clip=false keeps the title
+                                    // reel from being sliced mid-slide.
+                                    (slideInVertically(
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                    ) { height -> height / 2 } +
+                                        fadeIn(animationSpec = tween(300, easing = FastOutSlowInEasing))) togetherWith
+                                    (slideOutVertically(
+                                        animationSpec = tween(260, easing = FastOutSlowInEasing)
+                                    ) { height -> -height / 2 } +
+                                        fadeOut(animationSpec = tween(260, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
+                                } else {
+                                    (slideInVertically(
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                    ) { height -> height / 4 } +
+                                        fadeIn(animationSpec = tween(300, easing = FastOutSlowInEasing))) togetherWith
+                                    (slideOutVertically(
+                                        animationSpec = tween(260, easing = FastOutSlowInEasing)
+                                    ) { height -> -height / 4 } +
+                                        fadeOut(animationSpec = tween(260, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
+                                }
+                            },
+                            label = "heroContentReel"
+                        ) { currentTopic ->
                         Column {
                             Text(
-                                text = topic?.name ?: "Ready when you are",
+                                text = currentTopic?.name ?: "Ready when you are",
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.ExtraBold,
                                     lineHeight = 34.sp
@@ -1176,10 +1850,10 @@ private fun HeroTicketCard(
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            if (topic != null && topic.tags.isNotEmpty()) {
+                            if (currentTopic != null && currentTopic.tags.isNotEmpty()) {
                                 Spacer(Modifier.height(10.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                    topic.tags.take(2).forEach { tag ->
+                                    currentTopic.tags.take(2).forEach { tag ->
                                         Surface(
                                             shape = RoundedCornerShape(50),
                                 color = Color.White.copy(alpha = 0.22f)
@@ -1194,16 +1868,17 @@ private fun HeroTicketCard(
                                     }
                                 }
                             }
-                            if (landed && topic != null) {
+                            if (currentTopic != null && landed) {
                                 Spacer(Modifier.height(8.dp))
                                 Text(
-                                    text = topic.teaser,
+                                    text = currentTopic.teaser,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = Color.White.copy(alpha = 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
+                        }
                         }
 
                         // Tap hint — "tap to spin" idle, "tap to open" once
@@ -1222,7 +1897,7 @@ private fun HeroTicketCard(
                                 )
                             } else {
                                 CurioIcon(
-                                    if (landed) CurioIcons.ArrowForward else CurioIcons.Casino, null,
+                                    if (landed) CurioIcons.ChevronRight else CurioIcons.Casino, null,
                                     tint = Color.White,
                                     size = 16.dp
                                 )
@@ -1252,22 +1927,40 @@ private fun HeroTicketCard(
 @Composable
 private fun PeekCard(
     slot: Int,
+    scale: Float = 1f,
     accent: Color,
-    glyph: String,
+    cat: CurioCategory,
     topic: CurioTopic?,
-    landed: Boolean,
     shuffling: Boolean
 ) {
     val isTop = slot < 0
     val far = kotlin.math.abs(slot) == 2
+    // Slightly lower + wider fan: the whole deck sits a few px closer to
+    // the spin button and the far pair is spread a touch more so each
+    // layer reads as a separate card instead of one blurred pile.
+    // v6.11 — compact screens scale the fan offsets + card sizes down so
+    // the deck keeps the same look, just tighter on short screens.
     val yOff = when (slot) {
-        -2 -> -178f
-        -1 -> -136f
-        1 -> 136f
-        else -> 178f
+        -2 -> -178f * scale
+        -1 -> -134f * scale
+        1 -> 146f * scale
+        else -> 188f * scale
     }
-    val w = if (far) 272.dp else 300.dp
-    val h = if (far) 78.dp else 96.dp
+    // v6.5 — peek cards grew ~13% so the topic title inside each background
+    // card has room to read instead of hiding behind the fan. Proportions
+    // are kept — only the overall size went up, never the shape.
+    val w = (if (far) 328.dp else 360.dp) * scale
+    val h = (if (far) 96.dp else 116.dp) * scale
+    // Corner radius scales with card height so the slim far deck cards
+    // keep crisp, proportional corners instead of over-rounded ones.
+    val corner = (if (far) 15.dp else 19.dp) * scale
+    // Level-based shading — near cards step one shade down from the hero,
+    // far cards step down again, so the deck fades into the background in
+    // distinct layers. White content stays readable on the dimmed fill.
+    // Mixed decks shade the blended accent so the whole deck reads mixed.
+    val cardColor = remember(accent, far) {
+        lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
+    }
 
     Box(
         modifier = Modifier
@@ -1277,30 +1970,63 @@ private fun PeekCard(
                 rotationZ = when (slot) { -2 -> -3.5f; -1 -> -1.4f; 1 -> 1.4f; else -> 3.5f }
                 scaleX = if (far) 0.92f else 0.98f
                 scaleY = if (far) 0.92f else 0.98f
-                alpha = if (far) 0.48f else 0.82f
+                // Fully opaque — translucent layers blend badly with the tilt
+                // and render the card as soft/pixelated. Depth comes from
+                // scale + rotation + zIndex instead of transparency.
+                alpha = 1f
             }
             .zIndex(if (far) 2f else 5f)
     ) {
         AnimatedContent(
             targetState = topic,
             transitionSpec = {
-                slideInVertically(
-                    animationSpec = tween(240, easing = FastOutSlowInEasing)
-                ) { height -> if (isTop) -height / 3 else height / 3 } +
-                fadeIn(animationSpec = tween(240, easing = FastOutSlowInEasing)) togetherWith
-                slideOutVertically(
-                    animationSpec = tween(200, easing = FastOutSlowInEasing)
-                ) { height -> if (isTop) height / 3 else -height / 3 } +
-                fadeOut(animationSpec = tween(200, easing = FastOutSlowInEasing))
+                // v7.1 — direction + softness. Top peek cards (title placed
+                // at the card top) feed the deck from ABOVE — their content
+                // DROPS down into the card — while bottom peeks rise up, so
+                // the fan streams toward the hero from both ends and a top
+                // card's title is never sliced off the top edge by the old
+                // upward wipe (which read as cut off). The wipe itself is a
+                // partial-height glide + fade (like the hero's content reel)
+                // instead of a full-height hard slot cut, and the durations
+                // sit UNDER the ~340ms tick floor so each step completes
+                // before the next tick lands.
+                val dir = if (isTop) -1f else 1f
+                if (shuffling) {
+                    slideInVertically(
+                        animationSpec = tween(PeekWipeInMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * dir * PeekWipeTravel).toInt() } +
+                    fadeIn(animationSpec = tween(PeekWipeInMs, easing = FastOutSlowInEasing)) togetherWith
+                    slideOutVertically(
+                        animationSpec = tween(PeekWipeOutMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * -dir * PeekWipeTravel).toInt() } +
+                    fadeOut(animationSpec = tween(PeekWipeOutMs, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
+                } else {
+                    // Idle re-fan (landing re-deal / category switch) — a
+                    // slower, softer pass in the same per-side direction.
+                    slideInVertically(
+                        animationSpec = tween(PeekIdleInMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * dir * PeekWipeTravel).toInt() } +
+                    fadeIn(animationSpec = tween(PeekIdleInMs, easing = FastOutSlowInEasing)) togetherWith
+                    slideOutVertically(
+                        animationSpec = tween(PeekIdleOutMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * -dir * PeekWipeTravel).toInt() } +
+                    fadeOut(animationSpec = tween(PeekIdleOutMs, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
+                }
             },
             label = "peekSlot_$slot"
         ) { currentTopic ->
             Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (shuffling) 0.16f else 0.08f),
-                shadowElevation = if (landed) 8.dp else if (far) 1.dp else 4.dp,
-                tonalElevation = if (far) 0.dp else 1.dp,
-                border = BorderStroke(1.dp, accent.copy(alpha = if (far) 0.10f else 0.20f)),
+                shape = RoundedCornerShape(corner),
+                color = cardColor,
+                shadowElevation = 0.dp,
+                tonalElevation = 0.dp,
+                // Subtle hairline outline — kept very light so the rotated
+                // stroke stays crisp instead of aliasing into pixel noise —
+                // lets each deck layer read as a distinct card.
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = Color.White.copy(alpha = if (far) 0.14f else 0.22f)
+                ),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
@@ -1314,15 +2040,17 @@ private fun PeekCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         CurioIcon(
-                            name = glyph,
+                            name = cat.iconGlyph,
                             contentDescription = null,
-                            tint = accent.copy(alpha = 0.55f),
+                            tint = Color.White.copy(alpha = if (far) 0.55f else 0.75f),
                             size = 20.dp
                         )
                         Text(
                             text = currentTopic?.name ?: "…",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            // Far deck cards dim their content too, reinforcing
+                            // the layered fade into the background.
+                            color = Color.White.copy(alpha = if (far) 0.65f else 1f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -1343,11 +2071,19 @@ private fun SpinButton(
     landedTopic: CurioTopic?,
     pulseScale: Float,
     enabled: Boolean,
+    compact: Boolean = false,
     onClick: () -> Unit
 ) {
-    val buttonSize = if (landedTopic != null) 68.dp else 80.dp
+    // v6.3 — button grew a little (~7% up): 126dp idle, 108dp landed.
+    // v6.11 — compact screens step the button + orbit down ~11% so the
+    // pinned Categories/Filter bar always stays on screen.
+    val buttonSize = if (compact) {
+        if (landedTopic != null) 96.dp else 112.dp
+    } else {
+        if (landedTopic != null) 108.dp else 126.dp
+    }
     Box(
-        modifier = Modifier.size(128.dp),
+        modifier = Modifier.size(if (compact) 156.dp else 176.dp),
         contentAlignment = Alignment.Center
     ) {
         OrbitRing(active = isShuffling, color = tint, modifier = Modifier.fillMaxSize())
@@ -1355,9 +2091,10 @@ private fun SpinButton(
             onClick = onClick,
             enabled = enabled,
             shape = CircleShape,
-            // Opaque paper button with a strong ink edge and elevation.
-            color = if (landedTopic != null) MaterialTheme.colorScheme.surfaceContainerHigh else tint,
-            shadowElevation = if (isShuffling) 3.dp else 8.dp,
+            // v6.2 — the dice button keeps its filled category color in EVERY
+            // state (idle + landed "Tap to open"), so the CTA never goes grey.
+            color = tint,
+            shadowElevation = 0.dp,
             modifier = Modifier
                 .size(buttonSize)
                 .scale(pulseScale.coerceIn(0.9f, 1.10f))
@@ -1367,20 +2104,50 @@ private fun SpinButton(
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                if (isShuffling) {
-                    ShuffleGlyph(tint = CurioColors.DeepPlum, modifier = Modifier.size(48.dp))
-                } else if (landedTopic != null) {
-                    CurioIcon(
-                        CurioIcons.Refresh, null,
-                        tint = tint,
-                        size = 28.dp
-                    )
-                } else {
-                    CurioIcon(
-                        CurioIcons.Casino, null,
-                        tint = Color.White,
-                        size = 32.dp
-                    )
+                // v5.10 — the dice shows in EVERY state: tumbling while
+                // shuffling, a steady white dice on the filled accent.
+                // v6.10 — the tumble MORPHS into the resting dice (spring
+                // scale + fade) instead of hard-swapping, so the end of a
+                // spin reads as the die settling — never an abrupt stop.
+                AnimatedContent(
+                    targetState = isShuffling,
+                    transitionSpec = {
+                        (scaleIn(
+                            initialScale = 0.55f,
+                            animationSpec = spring(dampingRatio = 0.55f, stiffness = 380f)
+                        ) + fadeIn(animationSpec = tween(170))) togetherWith
+                        (scaleOut(
+                            targetScale = 0.55f,
+                            animationSpec = tween(150)
+                        ) + fadeOut(animationSpec = tween(150)))
+                    },
+                    label = "diceMorph"
+                ) { shuffling ->
+                    if (shuffling) {
+                        ShuffleGlyph(tint = Color.White, modifier = Modifier.size(72.dp))
+                    } else {
+                        // Gentle idle breathe on the resting die — a slow,
+                        // even pulse so the settled dice stays alive.
+                        val idleBreathe = rememberInfiniteTransition(label = "diceIdle")
+                        val breathe by idleBreathe.animateFloat(
+                            initialValue = 0f,
+                            targetValue = 1f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(1800, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "diceIdleBreathe"
+                        )
+                        CurioIcon(
+                            CurioIcons.Casino, null,
+                            tint = Color.White,
+                            size = if (landedTopic != null) 52.dp else 60.dp,
+                            modifier = Modifier.graphicsLayer {
+                                scaleX = 1f + breathe * 0.05f
+                                scaleY = 1f + breathe * 0.05f
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -1426,26 +2193,55 @@ private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifi
 @Composable
 private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
     val infinite = rememberInfiniteTransition(label = "shuffleGlyph")
+    // v5.10 — smooth, unhurried tumble: LinearEasing wraps 360°→0° with no
+    // visible snap (the old FastOutSlowIn + Restart eased out then jumped
+    // back, which read as fast and janky). The dot pattern is rotationally
+    // symmetric, so the wrap-around is invisible — a true seamless loop.
+    // 1600ms per turn completes ~1.5–2 rotations inside the 2.4–3.2s
+    // shuffle window — fluid, never frantic, and never stalled.
     val angle by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(980, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Restart
+            animation = tween(1600, easing = LinearEasing)
         ),
         label = "shuffleAngle"
     )
+    // Gentle breathe so the die feels alive while it rolls.
+    val pulse by infinite.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(700, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shufflePulse"
+    )
+    // v6.10 — a slow vertical bob so the die reads as shaking in the cup
+    // while it rolls, not just spinning in place.
+    val bob by infinite.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1300, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shuffleBob"
+    )
     Canvas(modifier = modifier) {
-        val radius = (size.minDimension / 2f) * 0.55f
+        val r = size.minDimension / 2f
         val cx = size.width / 2f
-        val cy = size.height / 2f
+        // cy lifts while the breathe is at rest, so the bob and the pulse
+        // rock through a gentle, non-fighting loop.
+        val cy = size.height / 2f - bob * r * 0.08f
+        val breathe = 1f + pulse * 0.06f
         rotate(degrees = angle, pivot = Offset(cx, cy)) {
             for (i in 0 until 6) {
                 val a = (i.toFloat() / 6) * (2f * Math.PI.toFloat())
                 drawCircle(
                     color = tint,
-                    radius = radius * 0.18f,
-                    center = Offset(cx + cos(a) * radius, cy + sin(a) * radius)
+                    radius = r * (0.15f * breathe),
+                    center = Offset(cx + cos(a) * r * 0.58f, cy + sin(a) * r * 0.58f)
                 )
             }
         }
@@ -1482,97 +2278,141 @@ private fun OpeningPulseDot() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Bottom bar — Categories · Filter · Shuffle/Explore
+// Bottom bar — Categories · Filter (solid control buttons)
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
 private fun BottomCta(
     cat: CurioCategory,
-    landedTopic: CurioTopic?,
-    shuffling: Boolean,
-    canSpin: Boolean,
+    mixedCount: Int = 1,
     filterActiveCount: Int,
-    onSpin: () -> Unit,
     onCategories: () -> Unit,
-    onFilter: () -> Unit
+    onFilter: () -> Unit,
+    vertical: Boolean = false
 ) {
-    val showAgain = landedTopic != null
     val hasFilters = filterActiveCount > 0
 
-    // Anchored paper tray: opaque, elevated.  No dividing rule — the
-    // surface elevation alone separates it from the content above.
+    // Anchored paper tray. v6.2 — it wore the SAME category-tint wash as
+    // the page background; now transparent so the Categories/Filter buttons
+    // sit directly on the Spin page background with no tinted band between
+    // them and the nav bar.
     Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 3.dp,
+        color = Color.Transparent,
+        tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            // ── Main CTA — Spin again (after landing) or Shuffle ──
+        if (vertical) {
+            // ── Extra-compact edge buttons (v7.2) — on very short screens
+            //    the bottom Categories/Filter row becomes two TALL pills
+            //    pinned to the left/right screen edges, so the middle stays
+            //    clear for the deck band and everything fits.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
+                    .navigationBarsPadding()
+                    .padding(horizontal = 12.dp, vertical = 10.dp)
             ) {
-                Button(
-                    onClick = onSpin,
-                    enabled = canSpin,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cat.accent,
-                        contentColor = CurioColors.DeepPlum,
-                        disabledContainerColor = cat.accent.copy(alpha = 0.35f),
-                        disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.45f)
-                    ),
-                    contentPadding = PaddingValues(horizontal = 28.dp, vertical = 14.dp)
+                VerticalDeckButton(
+                    label = if (mixedCount > 1) "Mixed · $mixedCount" else cat.displayName,
+                    icon = cat.iconGlyph,
+                    cat = cat,
+                    selected = true,
+                    onClick = onCategories,
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+                VerticalDeckButton(
+                    label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
+                    icon = CurioIcons.Search,
+                    cat = cat,
+                    selected = hasFilters,
+                    onClick = onFilter,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                // ── Categories · Filter — image-led deck buttons ────────
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    CurioIcon(
-                        if (showAgain) CurioIcons.Refresh else CurioIcons.Casino, null,
-                        tint = CurioColors.DeepPlum,
-                        size = 18.dp
+                    DeckControlButton(
+                        // A multi-select deck names itself "Mixed · N" so the
+                        // mix is obvious at a glance instead of the first
+                        // category's name.
+                        label = if (mixedCount > 1) "Mixed · $mixedCount" else cat.displayName,
+                        icon = cat.iconGlyph,
+                        cat = cat,
+                        selected = true,
+                        onClick = onCategories,
+                        modifier = Modifier.weight(1f)
                     )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = when {
-                            shuffling -> "Spinning…"
-                            showAgain -> "Spin again"
-                            else -> "Shuffle"
-                        },
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    DeckControlButton(
+                        label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
+                        icon = CurioIcons.Search,
+                        cat = cat,
+                        selected = hasFilters,
+                        onClick = onFilter,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
+        }
+    }
+}
 
-            // ── Categories · Filter — image-led deck buttons below the CTA ──
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                DeckControlButton(
-                    label = cat.displayName,
-                    icon = cat.iconGlyph,
-                    accent = cat.accent,
-                    selected = true,
-                    onClick = onCategories,
-                    modifier = Modifier.weight(1f)
-                )
-                DeckControlButton(
-                    label = if (hasFilters) "Filter · $filterActiveCount" else "Filter",
-                    icon = CurioIcons.Search,
-                    accent = cat.accent,
-                    selected = hasFilters,
-                    onClick = onFilter,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+/**
+ * Tall vertical pill used by the extra-compact bottom bar (v7.2) — icon
+ * over a stacked label, pinned to the left/right screen edge (Categories
+ * left, Filter right) so the middle of a very short screen stays clear for
+ * the deck band. Same fill/border language as [DeckControlButton].
+ */
+@Composable
+private fun VerticalDeckButton(
+    label: String,
+    icon: String,
+    cat: CurioCategory,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(24.dp),
+        color = if (selected) cat.themedAccent() else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = if (selected) null else cat.categoryBorder(),
+        shadowElevation = 0.dp,
+        modifier = modifier.size(width = 54.dp, height = 112.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 6.dp, vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CurioIcon(
+                icon, null,
+                tint = if (selected) Color.White else cat.categoryInk(),
+                size = 22.dp
+            )
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                color = if (selected) Color.White else cat.categoryInk(),
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
@@ -1582,40 +2422,46 @@ private fun BottomCta(
 private fun DeckControlButton(
     label: String,
     icon: String,
-    accent: Color,
+    cat: CurioCategory,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Solid fills — no translucent tint, no border. Selected buttons get the
+    // full accent color with white content; unselected buttons get a solid
+    // surface fill with theme-aware accent ink (stays readable on the
+    // midnight dark surfaces).
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = lerp(MaterialTheme.colorScheme.surfaceContainerLow, accent, if (selected) 0.18f else 0.08f),
-        border = BorderStroke(1.dp, accent.copy(alpha = if (selected) 0.34f else 0.18f)),
-        shadowElevation = if (selected) 4.dp else 2.dp,
+        color = if (selected) cat.themedAccent() else cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = if (selected) null else cat.categoryBorder(),
+        shadowElevation = 0.dp,
         modifier = modifier.height(62.dp)
     ) {
         Row(
+            // The icon + label group sits CENTERED in the pill box (not
+            // left-flush), so Categories/Filter read as balanced buttons.
             modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            // spacedBy + CenterHorizontally keeps the icon/text gap while
+            // centering the pair as one unit inside the pill.
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
         ) {
-            Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-                listOf(-6.dp to 4.dp, 5.dp to (-3).dp).forEachIndexed { index, offsetPair ->
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = accent.copy(alpha = if (index == 0) 0.18f else 0.30f),
-                        modifier = Modifier.size(28.dp).offset(x = offsetPair.first, y = offsetPair.second)
-                    ) {}
-                }
-                Surface(shape = RoundedCornerShape(14.dp), color = accent) {
-                    CurioIcon(icon, null, tint = CurioColors.DeepPlum, size = 20.dp, modifier = Modifier.padding(7.dp))
-                }
-            }
+            CurioIcon(
+                icon, null,
+                tint = if (selected) Color.White else cat.categoryInk(),
+                size = 24.dp
+            )
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
-                color = MaterialTheme.colorScheme.onSurface,
+                // Text-only bump: 14sp → 16sp (icon stays 24dp) so the
+                // button labels read a little larger per user request.
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold
+                ),
+                color = if (selected) Color.White else cat.categoryInk(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -1623,54 +2469,44 @@ private fun DeckControlButton(
     }
 }
 
-private fun cycleIndexPulse(glyph: String, topicId: String?): Float =
-    kotlin.math.abs((glyph + topicId.orEmpty()).hashCode() % 100) / 100f
-
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
 // Full-screen category picker dialog — immersive tile grid
 // ═══════════════════════════════════════════════════════════════════════════
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoryPickerSheet(
     currentCat: CurioCategory,
     onDismiss: () -> Unit,
     onCategorySelected: (CurioCategory) -> Unit,
+    onCategoriesSelected: (List<CurioCategory>) -> Unit,
     onBrowseAll: () -> Unit
 ) {
     val categories = remember { CurioCategories.visible }
-    var visible by remember { mutableStateOf(false) }
+    // Default = tap-to-open (single). Long-press enters multi-select mode.
+    var multiSelectMode by remember { mutableStateOf(false) }
+    var selectedSlugs by remember { mutableStateOf(setOf<String>()) }
 
-    LaunchedEffect(Unit) { visible = true }
+    // Same full-screen + swipe-down-dismiss pattern as the filter page — a
+    // ModalBottomSheet expanded to full height with a drag handle.
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    Dialog(
-        onDismissRequest = { visible = false },
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            dismissOnClickOutside = false
-        )
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        // v6.6 — the full-screen category selection page wears the
+        // same category tint wash as the Spin page it sits on, so
+        // the picker never flashes a foreign plain background.
+        containerColor = currentCat.categoryBackgroundWash(),
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = slideInVertically(
-                initialOffsetY = { it },
-                animationSpec = tween(350, easing = FastOutSlowInEasing)
-            ) + fadeIn(animationSpec = tween(280)),
-            exit = slideOutVertically(
-                targetOffsetY = { it },
-                animationSpec = tween(240, easing = FastOutSlowInEasing)
-            ) + fadeOut(animationSpec = tween(180))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
         ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .statusBarsPadding()
-                        .navigationBarsPadding()
-                ) {
                     // ── Close button + header ────────────────────────
                     Row(
                         modifier = Modifier
@@ -1679,7 +2515,7 @@ private fun CategoryPickerSheet(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Surface(
-                            onClick = { visible = false },
+                            onClick = onDismiss,
                             shape = CircleShape,
                             color = MaterialTheme.colorScheme.surfaceVariant
                         ) {
@@ -1693,39 +2529,82 @@ private fun CategoryPickerSheet(
                         Spacer(Modifier.width(10.dp))
                         Text(
                             text = "What are we exploring?",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
                         )
-                        // Current category indicator
-                        Surface(
-                            shape = RoundedCornerShape(50),
-                            color = currentCat.accent.copy(alpha = 0.15f)
-                        ) {
-                            Text(
-                                text = currentCat.displayName,
-                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                                color = currentCat.accent,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                            )
+                        // Current category indicator — or selection count in
+                        // multi-select mode.
+                        if (multiSelectMode) {
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = currentCat.themedAccent().copy(alpha = 0.15f)
+                            ) {
+                                Text(
+                                    text = if (selectedSlugs.isEmpty()) "Select decks"
+                                    else "${selectedSlugs.size} selected",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                                    color = currentCat.categoryInk(),
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                                )
+                            }
+                        } else {
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = currentCat.themedAccent().copy(alpha = 0.15f)
+                            ) {
+                                Text(
+                                    text = currentCat.displayName,
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+                                    color = currentCat.categoryInk(),
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                                )
+                            }
                         }
                     }
+
+                    // ── Mode hint — tap to open, hold to multi-select ──
+                    Text(
+                        text = if (multiSelectMode) {
+                            "Tap to toggle decks · Done to spin together"
+                        } else {
+                            "Tap a deck to spin it · hold to pick several"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                    )
 
                     // ── Tile grid filling the screen ────────────────
                     MorphEntrance {
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(14.dp),
-                            verticalArrangement = Arrangement.spacedBy(14.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier.weight(1f)
                         ) {
                             // All tiles render at once — no per-tile stagger.
                             items(categories) { cat ->
-                                CategoryPickerTile(
+                                val slug = cat.id.routeSlug
+                                CurioCategoryCard(
                                     category = cat,
-                                    isSelected = cat.id == currentCat.id,
-                                    onClick = { onCategorySelected(cat) }
+                                    isSelected = if (multiSelectMode) slug in selectedSlugs
+                                    else cat.id == currentCat.id,
+                                    onClick = {
+                                        if (multiSelectMode) {
+                                            selectedSlugs = if (slug in selectedSlugs) selectedSlugs - slug
+                                            else selectedSlugs + slug
+                                        } else {
+                                            onCategorySelected(cat)
+                                        }
+                                    },
+                                    onLongClick = {
+                                        multiSelectMode = true
+                                        if (slug !in selectedSlugs) {
+                                            selectedSlugs = selectedSlugs + slug
+                                        }
+                                    }
                                 )
                             }
                         }
@@ -1733,120 +2612,69 @@ private fun CategoryPickerSheet(
 
                     Spacer(Modifier.height(8.dp))
 
-                    // ── Browse all link ─────────────────────────────
-                    TextButton(
-                        onClick = onBrowseAll,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    ) {
-                        CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = "Browse all categories",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    Spacer(Modifier.height(8.dp))
-                }
-            }
-        }
-    }
-
-    // ── Dismiss after animation completes ──────────────────────────
-    LaunchedEffect(visible) {
-        if (!visible) {
-            delay(260)
-            onDismiss()
-        }
-    }
-}
-
-/** Full-height category tile matching the Explore page style with press animation. */
-@Composable
-private fun CategoryPickerTile(
-    category: CurioCategory,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    var pressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.92f else 1f,
-        animationSpec = CurioMotion.Springs.Press,
-        label = "catTileScale"
-    )
-
-    val isWildcard = category.id == CategoryId.WILDCARD
-    val cardColor = if (isWildcard) CurioColors.CoralBlush else category.accent
-
-    Surface(
-        onClick = {
-            pressed = true
-            onClick()
-        },
-        shape = RoundedCornerShape(28.dp),
-        color = cardColor,
-        shadowElevation = if (isSelected) 10.dp else 6.dp,
-        tonalElevation = if (isSelected) 6.dp else 2.dp,
-        border = if (isSelected) BorderStroke(2.5.dp, Color.White.copy(alpha = 0.7f)) else null,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(156.dp)
-            .scale(scale)
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            // Large ghost icon — decorative
-            CurioIcon(
-                name = category.iconGlyph,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.16f),
-                size = 104.dp,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 8.dp, end = 4.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(18.dp),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Icon badge
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh
-                ) {
-                    CurioIcon(
-                        name = category.iconGlyph,
-                        contentDescription = null,
-                        tint = Color.White,
-                        size = 34.dp,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    if (isSelected) {
-                        Surface(
-                            shape = CircleShape,
-                            color = Color.White
+                    // ── Browse all link, or Mix row in multi-select ──
+                    if (multiSelectMode) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            CurioIcon(
-                                CurioIcons.Check, null,
-                                tint = cardColor,
-                                size = 20.dp,
-                                modifier = Modifier.padding(4.dp)
+                            Button(
+                                onClick = {
+                                    if (selectedSlugs.isEmpty()) return@Button
+                                    onCategoriesSelected(
+                                        categories.filter { it.id.routeSlug in selectedSlugs }
+                                    )
+                                },
+                                enabled = selectedSlugs.isNotEmpty(),
+                                shape = RoundedCornerShape(24.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                ),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                CurioIcon(CurioIcons.Check, null, size = 18.dp)
+                                Text(
+                                    text = if (selectedSlugs.isEmpty()) "Mix" else "Mix · ${selectedSlugs.size}",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                            TextButton(
+                                onClick = {
+                                    multiSelectMode = false
+                                    selectedSlugs = emptySet()
+                                }
+                            ) {
+                                Text(
+                                    "Cancel",
+                                    style = MaterialTheme.typography.labelLarge.copy(
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                )
+                            }
+                        }
+                    } else {
+                        TextButton(
+                            onClick = onBrowseAll,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                text = "Browse all categories",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
-                }
-            }
+
+                    Spacer(Modifier.height(8.dp))
         }
     }
 }
@@ -1858,46 +2686,88 @@ private fun resolveTopicForSlot(
     slot: Int,
     pool: List<CurioTopic>,
     cycleIndex: Int,
-    shuffling: Boolean,
     landedTopic: CurioTopic?
 ): CurioTopic? {
     if (pool.isEmpty()) return null
+    if (landedTopic != null && slot == 0) return landedTopic
+    // v6.10 — the idle fan and the spinning reel are the SAME window into
+    // the hand (front = hand[cycleIndex], neighbors fanned around it), so
+    // a spin starts as a seamless +1 continuation — never a jump cut.
     val idxOf = { pos: Int -> ((pos % pool.size) + pool.size) % pool.size }
-    return when {
-        landedTopic != null && slot == 0 -> landedTopic
-        !shuffling -> when (slot) {
-            -1 -> pool[idxOf(pool.size - 1)]
-            0 -> pool[0]
-            else -> pool[idxOf(1)]
-        }
-        else -> when (slot) {
-            -2 -> pool[idxOf(cycleIndex - 2)]
-            -1 -> pool[idxOf(cycleIndex - 1)]
-            0 -> pool[idxOf(cycleIndex)]
-            1 -> pool[idxOf(cycleIndex + 1)]
-            else -> pool[idxOf(cycleIndex + 2)]
-        }
-    }
+    return pool[idxOf(cycleIndex + slot)]
 }
 
 /**
- * Weighted picker — favours tier 1 (human-curated marquee), then tier 2,
- * then tier 3, while excluding any topics in [recentIds].
+ * Deals a spin hand — up to 6 topics for the fan. With [center] the landed
+ * topic sits at the front (hand[0]) and its neighbors fill the rest; without
+ * one the hand is a plain random spread. Stable across a spin: the reel
+ * rotates through it via cycleIndex instead of re-shuffling mid-spin.
  */
-private fun pickFrom(pool: List<CurioTopic>, recentIds: Set<String>): CurioTopic? {
+private fun buildDeckHand(pool: List<CurioTopic>, center: CurioTopic?): List<CurioTopic> {
+    if (pool.isEmpty()) return emptyList()
+    val head = if (center != null && pool.any { it.id == center.id }) listOf(center) else emptyList()
+    val rest = (if (center == null) pool else pool.filterNot { it.id == center.id }).shuffled()
+    return (head + rest).take(6)
+}
+
+/**
+ * Weighted picker — tier bias (tier 1 human-curated marquee first), then
+ * tier 2, tier 3, while excluding topics in [recentIds] and any topic the
+ * user already explored (captured). Sentiment further skews the weights:
+ * liked topics get 2x, disliked drop to 0.25x, and each topic's CATEGORY
+ * affinity (net likes − dislikes in that category) boosts or dampens the
+ * whole genre — never fully blocked. Falls back gracefully when the pool
+ * is all-recent or all-explored.
+ */
+private fun pickFrom(
+    pool: List<CurioTopic>,
+    recentIds: Set<String>,
+    exploredIds: Set<String>,
+    sentiments: Map<String, String>,
+    categoryAffinity: Map<String, Int>
+): CurioTopic? {
     if (pool.isEmpty()) return null
-    val withoutRecents = pool.filterNot { it.id in recentIds }
-    val candidates = if (withoutRecents.isNotEmpty()) withoutRecents else pool
+    var candidates = pool.filterNot { it.id in recentIds }
+    // Explored topics (already captured) are excluded entirely — falling
+    // back to the full candidate pool only when everything is explored so
+    // the shuffle never runs dry.
+    val unvisited = candidates.filterNot { it.id in exploredIds }
+    if (unvisited.isNotEmpty()) candidates = unvisited
     if (candidates.isEmpty()) return null
     if (candidates.size == 1) return candidates[0]
 
-    val totalWeight = candidates.sumOf { t ->
-        when (t.tier) { 1 -> 100; 2 -> 60; 3 -> 20; else -> 30 }
+    fun baseWeight(t: CurioTopic): Double = when (t.tier) {
+        1 -> 100.0
+        2 -> 60.0
+        3 -> 20.0
+        else -> 30.0
     }
-    if (totalWeight <= 0) return candidates.random()
-    var target = Random.nextInt(totalWeight)
+
+    fun weight(t: CurioTopic): Double {
+        // Per-topic sentiment: a liked topic gets 2x, a disliked one drops
+        // to 0.25x — it can still appear, just far less often.
+        val topicFactor = when (sentiments["${t.categoryId.name}:${t.id}"]) {
+            AppPreferences.SENTIMENT_LIKE -> 2.0
+            AppPreferences.SENTIMENT_DISLIKE -> 0.25
+            else -> 1.0
+        }
+        // Category affinity (net likes − dislikes in the category): a liked
+        // genre shows more (up to 2.5x), a disliked genre shows less (down
+        // to 0.25x) — never fully blocked.
+        val aff = categoryAffinity[t.categoryId.name] ?: 0
+        val categoryFactor = when {
+            aff > 0 -> 1.0 + 0.5 * aff.coerceAtMost(3)
+            aff < 0 -> (1.0 + 0.4 * aff).coerceAtLeast(0.25)
+            else -> 1.0
+        }
+        return baseWeight(t) * topicFactor * categoryFactor
+    }
+
+    val totalWeight = candidates.sumOf { weight(it) }
+    if (totalWeight <= 0.0) return candidates.random()
+    var target = Random.nextDouble(totalWeight)
     for (topic in candidates) {
-        target -= when (topic.tier) { 1 -> 100; 2 -> 60; 3 -> 20; else -> 30 }
+        target -= weight(topic)
         if (target < 0) return topic
     }
     return candidates.random()

@@ -14,6 +14,21 @@ This file is part of the **DOX framework** defined in `master.md`. All agents MU
 
 Top-level instruction file for all AI agents (Codebuff/Buffy and spawned sub-agents) working on the FieldMind Android project. Project-wide rules, global preferences, and the top-level Child DOX Index.
 
+## ❓ ASK WHEN UNSURE
+
+If you understand the user's request less than ~80%, **ask for confirmation
+before doing anything**. Do not guess, do not assume, do not pick the most
+plausible interpretation and run with it. A wrong guess wastes a full cycle
+(edit → review → commit → push → CI → revert) and can ship an unwanted
+change. When in doubt, use the ask_user tool to clarify the request, and
+only proceed once the user confirms.
+
+This rule covers ambiguous phrasing, missing context, conflicting
+instructions, and any request where multiple readings would lead to
+different implementations. Spawned sub-agents don't have the ask_user tool
+— when they hit this uncertainty they must report it back to the parent
+agent, who asks the user.
+
 ## Critical Environment Rules
 
 ### ❌ NEVER RUN COMPILE OR BUILD COMMANDS
@@ -101,6 +116,57 @@ Use this git workflow:
 
 Follow conventional commit format: `feat:`, `fix:`, `refactor:`, `docs:`, `style:`, `chore:`, etc.
 
+### 📝 SMALL TEXT-ONLY CHANGES — DO NOT PUSH
+
+Small text-only changes that do **not** affect app functionality — comment
+rewordings, doc tweaks, formatting fixes, dead-comment cleanups — must
+**NOT** be committed and pushed on their own. They add noise to git history
+and trigger a CI build for zero behavior change. Leave them uncommitted in
+the working tree so they ride along with the next real change (or get
+dropped). This does NOT apply to:
+
+- Changes to agent instructions (AGENTS.md files, master.md) or the
+  Prompt.md request log — those MUST be committed and pushed so every
+  agent sees them.
+- Changes to user-visible text (strings, What's New, changelogs).
+- Any change that alters behavior, layout, or compiled output.
+
+### 🆕 NEW FEATURES — ASK THE USER: TOGGLEABLE OR NOT?
+
+Whenever an agent is ADDING A NEW MEASURE — a new feature, capability, or
+behavior the app didn't have before — ask the user whether they want it
+**toggleable** (behind a user-facing Settings option) or **always-on**.
+Use the ask_user tool BEFORE implementing and follow their answer. This
+ask does NOT apply to refinements or fixes of existing behavior — those
+ship as-is without the toggleable question.
+
+**Reminder — the toggle is NOT permanent.** Once a toggleable feature is
+decided/settled (the experiment concludes, the winning path is clear),
+REMOVE the toggle and hardcode the winning behavior — see rule 3 of the
+🧪 EXPERIMENTAL CHANGES section below. A toggle decided at ask-time is a
+ship vehicle, not a permanent Settings fixture.
+
+### 🧪 EXPERIMENTAL CHANGES — MUST BE SETTINGS-OPTIONAL
+
+Whenever a change is **experimental or being tested** (a visual A/B, a new
+rendering/animation strategy, a provisional behavior, a tuning experiment),
+do NOT hardcode it as the only behavior. Gate it behind a **user-facing
+settings option** (a toggle in the app's Settings screen) so it can be
+A/B-compared against the current behavior and reverted without a code change.
+
+Rules:
+
+1. Experiments ship as an **opt-in settings toggle**, never as a silent
+   behavior swap.
+2. The toggle must be **discoverable in the app's Settings screen**, not a
+   hidden flag.
+3. When the experiment concludes, **remove the toggle** and hardcode the
+   winning path.
+
+Note: settings-gating is about *how* an experiment ships, not *whether* to
+commit it — the **DO COMMIT AND PUSH AFTER EVERY FIX** rule above still
+applies to settings-gated experiments.
+
 ## Prompt.md — Research & Analysis Tracking
 
 `Prompt.md` at project root is the running log of the current request. See `Prompt.md` itself for its own rules. Agents must update Prompt.md when:
@@ -117,7 +183,9 @@ Follow conventional commit format: `feat:`, `fix:`, `refactor:`, `docs:`, `style
 5. **Implement** — make targeted, minimal changes
 6. **Review** — spawn code-reviewer-deepseek-flash for non-trivial changes
 7. **DOX pass** — update nearest owning AGENTS.md if change affects purpose, ownership, contracts, workflows, or structure (see `master.md` "Update After Editing")
-8. **Commit & push** — stage, commit with descriptive message, push
+8. **Commit & push** — stage, commit with descriptive message, push (skip
+   for small text-only changes that don't affect app functionality — see
+   "SMALL TEXT-ONLY CHANGES — DO NOT PUSH" above)
 9. **Update Prompt.md** — with completion summary and any follow-up notes
 
 ## Updating "What's New" (In-App Changelog)
@@ -126,11 +194,7 @@ Whenever you make significant changes, you MUST update the "What's New" section 
 
 ### What to Update
 
-1. **In-App Changelog** — `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindChangelogScreen.kt`
-   - Add a new `FieldMindChangelogEntry` at the **top** of the `fieldMindChangelog` list
-   - Structure: `version`, `date`, `title`, `importance` (`"Major"`/`"Patch"`), descriptive `tags`, and `sections` (list of `Pair<String, List<String>>`)
-   - Each section: emoji-prefixed heading + detailed check-marked bullet points
-   - Follow existing style (emoji headers, Material3 card design)
+1. **In-App Changelog** — only when the active `app/` module has a changelog screen. The new Curio app has no changelog screen yet; the old `FieldMindChangelogScreen.kt` lives in frozen `app-legacy/` and is **never edited**. When a changelog screen exists, add a new entry at the top of its list following the existing entry structure and style.
 
 2. **Fastlane Store Changelog** — `fastlane/metadata/android/en-US/changelogs/{versionCode}.txt`
    - See `fastlane/AGENTS.md` for store conventions (≤500 chars, versionCode naming)
@@ -147,9 +211,9 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 
 ## Child DOX Index
 
-- [app/AGENTS.md](app/AGENTS.md) — Active Android app module under rebuild
-- [app/CURIO_SPEC.md](app/CURIO_SPEC.md) — Canonical UX/UI spec for the new app (Curio)
-- [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — Frozen legacy Android app source (not built, not shipped; not consulted during normal revamp work)
+- [app/AGENTS.md](app/AGENTS.md) — Active Android app module (Curio) under rebuild — design direction comes from the user, not from in-repo docs
+- [app/CURIO_DATA_PLAN.md](app/CURIO_DATA_PLAN.md) — Curio data-layer spec (topics, categories, authoring pipeline)
+- [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — **Frozen legacy Android app source — NEVER modified, refactored, or "fixed"**. Not built, not shipped, read-only reference at most
 - [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
 - [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
 - [wiki/AGENTS.md](wiki/AGENTS.md) — Wiki documentation: user/contributor docs

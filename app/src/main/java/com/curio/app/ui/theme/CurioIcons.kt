@@ -1,5 +1,7 @@
 package com.curio.app.ui.theme
 
+import com.curio.app.data.CategoryFamily
+import com.curio.app.data.JournalMood
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
@@ -52,8 +54,10 @@ object CurioIcons {
     const val Settings    = "settings"         // cog
     const val MoreVert    = "more_vert"        // ⋮ — overflow
     const val Close       = "close"            // X
-    const val ArrowBack   = "arrow_back"       // ← — top-left back arrow
+    const val ArrowBack   = "arrow_back"       // ← — legacy top-left back arrow
     const val ArrowForward = "arrow_forward"
+    const val ChevronLeft  = "chevron_left"    // ‹ — unified back arrow
+    const val ChevronRight = "chevron_right"   // › — unified forward arrow
     const val Check       = "check"            // ✓
     const val Add         = "add"              // +
     const val AutoAwesome = "auto_awesome"     // sparkles / logomark
@@ -69,21 +73,44 @@ object CurioIcons {
     const val Refresh     = "refresh"
     const val Star        = "star"
     const val StarOutline = "star_outline"
+    const val Bookmark    = "bookmark"           // filled — pinned topic
+    const val BookmarkBorder = "bookmark_border" // outline — not pinned
+    const val ThumbUp     = "thumb_up"            // 👍 — liked topic
+    const val ThumbDown   = "thumb_down"          // 👎 — disliked topic
+    const val FormatQuote = "format_quote"
+    // ── Rich-text formatting (Marginalia journal/quotes + format fields)
+    const val FormatBold = "format_bold"           // B — bold
+    const val FormatItalic = "format_italic"       // I — italic
+    const val FormatUnderline = "format_underline" // U — underline
+    const val FormatHighlight = "format_color_fill" // highlighter marker
+    const val FormatText = "text_fields"           // small toggle for other fields
+    const val TextIncrease = "text_increase"       // A+ — enlarge selection
+    const val TextDecrease = "text_decrease"       // A− — shrink selection
     const val Mic         = "mic"
     const val MicNone     = "mic_none"
     const val Image       = "image"
+    const val Fullscreen  = "fullscreen"   // ⤢ — expand mood board
+    const val AspectRatio = "aspect_ratio" // ▭ — Smart Spin layout (small-screen fit)
+    const val PhotoSizeSelectLarge = "photo_size_select_large" // ⤢ size — Smart density layout (deck scale)
     const val PlayArrow   = "play_arrow"
     const val Pause       = "pause"
     const val Stop        = "stop"
     const val Timer       = "timer"
     const val KeyboardArrowDown = "keyboard_arrow_down"  // ▼ — chevron
     const val KeyboardArrowUp   = "keyboard_arrow_up"    // ▲ — chevron
+    const val ArrowUpward   = "arrow_upward"    // ⬆ — sort oldest-first
+    const val ArrowDownward = "arrow_downward"  // ⬇ — sort newest-first
     const val Casino      = "casino"
     const val Album       = "album"
     const val Movie       = "movie"
     const val MenuBook    = "menu_book"
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
+
+    // ── Note-paper style chips (Ruled/Torn/Coffee/Folded/Red-margin)
+    const val LocalCafe     = "local_cafe"        // coffee-stain paper
+    const val FoldedCorner  = "auto_stories"      // folded page (dog-ear)
+    const val RedMarginLine = "border_clear"      // ruled with red margin
 
     // ── Backup / restore glyphs (Settings → Backup & restore)
     const val Backup       = "backup"        // cloud upload — export data
@@ -94,10 +121,69 @@ object CurioIcons {
     const val BugReport     = "bug_report"
     const val Warning       = "warning"
     const val Notifications = "notifications"
+    const val BubbleChart   = "bubble_chart"   // floating explore bubble
     const val Schedule      = "schedule"
     const val LocalFire     = "local_fire_department"
     const val DarkMode      = "dark_mode"
+
+    // ── Journal mood glyphs (Marginalia editor + saved-entry meta card)
+    const val MoodCalm       = "self_improvement"    // meditating figure
+    const val MoodHappy      = "sentiment_satisfied" // smiley
+    const val MoodCurious    = "psychology"          // head with gears
+    const val MoodInspired   = "lightbulb"           // bulb
+    const val MoodTired      = "bedtime"             // crescent moon
+    const val MoodOverwhelmed = "mood_bad"           // frowning face
+
+    // ── Entry meta card glyph (date & time segment)
+    const val CalendarToday  = "calendar_today"
+
+    /**
+     * Per-family symbol sets for the saved-entry hero's decorative watermark
+     * scatter — instruments for Music, camera kit for Movies, books for
+     * Books, art tools for Visual Art, lab symbols for Science, curiosities
+     * for Wildcard. Standard Material Symbols OUTLINED ligature names, so a
+     * Music entry's hero scatters music notes/pianos, an Artists entry
+     * scatters instruments, etc.
+     */
+    fun heroWatermarkSymbols(family: CategoryFamily): List<String> = when (family) {
+        // Exactly 10 — one per hero scatter slot, so no glyph repeats.
+        CategoryFamily.MUSIC -> listOf(
+            "music_note", "library_music", "headphones", "mic", "album",
+            "equalizer", "piano", "radio", "audiotrack", "queue_music"
+        )
+        CategoryFamily.MOVIES -> listOf(
+            "movie", "videocam", "theater_comedy", "local_movies", "movie_filter",
+            "play_circle", "ondemand_video", "video_library", "theaters", "smart_display"
+        )
+        CategoryFamily.BOOKS -> listOf(
+            "menu_book", "auto_stories", "library_books", "edit_note", "book",
+            "format_quote", "import_contacts", "local_library", "create", "menu_open"
+        )
+        CategoryFamily.VISUAL_ART -> listOf(
+            "brush", "palette", "colorize", "photo_library", "museum",
+            "photo_camera", "wallpaper", "architecture", "photo", "landscape"
+        )
+        CategoryFamily.SCIENCE -> listOf(
+            "science", "biotech", "lightbulb", "functions", "psychology",
+            "bubble_chart", "explore", "hub", "online_prediction", "genetics"
+        )
+        CategoryFamily.WILDCARD -> listOf(
+            "casino", "auto_awesome", "explore", "bolt", "star",
+            "nightlight", "public", "spa", "diamond", "rocket_launch"
+        )
+    }
 }
+
+/** The Material Symbols glyph a journal mood wears. */
+val JournalMood.glyph: String
+    get() = when (this) {
+        JournalMood.CALM -> CurioIcons.MoodCalm
+        JournalMood.HAPPY -> CurioIcons.MoodHappy
+        JournalMood.CURIOUS -> CurioIcons.MoodCurious
+        JournalMood.INSPIRED -> CurioIcons.MoodInspired
+        JournalMood.TIRED -> CurioIcons.MoodTired
+        JournalMood.OVERWHELMED -> CurioIcons.MoodOverwhelmed
+    }
 
 /**
  * Renders a Material Symbols glyph via ligature.

@@ -43,6 +43,7 @@ There is **no root wrapper object**. The file is a bare JSON array. The
     "name": "Vespertine",
     "teaser": "Björk's 2001 chamber-electronic album, mostly recorded alone in her Reykjavík home. The beats sit closer than they should.",
     "imageUrl": "",
+    "byline": "Björk",
     "exploreAction": {
       "verb": "Listen",
       "targetName": "Vespertine (2001) end-to-end",
@@ -67,11 +68,12 @@ There is **no root wrapper object**. The file is a bare JSON array. The
 | `name` | string | ✅ | Display title. ≤ 80 chars. For works, format as `Title (Year) — Author` or `Title (Year)` — whichever reads best. |
 | `teaser` | string | ✅ | 1–2 sentences, ≤ 280 chars. The "one quirky fact" surfaced on Topic Reveal (CURIO_SPEC §6). NOT a Wikipedia bio — find a surprising angle. |
 | `imageUrl` | string | ✅ | Empty string `""` for now (image strategy deferred to a later phase). |
+| `byline` | string | ❌ | Creator tag shown as a pill on the Topic Reveal hero card (`Artist · The Beatles`, `Author · George Orwell`). Albums → artist, Books → author, Films → director, Artworks → painter. Optional, default `""`. Populated by `scripts/enrich_topics.py`. |
 | `exploreAction.verb` | string | ✅ | `Listen` \| `Watch` \| `Read` \| `Look at` \| `Try` \| `Visit` \| `Make` \| `Explore`. Drives the icon glyph on the action card. See table above for per-category defaults. |
 | `exploreAction.targetName` | string | ✅ | The exact artifact to consume. `Vespertine (2001) end-to-end`, not `an album by Björk`. |
 | `exploreAction.durationMinutes` | int | ✅ | Realistic human time-to-engage. ≤ 60 unless the artifact genuinely demands more. |
 | `exploreAction.instruction` | string | ✅ | ≤ 280 chars. Must pass the **quality bar** below. |
-| `tags` | string[] | ❌ | Free-form tags for the Spin screen's dynamic filter chip row. Default `[]`. Tags are category-specific: Artists might use `["Rock", "1970s"]`, Films might use `["Drama", "1990s"]`, Painters might use `["Impressionism", "Oil"]`. |
+| `tags` | string[] | ❌ | Free-form tags for the Spin screen's dynamic filter chip row. Default `[]`. Tags are category-specific: Artists might use `["Rock", "1970s"]`, Films might use `["Drama", "1990s"]`, Painters might use `["Impressionism", "Oil"]`. Films + Directors use the industry-region tags `Hollywood` (US studio system, replaces the plain `American` origin tag on those two categories) and `Bollywood` (Hindi cinema) — `SpinScreen` buckets both into the filter sheet's Origin group. |
 | `tier` | int 1–3 | ❌ | Quality tier. 1 = human-curated marquee (highest quality, surfaces most often). 2 = AI-curated long-tail (still good). 3 = draft / placeholder. Default 1 if omitted. |
 
 ---

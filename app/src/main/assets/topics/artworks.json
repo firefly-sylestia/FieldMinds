@@ -6,6 +6,7 @@
     "name": "The Physical Impossibility of Death (1991) by Damien Hirst",
     "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
     "imageUrl": "",
+    "byline": "Damien Hirst",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Physical Impossibility of Death (1991) by Damien Hirst",
@@ -25,923 +26,12 @@
     "name": "Shark (1988) by Jean-Michel Basquiat",
     "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
     "imageUrl": "",
+    "byline": "Jean-Michel Basquiat",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Shark (1988) by Jean-Michel Basquiat",
       "durationMinutes": 7,
       "instruction": "Compare the foreground with the right half. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-hidden-canvas-1-73",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Hidden Canvas #1",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Hidden Canvas #1",
-      "durationMinutes": 7,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-forgotten-canvas-2-74",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Forgotten Canvas #2",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Forgotten Canvas #2",
-      "durationMinutes": 7,
-      "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-unsung-canvas-3-75",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Unsung Canvas #3",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Unsung Canvas #3",
-      "durationMinutes": 6,
-      "instruction": "Notice what's missing. The artist deliberately left out light and shadow — that absence speaks volumes."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-radiant-canvas-4-76",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Radiant Canvas #4",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Radiant Canvas #4",
-      "durationMinutes": 3,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-quiet-canvas-5-77",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Quiet Canvas #5",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Quiet Canvas #5",
-      "durationMinutes": 8,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-luminous-canvas-6-78",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Luminous Canvas #6",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Luminous Canvas #6",
-      "durationMinutes": 6,
-      "instruction": "Step back and squint. The light and shadow reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-distant-canvas-7-79",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Distant Canvas #7",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Distant Canvas #7",
-      "durationMinutes": 4,
-      "instruction": "Look at the use of texture. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-unexpected-canvas-8-80",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Unexpected Canvas #8",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Unexpected Canvas #8",
-      "durationMinutes": 6,
-      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-eternal-canvas-9-81",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Eternal Canvas #9",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Eternal Canvas #9",
-      "durationMinutes": 3,
-      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-restless-canvas-10-82",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Restless Canvas #10",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Restless Canvas #10",
-      "durationMinutes": 9,
-      "instruction": "Step back and squint. The light and shadow reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-brilliant-canvas-11-83",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Brilliant Canvas #11",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Brilliant Canvas #11",
-      "durationMinutes": 3,
-      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-enigmatic-canvas-12-84",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Enigmatic Canvas #12",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Enigmatic Canvas #12",
-      "durationMinutes": 3,
-      "instruction": "Compare the upper section with the background. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-restless-canvas-13-85",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Restless Canvas #13",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Restless Canvas #13",
-      "durationMinutes": 6,
-      "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-subtle-canvas-14-86",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Subtle Canvas #14",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Subtle Canvas #14",
-      "durationMinutes": 3,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-vivid-canvas-15-87",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Vivid Canvas #15",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Vivid Canvas #15",
-      "durationMinutes": 6,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-ancient-canvas-16-88",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Ancient Canvas #16",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Ancient Canvas #16",
-      "durationMinutes": 7,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-modern-canvas-17-89",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Modern Canvas #17",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Modern Canvas #17",
-      "durationMinutes": 7,
-      "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-lost-canvas-18-90",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Lost Canvas #18",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Lost Canvas #18",
-      "durationMinutes": 6,
-      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-wandering-canvas-19-91",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Wandering Canvas #19",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Wandering Canvas #19",
-      "durationMinutes": 6,
-      "instruction": "Compare the foreground with the left half. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-timeless-canvas-20-92",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Timeless Canvas #20",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Timeless Canvas #20",
-      "durationMinutes": 9,
-      "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-hidden-study-21-93",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Hidden Study #21",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Hidden Study #21",
-      "durationMinutes": 7,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-forgotten-study-22-94",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Forgotten Study #22",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Forgotten Study #22",
-      "durationMinutes": 10,
-      "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-unsung-study-23-95",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Unsung Study #23",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Unsung Study #23",
-      "durationMinutes": 5,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-radiant-study-24-96",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Radiant Study #24",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Radiant Study #24",
-      "durationMinutes": 8,
-      "instruction": "Compare the left half with the lower edge. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-quiet-study-25-97",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Quiet Study #25",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Quiet Study #25",
-      "durationMinutes": 7,
-      "instruction": "Compare the upper section with the lower edge. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-luminous-study-26-98",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Luminous Study #26",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Luminous Study #26",
-      "durationMinutes": 5,
-      "instruction": "Compare the upper section with the upper section. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-distant-study-27-99",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Distant Study #27",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Distant Study #27",
-      "durationMinutes": 4,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-unexpected-study-28-100",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Unexpected Study #28",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Unexpected Study #28",
-      "durationMinutes": 10,
-      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-eternal-study-29-101",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Eternal Study #29",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Eternal Study #29",
-      "durationMinutes": 5,
-      "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-restless-study-30-102",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Restless Study #30",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Restless Study #30",
-      "durationMinutes": 8,
-      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-brilliant-study-31-103",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Brilliant Study #31",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Brilliant Study #31",
-      "durationMinutes": 3,
-      "instruction": "Compare the lower edge with the lower edge. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-enigmatic-study-32-104",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Enigmatic Study #32",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Enigmatic Study #32",
-      "durationMinutes": 5,
-      "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-restless-study-33-105",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Restless Study #33",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Restless Study #33",
-      "durationMinutes": 5,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-subtle-study-34-106",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Subtle Study #34",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Subtle Study #34",
-      "durationMinutes": 8,
-      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-vivid-study-35-107",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Vivid Study #35",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Vivid Study #35",
-      "durationMinutes": 8,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-ancient-study-36-108",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Ancient Study #36",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Ancient Study #36",
-      "durationMinutes": 6,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-modern-study-37-109",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Modern Study #37",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Modern Study #37",
-      "durationMinutes": 8,
-      "instruction": "Notice what's missing. The artist deliberately left out focal point — that absence speaks volumes."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-lost-study-38-110",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Lost Study #38",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Lost Study #38",
-      "durationMinutes": 10,
-      "instruction": "Compare the foreground with the upper section. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-wandering-study-39-111",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Wandering Study #39",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Wandering Study #39",
-      "durationMinutes": 10,
-      "instruction": "Step back and squint. The light and shadow reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-timeless-study-40-112",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Timeless Study #40",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Timeless Study #40",
-      "durationMinutes": 5,
-      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Photography",
-      "20th Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-hidden-panel-41-113",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Hidden Panel #41",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Hidden Panel #41",
-      "durationMinutes": 4,
-      "instruction": "Look at the use of texture. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-forgotten-panel-42-114",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Forgotten Panel #42",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Forgotten Panel #42",
-      "durationMinutes": 10,
-      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-unsung-panel-43-115",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Unsung Panel #43",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Unsung Panel #43",
-      "durationMinutes": 3,
-      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
-    },
-    "tags": [
-      "Sculpture",
-      "Modern"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-radiant-panel-44-116",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Radiant Panel #44",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Radiant Panel #44",
-      "durationMinutes": 6,
-      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-quiet-panel-45-117",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Quiet Panel #45",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Quiet Panel #45",
-      "durationMinutes": 6,
-      "instruction": "Notice what's missing. The artist deliberately left out focal point — that absence speaks volumes."
-    },
-    "tags": [
-      "Oil Painting",
-      "Classical"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-luminous-panel-46-118",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Luminous Panel #46",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Luminous Panel #46",
-      "durationMinutes": 10,
-      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
-    },
-    "tags": [
-      "Installation",
-      "Contemporary"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-distant-panel-47-119",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Distant Panel #47",
-    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Distant Panel #47",
-      "durationMinutes": 6,
-      "instruction": "Compare the right half with the upper section. The contrast is the whole point of the piece."
-    },
-    "tags": [
-      "Mixed Media",
-      "21st Century"
-    ],
-    "tier": 2
-  },
-  {
-    "id": "artw-unexpected-panel-48-120",
-    "categoryId": "ARTWORKS",
-    "subtype": "Artwork",
-    "name": "Unexpected Panel #48",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
-    "imageUrl": "",
-    "exploreAction": {
-      "verb": "Look at",
-      "targetName": "Unexpected Panel #48",
-      "durationMinutes": 3,
-      "instruction": "Compare the left half with the lower edge. The contrast is the whole point of the piece."
     },
     "tags": [
       "Installation",
@@ -956,6 +46,7 @@
     "name": "Flag (1954) by Jasper Johns",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Jasper Johns",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Flag (1954) by Jasper Johns",
@@ -975,6 +66,7 @@
     "name": "LOVE (1970) by Robert Indiana",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Robert Indiana",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "LOVE (1970) by Robert Indiana",
@@ -994,6 +86,7 @@
     "name": "Water Lilies (1919) by Claude Monet",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Claude Monet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Water Lilies (1919) by Claude Monet",
@@ -1013,6 +106,7 @@
     "name": "The Last Supper (1498) by Leonardo da Vinci",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Leonardo da Vinci",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Last Supper (1498) by Leonardo da Vinci",
@@ -1032,6 +126,7 @@
     "name": "The Creation of Adam (1512) by Michelangelo",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Michelangelo",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Creation of Adam (1512) by Michelangelo",
@@ -1051,6 +146,7 @@
     "name": "The School of Athens (1511) by Raphael",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Raphael",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The School of Athens (1511) by Raphael",
@@ -1070,6 +166,7 @@
     "name": "Girl with a Pearl Earring (1665) by Johannes Vermeer",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Johannes Vermeer",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Girl with a Pearl Earring (1665) by Johannes Vermeer",
@@ -1089,6 +186,7 @@
     "name": "The Swing (1767) by Jean-Honoré Fragonard",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Jean-Honoré Fragonard",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Swing (1767) by Jean-Honoré Fragonard",
@@ -1108,6 +206,7 @@
     "name": "The Third of May 1808 (1814) by Francisco Goya",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Francisco Goya",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Third of May 1808 (1814) by Francisco Goya",
@@ -1127,6 +226,7 @@
     "name": "Liberty Leading the People (1830) by Eugène Delacroix",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Eugène Delacroix",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Liberty Leading the People (1830) by Eugène Delacroix",
@@ -1146,6 +246,7 @@
     "name": "The Fighting Temeraire (1839) by J.M.W. Turner",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "J.M.W. Turner",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Fighting Temeraire (1839) by J.M.W. Turner",
@@ -1165,6 +266,7 @@
     "name": "The Luncheon on the Grass (1863) by Édouard Manet",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Édouard Manet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Luncheon on the Grass (1863) by Édouard Manet",
@@ -1184,6 +286,7 @@
     "name": "The Dance Class (1874) by Edgar Degas",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Edgar Degas",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Dance Class (1874) by Edgar Degas",
@@ -1203,6 +306,7 @@
     "name": "A Sunday on La Grande Jatte (1886) by Georges Seurat",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Georges Seurat",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "A Sunday on La Grande Jatte (1886) by Georges Seurat",
@@ -1222,6 +326,7 @@
     "name": "Irises (1889) by Vincent van Gogh",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Vincent van Gogh",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Irises (1889) by Vincent van Gogh",
@@ -1241,6 +346,7 @@
     "name": "The Kiss (1908) by Gustav Klimt",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Gustav Klimt",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Kiss (1908) by Gustav Klimt",
@@ -1260,6 +366,7 @@
     "name": "Guernica (1937) by Pablo Picasso",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Pablo Picasso",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Guernica (1937) by Pablo Picasso",
@@ -1279,6 +386,7 @@
     "name": "Black Square (1915) by Kazimir Malevich",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Kazimir Malevich",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Black Square (1915) by Kazimir Malevich",
@@ -1298,6 +406,7 @@
     "name": "American Gothic (1930) by Grant Wood",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Grant Wood",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "American Gothic (1930) by Grant Wood",
@@ -1317,6 +426,7 @@
     "name": "Nighthawks (1942) by Edward Hopper",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Edward Hopper",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Nighthawks (1942) by Edward Hopper",
@@ -1336,6 +446,7 @@
     "name": "Campbell's Soup Cans (1962) by Andy Warhol",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Andy Warhol",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Campbell's Soup Cans (1962) by Andy Warhol",
@@ -1355,6 +466,7 @@
     "name": "The Dinner Party (1979) by Judy Chicago",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Judy Chicago",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Dinner Party (1979) by Judy Chicago",
@@ -1374,6 +486,7 @@
     "name": "Cloud Gate (2006) by Anish Kapoor",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Anish Kapoor",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Cloud Gate (2006) by Anish Kapoor",
@@ -1393,6 +506,7 @@
     "name": "The Weather Project (2003) by Olafur Eliasson",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Olafur Eliasson",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Weather Project (2003) by Olafur Eliasson",
@@ -1412,6 +526,7 @@
     "name": "Maman (1999) by Louise Bourgeois",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Louise Bourgeois",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Maman (1999) by Louise Bourgeois",
@@ -1431,6 +546,7 @@
     "name": "Spiral Jetty (1970) by Robert Smithson",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Robert Smithson",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Spiral Jetty (1970) by Robert Smithson",
@@ -1450,6 +566,7 @@
     "name": "Rain Room (2012) by Random International",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Random International",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Rain Room (2012) by Random International",
@@ -1469,6 +586,7 @@
     "name": "Untitled (1991) by Felix Gonzalez-Torres",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Felix Gonzalez-Torres",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Untitled (1991) by Felix Gonzalez-Torres",
@@ -1488,6 +606,7 @@
     "name": "Untitled Boxer (1982) by Jean-Michel Basquiat",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Jean-Michel Basquiat",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Untitled Boxer (1982) by Jean-Michel Basquiat",
@@ -1507,6 +626,7 @@
     "name": "Whaam! (1963) by Roy Lichtenstein",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Roy Lichtenstein",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Whaam! (1963) by Roy Lichtenstein",
@@ -1526,6 +646,7 @@
     "name": "The Arnolfini Portrait (1434) by Jan van Eyck",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Jan van Eyck",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Arnolfini Portrait (1434) by Jan van Eyck",
@@ -1545,6 +666,7 @@
     "name": "Mona Lisa (1503) by Leonardo da Vinci",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Leonardo da Vinci",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Mona Lisa (1503) by Leonardo da Vinci",
@@ -1564,6 +686,7 @@
     "name": "The Garden of Earthly Delights (1505) by Hieronymus Bosch",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Hieronymus Bosch",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Garden of Earthly Delights (1505) by Hieronymus Bosch",
@@ -1583,6 +706,7 @@
     "name": "The Night Watch (1642) by Rembrandt",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Rembrandt",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Night Watch (1642) by Rembrandt",
@@ -1602,6 +726,7 @@
     "name": "Las Meninas (1656) by Diego Velázquez",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Diego Velázquez",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Las Meninas (1656) by Diego Velázquez",
@@ -1621,6 +746,7 @@
     "name": "The Death of Marat (1793) by Jacques-Louis David",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Jacques-Louis David",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Death of Marat (1793) by Jacques-Louis David",
@@ -1640,6 +766,7 @@
     "name": "The Raft of the Medusa (1819) by Théodore Géricault",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Théodore Géricault",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Raft of the Medusa (1819) by Théodore Géricault",
@@ -1659,6 +786,7 @@
     "name": "The Great Wave off Kanagawa (1831) by Hokusai",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Hokusai",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Great Wave off Kanagawa (1831) by Hokusai",
@@ -1678,6 +806,7 @@
     "name": "Olympia (1863) by Édouard Manet",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Édouard Manet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Olympia (1863) by Édouard Manet",
@@ -1697,6 +826,7 @@
     "name": "Impression Sunrise (1872) by Claude Monet",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Claude Monet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Impression Sunrise (1872) by Claude Monet",
@@ -1716,6 +846,7 @@
     "name": "Nocturne in Black and Gold (1875) by Whistler",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Whistler",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Nocturne in Black and Gold (1875) by Whistler",
@@ -1735,6 +866,7 @@
     "name": "The Starry Night (1889) by Vincent van Gogh",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Vincent van Gogh",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Starry Night (1889) by Vincent van Gogh",
@@ -1754,6 +886,7 @@
     "name": "The Scream (1893) by Edvard Munch",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Edvard Munch",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Scream (1893) by Edvard Munch",
@@ -1773,6 +906,7 @@
     "name": "Les Demoiselles d'Avignon (1907) by Picasso",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Picasso",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Les Demoiselles d'Avignon (1907) by Picasso",
@@ -1792,6 +926,7 @@
     "name": "Composition VII (1913) by Wassily Kandinsky",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Wassily Kandinsky",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Composition VII (1913) by Wassily Kandinsky",
@@ -1811,6 +946,7 @@
     "name": "Fountain (1917) by Marcel Duchamp",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Marcel Duchamp",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Fountain (1917) by Marcel Duchamp",
@@ -1830,6 +966,7 @@
     "name": "The Persistence of Memory (1931) by Salvador Dalí",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Salvador Dalí",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Persistence of Memory (1931) by Salvador Dalí",
@@ -1849,6 +986,7 @@
     "name": "Autumn Rhythm Number 30 (1950) by Jackson Pollock",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Jackson Pollock",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Autumn Rhythm Number 30 (1950) by Jackson Pollock",
@@ -1868,6 +1006,7 @@
     "name": "Marilyn Diptych (1962) by Andy Warhol",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Andy Warhol",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Marilyn Diptych (1962) by Andy Warhol",
@@ -1887,6 +1026,7 @@
     "name": "Balloon Dog Orange (2000) by Jeff Koons",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Jeff Koons",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Balloon Dog Orange (2000) by Jeff Koons",
@@ -1906,6 +1046,7 @@
     "name": "Sunflower Seeds (2010) by Ai Weiwei",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Ai Weiwei",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Sunflower Seeds (2010) by Ai Weiwei",
@@ -1925,6 +1066,7 @@
     "name": "Infinity Mirror Room (1965) by Yayoi Kusama",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Yayoi Kusama",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Infinity Mirror Room (1965) by Yayoi Kusama",
@@ -1944,6 +1086,7 @@
     "name": "My Bed (1998) by Tracey Emin",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Tracey Emin",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "My Bed (1998) by Tracey Emin",
@@ -1963,6 +1106,7 @@
     "name": "The Gates (2005) by Christo and Jeanne-Claude",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Christo and Jeanne-Claude",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Gates (2005) by Christo and Jeanne-Claude",

@@ -23,19 +23,40 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+
+/**
+ * Out-of-band handoff for the Spin page's category tint wash — published by
+ * [com.curio.app.features.spin.SpinScreen] and consumed by [CurioBottomBar]
+ * so the Scaffold-level nav bar can blend with the tinted Spin page (the bar
+ * lives outside the NavHost content and can't read SpinScreen's state
+ * directly). Mirrors the [com.curio.app.navigation.LightboxTarget] pattern.
+ *
+ * Only the Spin routes are tinted (the nav bar's own route check gates it)
+ * — Home and Cabinet stay on the plain theme surface, matching their plain
+ * pages.
+ */
+object CurioNavTint {
+    var spinWash by mutableStateOf<Color?>(null)
+        private set
+
+    fun publishSpinWash(color: Color?) {
+        spinWash = color
+    }
+}
 
 /**
  * Curio's persistent bottom navigation — see CURIO_SPEC.md §1 + §3.
@@ -87,12 +108,23 @@ fun CurioBottomBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val routePrefix = currentRoute?.substringBefore("/")
+
+    // The nav bar wears the Spin page's category tint wash ONLY on the Spin
+    // routes (tab + spin/{categorySlug}) — the screen that actually has a
+    // tinted page. Home and Cabinet stay on the plain theme surface (their
+    // pages are plain), so the bar never tints where the page doesn't.
+    val containerColor = if (routePrefix == CurioRoutes.SPIN) {
+        CurioNavTint.spinWash ?: MaterialTheme.colorScheme.surface
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
 
     NavigationBar(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 80.dp),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = containerColor,
         tonalElevation = 0.dp,
         windowInsets = WindowInsets.navigationBars
     ) {
@@ -108,13 +140,11 @@ fun CurioBottomBar(
                 selected = selected,
                 onClick = {
                     if (currentRoute != destination.route) {
-                        navController.navigate(destination.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        // Anchor to HOME (the persistent root), not the
+                        // graph start destination: SPLASH is popped on
+                        // launch, so popUpTo(startDestination) would be a
+                        // no-op and tab switches would pile up duplicates.
+                        navController.navigateToTab(destination.route)
                     }
                 },
                 icon = {

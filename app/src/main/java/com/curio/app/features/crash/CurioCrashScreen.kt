@@ -15,8 +15,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import android.app.Activity
 import android.content.Intent
 import androidx.navigation.NavController
+import com.curio.app.MainActivity
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.ui.theme.CurioColors
@@ -33,6 +35,9 @@ import com.curio.app.ui.theme.CurioIcons
 fun CurioCrashScreen(navController: NavController) {
     val context = LocalContext.current
     val crashLog = remember { CurioCrashReporter.getLastCrash(context) ?: "No crash log available." }
+    // True when the crash-loop guard flipped: repeated crashes were detected
+    // and the explore service + reminders were paused so the app could open.
+    val safeMode = remember { CurioCrashReporter.isSafeMode(context) }
     var showFullLog by remember { mutableStateOf(false) }
 
     val cat = detectCategory(crashLog)
@@ -98,6 +103,32 @@ fun CurioCrashScreen(navController: NavController) {
             )
         }
 
+        // Crash-loop guard notice — repeated crashes paused the background
+        // explore service + reminders so the app could open on this screen.
+        if (safeMode) {
+            Spacer(Modifier.height(16.dp))
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.errorContainer,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Repeated crashes detected",
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "Curio paused the explore timer, bubble and reminders so the app could open safely. " +
+                            "The crash below is the latest one — tap Restart Curio to start clean and continue normally.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+            }
+        }
+
         Spacer(Modifier.height(24.dp))
 
         // Recovery suggestion
@@ -121,12 +152,26 @@ fun CurioCrashScreen(navController: NavController) {
                 )
                 Spacer(Modifier.height(16.dp))
 
-                // Primary action
+                // Primary action — a single crash already runs in a fresh
+                // process, so Home is clean; a crash LOOP restarts the whole
+                // task so no stale state (or re-armed service) survives.
                 Button(
                     onClick = {
-                        CurioCrashReporter.clearPendingCrash(context)
-                        navController.navigate(CurioRoutes.HOME) {
-                            popUpTo(0) { inclusive = true }
+                        if (CurioCrashReporter.isSafeMode(context)) {
+                            CurioCrashReporter.resetLoopGuard(context)
+                            val restart = Intent(context, MainActivity::class.java).apply {
+                                addFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                                        Intent.FLAG_ACTIVITY_NEW_TASK
+                                )
+                            }
+                            context.startActivity(restart)
+                            (context as? Activity)?.finishAffinity()
+                        } else {
+                            CurioCrashReporter.clearPendingCrash(context)
+                            navController.navigate(CurioRoutes.HOME) {
+                                popUpTo(0) { inclusive = true }
+                            }
                         }
                     },
                     shape = RoundedCornerShape(28.dp),

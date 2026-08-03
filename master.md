@@ -78,6 +78,13 @@ Default section order:
 
 When the user requests a durable behavior change, record it here or in the relevant child AGENTS.md
 
+### ❓ Ask When Unsure
+
+If an agent understands the user's request less than ~80%, it MUST ask for
+confirmation before proceeding — never guess and run with the most plausible
+reading. Use the ask_user tool to clarify ambiguous, missing, or conflicting
+context first. See root `AGENTS.md` "ASK WHEN UNSURE".
+
 ### ✅ Commit and Push After Every Change
 
 Agents MUST commit and push all changes before the task is complete. Do not leave changes uncommitted. Follow the commit workflow in the root `AGENTS.md`:
@@ -87,6 +94,17 @@ Agents MUST commit and push all changes before the task is complete. Do not leav
 3. **Push:** `git push`
 
 This is mandatory — do not skip unless the user explicitly says not to push.
+
+### 📝 Small Text-Only Changes — Do NOT Push
+
+Small text-only changes that do **not** affect app functionality (comment
+rewordings, doc tweaks, formatting fixes) must NOT be committed and pushed
+on their own — leave them uncommitted so they ride along with the next real
+change. This does NOT apply to: changes to agent instructions (AGENTS.md,
+master.md) or the Prompt.md request log; changes to user-visible text
+(strings, What's New, changelogs); or any change that alters behavior,
+layout, or compiled output — those still get pushed. See root
+`AGENTS.md` "SMALL TEXT-ONLY CHANGES — DO NOT PUSH".
 
 ## DOX Tree Diagram
 

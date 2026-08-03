@@ -6,16 +6,39 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -23,6 +46,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.curio.app.data.AppPreferences
+import com.curio.app.data.ExploreReminderScheduler
+import com.curio.app.data.ExploreSessionStore
+import com.curio.app.data.formatElapsed
+import com.curio.app.infrastructure.ExploreSessionService
+import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
+import kotlinx.coroutines.delay
 import com.curio.app.features.bugreport.BugReportScreen
 import com.curio.app.features.crash.CurioCrashScreen
 import com.curio.app.features.lightbox.LightboxScreen
@@ -41,6 +72,14 @@ import com.curio.app.features.home.HomeScreen
 import com.curio.app.features.splash.SplashScreen
 import com.curio.app.ui.components.CurioBottomBar
 import com.curio.app.ui.theme.CurioMotion
+
+/**
+ * Decodes a nav-argument string safely — malformed percent-escapes or
+ * unpaired surrogates fall back to the raw value instead of crashing
+ * with IllegalArgumentException.
+ */
+private fun safeDecode(raw: String?): String =
+    runCatching { Uri.decode(raw.orEmpty()) }.getOrDefault(raw.orEmpty())
 
 /**
  * The Curio NavHost — single-NavHost scaffold for the active app.
@@ -73,14 +112,101 @@ fun CurioNavHost(
     }
     val showBottomBar = routePrefix in CurioRoutes.bottomNavRoutePrefixes
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                CurioBottomBar(navController = navController)
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var showDoneDialog by rememberSaveable { mutableStateOf(false) }
+    // Survives rotation so the startup prompt only fires on a truly fresh
+    // process (an active session left behind by a killed app).
+    var startupPromptDone by rememberSaveable { mutableStateOf(false) }
+
+    // Ask "are you done exploring?" whenever the app returns to the
+    // foreground while an explore session is active — mid-session, after
+    // the browser search, or after the app was killed in the background.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                if (AppPreferences.isExploreSessionsEnabled(context)) {
+                    val resumed = ExploreSessionStore.getActiveSession(context)
+                    showDoneDialog = resumed != null
+                    // If the user hid the bubble but no other controller
+                    // exists (live notifications off) and the bubble is
+                    // still enabled, bring it back on return — otherwise
+                    // there'd be no visible timer controller at all.
+                    if (resumed != null && resumed.pillHidden &&
+                        !AppPreferences.liveNotificationsEnabledState &&
+                        AppPreferences.isOverlayBubbleEnabled(context)
+                    ) {
+                        ExploreSessionStore.setPillHidden(context, false)
+                    }
+                    // Re-arm the explore service (live notification + bubble)
+                    // after returning to the app — covers permissions granted
+                    // mid-session, Settings toggles, and the restore above.
+                    if (resumed != null && AppPreferences.exploreServiceShouldRun(context)) {
+                        ExploreSessionService.start(context, resumed)
+                    }
+                }
             }
-        },
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+    // Startup restore: the observer above is added after the activity is
+    // already RESUMED on launch, so a persisted session from a killed
+    // process surfaces here instead (dialog + re-armed service).
+    LaunchedEffect(Unit) {
+        if (!startupPromptDone) {
+            startupPromptDone = true
+            if (AppPreferences.isExploreSessionsEnabled(context)) {
+                val session = ExploreSessionStore.getActiveSession(context)
+                showDoneDialog = session != null
+                if (session != null && AppPreferences.exploreServiceShouldRun(context)) {
+                    ExploreSessionService.start(context, session)
+                }
+            }
+        }
+    }
+
+    // ── "Done exploring" notification handoff ─────────────────────────
+    // The notification action stashes the topic (category slug + name) via
+    // PendingEntryOpen and launches the activity. Once this NavHost is on a
+    // stable root (a bottom-nav tab), open the write-it-down entry page with
+    // HOME anchored beneath it — so Back from the entry page returns to the
+    // app instead of exiting it. During the boot gates (splash/onboarding/
+    // crash) the effect returns WITHOUT consuming; it re-runs when the
+    // splash lands on HOME (keyed on currentRoute).
+    LaunchedEffect(currentRoute, PendingEntryOpen.trigger) {
+        val prefix = currentRoute?.substringBefore("/")
+        // Wait for a stable root: null (first frame) and the boot gates own
+        // navigation until the splash lands on HOME — the effect re-runs
+        // there (keyed on currentRoute) and consumes the target once.
+        if (prefix == null || prefix in CurioRoutes.bootGatePrefixes) return@LaunchedEffect
+        val target = PendingEntryOpen.take() ?: return@LaunchedEffect
+        if (prefix != CurioRoutes.HOME) {
+            navController.popBackStack(CurioRoutes.HOME, inclusive = false)
+        }
+        navController.navigate(CurioRoutes.captureFor(target.first, target.second)) {
+            launchSingleTop = true
+        }
+    }
+
+    // The floating explore bubble now lives in the explore service's overlay
+    // window (over other apps), so the Scaffold simply fills the screen.
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            bottomBar = {
+                if (showBottomBar) {
+                    CurioBottomBar(navController = navController)
+                }
+            },
+            // Every screen applies its own statusBarsPadding().  This Scaffold
+            // has no topBar, so without pinning the insets to the bottom only
+            // M3 would add the status-bar inset to innerPadding AND the screens
+            // would add it again — a double top gap (huge empty space above the
+            // status bar).  Screens without a bottom bar still get the nav-bar
+            // inset from here.
+            contentWindowInsets = WindowInsets.navigationBars,
+            modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = CurioRoutes.SPLASH,
@@ -178,7 +304,7 @@ fun CurioNavHost(
             ) { entry ->
                 TopicRevealScreen(
                     categorySlug = entry.arguments?.getString("categorySlug").orEmpty(),
-                    topicName    = Uri.decode(entry.arguments?.getString("topicName").orEmpty()),
+                    topicName    = safeDecode(entry.arguments?.getString("topicName")),
                     navController = navController
                 )
             }
@@ -191,7 +317,7 @@ fun CurioNavHost(
             ) { entry ->
                 SaveCaptureScreen(
                     categorySlug = entry.arguments?.getString("categorySlug").orEmpty(),
-                    topicName    = Uri.decode(entry.arguments?.getString("topicName").orEmpty()),
+                    topicName    = safeDecode(entry.arguments?.getString("topicName")),
                     navController = navController
                 )
             }
@@ -204,6 +330,32 @@ fun CurioNavHost(
                 EntryDetailScreen(
                     entryId = entry.arguments?.getString("entryId").orEmpty(),
                     navController = navController
+                )
+            }
+            // Both edit routes reopen a saved entry (a single mood board or a
+            // whole multi-section Portfolio) in the universal editor — the
+            // screen preloads the entry, lets the user rearrange any take,
+            // and re-saves in place (same id → Room REPLACE).
+            composable(
+                route = CurioRoutes.EDIT_MOODBOARD,
+                arguments = listOf(navArgument("entryId") { type = NavType.StringType })
+            ) { entry ->
+                SaveCaptureScreen(
+                    categorySlug = "",
+                    topicName = "",
+                    navController = navController,
+                    editEntryId = entry.arguments?.getString("entryId").orEmpty()
+                )
+            }
+            composable(
+                route = CurioRoutes.EDIT_ENTRY,
+                arguments = listOf(navArgument("entryId") { type = NavType.StringType })
+            ) { entry ->
+                SaveCaptureScreen(
+                    categorySlug = "",
+                    topicName = "",
+                    navController = navController,
+                    editEntryId = entry.arguments?.getString("entryId").orEmpty()
                 )
             }
             composable(CurioRoutes.PROFILE) {
@@ -224,15 +376,86 @@ fun CurioNavHost(
             composable(CurioRoutes.BUG_REPORT) {
                 BugReportScreen(navController = navController)
             }
-            composable(
-                route = CurioRoutes.LIGHTBOX,
-                arguments = listOf(navArgument("imageUrl") { type = NavType.StringType })
-            ) { entry ->
-                LightboxScreen(
-                    imageUrl = Uri.decode(entry.arguments?.getString("imageUrl").orEmpty()),
-                    navController = navController
-                )
+            composable(route = CurioRoutes.LIGHTBOX) {
+                // The image URI is handed off out-of-band via LightboxTarget
+                // (see CurioRoutes.lightbox) — no route arg, so no encoding/
+                // decoding round-trip that could corrupt content URIs.
+                LightboxScreen(navController = navController)
             }
         }
+        }
+    }
+
+    // ── Done-exploring prompt (app return while a session is active) ────
+    val activeSession = ExploreSessionStore.activeSessionState
+    if (showDoneDialog && activeSession != null) {
+        // Live elapsed time — ticks every second while the dialog is open
+        // (pause-aware: session.elapsedMillis banks paused time, so a paused
+        // session shows a frozen reading). Cancels on dismiss.
+        var elapsedMillis by remember(activeSession.startMillis) {
+            mutableStateOf(activeSession.elapsedMillis())
+        }
+        LaunchedEffect(activeSession.startMillis, activeSession.paused) {
+            while (true) {
+                elapsedMillis = activeSession.elapsedMillis()
+                delay(1_000)
+            }
+        }
+        AlertDialog(
+            onDismissRequest = { showDoneDialog = false },
+            title = { Text("Done exploring ${activeSession.topicName}?") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CurioIcon(
+                            name = if (activeSession.paused) CurioIcons.Pause else CurioIcons.Timer,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            size = 18.dp
+                        )
+                        Text(
+                            if (activeSession.paused)
+                                "Paused at ${formatElapsed(elapsedMillis)} — tap Resume on the bubble or notification to continue"
+                            else
+                                "You've been exploring for ${formatElapsed(elapsedMillis)}",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        )
+                    }
+                    Text(
+                        "You started ${activeSession.verb.lowercase()} ${activeSession.targetName} — if you're done, write it down while it's fresh. Or keep exploring, no rush.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDoneDialog = false
+                    ExploreSessionStore.clearSession(context)
+                    ExploreReminderScheduler.cancel(context)
+                    ExploreSessionService.stop(context)
+                    // Anchor HOME beneath the entry page so Back returns to
+                    // the app instead of exiting from a deep-opened page.
+                    val routePrefix = currentRoute?.substringBefore("/")
+                    if (routePrefix != null &&
+                        routePrefix != CurioRoutes.HOME &&
+                        routePrefix !in CurioRoutes.bootGatePrefixes
+                    ) {
+                        navController.popBackStack(CurioRoutes.HOME, inclusive = false)
+                    }
+                    navController.navigate(
+                        CurioRoutes.captureFor(activeSession.categoryId.routeSlug, activeSession.topicName)
+                    ) { launchSingleTop = true }
+                }) { Text("Done — write about it") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDoneDialog = false }) { Text("Keep exploring") }
+            }
+        )
     }
 }
+
+

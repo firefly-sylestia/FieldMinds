@@ -1,5 +1,6 @@
 package com.curio.app.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,16 +28,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
-import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBorder
+import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * Cabinet's entry card — used in the 2-col grid (CURIO_SPEC.md §9).
@@ -73,38 +80,50 @@ fun CurioEntryCard(
         },
         modifier = modifier.scale(pressScale),
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 2.dp,
+        // surfaceContainerHigh (not plain surface): in the AMOLED style
+        // `surface` is pure black, which made the whole Cabinet grid of
+        // cards invisible on the black page. The high container step keeps
+        // a faint grey lift so cards read as boxes in every theme.
+        color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = cat.categoryBorder(
+            fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        ),
+        shadowElevation = 0.dp,
         tonalElevation = 1.dp
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            // Image placeholder
+            // Image placeholder — richer theme-aware gradient that ends on
+            // the ACTIVE background (cream / midnight / pure black / dynamic)
+            // so the header melts into the surface behind the card, with the
+            // category glyph as a bright watermark.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(128.dp)
                     .background(
-                        if (cat.id == CategoryId.WILDCARD)
-                            Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-                        else Brush.horizontalGradient(listOf(cat.accent, cat.tint))
+                        Brush.verticalGradient(
+                            CurioGradients.cardGradient(cat.themedAccent())
+                        )
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(
                     name = cat.iconGlyph,
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.85f),
-                    size = 56.dp
+                    tint = Color.White.copy(alpha = 0.9f),
+                    size = 60.dp
                 )
             }
 
             Column(
-                modifier = Modifier.padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier.padding(14.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 Text(
                     text = entry.topic.name,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -127,11 +146,56 @@ fun CurioEntryCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    CurioIcon(
-                        name = formatGlyph(entry.format),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        size = 16.dp
+                    EntryFormatBadges(entry)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Bottom-right format indicator on a Cabinet card: a plain glyph for
+ * single-format entries, or a small STACKED badge — one circle per take's
+ * format (capped at 3, with a "+N" overflow chip) — for multi-section
+ * Portfolio entries, so the whole take composition is visible at a glance.
+ */
+@Composable
+private fun EntryFormatBadges(entry: CurioEntry) {
+    val sections = (entry.captureData as? CaptureData.Portfolio)?.sections.orEmpty()
+    if (sections.isEmpty()) {
+        // Single-format entry (or an empty/malformed Portfolio): keep the
+        // existing single-glyph look.
+        CurioIcon(
+            name = formatGlyph(entry.format),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            size = 16.dp
+        )
+        return
+    }
+    val visible = sections.take(3)
+    val extra = sections.size - visible.size
+    Row(
+        // Negative spacing makes each badge overlap the previous one, like an
+        // avatar stack; later children draw on top.
+        horizontalArrangement = Arrangement.spacedBy((-6).dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        visible.forEach { section ->
+            FormatBadgeCircle(glyph = formatGlyph(section.format))
+        }
+        if (extra > 0) {
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+                modifier = Modifier.size(18.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "+$extra",
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -139,7 +203,27 @@ fun CurioEntryCard(
     }
 }
 
-private fun formatGlyph(format: CaptureFormat): String = when (format) {
+/** One circular format badge in the stacked [EntryFormatBadges] cluster. */
+@Composable
+private fun FormatBadgeCircle(glyph: String) {
+    Surface(
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+        modifier = Modifier.size(18.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            CurioIcon(
+                name = glyph,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                size = 12.dp
+            )
+        }
+    }
+}
+
+internal fun formatGlyph(format: CaptureFormat): String = when (format) {
     CaptureFormat.SoundBite -> CurioIcons.Mic
     CaptureFormat.ReelNotes -> CurioIcons.Edit
     CaptureFormat.Marginalia -> CurioIcons.MenuBook

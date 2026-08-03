@@ -1,71 +1,99 @@
 package com.curio.app.features.picker
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.curio.app.ui.theme.CurioColors
 import androidx.navigation.NavController
-import com.curio.app.data.CategoryId
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.navigateToTab
+import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.categoryBackgroundWash
 
 /**
- * Full-screen Category Picker — gradient tiles with a large watermark
- * icon tucked into the bottom-right corner and bold coloured title text.
+ * Full-screen Category Picker.
+ *
+ * Default (single-select): **tap a card to open that category in the Spin
+ * page immediately** — like the original picker. **Tap and hold** a card to
+ * enter multi-select mode; in that mode taps toggle selection (any number)
+ * and a **Done** button appears (only then) to launch the Shuffle across
+ * every chosen deck. Cards carry a topic count so as many decks as possible
+ * fit on screen at once.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
+    val context = LocalContext.current
     val categories = remember { CurioCategories.visible }
     val gridState = rememberLazyGridState()
+    // ── Category tint wash — this picker hands off straight to the Shuffle
+    //    tab, so it wears the last-used deck's color story (same wash as the
+    //    Spin page / Save / Cabinet) instead of a plain theme background.
+    val washCat = remember {
+        val id = AppPreferences.getLastSpinCategories(context).firstOrNull()
+            ?: AppPreferences.getLastSpinCategory(context)
+        CurioCategories.byId(id)
+    }
+    // Null = not in multi-select mode (tap-to-open). Once set, cards toggle.
+    var selectedSlugs by rememberSaveable { mutableStateOf(listOf<String>()) }
+    var multiSelectMode by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp)
+    val toggleSlug = { slug: String ->
+        selectedSlugs = if (slug in selectedSlugs) selectedSlugs - slug else selectedSlugs + slug
+    }
+
+    // Same full-screen + swipe-down-dismiss pattern as the filter page — a
+    // ModalBottomSheet expanded to full height with a drag handle.
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = { navController.popBackStack() },
+        sheetState = sheetState,
+        // Theme-aware category wash — deep accent over cream in light,
+        // pastel twin glow over midnight in dark.
+        containerColor = washCat.categoryBackgroundWash(),
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 16.dp)
+        ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,19 +101,7 @@ fun CategoryPickerScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Surface(
-                onClick = { navController.popBackStack() },
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceVariant
-            ) {
-                CurioIcon(
-                    name = CurioIcons.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 24.dp,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+            CurioBackButton(onClick = { navController.popBackStack() })
             Text(
                 text = "What are we exploring?",
                 style = MaterialTheme.typography.headlineSmall,
@@ -93,22 +109,15 @@ fun CategoryPickerScreen(navController: NavController) {
             )
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            ExpressivePill(CurioIcons.AutoAwesome, "Focused decks")
-            ExpressivePill(CurioIcons.Casino, "Surprise mix")
-        }
-
         Text(
-            text = "Pick a mood for your next Shuffle. Every card is a complete deck with its own rhythm, color, and prompts.",
+            text = if (multiSelectMode) {
+                "Tap to toggle decks · Done to spin them together"
+            } else {
+                "Tap a deck to spin it · hold to pick several"
+            },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(top = 4.dp, bottom = 10.dp)
         )
 
         MorphEntrance {
@@ -116,134 +125,90 @@ fun CategoryPickerScreen(navController: NavController) {
                 state = gridState,
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(top = 4.dp, bottom = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 items(categories) { cat ->
-                    CategoryTile(
+                    val slug = cat.id.routeSlug
+                    CurioCategoryCard(
                         category = cat,
+                        isSelected = multiSelectMode && slug in selectedSlugs,
                         onClick = {
-                            navController.navigate(
-                                CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                            )
+                            if (multiSelectMode) {
+                                toggleSlug(slug)
+                            } else {
+                                // Default: tap opens this category on the
+                                // persistent Shuffle tab (the plain "spin"
+                                // route), not a separate spin/{slug} page.
+                                // The selection is persisted so it survives
+                                // back navigation, tab switches and relaunch.
+                                AppPreferences.setLastSpinCategories(context, listOf(cat.id))
+                                navController.navigateToTab(CurioRoutes.SPIN)
+                            }
+                        },
+                        onLongClick = {
+                            // Enter multi-select mode and select this card.
+                            multiSelectMode = true
+                            if (slug !in selectedSlugs) toggleSlug(slug)
                         }
                     )
                 }
             }
         }
 
-        FilledTonalButton(
-            onClick = { navController.navigate(CurioRoutes.MANAGE_CATEGORIES) },
-            shape = RoundedCornerShape(24.dp),
-            colors = ButtonDefaults.filledTonalButtonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            CurioIcon(CurioIcons.Settings, null, size = 18.dp)
-            Text(
-                text = "Manage categories",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-    }
-}
-
-@Composable
-private fun CategoryTile(
-    category: CurioCategory,
-    onClick: () -> Unit
-) {
-    var pressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.96f else 1f,
-        animationSpec = CurioMotion.Springs.Press,
-        label = "tileScale"
-    )
-
-    val isWildcard = category.id == CategoryId.WILDCARD
-    val tileGradient = remember(isWildcard, category.accent) {
-        if (isWildcard) CurioGradients.wildcardCardGradient()
-        else CurioGradients.cardGradient(category.accent)
-    }
-
-    Surface(
-        onClick = { onClick() },
-        shape = RoundedCornerShape(30.dp),
-        color = Color.Transparent,
-        shadowElevation = 9.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(164.dp)
-            .scale(scale)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Brush.verticalGradient(tileGradient), RoundedCornerShape(30.dp))
-                .padding(14.dp)
-        ) {
-            CurioIcon(
-                name = category.iconGlyph,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.16f),
-                size = 118.dp,
-                modifier = Modifier.align(Alignment.BottomEnd)
-            )
-            Surface(
-                shape = CircleShape,
-                color = Color.White.copy(alpha = 0.22f),
-                modifier = Modifier.size(42.dp)
+        if (multiSelectMode) {
+            // ── Mix row — only visible in multi-select mode ────────────
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(category.iconGlyph, null, tint = Color.White, size = 22.dp)
-                }
-            }
-            Column(
-                modifier = Modifier.align(Alignment.BottomStart),
-                verticalArrangement = Arrangement.spacedBy(7.dp)
-            ) {
-                Text(
-                    text = category.displayName,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 25.sp,
-                        lineHeight = 28.sp
+                Button(
+                    onClick = {
+                        if (selectedSlugs.isEmpty()) return@Button
+                        // Resolve the chosen slugs and persist the FULL set
+                        // (single or mixed) so the Shuffle tab reopens the
+                        // same deck after back navigation, tab switches and
+                        // app restarts. navigateToTab drops the picker and
+                        // lands on the real Shuffle tab — not a separate
+                        // spin/{slug} instance.
+                        val ids = selectedSlugs.mapNotNull { CurioCategories.byRouteSlug(it)?.id }
+                        if (ids.isEmpty()) return@Button
+                        AppPreferences.setLastSpinCategories(context, ids)
+                        navController.navigateToTab(CurioRoutes.SPIN)
+                    },
+                    enabled = selectedSlugs.isNotEmpty(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ),
-                    color = Color.White
-                )
-                Surface(shape = RoundedCornerShape(50), color = Color.White.copy(alpha = 0.20f)) {
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CurioIcon(CurioIcons.Check, null, size = 18.dp)
                     Text(
-                        text = if (isWildcard) "Surprise Shuffle" else "Start deck",
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp),
-                        color = Color.White.copy(alpha = 0.92f),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                        text = if (selectedSlugs.isEmpty()) "Mix" else "Mix · ${selectedSlugs.size}",
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        // Exit multi-select mode; selection is discarded.
+                        multiSelectMode = false
+                        selectedSlugs = emptyList()
+                    }
+                ) {
+                    Text(
+                        "Cancel",
+                        style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-private fun ExpressivePill(icon: String, label: String) {
-    Surface(
-        shape = RoundedCornerShape(50),
-        color = CurioColors.CoralBlush.copy(alpha = 0.13f),
-        border = BorderStroke(1.dp, CurioColors.CoralBlush.copy(alpha = 0.22f))
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            CurioIcon(icon, null, tint = CurioColors.CoralBlush, size = 17.dp)
-            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface)
-        }
     }
 }

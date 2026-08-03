@@ -39,7 +39,15 @@ data class CurioTopic(
     /** Free-form tags for dynamic Spin filter chips. Empty = no filters. */
     val tags: List<String> = emptyList(),
     /** Quality tier (1 = marquee, 2+ = long tail). */
-    val tier: Int = 1
+    val tier: Int = 1,
+    /**
+     * Creator byline shown as a tag on the Topic Reveal hero card
+     * ("The Beatles", "George Orwell", "Christopher Nolan").
+     * Albums = artist, Books = author, Films = director, Artworks =
+     * painter. Blank = no byline pill. Optional — defaults to "" so
+     * legacy JSON and hand-built topics need no migration.
+     */
+    val byline: String = ""
 ) {
     init {
         require(id.isNotBlank()) { "CurioTopic id must not be blank." }
@@ -117,3 +125,18 @@ enum class CaptureFormat {
     FieldNotes,   // 3-section report
     OpenNotebook  // Wildcard: pick your own format
 }
+
+/**
+ * Short display name for a [CaptureFormat] — used by the universal format
+ * picker chips, the detail-page section switcher, and [CaptureData.toPreview].
+ * UI-safe (pure string, no icons).
+ */
+val CaptureFormat.shortName: String
+    get() = when (this) {
+        CaptureFormat.SoundBite -> "Voice"
+        CaptureFormat.ReelNotes -> "Review"
+        CaptureFormat.Marginalia -> "Journal"
+        CaptureFormat.GalleryWall -> "Moodboard"
+        CaptureFormat.FieldNotes -> "Field notes"
+        CaptureFormat.OpenNotebook -> "Wildcard"
+    }

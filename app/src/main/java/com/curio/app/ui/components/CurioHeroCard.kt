@@ -36,6 +36,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.themedAccent
 
 /**
  * Home screen's hero \"Shuffle the Deck\" card — see CURIO_SPEC.md §3.
@@ -63,13 +64,10 @@ fun CurioHeroShuffleCard(
     val isWildcard = wildcardSelected || selectedCategory?.id == CategoryId.WILDCARD
     val activeAccent: Color = when {
         isWildcard -> CurioColors.CoralBlush
-        selectedCategory != null -> selectedCategory.accent
+        selectedCategory != null -> selectedCategory.themedAccent()
         else -> CurioColors.CoralBlush
     }
-    val cardGradient = remember(isWildcard, activeAccent) {
-        if (isWildcard) CurioGradients.wildcardCardGradient()
-        else CurioGradients.cardGradient(activeAccent)
-    }
+    val cardGradient = CurioGradients.cardGradient(activeAccent)
 
     // ── Press scale animation ─────────────────────────────────────────────
     val pressScale by animateFloatAsState(
@@ -89,7 +87,7 @@ fun CurioHeroShuffleCard(
             .scale(pressScale),
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
-        shadowElevation = 10.dp
+        shadowElevation = 0.dp
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             // ── Solid gradient background ─────────────────────────────────

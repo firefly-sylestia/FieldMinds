@@ -116,8 +116,12 @@ fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         TopicJsonLoader.preloadAll()
         delay(800)
-        // Check for pending crash from previous session
-        val destination = if (CurioCrashReporter.hasPendingCrash(context)) {
+        // Check for pending crash from previous session — also route to the
+        // crash screen when the crash-loop guard flipped on safe mode, so the
+        // user always gets the log + safe restart instead of an endless loop.
+        val destination = if (CurioCrashReporter.hasPendingCrash(context) ||
+            CurioCrashReporter.isSafeMode(context)
+        ) {
             CurioRoutes.CRASH
         } else if (CurioOnboardingState.isComplete(context)) {
             CurioRoutes.HOME

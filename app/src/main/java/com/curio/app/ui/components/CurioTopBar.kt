@@ -6,6 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -22,8 +24,9 @@ import com.curio.app.ui.theme.CurioIcons
  */
 
 /**
- * The canonical "← Back" button. Circular Surface in surfaceVariant
- * containing the ArrowBack Material Symbol. Sized at 40dp total (24dp
+ * The canonical "‹ Back" button. Circular Surface in surfaceVariant
+ * containing the ChevronLeft Material Symbol — the unified back arrow
+ * that mirrors [CurioForwardArrow]'s chevron. Sized at 40dp total (24dp
  * glyph + 8dp padding on each side) to match the standard Android
  * touch-target minimum.
  */
@@ -40,11 +43,34 @@ fun CurioBackButton(
         modifier = modifier
     ) {
         CurioIcon(
-            name = CurioIcons.ArrowBack,
+            name = CurioIcons.ChevronLeft,
             contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onSurface,
             size = 24.dp,
             modifier = Modifier.padding(8.dp)
         )
     }
+}
+
+/**
+ * The canonical "forward" disclosure arrow (› chevron). Used everywhere a
+ * row/card leads deeper — Home sections, Profile rows, Settings items, the
+ * Spin "Tap to open" hint. One component keeps the arrow language unified
+ * (consistent glyph, weight, and default tint) instead of ad-hoc ArrowForward
+ * glyphs at random sizes and alphas.
+ */
+@Composable
+fun CurioForwardArrow(
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    tint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    size: Dp = 18.dp
+) {
+    CurioIcon(
+        name = CurioIcons.ChevronRight,
+        contentDescription = contentDescription,
+        tint = tint,
+        size = size,
+        modifier = modifier
+    )
 }

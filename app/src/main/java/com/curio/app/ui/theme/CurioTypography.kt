@@ -38,6 +38,29 @@ val MaterialSymbolsFontFamily: FontFamily = FontFamily(
 )
 
 /**
+ * Patrick Hand — the handwritten note font for the paper text fields
+ * (journal, quotes, review, notes, captions, field notes). Google Fonts
+ * ships Patrick Hand as a SINGLE regular file (there is no bold or italic
+ * TTF), so the family declares ONLY that one face — and Compose's font
+ * matcher therefore can never find an exact match for a Bold / Italic
+ * request. When a request mismatches the loaded font, the text stack's
+ * `fontSynthesis` (set explicitly on styled spans in `buildRichAnnotated`)
+ * applies FAKE BOLD (stroke) and OBLIQUE from the single file.
+ *
+ * This must stay a single entry: declaring Bold / Italic entries that all
+ * point at the SAME regular TTF makes every request match an "exact"
+ * descriptor whose glyphs are the regular face — the mismatch that triggers
+ * synthesis never happens, and bold/italic silently render as regular
+ * (the "bold/italic stopped working" regression).
+ *
+ * The ruled-line cadence stays on `bodyLarge.lineHeight` (24sp), so notes
+ * keep their notebook alignment on paper.
+ */
+val PatrickHandFontFamily: FontFamily = FontFamily(
+    Font(R.font.patrick_hand_regular)
+)
+
+/**
  * Curio typography set — Material 3 defaults overridden with geom where appropriate.
  *
  * Display family uses geom (700+ weight). Body family uses M3 default sans.

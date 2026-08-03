@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -29,10 +30,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.curio.app.navigation.CurioRoutes
+import com.curio.app.navigation.LightboxTarget
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
@@ -53,7 +55,18 @@ import com.curio.app.ui.theme.CurioIcons
  * alongside the data loader phase if it becomes important.
  */
 @Composable
-fun LightboxScreen(imageUrl: String, navController: NavController) {
+fun LightboxScreen(navController: NavController) {
+    // The URI arrives out-of-band via LightboxTarget so it stays byte-for-byte
+    // intact (route strings would be decoded twice and corrupt content URIs).
+    val imageUrl = remember { LightboxTarget.uri.orEmpty() }
+
+    // Edge case — blank/empty image URL: nothing to view, pop back
+    // silently; if Lightbox is somehow the root, fall back to Home.
+    LaunchedEffect(imageUrl) {
+        if (imageUrl.isBlank() && !navController.popBackStack()) {
+            navController.navigate(CurioRoutes.HOME) { launchSingleTop = true }
+        }
+    }
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     var offsetY by remember { mutableFloatStateOf(0f) }
@@ -132,7 +145,7 @@ fun LightboxScreen(imageUrl: String, navController: NavController) {
             }
         }
 
-        // ── Bottom helper strip ──────────────────────────────────────────
+        // ── Bottom helper strip — no raw URL, just the gesture hint ──────
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -141,17 +154,9 @@ fun LightboxScreen(imageUrl: String, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = imageUrl,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                color = Color.White.copy(alpha = 0.65f)
-            )
-            Text(
                 text = "Pinch to zoom · Close button to dismiss",
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.White.copy(alpha = 0.40f),
-                modifier = Modifier.padding(top = 4.dp)
+                color = Color.White.copy(alpha = 0.40f)
             )
         }
     }

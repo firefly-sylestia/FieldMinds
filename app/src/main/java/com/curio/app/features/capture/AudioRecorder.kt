@@ -54,6 +54,13 @@ class AudioRecorder(private val context: Context) {
         }
 
     /**
+     * Real microphone input level (0..32767) while recording — drives the
+     * live visualizer. Returns 0 outside RECORDING/PAUSED.
+     */
+    val maxAmplitude: Int
+        get() = mediaRecorder?.maxAmplitude ?: 0
+
+    /**
      * Start recording to a new temporary file.
      * Throws [IllegalStateException] if not in IDLE state.
      */

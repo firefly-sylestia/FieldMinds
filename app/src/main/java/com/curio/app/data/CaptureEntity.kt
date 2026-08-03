@@ -63,14 +63,39 @@ class CaptureConverters {
             return when (map["subFormat"]) {
                 null -> {
                     when {
+                        // Multi-section Portfolio: each section carries its own
+                        // format + nested data — reconstruct recursively.
+                        map.containsKey("sections") -> {
+                            @Suppress("UNCHECKED_CAST")
+                            val rawSections = map["sections"] as List<Map<String, Any?>>
+                            val sections = rawSections.mapNotNull { raw ->
+                                runCatching {
+                                    val format = CaptureFormat.valueOf(raw["format"] as String)
+                                    val title = raw["title"] as? String
+                                    val dataJson = gson.toJson(raw["data"])
+                                    CaptureData.CaptureSection(
+                                        format = format,
+                                        data = deserializeCaptureData(dataJson),
+                                        title = title
+                                    )
+                                }.getOrNull()
+                            }
+                            CaptureData.Portfolio(sections)
+                        }
                         map.containsKey("durationSeconds") ->
                             gson.fromJson(json, CaptureData.SoundBite::class.java)
                         map.containsKey("rating") ->
                             gson.fromJson(json, CaptureData.ReelNotes::class.java)
-                        map.containsKey("quotes") ->
-                            gson.fromJson(json, CaptureData.Marginalia::class.java)
+                        // GalleryWall BEFORE "quotes": the mood board also
+                        // carries a quotes list, so a GalleryWall blob (which
+                        // serializes `quotes:[]`) must not fall through to the
+                        // Marginalia branch — that misdetection decoded newly
+                        // saved mood boards as Marginalia, and the detail page
+                        // silently rendered a blank body (2026-08-03).
                         map.containsKey("caption") ->
                             gson.fromJson(json, CaptureData.GalleryWall::class.java)
+                        map.containsKey("quotes") ->
+                            gson.fromJson(json, CaptureData.Marginalia::class.java)
                         map.containsKey("learnNext") ->
                             gson.fromJson(json, CaptureData.FieldNotes::class.java)
                         else -> throw IllegalArgumentException("Unknown CaptureData type: $json")

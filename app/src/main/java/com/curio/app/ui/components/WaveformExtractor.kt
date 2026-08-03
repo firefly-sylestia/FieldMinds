@@ -5,6 +5,7 @@ import android.media.MediaExtractor
 import android.media.MediaFormat
 import java.io.File
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import kotlin.math.abs
 
 /**
@@ -111,11 +112,20 @@ object WaveformExtractor {
         return if (samples.isEmpty()) null else samples.toShortArray()
     }
 
-    /** Read PCM 16-bit samples from a ByteBuffer (little-endian). */
+    /**
+     * Read PCM 16-bit samples from a ByteBuffer.
+     *
+     * MediaCodec decoders emit PCM as **little-endian** shorts (per the
+     * platform's canonical PCM layout), but a fresh ByteBuffer defaults to
+     * BIG_ENDIAN — reading shorts without flipping the order byte-swaps every
+     * sample, turning a clean waveform into noise (the "broken visualizer"
+     * symptom). Pin the buffer to LITTLE_ENDIAN before reading.
+     */
     private fun extractPcmShorts(buffer: ByteBuffer, info: MediaCodec.BufferInfo): ShortArray {
         val count = info.size / 2  // 2 bytes per 16-bit sample
         val result = ShortArray(count)
         val dup = buffer.duplicate()
+        dup.order(ByteOrder.LITTLE_ENDIAN)
         dup.position(info.offset)
         dup.limit(info.offset + info.size)
         for (i in 0 until count) {

@@ -17,12 +17,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -46,14 +44,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
+import com.curio.app.data.NotePaperStyle
+import com.curio.app.data.TextSpan
 import com.curio.app.features.capture.AudioRecorder
 import com.curio.app.ui.components.AudioTrimmer
+import com.curio.app.ui.components.RichTextEditor
+import com.curio.app.ui.components.RichTextToolbarMode
+import com.curio.app.ui.theme.paperInk
 import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.TrimWaveform
 import com.curio.app.ui.components.WaveformExtractor
 import com.curio.app.ui.components.formatRecordingTime
 import com.curio.app.ui.components.rememberPulseScale
-import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import kotlinx.coroutines.Dispatchers
@@ -82,17 +85,63 @@ fun SoundBiteFormat(
     accent: Color,
     tint: Color,
     onCanSaveChange: (Boolean) -> Unit,
-    onDataChanged: (CaptureData?) -> Unit = {}
+    onDataChanged: (CaptureData?) -> Unit = {},
+    onBusyChange: (Boolean) -> Unit = {},
+    initialData: CaptureData.SoundBite? = null
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val recorder = remember(context) { AudioRecorder(context) }
-    var recordingState by remember { mutableStateOf(AudioRecorder.State.IDLE) }
-    var recordingSeconds by remember { mutableIntStateOf(0) }
-    var title by remember { mutableStateOf("") }
-    var note by remember { mutableStateOf("") }
-    var savedFilePath by remember { mutableStateOf<String?>(null) }
+    // Edit mode: restore a saved recording as STOPPED with its file + title so
+    // re-saving preserves the original capture (no silent wipe). Keyed on
+    // initialData so a newly-loaded edit preloads once.
+    var recordingState by remember(initialData) {
+        mutableStateOf(if (initialData != null) AudioRecorder.State.STOPPED else AudioRecorder.State.IDLE)
+    }
+    var recordingSeconds by remember(initialData) { mutableIntStateOf(initialData?.durationSeconds ?: 0) }
+    var title by remember(initialData) { mutableStateOf(initialData?.title ?: "") }
+    var note by remember(initialData) { mutableStateOf(initialData?.note ?: "") }
+    // Rich-text formatting for the note — legacy entries lack it (Gson →
+    // null), guard with orEmpty().
+    var noteSpans by remember(initialData) { mutableStateOf(initialData?.noteSpans.orEmpty()) }
+    // Note-paper style per text box — the title slip and the note wear
+    // their OWN choice. Legacy entries lack the per-field fields (Gson →
+    // null), fall back to the take-level paperStyle → RULED.
+    var titleStyle by remember(initialData) {
+        mutableStateOf(initialData?.titleStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    var noteStyle by remember(initialData) {
+        mutableStateOf(initialData?.noteStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED)
+    }
+    // Note-paper color per text box — legacy entries lack the per-field
+    // fields (Gson → null), fall back to CREAM.
+    var titleColor by remember(initialData) {
+        mutableStateOf(initialData?.titleColor ?: NotePaperColor.CREAM)
+    }
+    var noteColor by remember(initialData) {
+        mutableStateOf(initialData?.noteColor ?: NotePaperColor.CREAM)
+    }
+    // Mood — the shared "How did it make you feel?" row. Optional; legacy
+    // entries have none (Gson → null).
+    var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
+    // Quote cards — the SHARED hand-placed paper notecard section (same
+    // component Marginalia / Reel Notes / Mood Board use). Owns the parallel
+    // lists (text / spans / tilt / style / color); new cards inherit the
+    // note box's current paper style + color.
+    val quoteCards = rememberQuoteCardsState(
+        initialQuotes = initialData?.quotes.orEmpty(),
+        initialSpans = initialData?.quoteSpans.orEmpty(),
+        initialTilts = initialData?.quoteTilts.orEmpty(),
+        initialStyles = initialData?.quoteStyles.orEmpty(),
+        initialColors = initialData?.quoteColors.orEmpty(),
+        defaultStyle = initialData?.noteStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED,
+        defaultColor = initialData?.noteColor ?: NotePaperColor.CREAM
+    )
+    var savedFilePath by remember(initialData) { mutableStateOf(initialData?.audioFilePath) }
     var permissionDenied by remember { mutableStateOf(false) }
+    // Edit-mode restore: a restored recording must NOT auto-open the trimmer —
+    // only freshly-recorded audio should. Cleared the moment the user (re)records.
+    var restoredRecording by remember { mutableStateOf(initialData != null) }
 
     // ── Trim state ───────────────────────────────────────────────────────
     var showTrimmer by remember { mutableStateOf(false) }
@@ -107,6 +156,7 @@ fun SoundBiteFormat(
         if (granted) {
             try {
                 recorder.start()
+                restoredRecording = false
                 recordingState = recorder.state
                 recordingSeconds = 0
                 permissionDenied = false
@@ -128,6 +178,22 @@ fun SoundBiteFormat(
         }
     }
 
+    // ── Real-time mic level (0..1) while recording — drives the live
+    //    visualizer with ACTUAL input (AudioRecorder.maxAmplitude), not a
+    //    fake sine, so the bars dance with the voice. Decays to 0 when idle.
+    var micLevel by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(recordingState) {
+        if (recordingState == AudioRecorder.State.RECORDING ||
+            recordingState == AudioRecorder.State.PAUSED
+        ) {
+            while (recordingState == AudioRecorder.State.RECORDING) {
+                micLevel = (recorder.maxAmplitude / 32767f).coerceIn(0f, 1f)
+                delay(70)
+            }
+            micLevel = 0f
+        }
+    }
+
     // ── Extract waveform when entering STOPPED with a valid file ─────────
     val waveformSamples by produceState<FloatArray>(
         initialValue = FloatArray(120),
@@ -140,9 +206,11 @@ fun SoundBiteFormat(
         }
     }
 
-    // ── Show trimmer when first entering STOPPED ─────────────────────────
+    // ── Show trimmer when first entering STOPPED (fresh recordings only) ─
     LaunchedEffect(recordingState, savedFilePath) {
-        if (recordingState == AudioRecorder.State.STOPPED && savedFilePath != null) {
+        if (recordingState == AudioRecorder.State.STOPPED &&
+            savedFilePath != null && !restoredRecording
+        ) {
             showTrimmer = true
             startTrim = 0f
             endTrim = 1f
@@ -151,22 +219,59 @@ fun SoundBiteFormat(
 
     // ── Clean up recorder on dispose ─────────────────────────────────────
     DisposableEffect(Unit) {
-        onDispose { recorder.release() }
+        onDispose {
+            recorder.release()
+            // Tell the parent the take is no longer busy (live recording lost
+            // with this editor) so format-switch confirmation can't be skipped.
+            onBusyChange(false)
+        }
+    }
+
+    // ── Report busy state (recording in progress) so the universal picker
+    // can confirm before switching format on a live take ──────────────────
+    LaunchedEffect(recordingState) {
+        onBusyChange(
+            recordingState == AudioRecorder.State.RECORDING ||
+                recordingState == AudioRecorder.State.PAUSED
+        )
     }
 
     // ── Report can-save + capture data ───────────────────────────────────
-    val canSave = recordingState == AudioRecorder.State.STOPPED &&
-                  recordingSeconds > 0 &&
-                  savedFilePath != null &&
-                  !trimInProgress
-    LaunchedEffect(canSave, savedFilePath, title, note) {
+    // A completed recording is the primary content, but a take that only
+    // holds typed content (title / note / quotes, no recording) is still a
+    // saveable draft — the old recording-only rule silently dropped those
+    // on back/switch.
+    val hasRecording = recordingState == AudioRecorder.State.STOPPED &&
+                       recordingSeconds > 0 &&
+                       savedFilePath != null &&
+                       !trimInProgress
+    val hasTypedContent = title.isNotBlank() || note.isNotBlank() || quoteCards.hasContent
+    val canSave = hasRecording || hasTypedContent
+    LaunchedEffect(
+        canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle,
+        titleColor, noteColor, mood, quoteCards.quotes.toList(), quoteCards.spans.toList(),
+        quoteCards.tilts.toList(), quoteCards.styles.toList(), quoteCards.colors.toList()
+    ) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.SoundBite(
                 durationSeconds = recordingSeconds,
                 title = title,
                 note = note,
-                audioFilePath = savedFilePath
+                noteSpans = noteSpans,
+                audioFilePath = savedFilePath,
+                titleStyle = titleStyle,
+                noteStyle = noteStyle,
+                titleColor = titleColor,
+                noteColor = noteColor,
+                quotes = quoteCards.quotes.toList(),
+                quoteSpans = quoteCards.spans.toList(),
+                quoteTilts = quoteCards.tilts.toList(),
+                quoteStyles = quoteCards.styles.toList(),
+                quoteColors = quoteCards.colors.toList(),
+                // Legacy fallback — mirror the primary field's style.
+                paperStyle = noteStyle,
+                mood = mood
             )
             else null
         )
@@ -193,6 +298,7 @@ fun SoundBiteFormat(
                     if (hasPermission) {
                         try {
                             recorder.start()
+                            restoredRecording = false
                             recordingState = recorder.state
                             recordingSeconds = 0
                         } catch (_: Exception) {
@@ -209,6 +315,7 @@ fun SoundBiteFormat(
                 tint = tint,
                 isPaused = recordingState == AudioRecorder.State.PAUSED,
                 seconds = recordingSeconds,
+                level = micLevel,
                 onPauseResume = {
                     if (recordingState == AudioRecorder.State.RECORDING) {
                         recorder.pause()
@@ -279,6 +386,7 @@ fun SoundBiteFormat(
                         seconds = recordingSeconds,
                         onReRecord = {
                             recorder.release()
+                            restoredRecording = false
                             recordingState = recorder.state
                             recordingSeconds = 0
                             savedFilePath = null
@@ -302,28 +410,52 @@ fun SoundBiteFormat(
         }
 
         // ── Optional title field — show always, disabled during trim ─────
-        OutlinedTextField(
+        // Wears the note-paper slip like the other text boxes.
+        PaperLineField(
             value = title,
             onValueChange = { title = it },
-            label = { Text("Add a quick title (optional)") },
-            singleLine = true,
+            label = "Add a quick title (optional)",
             enabled = recordingState != AudioRecorder.State.RECORDING,
-            shape = RoundedCornerShape(16.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            modifier = Modifier.fillMaxWidth()
+            imeAction = ImeAction.Next,
+            paperStyle = titleStyle,
+            onPaperStyleChange = { titleStyle = it },
+            paperColor = titleColor,
+            onPaperColorChange = { titleColor = it }
         )
 
-        OutlinedTextField(
-            value = note,
-            onValueChange = { note = it },
-            label = { Text("Add notes or context (optional)") },
-            placeholder = { Text("What did this recording capture?") },
+        // Rich-text note — formatting behind a small toggle. The toolbar
+        // renders OUTSIDE the paper slip (paper mode) so the ruled lines
+        // line up under the text while typing; the field itself sits
+        // directly on the paper (no inner box / double margin).
+        RichTextEditor(
+            modifier = Modifier.fillMaxWidth(),
+            text = note,
+            spans = noteSpans,
+            onRichTextChange = { newText, newSpans ->
+                note = newText
+                noteSpans = newSpans
+            },
+            placeholder = "What did this recording capture?",
+            toolbarMode = RichTextToolbarMode.TOGGLE,
+            minHeight = 96.dp,
             enabled = recordingState != AudioRecorder.State.RECORDING,
-            shape = RoundedCornerShape(16.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
+            ink = paperInk(),
+            accent = MaterialTheme.colorScheme.tertiary,
+            paper = true,
+            paperStyle = noteStyle,
+            onPaperStyleChange = { noteStyle = it },
+            paperColor = noteColor,
+            onPaperColorChange = { noteColor = it },
+            paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        )
+
+        // ── Quote cards — the SHARED hand-placed paper notecard section ──
+        // Frozen while actively recording (the cards need the keyboard).
+        QuoteCardsSection(
+            state = quoteCards,
+            enabled = recordingState != AudioRecorder.State.RECORDING,
+            newCardStyle = { noteStyle },
+            newCardColor = { noteColor }
         )
     }
 }
@@ -401,7 +533,7 @@ private fun TrimSection(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = accent,
-                    contentColor = CurioColors.DeepPlum,
+                    contentColor = Color.White,
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
@@ -410,7 +542,7 @@ private fun TrimSection(
             ) {
                 if (trimInProgress) {
                     CircularProgressIndicator(
-                        color = CurioColors.DeepPlum,
+                        color = Color.White,
                         strokeWidth = 2.dp,
                         modifier = Modifier.size(18.dp)
                     )
@@ -450,7 +582,7 @@ private fun IdleControls(
                 CurioIcon(
                     name = CurioIcons.Mic,
                     contentDescription = "Start recording",
-                    tint = CurioColors.DeepPlum,
+                    tint = Color.White,
                     size = 48.dp
                 )
             }
@@ -470,6 +602,7 @@ private fun LiveControls(
     tint: Color,
     isPaused: Boolean,
     seconds: Int,
+    level: Float,
     onPauseResume: () -> Unit,
     onStop: () -> Unit,
     onDiscard: () -> Unit
@@ -501,17 +634,18 @@ private fun LiveControls(
                     CurioIcon(
                         name = if (isPaused) CurioIcons.MicNone else CurioIcons.Mic,
                         contentDescription = null,
-                        tint = CurioColors.DeepPlum,
+                        tint = Color.White,
                         size = 48.dp
                     )
                 }
             }
         }
 
-        // Live waveform
+        // Live waveform — real mic amplitude (level 0..1) drives the bars.
         LiveWaveform(
             color = accent,
             active = !isPaused,
+            level = level,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
