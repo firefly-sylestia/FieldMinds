@@ -1524,3 +1524,22 @@ code-reviewer-deepseek-flash: clean pass (two rounds). Verified no declarations 
 ### Follow-ups / notes
 - Natural next step if wanted: `byline` for discoveries (discoverer, e.g. Penicillin → Alexander Fleming) — ~150-entry curated map, same script pattern.
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+**Entry-detail hero gradient: light-mode banding fix + AMOLED refinement**
+
+### What was asked
+Light-mode detail-screen hero gradient looked wrong ("weird out of place gradient"); dark was great; AMOLED wanted more refinement.
+
+### What was changed (`EntryDetailScreen.kt` hero banner, one block + one import)
+- Root cause: light mode held the deep accent to 0.88 of the 380dp hero and crammed the whole accent→cream HSL glide into the bottom 12% (~46dp) — a thin high-contrast stripe that read as a broken gradient. Dark mode spreads over 30% (hence "awesome").
+- Light: hold now 0.76, glide widened to the bottom 24% (~91dp ≈ 11dp/stop, comparable to dark) — a smooth luminous wash-out. Frosted bar (bottom edge ≤ ~80% worst case) stays on the deep accent since the first glide stops are barely lighter.
+- AMOLED (new branch, `AppPreferences.THEME_STYLE_AMOLED`): start deepened ~25% toward black (`categoryCardFill(lerp(accent, Black, 0.15f))`), held to 0.60, then a long on-hue melt into pure black over the bottom 40% — moodier + OLED-friendly.
+- Dark: unchanged. Added `androidx.compose.ui.graphics.lerp` import.
+
+### Review
+code-reviewer-deepseek-flash: clean. Stop positions strictly increasing in all three branches; legibility margin at 0.76 acceptable (glide still deep through 0.90); double-deepen noted as intentional. check_braces balanced.
+
+### Follow-ups / notes
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.

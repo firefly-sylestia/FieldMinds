@@ -66,6 +66,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -220,13 +221,33 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // rich glide takes over and ends EXACTLY on [wash] at the hero's
         // bottom edge, so the merge into the page stays seamless.
         //
-        // Theme-aware geometry: in dark/AMOLED the wash is dark (pure black
-        // in AMOLED), so the glide can start just below the title zone and
-        // spread over the bottom third; in light the wash brightens toward
-        // cream, so the accent is held longer (below the frosted bar)
-        // before the luminous fade.
+        // Theme-aware geometry:
+        //  - Dark: the wash is dark, so the glide can start just below the
+        //    title zone and spread over the bottom third (accent → dark =
+        //    a gentle, even melt — reads great).
+        //  - Light: the wash brightens toward cream, so the accent is held
+        //    a touch longer (through the frosted bar, keeping white glass
+        //    legible) and the accent → cream fade spreads over the bottom
+        //    QUARTER — the old 12% band packed the whole high-contrast
+        //    lighten-up into a thin stripe that read as a weird, out-of-
+        //    place gradient. ~91dp of glide reads as a smooth luminous
+        //    wash-out instead.
+        //  - AMOLED: the wash is pure black, so the refinement deepens the
+        //    accent toward black first (richer, easier on OLED pixels),
+        //    holds it through the title zone, then melts into true black
+        //    over the bottom two-fifths — a long on-hue fade with no hard
+        //    edge and no grey midtones.
         val heroStart = CurioGradients.categoryCardFill(cat.themedAccent())
-        val heroStops = if (isCurioDarkTheme()) {
+        val isAmoledStyle = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_AMOLED
+        val heroStops = if (isAmoledStyle) {
+            // Deeper, moodier start for the pure-black style (~25% toward
+            // black vs the standard 10%) — the fade to OLED black then stays
+            // on-hue from a richer base.
+            val amoledStart = CurioGradients.categoryCardFill(lerp(cat.themedAccent(), Color.Black, 0.15f))
+            val glide = CurioGradients.hslGradientStops(amoledStart, wash, 9)
+            listOf(0.00f to amoledStart, 0.60f to amoledStart) +
+                glide.drop(1).mapIndexed { i, c -> (0.60f + (i + 1) * 0.40f / 8f) to c }
+        } else if (isCurioDarkTheme()) {
             // drop(1): the first glide sample IS heroStart, already covered
             // by the hold stop — skipping it keeps stop positions strictly
             // increasing (no duplicate-position stops for the shader).
@@ -235,8 +256,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 glide.drop(1).mapIndexed { i, c -> (0.70f + (i + 1) * 0.30f / 8f) to c }
         } else {
             val glide = CurioGradients.hslGradientStops(heroStart, wash, 9)
-            listOf(0.00f to heroStart, 0.88f to heroStart) +
-                glide.drop(1).mapIndexed { i, c -> (0.88f + (i + 1) * 0.12f / 8f) to c }
+            listOf(0.00f to heroStart, 0.76f to heroStart) +
+                glide.drop(1).mapIndexed { i, c -> (0.76f + (i + 1) * 0.24f / 8f) to c }
         }
         Box(
             modifier = Modifier
