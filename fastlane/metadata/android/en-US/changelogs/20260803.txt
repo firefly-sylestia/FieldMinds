@@ -1,3 +1,4 @@
+• Note paper got real texture — faint grain and creases like a crumpled sheet smoothed back out, richer coffee rings, and a deeper folded corner; torn notes can now also carry coffee stains or a folded dog-ear
 • Spin sizing is now two-way and tunable — low-density phones get a smaller deck, high-density phones a roomier one (Settings → Experimental → Smart density layout)
 • Profile and Settings got a full redesign — a quest-card hero with your stats, level, and lanes, and a Settings screen grouped into General, Preferences, Data, Experimental, and Support
 • Spin now fits every screen: low-density phones stay compact automatically, and very short screens shrink the deck and move Categories/Filter to the edges — tunable in Settings → Experimental

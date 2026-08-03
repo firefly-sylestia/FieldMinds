@@ -949,6 +949,24 @@ fun RichTextEditor(
                 ) {
                     fieldBlock()
                 }
+                NotePaperStyle.TORN_COFFEE -> TornPaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = false,
+                    coffeeStains = true,
+                    paperColor = paperColor,
+                    contentPadding = paperContentPadding
+                ) {
+                    fieldBlock()
+                }
+                NotePaperStyle.TORN_FOLDED -> TornPaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = false,
+                    folded = true,
+                    paperColor = paperColor,
+                    contentPadding = paperContentPadding
+                ) {
+                    fieldBlock()
+                }
             }
         } else {
             fieldBlock()

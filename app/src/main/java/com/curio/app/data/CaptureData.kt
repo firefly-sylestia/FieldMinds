@@ -11,7 +11,9 @@ import com.curio.app.data.CaptureFormat
  * cadence inside. [COFFEE] is a ruled page with coffee-stain blotches along
  * the edges; [FOLDED] is a ruled page with a folded (dog-ear) top-right
  * corner; [RED_MARGIN] is the classic school-notebook ruled page with a red
- * vertical margin line and the text indented past it.
+ * vertical margin line and the text indented past it. [TORN_COFFEE] and
+ * [TORN_FOLDED] are torn slips that ALSO carry the coffee stains / folded
+ * dog-ear (the "coffee" and "folded" options on a torn page).
  *
  * Chosen PER TEXT BOX (each field's toolbar holds the style chips +
  * rules-on-torn toggle) and persisted per field on every [CaptureData]
@@ -19,7 +21,9 @@ import com.curio.app.data.CaptureFormat
  * Legacy entries omit the per-field fields (Gson → null) and resolve to
  * the take-level [CaptureData.paperStyle] or [RULED].
  */
-enum class NotePaperStyle { RULED, TORN, TORN_RULED, COFFEE, FOLDED, RED_MARGIN }
+enum class NotePaperStyle {
+    RULED, TORN, TORN_RULED, COFFEE, FOLDED, RED_MARGIN, TORN_COFFEE, TORN_FOLDED
+}
 
 /**
  * The note-paper COLOR a capture's text boxes wear — a small swatch picker

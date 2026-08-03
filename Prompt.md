@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Paper-texture redesign — real grain + crumpled creases on every page, torn pages gain coffee & folded options, coffee + folded quality pass**
+
+### What was asked
+
+“the pages dont have actualy texture like when its crumbled and open up it shold have that too. and also the torn pages also shpoul d have folded and coffee options and also redesign the cofee and folded paper pages as its not up to the design and mark in quality” — sequenced AFTER the Spin density toggle per ask_user (work order: Spin toggle first, then paper).
+
+### What was done
+
+- **Real paper texture (both card families):** new `drawPaperTexture` — fine grain (the shared torn-note bitmap tiled at 0.30 alpha on ruled sheets, full strength on torn slips) PLUS soft S-curve crease lines with an offset light bulge — the “crumpled then flattened” tooth of real paper. Drawn under the rules/ink on EVERY paper page (editor fields, save, detail). Fixed seed per size → deterministic; typing never re-rolls it.
+- **Torn + coffee/folded combos:** `NotePaperStyle` gained `TORN_COFFEE` + `TORN_FOLDED` (appended → Gson-safe). `TornPaperCard` gained `coffeeStains` + `folded` params (fold flap overlays the torn outline; content inset 24dp so text never runs under it). The `NotePaperCard` dispatcher and the `RichTextEditor` when now cover all 8 styles; the style toggle shows Rules / Coffee / Folded sub-chips while a torn style is active (mutually exclusive taps).
+- **Coffee quality pass:** irregular wobbling rim rings (radial-jittered Paths instead of compass circles), faint wet body inside, occasional double rings where the cup rocked, satellite splatter dots, plus two very faint washed patches.
+- **Folded quality pass:** three-stop flap gradient (dark crease → light tip), a thin specular highlight just off the crease, a softer gradient drop shadow, crisper crease halo + hairline, and a corner-tip light spot.
+
+### Validation
+
+- `check_braces.py` BALANCED on all 3 files; both exhaustive `when`s cover all 8 styles; no stale refs (the per-card `grainBrush` remember was replaced by one shared lazy brush).
+- Code-reviewer: clean after one visual fix — the crease “highlight” was drawn on the SAME path as the dark line (which would cancel it); now a parallel offset line reads as a fold bulge.
+- Note for the user: no crumple/unfold ANIMATION exists in the app — the creases ARE the crumpled-then-flattened texture baked into every paper surface.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Smart density layout — two-way Spin sizing (toggleable): low-dpi phones get a smaller deck, high-dpi phones a roomier one**
 
 ### What was asked
@@ -34,8 +58,6 @@ CI failed on the PROFILE rewrite (`8d1806f9` build): `ProfileScreen.kt:132:46 �
 Paper-texture redesign (real crumpled/torn texture, torn + folded/coffee combos, coffee/folded quality pass) — sequenced next per ask_user.
 
 ---
-
-## Previous Requests (COMPLETED)
 
 **Profile + Settings full revamp — quest-card hero, identity & stats Profile, Settings grouped into sections with an Experimental area, dead shared components deleted**
 
