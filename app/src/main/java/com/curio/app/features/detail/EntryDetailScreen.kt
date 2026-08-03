@@ -242,7 +242,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(380.dp)
-                .background(Brush.verticalGradient(colorStops = heroStops)),
+                // This Compose version's verticalGradient only offers the
+                // vararg overload — the named `colorStops` List form doesn't
+                // exist, so spread the sampled stops as an array.
+                .background(Brush.verticalGradient(*heroStops.toTypedArray())),
             contentAlignment = Alignment.Center
         ) {
             // ── Hero watermark — a scatter of the entry's category-family
