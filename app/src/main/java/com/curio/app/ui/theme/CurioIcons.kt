@@ -1,5 +1,6 @@
 package com.curio.app.ui.theme
 
+import com.curio.app.data.CategoryFamily
 import com.curio.app.data.JournalMood
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -132,6 +133,42 @@ object CurioIcons {
 
     // ── Entry meta card glyph (date & time segment)
     const val CalendarToday  = "calendar_today"
+
+    /**
+     * Per-family symbol sets for the saved-entry hero's decorative watermark
+     * scatter — instruments for Music, camera kit for Movies, books for
+     * Books, art tools for Visual Art, lab symbols for Science, curiosities
+     * for Wildcard. Standard Material Symbols OUTLINED ligature names, so a
+     * Music entry's hero scatters music notes/pianos, an Artists entry
+     * scatters instruments, etc.
+     */
+    fun heroWatermarkSymbols(family: CategoryFamily): List<String> = when (family) {
+        // Exactly 10 — one per hero scatter slot, so no glyph repeats.
+        CategoryFamily.MUSIC -> listOf(
+            "music_note", "library_music", "headphones", "mic", "album",
+            "equalizer", "piano", "radio", "audiotrack", "queue_music"
+        )
+        CategoryFamily.MOVIES -> listOf(
+            "movie", "videocam", "theater_comedy", "local_movies", "movie_filter",
+            "play_circle", "ondemand_video", "video_library", "theaters", "smart_display"
+        )
+        CategoryFamily.BOOKS -> listOf(
+            "menu_book", "auto_stories", "library_books", "edit_note", "book",
+            "format_quote", "import_contacts", "local_library", "create", "menu_open"
+        )
+        CategoryFamily.VISUAL_ART -> listOf(
+            "brush", "palette", "colorize", "photo_library", "museum",
+            "photo_camera", "wallpaper", "architecture", "photo", "landscape"
+        )
+        CategoryFamily.SCIENCE -> listOf(
+            "science", "biotech", "lightbulb", "functions", "psychology",
+            "bubble_chart", "explore", "hub", "online_prediction", "genetics"
+        )
+        CategoryFamily.WILDCARD -> listOf(
+            "casino", "auto_awesome", "explore", "bolt", "star",
+            "nightlight", "public", "spa", "diamond", "rocket_launch"
+        )
+    }
 }
 
 /** The Material Symbols glyph a journal mood wears. */

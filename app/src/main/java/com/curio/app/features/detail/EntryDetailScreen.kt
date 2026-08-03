@@ -13,6 +13,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -55,6 +56,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -64,6 +66,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -221,6 +224,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 ),
             contentAlignment = Alignment.Center
         ) {
+            // ── Hero watermark — a scatter of the entry's category-family
+            //     symbols (instruments for Music, camera kit for Movies,
+            //     books for Books, art tools for Visual Art, lab symbols
+            //     for Science, curiosities for Wildcard) pinned around the
+            //     banner's perimeter. Only in the hero — the page backdrop
+            //     keeps its own muted glyph wash.
+            HeroSymbolScatter(cat = cat)
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -478,6 +489,59 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         )
     }
 }
+
+/**
+ * Decorative watermark for the saved-entry hero — a scatter of the entry's
+ * category-family symbols (instruments for Music, camera kit for Movies,
+ * books for Books, art tools for Visual Art, lab symbols for Science,
+ * curiosities for Wildcard) pinned around the banner's perimeter. Fixed,
+ * well-spaced slots keep the glyphs from overlapping each other or the
+ * centered title / frosted bar / top buttons, and they're drawn in solid
+ * white at a soft alpha so they read clearly against the vivid gradient
+ * (never a transparent wash).
+ */
+@Composable
+private fun BoxScope.HeroSymbolScatter(cat: CurioCategory) {
+    val symbols = CurioIcons.heroWatermarkSymbols(cat.family)
+    // Sparse perimeter slots (BiasAlignment -1..1 across the hero box) —
+    // corners + edge midpoints, deliberately clear of the centered column
+    // (icon + title + frosted bar) and the top back/more buttons.
+    val slots = listOf(
+        // Top corners sit just below the status-bar band (the banner runs
+        // under the system icons) and above the back/more buttons.
+        HeroWatermarkSlot(BiasAlignment(-0.93f, -0.84f), 42.dp, -14f),
+        HeroWatermarkSlot(BiasAlignment(0.93f, -0.84f), 42.dp, 12f),
+        HeroWatermarkSlot(BiasAlignment(-0.56f, -0.66f), 50.dp, 8f),
+        HeroWatermarkSlot(BiasAlignment(0.58f, -0.60f), 46.dp, -10f),
+        HeroWatermarkSlot(BiasAlignment(-0.92f, -0.18f), 56.dp, 16f),
+        HeroWatermarkSlot(BiasAlignment(0.92f, -0.12f), 60.dp, -12f),
+        HeroWatermarkSlot(BiasAlignment(-0.58f, 0.52f), 52.dp, -16f),
+        HeroWatermarkSlot(BiasAlignment(0.60f, 0.55f), 54.dp, 10f),
+        HeroWatermarkSlot(BiasAlignment(-0.94f, 0.96f), 46.dp, 6f),
+        HeroWatermarkSlot(BiasAlignment(0.94f, 0.96f), 46.dp, -8f)
+    )
+    slots.forEachIndexed { i, s ->
+        CurioIcon(
+            // One glyph per slot — the 10-symbol family list maps 1:1.
+            name = symbols[i],
+            contentDescription = null,
+            // Solid white at a soft alpha — clearly visible on the vivid
+            // gradient, alternating slightly so the scatter breathes.
+            tint = Color.White.copy(alpha = if (i % 2 == 0) 0.16f else 0.20f),
+            size = s.size,
+            modifier = Modifier
+                .align(s.alignment)
+                .graphicsLayer { rotationZ = s.rotation }
+        )
+    }
+}
+
+/** One hero watermark slot: bias alignment, glyph size, rotation. */
+private data class HeroWatermarkSlot(
+    val alignment: Alignment,
+    val size: Dp,
+    val rotation: Float
+)
 
 /**
  * True when an entry is a multi-section Portfolio (2+ takes) — these reopen

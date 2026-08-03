@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Saved-entry hero gains a category-symbol watermark scatter (hero only, no overlap)**
+
+### What was asked
+
+Add a different watermark to the saved-entry detail hero — more symbols of that category (artists → instruments etc.), only in the hero top area (not the page background), with a proper non-transparent color blend and no symbol overlap.
+
+### What was done
+
+- **`CurioIcons.kt`** — new `CurioIcons.heroWatermarkSymbols(family)` returning exactly 10 Material Symbols OUTLINED ligature names per family (one per scatter slot): Music → music_note/library_music/headphones/mic/album/equalizer/piano/radio/audiotrack/queue_music; Movies → movie/videocam/theater_comedy/local_movies/movie_filter/play_circle/ondemand_video/video_library/theaters/smart_display; Books → menu_book/auto_stories/library_books/edit_note/book/format_quote/import_contacts/local_library/create/menu_open; Visual Art → brush/palette/colorize/photo_library/museum/photo_camera/wallpaper/architecture/photo/landscape; Science → science/biotech/lightbulb/functions/psychology/bubble_chart/explore/hub/online_prediction/genetics; Wildcard → casino/auto_awesome/explore/bolt/star/nightlight/public/spa/diamond/rocket_launch.
+- **`EntryDetailScreen.kt`** — new private `BoxScope.HeroSymbolScatter(cat)` drawn INSIDE the hero banner Box (before the content column, so behind it): 10 fixed `BiasAlignment` slots around the perimeter (corners + edge midpoints), 42–60dp glyphs rotated −16..16°, solid WHITE at alternating 0.16/0.20 alpha (visible, never transparent), one glyph per slot. Slots verified non-overlapping and clear of the centered icon/title/frosted bar and the top back/more buttons; top-corner slots sit below the status-bar band. New `HeroWatermarkSlot` data class + imports (BoxScope, BiasAlignment, graphicsLayer). Page background's `CurioWatermarkBackdrop` untouched.
+
+### Validation
+
+- Brace/paren balance on both files (node script).
+- Code-reviewer pass: slot-to-slot distances (~140–230dp vs ~47dp combined radii) and center-content clearance verified; imports all used; applied its 3 nits — expanded symbol sets 8→10 so no glyph repeats at the corners, swapped `imagesmode`/`border_color` for safer `photo_library`/`local_library`-style glyphs, nudged top corners below the status-bar band.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Removed 700 fake/placeholder topic entries — kept real ones; albums + artists untouched**
 
 ### What was asked
