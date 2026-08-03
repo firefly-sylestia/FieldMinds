@@ -2,6 +2,7 @@ package com.curio.app.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.themedAccent
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 /**
@@ -106,6 +108,12 @@ private fun BoxScope.WatermarkGlyph(
  * a [seed]-driven pattern over a sparse ring of anchor slots, so every mood
  * board gets its own quiet background collage WITHOUT glyphs overlapping
  * (positions are a seeded subset of well-spaced slots plus a small jitter).
+ *
+ * The glyph count is scaled to the canvas AREA, so the same seed reads the
+ * same density on the small inline card and the full-screen expanded board
+ * (the old fixed 9-11 glyphs scattered sparse across ~2x the space). A
+ * couple of quiet centre slots keep the board's middle from being bare.
+ *
  * Theme-aware (muted in dark mode, slightly stronger in light mode) and
  * centred on [accent] tones so it stays legible behind tiles. The seed is
  * stable per board — derive it from the entry id when re-rendering a saved
@@ -124,51 +132,78 @@ fun CurioMoodBoardBackdrop(
     val glyphs = remember {
         CurioCategories.all.map { it.iconGlyph }
     }
-    // Deterministic per-seed scatter: pick a seeded SUBSET of a sparse ring
-    // of anchor slots (never two glyphs on the same slot) so the collage can
-    // never overlap, then jitter each a little so it reads organic instead of
-    // grid-locked. Sizes are capped so neighbouring slots stay clear. The
-    // alpha boost stays in the seeded pattern (each glyph keeps its own
-    // random weight); the theme-aware base alpha is applied at draw time so
-    // light/dark toggles re-render without re-seeding.
-    val pattern = remember(seed, accentByGlyph, glyphs) {
-        val rng = Random(seed)
-        // Sparse ring of well-spaced slots around the perimeter — the centre
-        // stays clear for tiles.
-        val slots = listOf(
-            BiasAlignment(-0.90f, -0.90f), BiasAlignment(-0.35f, -0.92f),
-            BiasAlignment(0.30f, -0.90f),  BiasAlignment(0.88f, -0.86f),
-            BiasAlignment(0.95f, -0.42f),  BiasAlignment(0.90f, 0.10f),
-            BiasAlignment(0.92f, 0.58f),   BiasAlignment(0.62f, 0.92f),
-            BiasAlignment(0.05f, 0.94f),   BiasAlignment(-0.50f, 0.92f),
-            BiasAlignment(-0.94f, 0.72f),  BiasAlignment(-0.95f, 0.18f),
-            BiasAlignment(-0.92f, -0.35f), BiasAlignment(-0.60f, -0.55f)
-        )
-        val count = 9 + rng.nextInt(3) // 9..11 glyphs
-        slots.shuffled(rng).take(count).map { slot ->
-            val glyph = glyphs[rng.nextInt(glyphs.size)]
-            val accentForGlyph = accentByGlyph[glyph] ?: accent
-            // Small jitter keeps the subset from looking grid-locked without
-            // letting neighbours collide (slots are far apart).
-            val jitterX = (rng.nextFloat() * 2f - 1f) * 0.05f
-            val jitterY = (rng.nextFloat() * 2f - 1f) * 0.05f
-            WatermarkPlacement(
-                glyph = glyph,
-                alignment = BiasAlignment(
-                    (slot.horizontalBias + jitterX).coerceIn(-1f, 1f),
-                    (slot.verticalBias + jitterY).coerceIn(-1f, 1f)
-                ),
-                size = (46f + rng.nextFloat() * 38f).dp, // 46..84 dp
-                rotation = -18f + rng.nextFloat() * 36f,
-                // Mostly the board's own accent family, sometimes a sibling
-                // category colour for variety.
-                tint = if (rng.nextFloat() < 0.75f) accent else accentForGlyph,
-                alphaBoost = 0.8f + rng.nextFloat() * 0.4f // 0.8..1.2 per glyph
+    // Measure the canvas so the glyph count can scale with its AREA — the
+    // same seeded ring would otherwise scatter far apart on the expanded
+    // full-screen board instead of keeping the inline card's density.
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val canvasW = maxWidth
+        val canvasH = maxHeight
+        // Deterministic per-seed scatter: pick a seeded SUBSET of a sparse
+        // ring of anchor slots (never two glyphs on the same slot) so the
+        // collage can never overlap, then jitter each a little so it reads
+        // organic instead of grid-locked. Sizes are capped so neighbouring
+        // slots stay clear. The alpha boost stays in the seeded pattern (each
+        // glyph keeps its own random weight); the theme-aware base alpha is
+        // applied at draw time so light/dark toggles re-render without
+        // re-seeding.
+        val pattern = remember(seed, accentByGlyph, glyphs, canvasW, canvasH) {
+            val rng = Random(seed)
+            // Sparse ring of well-spaced perimeter slots, plus a couple of
+            // quiet centre slots so the board's middle isn't bare (1-2 small
+            // glyphs tucked near the middle, well clear of the corner ring).
+            val perimeterSlots = listOf(
+                BiasAlignment(-0.90f, -0.90f), BiasAlignment(-0.35f, -0.92f),
+                BiasAlignment(0.30f, -0.90f),  BiasAlignment(0.88f, -0.86f),
+                BiasAlignment(0.95f, -0.42f),  BiasAlignment(0.90f, 0.10f),
+                BiasAlignment(0.92f, 0.58f),   BiasAlignment(0.62f, 0.92f),
+                BiasAlignment(0.05f, 0.94f),   BiasAlignment(-0.50f, 0.92f),
+                BiasAlignment(-0.94f, 0.72f),  BiasAlignment(-0.95f, 0.18f),
+                BiasAlignment(-0.92f, -0.35f), BiasAlignment(-0.60f, -0.55f)
             )
+            val centerSlots = listOf(
+                BiasAlignment(-0.12f, -0.05f),
+                BiasAlignment(0.10f, 0.08f)
+            )
+            // Density-scaled count: the inline board is roughly 360x460dp;
+            // the expanded board is ~2-3x that area, so scale the perimeter
+            // count with the area (capped at the 14 perimeter slots — there
+            // are never more) so the pattern reads the same instead of
+            // scattering sparse on the big canvas.
+            val refArea = 360f * 460f
+            val area = canvasW.value * canvasH.value
+            val density = (area / refArea).coerceIn(1f, 2.6f)
+            val perimeterCount = ((9 + rng.nextInt(3)) * density).roundToInt().coerceIn(9, 14)
+            // 1-2 quiet centre glyphs (never more — the middle stays mostly
+            // clear for the tiles).
+            val centerCount = 1 + rng.nextInt(2)
+            val picked = centerSlots.map { it to true }.shuffled(rng).take(centerCount) +
+                perimeterSlots.map { it to false }.shuffled(rng).take(perimeterCount)
+            picked.map { (slot, isCenter) ->
+                val glyph = glyphs[rng.nextInt(glyphs.size)]
+                val accentForGlyph = accentByGlyph[glyph] ?: accent
+                // Small jitter keeps the subset from looking grid-locked
+                // without letting neighbours collide (slots are far apart).
+                val jitterX = (rng.nextFloat() * 2f - 1f) * 0.05f
+                val jitterY = (rng.nextFloat() * 2f - 1f) * 0.05f
+                WatermarkPlacement(
+                    glyph = glyph,
+                    alignment = BiasAlignment(
+                        (slot.horizontalBias + jitterX).coerceIn(-1f, 1f),
+                        (slot.verticalBias + jitterY).coerceIn(-1f, 1f)
+                    ),
+                    // Centre glyphs stay small so they whisper between tiles;
+                    // perimeter glyphs keep the full 46..84dp range.
+                    size = if (isCenter) (30f + rng.nextFloat() * 18f).dp // 30..48 dp
+                           else (46f + rng.nextFloat() * 38f).dp,        // 46..84 dp
+                    rotation = -18f + rng.nextFloat() * 36f,
+                    // Mostly the board's own accent family, sometimes a
+                    // sibling category colour for variety.
+                    tint = if (rng.nextFloat() < 0.75f) accent else accentForGlyph,
+                    alphaBoost = 0.8f + rng.nextFloat() * 0.4f // 0.8..1.2 per glyph
+                )
+            }
         }
-    }
 
-    Box(modifier = modifier.fillMaxSize()) {
         pattern.forEach { p ->
             // Theme-aware base alpha × the glyph's seeded boost, computed at
             // draw time so light/dark toggles apply immediately. Dark mode

@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board fixes: expanded view keeps its tint in AMOLED, watermark density matches inline, 1-2 center glyphs**
+
+### What was asked
+
+1. The expanded mood-board view in AMOLED mode loses its tint color — looks very dark.
+2. The watermark pattern looks fine in the mood board's small view but scatters more when expanded — fix it.
+3. There are very few / no icons around the middle — add just 1 or 2 (not a lot).
+
+### What was done
+
+- **`CurioWatermarkBackdrop.kt` / `CurioMoodBoardBackdrop`**:
+  - Wrapped the pattern in `BoxWithConstraints` and now scale the PERIMETER glyph count by the canvas AREA vs a 360×460dp reference (`density = (area/refArea).coerceIn(1f, 2.6f)`, `count = (9..11 × density).roundToInt().coerceIn(9, 14)` — the honest cap is the 14 perimeter slots). The inline card (~1.0×) keeps its old 9-11 look; the expanded full-screen board (~1.7-2× area) now fills all 14 perimeter slots, so the pattern reads the SAME density instead of scattering sparse across the bigger canvas.
+  - Added 2 quiet CENTER slots (`BiasAlignment(-0.12f, -0.05f)` / `(0.10f, 0.08f)`), of which 1-2 are always seeded (small 30..48dp glyphs, vs the perimeter's 46..84dp) — the board's middle is no longer bare, without crowding the tiles. Same seeded determinism, jitter, theme-aware alpha (0.10 dark / 0.14 light × boost) preserved.
+- **`EntryDetailScreen.kt` / `ExpandedMoodBoardDialog`**: the full-screen dialog's background was `wash` (= `categoryBackgroundWash()`, which returns PLAIN BLACK in AMOLED because `tintWashEffective()` is false there) — that's why the expanded board lost its tint. It now takes `boardSurface` and is painted with `category.categorySurfaceMoodBoard()` — the same AMOLED-immune tinted surface the INLINE board already uses (gates on `tintWashEnabledState`, not `tintWashEffective()`), so the expanded board keeps its category tint on pure black exactly like the small card.
+
+### Validation
+
+- Brace/paren balance on both files (node script) — balanced.
+- Code-reviewer pass: BoxWithConstraintsScope maxWidth/maxHeight are Dp (`.value` = Float), Dp-as-remember-key valid, Pair destructuring compiles, no stale `wash` refs in the dialog (remaining hits are the page background/hero gradient, which correctly keep `wash`), `categorySurfaceMoodBoard` import present, `categoryBackgroundWash` still used (no orphaned import). Applied its one nit: perimeter count cap corrected 20 → 14 (the true slot count; take() beyond list size silently caps — the 20 was unreachable).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mixed-deck page wash now genuinely wears THE blend color — decks visibly repaint the page**
 
 ### What was asked

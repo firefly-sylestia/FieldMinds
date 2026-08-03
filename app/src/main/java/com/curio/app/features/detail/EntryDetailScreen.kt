@@ -1864,7 +1864,11 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 data = data,
                 seed = boardSeed,
                 accent = category.themedAccent(),
-                wash = category.categoryBackgroundWash(),
+                // The expanded board rests on the SAME AMOLED-immune tinted
+                // surface as the inline card — never the page wash (which
+                // blacks out in AMOLED and makes the full-screen board look
+                // pitch dark without its tint).
+                boardSurface = category.categorySurfaceMoodBoard(),
                 onDismiss = { boardExpanded = false },
                 onEdit = {
                     navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true }
@@ -1878,14 +1882,16 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
  * Full-screen expanded mood board — scales the tile collage up to fill the
  * screen, centers it, and keeps per-tile tap → Lightbox. Close button
  * top-right; back/outside tap dismisses. Rests on the same theme-aware
- * watermark backdrop as the inline board (seeded from the entry id).
+ * watermark backdrop as the inline board (seeded from the entry id) and on
+ * the same AMOLED-immune tinted surface ([categorySurfaceMoodBoard]) so the
+ * full-screen board keeps its category tint even in AMOLED.
  */
 @Composable
 private fun ExpandedMoodBoardDialog(
     data: CaptureData.GalleryWall,
     seed: Int,
     accent: Color,
-    wash: Color,
+    boardSurface: Color,
     onDismiss: () -> Unit,
     onEdit: () -> Unit
 ) {
@@ -1919,7 +1925,7 @@ private fun ExpandedMoodBoardDialog(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(wash)
+                .background(boardSurface)
         ) {
             // ── Theme-aware watermark backdrop (matches inline board) ──
             CurioMoodBoardBackdrop(
