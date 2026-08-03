@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Detail hero gradient now blends accent→wash in HSL space ("proper gradient blend") — fixes muddy RGB banding in light, dark AND AMOLED**
+
+### What was asked
+
+In dark mode and AMOLED the detail-view blending still looked bad — and in light mode too. Use a proper gradient blend with the 2 colors (the accent and the page wash).
+
+### What was done
+
+- **`CurioColors.kt`** — `Hsl` / `toHsl` / `fromHsl` moved out of `object CurioMixedDeck` to file-level `private` (shared by the mixed-deck blends and the new helper). NEW `CurioGradients.hslGradientStops(from, to, steps)`: interpolates in HSL along the shortest hue path and returns `steps` evenly-spaced colors. Achromatic endpoints (pure black/white/grey — e.g. the AMOLED black wash) have no meaningful hue, so the path anchors on the chromatic endpoint's hue — a deep accent fades to black ON-HUE instead of swinging through foreign hues. Naive RGB `lerp` between a deep accent and a light/dark wash passes through muddy grey midtones — that grey band was the "bad blending" in every theme.
+- **`EntryDetailScreen.kt`** — the hero banner's background is now `Brush.verticalGradient(colorStops = heroStops)` where the stops hold the vivid accent behind the icon/title zone (white-on-glass legibility) and then glide through 8 HSL-sampled colors to exactly `wash` at the bottom edge (seamless page merge): dark/AMOLED hold to 0.70 then glide 0.70→1.00; light hold to 0.88 (below the frosted bar, since cream brightening would wash out white text) then glide 0.88→1.00. First glide sample skipped (`drop(1)`) so stop positions stay strictly increasing (no duplicate-position stops for the shader). Removed the now-unused `lerp` import.
+
+### Validation
+
+- Node HSL-math over representative blends: LIGHT indigo→cream now passes through rich periwinkle/lavender (#3C32B6 → #6142C2 → #875DC3 → #A476C5 → … → #E6DFE3) instead of the RGB midpoint #9189CD (muddy grey-purple); DARK rose/amber/coral glide through deep on-hue tones; AMOLED sky/coral/rose fade to black on-hue with no purple detour.
+- Code-reviewer pass: file-level helper move leaves `CurioMixedDeck`'s references resolving, object braces balanced, hue-anchoring correct, fraction math exact (0.70+8·0.30/8 = 1.00). Applied both reviewer nits: dropped the duplicate-position first glide sample, and switched to the `colorStops` List overload (no per-recomposition array allocation).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Home "Recents" merge, Profile gets an inline Theme card (recent activity removed), mixed-deck dark wash deepened**
 
 ### What was asked

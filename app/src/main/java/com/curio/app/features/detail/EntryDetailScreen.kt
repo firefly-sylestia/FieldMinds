@@ -67,7 +67,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.zIndex
@@ -212,35 +211,38 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // below the title + frosted bar zone, so white-on-glass stays
         // legible even for two-line titles.
         //
-        // Theme-aware stops. Light mode keeps the original design: the
-        // vivid accent holds until 0.90 and only the bottom band washes
-        // out, BRIGHTENING into the cream page like paper. In dark / AMOLED
-        // the wash is a near-black tint (pure black in AMOLED), so the same
-        // bottom-10% band would PLUNGE from the accent into darkness — a
-        // hard, muddy band. There the fade instead begins just below the
-        // title zone (0.72) and glides to the wash over the bottom third,
-        // ending exactly on the page color so the merge stays seamless.
+        // Proper gradient blend: the accent → wash glide is sampled in HSL
+        // space ([CurioGradients.hslGradientStops]) instead of naive RGB
+        // lerp, which passes through muddy grey midtones between a deep
+        // accent and a light/dark page wash — that grey band is what read
+        // as "bad blending" in every theme. The vivid accent is still held
+        // behind the icon/title zone (white-on-glass legibility), then the
+        // rich glide takes over and ends EXACTLY on [wash] at the hero's
+        // bottom edge, so the merge into the page stays seamless.
+        //
+        // Theme-aware geometry: in dark/AMOLED the wash is dark (pure black
+        // in AMOLED), so the glide can start just below the title zone and
+        // spread over the bottom third; in light the wash brightens toward
+        // cream, so the accent is held longer (below the frosted bar)
+        // before the luminous fade.
         val heroStart = CurioGradients.categoryCardFill(cat.themedAccent())
+        val heroStops = if (isCurioDarkTheme()) {
+            // drop(1): the first glide sample IS heroStart, already covered
+            // by the hold stop — skipping it keeps stop positions strictly
+            // increasing (no duplicate-position stops for the shader).
+            val glide = CurioGradients.hslGradientStops(heroStart, wash, 9)
+            listOf(0.00f to heroStart, 0.70f to heroStart) +
+                glide.drop(1).mapIndexed { i, c -> (0.70f + (i + 1) * 0.30f / 8f) to c }
+        } else {
+            val glide = CurioGradients.hslGradientStops(heroStart, wash, 9)
+            listOf(0.00f to heroStart, 0.88f to heroStart) +
+                glide.drop(1).mapIndexed { i, c -> (0.88f + (i + 1) * 0.12f / 8f) to c }
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(380.dp)
-                .background(
-                    if (isCurioDarkTheme()) {
-                        Brush.verticalGradient(
-                            0.00f to heroStart,
-                            0.72f to heroStart,
-                            0.90f to lerp(heroStart, wash, 0.50f),
-                            1.00f to wash
-                        )
-                    } else {
-                        Brush.verticalGradient(
-                            0.00f to heroStart,
-                            0.90f to lerp(heroStart, wash, 0.18f),
-                            1.00f to wash
-                        )
-                    }
-                ),
+                .background(Brush.verticalGradient(colorStops = heroStops)),
             contentAlignment = Alignment.Center
         ) {
             // ── Hero watermark — a scatter of the entry's category-family

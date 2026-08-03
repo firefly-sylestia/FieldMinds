@@ -88,6 +88,48 @@ object CurioColors {
 }
 
 /**
+ * HSL components of a color, computed from its RGBA channels. File-level
+ * (shared by [CurioMixedDeck]'s premium blends and [CurioGradients.hslGradientStops]).
+ */
+private data class Hsl(val h: Float, val s: Float, val l: Float)
+
+/** Standard RGB → HSL conversion (channels in [0,1], hue in degrees). */
+private fun toHsl(color: Color): Hsl {
+    val r = color.red
+    val g = color.green
+    val b = color.blue
+    val max = maxOf(r, g, b)
+    val min = minOf(r, g, b)
+    val l = (max + min) / 2f
+    val d = max - min
+    val s = if (d == 0f) 0f else d / (1f - kotlin.math.abs(2f * l - 1f))
+    val h = when {
+        d == 0f -> 0f
+        max == r -> ((g - b) / d) % 6f
+        max == g -> (b - r) / d + 2f
+        else -> (r - g) / d + 4f
+    } * 60f
+    return Hsl((h + 360f) % 360f, s.coerceIn(0f, 1f), l.coerceIn(0f, 1f))
+}
+
+/** Standard HSL → RGB conversion (hue in degrees, s/l in [0,1]). */
+private fun fromHsl(h: Float, s: Float, l: Float): Color {
+    val c = (1f - kotlin.math.abs(2f * l - 1f)) * s
+    val hp = h / 60f
+    val x = c * (1f - kotlin.math.abs(hp % 2f - 1f))
+    val (r, g, b) = when {
+        hp < 1f -> Triple(c, x, 0f)
+        hp < 2f -> Triple(x, c, 0f)
+        hp < 3f -> Triple(0f, c, x)
+        hp < 4f -> Triple(0f, x, c)
+        hp < 5f -> Triple(x, 0f, c)
+        else -> Triple(c, 0f, x)
+    }
+    val m = l - c / 2f
+    return Color(r + m, g + m, b + m)
+}
+
+/**
  * Solid gradient definitions for card surfaces. Every card gradient opens on
  * the same deepened accent used by the flat category cards ([categoryCardFill])
  * and fades toward the active theme's background — white in light mode, black
@@ -108,6 +150,37 @@ object CurioGradients {
      * brightness for the full-width tile treatment.
      */
     fun categoryCardFill(accent: Color): Color = lerp(accent, Color.Black, 0.10f)
+
+    /**
+     * Interpolates [from] → [to] in HSL space (shortest hue path) and
+     * returns [steps] evenly-spaced colors INCLUDING both endpoints. Naive
+     * RGB lerp between a deep accent and a light/dark page wash passes
+     * through muddy grey midtones; HSL keeps the hue saturated along the
+     * whole path, so gradient blends glide through proper blended colors
+     * instead of a grey band.
+     */
+    fun hslGradientStops(from: Color, to: Color, steps: Int = 9): List<Color> {
+        require(steps >= 2)
+        val a = toHsl(from)
+        val b = toHsl(to)
+        // Achromatic endpoints (pure black/white/grey) carry no meaningful
+        // hue — anchor the path on the chromatic endpoint's hue so the
+        // blend simply darkens/lightens instead of swinging through foreign
+        // hues (e.g. a deep accent fading to AMOLED black stays on-hue).
+        val hueFrom = if (a.s <= 0.001f) b.h else a.h
+        val hueTo = if (b.s <= 0.001f) hueFrom else b.h
+        var dh = hueTo - hueFrom
+        if (dh > 180f) dh -= 360f
+        if (dh < -180f) dh += 360f
+        return List(steps) { i ->
+            val t = i / (steps - 1).toFloat()
+            fromHsl(
+                (hueFrom + dh * t + 360f) % 360f,
+                (a.s + (b.s - a.s) * t).coerceIn(0f, 1f),
+                (a.l + (b.l - a.l) * t).coerceIn(0f, 1f)
+            )
+        }
+    }
 
     /**
      * Theme-aware category card gradient: opens on [categoryCardFill] (the
@@ -388,42 +461,4 @@ object CurioMixedDeck {
     private fun toLinear(c: Float): Float =
         if (c <= 0.03928f) c / 12.92f else ((c + 0.055f) / 1.055f).pow(2.4f)
 
-    /** HSL components of a color, computed from its RGBA channels. */
-    private data class Hsl(val h: Float, val s: Float, val l: Float)
-
-    /** Standard RGB → HSL conversion (channels in [0,1], hue in degrees). */
-    private fun toHsl(color: Color): Hsl {
-        val r = color.red
-        val g = color.green
-        val b = color.blue
-        val max = maxOf(r, g, b)
-        val min = minOf(r, g, b)
-        val l = (max + min) / 2f
-        val d = max - min
-        val s = if (d == 0f) 0f else d / (1f - kotlin.math.abs(2f * l - 1f))
-        val h = when {
-            d == 0f -> 0f
-            max == r -> ((g - b) / d) % 6f
-            max == g -> (b - r) / d + 2f
-            else -> (r - g) / d + 4f
-        } * 60f
-        return Hsl((h + 360f) % 360f, s.coerceIn(0f, 1f), l.coerceIn(0f, 1f))
-    }
-
-    /** Standard HSL → RGB conversion (hue in degrees, s/l in [0,1]). */
-    private fun fromHsl(h: Float, s: Float, l: Float): Color {
-        val c = (1f - kotlin.math.abs(2f * l - 1f)) * s
-        val hp = h / 60f
-        val x = c * (1f - kotlin.math.abs(hp % 2f - 1f))
-        val (r, g, b) = when {
-            hp < 1f -> Triple(c, x, 0f)
-            hp < 2f -> Triple(x, c, 0f)
-            hp < 3f -> Triple(0f, c, x)
-            hp < 4f -> Triple(0f, x, c)
-            hp < 5f -> Triple(x, 0f, c)
-            else -> Triple(c, 0f, x)
-        }
-        val m = l - c / 2f
-        return Color(r + m, g + m, b + m)
-    }
 }
