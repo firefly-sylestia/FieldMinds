@@ -15,6 +15,7 @@ import com.curio.app.MainActivity
 import com.curio.app.R
 import com.curio.app.data.ExploreReminderScheduler
 import com.curio.app.data.ExploreSessionStore
+import com.curio.app.navigation.PendingEntryOpen
 
 /**
  * Two jobs for the explore-session flow:
@@ -26,9 +27,26 @@ import com.curio.app.data.ExploreSessionStore
 class ExploreReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent?.action == ACTION_STOP) {
+            // "Done exploring" — tear the session down AND hand the user
+            // straight to the write-it-down entry page for the topic, so the
+            // action lands somewhere useful instead of just dismissing the
+            // shade. The NavHost opens the page with HOME anchored beneath
+            // it, so Back from the entry page returns to the app instead of
+            // exiting it.
+            val session = ExploreSessionStore.getActiveSession(context)
             ExploreSessionStore.clearSession(context)
             ExploreReminderScheduler.cancel(context)
             ExploreSessionService.stop(context)
+            if (session != null) {
+                val open = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP or
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    putExtra(PendingEntryOpen.EXTRA_CATEGORY_SLUG, session.categoryId.routeSlug)
+                    putExtra(PendingEntryOpen.EXTRA_TOPIC_NAME, session.topicName)
+                }
+                context.startActivity(open)
+            }
             return
         }
 

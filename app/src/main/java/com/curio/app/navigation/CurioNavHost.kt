@@ -166,6 +166,29 @@ fun CurioNavHost(
         }
     }
 
+    // ── "Done exploring" notification handoff ─────────────────────────
+    // The notification action stashes the topic (category slug + name) via
+    // PendingEntryOpen and launches the activity. Once this NavHost is on a
+    // stable root (a bottom-nav tab), open the write-it-down entry page with
+    // HOME anchored beneath it — so Back from the entry page returns to the
+    // app instead of exiting it. During the boot gates (splash/onboarding/
+    // crash) the effect returns WITHOUT consuming; it re-runs when the
+    // splash lands on HOME (keyed on currentRoute).
+    LaunchedEffect(currentRoute, PendingEntryOpen.trigger) {
+        val prefix = currentRoute?.substringBefore("/")
+        // Wait for a stable root: null (first frame) and the boot gates own
+        // navigation until the splash lands on HOME — the effect re-runs
+        // there (keyed on currentRoute) and consumes the target once.
+        if (prefix == null || prefix in CurioRoutes.bootGatePrefixes) return@LaunchedEffect
+        val target = PendingEntryOpen.take() ?: return@LaunchedEffect
+        if (prefix != CurioRoutes.HOME) {
+            navController.popBackStack(CurioRoutes.HOME, inclusive = false)
+        }
+        navController.navigate(CurioRoutes.captureFor(target.first, target.second)) {
+            launchSingleTop = true
+        }
+    }
+
     // The floating explore bubble now lives in the explore service's overlay
     // window (over other apps), so the Scaffold simply fills the screen.
     Box(modifier = Modifier.fillMaxSize()) {
@@ -414,6 +437,15 @@ fun CurioNavHost(
                     ExploreSessionStore.clearSession(context)
                     ExploreReminderScheduler.cancel(context)
                     ExploreSessionService.stop(context)
+                    // Anchor HOME beneath the entry page so Back returns to
+                    // the app instead of exiting from a deep-opened page.
+                    val routePrefix = currentRoute?.substringBefore("/")
+                    if (routePrefix != null &&
+                        routePrefix != CurioRoutes.HOME &&
+                        routePrefix !in CurioRoutes.bootGatePrefixes
+                    ) {
+                        navController.popBackStack(CurioRoutes.HOME, inclusive = false)
+                    }
                     navController.navigate(
                         CurioRoutes.captureFor(activeSession.categoryId.routeSlug, activeSession.topicName)
                     ) { launchSingleTop = true }

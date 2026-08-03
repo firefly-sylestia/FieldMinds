@@ -1,3 +1,5 @@
+• Spin: top peek cards now drop down into the deck while bottom peeks rise up — softer, slower glides make the reel smooth instead of a fast hard wipe
+• Tapping “Done exploring” on the timer notification opens Curio straight to the write-it-down page, and Back returns home instead of exiting
 • Backing out of a capture with any draft now offers Save and switch, Keep editing, or Discard — optional fields (rating, images, captions) are protected too
 • Switching formats keeps your draft: Save and switch, or switch and clear
 • Mood board captures now have the "How did it make you feel?" mood picker

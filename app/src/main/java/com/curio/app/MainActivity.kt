@@ -1,5 +1,6 @@
 package com.curio.app
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import com.curio.app.data.ExploreSessionStore
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioNavHost
+import com.curio.app.navigation.PendingEntryOpen
 import com.curio.app.ui.theme.CurioTheme
 
 /**
@@ -30,6 +32,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        // A "Done exploring" notification action may carry the topic to open
+        // (cold-start path) — stash it for the NavHost to navigate to once
+        // the splash settles on HOME. Gated on a FRESH process (no saved
+        // instance state): recreation (rotation / process-death restore)
+        // re-delivers the same intent and would otherwise re-trigger the
+        // entry-page navigation over a state the user already has on screen.
+        if (savedInstanceState == null) {
+            PendingEntryOpen.capture(intent)
+        }
 
         // Wire the asset manager into the topic loader before any Compose
         // code runs. Must happen here (not in SplashScreen's LaunchedEffect)
@@ -59,5 +71,13 @@ class MainActivity : ComponentActivity() {
                 CurioNavHost()
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        // Warm-start path: the activity was already running, so a pending
+        // entry-open target arrives here instead of onCreate.
+        PendingEntryOpen.capture(intent)
     }
 }

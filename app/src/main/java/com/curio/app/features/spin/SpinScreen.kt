@@ -246,6 +246,18 @@ import kotlin.random.Random
  *     the landed die) instead of hard-swapping, and the tumble gains a
  *     slow vertical bob so the loop reads as a die shaking — seamless,
  *     and it never just stops.
+ *
+ * v7.1 changes:
+ * 28. **Directional peek wipes** — top peek cards now feed the deck from
+ *     ABOVE (their content drops DOWN into the card) while bottom peeks
+ *     rise up, so the fan streams toward the hero from both ends and a
+ *     top card's title is never sliced off the top edge by the old
+ *     upward wipe.
+ * 29. **Soft glides, not hard cuts** — the full-height slot wipe (which
+ *     sliced the title mid-slide and read as cut off) is replaced by a
+ *     partial-height glide + fade at ~320ms (under the ~340ms tick floor),
+ *     so each step completes before the next tick and the reel reads as
+ *     calm and smooth instead of fast and glitchy.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -539,11 +551,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // Smooth reel deceleration: a plain sine ease (no squaring) so
             // the wheel starts at a readable cadence and glides gently to a
             // stop — a graceful slow-down instead of a snappy whip. The
-            // ~200ms floor keeps even the fastest early ticks readable and
-            // matches the 200ms deck wipe so every transition completes
-            // before the next tick lands. Intervals ~200ms -> ~520ms.
+            // ~340ms floor keeps the fastest early ticks readable and sits
+            // ABOVE the ~320ms peek wipe, so every transition completes
+            // before the next tick lands. Intervals ~340ms -> ~520ms.
             val eased = sin(progress * Math.PI.toFloat() / 2f)
-            val interval = (200L + (320L * eased).toLong()).coerceAtMost(520L)
+            val interval = (340L + (180L * eased).toLong()).coerceAtMost(520L)
             cycleIndex = ++tick
             // Slot-machine ratchet: haptic intensity escalates as the wheel
             // decelerates — a light tick at the brisk opening cadence, a
@@ -1363,6 +1375,17 @@ private fun CompactChip(
 /** Rest scale the hero card settles to after a shuffle lands. */
 private const val LandedRestScale = 1.02f
 
+// v7.1 — peek wipe timings. Soft partial-height glides + fades (no hard
+// slot cut), all under the ~340ms tick floor so each step completes before
+// the next tick lands.
+private const val PeekWipeInMs = 320
+private const val PeekWipeOutMs = 300
+private const val PeekIdleInMs = 300
+private const val PeekIdleOutMs = 280
+
+/** Fraction of the card height a peek wipe travels (partial = soft glide). */
+private const val PeekWipeTravel = 0.45f
+
 /**
  * Small-screen adaptive layout (v6.11). The Spin stack — top bar + 44dp
  * spacer + 444dp deck + spin button + Categories/Filter bar — needs ~830dp;
@@ -1704,22 +1727,22 @@ private fun HeroTicketCard(
                                     // streams. clip=false keeps the title
                                     // reel from being sliced mid-slide.
                                     (slideInVertically(
-                                        animationSpec = tween(190, easing = FastOutSlowInEasing)
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
                                     ) { height -> height / 2 } +
-                                        fadeIn(animationSpec = tween(190, easing = FastOutSlowInEasing))) togetherWith
+                                        fadeIn(animationSpec = tween(300, easing = FastOutSlowInEasing))) togetherWith
                                     (slideOutVertically(
-                                        animationSpec = tween(160, easing = FastOutSlowInEasing)
+                                        animationSpec = tween(260, easing = FastOutSlowInEasing)
                                     ) { height -> -height / 2 } +
-                                        fadeOut(animationSpec = tween(160, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
+                                        fadeOut(animationSpec = tween(260, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
                                 } else {
                                     (slideInVertically(
-                                        animationSpec = tween(260, easing = FastOutSlowInEasing)
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
                                     ) { height -> height / 4 } +
-                                        fadeIn(animationSpec = tween(260, easing = FastOutSlowInEasing))) togetherWith
+                                        fadeIn(animationSpec = tween(300, easing = FastOutSlowInEasing))) togetherWith
                                     (slideOutVertically(
-                                        animationSpec = tween(240, easing = FastOutSlowInEasing)
+                                        animationSpec = tween(260, easing = FastOutSlowInEasing)
                                     ) { height -> -height / 4 } +
-                                        fadeOut(animationSpec = tween(240, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
+                                        fadeOut(animationSpec = tween(260, easing = FastOutSlowInEasing))) using SizeTransform(clip = false)
                                 }
                             },
                             label = "heroContentReel"
@@ -1866,37 +1889,37 @@ private fun PeekCard(
         AnimatedContent(
             targetState = topic,
             transitionSpec = {
+                // v7.1 — direction + softness. Top peek cards (title placed
+                // at the card top) feed the deck from ABOVE — their content
+                // DROPS down into the card — while bottom peeks rise up, so
+                // the fan streams toward the hero from both ends and a top
+                // card's title is never sliced off the top edge by the old
+                // upward wipe (which read as cut off). The wipe itself is a
+                // partial-height glide + fade (like the hero's content reel)
+                // instead of a full-height hard slot cut, and the durations
+                // sit UNDER the ~340ms tick floor so each step completes
+                // before the next tick lands.
+                val dir = if (isTop) -1f else 1f
                 if (shuffling) {
-                    // v6.10 — a proper reel: every slot's content rises
-                    // THROUGH the card window at full height (in from below,
-                    // out the top) clipped to the card, so the deck streams
-                    // upward like a slot-machine reel. No fades — the
-                    // incoming covers the outgoing as it rises, so the wipe
-                    // line stays crisp instead of muddying both halves. The
-                    // old 1/3-height slide with an inverted top-peek
-                    // direction made the top card glide BACKWARDS while the
-                    // bottom went forward — incoherent — and wipes that
-                    // matched the 200ms tick floor exactly got interrupted
-                    // every tick, which read as glitchy. Durations now sit
-                    // UNDER the tick floor so each step completes before
-                    // the next one lands.
                     slideInVertically(
-                        animationSpec = tween(190, easing = FastOutSlowInEasing)
-                    ) { height -> height } togetherWith
+                        animationSpec = tween(PeekWipeInMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * dir * PeekWipeTravel).toInt() } +
+                    fadeIn(animationSpec = tween(PeekWipeInMs, easing = FastOutSlowInEasing)) togetherWith
                     slideOutVertically(
-                        animationSpec = tween(160, easing = FastOutSlowInEasing)
-                    ) { height -> -height } using SizeTransform(clip = true)
+                        animationSpec = tween(PeekWipeOutMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * -dir * PeekWipeTravel).toInt() } +
+                    fadeOut(animationSpec = tween(PeekWipeOutMs, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
                 } else {
                     // Idle re-fan (landing re-deal / category switch) — a
-                    // slower, softer pass in the same upward direction.
+                    // slower, softer pass in the same per-side direction.
                     slideInVertically(
-                        animationSpec = tween(260, easing = FastOutSlowInEasing)
-                    ) { height -> height } +
-                    fadeIn(animationSpec = tween(260, easing = FastOutSlowInEasing)) togetherWith
+                        animationSpec = tween(PeekIdleInMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * dir * PeekWipeTravel).toInt() } +
+                    fadeIn(animationSpec = tween(PeekIdleInMs, easing = FastOutSlowInEasing)) togetherWith
                     slideOutVertically(
-                        animationSpec = tween(220, easing = FastOutSlowInEasing)
-                    ) { height -> -height } +
-                    fadeOut(animationSpec = tween(220, easing = FastOutSlowInEasing)) using SizeTransform(clip = true)
+                        animationSpec = tween(PeekIdleOutMs, easing = FastOutSlowInEasing)
+                    ) { height -> (height * -dir * PeekWipeTravel).toInt() } +
+                    fadeOut(animationSpec = tween(PeekIdleOutMs, easing = FastOutSlowInEasing)) using SizeTransform(clip = false)
                 }
             },
             label = "peekSlot_$slot"

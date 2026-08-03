@@ -2,6 +2,40 @@
 
 ## Latest Request (COMPLETED)
 
+**Peek-card reel fixed (direction, cut-off, speed) + “Done exploring” on the notification now opens the app at the write-it-down entry page with a HOME-anchored back stack**
+
+### What was asked
+
+“the peek card animation got better but now it looks cut off… the above peek cards should animate downwards not upwards. its also too fast and does not look that smooth. also when i tap done exploring on notification it just closes it and doesnt open the app with the entry page. and if i open the entry page and tap back it just exits.”
+
+### Root causes
+
+1. **Peek wipes sliced the content** — every peek card wiped UPWARD (in from below, out the top) as a full-height hard slot slide at 190/160ms, under a 200ms tick floor. Top peek titles (placed at the card TOP via `Arrangement.Top`) were the first thing sliced off the top edge — the “cut off” look — and a 190ms wipe barely finished before the next 200ms tick, reading fast + glitchy.
+2. **“Done exploring” was dismiss-only** — the notification action fired `ExploreReminderReceiver.ACTION_STOP`, which cleared the session + stopped the service but never opened the app; and nothing anchored a back stack under a deep-opened entry page, so Back could exit the app.
+
+### What was done
+
+**`SpinScreen.kt` (v7.1):**
+- **Directional wipes** — top peek cards now feed the deck from ABOVE (content DROPS down into the card, `dir = -1f`); bottom peeks rise up (`dir = +1f`). Idle re-fan (landing re-deal / category switch) uses the same per-side direction.
+- **Soft glides, not hard cuts** — the full-height slot wipe is replaced by a partial-height glide (45% travel) + fade at 320/300ms (idle 300/280ms) with `SizeTransform(clip = false)`; hero content reel durations bumped 190/160 → 300/260ms to match.
+- **Calmer cadence** — tick interval floor raised 200 → 340ms (`340 + 180·eased`, still easing to 520) so every wipe completes before the next tick lands; header change-log updated (v7.1 items 28–29) + new `PeekWipe*` constants.
+
+**Notification → entry page (the “Done exploring” action now lands somewhere useful):**
+- `navigation/CurioRoutes.kt` — new `PendingEntryOpen` out-of-band handoff (same pattern as `LightboxTarget`): extra-name constants, `capture()/take()/trigger`; new `bootGatePrefixes` set (SPLASH/ONBOARDING/CRASH).
+- `infrastructure/ExploreReminderReceiver.kt` — `ACTION_STOP` now reads the session BEFORE clearing it and launches MainActivity with `FLAG_ACTIVITY_NEW_TASK|SINGLE_TOP|CLEAR_TOP` plus the topic’s category slug + name extras.
+- `MainActivity.kt` — `PendingEntryOpen.capture(intent)` in onCreate (cold start) + a new `onNewIntent` override (warm start).
+- `navigation/CurioNavHost.kt` — new `LaunchedEffect(currentRoute, PendingEntryOpen.trigger)`: returns WITHOUT consuming on null / boot-gate routes (re-runs when the splash lands on HOME), pops to HOME first when not already there, then navigates `captureFor(slug, name)` — so Back from the entry page returns HOME instead of exiting. The “Done — write about it” dialog navigation got the same HOME anchoring.
+
+### Validation
+
+- `check_braces.py` BALANCED on all 5 touched files; grep confirms zero stale refs and that the new extras/constants are referenced everywhere needed.
+- Code-reviewer pass: (see review results — no blockers).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Bubble expand/collapse is now an animated unfurl (size + corner + position), and the clipped boxy shadow is gone — the pill shape was refined**
 
 ### What was asked

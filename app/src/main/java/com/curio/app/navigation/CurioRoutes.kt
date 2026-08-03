@@ -1,6 +1,8 @@
 package com.curio.app.navigation
 
+import android.content.Intent
 import android.net.Uri
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.navigation.NavController
 
 /**
@@ -23,6 +25,52 @@ import androidx.navigation.NavController
  */
 object LightboxTarget {
     var uri: String? = null
+}
+
+/**
+ * Out-of-band handoff for the "Done exploring" notification action.
+ *
+ * The action's broadcast receiver tears the session down and launches
+ * MainActivity with the topic's category slug + name as extras. The extras
+ * are stashed here (like [LightboxTarget]) because MainActivity may be
+ * cold-started (onCreate) or already running (onNewIntent), and the NavHost
+ * is the only place that can navigate to the write-it-down entry page with
+ * a HOME-anchored back stack. The NavHost consumes the target once it is on
+ * a stable root route.
+ */
+object PendingEntryOpen {
+    const val EXTRA_CATEGORY_SLUG = "com.curio.app.extra.OPEN_ENTRY_CATEGORY_SLUG"
+    const val EXTRA_TOPIC_NAME = "com.curio.app.extra.OPEN_ENTRY_TOPIC_NAME"
+
+    private var categorySlug: String? = null
+    private var topicName: String? = null
+    // Compose-observable bump: capture() may run from MainActivity (outside
+    // composition), so the NavHost must recompose when it fires — a plain
+    // Int would never invalidate the LaunchedEffect key.
+    private val counter = mutableIntStateOf(0)
+
+    /** Stashes a deep-link target carried by [intent], if one is present. */
+    fun capture(intent: Intent?) {
+        val slug = intent?.getStringExtra(EXTRA_CATEGORY_SLUG)
+        val name = intent?.getStringExtra(EXTRA_TOPIC_NAME)
+        if (slug != null && name != null) {
+            categorySlug = slug
+            topicName = name
+            counter.intValue++
+        }
+    }
+
+    /** Monotonic bump — the NavHost keys its open-effect on this. */
+    val trigger: Int get() = counter.intValue
+
+    /** Consumes and returns the pending target, if one is set. */
+    fun take(): Pair<String, String>? {
+        val slug = categorySlug ?: return null
+        val name = topicName ?: return null
+        categorySlug = null
+        topicName = null
+        return slug to name
+    }
 }
 
 object CurioRoutes {
@@ -90,6 +138,13 @@ object CurioRoutes {
      * exactly the user-visible splash-nav bug.
      */
     val bottomNavRoutePrefixes: Set<String> = setOf(HOME, SPIN, CABINET)
+
+    /**
+     * Route PREFIXES that own navigation during app boot (splash → home /
+     * onboarding / crash gate). The NavHost waits for these to finish before
+     * acting on a deep-linked entry open.
+     */
+    val bootGatePrefixes: Set<String> = setOf(SPLASH, ONBOARDING, CRASH)
 }
 
 /**
