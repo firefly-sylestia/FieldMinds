@@ -112,6 +112,7 @@ import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.isCurioDarkTheme
+import com.curio.app.ui.theme.lightAccentTint
 import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
@@ -276,6 +277,15 @@ import kotlin.random.Random
  * 31. **Pastel peek cards** — the peek fills now wear the pastel card
  *     family in pastel mode (airy pale layers in light, softly deepened
  *     muted twins in dark) instead of the old lerp-toward-black mid-tones.
+ *
+ * v7.9 changes:
+ * 32. **Pastel hero ticket** — in pastel light mode a single-category
+ *     deck's hero ticket opens on a pastel-family crown (a whisper of the
+ *     pastel accent melting into the on-hue wash) instead of the
+ *     black-darkened card fill, so the front card, the pale peek cards and
+ *     the pastel spin button all read as one pastel story. Mixed decks
+ *     already carried pure pastel stops; dark mode and non-pastel keep the
+ *     classic card gradient.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -491,7 +501,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     val deckAccent = remember(deckAccents, pastelMode, darkMode) {
         CurioMixedDeck.mixedDeckAccent(deckAccents, pastel = pastelMode, dark = darkMode)
     }
-    val deckGradient = CurioMixedDeck.mixedDeckGradient(deckAccents)
 
     // ── Mixed-deck identity (v5.13) ───────────────────────────────────────
     // A multi-select deck presents as ONE "Mixed" category instead of
@@ -501,6 +510,23 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // logic keys (landed topic, filters, reveal guard, last-used prefs)
     // keep operating on the real category set.
     val isMixedDeck = remember(activeCatIds) { activeCatIds.distinct().size > 1 }
+
+    // v7.9 — pastel LIGHT mode: a single-category deck opens its hero
+    // ticket on the pastel-family crown (a whisper of the pastel accent,
+    // melting into the on-hue page wash) instead of categoryCardFill's
+    // black-darkened start, so the front card wears the same pastel story
+    // as the pale peek cards behind it (which fade toward the wash) and
+    // the pastel spin button. Mixed decks already carry pure pastel stops
+    // + pastel seams; dark mode and non-pastel keep the classic card
+    // gradient (the muted pastel twins already match the dark peeks).
+    val deckGradient = if (pastelMode && !darkMode && !isMixedDeck) {
+        listOf(
+            lerp(deckAccent, Color.White, 0.04f),
+            lightAccentTint(deckAccent, saturation = 0.20f, lightness = 0.90f)
+        )
+    } else {
+        CurioMixedDeck.mixedDeckGradient(deckAccents)
+    }
     val deckCat = remember(activeCatIds, deckAccent, activeCategory) {
         if (isMixedDeck) {
             activeCategory.copy(

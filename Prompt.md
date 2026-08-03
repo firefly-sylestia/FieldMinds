@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**Pastel hero-ticket unification (v7.9) — the Spin deck reads as one pastel story**
+
+### What was asked
+
+Follow-up suggestion clicked: “The peek cards now wear pastel card colors — should the hero ticket and spin button get the same pastel-family fill treatment for consistency?”
+
+### What was done
+
+- **Audit result**: the spin button was ALREADY consistent (it wears `deckAccent` = themed pastel with `pastelFillInk` content), and mixed decks already carried pure pastel stops + pastel seams. The ONE genuine gap: a single-category deck’s hero ticket went through `CurioGradients.cardGradient()` whose crown is `categoryCardFill(pastel)` = `lerp(pastel, Black, 0.10)` — the classic black-darkened start, while the v7.7 peeks fade toward WHITE in pastel light.
+- **Fix (SpinScreen.kt)**: `deckGradient` is now pastel-aware — in pastel LIGHT mode for a single deck it opens on `lerp(deckAccent, White, 0.04)` (a whisper of the pastel accent, L≈0.80) and melts into `lightAccentTint(deckAccent, 0.20, 0.90)` (exactly the page wash), so hero / peeks / button share one pastel family and the front card sits a touch deeper than the near peeks (0.82). Dark pastel, non-pastel, and mixed decks unchanged. `isMixedDeck` moved above `deckGradient` (was declared after); added the `lightAccentTint` import.
+- **Docs**: fastlane changelog `20260810.txt`; SpinScreen v7.9 header note; Prompt.md.
+
+### Validation
+
+- Braces balanced; code-reviewer pass; NO local Gradle build per AGENTS.md — CI validates on push. Committed & pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Material card blends (v7.8) + light-mode detail-screen gradient fix for rose/teal/sky**
 
 ### What was asked
