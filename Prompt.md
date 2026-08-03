@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**Explore service start is now crash-proof at the choke point — synchronous start failures are logged and swallowed instead of killing the app**
+
+### What was asked
+
+"Add a try/catch around ExploreSessionService.start calls so a service failure can never kill the app again — log and continue gracefully instead."
+
+### What was done
+
+**`ExploreSessionService.kt` companion — single choke point.** `start()` and `sync()` now wrap `ContextCompat.startForegroundService(...)` (including `session.toJsonString()`) in `try { ... } catch (e: Exception) { Log.e(TAG, ...) }`. Because every caller goes through the companion (CurioNavHost ×2, ExploreBootReceiver, AppPreferences toggles ×2 + sync ×2, TopicRevealScreen ×3), one guarded spot protects all of them — no per-call-site try/catch needed. Added `android.util.Log` import + companion `const val TAG`. `catch (Exception)` (not Throwable) — won't swallow Errors/OOM. The comment explicitly scopes this to SYNCHRONOUS failures (background FGS start on Android 12+, SecurityException, dead context); the async constructor-crash path is covered by the earlier OverlayOwner fix + crash-loop guard. Nothing is lost on a swallowed failure: the session is persisted and the reminder scheduled BEFORE `start()` runs, and the done-prompt still fires on return.
+
+### Validation
+
+- `check_braces.py` BALANCED; grep confirms the only `startForegroundService` calls in the module are the two guarded ones (no bypass path).
+- Code-reviewer pass: compiles (companion TAG referenced unqualified), catch(Exception) appropriate, `toJsonString()` inside the try, no caller relies on `start()` throwing, no double-catch. Applied its comment-scope nit.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Saved-entry detail: background watermark glyphs padded below the hero — no more "cut" glyphs at the gradient blend (hero card untouched)**
 
 ### What was asked

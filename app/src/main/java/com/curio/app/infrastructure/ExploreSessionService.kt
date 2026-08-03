@@ -13,6 +13,7 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -494,6 +495,7 @@ class ExploreSessionService : Service() {
     }
 
     companion object {
+        const val TAG = "ExploreSessionService"
         const val EXTRA_SESSION = "explore_session_json"
         const val ACTION_TOGGLE_PAUSE = "com.curio.app.action.TOGGLE_EXPLORE_PAUSE"
         const val ACTION_SYNC = "com.curio.app.action.SYNC_EXPLORE_SESSION"
@@ -506,11 +508,23 @@ class ExploreSessionService : Service() {
             // recovering on the crash screen — an automatic start here is what
             // kept re-triggering the crash before the user could see the logs.
             if (CurioCrashReporter.isSafeMode(context)) return
-            ContextCompat.startForegroundService(
-                context,
-                Intent(context, ExploreSessionService::class.java)
-                    .putExtra(EXTRA_SESSION, session.toJsonString())
-            )
+            // A SYNCHRONOUS start failure (background FGS start on Android
+            // 12+, a revoked permission, a dead context…) must never take the
+            // app down — log it and continue. (The async path — the service
+            // constructor throwing after a successful start — is covered by
+            // the OverlayOwner init-order fix + crash-loop guard, not by this
+            // catch.) The session is already persisted, the end-of-session
+            // reminder still fires, and the done-prompt still shows on
+            // return, so nothing is lost.
+            try {
+                ContextCompat.startForegroundService(
+                    context,
+                    Intent(context, ExploreSessionService::class.java)
+                        .putExtra(EXTRA_SESSION, session.toJsonString())
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to start explore service", e)
+            }
         }
 
         /**
@@ -522,12 +536,16 @@ class ExploreSessionService : Service() {
         fun sync(context: Context) {
             if (CurioCrashReporter.isSafeMode(context)) return
             val session = ExploreSessionStore.getActiveSession(context) ?: return
-            ContextCompat.startForegroundService(
-                context,
-                Intent(context, ExploreSessionService::class.java)
-                    .setAction(ACTION_SYNC)
-                    .putExtra(EXTRA_SESSION, session.toJsonString())
-            )
+            try {
+                ContextCompat.startForegroundService(
+                    context,
+                    Intent(context, ExploreSessionService::class.java)
+                        .setAction(ACTION_SYNC)
+                        .putExtra(EXTRA_SESSION, session.toJsonString())
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to sync explore service", e)
+            }
         }
 
         fun stop(context: Context) {
