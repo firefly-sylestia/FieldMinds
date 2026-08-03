@@ -136,6 +136,10 @@ object ExploreSessionStore {
             it.categoryId == categoryId && it.topicName == topicName
         }
         saveExplored(context, updated.take(MAX_LIST))
+        // A topic is no longer unexplored the moment it's explored — drop it
+        // from the resume list so the merged Home "Recents" never shows the
+        // same topic twice (once "Resumed", once "Unexplored").
+        if (wasUnexplored) removeUnexplored(context, categoryId, topicName)
     }
 
     fun removeExplored(context: Context, categoryId: CategoryId, topicName: String) {

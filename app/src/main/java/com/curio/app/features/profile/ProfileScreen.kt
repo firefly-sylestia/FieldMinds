@@ -21,10 +21,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -37,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -51,7 +57,6 @@ import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.infrastructure.CurioCrashReporter
@@ -72,11 +77,11 @@ import com.curio.app.ui.theme.themedAccent
 /**
  * Profile hub — identity, stats, and a single proper Settings entry.
  *
- * Personalization settings (theme, audio quality, reminders, categories,
- * backup) live in the Settings screen; Profile keeps only a hero, glanceable
- * stats, lanes/activity, and a Settings card that opens that screen. Every
- * row that looks interactive either opens a dialog or navigates; informational
- * values are rendered as text instead of dead buttons.
+ * Personalization settings (audio quality, reminders, categories, backup)
+ * live in the Settings screen; Profile keeps a hero, glanceable stats, lanes,
+ * an inline Theme card (style + mode pickers), and a Settings card that opens
+ * that screen. Every row that looks interactive either opens a dialog or
+ * navigates; informational values are rendered as text instead of dead buttons.
  */
 @Composable
 fun ProfileScreen(navController: NavController) {
@@ -87,13 +92,18 @@ fun ProfileScreen(navController: NavController) {
     var nameInput by remember(displayName) { mutableStateOf(displayName) }
     var crashCount by remember { mutableIntStateOf(0) }
     var totalSaved by remember { mutableIntStateOf(0) }
-    var recentEntries by remember { mutableStateOf<List<CurioEntry>>(emptyList()) }
     var categoryCounts by remember { mutableStateOf<Map<CategoryId, Int>>(emptyMap()) }
+    // Theme pickers — refreshed on resume so external changes (Settings)
+    // reflect here too. The Theme card writes prefs + local state directly.
+    var themeMode by remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
+    var themeStyle by remember { mutableStateOf(AppPreferences.getThemeStyle(context)) }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 displayName = AppPreferences.getDisplayName(context)
+                themeMode = AppPreferences.getThemeMode(context)
+                themeStyle = AppPreferences.getThemeStyle(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -104,7 +114,6 @@ fun ProfileScreen(navController: NavController) {
         runCatching {
             val entries = CurioRepositoryHolder.repo.getAll()
             totalSaved = entries.size
-            recentEntries = entries.take(5)
             categoryCounts = entries.groupingBy { it.topic.categoryId }.eachCount()
         }.onFailure { android.util.Log.e("ProfileScreen", "Failed to load entries", it) }
         crashCount = CurioCrashReporter.getCrashHistory(context).size
@@ -189,7 +198,6 @@ fun ProfileScreen(navController: NavController) {
                 StatsStrip(
                     streak = streakDays,
                     saved = totalSaved,
-                    recent = recentEntries.size,
                     lanes = CurioCategories.visible.size
                 )
             }
@@ -207,6 +215,21 @@ fun ProfileScreen(navController: NavController) {
                     onOpenSettings = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
                 )
             }
+            item {
+                ThemeCard(
+                    themeMode = themeMode,
+                    themeStyle = themeStyle,
+                    onModeChange = { mode ->
+                        themeMode = mode
+                        AppPreferences.setThemeMode(context, mode)
+                    },
+                    onStyleChange = { style ->
+                        themeStyle = style
+                        AppPreferences.setThemeStyle(context, style)
+                    },
+                    onTintChange = { enabled -> AppPreferences.setTintWashEnabled(context, enabled) }
+                )
+            }
             if (categoryCounts.isNotEmpty()) {
                 item {
                     CategoriesCard(
@@ -215,14 +238,7 @@ fun ProfileScreen(navController: NavController) {
                     )
                 }
             }
-            if (recentEntries.isNotEmpty()) {
-                item {
-                    RecentActivityCard(
-                        entries = recentEntries,
-                        onEntryClick = { navController.navigate(CurioRoutes.entryDetail(it)) { launchSingleTop = true } }
-                    )
-                }
-            }
+
             item {
                 DeveloperCard(
                     crashCount = crashCount,
@@ -375,11 +391,10 @@ private fun ProfileHero(name: String, streakDays: Int, onEditName: () -> Unit) {
 }
 
 @Composable
-private fun StatsStrip(streak: Int, saved: Int, recent: Int, lanes: Int) {
+private fun StatsStrip(streak: Int, saved: Int, lanes: Int) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         ProfileStat(Modifier.weight(1f), CurioIcons.LocalFire, "$streak", "Streak", CurioColors.CoralBlush)
         ProfileStat(Modifier.weight(1f), CurioIcons.Inventory2, "$saved", "Saved", CurioColors.Sage)
-        ProfileStat(Modifier.weight(1f), CurioIcons.History, "$recent", "Recent", CurioColors.Lilac)
         ProfileStat(Modifier.weight(1f), CurioIcons.Palette, "$lanes", "Lanes", CurioColors.Teal)
     }
 }
@@ -471,7 +486,7 @@ private fun SettingsCard(onOpenSettings: () -> Unit) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text("Settings", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
                     Text(
-                        "Theme · reminders · audio · backup",
+                        "Reminders · audio · backup",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -517,39 +532,7 @@ private fun CategoriesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) 
     }
 }
 
-@Composable
-private fun RecentActivityCard(entries: List<CurioEntry>, onEntryClick: (String) -> Unit) {
-    CurioSettingsCard {
-        CurioCardHeader(CurioIcons.History, "Recent activity", "Your latest captures")
-        Spacer(Modifier.height(4.dp))
-        entries.forEachIndexed { index, entry ->
-            RecentEntryRow(entry, { onEntryClick(entry.id) })
-            if (index < entries.lastIndex) CurioSettingsDivider()
-        }
-    }
-}
 
-@Composable
-private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
-    val category = CurioCategories.byId(entry.topic.categoryId)
-    Surface(onClick = onClick, color = Color.Transparent, modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                modifier = Modifier.size(40.dp).clip(RoundedCornerShape(13.dp)).background(category.themedAccent().copy(alpha = 0.16f)),
-                contentAlignment = Alignment.Center
-            ) { CurioIcon(category.iconGlyph, null, tint = category.categoryInk(), size = 20.dp) }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(entry.topic.name, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text("${category.displayName} · ${capturedLabel(entry)}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            CurioForwardArrow(tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 17.dp)
-        }
-    }
-}
 
 @Composable
 private fun DeveloperCard(
@@ -572,17 +555,132 @@ private fun DeveloperCard(
 
 
 
+/**
+ * Inline theme switcher — style (Curio/AMOLED/Material) + Light/Dark/System
+ * mode pickers + the category-tint toggle, mirroring Settings → Appearance
+ * so the theme can be changed right on Profile. Writes prefs immediately so
+ * [CurioTheme] recomposes app-wide.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ThemeCard(
+    themeMode: String,
+    themeStyle: String,
+    onModeChange: (String) -> Unit,
+    onStyleChange: (String) -> Unit,
+    onTintChange: (Boolean) -> Unit
+) {
+    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
+    val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
+    val themeStyles = listOf(
+        AppPreferences.THEME_STYLE_DEFAULT,
+        AppPreferences.THEME_STYLE_AMOLED,
+        AppPreferences.THEME_STYLE_MATERIAL
+    )
+    val currentStyleIndex = themeStyles.indexOf(themeStyle).coerceAtLeast(0)
+    val styleLabel = listOf("Curio", "AMOLED", "Material")[currentStyleIndex]
+    // AMOLED is always dark — the Light/Dark/System pick is ignored while it's on.
+    val themePickerEnabled = themeStyle != AppPreferences.THEME_STYLE_AMOLED
+
+    CurioSettingsCard {
+        CurioCardHeader(CurioIcons.DarkMode, "Theme", "Applies instantly")
+        // ── Theme style — Curio (default) / AMOLED / Material ──
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(CurioIcons.AutoAwesome, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Theme style", style = MaterialTheme.typography.bodyLarge)
+                Text(styleLabel, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        Spacer(Modifier.height(2.dp))
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            listOf("Curio", "AMOLED", "Material").forEachIndexed { index, label ->
+                SegmentedButton(
+                    selected = index == currentStyleIndex,
+                    onClick = { onStyleChange(themeStyles[index]) },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
+                ) {
+                    Text(label, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
+        CurioSettingsDivider()
+        // ── Light / Dark / System — ignored while AMOLED is active ──
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp)
+                .alpha(if (themePickerEnabled) 1f else 0.4f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(CurioIcons.DarkMode, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Theme mode", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    if (themePickerEnabled) listOf("Light", "Dark", "System")[currentThemeIndex]
+                    else "AMOLED is always dark",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        Spacer(Modifier.height(2.dp))
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            listOf("Light", "Dark", "System").forEachIndexed { index, label ->
+                SegmentedButton(
+                    selected = index == currentThemeIndex,
+                    onClick = { onModeChange(themes[index]) },
+                    enabled = themePickerEnabled,
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = 3)
+                ) {
+                    Text(label, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
+        CurioSettingsDivider()
+        // ── Category tint toggle — off restores the plain theme background.
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Category tint", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    when {
+                        !AppPreferences.tintWashEffective() &&
+                            themeStyle == AppPreferences.THEME_STYLE_DEFAULT -> "Plain theme background"
+                        !AppPreferences.tintWashEffective() -> "Off in the $styleLabel theme"
+                        else -> "Colorful page backgrounds"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Switch(
+                checked = AppPreferences.tintWashEffective(),
+                onCheckedChange =
+                    if (themeStyle == AppPreferences.THEME_STYLE_DEFAULT) {
+                        // Double-brace: the outer block carries an inner
+                        // lambda so `it` resolves as the arg.
+                        { onTintChange(it) }
+                    } else null
+            )
+        }
+    }
+}
+
 private fun taglineForStreak(streakDays: Int): String = when {
     streakDays >= 30 -> "Marathon explorer · beautifully consistent."
     streakDays >= 7 -> "A strong curiosity streak is underway."
     streakDays > 0 -> "Keep the spark going today."
     else -> "Stay curious. There is always more to find."
-}
-
-private fun capturedLabel(entry: CurioEntry): String = when (entry.capturedAtDaysAgo) {
-    0 -> "today"
-    1 -> "yesterday"
-    else -> "${entry.capturedAtDaysAgo}d ago"
 }
 
 private val levelThresholds = listOf(0, 1, 5, 15, 30, 60, 100, 250, 500)

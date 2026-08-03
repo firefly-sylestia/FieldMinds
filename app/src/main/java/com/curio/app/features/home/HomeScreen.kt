@@ -114,8 +114,9 @@ import java.util.Calendar
  *      Tapping sets the active category.
  *   6. **Saved** — bookmarked quotes + pinned topics (hidden when empty),
  *      each row tappable through to its entry / topic.
- *   7. **Recently explored** — header row + 2-col grid of recent entry
- *      cards, or a beautiful empty-state card prompting the first spin.
+ *   7. **Recents** — explored topics, unexplored topics (tagged
+ *      "Unexplored"), and the latest saved entries in one list, or a
+ *      beautiful empty-state card prompting the first spin.
  *   8. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
  *      card suggesting the user try a daily shuffle reminder, navigating to
  *      Settings.
@@ -562,7 +563,7 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(Modifier.height(20.dp))
 
-            // ── 7. Recently explored — renders all at once (no stagger) ──
+            // ── 7. Recents — explored + unexplored topics and recent entries ──
             val exploredTopics = ExploreSessionStore.recentlyExploredState
             val unexploredTopics = ExploreSessionStore.recentlyUnexploredState
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -572,7 +573,7 @@ fun HomeScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Recently explored",
+                        "Recents",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -592,7 +593,7 @@ fun HomeScreen(navController: NavController) {
                 }
                 Spacer(Modifier.height(10.dp))
 
-                if (recentEntries.isEmpty() && exploredTopics.isEmpty()) {
+                if (recentEntries.isEmpty() && exploredTopics.isEmpty() && unexploredTopics.isEmpty()) {
                     FirstTimeEmpty(
                         surface = MaterialTheme.colorScheme.surfaceContainerLow,
                         onPickCategory = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
@@ -619,6 +620,22 @@ fun HomeScreen(navController: NavController) {
                                 }
                             )
                         }
+                        // Unexplored topics now live INSIDE Recents, tagged —
+                        // no separate section; tap resumes the reveal.
+                        unexploredTopics.forEach { unexplored ->
+                            val category = CurioCategories.byId(unexplored.categoryId)
+                            ExploreTopicRow(
+                                category = category,
+                                topicName = unexplored.topicName,
+                                tag = "Unexplored",
+                                subtitle = "Left without exploring · tap to resume",
+                                onClick = {
+                                    navController.navigate(
+                                        CurioRoutes.revealFor(unexplored.categoryId.routeSlug, unexplored.topicName)
+                                    ) { launchSingleTop = true }
+                                }
+                            )
+                        }
                         recentEntries.forEach { entry ->
                             RecentEntryRow(
                                 entry = entry,
@@ -630,36 +647,6 @@ fun HomeScreen(navController: NavController) {
 
                 // Add breathing room before the bottom card / nav bar
                 Spacer(Modifier.height(12.dp))
-            }
-
-            // ── 7b. Recently unexplored — topics the user left without ──
-            //     exploring, so Home offers a way to resume them.
-            if (unexploredTopics.isNotEmpty()) {
-                Spacer(Modifier.height(20.dp))
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    Text(
-                        "Recently unexplored",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        unexploredTopics.forEach { unexplored ->
-                            val category = CurioCategories.byId(unexplored.categoryId)
-                            ExploreTopicRow(
-                                category = category,
-                                topicName = unexplored.topicName,
-                                subtitle = "Left without exploring · tap to resume",
-                                onClick = {
-                                    navController.navigate(
-                                        CurioRoutes.revealFor(unexplored.categoryId.routeSlug, unexplored.topicName)
-                                    ) { launchSingleTop = true }
-                                }
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(12.dp))
-                }
             }
 
             // ── 8. Reminder nudge (when reminders off) ─────────────────

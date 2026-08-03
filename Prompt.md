@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Home "Recents" merge, Profile gets an inline Theme card (recent activity removed), mixed-deck dark wash deepened**
+
+### What was asked
+
+1. Home: remove the "Recently unexplored" section; rename "Recently explored" to "Recents"; show the unexplored topics INSIDE Recents with a tag.
+2. Profile: remove recent activity; add a theme change (style/mode) to the Profile page.
+3. The mixed color background tints look bad in dark mode.
+
+### What was done
+
+- **`HomeScreen.kt`** — section 7b ("Recently unexplored") deleted; section 7 header renamed to "Recents"; unexplored topics now render inside Recents via the existing `ExploreTopicRow` with `tag = "Unexplored"` (tap still resumes the reveal), after the explored rows and before the Cabinet entries. Empty-state condition extended to cover the unexplored list too. Section doc comment updated.
+- **`ProfileScreen.kt`** — removed `RecentActivityCard` / `RecentEntryRow` / `capturedLabel` / `recentEntries` (+ the `CurioEntry` import) and the "Recent" stat from `StatsStrip` (its data source was the activity list); SettingsCard subtitle now "Reminders · audio · backup". NEW inline `ThemeCard` (right below the Settings card): Curio/AMOLED/Material style segmented row + Light/Dark/System mode segmented row (disabled while AMOLED) + Category tint switch — mirrors Settings → Appearance, writes prefs immediately so `CurioTheme` recomposes app-wide; `themeMode`/`themeStyle` local state refreshed in the existing ON_RESUME observer. New imports: SegmentedButton(+Defaults)/SingleChoiceSegmentedButtonRow/Switch/alpha/ExperimentalMaterial3Api.
+- **`ExploreSession.kt`** — `recordExplored` now also calls `removeUnexplored` when the topic was previously unexplored, so a resumed topic can never sit in BOTH lists (the merged Recents would otherwise show it twice: once "Resumed", once "Unexplored"). Call sites already did this; now it's guaranteed at the data layer.
+- **`CurioColors.kt` / `CurioMixedDeck.mixedDeckWash`** — dark branch changed from `lerp(background, blend, 0.70f)` (a loud saturated banner, e.g. a vivid purple page) to `lerp(background, lerp(blend, Color.Black, 0.35f), 0.45f)` — a deep, muted jewel tone; each mix stays clearly distinct (deep plum vs maroon vs jade vs violet) while reading as a tasteful dark background. Light mode untouched.
+
+### Validation
+
+- Node color-math over all 15 pair + 20 triple curated blends: OLD dark wash was saturated mid-tones (#78249D, #891A15, #A71135, #7218BA…) → NEW is deep muted (#37164C, #3E1213, #4A0E21, #341158…), all distinct per mix.
+- Code-reviewer pass: imports verified (no orphaned CurioEntry/TextOverflow/etc.), the double-brace Switch idiom matches Settings (CI-postmortem rule), ON_RESUME refresh correct. Reviewer's one real catch — the resume-duplicate — fixed at the data layer (see above).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Spin page Categories/Filter pills — icon+label centered in the box, label text bumped 14→16sp (text only)**
 
 ### What was asked

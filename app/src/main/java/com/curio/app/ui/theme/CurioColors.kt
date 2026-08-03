@@ -272,10 +272,13 @@ object CurioMixedDeck {
         val background = MaterialTheme.colorScheme.background
         if (!AppPreferences.tintWashEffective()) return background
         return if (isCurioDarkTheme()) {
-            // The blend itself over midnight, darkened only enough that the
-            // near-white ink and paper cards read — the page plainly wears
-            // the mix color, deep and vivid.
-            lerp(background, blend, 0.70f)
+            // A deep, muted jewel tone: the blend darkened toward black
+            // (~35%) and mixed at a moderate strength (~45%) over midnight.
+            // The old 70% PURE blend rendered as a loud, saturated banner
+            // (e.g. a vivid purple page) in dark mode; this keeps each mix's
+            // hue clearly distinguishable while reading as a tasteful dark
+            // background the white ink and paper cards can sit on.
+            lerp(background, lerp(blend, Color.Black, 0.35f), 0.45f)
         } else {
             // A pastel twin of the blend over cream at high strength — the
             // hue is unmistakable per mix while staying light enough for the
