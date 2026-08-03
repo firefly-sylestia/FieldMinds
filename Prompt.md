@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Saved-entry hero blends seamlessly into the page — square edges, no fade scrim**
+
+### What was asked
+
+The saved detail (EntryDetail) screen's hero banner should blend better into the screen background, and it should NOT have rounded bottom edges (they looked weird).
+
+### What was done
+
+- **EntryDetailScreen.kt** — the hero banner:
+  - Removed the `RoundedCornerShape(bottomStart/bottomEnd = 28dp)` clip → the banner is now a square, edge-to-edge header (no rounded card look).
+  - Replaced the shared `CurioGradients.cardGradient(...)` (which ends ~70% accent, far from the page color) with a custom 3-stop vertical gradient whose FINAL stop is the page's exact category wash color: `0.0 → categoryCardFill(themedAccent)`, `0.90 → lerp(start, wash, 0.18)`, `1.0 → wash`. The wash-out only begins below the title + frosted-bar zone, so white-on-glass stays legible even for two-line titles; the seam is pixel-identical (invisible).
+  - Deleted the old 36dp bottom fade overlay Box (it was clipped by the rounded corners — the corner notches were the "weird" look). The gradient itself now dissolves into the page.
+  - Hoisted `val wash = cat.categoryBackgroundWash()` once (next to `cat`) and shared it between the page background and the hero's gradient end, so the seam matches by construction. Added the `androidx.compose.ui.graphics.lerp` import.
+
+### Validation
+
+- Brace/paren balance verified (node script; 295/295 `{}`, 962/962 `()`).
+- Code-reviewer pass: `androidx.compose.ui.graphics.lerp` resolves, `categoryCardFill` is public, gradient stays rich (82% accent) through the 0.90 stop → frosted bar legible for 1- and 2-line titles in light/dark/AMOLED/Material; applied its DRY suggestion (shared `wash` val).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Universal 'How did it make you feel?' mood row — right above the capture options, animated**
 
 ### What was asked

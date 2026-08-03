@@ -64,6 +64,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.zIndex
@@ -172,6 +173,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
     val resolvedEntry = entry ?: return
     val cat = CurioCategories.byId(resolvedEntry.topic.categoryId)
+    // The page's category tint wash — the saved-entry page wears the entry's
+    // wash over the theme background (same as Spin / Save / Cabinet), so a
+    // capture from the Cabinet reads in its category's color story instead of
+    // a plain patch. Hoisted once and shared with the hero's gradient so the
+    // hero's final stop is, by construction, exactly the page color behind it.
+    val wash = cat.categoryBackgroundWash()
     // v5.8 — saveable so rotation doesn't close the menu/dialog unexpectedly.
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
     var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
@@ -179,11 +186,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            // Category tint wash — the saved-entry page wears the entry's
-            // category wash over the theme background (same as Spin / Save /
-            // Cabinet), so a capture from the Cabinet reads in its category's
-            // color story instead of a plain patch.
-            .background(cat.categoryBackgroundWash())
+            .background(wash)
     ) {
         // Muted category-glyph watermark behind the content — the same
         // backdrop language as Home / Spin / the mood boards, so a saved
@@ -197,15 +200,24 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // ── Expressive hero banner — one composed card: category glyph
         // watermark with the topic title UNDER it, both on the gradient,
         // plus a frosted (blurred-glass) date + type bar below the title.
+        //
+        // The banner runs edge-to-edge (square corners — no rounded card
+        // look) and its gradient's FINAL stop is the page's exact category
+        // wash color ([wash]), so the hero's lower edge dissolves seamlessly
+        // into the background with no visible seam. The wash-out only begins
+        // below the title + frosted bar zone, so white-on-glass stays
+        // legible even for two-line titles.
+        val heroStart = CurioGradients.categoryCardFill(cat.themedAccent())
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(380.dp)
-                // Rounded bottom corners — the hero card curves into the
-                // page instead of ending on a hard horizontal edge.
-                .clip(RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp))
                 .background(
-                    Brush.verticalGradient(CurioGradients.cardGradient(cat.themedAccent()))
+                    Brush.verticalGradient(
+                        0.00f to heroStart,
+                        0.90f to lerp(heroStart, wash, 0.18f),
+                        1.00f to wash
+                    )
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -380,21 +392,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 }
             }
 
-            // ── Bottom fade — the hero's lower edge dissolves into the
-            //     page's category wash so the card merges smoothly with the
-            //     content below (no hard gradient cutoff line).
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(36.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(
-                        Brush.verticalGradient(
-                            0f to Color.Transparent,
-                            1f to cat.categoryBackgroundWash()
-                        )
-                    )
-            )
         }
 
         // ── Topic meta — the title now lives INSIDE the hero above, so
