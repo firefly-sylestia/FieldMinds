@@ -1493,3 +1493,34 @@ code-reviewer-deepseek-flash: clean pass (two rounds). Verified no declarations 
 ### Follow-ups / notes
 - Next per user: note-paper COLORS (new palette per style) — the `NotePaperStyle` field is already persisted, so a color companion is a clean follow-up.
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+**Creator bylines on the Topic Reveal hero card + Hollywood/Bollywood film filters + iconic Bollywood content batch**
+
+### What was asked
+
+1. Show the artist on the hero card of the topic reveal screen; same for books (author) — "you can suggest more".
+2. Add Hollywood and Bollywood to the films and directors filters.
+
+### What was changed
+
+**Data (`scripts/enrich_topics.py` — new, idempotent; re-run safe)**
+- Added an optional `byline` field to the topic schema and populated it: albums.json (448/448 — artist derived from the `album-{artist-slug}-…` id via a curated slug→name map + 15 per-album overrides for ambiguous slugs + the `album-the-…` 3rd-segment rule), books.json (148/149 — curated author map; `book-the-new-naturals-2023-173` intentionally unmapped), films.json (130/130 — curated director map incl. the new Bollywood batch), artworks.json (56/56 — painter parsed from the trailing " by X" in the name).
+- Films + Directors: replaced the plain `American` origin tag with `Hollywood` (66 films, 41 directors — curated by US-studio production). `SpinScreen.NationalityTags` gained `Hollywood` + `Bollywood` so both bucket into the filter sheet's Origin group (alongside British / French / Korean / Indian…).
+- Appended a curated iconic Bollywood batch (all tier 1, full teasers/instructions): 10 films (Sholay, Dilwale Dulhania Le Jayenge, Lagaan, 3 Idiots, Dangal, Pyaasa, Mughal-e-Azam, Mother India, Deewaar, Shree 420) + 9 directors (Raj Kapoor, Guru Dutt, Yash Chopra, Ramesh Sippy, Rajkumar Hirani, Sanjay Leela Bhansali, Anurag Kashyap, Karan Johar, Mehboob Khan).
+- JSON written with literal UTF-8 + indent=2 (matches the checked-in formatting — first pass used ensure_ascii and churned 2,300+ album lines; fixed). Diff is now 1,385 insertions / 141 deletions (the deletions are just the swapped `American` tags).
+
+**Kotlin**
+- `CurioTopic.kt` — new trailing `val byline: String = ""` (defaulted → zero breakage for TopicJsonLoader/CaptureEntity named-arg constructors).
+- `TopicJsonLoader.kt` — reads `obj.optString("byline", "")`.
+- `TopicRevealScreen.kt` HeroCard — new byline pill bottom-start (mirrors the subtype pill bottom-end): `Artist · The Beatles` / `Author · George Orwell` / `Director · Christopher Nolan` / `Painter · Vincent van Gogh` with the Person glyph, shown only when byline + a label exist.
+- `SpinScreen.kt` — `Hollywood`/`Bollywood` added to `NationalityTags`.
+
+### Review
+- `scripts/validate_topics.py`: 470 errors are ALL pre-existing album instruction-length violations under the strict local 280-char limit (identical on baseline HEAD via git stash; the Gradle task allows 450) — zero errors mention the new content or byline. Cross-file id uniqueness passes.
+- code-reviewer pass (below) on the Kotlin changes: no new imports required (CategoryId, CurioIcons.Person, TextOverflow, Alignment already imported); byline is a pure display read.
+
+### Follow-ups / notes
+- Natural next step if wanted: `byline` for discoveries (discoverer, e.g. Penicillin → Alexander Fleming) — ~150-entry curated map, same script pattern.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.

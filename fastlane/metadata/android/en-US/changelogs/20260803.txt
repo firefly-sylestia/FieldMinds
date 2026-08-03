@@ -4,3 +4,5 @@
 • Bold/italic/highlight and paper-style icons are clearly visible in dark and AMOLED mode
 • Exploring shows a floating timer bubble that hovers over other apps — pause, stop, or hide it, and Curio asks for the Display over other apps permission in setup and when you explore
 • Optional live explore notification with Pause/Resume controls (Settings → Notifications), now tinted and more detailed
+• Topic cards show the creator — Artist · The Beatles, Author · George Orwell, Director · Christopher Nolan, Painter · Vincent van Gogh
+• Film filters now include Hollywood and Bollywood, plus a new batch of iconic Bollywood films and directors

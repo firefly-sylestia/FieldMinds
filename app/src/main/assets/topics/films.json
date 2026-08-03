@@ -6,6 +6,7 @@
     "name": "Citizen Kane (1941)",
     "teaser": "26-year-old Welles made it; it cost $800K; it won one Oscar; it changed cinema's grammar. Five reporters chasing one word — \"Rosebud\" — and missing what's actually in the frame.",
     "imageUrl": "",
+    "byline": "Orson Welles",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Citizen Kane (1941) end-to-end",
@@ -14,8 +15,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "1940s"
+      "1940s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -26,6 +27,7 @@
     "name": "Vertigo (1958)",
     "teaser": "Hitchcock lost the Best Picture Oscar to Gigi for this; 24 years later Sight & Sound voters ranked it greatest film ever. Scottie's not a detective — he's a man unable to look.",
     "imageUrl": "",
+    "byline": "Alfred Hitchcock",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Vertigo (1958) end-to-end",
@@ -34,8 +36,8 @@
     },
     "tags": [
       "Thriller",
-      "American",
-      "1950s"
+      "1950s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -46,6 +48,7 @@
     "name": "2001: A Space Odyssey (1968)",
     "teaser": "Warner Bros. wanted it cut by 40 minutes; Kubrick locked the director's cut in a vault and walked away. The film's first 25 minutes have no dialogue. The last 25 have almost none either.",
     "imageUrl": "",
+    "byline": "Stanley Kubrick",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "2001: A Space Odyssey (1968) — first 30 minutes",
@@ -55,7 +58,8 @@
     "tags": [
       "Sci-Fi",
       "British-American",
-      "1960s"
+      "1960s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -66,6 +70,7 @@
     "name": "Casablanca (1942)",
     "teaser": "Shot in 1942 with an unfinished script; cast didn't know how it ended. Bogart's famous line \"Here's looking at you, kid\" was an ad-lib. The film is a string of unfinishings.",
     "imageUrl": "",
+    "byline": "Michael Curtiz",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Casablanca (1942) end-to-end",
@@ -74,8 +79,8 @@
     },
     "tags": [
       "Romance",
-      "American",
-      "1940s"
+      "1940s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -86,6 +91,7 @@
     "name": "The Godfather (1972)",
     "teaser": "Paramount didn't want Brando; he got the role by stuffing tissues in his jowls during the audition. Coppolla was 31. The film taught Hollywood that cinema-book fidelity wasn't necessary.",
     "imageUrl": "",
+    "byline": "Francis Ford Coppola",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Godfather (1972) end-to-end",
@@ -94,8 +100,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -106,6 +112,7 @@
     "name": "The Godfather Part II (1974)",
     "teaser": "Coppola restructured the sequel as two parallel timelines, neither a flashback to the original. It's the first major American film to run two narratives simultaneously without telling the audience.",
     "imageUrl": "",
+    "byline": "Francis Ford Coppola",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Godfather Part II (1974) end-to-end",
@@ -114,8 +121,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -126,6 +133,7 @@
     "name": "Apocalypse Now (1979)",
     "teaser": "Coppola shot in the Philippines during a typhoon, Martin Sheen had a heart attack, Brando arrived overweight and unprepared. Final cost: $30M on a $12M budget. The film opened to a 6-minute ovation at Cannes.",
     "imageUrl": "",
+    "byline": "Francis Ford Coppola",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Apocalypse Now (1979) — the Kilgore sequence, end-to-end",
@@ -134,8 +142,8 @@
     },
     "tags": [
       "War",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -146,6 +154,7 @@
     "name": "Raging Bull (1980)",
     "teaser": "Scorsese shot it in black and white because color tests looked 'wrong.' De Niro gained 60 pounds to play the older LaMotta. Editing is by Thelma Schoonmaker, who'd stay his editor for 40 years.",
     "imageUrl": "",
+    "byline": "Martin Scorsese",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Raging Bull (1980) — ring entrances, two opening fights",
@@ -154,8 +163,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -166,6 +175,7 @@
     "name": "Taxi Driver (1976)",
     "teaser": "Scorsese award-winning screenplay, then-unknown Jodie Foster, Bernard Herrmann's last film score. It opens with legalized prostitution and ends with a vigilante shootout — the same loneliness throughout.",
     "imageUrl": "",
+    "byline": "Martin Scorsese",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Taxi Driver (1976) — \"Are you talkin' to me?\" sequence",
@@ -174,8 +184,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -186,6 +196,7 @@
     "name": "Goodfellas (1990)",
     "teaser": "The film Scorsese killed two characters inside the first 20 minutes — Henry Hill said the test of a mob movie is whether the protagonist dies by the end. He's the narrator, not the protagonist.",
     "imageUrl": "",
+    "byline": "Martin Scorsese",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Goodfellas (1990) — Copacabana long take (3 min)",
@@ -194,8 +205,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -206,6 +217,7 @@
     "name": "Pulp Fiction (1994)",
     "teaser": "Tarantino wrote 500 pages of script and shot a film with 9 chapters in non-chronological order. Travolta was 'washed up' by the studio when he was cast; the film revived his career and the studio never had the same control.",
     "imageUrl": "",
+    "byline": "Quentin Tarantino",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Pulp Fiction (1994) end-to-end",
@@ -214,8 +226,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -226,6 +238,7 @@
     "name": "Bicycle Thieves (1948)",
     "teaser": "Italian neorealist masterpiece shot on the streets of Rome with nonprofessional actors. The bike is stolen two hours in; the rest of the film is just a father chasing it.",
     "imageUrl": "",
+    "byline": "Vittorio De Sica",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Bicycle Thieves (1948) end-to-end",
@@ -246,6 +259,7 @@
     "name": "8½ (1963)",
     "teaser": "Fellini's 8.5th film: a director who can't finish a film makes a film about not being able to finish a film. The opening credits roll over a traffic jam.",
     "imageUrl": "",
+    "byline": "Federico Fellini",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "8½ (1963) — the opening credits sequence (8 min)",
@@ -266,6 +280,7 @@
     "name": "La Dolce Vita (1960)",
     "teaser": "Marcello is a gossip columnist in Rome; Fellini casts Anita Ekberg in a Trevi Fountain scene that became one of cinema's most quoted single shots.",
     "imageUrl": "",
+    "byline": "Federico Fellini",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "La Dolce Vita (1960) — Trevi Fountain sequence (5 min)",
@@ -286,6 +301,7 @@
     "name": "Tokyo Story (1953)",
     "teaser": "Ozu made a film about a family that doesn't really think much of each other. His camera sits on a tatami mat; nothing dramatic happens for an hour; then it ends.",
     "imageUrl": "",
+    "byline": "Yasujirō Ozu",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Tokyo Story (1953) — first 30 min only",
@@ -306,6 +322,7 @@
     "name": "Seven Samurai (1954)",
     "teaser": "Toshiro Mifune improvised half his performance. Kurosawa's film changed the western (and the superhero team-up film) on contact. The opening 30 minutes alone became a teaching tool for action cinema decades later.",
     "imageUrl": "",
+    "byline": "Akira Kurosawa",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Seven Samurai (1954) — opening farmer-marshal scene (15 min)",
@@ -326,6 +343,7 @@
     "name": "Persona (1966)",
     "teaser": "Bergman's two-woman film about two faces gradually merging. The famous 'fused-face' shot is one of cinema's strangest — and one of cinema's earliest uses of a split-screen mirror.",
     "imageUrl": "",
+    "byline": "Ingmar Bergman",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Persona (1966) — final 30 min",
@@ -346,6 +364,7 @@
     "name": "Stalker (1979)",
     "teaser": "Tarkovsky shot it on the same Estonian peat-bog location over and over for two years until the moss was right. Three men looking for a room that grants wishes — but mostly sitting around waiting.",
     "imageUrl": "",
+    "byline": "Andrei Tarkovsky",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Stalker (1979) — opening (30 min)",
@@ -366,6 +385,7 @@
     "name": "Breathless (À bout de souffle) (1960)",
     "teaser": "Godard's first feature shot on location in Paris with a borrowed camera. The jump cuts weren't errors — they were a deliberate break with cinema's promise of continuity.",
     "imageUrl": "",
+    "byline": "Jean-Luc Godard",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Breathless (À bout de souffle) (1960) end-to-end",
@@ -386,6 +406,7 @@
     "name": "The 400 Blows (1959)",
     "teaser": "Truffaut's first film — shot on real street in Paris with a 14-year-old lead who had been in juvenile detention. The famous last shot is a freeze-frame at the sea, the first freeze frame in cinema history.",
     "imageUrl": "",
+    "byline": "François Truffaut",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The 400 Blows (1959) end-to-end",
@@ -406,6 +427,7 @@
     "name": "Annie Hall (1977)",
     "teaser": "Woody Allen's romantic comedy was structurally set in a therapy session. The most-quoted 'Chick Manhattan' scene was a last-minute re-write Allen and his co-writer agreed to because the original wasn't funny.",
     "imageUrl": "",
+    "byline": "Woody Allen",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Annie Hall (1977) — opening split-screen scene (5 min)",
@@ -414,8 +436,8 @@
     },
     "tags": [
       "Romance",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -426,6 +448,7 @@
     "name": "Jaws (1975)",
     "teaser": "The mechanical shark barely worked; Spielberg shot much of the film without showing the shark at all. The film's title card — a single note of John Williams's theme — invented the modern summer-blockbuster.",
     "imageUrl": "",
+    "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Jaws (1975) — \"Here's to swimming with bow-legged women\" scene (5 min)",
@@ -434,8 +457,8 @@
     },
     "tags": [
       "Thriller",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -446,6 +469,7 @@
     "name": "Star Wars (1977)",
     "teaser": "20th Century Fox didn't want to release it; theaters hated it; the merchandising contract was sold for $500K to a small toy company. The film opened to $1.6M opening weekend, then kept earning money for 18 months.",
     "imageUrl": "",
+    "byline": "George Lucas",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Star Wars (1977) — opening crawl and Mos Eisley sequence (15 min)",
@@ -454,8 +478,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -466,6 +490,7 @@
     "name": "Monty Python and the Holy Grail (1975)",
     "teaser": "Originally funded by Led Zeppelin and Atlantic Records, with no film budget for the on-screen violence, the Pythons used coconut halves as horse hooves. Shot on a relative's estate in Scotland.",
     "imageUrl": "",
+    "byline": "Terry Gilliam & Terry Jones",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Monty Python and the Holy Grail (1975) end-to-end",
@@ -486,6 +511,7 @@
     "name": "The Third Man (1949)",
     "teaser": "Reed shot in post-war Vienna. The famous cuckoo-clock speech is one monologue; the famous zither score (Anton Karas) was the only film score for years that outsold the film outside Europe.",
     "imageUrl": "",
+    "byline": "Carol Reed",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Third Man (1949) end-to-end",
@@ -506,6 +532,7 @@
     "name": "Jules and Jim (1962)",
     "teaser": "Truffaut's triangular love story set across two world wars, with Truffaut's own narration. Jeanne Moreau's voiceover defines the film as much as her eyes — the film doesn't show you her face often until it matters.",
     "imageUrl": "",
+    "byline": "François Truffaut",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Jules and Jim (1962) end-to-end",
@@ -526,6 +553,7 @@
     "name": "Hiroshima Mon Amour (1959)",
     "teaser": "Resnais shot a documentary-style love story between a French actress and a Japanese architect in post-war Hiroshima. The screenplay was by Marguerite Duras; it's the first French film to show a woman having a sexual response on screen.",
     "imageUrl": "",
+    "byline": "Alain Resnais",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Hiroshima Mon Amour (1959) — opening (10 min) + closing (10 min)",
@@ -546,6 +574,7 @@
     "name": "Spirited Away (2001)",
     "teaser": "Miyazaki's Studio Ghibli film became the highest-grossing film in Japanese history, beating Titanic in Japan. Joe Hisaishi's score is one of the most-rewatched film scores in existence.",
     "imageUrl": "",
+    "byline": "Hayao Miyazaki",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Spirited Away (2001) — train sequence (5 min)",
@@ -566,6 +595,7 @@
     "name": "My Neighbor Totoro (1988)",
     "teaser": "Miyazaki made a children's film about a sick mother and a family waiting at a hospital. No villain appears. The forest creature is mostly invisible. The film is what a childhood should feel like.",
     "imageUrl": "",
+    "byline": "Hayao Miyazaki",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "My Neighbor Totoro (1988) end-to-end with a child if possible",
@@ -586,6 +616,7 @@
     "name": "Princess Mononoke (1997)",
     "teaser": "Made on a 4-year production schedule during Japan's economic recession; became the highest-grossing film of 1997 in Japan. A masterclass in narrative density under animation studio limits.",
     "imageUrl": "",
+    "byline": "Hayao Miyazaki",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Princess Mononoke (1997) — the ironworks arrival sequence (10 min)",
@@ -606,6 +637,7 @@
     "name": "WALL-E (2008)",
     "teaser": "Pixar made a feature with the first 40 minutes having no dialogue. The opening is a 40-minute love story between two robots and a cockroach. The film won Pixar its second Best Picture nomination.",
     "imageUrl": "",
+    "byline": "Andrew Stanton",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "WALL-E (2008) — first 40 minutes",
@@ -614,8 +646,8 @@
     },
     "tags": [
       "Animation",
-      "American",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -626,6 +658,7 @@
     "name": "Up (2009)",
     "teaser": "Pixar's opening montage is the most-deconstructed 9 minutes in animation history. They tested it on the toughest crowd they had and still made it 20 seconds longer. Children sat silently for the whole thing.",
     "imageUrl": "",
+    "byline": "Pete Docter",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Up (2009) — opening montage to end of opening credits (11 min)",
@@ -634,8 +667,8 @@
     },
     "tags": [
       "Animation",
-      "American",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -646,6 +679,7 @@
     "name": "Parasite (2019)",
     "teaser": "Bong Joon-ho's Korean social satire won Palme d'Or, Best Picture, Best Director, and Best Original Screenplay — first non-English-language film to win Best Picture in the Academy's 90-year history.",
     "imageUrl": "",
+    "byline": "Bong Joon-ho",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Parasite (2019) end-to-end",
@@ -666,6 +700,7 @@
     "name": "Oldboy (2003)",
     "teaser": "Park Chan-wook's Korean revenge film won the Grand Prix at Cannes 2004. The famous hallway fight is shot in a single take — a real hallway, hand-to-hand, real injuries, real time.",
     "imageUrl": "",
+    "byline": "Park Chan-wook",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Oldboy (2003) — hallway fight (3 min)",
@@ -686,6 +721,7 @@
     "name": "Pather Panchali (1955)",
     "teaser": "Satyajit Ray sold his wife's wedding jewelry to fund a 40-second shot of a train coming through trees. It became the first Indian film at a major Western festival (Cannes) — and launched Indian art cinema.",
     "imageUrl": "",
+    "byline": "Satyajit Ray",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Pather Panchali (1955) end-to-end",
@@ -706,6 +742,7 @@
     "name": "Rome, Open City (1945)",
     "teaser": "Rossellini shot the film clandestinely during the German occupation of Rome, using real locations, real partisans, and the eventual reality that several cast members were killed by the Nazis during filming.",
     "imageUrl": "",
+    "byline": "Roberto Rossellini",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Rome, Open City (1945) end-to-end",
@@ -726,6 +763,7 @@
     "name": "Ikiru (1952)",
     "teaser": "Kurosawa's most human film: a Tokyo bureaucrat with terminal cancer spends his remaining days trying to build a playground. The film flips the question of dying from 'how long' to 'what for.'",
     "imageUrl": "",
+    "byline": "Akira Kurosawa",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Ikiru (1952) — the playground scene (5 min)",
@@ -746,6 +784,7 @@
     "name": "Roma (2018)",
     "teaser": "Cuarón filmed in his childhood neighborhood with a nonprofessional cast, in Spanish and Mixtec, for Netflix. He won Best Director — and told the Academy, on stage, that he'd share his Oscar with a domestic worker he'd grown up with.",
     "imageUrl": "",
+    "byline": "Alfonso Cuarón",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Roma (2018) — opening long take (3 min)",
@@ -766,6 +805,7 @@
     "name": "Moonlight (2016)",
     "teaser": "Barry Jenkins's first studio film won Best Picture after a presentation-card mishap at the 89th Oscars. The film is shot in three triptychs — childhood, adolescence, adulthood — about one Black young man's three lives.",
     "imageUrl": "",
+    "byline": "Barry Jenkins",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Moonlight (2016) end-to-end",
@@ -774,8 +814,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -786,6 +826,7 @@
     "name": "Portrait of a Lady on Fire (2019)",
     "teaser": "Sciamma's French period film about a painter and her subject. The film won Best Screenplay at Cannes, has no men with speaking roles, and the last shot is the only direct gaze the painter gives the woman she loves.",
     "imageUrl": "",
+    "byline": "Céline Sciamma",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Portrait of a Lady on Fire (2019) — final scene (8 min)",
@@ -806,6 +847,7 @@
     "name": "There Will Be Blood (2007)",
     "teaser": "PTA's American oil epic has Daniel Day-Lewis in his breakout performance. Jonny Greenwood's score (from Radiohead) is discordant enough that he refused to give the score a title — it never got an album title.",
     "imageUrl": "",
+    "byline": "Paul Thomas Anderson",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "There Will Be Blood (2007) — bowling alley scene (last 15 min)",
@@ -814,8 +856,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -826,6 +868,7 @@
     "name": "Singin' in the Rain (1952)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Gene Kelly & Stanley Donen",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Singin' in the Rain (1952)",
@@ -834,7 +877,8 @@
     },
     "tags": [
       "Drama",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -845,6 +889,7 @@
     "name": "The Seventh Seal (1957)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Ingmar Bergman",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Seventh Seal (1957)",
@@ -864,6 +909,7 @@
     "name": "Psycho (1960)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
+    "byline": "Alfred Hitchcock",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Psycho (1960)",
@@ -872,7 +918,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -883,6 +930,7 @@
     "name": "Lawrence of Arabia (1962)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
+    "byline": "David Lean",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Lawrence of Arabia (1962)",
@@ -902,6 +950,7 @@
     "name": "The Good the Bad and the Ugly (1966)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Sergio Leone",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Good the Bad and the Ugly (1966)",
@@ -921,6 +970,7 @@
     "name": "Once Upon a Time in the West (1968)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Sergio Leone",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Once Upon a Time in the West (1968)",
@@ -940,6 +990,7 @@
     "name": "A Clockwork Orange (1971)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Stanley Kubrick",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "A Clockwork Orange (1971)",
@@ -948,7 +999,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -959,6 +1011,7 @@
     "name": "Chinatown (1974)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Roman Polanski",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Chinatown (1974)",
@@ -967,7 +1020,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -978,6 +1032,7 @@
     "name": "Oppenheimer (2023)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
+    "byline": "Christopher Nolan",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Oppenheimer (2023)",
@@ -986,7 +1041,8 @@
     },
     "tags": [
       "Drama",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -997,6 +1053,7 @@
     "name": "Killers of the Flower Moon (2023)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Martin Scorsese",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Killers of the Flower Moon (2023)",
@@ -1005,7 +1062,8 @@
     },
     "tags": [
       "Thriller",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1016,6 +1074,7 @@
     "name": "Poor Things (2023)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
+    "byline": "Yorgos Lanthimos",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Poor Things (2023)",
@@ -1035,6 +1094,7 @@
     "name": "Anatomy of a Fall (2023)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
+    "byline": "Justine Triet",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Anatomy of a Fall (2023)",
@@ -1054,6 +1114,7 @@
     "name": "Close Encounters of the Third Kind (1977)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Close Encounters of the Third Kind (1977)",
@@ -1062,7 +1123,8 @@
     },
     "tags": [
       "Drama",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1073,6 +1135,7 @@
     "name": "Blade Runner (1982)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Ridley Scott",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Blade Runner (1982)",
@@ -1081,7 +1144,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1092,6 +1156,7 @@
     "name": "The Thing (1982)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "John Carpenter",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Thing (1982)",
@@ -1100,7 +1165,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1111,6 +1177,7 @@
     "name": "Brazil (1985)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Terry Gilliam",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Brazil (1985)",
@@ -1130,6 +1197,7 @@
     "name": "Wings of Desire (1987)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Wim Wenders",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Wings of Desire (1987)",
@@ -1149,6 +1217,7 @@
     "name": "Do the Right Thing (1989)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Spike Lee",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Do the Right Thing (1989)",
@@ -1157,7 +1226,8 @@
     },
     "tags": [
       "Thriller",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1168,6 +1238,7 @@
     "name": "Reservoir Dogs (1992)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Quentin Tarantino",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Reservoir Dogs (1992)",
@@ -1176,7 +1247,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1187,6 +1259,7 @@
     "name": "Schindler's List (1993)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Schindler's List (1993)",
@@ -1195,7 +1268,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1206,6 +1280,7 @@
     "name": "Chungking Express (1994)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Wong Kar-wai",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Chungking Express (1994)",
@@ -1225,6 +1300,7 @@
     "name": "Fargo (1996)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Coen Brothers",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Fargo (1996)",
@@ -1233,7 +1309,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1244,6 +1321,7 @@
     "name": "The Big Lebowski (1998)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Coen Brothers",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Big Lebowski (1998)",
@@ -1252,7 +1330,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1263,6 +1342,7 @@
     "name": "Beau Travail (1999)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Claire Denis",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Beau Travail (1999)",
@@ -1282,6 +1362,7 @@
     "name": "Amélie (2001)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Jean-Pierre Jeunet",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Amélie (2001)",
@@ -1301,6 +1382,7 @@
     "name": "City of God (2002)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Fernando Meirelles",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "City of God (2002)",
@@ -1320,6 +1402,7 @@
     "name": "Eternal Sunshine (2004)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Michel Gondry",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Eternal Sunshine (2004)",
@@ -1328,7 +1411,8 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1339,6 +1423,7 @@
     "name": "Pan's Labyrinth (2006)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Guillermo del Toro",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Pan's Labyrinth (2006)",
@@ -1358,6 +1443,7 @@
     "name": "No Country for Old Men (2007)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Coen Brothers",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "No Country for Old Men (2007)",
@@ -1366,7 +1452,8 @@
     },
     "tags": [
       "Thriller",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1377,6 +1464,7 @@
     "name": "The Dark Knight (2008)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Christopher Nolan",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Dark Knight (2008)",
@@ -1385,7 +1473,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1396,6 +1485,7 @@
     "name": "Inglourious Basterds (2009)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Quentin Tarantino",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Inglourious Basterds (2009)",
@@ -1404,7 +1494,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1415,6 +1506,7 @@
     "name": "The Social Network (2010)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "David Fincher",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Social Network (2010)",
@@ -1423,7 +1515,8 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1434,6 +1527,7 @@
     "name": "The Tree of Life (2011)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Terrence Malick",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Tree of Life (2011)",
@@ -1442,7 +1536,8 @@
     },
     "tags": [
       "Horror",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1453,6 +1548,7 @@
     "name": "Her (2013)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Spike Jonze",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Her (2013)",
@@ -1461,7 +1557,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1472,6 +1569,7 @@
     "name": "Boyhood (2014)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Richard Linklater",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Boyhood (2014)",
@@ -1480,7 +1578,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1491,6 +1590,7 @@
     "name": "Mad Max Fury Road (2015)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "George Miller",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Mad Max Fury Road (2015)",
@@ -1510,6 +1610,7 @@
     "name": "Arrival (2016)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Denis Villeneuve",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Arrival (2016)",
@@ -1518,7 +1619,8 @@
     },
     "tags": [
       "Horror",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1529,6 +1631,7 @@
     "name": "Call Me by Your Name (2017)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Luca Guadagnino",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Call Me by Your Name (2017)",
@@ -1548,6 +1651,7 @@
     "name": "Soul (2020)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Pete Docter",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Soul (2020)",
@@ -1556,7 +1660,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1567,6 +1672,7 @@
     "name": "Drive My Car (2021)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Ryusuke Hamaguchi",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Drive My Car (2021)",
@@ -1586,6 +1692,7 @@
     "name": "Everything Everywhere All at Once (2022)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Daniels",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Everything Everywhere All at Once (2022)",
@@ -1594,7 +1701,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1605,6 +1713,7 @@
     "name": "The Fabelmans (2022)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Fabelmans (2022)",
@@ -1613,7 +1722,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1624,6 +1734,7 @@
     "name": "Barbie (2023)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Greta Gerwig",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Barbie (2023)",
@@ -1632,7 +1743,8 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1643,6 +1755,7 @@
     "name": "Past Lives (2023)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Celine Song",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Past Lives (2023)",
@@ -1651,7 +1764,8 @@
     },
     "tags": [
       "Drama",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1662,6 +1776,7 @@
     "name": "The Zone of Interest (2023)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Jonathan Glazer",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Zone of Interest (2023)",
@@ -1681,6 +1796,7 @@
     "name": "The Holdovers (2023)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Alexander Payne",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Holdovers (2023)",
@@ -1689,7 +1805,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1700,6 +1817,7 @@
     "name": "Rashomon (1950)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Akira Kurosawa",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Rashomon (1950)",
@@ -1719,6 +1837,7 @@
     "name": "Rear Window (1954)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Alfred Hitchcock",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Rear Window (1954)",
@@ -1727,7 +1846,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1738,6 +1858,7 @@
     "name": "The Night of the Hunter (1955)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Charles Laughton",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Night of the Hunter (1955)",
@@ -1746,7 +1867,8 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1757,6 +1879,7 @@
     "name": "Breathless (1960)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Jean-Luc Godard",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Breathless (1960)",
@@ -1776,6 +1899,7 @@
     "name": "Yojimbo (1961)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Akira Kurosawa",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Yojimbo (1961)",
@@ -1795,6 +1919,7 @@
     "name": "Dr. Strangelove (1964)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Stanley Kubrick",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Dr. Strangelove (1964)",
@@ -1803,7 +1928,8 @@
     },
     "tags": [
       "Comedy",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1814,6 +1940,7 @@
     "name": "2001 A Space Odyssey (1968)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Stanley Kubrick",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "2001 A Space Odyssey (1968)",
@@ -1822,7 +1949,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1833,6 +1961,7 @@
     "name": "The Conformist (1970)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Bernardo Bertolucci",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Conformist (1970)",
@@ -1852,6 +1981,7 @@
     "name": "Aguirre the Wrath of God (1972)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Werner Herzog",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Aguirre the Wrath of God (1972)",
@@ -1871,6 +2001,7 @@
     "name": "Network (1976)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Sidney Lumet",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Network (1976)",
@@ -1879,7 +2010,8 @@
     },
     "tags": [
       "Horror",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1890,6 +2022,7 @@
     "name": "Koyaanisqatsi (1982)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Godfrey Reggio",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Koyaanisqatsi (1982)",
@@ -1909,6 +2042,7 @@
     "name": "Paris Texas (1984)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Wim Wenders",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Paris Texas (1984)",
@@ -1928,6 +2062,7 @@
     "name": "Blue Velvet (1986)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "David Lynch",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Blue Velvet (1986)",
@@ -1936,7 +2071,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1947,6 +2083,7 @@
     "name": "Akira (1988)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Katsuhiro Otomo",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Akira (1988)",
@@ -1966,6 +2103,7 @@
     "name": "The Piano (1993)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Jane Campion",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Piano (1993)",
@@ -1985,6 +2123,7 @@
     "name": "Before Sunrise (1995)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Richard Linklater",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Before Sunrise (1995)",
@@ -2004,6 +2143,7 @@
     "name": "Titanic (1997)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "James Cameron",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Titanic (1997)",
@@ -2012,7 +2152,8 @@
     },
     "tags": [
       "Horror",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2023,6 +2164,7 @@
     "name": "The Matrix (1999)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "The Wachowskis",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Matrix (1999)",
@@ -2031,7 +2173,8 @@
     },
     "tags": [
       "Horror",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2042,6 +2185,7 @@
     "name": "In the Mood for Love (2000)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Wong Kar-wai",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "In the Mood for Love (2000)",
@@ -2061,6 +2205,7 @@
     "name": "Mulholland Drive (2001)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "David Lynch",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Mulholland Drive (2001)",
@@ -2069,7 +2214,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2080,6 +2226,7 @@
     "name": "Lost in Translation (2003)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Sofia Coppola",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Lost in Translation (2003)",
@@ -2088,7 +2235,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2099,6 +2247,7 @@
     "name": "Brokeback Mountain (2005)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Ang Lee",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Brokeback Mountain (2005)",
@@ -2107,7 +2256,8 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2118,6 +2268,7 @@
     "name": "Children of Men (2006)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Alfonso Cuarón",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Children of Men (2006)",
@@ -2126,7 +2277,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2137,6 +2289,7 @@
     "name": "A Serious Man (2009)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Coen Brothers",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "A Serious Man (2009)",
@@ -2145,7 +2298,8 @@
     },
     "tags": [
       "Documentary",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2156,6 +2310,7 @@
     "name": "Inception (2010)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Christopher Nolan",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Inception (2010)",
@@ -2164,7 +2319,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2175,6 +2331,7 @@
     "name": "A Separation (2011)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Asghar Farhadi",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "A Separation (2011)",
@@ -2194,6 +2351,7 @@
     "name": "Amour (2012)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Michael Haneke",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Amour (2012)",
@@ -2213,6 +2371,7 @@
     "name": "Gravity (2013)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Alfonso Cuarón",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Gravity (2013)",
@@ -2221,7 +2380,8 @@
     },
     "tags": [
       "Horror",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2232,6 +2392,7 @@
     "name": "Whiplash (2014)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Damien Chazelle",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Whiplash (2014)",
@@ -2240,7 +2401,8 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2251,6 +2413,7 @@
     "name": "Get Out (2017)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Jordan Peele",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Get Out (2017)",
@@ -2259,7 +2422,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2270,6 +2434,7 @@
     "name": "Dune (2021)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Denis Villeneuve",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Dune (2021)",
@@ -2278,7 +2443,8 @@
     },
     "tags": [
       "Animation",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2289,6 +2455,7 @@
     "name": "The Power of the Dog (2021)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Jane Campion",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "The Power of the Dog (2021)",
@@ -2308,6 +2475,7 @@
     "name": "Tár (2022)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Todd Field",
     "exploreAction": {
       "verb": "Watch",
       "targetName": "Tár (2022)",
@@ -2316,8 +2484,228 @@
     },
     "tags": [
       "Foreign",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
+  },
+  {
+    "id": "film-sholay-1975",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Sholay (1975)",
+    "teaser": "Ramesh Sippy's 1975 dacoit-western fusion that redefined the Bollywood blockbuster — the highest-grossing Indian film for two decades. Amjad Khan's Gabbar Singh was a last-minute casting gamble; his growl came from a prosthetic jaw.",
+    "imageUrl": "",
+    "byline": "Ramesh Sippy",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Sholay (1975) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "Watch the first hour and count how many times the plot turns on a line of dialogue instead of a gunfight. Notice how Sippy shoots the Thakur-Gabbar confrontation like a Leone western — wide frames, dust, silence — then cuts to melodrama the instant the music starts."
+    },
+    "tags": [
+      "Bollywood",
+      "Action",
+      "Drama",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-ddlj-1995",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Dilwale Dulhania Le Jayenge (1995)",
+    "teaser": "1995 — still running at Mumbai's Maratha Mandir decades later, a world record for theatrical longevity. Shah Rukh Khan's Raj made the NRI love story a genre; the mustard-field finale became Indian cinema's most imitated image.",
+    "imageUrl": "",
+    "byline": "Aditya Chopra",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Dilwale Dulhania Le Jayenge (1995) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "Notice how the first hour delays the couple's first meeting for twenty minutes — the film knows anticipation is the plot. Then watch 'Tujhe Dekha Toh' twice: the lyrics, the wind machine, the train — every frame sells a love you never see consummated."
+    },
+    "tags": [
+      "Bollywood",
+      "Romance",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-lagaan-2001",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Lagaan (2001)",
+    "teaser": "2001 — India's third Oscar nomination for Best Foreign Language Film. A drought-stricken village bets its taxes on a cricket match against the British Raj; the cast trained with real cricketers, and Aamir Khan learned left-hand batting for one role.",
+    "imageUrl": "",
+    "byline": "Ashutosh Gowariker",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lagaan (2001) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "Watch how the film turns a colonial tax dispute into a siege. The villagers' practice montage matters: every bungled catch pays off in the final innings. The match is filmed in real time — no cuts mid-delivery, so the umpire's calls become the drama."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "Sports",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-3-idiots-2009",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "3 Idiots (2009)",
+    "teaser": "2009 — the highest-grossing Indian film of its decade. Rajkumar Hirani's takedown of rote education stars Aamir Khan as a genius who asks 'why' instead of 'what'; the 'All Izz Well' scooter scene was filmed with Khan genuinely unable to control the bike.",
+    "imageUrl": "",
+    "byline": "Rajkumar Hirani",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "3 Idiots (2009) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "Notice how every lecture scene is staged like a courtroom — the professor prosecutes, Rancho defends with questions. The hostel raid is one long tracking shot. Hirani hides the film's argument inside gags: the 'machine' monologue is the thesis."
+    },
+    "tags": [
+      "Bollywood",
+      "Comedy",
+      "Drama",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-dangal-2016",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Dangal (2016)",
+    "teaser": "2016 — China's biggest foreign-language hit in history. Aamir Khan gained 25kg to play the ageing father, then shed it for the flashbacks; the real Phogat sisters coached the actresses. The wrestling is filmed in unbroken takes — no cuts mid-match.",
+    "imageUrl": "",
+    "byline": "Nitesh Tiwari",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Dangal (2016) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "Watch the wrestling scenes for the sound design: every throw lands with a wet thud before the crowd reacts. The first hour builds the daughters' rebellion, then the haircut scene flips the mood — notice how the music stops at the barber's chair."
+    },
+    "tags": [
+      "Bollywood",
+      "Biopic",
+      "Sports",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-pyaasa-1957",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Pyaasa (1957)",
+    "teaser": "Guru Dutt's 1957 portrait of a poet crushed by a world that buys and sells words — routinely ranked among the greatest films ever made. 'Jaane Woh Kaise Log The' was filmed in one unbroken take through the streets of a sleeping city.",
+    "imageUrl": "",
+    "byline": "Guru Dutt",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pyaasa (1957) — the first hour",
+      "durationMinutes": 50,
+      "instruction": "Watch 'Jaane Woh Kaise Log The' without reading the subtitles — the camera does the talking. Dutt films Vijay's poems as private objects, then the market scenes turn the same words into currency. That exchange is the whole film."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "Musical",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-mughal-e-azam-1960",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Mughal-e-Azam (1960)",
+    "teaser": "1960 — fifteen years in the making and the most expensive Indian film of its era. 'Pyar Kiya To Darna Kya' was shot in a palace of mirrored glass; one war scene used over a hundred thousand extras. A 2004 re-release colorized scenes shot in black-and-white.",
+    "imageUrl": "",
+    "byline": "K. Asif",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mughal-e-Azam (1960) — the Sheesh Mahal sequence",
+      "durationMinutes": 45,
+      "instruction": "Skip ahead to the Sheesh Mahal — the mirrored hall where 'Pyar Kiya To Darna Kya' is sung. Anarkali's defiance is framed in shattered reflections: the mirror splits her into many selves while the emperor listens. Then watch the war scene and count the extras."
+    },
+    "tags": [
+      "Bollywood",
+      "Historical",
+      "Romance",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-mother-india-1957",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Mother India (1957)",
+    "teaser": "1957 — the first Indian film nominated for a Best Foreign Language Oscar. Nargis's Radha became the archetypal Indian mother; she nearly drowned filming the flood sequence. The title deliberately echoed Maxim Gorky's 'Mother'.",
+    "imageUrl": "",
+    "byline": "Mehboob Khan",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mother India (1957) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "Watch the flood scene knowing it was filmed with a real surge — Nargis was nearly swept away. The film's engine is Birju's resentment: every time the camera frames Radha's hands in the soil, it's foreshadowing the final act's shovel."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "Classic",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-deewaar-1975",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Deewaar (1975)",
+    "teaser": "1975 — the film that codified Bollywood's 'angry young man'. Amitabh Bachchan's 'Mere paas maa hai' is among the most quoted lines in Indian cinema; Yash Chopra shot the confrontation in one long take to let the silence build.",
+    "imageUrl": "",
+    "byline": "Yash Chopra",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Deewaar (1975) — the first hour",
+      "durationMinutes": 60,
+      "instruction": "The film is built on brothers choosing opposite sides of the law. Watch the 'Mere paas maa hai' scene and notice the blocking: both brothers refuse to move and the camera never cuts — the standoff is physical before it's verbal."
+    },
+    "tags": [
+      "Bollywood",
+      "Crime",
+      "Drama",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-shree-420-1955",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Shree 420 (1955)",
+    "teaser": "Raj Kapoor's 1955 tramp-in-the-city satire — 'Mera Joota Hai Japani' became the anthem of post-independence India. The title is slang for a con man, after the penal code's Section 420; Kapoor's Chaplin-esque tramp walked the line between them.",
+    "imageUrl": "",
+    "byline": "Raj Kapoor",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Shree 420 (1955) — the first hour",
+      "durationMinutes": 45,
+      "instruction": "Watch the opening song: Raj's tramp walks into Bombay singing 'Mera Joota Hai Japani' — the whole film's argument in one chorus. Then notice how the same shoes become the metaphor for selling out when he trades them for a suit."
+    },
+    "tags": [
+      "Bollywood",
+      "Comedy",
+      "Musical",
+      "1950s"
+    ],
+    "tier": 1
   }
 ]

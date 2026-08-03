@@ -14,8 +14,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "American",
-      "1960s"
+      "1960s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -35,7 +35,8 @@
     "tags": [
       "Thriller",
       "British-American",
-      "1950s"
+      "1950s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -174,8 +175,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -194,8 +195,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -214,8 +215,8 @@
     },
     "tags": [
       "War",
-      "American",
-      "1970s"
+      "1970s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -234,8 +235,8 @@
     },
     "tags": [
       "Surrealist",
-      "American",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -254,8 +255,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -274,8 +275,8 @@
     },
     "tags": [
       "Crime",
-      "American",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -294,8 +295,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -314,8 +315,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -334,8 +335,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "1980s"
+      "1980s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -354,8 +355,8 @@
     },
     "tags": [
       "Western",
-      "American",
-      "1950s"
+      "1950s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -374,8 +375,8 @@
     },
     "tags": [
       "Comedy",
-      "American",
-      "1950s"
+      "1950s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -394,8 +395,8 @@
     },
     "tags": [
       "Drama",
-      "American",
-      "1960s"
+      "1960s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -555,7 +556,8 @@
     "tags": [
       "Drama",
       "Mexican",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -575,7 +577,8 @@
     "tags": [
       "Fantasy",
       "Mexican",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -594,8 +597,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "American",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -615,7 +618,8 @@
     "tags": [
       "Thriller",
       "British",
-      "2000s"
+      "2000s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -634,8 +638,8 @@
     },
     "tags": [
       "Thriller",
-      "American",
-      "1990s"
+      "1990s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -674,8 +678,8 @@
     },
     "tags": [
       "Coming-of-Age",
-      "American",
-      "2010s"
+      "2010s",
+      "Hollywood"
     ],
     "tier": 1
   },
@@ -714,8 +718,8 @@
     },
     "tags": [
       "Experimental",
-      "American",
-      "1940s"
+      "1940s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -772,7 +776,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1057,7 +1062,8 @@
     },
     "tags": [
       "Foreign",
-      "21st Century"
+      "21st Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1076,7 +1082,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1095,7 +1102,8 @@
     },
     "tags": [
       "Foreign",
-      "21st Century"
+      "21st Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1114,7 +1122,8 @@
     },
     "tags": [
       "Comedy",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1133,7 +1142,8 @@
     },
     "tags": [
       "Comedy",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1152,7 +1162,8 @@
     },
     "tags": [
       "Comedy",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1171,7 +1182,8 @@
     },
     "tags": [
       "Comedy",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1323,7 +1335,8 @@
     },
     "tags": [
       "Foreign",
-      "21st Century"
+      "21st Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1399,7 +1412,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1418,7 +1432,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1437,7 +1452,8 @@
     },
     "tags": [
       "Thriller",
-      "21st Century"
+      "21st Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1456,7 +1472,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1551,7 +1568,8 @@
     },
     "tags": [
       "Indie",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1817,7 +1835,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "21st Century"
+      "21st Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1836,7 +1855,8 @@
     },
     "tags": [
       "Sci-Fi",
-      "21st Century"
+      "21st Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1855,7 +1875,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2064,7 +2085,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2083,7 +2105,8 @@
     },
     "tags": [
       "Drama",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -2102,8 +2125,189 @@
     },
     "tags": [
       "Indie",
-      "20th Century"
+      "20th Century",
+      "Hollywood"
     ],
     "tier": 2
+  },
+  {
+    "id": "dire-raj-kapoor",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Raj Kapoor",
+    "teaser": "The showman of Indian cinema — Chaplin's tramp reborn as the Raj-era everyman. Awaara's 'Mera Joota Hai Japani' made him a household name across the Soviet Union, China and the Middle East, decades before globalisation.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Awaara (1951) — the dream sequence",
+      "durationMinutes": 40,
+      "instruction": "Kapoor's tramp was his Chaplin homage made political. Watch the Awaara dream sequence: the giant shadows, the surrealist city — German expressionism made Indian. Then watch Shree 420's opening song to see the same tramp grow up."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-guru-dutt",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Guru Dutt",
+    "teaser": "A melancholic perfectionist who directed only eight features — Pyaasa, Kaagaz Ke Phool, Sahib Bibi Aur Ghulam — and is now ranked among cinema's greats. He controlled camera, light and mood like a poet, and was brutally self-critical.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Kaagaz Ke Phool (1959) — the opening",
+      "durationMinutes": 40,
+      "instruction": "Dutt's own favourite film — and the flop that broke him. Watch the opening ten minutes: a director walks into a crumbling studio, and the flashback is filmed in shadows so deep the sets vanish. He turned his own decline into the film's subject."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-yash-chopra",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Yash Chopra",
+    "teaser": "From Deewaar's rage to DDLJ's mustard fields — the 'king of romance'. His Switzerland song sequences invented the modern Bollywood travelogue, and his 1970s films taught Hindi cinema how to make villains charismatic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Silsila (1981) — the Kashmir song sequence",
+      "durationMinutes": 40,
+      "instruction": "Chopra's signature is the romantic song in a foreign landscape. Watch any Silsila sequence and notice how the choreography is secondary — the camera, the wind and the colour grading carry the emotion. That grammar still runs Bollywood."
+    },
+    "tags": [
+      "Bollywood",
+      "Romance",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-ramesh-sippy",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ramesh Sippy",
+    "teaser": "The man who fused the Hollywood western with the Indian masala film. Sholay took three years to become a hit, then held the box-office record for twenty — the patience made his name.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Sholay (1975) — Gabbar's introduction",
+      "durationMinutes": 35,
+      "instruction": "Sippy introduced Gabbar Singh from behind — a silhouette, a knife, a menacing voice — before any close-up. Watch how long he withholds the face. Then watch the Thakur-gallows scene: the camera stays low, like the hostages."
+    },
+    "tags": [
+      "Bollywood",
+      "Action",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-rajkumar-hirani",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Rajkumar Hirani",
+    "teaser": "The soft-spoken storyteller whose comedies — 3 Idiots, PK, Sanju — quietly lecture on education, religion and the news media. Every Hirani film breaks box-office records while sneaking in a manifesto.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "3 Idiots (2009) — the 'machine' monologue",
+      "durationMinutes": 30,
+      "instruction": "Hirani's method: the joke comes first, the argument second. Watch Rancho's machine lecture — a TED talk disguised as a classroom scene. Count how many of his gags land on an actual idea. That's the whole trick."
+    },
+    "tags": [
+      "Bollywood",
+      "Comedy",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-sanjay-leela-bhansali",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Sanjay Leela Bhansali",
+    "teaser": "The maximalist — Devdas's mirrored halls, Bajirao Mastani's battlefields, Padmaavat's opulence. Every frame is composed like a painting; he is said to storyboard sequences down to a single eyelash.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Devdas (2002) — the 'Dola Re Dola' sequence",
+      "durationMinutes": 40,
+      "instruction": "Bhansali doesn't do realism — he does theatre. Watch 'Dola Re Dola' and notice the geometry: the camera moves in circles, the dancers mirror each other, the chandeliers frame the frame. Every element is choreographed, even the wind."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-anurag-kashyap",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Anurag Kashyap",
+    "teaser": "The indie disruptor who taught Bollywood to be dangerous. Gangs of Wasseypur — his two-part, five-hour gangster epic — was shot guerrilla-style across Dhanbad's coal country with local non-actors.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Gangs of Wasseypur (2012) — the opening hour",
+      "durationMinutes": 60,
+      "instruction": "Kashyap's world is oral history with violence: the film opens with a prophecy. Notice how he uses real locations and real faces — the movie feels like a documentary that suddenly remembers it's a Tarantino film."
+    },
+    "tags": [
+      "Bollywood",
+      "Crime",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-karan-johar",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Karan Johar",
+    "teaser": "The millennial Bollywood brand — Kuch Kuch Hota Hai, Kabhi Khushi Kabhie Gham, Ae Dil Hai Mushkil. Glossy, emotional, song-drenched family dramas that turned diaspora longing into a global aesthetic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Kuch Kuch Hota Hai (1998) — the friendship-first montage",
+      "durationMinutes": 35,
+      "instruction": "Johar's formula is friendship disguised as romance. Watch the college montage and notice how the film delays the confession for two hours — the longing is the product. His scenes are staged for the song, not the dialogue."
+    },
+    "tags": [
+      "Bollywood",
+      "Romance",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "dire-mehboob-khan",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Mehboob Khan",
+    "teaser": "The studio-era titan behind Mother India — the film that turned a farmer's wife into the icon of Indian resilience. He directed 29 films in three decades, mixing social realism with spectacle before either word was fashionable.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mother India (1957) — the final act",
+      "durationMinutes": 45,
+      "instruction": "Mehboob shot the finale — a mother forced to choose between her son and her village — as pure opera. Watch how Nargis's face carries the entire moral argument; the film trusts one close-up over a hundred lines of dialogue."
+    },
+    "tags": [
+      "Bollywood",
+      "Drama",
+      "1950s"
+    ],
+    "tier": 1
   }
 ]

@@ -217,6 +217,7 @@ object TopicJsonLoader {
             List(tagsArr.length()) { i -> tagsArr.getString(i) }
         } else emptyList()
         val tier = obj.optInt("tier", 1)
+        val byline = obj.optString("byline", "")
         return CurioTopic(
             id            = id,
             categoryId    = categoryId,
@@ -226,7 +227,8 @@ object TopicJsonLoader {
             imageUrl      = imageUrl,
             exploreAction = exploreAction,
             tags          = tags,
-            tier          = tier
+            tier          = tier,
+            byline        = byline
         )
     }
 }

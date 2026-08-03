@@ -832,6 +832,10 @@ private val NationalityTags = setOf(
     "Ecuadorian", "Bolivian", "Uruguayan", "Croatian", "Serbian", "Bulgarian", "Slovak",
     "Estonian", "Lithuanian", "New Zealand", "New Zealander", "Taiwanese", "Hong Kong",
     "Cape Verdean", "Barbadian", "Beninese", "African", "European", "Soviet", "Tuareg",
+    // Film/TV industry regions — Hollywood (US studio system) and Bollywood
+    // (Hindi cinema) read as origin tags on Films/Directors, so the Origin
+    // bucket offers them alongside British / French / Korean / Indian…
+    "Hollywood", "Bollywood",
     "Congolese", "Panamanian", "Chilean", "Argentine", "Puerto Rican",
     "American-British", "British-Nigerian", "American-Canadian", "French-Algerian",
     "Italian-American", "British-Irish", "African-American", "British-Canadian",
