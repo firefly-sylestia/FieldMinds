@@ -107,6 +107,7 @@ object CurioIcons {
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
     const val Colorize    = "colorize"   // eyedropper — Pastel colors mode
+    const val Layers      = "layers"     // stacked cards — Deck card redesign (v7.6)
 
     // ── Note-paper style chips (Ruled/Torn/Coffee/Folded/Red-margin)
     const val LocalCafe     = "local_cafe"        // coffee-stain paper

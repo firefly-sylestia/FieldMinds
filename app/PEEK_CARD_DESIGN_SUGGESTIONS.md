@@ -1,9 +1,12 @@
 # Peek Card Design Suggestions (pending user review)
 
-> **Status: SUGGESTIONS ONLY — nothing here is applied.** Per the app-module
-> contract (design direction comes from the user, not in-repo docs), these
-> proposals are written down for review. Say the word and any of them gets
-> implemented in `SpinScreen.kt` (all live inside `PeekCard` / the deck fan).
+> **Status: RECOMMENDED SET IMPLEMENTED (v7.6, behind a Settings toggle).**
+> The recommended set — 1a top-lit gradient, 1b category-tinted hairline,
+> soft shadows, two-line near titles — is live in `SpinScreen.kt` behind the
+> **Settings → Appearance → "Deck card redesign"** toggle, OFF by default
+> (the classic flat deck stays the shipping look until the experiment
+> settles). 1c (light-paper deck) is still unimplemented — say the word to
+> add it to the toggle.
 
 ## Where the peek cards are today
 

@@ -2,6 +2,36 @@
 
 ## Latest Request (COMPLETED)
 
+**Peek-deck redesign (v7.6, EXPERIMENTAL, Settings toggle, OFF by default) + CI compile fixes for the pastel commit**
+
+### What was asked
+
+“implement this idea with toggle and make it off by default and keep the current one too.” — the recommended set from `app/PEEK_CARD_DESIGN_SUGGESTIONS.md` (top-lit gradient + category-tinted hairline + soft shadows + two-line near titles, skipping the optional light-paper deck). ask_user: scope = **recommended set**; toggle lives in **Settings**. Also: fix the CI compile errors on the pastel commit first, commit + push, then continue.
+
+### CI fixes (committed separately, `d5d037b0`)
+
+- `CurioColors.kt` — `Hsl` was `private` while `toHsl`/`fromHsl` were `internal`, so the new cross-file helpers in CategoryInk.kt (`pastelFillInk` / `deepHueInk`) couldn't access the return type → `internal data class Hsl` (+ KDoc updated).
+- `SpinScreen.kt` — `isCurioDarkTheme()` was called at :475 without an import → added `import com.curio.app.ui.theme.isCurioDarkTheme`.
+
+### What was done (peek-deck redesign, v7.6)
+
+- **AppPreferences.kt** — `peekDeckRedesignState` (default OFF, reactive, `private set`, seeded in `initThemeMode`) + `KEY_PEEK_DECK_REDESIGN` + is/set — same pattern as the pastel toggle.
+- **CurioIcons.kt** — added `Layers` glyph (stacked cards).
+- **SettingsScreen.kt** — Appearance card gained a “Deck card redesign” switch (Layers glyph, subtitle “Top-lit deck cards with tinted edges and roomier titles”) right after Pastel colors. OFF by default.
+- **SpinScreen.kt `PeekCard`** — when ON: (1a) top-lit two-stop vertical gradient (crown = accent→white 0.10/0.14, base = the classic level shade); (1b) category-tinted hairline (deep accent ink @ 0.22/0.30 alpha in light, light twin @ 0.28/0.40 in dark); (2) soft ambient shadows (1dp far / 3dp near); (3) near titles 16sp SemiBold with 0.15sp tracking and TWO lines, far titles 13sp Medium @ 0.72 alpha on one line, glyphs 22dp near / 18dp far. When OFF every value resolves to the classic flat look (gradient brush null, flat cardColor, white ink hairline, no shadow, 20dp glyph, 14sp Bold one line). Composes with pastel mode (content ink stays `pastelFillInk`; the tinted hairline uses `categoryInk`/`lightAccent`). v7.6 header changelog added (item 30).
+- **PEEK_CARD_DESIGN_SUGGESTIONS.md** — status header updated (recommended set implemented behind the toggle; 1c still unimplemented).
+- **Fastlane** — changelog `20260806.txt`.
+
+### Validation
+
+- `check_braces.py` BALANCED on all touched files; `Surface(brush = …)` confirmed available in the resolved Material3 (BOM 2026.05.01 — brush param since M3 1.0); 2-line near titles verified to fit even at the smallest deck scale (0.72 → 83dp card height vs ~68dp needed).
+- Code-reviewer pass: clean.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Pastel color mode complete — Settings toggle + pastel-ized mixed-deck blends and blended page tints in light & dark**
 
 ### What was asked

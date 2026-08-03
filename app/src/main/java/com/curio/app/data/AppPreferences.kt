@@ -58,6 +58,10 @@ object AppPreferences {
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
     private const val KEY_THEME_STYLE = "theme_style"      // "default", "amoled", "material"
     private const val KEY_PASTEL_COLORS_ENABLED = "pastel_colors_enabled"
+    // v7.6 — experimental peek-card redesign (top-lit gradient fill, tinted
+    // hairline, soft shadows, two-line near titles). OFF by default — the
+    // classic flat deck stays the shipping look until the experiment settles.
+    private const val KEY_PEEK_DECK_REDESIGN = "peek_deck_redesign"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
@@ -107,6 +111,14 @@ object AppPreferences {
     // theme STYLE (combines with Curio, AMOLED and Material) and theme MODE.
     // Default OFF. Seeded from prefs in [initThemeMode].
     var pastelColorsState by mutableStateOf(false)
+        private set
+
+    // Peek-deck redesign (v7.6, EXPERIMENTAL) — the Spin deck's background
+    // peek cards wear a top-lit gradient fill, a category-tinted hairline
+    // border, soft shadows, and roomier two-line near-card titles. Default
+    // OFF; the classic flat deck stays the default until the experiment
+    // concludes (then the winning path is hardcoded and the toggle removed).
+    var peekDeckRedesignState by mutableStateOf(false)
         private set
 
     var reminderEnabledState by mutableStateOf(false)
@@ -189,6 +201,7 @@ object AppPreferences {
         themeModeState = getThemeMode(context)
         themeStyleState = getThemeStyle(context)
         pastelColorsState = isPastelColorsEnabled(context)
+        peekDeckRedesignState = isPeekDeckRedesignEnabled(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
@@ -228,6 +241,16 @@ object AppPreferences {
     fun setPastelColorsEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_PASTEL_COLORS_ENABLED, enabled).apply()
         pastelColorsState = enabled
+    }
+
+    // ── Peek-deck redesign (v7.6 experimental) ────────────────────────
+    /** Whether the peek-deck redesign is on (default off). */
+    fun isPeekDeckRedesignEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_PEEK_DECK_REDESIGN, false)
+
+    fun setPeekDeckRedesignEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_PEEK_DECK_REDESIGN, enabled).apply()
+        peekDeckRedesignState = enabled
     }
 
     // ── Category tint wash ────────────────────────────────────────────

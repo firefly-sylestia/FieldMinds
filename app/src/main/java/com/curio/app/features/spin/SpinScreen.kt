@@ -262,6 +262,16 @@ import kotlin.random.Random
  *     partial-height glide + fade at ~320ms (under the ~340ms tick floor),
  *     so each step completes before the next tick and the reel reads as
  *     calm and smooth instead of fast and glitchy.
+ *
+ * v7.6 changes (EXPERIMENTAL, toggleable):
+ * 30. **Deck card redesign toggle** — Settings → Appearance → "Deck card
+ *     redesign" (OFF by default) swaps the flat peek-card slabs for the
+ *     recommended set from PEEK_CARD_DESIGN_SUGGESTIONS.md: a top-lit
+ *     two-stop gradient fill, a category-tinted hairline border (deep ink
+ *     in light, light twin in dark), soft ambient shadows, and roomier
+ *     near-card titles (16sp SemiBold, light tracking, two lines) with
+ *     proportional glyphs (22dp near / 18dp far). The classic flat deck
+ *     stays the shipping look until the experiment settles.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -2024,6 +2034,37 @@ private fun PeekCard(
     // ink of the deck color (light mode) / a light tint (dark).
     val ink = pastelFillInk(accent)
 
+    // v7.6 — deck card redesign (EXPERIMENTAL, Settings toggle, OFF by
+    // default): the flat shade becomes a top-lit two-stop gradient, the
+    // generic hairline is tinted with the category's own colors, near cards
+    // gain soft shadows, and near titles get two readable lines. Reads the
+    // reactive preference directly so flipping the toggle recomposes the
+    // deck instantly; when OFF every value below resolves to the classic
+    // flat-deck look.
+    val redesign = AppPreferences.peekDeckRedesignState
+    // 1a — top-lit gradient: crown = a whisper of light at the card top,
+    // base = the classic level shade. The top peek catching more light also
+    // whispers "next up" on the reel.
+    val fillBrush = remember(accent, far) {
+        val base = lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
+        val crown = lerp(accent, Color.White, if (far) 0.10f else 0.14f)
+        Brush.verticalGradient(listOf(crown, base))
+    }
+    // 1b — category-tinted hairline so each deck layer whispers its
+    // category instead of a generic white rule. The light twin reads on the
+    // DARK deck fills (both non-pastel light and dark mode); in pastel
+    // light mode the fills are pale, so the deep accent ink carries the
+    // edge instead (a deep-on-deep hairline would vanish — reviewer catch).
+    val hairline = if (redesign) {
+        if (AppPreferences.pastelColorsState && !isCurioDarkTheme()) {
+            cat.categoryInk().copy(alpha = if (far) 0.22f else 0.30f)
+        } else {
+            cat.lightAccent.copy(alpha = if (far) 0.28f else 0.40f)
+        }
+    } else {
+        ink.copy(alpha = if (far) 0.14f else 0.22f)
+    }
+
     Box(
         modifier = Modifier
             .size(w, h)
@@ -2079,16 +2120,16 @@ private fun PeekCard(
         ) { currentTopic ->
             Surface(
                 shape = RoundedCornerShape(corner),
-                color = cardColor,
-                shadowElevation = 0.dp,
+                color = if (redesign) Color.Transparent else cardColor,
+                brush = if (redesign) fillBrush else null,
+                // 2 — soft ambient shadows lift the deck off the tinted page
+                // (near cards sit higher than the far pair).
+                shadowElevation = if (redesign) (if (far) 1.dp else 3.dp) else 0.dp,
                 tonalElevation = 0.dp,
                 // Subtle hairline outline — kept very light so the rotated
                 // stroke stays crisp instead of aliasing into pixel noise —
                 // lets each deck layer read as a distinct card.
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = ink.copy(alpha = if (far) 0.14f else 0.22f)
-                ),
+                border = BorderStroke(width = 1.dp, color = hairline),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
@@ -2105,15 +2146,36 @@ private fun PeekCard(
                             name = cat.iconGlyph,
                             contentDescription = null,
                             tint = ink.copy(alpha = if (far) 0.55f else 0.75f),
-                            size = 20.dp
+                            size = if (redesign) (if (far) 18.dp else 22.dp) else 20.dp
                         )
                         Text(
                             text = currentTopic?.name ?: "…",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            style = if (redesign) {
+                                if (far) {
+                                    // 3 — far cards are hints, not reads: a
+                                    // smaller, softer single line.
+                                    MaterialTheme.typography.labelMedium.copy(
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                } else {
+                                    // 3 — near titles breathe: 16sp SemiBold
+                                    // with light tracking and TWO lines so
+                                    // long topic names stop clipping at one.
+                                    MaterialTheme.typography.labelLarge.copy(
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        letterSpacing = 0.15.sp
+                                    )
+                                }
+                            } else {
+                                MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                            },
                             // Far deck cards dim their content too, reinforcing
                             // the layered fade into the background.
-                            color = ink.copy(alpha = if (far) 0.65f else 1f),
-                            maxLines = 1,
+                            color = if (redesign && far) ink.copy(alpha = 0.72f)
+                                    else ink.copy(alpha = if (far) 0.65f else 1f),
+                            maxLines = if (redesign && !far) 2 else 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     }

@@ -1,0 +1,1 @@
+• New experimental Deck card redesign (Settings → Appearance, off by default): the Spin deck's peek cards get a top-lit gradient fill, category-tinted edges, soft shadows and roomier two-line titles

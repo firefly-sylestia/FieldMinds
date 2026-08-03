@@ -546,6 +546,36 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
+                        // ── Deck card redesign (v7.6, EXPERIMENTAL) — the
+                        //    Spin deck's background peek cards get a top-lit
+                        //    gradient fill, category-tinted hairline border,
+                        //    soft shadows, and two-line near-card titles.
+                        //    OFF by default — the classic flat deck stays
+                        //    the shipping look until the experiment settles.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Layers, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Deck card redesign", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    "Top-lit deck cards with tinted edges and roomier titles",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.peekDeckRedesignState,
+                                onCheckedChange = { AppPreferences.setPeekDeckRedesignEnabled(context, it) }
+                            )
+                        }
+                        CurioSettingsDivider()
                         // ── Entry date & mood — the meta card (date / time /
                         //    mood / type) on saved entries + the journal's mood
                         //    and attachment sections. Default ON.
