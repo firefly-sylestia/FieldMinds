@@ -2,6 +2,36 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board watermark rework: expanded board is no longer sparse — interior ring fills the middle, denser counts keep the same density on big canvases**
+
+### What was asked
+
+"the moodboard glyph watermarks are even worse now very less and so much scattered that the middle part have none when expanded"
+
+### Root cause
+
+`buildMoodBoardPattern` (the distance-checked mood-board sampler) placed glyphs in ONE far-first greedy pass with a large centre exclusion (`exclFrac 0.225`) and a hard count cap of 16. On the expanded full-screen board (~384×832dp, area ratio 1.93) the perimeter filled to the 16 cap before the interior cells were ever reached, and the 0.225 exclusion left the middle band (~170×170dp) completely empty — "very few, scattered, no middle". The count cap also throttled the expanded count below the linear-area density the inline board got, so the expanded board thinned out.
+
+### What was done
+
+**`CurioWatermarkBackdrop.kt` / `buildMoodBoardPattern` — two-phase interior-first placement + denser tuning:**
+- **Phase A — INTERIOR ring**: the band just outside the tiny core (`coreFrac 0.225→0.10`, only the exact middle stays clear) is seeded FIRST with small glyphs (26–33dp), quota `max(2, round(target×0.22))` — the middle of the collage is never bare. **Phase B — PERIMETER**: far cells first until the target. (A single far-first pass was the bug: it filled the edges before ever reaching the interior.)
+- **Denser counts**: `(9 + nextInt(4)) × density`, density cap `2.6→3.0`, `coerceIn(9, 22)` (was 8..10 / cap 16) — the expanded board now keeps the same per-area density as the inline card instead of thinning out.
+- **Sizes** 26..54dp (was 34..54) with a wider `((e-1)/5)` span so interior glyphs read smaller; `marginFrac 0.095`, `cellFrac 0.17`, `jitter 0.34`. Glyph size is ALSO capped at `2 × marginFrac × short` (reviewer nit) so the radius can never exceed the canvas margin — a hard in-bounds guarantee at any canvas width.
+- **Alpha** base bumped 0.10→0.12 (dark) / 0.14→0.16 (light) so the denser collage (and the interior ring) reads.
+- KDocs updated (interior ring + two-phase description, verification numbers).
+
+### Validation
+
+- JS simulation (deterministic xorshift32 model of the exact algorithm) over 40 seeds × 7 canvases (280×560 … 411×915 dp): min center-distance ratio ≥ 1.06 ALWAYS (no overlap, by construction via `clearsAll`), all glyphs in bounds (280×560 now passes thanks to the size cap), interior ring always places — avg 2 middle glyphs inline / 3.5–3.7 expanded. Old params for contrast: expanded avg 15–16 placed with 0 middle.
+- `check_braces.py` BALANCED; grep confirms no stale `perimeterCount`/`exclFrac` refs (the rename `exclFrac→coreFrac` missed two lines in the first edit — caught + fixed before validation).
+- Code-reviewer pass: two-phase logic sound (a Phase-A cell simply fails `clearsAll` against itself in Phase B — harmless), compile-safe (local fun captures, Int arithmetic), inline board stays reasonable (~9-10 + 2 small middle). Applied its nit: the size-vs-margin cap.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Light-mode gradient fix: teal / light-blue / red detail heroes no longer blend through foreign colors — the light wash is now a hue-preserving pastel of the accent**
 
 ### What was asked

@@ -229,14 +229,15 @@ private fun BoxWithConstraintsScope.LowerBandGlyph(
  * neighbours drift into each other, and the two centre slots sat close
  * enough to collide on smaller canvases.
  *
- * Layout: a band of quiet glyphs sits at the edges (perimeter) and the
- * MIDDLE stays completely clear for the tiles — no glyph ever drifts into
- * the centre (the old fixed-bias slots left a lone icon floating there,
- * which read as a weird middle glyph). Glyph size grows toward the edges
- * and shrinks toward the middle, so the collage reads as a natural scatter
- * that fades out where the content sits. Counts scale with the canvas AREA
- * so the inline card and the full-screen expanded board keep the same
- * visual density.
+ * Layout: a quiet INTERIOR RING of small glyphs sits just outside the tiny
+ * centre core (only the exact middle stays clear, for the tiles), and the
+ * bigger glyphs ring the edges — the collage fills the whole canvas instead
+ * of hugging the perimeter (the old far-first sampler filled the edges
+ * before ever reaching the interior, leaving the expanded board's middle a
+ * huge empty band). Glyph size grows toward the edges and shrinks toward
+ * the middle, so it reads as a natural scatter that stays quiet where the
+ * content sits. Counts scale with the canvas AREA so the inline card and
+ * the full-screen expanded board keep the same visual density.
  *
  * Theme-aware (muted in dark mode, slightly stronger in light mode) and
  * centred on [accent] tones so it stays legible behind tiles. The seed is
@@ -267,8 +268,9 @@ fun CurioMoodBoardBackdrop(
             // Theme-aware base alpha × the glyph's seeded boost, computed at
             // draw time so light/dark toggles apply immediately. Dark mode
             // was raised from 0.05 so the collage is actually visible on the
-            // midnight surface.
-            val alpha = (if (isDark) 0.10f else 0.14f) * p.alphaBoost
+            // midnight surface (bumped again 0.10→0.12 / 0.14→0.16 with the
+            // denser collage so the interior ring reads too).
+            val alpha = (if (isDark) 0.12f else 0.16f) * p.alphaBoost
             // Anchor the icon on its CENTRE: the pattern's (xFrac, yFrac)
             // is the glyph centre, but [Modifier.offset] shifts the icon's
             // top-left — so back off by half the glyph's pixel size. Without
@@ -297,13 +299,16 @@ fun CurioMoodBoardBackdrop(
  *
  * Positions are NORMALIZED canvas fractions (0..1 from the top-left corner)
  * so the pattern adapts to any canvas. Placement is a jittered-grid,
- * Poisson-disc-style sampler — every glyph is accepted ONLY if its circle
- * clears the centre exclusion AND stays a radius-sum times a 1.06 spacing
- * MARGIN away from every already-placed glyph (checked in canvas dp, so
- * the guarantee holds at any board size). The middle is left completely
- * empty. Verified by simulation: 40 seeds × 6 canvas sizes (300×420 up to
- * 430×900 dp), min center-distance ratio ≥ 1.06 always — glyphs can never
- * overlap or even crowd, and the full requested count always places.
+ * Poisson-disc-style sampler in TWO phases: the interior band just outside
+ * the tiny centre core is seeded FIRST with small glyphs (so the middle of
+ * the collage is never bare), then the perimeter fills far-cells-first up
+ * to the target count. Every glyph is accepted ONLY if its circle clears
+ * the centre core AND stays a radius-sum times a 1.06 spacing MARGIN away
+ * from every already-placed glyph (checked in canvas dp, so the guarantee
+ * holds at any board size). Verified by simulation: 40 seeds × 6 canvas
+ * sizes (300×600 up to 411×915 dp), min center-distance ratio ≥ 1.06
+ * always — glyphs never overlap, all stay in bounds, and the interior ring
+ * always places (avg 2 in the middle inline, 3-4 expanded).
  *
  * The old fixed-bias slot ring only LOOKED collision-free: slots crowd at
  * the corners, the jitter let neighbours drift into each other, and the two
@@ -323,25 +328,28 @@ private fun buildMoodBoardPattern(
     if (w <= 0f || h <= 0f) return emptyList()
     val short = minOf(w, h)
     val area = w * h
-    // Density-scaled counts: ~8-10 perimeter glyphs on the inline board
-    // (~360x460dp), scaling up to ~16 on the full-screen board.
+    // Density-scaled counts: ~9-12 glyphs on the inline board (~360x460dp),
+    // scaling up to ~22 on the full-screen expanded board — the collage
+    // keeps the same visual density instead of thinning out when the canvas
+    // grows (the old 16 cap clipped the expanded count down).
     val refArea = 360f * 460f
-    val density = (area / refArea).coerceIn(1f, 2.6f)
-    val perimeterCount = ((8 + Random(seed).nextInt(3)) * density).roundToInt().coerceIn(8, 16)
+    val density = (area / refArea).coerceIn(1f, 3f)
+    val targetCount = ((9 + Random(seed).nextInt(4)) * density).roundToInt().coerceIn(9, 22)
 
     // Geometry as fractions of the SHORT side — kept tight enough that the
     // grid always has room for the full requested count (validated).
-    val marginFrac = 0.09f   // glyphs stay fully inside the canvas
-    val cellFrac = 0.185f    // grid cell size (jitter stays inside the cell)
-    val jitter = 0.32f       // of the cell
-    val exclFrac = 0.225f    // centre exclusion radius (tiles read clearly)
+    val marginFrac = 0.095f  // glyphs stay fully inside the canvas (>= largest glyph radius)
+    val cellFrac = 0.17f     // grid cell size (jitter stays inside the cell)
+    val jitter = 0.34f       // of the cell
+    val coreFrac = 0.10f     // tiny centre core exclusion — only the exact middle stays clear
+    val interiorBandE = 2.2f // eccentricity ceiling of the quiet interior ring
     val spacingMargin = 1.06f // min centre gap = (r1+r2) × this
     val marginX = marginFrac * short / w
     val marginY = marginFrac * short / h
     val cellX = cellFrac * short / w
     val cellY = cellFrac * short / h
-    val exclX = exclFrac * short / w
-    val exclY = exclFrac * short / h
+    val exclX = coreFrac * short / w
+    val exclY = coreFrac * short / h
 
     val rng = Random(seed * 7919 + 13)
     // Centres + radii in canvas dp for the exact distance checks. The
@@ -361,9 +369,35 @@ private fun buildMoodBoardPattern(
         }
     }
 
-    // ── Perimeter: jittered grid over the whole canvas, candidates sorted
-    // far-from-centre first so the outer ring reads first and the cells
-    // nearest the middle fill last (and only when they clear the exclusion).
+    /** Sizes, tints and pushes one glyph at (x, y) if it clears [clearsAll]. */
+    fun placeGlyph(x: Float, y: Float, e: Float): Boolean {
+        // Bigger glyphs toward the edges, smaller near the middle — reads
+        // as a natural collage instead of uniform dots. The cap keeps the
+        // radius <= the canvas margin, so even the biggest corner glyph
+        // stays fully in bounds on any canvas width.
+        val t = ((e - 1f) / 5.0f).coerceIn(0f, 1f)
+        val sizeDp = (26f + t * 28f).coerceAtMost(2f * marginFrac * short) // 26..54 dp
+        if (!clearsAll(x, y, sizeDp / 2f)) return false
+        val glyph = glyphs[rng.nextInt(glyphs.size)]
+        placed.add(
+            Placed(
+                x, y, sizeDp / 2f,
+                WatermarkPlacement(
+                    glyph = glyph,
+                    xFrac = x,
+                    yFrac = y,
+                    size = sizeDp.dp,
+                    rotation = -14f + rng.nextFloat() * 28f,
+                    tint = if (rng.nextFloat() < 0.80f) accent else (accentByGlyph[glyph] ?: accent),
+                    alphaBoost = 0.85f + rng.nextFloat() * 0.35f
+                )
+            )
+        )
+        return true
+    }
+
+    // ── Jittered grid over the whole canvas; e = distance from the centre
+    // core in core radii (e < 1 = inside the core).
     val cells = mutableListOf<Triple<Float, Float, Float>>() // x, y, eccentricity
     val nx = (1f / cellX).toInt()
     val ny = (1f / cellY).toInt()
@@ -377,27 +411,27 @@ private fun buildMoodBoardPattern(
             cells.add(Triple(x, y, e))
         }
     }
-    cells.sortByDescending { it.third }
-
+    // ── Two-phase placement ────────────────────────────────────────────
+    // Phase A — INTERIOR: the quiet band just outside the tiny core is
+    // seeded FIRST with small glyphs, so the middle of the collage is never
+    // bare. (A single far-first pass fills the perimeter before ever
+    // reaching the interior — that's what left the expanded board's middle
+    // a huge empty band.)
+    val interiorQuota = maxOf(2, (targetCount * 0.22f).roundToInt())
+    cells.sortBy { it.third }
     for ((x, y, e) in cells) {
-        if (placed.size >= perimeterCount) break
-        if (e < 1f) continue // inside the centre exclusion — middle stays clear
-        // Bigger glyphs toward the edges, smaller near the middle — reads
-        // as a natural collage instead of uniform dots.
-        val t = ((e - 1f) / 2.0f).coerceIn(0f, 1f)
-        val sizeDp = 34f + t * 20f // 34..54 dp
-        if (!clearsAll(x, y, sizeDp / 2f)) continue
-        val glyph = glyphs[rng.nextInt(glyphs.size)]
-        val placement = WatermarkPlacement(
-            glyph = glyph,
-            xFrac = x,
-            yFrac = y,
-            size = sizeDp.dp,
-            rotation = -14f + rng.nextFloat() * 28f,
-            tint = if (rng.nextFloat() < 0.80f) accent else (accentByGlyph[glyph] ?: accent),
-            alphaBoost = 0.85f + rng.nextFloat() * 0.35f
-        )
-        placed.add(Placed(x, y, sizeDp / 2f, placement))
+        if (placed.size >= interiorQuota) break
+        if (e < 1f || e > interiorBandE) continue
+        placeGlyph(x, y, e)
+    }
+    // Phase B — PERIMETER: the rest, far cells first, until the target.
+    // The interior ring is already in, so the outer ring fills around it
+    // easily (the interior glyphs are small and far away).
+    cells.sortByDescending { it.third }
+    for ((x, y, e) in cells) {
+        if (placed.size >= targetCount) break
+        if (e < 1f) continue
+        placeGlyph(x, y, e)
     }
     return placed.map { it.placement }
 }
