@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Topic Reveal gains the watermark backdrop; background-level cards confirmed opaque**
+
+### What was asked
+
+Add the watermark pattern to the Topic Reveal screen too, and make its transparent elements sitting directly above the background opaque — NOT the hero card, just the background.
+
+User clarified (ask_user): the teaser / action-prompt cards become fully solid; keep the tag chips as they are.
+
+### What was done
+
+- **`TopicRevealScreen.kt`** — the root `Column` (which owned the category wash background + verticalScroll) is now wrapped in a `Box` that keeps `cat.categoryBackgroundWash()`; `CurioWatermarkBackdrop(activeCat = cat)` sits as a FIXED sibling behind the scrollable `Column` (same pattern as Spin / EntryDetail), so the page's quiet glyph collage shows in the gaps around the content while the content scrolls over it. Added the `CurioWatermarkBackdrop` import.
+- **Opaque cards**: the teaser card + action-prompt card already render on `category.categorySurface(...)` — a fully opaque color (lerp of opaque colors, no alpha) — so the watermark never bleeds through them; documented this contract in the new backdrop comment. Tag chips keep their 0.18f accent alpha per the user's clarification; the hero card (its own gradient + pills) is untouched per "not the hero card".
+
+### Validation
+
+- Brace/paren balance verified (87/87 `{}`, 266/266 `()`). Box closes before BackHandler; ConfettiBurst + AlertDialog remain outside the Box (confetti still overlays full-screen).
+- Code-reviewer pass: wash correctly moved from Column → Box (no double background), verticalScroll kept on the inner Column so the backdrop stays fixed, cards' `categorySurface` confirmed opaque, imports resolve, no dead code.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board fixes: expanded view keeps its tint in AMOLED, watermark density matches inline, 1-2 center glyphs**
 
 ### What was asked

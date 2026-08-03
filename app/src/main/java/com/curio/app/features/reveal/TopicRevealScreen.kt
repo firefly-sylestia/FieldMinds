@@ -65,6 +65,7 @@ import com.curio.app.data.buildExploreSearchUrl
 import com.curio.app.infrastructure.ExploreSessionService
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
+import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -199,7 +200,7 @@ fun TopicRevealScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             // Category tint wash — the reveal page wears a faint wash of the
@@ -208,8 +209,20 @@ fun TopicRevealScreen(
             // Theme-aware: deep accent over cream in light, pastel twin glow
             // over midnight in dark (deep accents look muddy on dark).
             .background(cat.categoryBackgroundWash())
-            .verticalScroll(rememberScrollState())
     ) {
+        // ── Watermark backdrop — every category glyph scattered behind the
+        //    content (FIXED — the content scrolls over it), the same
+        //    backdrop language as Home / Spin / the saved-entry page. The
+        //    teaser / action cards above it sit on OPAQUE category surfaces
+        //    so the glyphs only show in the gaps around them, never bleeding
+        //    through the cards.
+        CurioWatermarkBackdrop(activeCat = cat, modifier = Modifier.fillMaxSize())
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
         // ── 1. Top bar (pin bookmark + close ✕) ────────────────────────
         Row(
             modifier = Modifier
@@ -445,7 +458,8 @@ fun TopicRevealScreen(
                 Spacer(Modifier.height(20.dp))
             }
 
-        Spacer(Modifier.height(navInsets.calculateBottomPadding()))
+            Spacer(Modifier.height(navInsets.calculateBottomPadding()))
+        }
     }
 
     // Leaving via the system back gesture without engaging → recently-unexplored.
