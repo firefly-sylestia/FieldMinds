@@ -14,6 +14,18 @@ import org.json.JSONObject
  * Stores display name, theme mode, daily reminder, and data flags
  * across app restarts. Used by ProfileScreen and SettingsScreen.
  */
+/**
+ * Spin density sizing strength (v7.4) — replaces the old on/off switch with
+ * three levels:
+ *  - [OFF] — density sizing disabled entirely (the DIMENSION rule can still
+ *    compact short screens via "Smart Spin layout").
+ *  - [COMPACT] — classic rule: under 440 dpi the deck compacts, 440+ dpi
+ *    gets a roomier deck.
+ *  - [EXTRA_COMPACT] — adds a 2x tier: under ~350 dpi the deck shrinks even
+ *    further so very low-dpi phones fit everything comfortably.
+ */
+enum class SmartDensityMode { OFF, COMPACT, EXTRA_COMPACT }
+
 object AppPreferences {
 
     /** Theme mode constants used across ProfileScreen, SettingsScreen, CurioTheme. */
@@ -50,7 +62,10 @@ object AppPreferences {
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_SMART_SPIN_LAYOUT = "smart_spin_layout"
-    private const val KEY_SMART_DENSITY_LAYOUT = "smart_density_layout"
+    // v7.4 — the density rule is a 3-way STRENGTH picker now. The legacy
+    // boolean key below is read once for migration and then removed.
+    private const val KEY_SMART_DENSITY_MODE = "smart_density_mode"
+    private const val KEY_LEGACY_SMART_DENSITY_LAYOUT = "smart_density_layout"
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
     private const val KEY_OVERLAY_BUBBLE_ENABLED = "overlay_bubble_enabled"
@@ -107,12 +122,13 @@ object AppPreferences {
     // compact system: short screens get the compact (or extra-compact)
     // layout. Default ON. Seeded from prefs in [initThemeMode].
     var smartSpinLayoutState by mutableStateOf(true)
-    // Smart density layout — the DENSITY rule of the Spin page's smart
-    // sizing: low-density devices (under 440 dpi) get the compact layout
-    // AND high-density devices (440+ dpi) get a roomier deck — both gated
-    // by this one switch, so the sizing works in both directions. Default
-    // ON. Seeded from prefs in [initThemeMode].
-    var smartDensityLayoutState by mutableStateOf(true)
+    // Smart density mode — the DENSITY rule of the Spin page's smart
+    // sizing, now a 3-way strength picker (v7.4): OFF disables density
+    // sizing, COMPACT keeps the classic rule (under 440 dpi → smaller,
+    // 440+ dpi → roomier), EXTRA_COMPACT adds a 2x tier for very low dpi
+    // (under 350 dpi → even smaller deck). Default COMPACT (preserves the
+    // pre-v7.4 always-on behavior). Seeded from prefs in [initThemeMode].
+    var smartDensityModeState by mutableStateOf(SmartDensityMode.COMPACT)
     // Explore sessions — the explore-now timer/reminder/done flow. Default
     // ON; off disables the timer notification + reminder + done prompt while
     // Explore-now still opens the browser and records recently-explored.
@@ -166,7 +182,7 @@ object AppPreferences {
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
         smartSpinLayoutState = isSmartSpinLayoutEnabled(context)
-        smartDensityLayoutState = isSmartDensityLayoutEnabled(context)
+        smartDensityModeState = getSmartDensityMode(context)
         exploreSessionsEnabledState = isExploreSessionsEnabled(context)
         liveNotificationsEnabledState = isLiveNotificationsEnabled(context)
         overlayBubbleEnabledState = isOverlayBubbleEnabled(context)
@@ -229,12 +245,32 @@ object AppPreferences {
         smartSpinLayoutState = enabled
     }
 
-    fun isSmartDensityLayoutEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_SMART_DENSITY_LAYOUT, true)
+    /**
+     * The Spin density strength — see [SmartDensityMode].
+     *
+     * v7.4 — migrates the pre-v7.4 boolean switch on first read: true →
+     * COMPACT, false → OFF. The legacy key is removed after migration so
+     * the mode key becomes the single source of truth.
+     */
+    fun getSmartDensityMode(context: Context): SmartDensityMode {
+        val prefs = prefs(context)
+        val stored = prefs.getString(KEY_SMART_DENSITY_MODE, null)
+        if (stored != null) {
+            return runCatching { SmartDensityMode.valueOf(stored) }
+                .getOrDefault(SmartDensityMode.COMPACT)
+        }
+        val legacy = prefs.getBoolean(KEY_LEGACY_SMART_DENSITY_LAYOUT, true)
+        val migrated = if (legacy) SmartDensityMode.COMPACT else SmartDensityMode.OFF
+        prefs.edit()
+            .putString(KEY_SMART_DENSITY_MODE, migrated.name)
+            .remove(KEY_LEGACY_SMART_DENSITY_LAYOUT)
+            .apply()
+        return migrated
+    }
 
-    fun setSmartDensityLayoutEnabled(context: Context, enabled: Boolean) {
-        prefs(context).edit().putBoolean(KEY_SMART_DENSITY_LAYOUT, enabled).apply()
-        smartDensityLayoutState = enabled
+    fun setSmartDensityMode(context: Context, mode: SmartDensityMode) {
+        prefs(context).edit().putString(KEY_SMART_DENSITY_MODE, mode.name).apply()
+        smartDensityModeState = mode
     }
 
     /** Whether the explore-session flow (timer/reminder/done prompt) is on. */

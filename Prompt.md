@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Spin density 2x tier + layout pinning — 3-way density picker (Off / Compact / 2x), Categories/Filter pinned to the nav bar, category-picker Mix button always visible**
+
+### What was asked
+
+“when i have density option on sometimes in some dpi the padding looks off the category and filters gets too much above the nav buttons and the done and mix button for category picker also hides can u pin it properly and also add a 2x density option for more lower dpi like 350 properly fix it” — ask_user: density strength picker (Off / Compact / Extra-compact), Mix row cut off in BOTH pickers, gap is above the app nav bar.
+
+### What was done
+
+- **AppPreferences.kt (v7.4):** the boolean `smartDensityLayoutState` became a 3-way `SmartDensityMode` enum (OFF / COMPACT / EXTRA_COMPACT) stored under a new string key, with one-time migration of the legacy boolean (true → COMPACT, false → OFF) and removal of the old key. Default COMPACT preserves the old always-on behavior.
+- **SpinScreen.kt:** density tiers now read the mode — COMPACT keeps the classic rule (< 440 dpi → smaller, 440+ → roomier); EXTRA_COMPACT adds a 2x tier below the new `SpinExtraLowDensityDpi = 350`: deck scale 0.72 (`SpinDensityExtraCompactDeckScale`), 325dp carousel box, 12dp deck spacer + tighter spin-button padding.
+- **BottomCta gap fix:** removed `navigationBarsPadding()` from both the normal row and the vertical-pill branch — verified from the bundled M3 1.5.0-alpha20 Scaffold source that `innerPadding.bottom = bottomBarHeight` exactly when the bottom bar exists, so the in-content inset padding was creating the floating gap above the nav bar. The Categories/Filter bar now sits flush on the app bottom nav.
+- **Category-picker Mix row fix (both pickers):** the grid's `Modifier.weight(1f)` sat inside `MorphEntrance { … }` (a plain lambda), so the sheet Column measured the grid with unbounded height → full-height grid → Mix/Cancel row pushed off-screen. The grid now sits in a weighted `Box` that is a DIRECT child of the sheet Column (MorphEntrance moved inside), bounding the grid so the action row stays pinned — same pattern as the already-working FilterSheet.
+- **SettingsScreen.kt:** the density Switch became a `SingleChoiceSegmentedButtonRow` (Off / Compact / 2x) with a summary subtitle, matching the theme-style picker pattern.
+- **Fastlane:** new changelog `20260804.txt`.
+
+### Validation
+
+- `check_braces.py` BALANCED on all 4 touched files; no stale references to the old boolean API; the 2x tier takes priority over plain compact in every `when` (deck scale, carousel box, spacers, button padding).
+- Code-reviewer: clean — confirmed the weight fix matches the M3 sheet internals (content lambda is `ColumnScope.() -> Unit`, no internal verticalScroll) and the inset reasoning against the bundled Scaffold source. Suggested a real-device visual check of the 0.72 deck on ~350 dpi.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Paper-texture redesign — real grain + crumpled creases on every page, torn pages gain coffee & folded options, coffee + folded quality pass**
 
 ### What was asked

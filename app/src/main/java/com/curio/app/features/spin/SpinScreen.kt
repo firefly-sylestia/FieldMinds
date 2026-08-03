@@ -93,6 +93,7 @@ import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.CurioTopic
+import com.curio.app.data.SmartDensityMode
 import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
@@ -688,10 +689,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         //    [SpinExtraCompactThresholdHeight] get the EXTRA-compact tier —
         //    a smaller deck AND Categories/Filter as tall vertical pills
         //    pinned to the left/right screen edges.
-        val densityEnabled = AppPreferences.smartDensityLayoutState
+        val densityMode = AppPreferences.smartDensityModeState
         val densityDpi = context.resources.displayMetrics.densityDpi
-        val lowDensity = densityEnabled && densityDpi < SpinLowDensityDpi
-        val highDensity = densityEnabled && densityDpi >= SpinHighDensityDpi
+        val densityActive = densityMode != SmartDensityMode.OFF
+        val lowDensity = densityActive && densityDpi < SpinLowDensityDpi
+        val highDensity = densityActive && densityDpi >= SpinHighDensityDpi
+        // v7.4 — the 2x tier: EXTRA_COMPACT mode shrinks the deck a step
+        // further below [SpinExtraLowDensityDpi] so very low-dpi phones
+        // (≈350 dpi) fit the whole spin comfortably.
+        val densityExtraCompact =
+            densityMode == SmartDensityMode.EXTRA_COMPACT && densityDpi < SpinExtraLowDensityDpi
         val smartLayout = AppPreferences.smartSpinLayoutState
         val heightCompact = maxHeight < SpinCompactThresholdHeight
         val extraCompact = smartLayout && maxHeight < SpinExtraCompactThresholdHeight
@@ -741,6 +748,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 SpinDeckSection(
                     compact = true,
                     extraCompact = extraCompact,
+                    densityExtraCompact = densityExtraCompact,
                     roomy = false,
                     cat = deckCat,
                     deckAccent = deckAccent,
@@ -764,6 +772,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // ── Normal layout — the exact pre-compact stack ──────────
             SpinDeckSection(
                 compact = false,
+                densityExtraCompact = densityExtraCompact,
                 roomy = roomy,
                 cat = deckCat,
                 deckAccent = deckAccent,
@@ -871,6 +880,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 private fun ColumnScope.SpinDeckSection(
     compact: Boolean,
     extraCompact: Boolean = false,
+    densityExtraCompact: Boolean = false,
     roomy: Boolean = false,
     cat: CurioCategory,
     deckAccent: Color,
@@ -893,6 +903,7 @@ private fun ColumnScope.SpinDeckSection(
     Spacer(
         Modifier.height(
             when {
+                densityExtraCompact -> 12.dp
                 extraCompact -> 12.dp
                 compact -> 20.dp
                 roomy -> 56.dp
@@ -918,6 +929,7 @@ private fun ColumnScope.SpinDeckSection(
         enabled = enabled,
         compact = compact,
         extraCompact = extraCompact,
+        densityExtraCompact = densityExtraCompact,
         roomy = roomy,
         onCardTap = onCardTap,
         modifier = Modifier.fillMaxWidth()
@@ -928,8 +940,20 @@ private fun ColumnScope.SpinDeckSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = if (compact) (if (extraCompact) 12.dp else 16.dp) else if (roomy) 40.dp else 32.dp,
-                bottom = if (compact) (if (extraCompact) 8.dp else 10.dp) else if (roomy) 26.dp else 20.dp
+                top = when {
+                    densityExtraCompact -> 12.dp
+                    compact && extraCompact -> 12.dp
+                    compact -> 16.dp
+                    roomy -> 40.dp
+                    else -> 32.dp
+                },
+                bottom = when {
+                    densityExtraCompact -> 8.dp
+                    compact && extraCompact -> 8.dp
+                    compact -> 10.dp
+                    roomy -> 26.dp
+                    else -> 20.dp
+                }
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -1459,6 +1483,13 @@ private val SpinExtraCompactThresholdHeight = 600.dp
 private const val SpinLowDensityDpi = 440
 
 /**
+ * Extra-low-density threshold (v7.4) — devices under this density get the
+ * 2x density tier (an even smaller deck) when Settings → Experimental →
+ * Smart density is set to Extra-compact ("2x").
+ */
+private const val SpinExtraLowDensityDpi = 350
+
+/**
  * High-density threshold (v7.3) — devices at or above this density get the
  * roomy tier (a slightly LARGER deck), so the density rule scales both
  * ways: low dpi → smaller, high dpi → larger.
@@ -1470,6 +1501,9 @@ private const val SpinCompactDeckScale = 0.88f
 
 /** Deck scale factor applied in extra-compact mode. */
 private const val SpinExtraCompactDeckScale = 0.78f
+
+/** Deck scale factor applied in the 2x density tier (v7.4). */
+private const val SpinDensityExtraCompactDeckScale = 0.72f
 
 /** Deck scale factor applied in roomy (high-density) mode. */
 private const val SpinRoomyDeckScale = 1.05f
@@ -1489,6 +1523,7 @@ private fun Carousel(
     enabled: Boolean,
     compact: Boolean = false,
     extraCompact: Boolean = false,
+    densityExtraCompact: Boolean = false,
     roomy: Boolean = false,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
@@ -1500,6 +1535,7 @@ private fun Carousel(
     // v7.3 — roomy scales the fan UP ~5% on high-density screens so the
     // density rule works both ways (low → smaller, high → larger).
     val deckScale = when {
+        densityExtraCompact -> SpinDensityExtraCompactDeckScale
         extraCompact -> SpinExtraCompactDeckScale
         compact -> SpinCompactDeckScale
         roomy -> SpinRoomyDeckScale
@@ -1512,6 +1548,7 @@ private fun Carousel(
         // match the up-scaled fan.
         modifier = modifier.height(
             when {
+                densityExtraCompact -> 325.dp
                 extraCompact -> 350.dp
                 compact -> 390.dp
                 roomy -> 470.dp
@@ -2306,10 +2343,14 @@ private fun BottomCta(
             //    the bottom Categories/Filter row becomes two TALL pills
             //    pinned to the left/right screen edges, so the middle stays
             //    clear for the deck band and everything fits.
+            // v7.4 — the Scaffold already ends the content area exactly at
+            // the app's bottom nav bar (innerPadding.bottom = bar height),
+            // so the extra navigationBarsPadding() here pushed the buttons
+            // up by the system gesture/3-button inset — the "floating above
+            // the nav bar" gap. Removed so the bar sits flush on the nav bar.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding()
                     .padding(horizontal = 12.dp, vertical = 10.dp)
             ) {
                 VerticalDeckButton(
@@ -2330,10 +2371,12 @@ private fun BottomCta(
                 )
             }
         } else {
+            // v7.4 — same inset fix as the vertical branch above: the
+            // content area already ends above the app's bottom nav bar, so
+            // navigationBarsPadding() only created a gap under the buttons.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding()
                     .padding(vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -2576,14 +2619,27 @@ private fun CategoryPickerSheet(
                     )
 
                     // ── Tile grid filling the screen ────────────────
-                    MorphEntrance {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
+                    // v7.4 — the grid sits inside a WEIGHTED Box that is a
+                    // DIRECT child of the sheet Column. Weight inside the
+                    // old MorphEntrance wrapper was ignored (MorphEntrance's
+                    // lambda is not a ColumnScope child), so the grid
+                    // rendered at full height and pushed the Mix/Cancel row
+                    // off-screen on smaller phones. The Box keeps the
+                    // entrance animation AND bounds the grid, so the action
+                    // row stays pinned.
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    ) {
+                        MorphEntrance {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(2),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
+                                modifier = Modifier.fillMaxSize()
+                            ) {
                             // All tiles render at once — no per-tile stagger.
                             items(categories) { cat ->
                                 val slug = cat.id.routeSlug
@@ -2606,6 +2662,7 @@ private fun CategoryPickerSheet(
                                         }
                                     }
                                 )
+                            }
                             }
                         }
                     }

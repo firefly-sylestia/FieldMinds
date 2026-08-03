@@ -1,9 +1,11 @@
 package com.curio.app.features.picker
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -120,15 +122,25 @@ fun CategoryPickerScreen(navController: NavController) {
             modifier = Modifier.padding(top = 4.dp, bottom = 10.dp)
         )
 
-        MorphEntrance {
-            LazyVerticalGrid(
-                state = gridState,
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(top = 4.dp, bottom = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.weight(1f)
-            ) {
+        // v7.4 — the grid sits inside a WEIGHTED Box that is a DIRECT child
+        // of the sheet Column. Weight inside the old MorphEntrance wrapper
+        // was ignored, so the grid rendered at full height and pushed the
+        // Mix row off-screen on smaller phones. The Box keeps the entrance
+        // animation AND bounds the grid, so the action row stays pinned.
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            MorphEntrance {
+                LazyVerticalGrid(
+                    state = gridState,
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(top = 4.dp, bottom = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
                 items(categories) { cat ->
                     val slug = cat.id.routeSlug
                     CurioCategoryCard(
@@ -153,6 +165,7 @@ fun CategoryPickerScreen(navController: NavController) {
                             if (slug !in selectedSlugs) toggleSlug(slug)
                         }
                     )
+                }
                 }
             }
         }

@@ -61,6 +61,7 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioQuality
 import com.curio.app.data.AudioQualitySettings
 import com.curio.app.data.CurioBackupManager
+import com.curio.app.data.SmartDensityMode
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
@@ -786,12 +787,12 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
-                        // ── Smart density layout — the DENSITY rule of the
-                        //    Spin page's smart sizing, working BOTH ways:
-                        //    low-density phones (< 440 dpi) get the compact
-                        //    layout and high-density phones (440+ dpi) get a
-                        //    slightly larger, roomier deck. One switch gates
-                        //    the whole rule.
+                        // ── Smart density — the DENSITY rule of the Spin
+                        //    page's smart sizing, now a 3-way strength picker
+                        //    (v7.4): Off disables density sizing, Compact
+                        //    keeps the classic two-way rule (< 440 dpi →
+                        //    smaller deck, 440+ → roomier), and 2x adds an
+                        //    even smaller tier for very low dpi (< 350 dpi).
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -803,18 +804,35 @@ fun SettingsScreen(navController: NavController) {
                                 size = 22.dp
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Smart density layout", style = MaterialTheme.typography.bodyLarge)
+                                Text("Smart density", style = MaterialTheme.typography.bodyLarge)
                                 Text(
-                                    "Smaller on low-density phones · larger on high-density",
+                                    densityModeSummary(AppPreferences.smartDensityModeState),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                            Switch(
-                                checked = AppPreferences.smartDensityLayoutState,
-                                onCheckedChange = { AppPreferences.setSmartDensityLayoutEnabled(context, it) }
-                            )
                         }
+                        Spacer(Modifier.height(2.dp))
+                        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                            SmartDensityMode.entries.forEachIndexed { index, mode ->
+                                SegmentedButton(
+                                    selected = mode == AppPreferences.smartDensityModeState,
+                                    onClick = { AppPreferences.setSmartDensityMode(context, mode) },
+                                    shape = SegmentedButtonDefaults.itemShape(
+                                        index = index,
+                                        count = SmartDensityMode.entries.size
+                                    )
+                                ) {
+                                    Text(densityModeSegmentLabel(mode), style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                        }
+                        Text(
+                            "Smaller deck below 440 dpi · 2x shrinks it further below 350 dpi · roomier deck at 440+ dpi",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 6.dp, bottom = 2.dp)
+                        )
                         Text(
                             "These features are still finding their shape — they may change in future updates.",
                             style = MaterialTheme.typography.bodySmall,
@@ -898,5 +916,18 @@ private fun AudioQualityDialog(
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text("Close", fontWeight = FontWeight.Bold) } }
     )
+}
+
+// ── Smart density — segment labels + summary copy for the 3-way picker ──
+private fun densityModeSegmentLabel(mode: SmartDensityMode): String = when (mode) {
+    SmartDensityMode.OFF -> "Off"
+    SmartDensityMode.COMPACT -> "Compact"
+    SmartDensityMode.EXTRA_COMPACT -> "2x"
+}
+
+private fun densityModeSummary(mode: SmartDensityMode): String = when (mode) {
+    SmartDensityMode.OFF -> "Density sizing off"
+    SmartDensityMode.COMPACT -> "Smaller on low-density phones · larger on high-density"
+    SmartDensityMode.EXTRA_COMPACT -> "2x — even smaller on very low-density phones"
 }
 
