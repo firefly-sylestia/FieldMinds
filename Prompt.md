@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Crash fix: Cabinet NPE on legacy entries — null-hardened CaptureData preview/content + detail renders (mood board now shows)**
+
+### What was asked
+
+"Fix this crash and also the mood board wasn't showing — is it because of this crash?" Crash report 2026-08-03: `java.lang.NullPointerException — Parameter specified as non-null is null: kotlin.text.StringsKt__StringsKt.isBlank` at `CaptureData.toPreview(CaptureData.kt:315)` → `CurioEntry.getBodyPreview` → `CurioTopicCard` in the Cabinet `LazyGrid`.
+
+### Root cause
+
+YES — the mood board not showing was this crash. `toPreview()` called `.isBlank()` / `.take()` / `.firstOrNull()` directly on capture fields; legacy entries decode missing Kotlin-default fields to NULL (Gson allocates via Unsafe, skipping constructor defaults — the app's repeatedly-documented failure mode). One bad card NPE'd while composing → the whole Cabinet grid (mood boards included) died. The crashing branch (Marginalia `journalText`) plus every other format branch had the same latent NPE.
+
+### What was done
+
+**1 — `CaptureData.kt`: `toPreview()` + `toFullContent()` fully null-hardened** — every String field via `.orEmpty()` / `isNullOrBlank()`, every List via `.orEmpty()`, quote-list elements null-checked in filters, OpenNotebook `subFormat?.name ?: "Wildcard"` + `subData?.` (safe-call on a non-null-typed property — benign "unnecessary safe call" warning only, no warnings-as-errors in the project), Portfolio `sections.orEmpty()`. Sibling helpers hardened the same way: `audioFilePaths`, `imageUrisAll`, `withImageUris` (OpenNotebook branch `subData?.let { copy(subData = it.withImageUris(remap)) } ?: this` — avoids a null-into-non-null copy mismatch), `notePaperStyle`.
+
+**2 — `EntryDetailScreen.kt`: five render-site guards** — `data.title`/`data.note` (SoundBite), `data.reviewText` (ReelNotes), `data.journalText` (Marginalia), `data.caption` (**GalleryWall mood board**) all switched `.isNotBlank()` → `!.isNullOrBlank()`, so opening a legacy entry — mood board included — can't crash the detail page either.
+
+### Validation
+
+- `check_braces.py` BALANCED on both files; grep confirms no remaining unguarded `.isNotBlank()`/direct field access on those Gson fields in the touched paths (remaining hits are inside the now-guarded `Text(...)` bodies).
+- Code-reviewer pass: clean — confirmed no type mismatches, no missing imports (orEmpty/isNullOrBlank are stdlib), the `subData?.let` form, and applied its one nit: `subFormat?.name ?: "Wildcard"` guard in the two OpenNotebook branches.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Star rating polish — roomier review text box, "Rate quality" help text, lighter palette-matched rating card, redesigned stars (gradient fill + hollow slots) in entry and saved detail**
 
 ### What was asked
