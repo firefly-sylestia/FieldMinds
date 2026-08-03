@@ -50,7 +50,6 @@ object AppPreferences {
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
     private const val KEY_OVERLAY_BUBBLE_ENABLED = "overlay_bubble_enabled"
-    private const val KEY_OVERLAY_PROMPT_SEEN = "overlay_prompt_seen"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
     private const val KEY_TOPIC_SENTIMENTS = "topic_sentiments"  // JSON object: "CATEGORY:topicId" -> "like"/"dislike"
@@ -290,13 +289,6 @@ object AppPreferences {
                 (isOverlayBubbleEnabled(context) && Settings.canDrawOverlays(context))
             )
 
-    /** Whether the one-time "floating bubble" permission prompt has been shown. */
-    fun isOverlayPromptSeen(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_OVERLAY_PROMPT_SEEN, false)
-
-    fun setOverlayPromptSeen(context: Context) {
-        prefs(context).edit().putBoolean(KEY_OVERLAY_PROMPT_SEEN, true).apply()
-    }
 
     // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────
     /**

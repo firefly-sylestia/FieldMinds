@@ -2,8 +2,11 @@ package com.curio.app.features.onboarding
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -84,6 +87,10 @@ fun OnboardingScreen(navController: NavController) {
     // ── Setup-step permission state ───────────────────────────────────
     var notificationGranted by remember { mutableStateOf(hasNotificationPermission(context)) }
     var micGranted by remember { mutableStateOf(hasMicPermission(context)) }
+    // "Display over other apps" — special access for the floating explore
+    // bubble. No runtime dialog on Android 10+, so "Allow" opens the system
+    // settings page; the ON_RESUME observer picks up the grant on return.
+    var overlayGranted by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
     // "Want the daily shuffle reminder on?" — only reachable once
     // notifications are granted; applied to prefs the moment it flips.
     var reminderWanted by rememberSaveable { mutableStateOf(false) }
@@ -100,6 +107,23 @@ fun OnboardingScreen(navController: NavController) {
     val requestMic = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted -> micGranted = granted }
+    // The result callback is empty on purpose: `StartActivityForResult`
+    // fires while the settings page is still open (permission not yet
+    // granted), so the ON_RESUME observer above is the real source of truth.
+    val requestOverlay = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { _ -> }
+
+    fun openOverlaySettings() {
+        runCatching {
+            requestOverlay.launch(
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:${context.packageName}")
+                )
+            )
+        }
+    }
 
     // Re-read permission state when returning from the system Settings
     // screen — users can flip grants mid-session and the cards should
@@ -110,6 +134,7 @@ fun OnboardingScreen(navController: NavController) {
             if (event == Lifecycle.Event.ON_RESUME) {
                 notificationGranted = hasNotificationPermission(context)
                 micGranted = hasMicPermission(context)
+                overlayGranted = Settings.canDrawOverlays(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -136,6 +161,7 @@ fun OnboardingScreen(navController: NavController) {
                     SetupSlide(
                         notificationGranted = notificationGranted,
                         micGranted = micGranted,
+                        overlayGranted = overlayGranted,
                         reminderWanted = reminderWanted,
                         onReminderChange = { wanted ->
                             reminderWanted = wanted
@@ -146,7 +172,8 @@ fun OnboardingScreen(navController: NavController) {
                         },
                         onRequestMic = {
                             requestMic.launch(Manifest.permission.RECORD_AUDIO)
-                        }
+                        },
+                        onRequestOverlay = { openOverlaySettings() }
                     )
                 } else {
                     MorphEntrance {
@@ -266,10 +293,12 @@ private fun OnboardingSlide(slide: OnboardingSlideData) {
 private fun SetupSlide(
     notificationGranted: Boolean,
     micGranted: Boolean,
+    overlayGranted: Boolean,
     reminderWanted: Boolean,
     onReminderChange: (Boolean) -> Unit,
     onRequestNotifications: () -> Unit,
-    onRequestMic: () -> Unit
+    onRequestMic: () -> Unit,
+    onRequestOverlay: () -> Unit
 ) {
     // Centered when the content fits, scrollable on very small screens —
     // the Box centers the scrollable column as a whole, so short content
@@ -349,6 +378,17 @@ private fun SetupSlide(
             subtitle = "Voice notes (Sound Bite) & voice attachments in your journal",
             granted = micGranted,
             onRequest = onRequestMic
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        // ── Display over other apps (floating explore bubble) ─────────
+        PermissionCard(
+            glyph = CurioIcons.BubbleChart,
+            title = "Display over other apps",
+            subtitle = "Floating explore bubble while you research a topic",
+            granted = overlayGranted,
+            onRequest = onRequestOverlay
         )
         }
     }

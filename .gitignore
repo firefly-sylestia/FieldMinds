@@ -11,6 +11,8 @@
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
+/logcat.txt
+/logcat-moodboard.txt
 /.idea/assetWizardSettings.xml
 /.idea/shelf/
 .DS_Store

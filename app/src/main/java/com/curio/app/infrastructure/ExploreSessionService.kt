@@ -25,6 +25,17 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.savedstate.SavedStateRegistry
+import androidx.savedstate.SavedStateRegistryController
+import androidx.savedstate.SavedStateRegistryOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.curio.app.MainActivity
 import com.curio.app.R
 import com.curio.app.data.AppPreferences
@@ -71,6 +82,33 @@ class ExploreSessionService : Service() {
 
     // ── Overlay bubble window ─────────────────────────────────────────
     private var bubbleView: ComposeView? = null
+
+    // ── Overlay-window owners ────────────────────────────────────────
+    // A TYPE_APPLICATION_OVERLAY window has no Activity behind it, so the
+    // bubble's ComposeView inherits no ViewTree owners. Without them,
+    // attaching the view throws "ViewTreeLifecycleOwner not found" — the
+    // crash when tapping Explore now. Provide service-owned owners (the
+    // standard pattern for WindowManager-hosted Compose) and keep the
+    // lifecycle RESUMED for the window's lifetime.
+    private val overlayLifecycleOwner = object : LifecycleOwner {
+        val registry: LifecycleRegistry = LifecycleRegistry.createUnsafe(this).apply {
+            currentState = Lifecycle.State.RESUMED
+        }
+        override val lifecycle: Lifecycle get() = registry
+    }
+
+    private val overlayViewModelStoreOwner = object : ViewModelStoreOwner {
+        private val store = ViewModelStore()
+        override val viewModelStore: ViewModelStore get() = store
+    }
+
+    private val overlaySavedStateRegistryOwner = object : SavedStateRegistryOwner {
+        private val controller = SavedStateRegistryController.create(this).apply {
+            performRestore(null)
+        }
+        override val savedStateRegistry: SavedStateRegistry
+            get() = controller.savedStateRegistry
+    }
 
     // Drag state (view-level touch listener — slop-gated so taps on the
     // bubble's Compose buttons still land while drags move the window).
@@ -270,6 +308,12 @@ class ExploreSessionService : Service() {
         if (bubbleView != null) return
 
         val view = ComposeView(this).apply {
+            // Overlay windows have no Activity to supply the ViewTree owners
+            // Compose requires — install the service-owned ones above so
+            // attaching this view doesn't throw (crash fix).
+            setViewTreeLifecycleOwner(overlayLifecycleOwner)
+            setViewTreeViewModelStoreOwner(overlayViewModelStoreOwner)
+            setViewTreeSavedStateRegistryOwner(overlaySavedStateRegistryOwner)
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
             setContent {
                 // Reads the reactive session — pause/resume/hide from the
@@ -428,6 +472,7 @@ class ExploreSessionService : Service() {
 
     override fun onDestroy() {
         removeBubble()
+        overlayLifecycleOwner.registry.currentState = Lifecycle.State.DESTROYED
         super.onDestroy()
     }
 

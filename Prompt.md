@@ -2,6 +2,43 @@
 
 ## Latest Request (COMPLETED)
 
+**Crash + permission fixes: explore bubble no longer crashes (overlay ViewTree owners), "Display over other apps" asked in setup & on Explore now, and newly saved mood boards no longer render blank**
+
+### What was asked
+
+1. "fix the crash it happens when i tap explore now and also it doesnt ask for display over apps permission in setup neither after i tap explore now"
+2. "fix this as the moodboard isnt showing after i save it it shows me blank page not even the moodboard layout. but the old moodboards are visible" — commit + push both.
+
+### Root causes
+
+**Crash** — `java.lang.IllegalStateException: ViewTreeLifecycleOwner not found from ComposeView` (crash-loop, 7+ process restarts). The floating bubble is a `TYPE_APPLICATION_OVERLAY` window hosted by `ExploreSessionService`; `WindowManager.addView` attaches its ComposeView with no Activity behind it, so Compose finds no ViewTree lifecycle/ViewModelStore/SavedStateRegistry owners on attach and throws. Every bubble path (Explore now → grant → ON_RESUME continuation, NavHost restore, boot receiver, settings toggles) hit it.
+
+**Overlay permission never asked** — onboarding only asked Notifications + Microphone; and the reveal-flow ask was gated behind a ONE-TIME `overlay_prompt_seen` pref, so after one show (or dev testing) it never re-appeared.
+
+**Mood board blank after save** — `CaptureConverters.deserializeCaptureData` field-detection checked `map.containsKey("quotes") → Marginalia` BEFORE `map.containsKey("caption") → GalleryWall`. The mood board gained a `quotes` list, so NEW GalleryWall blobs serialize `"quotes":[]` and were decoded as Marginalia; the detail screen's `entry.captureData as? CaptureData.GalleryWall ?: return` then silently rendered an empty body ("blank page, not even the moodboard layout"). Old boards (no quotes key) fell through to `caption` → fine; every other format has an earlier discriminating key (durationSeconds / rating) → "others are fine".
+
+### What was done
+
+**1 — Bubble crash fix (`ExploreSessionService.kt`)** — service-owned ViewTree owners set on the bubble's ComposeView BEFORE `addView`: `overlayLifecycleOwner` (`LifecycleRegistry.createUnsafe`, held at RESUMED), `overlayViewModelStoreOwner` (`ViewModelStore()`), `overlaySavedStateRegistryOwner` (`SavedStateRegistryController`, `performRestore(null)`). All three are required (`getWindowRecomposer` throws on the missing lifecycle owner; `resolveComposeViewContext` on the other two). `onDestroy` moves the registry to DESTROYED. Fix lives in the service, so every bubble-start path is covered.
+
+**2 — Onboarding asks for overlay (`OnboardingScreen.kt`)** — new "Display over other apps" PermissionCard (bubble_chart glyph) on the setup slide; "Allow" opens `ACTION_MANAGE_OVERLAY_PERMISSION` (special access — no runtime dialog on Android 10+); `overlayGranted` re-read from `Settings.canDrawOverlays` in the existing ON_RESUME observer (launcher callback intentionally empty — fires before the grant lands).
+
+**3 — Explore now always asks (`TopicRevealScreen.kt`)** — removed the one-time `overlay_prompt_seen` gate: the "Floating explore bubble?" dialog now shows whenever the bubble toggle is ON and the permission is missing ("Not now" proceeds without it; the prompt returns next session). Dead pref + accessors removed from `AppPreferences.kt`.
+
+**4 — Mood board fix (`CaptureEntity.kt`)** — `caption → GalleryWall` moved BEFORE `quotes → Marginalia` in `deserializeCaptureData` (with a comment explaining why). Stored JSON was always a valid GalleryWall blob, so already-broken saved boards self-heal on next read — no data migration. Also fixes OpenNotebook/Portfolio-nested boards and backup/restore (same shared deserializer).
+
+**5 — Changelog** — `fastlane/.../20260803.txt` bubble line updated (overlay bubble + permission ask).
+
+### Validation
+
+- `check_braces.py` BALANCED on all 5 Kotlin files; grep confirms zero stale `isOverlayPromptSeen`/`overlay_prompt_seen` refs.
+- Code-reviewer pass (2): crash fix is the complete standard pattern (all 3 owners before addView; `createUnsafe` correct for lifecycle 2.10 — constructor deprecated); detection-matrix walk confirms the reorder breaks nothing (Marginalia has no `caption`, SoundBite/ReelNotes checked earlier, `caption` unique to GalleryWall — `imageCount` would NOT have been safe since ReelNotes has it too); applied the nit (empty onboarding launcher callback).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **CI fix: CurioTheme unresolved `isDark` (compile error)**
 
 - The bubble-theme refactor moved `isDark` into `curioColorScheme()`, but `CurioTheme`'s `SideEffect` still referenced it → `Unresolved reference 'isDark'` at CurioTheme.kt:206-207.

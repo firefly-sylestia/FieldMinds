@@ -217,10 +217,11 @@ fun TopicRevealScreen(
         }
     }
 
-    // ── Floating explore bubble permission (one-time prompt) ──────────
+    // ── Floating explore bubble permission ────────────────────────────
     //    "Display over other apps" has no runtime dialog on Android 10+, so
     //    Allow opens the system special-access page; ON_RESUME below resumes
-    //    the deferred flow (and starts the bubble service if granted).
+    //    the deferred flow (and starts the bubble service if granted). Asked
+    //    whenever the permission is missing — never a one-time gate.
     //    Plain `remember` (not saveable): a rotation mid-dialog drops the
     //    continuation, but the session is already persisted and the user can
     //    simply tap "Explore now" again.
@@ -293,11 +294,12 @@ fun TopicRevealScreen(
         val needsNotification = AppPreferences.isLiveNotificationsEnabled(context) &&
             !hasNotificationPermission(context)
 
-        if (needsOverlay && !AppPreferences.isOverlayPromptSeen(context)) {
-            // One-time ask: the bubble floats over other apps and needs the
-            // "Display over other apps" special access. Defer the browser
-            // until the user answers (Allow → system settings → ON_RESUME).
-            AppPreferences.setOverlayPromptSeen(context)
+        if (needsOverlay) {
+            // The bubble floats over other apps and needs the "Display over
+            // other apps" special access — ask whenever it's missing (not a
+            // one-time ask; "Not now" proceeds without the bubble and the
+            // prompt returns on the next session). Defer the browser until
+            // the user answers (Allow → system settings → ON_RESUME).
             overlayNeedsNotification = needsNotification
             pendingOverlaySession = session
             showOverlayPermissionDialog = true

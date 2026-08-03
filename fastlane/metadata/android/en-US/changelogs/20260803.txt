@@ -2,5 +2,5 @@
 • Switching formats keeps your draft: Save and switch, or switch and clear
 • Mood board captures now have the "How did it make you feel?" mood picker
 • Bold/italic/highlight and paper-style icons are clearly visible in dark and AMOLED mode
-• Exploring shows a draggable floating timer pill — pause, stop, or hide it; the live notification stays in control
+• Exploring shows a floating timer bubble that hovers over other apps — pause, stop, or hide it, and Curio asks for the Display over other apps permission in setup and when you explore
 • Optional live explore notification with Pause/Resume controls (Settings → Notifications), now tinted and more detailed
