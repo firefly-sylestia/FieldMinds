@@ -1,8 +1,18 @@
 package com.curio.app.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +44,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -59,7 +70,9 @@ import kotlinx.coroutines.delay
  * verb/target lines or descriptions; those live in the done-prompt, not on
  * a floating pill.
  *
- * Two shapes:
+ * Two shapes, animated between on expand/collapse (v6.12 — a Transition
+ * springs the size, morphs the corner radius and crossfades the content
+ * instead of the old instant swap):
  *  - **Minimized** (default): a compact capsule pill — category glyph chip,
  *    the topic name, and a chronometer-style elapsed readout. Tapping it
  *    expands; long topic names slow-scroll (marquee) inside the pill so the
@@ -68,6 +81,10 @@ import kotlinx.coroutines.delay
  *    with that much content reads as a circle). A header row with the glyph
  *    chip + topic + elapsed + a Minimize chevron, then a row of labeled
  *    controls: **Pause / Resume**, **Stop**, **Hide**.
+ *
+ * While the transition runs, [onSizeChanged] reports the growing/shrinking
+ * pixel size so the service can keep the window centered and clamped —
+ * timer ticks are excluded (they fire outside the transition window).
  *
  * Dragging lives HERE (Compose), not on the window: a system-overlay
  * ComposeView's composed child consumes every View-level touch, so a View
@@ -95,6 +112,11 @@ fun ExploreBubbleContent(
     onHide: () -> Unit,
     onDragBy: (dx: Float, dy: Float) -> Unit,
     onDragEnd: () -> Unit,
+    // Called with the new pixel size whenever the bubble resizes WHILE the
+    // expand/collapse transition is running — the service keeps the window
+    // centered/clamped so the growth reads as unfurling in place instead of
+    // an anchored jump. Timer ticks never forward (see [sizeAnimating]).
+    onSizeChanged: (wPx: Int, hPx: Int) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     val category = CurioCategories.byId(session.categoryId)
@@ -120,6 +142,22 @@ fun ExploreBubbleContent(
     // (hide → re-show, service restart) the bubble comes back small.
     var minimized by remember { mutableStateOf(true) }
 
+    // ── Expand/collapse transition (v6.12) ────────────────────────────
+    // The bubble used to swap between the pill and the panel INSTANTLY —
+    // the window snapped to the new size with no motion. Now a Transition
+    // springs the size (pill ⇄ panel), morphs the corner radius (pill ⇄
+    // card) and crossfades the content, and the window position follows the
+    // animated size frame-by-frame via [onSizeChanged] — gated to this
+    // transition so the per-second timer tick can never nudge the bubble.
+    val transition = updateTransition(targetState = minimized, label = "bubbleExpand")
+    val corner by transition.animateDp(
+        transitionSpec = { tween(280, easing = FastOutSlowInEasing) },
+        label = "bubbleCorner"
+    ) { isMinimized -> if (isMinimized) PILL_CORNER_RADIUS else PANEL_CORNER_RADIUS }
+    // True while the size/corner animation runs — size callbacks are only
+    // forwarded to the service during this window.
+    val sizeAnimating = transition.isRunning
+
     // Drag — slop-gated Compose detector: taps on the pill/buttons still
     // land, real drags report deltas for the service to move the window.
     // Placed OUTER to the clickable so drags win over taps (a clickable that
@@ -132,41 +170,68 @@ fun ExploreBubbleContent(
     }
 
     Surface(
-        // Minimized: a full capsule pill. Expanded: a rounded card panel —
-        // a 50% capsule on that much content is what made it read as a
-        // circle, so the expanded shape is a plain 20dp card instead.
-        shape = if (minimized) RoundedCornerShape(50) else RoundedCornerShape(20.dp),
+        // Shape morphs with the transition: a near-capsule pill when
+        // minimized, a rounded card when expanded — animated, so the two
+        // shapes melt into each other instead of hard-swapping.
+        shape = RoundedCornerShape(corner),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, accent.copy(alpha = 0.45f)),
-        shadowElevation = 8.dp,
+        border = BorderStroke(1.dp, accent.copy(alpha = 0.50f)),
+        // No elevation shadow: the old 8dp shadow rendered BEYOND the
+        // overlay window's bounds and the window clipped it into a hard,
+        // boxy edge around the pill. The crisp accent border carries the
+        // definition now.
+        shadowElevation = 0.dp,
         modifier = modifier
             .then(dragModifier)
+            .onSizeChanged { w, h ->
+                // Only while the expand/collapse transition runs — timer
+                // ticks change the pill width by a pixel and must not move
+                // the window.
+                if (sizeAnimating) onSizeChanged(w, h)
+            }
             // The minimized pill is tappable anywhere to expand; the expanded
             // bubble's buttons handle their own input. Applied conditionally
             // so the expanded bubble carries no dead clickable semantics.
             .then(if (minimized) Modifier.clickable { minimized = false } else Modifier)
     ) {
-        if (minimized) {
-            MinimizedPill(
-                session = session,
-                category = category,
-                accent = accent,
-                ink = ink,
-                elapsed = elapsed,
-                onExpand = { minimized = false }
-            )
-        } else {
-            ExpandedPanel(
-                session = session,
-                category = category,
-                accent = accent,
-                ink = ink,
-                elapsed = elapsed,
-                onTogglePause = onTogglePause,
-                onStop = onStop,
-                onHide = onHide,
-                onMinimize = { minimized = true }
-            )
+        AnimatedContent(
+            transitionState = transition,
+            transitionSpec = {
+                // The incoming state rises in from just below as the outgoing
+                // glides up and fades — reads as the bubble unfurling when it
+                // expands and folding back when it collapses. The size spring
+                // (SizeTransform) does the actual resizing smoothly.
+                (fadeIn(tween(160, delayMillis = 40)) +
+                    slideInVertically(animationSpec = tween(240, easing = FastOutSlowInEasing)) { it / 4 })
+                    togetherWith
+                    (fadeOut(tween(120)) +
+                        slideOutVertically(animationSpec = tween(200, easing = FastOutSlowInEasing)) { -it / 6 })
+                    using SizeTransform(clip = false)
+            },
+            label = "bubbleState"
+        ) { isMinimized ->
+            if (isMinimized) {
+                MinimizedPill(
+                    session = session,
+                    category = category,
+                    accent = accent,
+                    ink = ink,
+                    elapsed = elapsed,
+                    onExpand = { minimized = false }
+                )
+            } else {
+                ExpandedPanel(
+                    session = session,
+                    category = category,
+                    accent = accent,
+                    ink = ink,
+                    elapsed = elapsed,
+                    onTogglePause = onTogglePause,
+                    onStop = onStop,
+                    onHide = onHide,
+                    onMinimize = { minimized = true }
+                )
+            }
         }
     }
 }
@@ -474,6 +539,12 @@ private fun compactElapsed(millis: Long): String {
 }
 
 // ── Tuning constants ────────────────────────────────────────────────────
+// Corner radii the shape animates between: a near-capsule pill when
+// minimized (24dp ≈ the pill's half-height, so the ends stay fully rounded)
+// and a refined card when expanded.
+private val PILL_CORNER_RADIUS = 24.dp
+private val PANEL_CORNER_RADIUS = 18.dp
+
 // Topic area width caps: tight in the minimized pill, roomier in the
 // expanded panel. Longer topics slow-scroll within these bounds.
 private val MINIMIZED_TOPIC_WIDTH = 110.dp

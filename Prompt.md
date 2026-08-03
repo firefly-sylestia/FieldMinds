@@ -2,36 +2,40 @@
 
 ## Latest Request (COMPLETED)
 
-**Light-mode + Material gradient fixes (detail hero + washes), peek-card design suggestions file, and a small-screen adaptive system for the Shuffle page**
+**Bubble expand/collapse is now an animated unfurl (size + corner + position), and the clipped boxy shadow is gone — the pill shape was refined**
 
 ### What was asked
 
-"in light mode the red color the green teal and the sky blue blend gradient in the detail page doesnt mat ch the color it should be and it looks off. and also in metaril theme all of the blended colors look bad. so find me a solution for the material theme too. and give a suggestion in a file for the peek card colors for making them more beautiful and maybe also suggest a design and text size chnage for that. and lastly the shuffle page looks too big that in a small screen with category and filters gets hidden so add a system that detects small screen and adjust itsel without chnaging the current look and size."
+"Add a size/position transition so the bubble animates smoothly when it expands and collapses instead of resizing instantly also redesign the pill collapse shape i mean refine it as there a weird shadow boxy shadow around it and the look also feels bad."
 
 ### Root causes
 
-1. **Light-mode wash was on-hue but almost colorless.** `lightAccentTint` defaults (0.22 sat / 0.88 light) produced pastels within a few RGB points of each other for red/teal/sky (verified: #E7DADD / #DAE7E6 / #DAE2E7) — so Movies, Visual Art and Science detail pages all wore the same near-white beige wash and the hero blend melted into it instead of into the category color. HSL math confirmed the previous hue fix held (hues 345°/175°/201° constant through the glide) — the remaining problem was saturation.
-2. **Material theme polluted every category hue.** `themedAccent()` RGB-lerped each accent 40% toward the dynamic primary — with a blue wallpaper red (Movies) turned purple (#8A2F8A) and amber mauve; with an orange wallpaper teal and sky sank to grey-olive (#6B7842 / #647161). Every blended gradient/card in Material style looked muddy.
-3. **Shuffle page overflows on short screens.** Fixed stack ≈ 830dp (top bar + 44dp spacer + 444dp carousel + spin button + Categories/Filter bar); on small phones the NavHost grants ~510–650dp, the weight spacer collapses to zero and the BottomCta is pushed off-screen — "category and filters gets hidden".
+1. **Instant resize** — `ExploreBubbleContent` hard-swapped between `MinimizedPill` and `ExpandedPanel` inside the Surface, so the WRAP_CONTENT overlay window snapped to the new size with zero motion; the pill/panel shape also swapped (RoundedCornerShape(50) percent capsule ⇄ 20dp card) with no morph.
+2. **Boxy shadow** — `shadowElevation = 8.dp` on the root Surface renders the elevation shadow BEYOND the surface bounds, but the overlay window is exactly the surface size, so the window clipped the soft shadow into a hard, boxy edge around the pill.
+3. **Position jump / off-screen** — the window is gravity TOP|START anchored at its top-left; expanding (pill ~54dp → panel ~150dp) grew right-down from the top-left and, near the screen edges, pushed the panel off-screen.
 
 ### What was done
 
-1. **Light mode — the wash now READS its category (`CurioColors.kt`).** `lightAccentTint` defaults raised 0.22/0.88 → 0.32/0.85; `lightSurfaceTint` (cards/chips) 0.28/0.89 → 0.36/0.86. New washes: rose #E5CDD2, teal #CDE5E3, sky #CDDCE5 — clearly distinct pastels, DeepPlum ink ≥10.8:1 everywhere. The detail hero's final stop IS the wash, so its blend now ends on the real category color app-wide (Spin/Reveal/Cabinet/Save too).
-2. **Material theme — category accents stay true (`CategoryInk.kt`).** `themedAccent()` now returns the canonical accent in every style (the 40% RGB blend toward the dynamic primary removed). The Material style keeps its device identity through the dynamic color scheme (surfaces/backgrounds/controls come from the wallpaper); category colors stay the researched hues, so cards, heroes and mixed-deck blends stay vivid. KDocs + Settings description + `app/AGENTS.md` + `AppPreferences` stale "~40% shade" text updated.
-3. **Small-screen system (`SpinScreen.kt`, v6.11).** Root layout is now `BoxWithConstraints`; when the granted height < `SpinCompactThresholdHeight` (680dp) the page switches to a compact layout: the deck + spin button move into a vertically scrollable middle band pinned between the top bar and the pinned Categories/Filter bar (controls never hidden), and every fixed size steps down (`SpinCompactDeckScale` 0.88: carousel 444→390, hero ticket 286×310→252×273, peek cards + fan offsets ×0.88, spin button 126/108→112/96 with orbit box 176→156, spacers/paddings tightened). New `ColumnScope.SpinDeckSection` shares the deck between branches. Above the threshold the layout is byte-for-byte the original — normal screens unchanged.
-4. **Peek-card suggestions file (`app/PEEK_CARD_DESIGN_SUGGESTIONS.md`, new).** Concrete proposals — top-lit two-stop gradient fill, category-tinted hairlines (reuse `categoryBorder()`), soft shadows, one-point fan bias, two-line 16sp near titles vs 13sp far hints — marked SUGGESTIONS ONLY pending user review (design direction comes from the user).
+**`ExploreBubbleContent.kt` (v6.12):**
+- **Animated transition** — `updateTransition(minimized)` drives an `AnimatedContent(transitionState = transition)` with fade + vertical slide + `SizeTransform(clip = false)` (the size spring does the actual pill ⇄ panel resize smoothly), and `transition.animateDp` morphs the corner radius (24dp near-capsule pill ⇄ 18dp card) instead of hard-swapping the shape.
+- **Refined pill** — `shadowElevation 8dp → 0dp` (kills the clipped boxy shadow; the crisp accent border carries the definition, alpha bumped 0.45 → 0.50); the collapsed pill is a slightly squarer near-capsule (24dp) that reads cleaner than the extreme 50%-percent capsule.
+- **Gated size callback** — new `onSizeChanged: (wPx, hPx) -> Unit` (default no-op) forwarded from `Modifier.onSizeChanged` ONLY while `transition.isRunning`, so the per-second timer tick (a 1-2px width change) can never nudge the window.
+
+**`ExploreSessionService.kt`:**
+- **Center-anchored position compensation** — the new `onSizeChanged` callback moves the window by half the size delta per frame (x -= Δw/2, y -= Δh/2) so the bubble grows/shrinks around its center instead of anchored to the top-left, clamped to screen margins so the expanded panel never leaves the screen; deltas tracked via `bubbleLastW/H` (the view's own width can lag the window relayout a frame), applied via `view.post { updateViewLayout }` (never relayout mid-layout-pass), and cleared in `removeBubble()` (reviewer nit).
 
 ### Validation
 
-- `check_braces.py` BALANCED on all 6 edited Kotlin files.
-- Python HSL verification: new washes on-hue (345/175/201/245/26/349°) with ≥10.8:1 ink contrast; the Material 40%-blend damage quantified (red→purple, teal→olive) before removal.
-- Grep: zero stale `return@Carousel`, old fixed heights, or remaining accent×primary blends (remaining `colorScheme.primary` uses are generic M3 controls); docs no longer describe the ~40% shade.
-- Code-reviewer pass: compile-safe (BoxWithConstraints/maxHeight, Dp×Float, ColumnScope extension, verticalScroll in a weight(1f) column), normal-screen path verified byte-identical, hoisted tap lambda equivalent.
+- `check_braces.py` BALANCED on both files.
+- API precedent verified: `togetherWith`/`SizeTransform`/`using` (ContentTransform member — no import needed) already proven in SpinScreen.kt; `updateTransition`/`animateDp`/`AnimatedContent(transitionState)`/IntSize destructuring all stable in the resolved BOM.
+- Code-reviewer pass: compile-safe, center-anchored math correct for gravity TOP|START, timer-tick suppression sound; applied its one nit (clear bubbleLastW/H in removeBubble). Runtime note: WRAP_CONTENT overlay + per-frame size animation is a known-working pattern — verify on device for OEM-specific smoothness (fallback would be a fixed-size window + graphicsLayer scale).
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
 
 ---
 
 ## Previous Requests (COMPLETED)
+
+**Light-mode + Material gradient fixes, peek-card suggestions, small-screen Spin layout** — on-hue pastel wash enriched (0.32/0.85) so red/teal/sky pages and the detail hero blend read their true category color; Material style dropped the 40% dynamic-primary accent blend (canonical category colors on dynamic surfaces); Spin page gets a BoxWithConstraints compact layout for short screens; `app/PEEK_CARD_DESIGN_SUGGESTIONS.md` written (pending review). See the `fix: category gradients stay true…` commit.
 
 **Spin shuffle reel fluidity + peek wipe + dice tumble** — fan dealt once per pool (no start glitch), peek wipes rise through the card window at full height (190/160ms, no fades), dice tumbles on a seamless loop and morphs into the resting die. See the `feat: fluid shuffle reel…` commit.
 

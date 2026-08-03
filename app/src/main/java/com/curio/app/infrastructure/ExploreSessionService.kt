@@ -86,6 +86,11 @@ class ExploreSessionService : Service() {
     // ── Overlay bubble window ─────────────────────────────────────────
     private var bubbleView: ComposeView? = null
     private var bubbleParams: WindowManager.LayoutParams? = null
+    // Last bubble size seen by the expand/collapse position compensation
+    // (the ComposeView's own width/height can lag the window relayout by a
+    // frame, so the deltas are computed against these instead).
+    private var bubbleLastW = 0
+    private var bubbleLastH = 0
 
     // ── Periodic live-notification refresh ─────────────────────────────
     // The shade chronometer ticks live, but the progress bar and expanded
@@ -402,7 +407,43 @@ class ExploreSessionService : Service() {
                                     runCatching { windowManager.updateViewLayout(v, params) }
                                 }
                             },
-                            onDragEnd = { snapBubble() }
+                            onDragEnd = { snapBubble() },
+                            // Center-anchored growth: as the bubble animates
+                            // between the pill and the panel, keep its visual
+                            // center pinned (grow around the middle) instead
+                            // of anchored to the window's top-left, and clamp
+                            // so the larger panel never leaves the screen.
+                            // Compose only forwards this while an expand /
+                            // collapse transition runs, so the per-second
+                            // timer tick (a 1-2px width change) can't drift
+                            // the bubble.
+                            onSizeChanged = { w, h ->
+                                val view = bubbleView ?: return@ExploreBubbleContent
+                                val p = bubbleParams ?: return@ExploreBubbleContent
+                                if (bubbleLastW == 0 || bubbleLastH == 0) {
+                                    bubbleLastW = view.width
+                                    bubbleLastH = view.height
+                                }
+                                val deltaX = (w - bubbleLastW) / 2
+                                val deltaY = (h - bubbleLastH) / 2
+                                if (deltaX == 0 && deltaY == 0) return@ExploreBubbleContent
+                                bubbleLastW = w
+                                bubbleLastH = h
+                                val bounds = windowBounds()
+                                val marginPx = (12 * resources.displayMetrics.density).toInt()
+                                val minX = marginPx
+                                val maxX = (bounds.width() - w - marginPx).coerceAtLeast(minX)
+                                val minY = marginPx
+                                val maxY = (bounds.height() - h - marginPx).coerceAtLeast(minY)
+                                val newX = (p.x - deltaX).coerceIn(minX, maxX)
+                                val newY = (p.y - deltaY).coerceIn(minY, maxY)
+                                if (newX == p.x && newY == p.y) return@ExploreBubbleContent
+                                p.x = newX
+                                p.y = newY
+                                view.post {
+                                    runCatching { windowManager.updateViewLayout(view, p) }
+                                }
+                            }
                         )
                     }
                 }
@@ -427,6 +468,10 @@ class ExploreSessionService : Service() {
             params.x = ((bounds.width() - view.width) / 2).coerceAtLeast(margin)
             params.y = (bounds.height() - view.height - (96 * density).toInt()).coerceAtLeast(margin)
             windowManager.updateViewLayout(view, params)
+            // Seed the size-compensation tracker with the pill's size so the
+            // first expand transition measures against it (not 0).
+            bubbleLastW = view.width
+            bubbleLastH = view.height
         }
         bubbleView = view
     }
@@ -437,6 +482,10 @@ class ExploreSessionService : Service() {
             runCatching { windowManager.removeView(v) }
             bubbleView = null
             bubbleParams = null
+            // Clear the size tracker too — the next showBubble's doOnLayout
+            // re-seeds it; leaving stale sizes would mislead the guard.
+            bubbleLastW = 0
+            bubbleLastH = 0
         }
     }
 
