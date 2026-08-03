@@ -2,6 +2,49 @@
 
 ## Latest Request (COMPLETED)
 
+**Spin page Categories/Filter pills — icon+label centered in the box, label text bumped 14→16sp (text only)**
+
+### What was asked
+
+On the Spin page, the category and filter pill buttons: make the text centered along with its icon in its box, and make the text a little larger — the text only.
+
+### What was done
+
+- **`SpinScreen.kt` / `DeckControlButton`** (the Categories · Filter pill buttons in the bottom bar):
+  - The icon + label `Row` was left-flush inside the pill (`Arrangement.spacedBy(10.dp)`). It now uses `Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)` — the icon/text pair stays 10dp apart but is CENTERED as one unit inside the pill box.
+  - The label text grew 14sp → 16sp (`labelLarge.copy(fontSize = 16.sp, fontWeight = ExtraBold)`); the icon stays 24dp — text only, per the request. `sp`/`Alignment`/`Arrangement`/`FontWeight` imports were already present.
+
+### Validation
+
+- Targeted 2-line change in one component; verified in place via code search. No new imports, no API risk (`Arrangement.spacedBy(Dp, Alignment.Horizontal)` and `TextStyle.copy(fontSize = …)` are bedrock Compose).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
+**Python 3 + pip installed in the IDX environment and persisted in .idx/dev.nix**
+
+### What was asked
+
+Install Python 3 (etc.) and add them to the IDX dev.nix.
+
+### What was done
+
+- **`.idx/dev.nix`** — added `pkgs.python3` + `pkgs.python3Packages.pip` to the `packages` list (channel stays `stable-24.05`), so a workspace rebuild installs them persistently. Syntax verified with `nix-instantiate --parse`.
+- **Current environment** — installed the SAME channel attrs (`nix-env -iA nixpkgs_24_05.python3 nixpkgs_24_05.python3Packages.pip`) → **Python 3.11.10 + pip 24.0** landed in `~/.nix-profile/bin`, the exact version dev.nix resolves after a rebuild (no mismatch).
+- **`~/.bashrc`** — appended `export PATH=$PATH:$HOME/.nix-profile/bin` (the user profile wasn't on PATH), so `python3`/`pip3` resolve in new shells immediately. (~/.bashrc lives outside the repo — not committed.)
+
+### Validation
+
+- Fresh interactive shell: `python3 --version` → Python 3.11.10; `pip3 --version` → pip 24.0.
+- `nix-instantiate --parse .idx/dev.nix` → syntax OK.
+- Committed & pushed (`.idx/dev.nix` is git-tracked).
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Dark/AMOLED detail-page hero gradient — smooth theme-aware fade instead of the bottom plunge**
 
 ### What was asked

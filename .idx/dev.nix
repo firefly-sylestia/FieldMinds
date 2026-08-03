@@ -7,8 +7,10 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     # pkgs.go
-    # pkgs.python311
-    # pkgs.python311Packages.pip
+    # Project scripts under scripts/*.py (validate_topics.py, fix_structural.py,
+    # generate_artists.py, ...) run on Python 3 + pip.
+    pkgs.python3
+    pkgs.python3Packages.pip
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
     pkgs.gh

@@ -2019,9 +2019,13 @@ private fun DeckControlButton(
         modifier = modifier.height(62.dp)
     ) {
         Row(
+            // The icon + label group sits CENTERED in the pill box (not
+            // left-flush), so Categories/Filter read as balanced buttons.
             modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            // spacedBy + CenterHorizontally keeps the icon/text gap while
+            // centering the pair as one unit inside the pill.
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
         ) {
             CurioIcon(
                 icon, null,
@@ -2030,7 +2034,12 @@ private fun DeckControlButton(
             )
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
+                // Text-only bump: 14sp → 16sp (icon stays 24dp) so the
+                // button labels read a little larger per user request.
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold
+                ),
                 color = if (selected) Color.White else cat.categoryInk(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
