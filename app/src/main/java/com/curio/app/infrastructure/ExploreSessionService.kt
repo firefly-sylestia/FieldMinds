@@ -87,13 +87,19 @@ class ExploreSessionService : Service() {
     // A TYPE_APPLICATION_OVERLAY window has no Activity behind it, so the
     // bubble's ComposeView inherits no ViewTree owners. Without them,
     // attaching the view throws "ViewTreeLifecycleOwner not found" — the
-    // crash when tapping Explore now. Provide ONE service-owned owner that
-    // implements all three ViewTree contracts and keep the lifecycle
-    // RESUMED for the window's lifetime. (Newer androidx.savedstate makes
-    // SavedStateRegistryOwner extend LifecycleOwner, so a single owner
-    // must supply lifecycle + viewModelStore + savedStateRegistry — three
-    // separate anonymous objects no longer compile.)
-    private val overlayOwner = object :
+    // crash when tapping Explore now. One service-owned owner implements
+    // all three ViewTree contracts (newer androidx.savedstate makes
+    // SavedStateRegistryOwner extend LifecycleOwner, so the owner must
+    // supply lifecycle + viewModelStore + savedStateRegistry) and keeps
+    // its lifecycle RESUMED for the window's lifetime.
+    private val overlayOwner = OverlayOwner()
+
+    /**
+     * Service-owned ViewTree owner for the overlay bubble's ComposeView.
+     * A plain (static) nested class — no outer-service reference — so the
+     * bubble window never keeps the service alive through this object.
+     */
+    private class OverlayOwner :
         LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
         val registry: LifecycleRegistry = LifecycleRegistry.createUnsafe(this).apply {
             currentState = Lifecycle.State.RESUMED
