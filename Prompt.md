@@ -2,6 +2,36 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating pill + explore notification trimmed to the essentials; expanded pill redesigned (no more circle look); topic slow-scrolls (marquee)**
+
+### What was asked
+
+"the floating pill in curio and its explore now notification should not show too much details like even the description. make it short and redesign the expanded floating pill as the current one looks like a circle when expanded so fix it, and make the floating pill topic animate so show the full topic slowly." — a refinement of existing bubble/notification behavior (no toggle question per root AGENTS.md).
+
+### What was done
+
+1. **Pill content is now short** — the second line dropped "· {verb} {target}" entirely (minimized: topic + "12:34" chronometer; expanded: topic + "12m 5s"). No descriptions anywhere on the bubble.
+2. **Expanded pill redesigned (no more circle)** — the expanded state was a 50% capsule (`RoundedCornerShape(50)`) holding a chip + text + 4 icon buttons in one row, which read as a circle. It's now a **rounded card panel** (`RoundedCornerShape(20.dp)`): a header row (glyph chip + topic + elapsed + Minimize chevron) over a row of **labeled** pill buttons — Pause/Resume, Stop, Hide (icon + text — clearer than bare icons). Minimized stays a compact capsule.
+3. **Topic slow-scrolls (marquee)** — new `MarqueeTopicText`: measures the single-line topic with `rememberTextMeasurer`, draws it at full measured width (via `requiredWidth` — escapes parent constraints) inside a `min(textWidth, cap)` clipped box (110dp pill / 180dp panel), and glides it left→right at ~42 px/s with holds at each end (ping-pong `Animatable`) when it overflows. Short topics sit still. The overflowing tail actually renders instead of being ellipsized.
+
+**`ExploreSessionService.kt`** — notification text trimmed to the minimum:
+- Live contentText: "12m 5s in" (was "12m 5s in · exploring X · ~30 min"); paused: "Paused · 12m 5s".
+- `BigTextStyle` removed entirely (no "timing your explore", "Tap Done exploring…", "~N min recommended", category name) — the shade shows just the short line. Progress bar + Pause/Resume + Done exploring actions kept.
+- Bubble-only notification contentText: "12m 5s in" (was "Floating timer active — 12m 5s in").
+
+**`fastlane/.../20260803.txt`** — bubble + notification changelog lines updated to the short behavior.
+
+### Validation
+
+- `check_braces.py` BALANCED on both Kotlin files.
+- Grep: zero stale `verb.lowercase()`/`targetName` refs in the bubble/notification paths (verb/target still drive the done-prompt + session model, untouched).
+- Code-reviewer pass: compile-safe (TextMeasurer/Animatable/requiredWidth/graphicsLayer all stable in BOM 2026.05.01; requiredWidth lets the marquee text exceed its parent's constraints), marquee math + clip behavior verified, no dead imports.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Bubble UX rework: drag now works (Compose-level), minimized-by-default pill with expand/minimize, richer + audible live notification with progress bar**
 
 ### What was asked

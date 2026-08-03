@@ -57,9 +57,10 @@ import com.curio.app.ui.theme.curioColorScheme
  *
  * 1. **Live explore notification** (when "Live explore notification" is ON):
  *    a persistent, audible notification with a live elapsed-time chronometer,
- *    a progress bar against the recommended duration, topic + category info,
- *    and Pause/Resume + "Done exploring" actions, tinted with the topic's
- *    category accent. An elapsed clock, NOT a countdown.
+ *    a progress bar against the recommended duration, the topic name, and
+ *    Pause/Resume + "Done exploring" actions, tinted with the topic's
+ *    category accent. Kept SHORT by design — just the topic and the elapsed
+ *    time, no description lines. An elapsed clock, NOT a countdown.
  *
  * 2. **Floating explore bubble** (when "Floating explore bubble" is ON and
  *    the "Display over other apps" permission is granted): a Messenger-style
@@ -67,7 +68,8 @@ import com.curio.app.ui.theme.curioColorScheme
  *    OTHER apps — including the browser — while the session runs. It shows
  *    the same topic + live timer with Pause/Resume, Stop, Minimize and Hide,
  *    starts minimized (compact chip + timer), and can be dragged anywhere
- *    (snaps to the nearest horizontal edge on release).
+ *    (snaps to the nearest horizontal edge on release). Long topic names
+ *    slow-scroll across the pill so the full name is always readable.
  *
  * The service runs while EITHER is active. When only the bubble is on, the
  * mandatory FGS notification downgrades to a quiet, non-chronometer
@@ -94,7 +96,7 @@ class ExploreSessionService : Service() {
     private val notificationTick = object : Runnable {
         override fun run() {
             // Re-render from the persisted session — refreshes the progress
-            // bar + expanded text; render() re-schedules this tick while a
+            // bar + content text; render() re-schedules this tick while a
             // live notification is wanted and stops the service otherwise.
             render()
         }
@@ -181,7 +183,7 @@ class ExploreSessionService : Service() {
         if (bubbleWanted) showBubble() else removeBubble()
         // Keep a single periodic refresh chain (never stack ticks): the
         // chronometer in the shade ticks on its own, this keeps the progress
-        // bar + expanded text honest while a live notification is showing.
+        // bar + content text honest while a live notification is showing.
         mainHandler.removeCallbacks(notificationTick)
         if (liveNotif) mainHandler.postDelayed(notificationTick, NOTIFICATION_REFRESH_MS)
         return START_STICKY
@@ -240,7 +242,7 @@ class ExploreSessionService : Service() {
      * Full live-timer notification — used when live notifications are ON. A
      * default-importance channel so it's actually seen/heard, with a live
      * chronometer, a progress bar against the recommended duration, and a
-     * richer expanded summary (category + verb/target + elapsed).
+     * SHORT readout (just the elapsed time — no description lines).
      */
     private fun liveNotification(session: ExploreSession): Notification {
         val category = CurioCategories.byId(session.categoryId)
@@ -269,22 +271,12 @@ class ExploreSessionService : Service() {
         if (paused) {
             // Frozen readout — the chronometer would keep counting, so drop
             // it and print the banked elapsed time as text instead. The
-            // progress bar freezes where the timer paused.
+            // progress bar freezes where the timer paused. Short on purpose:
+            // topic + elapsed only, no verb/target or description lines.
             builder
                 .setUsesChronometer(false)
                 .setShowWhen(false)
-                .setContentText(
-                    "Paused · ${formatElapsed(elapsed)} — ${session.verb.lowercase()} ${session.targetName}"
-                )
-                .setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(
-                            "Paused · ${formatElapsed(elapsed)} in.\n" +
-                            "${session.verb.lowercase()} ${session.targetName} · " +
-                            "${category.displayName} · ~${session.durationMinutes} min recommended.\n" +
-                            "Tap Resume to keep going."
-                        )
-                )
+                .setContentText("Paused · ${formatElapsed(elapsed)}")
                 .addAction(0, "Resume", togglePauseIntent())
         } else {
             // Live chronometer anchored at start + banked pauses, so it shows
@@ -295,19 +287,7 @@ class ExploreSessionService : Service() {
                 .setUsesChronometer(true)
                 .setShowWhen(true)
                 .setWhen(session.startMillis + session.accumulatedPausedMillis)
-                .setContentText(
-                    "${formatElapsed(elapsed)} in · ${session.verb.lowercase()} ${session.targetName} · " +
-                    "~${session.durationMinutes} min"
-                )
-                .setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(
-                            "${session.verb.lowercase()} ${session.targetName} — " +
-                            "${category.displayName}, timing your explore.\n" +
-                            "Elapsed: ${formatElapsed(elapsed)} of ~${session.durationMinutes} min recommended.\n" +
-                            "Done? Tap Done exploring to wrap up."
-                        )
-                )
+                .setContentText("${formatElapsed(elapsed)} in")
                 .addAction(0, "Pause", togglePauseIntent())
         }
         builder.addAction(0, "Done exploring", stopSessionIntent())
@@ -325,7 +305,7 @@ class ExploreSessionService : Service() {
             .setSmallIcon(R.drawable.ic_notification)
             .setColor(accent)
             .setContentTitle("Explore bubble · ${session.topicName}")
-            .setContentText("Floating timer active — ${formatElapsed(session.elapsedMillis())} in")
+            .setContentText("${formatElapsed(session.elapsedMillis())} in")
             .setContentIntent(openAppIntent())
             .setOngoing(true)
             .setOnlyAlertOnce(true)

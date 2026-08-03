@@ -1,5 +1,8 @@
 package com.curio.app.ui.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
@@ -26,12 +30,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.CurioCategory
 import com.curio.app.data.ExploreSession
 import com.curio.app.data.formatElapsed
 import com.curio.app.ui.theme.CurioIcon
@@ -39,20 +50,24 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.themedAccent
 import java.util.Locale
+import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 
 /**
- * The explore-timer bubble's visual content — the pill-shaped surface with
- * the category glyph chip, the topic name, a live elapsed chronometer, and
- * controls:
- *  - **Pause / Resume** — freezes/resumes the visible timer only (the
- *    end-of-session reminder still fires at the original start + duration).
- *  - **Stop** — ends the session, clears it, cancels the reminder.
- *  - **Minimize** — collapses to the compact chip+timer pill. The bubble
- *    STARTS minimized (small by default); tap the pill to expand it.
- *  - **Hide** — dismisses the bubble for the session; the notification
- *    (when live notifications are on) becomes the controller. Hidden is
- *    persisted on the session so the bubble doesn't pop back.
+ * The explore-timer bubble's visual content — kept SHORT on purpose: just
+ * the category glyph, the topic name and the live elapsed time. No
+ * verb/target lines or descriptions; those live in the done-prompt, not on
+ * a floating pill.
+ *
+ * Two shapes:
+ *  - **Minimized** (default): a compact capsule pill — category glyph chip,
+ *    the topic name, and a chronometer-style elapsed readout. Tapping it
+ *    expands; long topic names slow-scroll (marquee) inside the pill so the
+ *    full name is readable without stretching it.
+ *  - **Expanded**: a rounded card panel (NOT a full capsule — a capsule
+ *    with that much content reads as a circle). A header row with the glyph
+ *    chip + topic + elapsed + a Minimize chevron, then a row of labeled
+ *    controls: **Pause / Resume**, **Stop**, **Hide**.
  *
  * Dragging lives HERE (Compose), not on the window: a system-overlay
  * ComposeView's composed child consumes every View-level touch, so a View
@@ -117,7 +132,10 @@ fun ExploreBubbleContent(
     }
 
     Surface(
-        shape = RoundedCornerShape(50),
+        // Minimized: a full capsule pill. Expanded: a rounded card panel —
+        // a 50% capsule on that much content is what made it read as a
+        // circle, so the expanded shape is a plain 20dp card instead.
+        shape = if (minimized) RoundedCornerShape(50) else RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         border = BorderStroke(1.dp, accent.copy(alpha = 0.45f)),
         shadowElevation = 8.dp,
@@ -128,100 +146,257 @@ fun ExploreBubbleContent(
             // so the expanded bubble carries no dead clickable semantics.
             .then(if (minimized) Modifier.clickable { minimized = false } else Modifier)
     ) {
+        if (minimized) {
+            MinimizedPill(
+                session = session,
+                category = category,
+                accent = accent,
+                ink = ink,
+                elapsed = elapsed,
+                onExpand = { minimized = false }
+            )
+        } else {
+            ExpandedPanel(
+                session = session,
+                category = category,
+                accent = accent,
+                ink = ink,
+                elapsed = elapsed,
+                onTogglePause = onTogglePause,
+                onStop = onStop,
+                onHide = onHide,
+                onMinimize = { minimized = true }
+            )
+        }
+    }
+}
+
+/** The compact capsule pill — glyph chip + scrolling topic + compact timer. */
+@Composable
+private fun MinimizedPill(
+    session: ExploreSession,
+    category: CurioCategory,
+    accent: Color,
+    ink: Color,
+    elapsed: Long,
+    onExpand: () -> Unit
+) {
+    Row(
+        modifier = Modifier.padding(start = 12.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        CategoryGlyphChip(category = category, accent = accent, ink = ink)
+
+        // Topic + live timer — the topic caps at [MINIMIZED_TOPIC_WIDTH] and
+        // slow-scrolls (marquee) when it's longer, so the pill stays small.
+        Column(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .widthIn(max = MINIMIZED_TOPIC_WIDTH)
+        ) {
+            MarqueeTopicText(
+                text = session.topicName,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxWidth = MINIMIZED_TOPIC_WIDTH,
+                paused = session.paused
+            )
+            Text(
+                text = if (session.paused) "Paused · ${compactElapsed(elapsed)}"
+                       else compactElapsed(elapsed),
+                style = MaterialTheme.typography.labelSmall,
+                color = if (session.paused) accent
+                        else MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        // ── Expand to the full controls ────────────────────────────
+        BubbleIconButton(
+            icon = CurioIcons.KeyboardArrowUp,
+            contentDescription = "Expand timer",
+            tint = accent,
+            onClick = onExpand
+        )
+    }
+}
+
+/**
+ * The expanded card panel — header (glyph chip + topic + elapsed + Minimize
+ * chevron) over a row of labeled controls (Pause/Resume, Stop, Hide).
+ * Deliberately a rounded rectangle, not a capsule, so it never reads as a
+ * circle.
+ */
+@Composable
+private fun ExpandedPanel(
+    session: ExploreSession,
+    category: CurioCategory,
+    accent: Color,
+    ink: Color,
+    elapsed: Long,
+    onTogglePause: () -> Unit,
+    onStop: () -> Unit,
+    onHide: () -> Unit,
+    onMinimize: () -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        // ── Header: glyph chip + topic + elapsed + minimize ────────
         Row(
-            modifier = Modifier.padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // ── Category glyph chip ─────────────────────────────────
-            Box(
-                modifier = Modifier
-                    .size(34.dp)
-                    .clip(CircleShape)
-                    .background(accent.copy(alpha = 0.18f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = category.iconGlyph,
-                    contentDescription = null,
-                    tint = ink,
-                    size = 18.dp
-                )
-            }
-
-            // ── Topic + live timer (capped width so long topic
-            //    names ellipsize instead of stretching the bubble;
-            //    tighter while minimized) ──
+            CategoryGlyphChip(category = category, accent = accent, ink = ink)
             Column(
                 modifier = Modifier
                     .weight(1f, fill = false)
-                    .widthIn(max = if (minimized) 110.dp else 150.dp)
+                    .widthIn(max = EXPANDED_TOPIC_WIDTH)
             ) {
-                Text(
+                MarqueeTopicText(
                     text = session.topicName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    maxWidth = EXPANDED_TOPIC_WIDTH,
+                    paused = session.paused
                 )
                 Text(
-                    text = when {
-                        session.paused -> "Paused · ${compactElapsed(elapsed)}"
-                        minimized -> compactElapsed(elapsed)
-                        else -> "${formatElapsed(elapsed)} · ${session.verb.lowercase()} ${session.targetName}"
-                    },
+                    text = if (session.paused) "Paused · ${formatElapsed(elapsed)}"
+                           else formatElapsed(elapsed),
                     style = MaterialTheme.typography.labelSmall,
                     color = if (session.paused) accent
                             else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            BubbleIconButton(
+                icon = CurioIcons.KeyboardArrowDown,
+                contentDescription = "Minimize timer",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                onClick = onMinimize
+            )
+        }
 
-            if (minimized) {
-                // ── Expand back to the full controls ───────────────
-                BubbleIconButton(
-                    icon = CurioIcons.KeyboardArrowUp,
-                    contentDescription = "Expand timer",
-                    tint = accent,
-                    onClick = { minimized = false }
-                )
-            } else {
-                // ── Pause / Resume ─────────────────────────────────
-                BubbleIconButton(
-                    icon = if (session.paused) CurioIcons.PlayArrow else CurioIcons.Pause,
-                    contentDescription = if (session.paused) "Resume exploring" else "Pause exploring",
-                    tint = accent,
-                    onClick = onTogglePause
-                )
-
-                // ── Stop ───────────────────────────────────────────
-                BubbleIconButton(
-                    icon = CurioIcons.Stop,
-                    contentDescription = "Stop exploring",
-                    tint = MaterialTheme.colorScheme.error,
-                    onClick = onStop
-                )
-
-                // ── Minimize (collapse to the small pill) ─────────
-                BubbleIconButton(
-                    icon = CurioIcons.KeyboardArrowDown,
-                    contentDescription = "Minimize timer",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = { minimized = true }
-                )
-
-                // ── Hide (notification takes over) ────────────────
-                BubbleIconButton(
-                    icon = CurioIcons.Close,
-                    contentDescription = "Hide this timer",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = onHide
-                )
-            }
+        // ── Controls: labeled actions ──────────────────────────────
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            LabeledBubbleButton(
+                icon = if (session.paused) CurioIcons.PlayArrow else CurioIcons.Pause,
+                label = if (session.paused) "Resume" else "Pause",
+                tint = accent,
+                onClick = onTogglePause
+            )
+            LabeledBubbleButton(
+                icon = CurioIcons.Stop,
+                label = "Stop",
+                tint = MaterialTheme.colorScheme.error,
+                onClick = onStop
+            )
+            LabeledBubbleButton(
+                icon = CurioIcons.Close,
+                label = "Hide",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                onClick = onHide
+            )
         }
     }
 }
 
-/** Small circular icon button used by the bubble's Pause/Stop/Minimize/Hide controls. */
+/** The small category-glyph circle shown at the pill's start. */
+@Composable
+private fun CategoryGlyphChip(
+    category: CurioCategory,
+    accent: Color,
+    ink: Color
+) {
+    Box(
+        modifier = Modifier
+            .size(34.dp)
+            .clip(CircleShape)
+            .background(accent.copy(alpha = 0.18f)),
+        contentAlignment = Alignment.Center
+    ) {
+        CurioIcon(
+            name = category.iconGlyph,
+            contentDescription = null,
+            tint = ink,
+            size = 18.dp
+        )
+    }
+}
+
+/**
+ * Single-line topic text that slow-scrolls (marquee) when it's longer than
+ * [maxWidth]: it holds at the start, glides left to reveal the full name,
+ * holds, then glides back — so the complete topic is always readable inside
+ * a small pill. Fits text simply sits still (no scrolling); while [paused]
+ * the topic freezes at the start, matching the frozen timer.
+ *
+ * The visible box is `min(textWidth, maxWidth)` wide and clips; the text
+ * inside is drawn at its full measured width and translated by the scroll
+ * offset, so the overflowing tail actually appears instead of being
+ * ellipsized away.
+ */
+@Composable
+private fun MarqueeTopicText(
+    text: String,
+    style: TextStyle,
+    color: Color,
+    maxWidth: Dp,
+    paused: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val textLayout = remember(text, style, density) {
+        textMeasurer.measure(
+            text = text,
+            style = style,
+            overflow = TextOverflow.Clip,
+            softWrap = false,
+            maxLines = 1
+        )
+    }
+    val textWidthPx = textLayout.size.width
+    val capPx = with(density) { maxWidth.toPx() }.roundToInt()
+    val boxWidthPx = minOf(textWidthPx, capPx)
+
+    val scrollX = remember { Animatable(0f) }
+    val scrollDistance = (textWidthPx - boxWidthPx).coerceAtLeast(0)
+    LaunchedEffect(scrollDistance, text, paused) {
+        scrollX.snapTo(0f)
+        if (paused || scrollDistance <= 0) return@LaunchedEffect
+        // Cap the one-way glide (~12s) so an absurdly long topic never
+        // crawls; the speed constant already makes the normal case slow.
+        val travelMs = (scrollDistance / MARQUEE_PX_PER_MS).toInt().coerceIn(1, 12_000)
+        while (true) {
+            delay(MARQUEE_START_HOLD_MS)
+            scrollX.animateTo(scrollDistance.toFloat(), tween(travelMs, easing = LinearEasing))
+            delay(MARQUEE_END_HOLD_MS)
+            scrollX.animateTo(0f, tween(travelMs, easing = LinearEasing))
+            delay(MARQUEE_END_HOLD_MS)
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .requiredWidth(with(density) { boxWidthPx.toDp() })
+            .clipToBounds()
+    ) {
+        Text(
+            text = text,
+            style = style,
+            color = color,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Clip,
+            modifier = Modifier
+                .requiredWidth(with(density) { textWidthPx.toDp() })
+                .graphicsLayer { translationX = -scrollX.value }
+        )
+    }
+}
+
+/** Small circular icon button used by the bubble's expand/minimize controls. */
 @Composable
 private fun BubbleIconButton(
     icon: String,
@@ -246,6 +421,41 @@ private fun BubbleIconButton(
     }
 }
 
+/** Small labeled pill button used by the expanded panel's control row. */
+@Composable
+private fun LabeledBubbleButton(
+    icon: String,
+    label: String,
+    tint: Color,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(50),
+        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        border = BorderStroke(1.dp, tint.copy(alpha = 0.35f)),
+        shadowElevation = 0.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            CurioIcon(
+                name = icon,
+                contentDescription = null,
+                tint = tint,
+                size = 16.dp
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = tint
+            )
+        }
+    }
+}
+
 /**
  * Compact chronometer-style reading for the minimized pill ("12:34",
  * "1:02:34") — tighter than the friendly [formatElapsed] ("12m 5s") so the
@@ -262,3 +472,16 @@ private fun compactElapsed(millis: Long): String {
         "%02d:%02d".format(Locale.US, minutes, seconds)
     }
 }
+
+// ── Tuning constants ────────────────────────────────────────────────────
+// Topic area width caps: tight in the minimized pill, roomier in the
+// expanded panel. Longer topics slow-scroll within these bounds.
+private val MINIMIZED_TOPIC_WIDTH = 110.dp
+private val EXPANDED_TOPIC_WIDTH = 180.dp
+
+// Marquee tuning — a slow ticker (~42 px/s) that holds briefly at each end
+// before gliding back, so the full topic name reveals itself at a readable
+// pace without feeling restless.
+private const val MARQUEE_PX_PER_MS = 0.042f
+private const val MARQUEE_START_HOLD_MS = 900L
+private const val MARQUEE_END_HOLD_MS = 1_100L
