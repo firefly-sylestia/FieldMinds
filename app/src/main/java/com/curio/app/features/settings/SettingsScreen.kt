@@ -537,6 +537,32 @@ fun SettingsScreen(navController: NavController) {
                                 onCheckedChange = { AppPreferences.setExploreSessionsEnabled(context, it) }
                             )
                         }
+                        // ── Live explore notification — the persistent
+                        //    chronometer notification with Pause/Stop controls
+                        //    (like Samsung/Google's live-updating ongoing
+                        //    notifications). Off = no ongoing notification,
+                        //    only the end-of-session reminder + in-app pill.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(CurioIcons.Notifications, null, tint = CurioColors.CoralBlush, size = 22.dp)
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Live explore notification", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    if (AppPreferences.liveNotificationsEnabledState)
+                                        "Ongoing timer with Pause/Resume & Stop controls"
+                                    else "Off · only the end-of-session reminder shows",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.liveNotificationsEnabledState,
+                                onCheckedChange = { AppPreferences.setLiveNotificationsEnabled(context, it) }
+                            )
+                        }
                         if (reminderEnabled) {
                             Row(
                                 modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),

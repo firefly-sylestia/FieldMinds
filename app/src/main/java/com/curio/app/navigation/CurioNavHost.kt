@@ -10,6 +10,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -70,6 +71,7 @@ import com.curio.app.features.spin.SpinScreen
 import com.curio.app.features.home.HomeScreen
 import com.curio.app.features.splash.SplashScreen
 import com.curio.app.ui.components.CurioBottomBar
+import com.curio.app.ui.components.ExploreSessionPill
 import com.curio.app.ui.theme.CurioMotion
 
 /**
@@ -125,7 +127,16 @@ fun CurioNavHost(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 if (AppPreferences.isExploreSessionsEnabled(context)) {
-                    showDoneDialog = ExploreSessionStore.getActiveSession(context) != null
+                    val resumed = ExploreSessionStore.getActiveSession(context)
+                    showDoneDialog = resumed != null
+                    // If the user hid the pill but live notifications are
+                    // OFF, bring the pill back on return — otherwise there'd
+                    // be no visible timer controller at all.
+                    if (resumed != null && resumed.pillHidden &&
+                        !AppPreferences.liveNotificationsEnabledState
+                    ) {
+                        ExploreSessionStore.setPillHidden(context, false)
+                    }
                 }
             }
         }
@@ -144,21 +155,25 @@ fun CurioNavHost(
         }
     }
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                CurioBottomBar(navController = navController)
-            }
-        },
-        // Every screen applies its own statusBarsPadding().  This Scaffold
-        // has no topBar, so without pinning the insets to the bottom only
-        // M3 would add the status-bar inset to innerPadding AND the screens
-        // would add it again — a double top gap (huge empty space above the
-        // status bar).  Screens without a bottom bar still get the nav-bar
-        // inset from here.
-        contentWindowInsets = WindowInsets.navigationBars,
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+    // The floating explore pill overlays the whole app, so the Scaffold
+    // sits inside a Box with the pill drawn on top (all screens, while a
+    // session is active).
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            bottomBar = {
+                if (showBottomBar) {
+                    CurioBottomBar(navController = navController)
+                }
+            },
+            // Every screen applies its own statusBarsPadding().  This Scaffold
+            // has no topBar, so without pinning the insets to the bottom only
+            // M3 would add the status-bar inset to innerPadding AND the screens
+            // would add it again — a double top gap (huge empty space above the
+            // status bar).  Screens without a bottom bar still get the nav-bar
+            // inset from here.
+            contentWindowInsets = WindowInsets.navigationBars,
+            modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = CurioRoutes.SPLASH,
@@ -335,20 +350,52 @@ fun CurioNavHost(
                 LightboxScreen(navController = navController)
             }
         }
+        }
+
+        // ── Floating explore pill — the draggable live-timer controller.
+        //    Shows on every screen while a session is active and the pill
+        //    hasn't been hidden for it. Hidden + live notifications off →
+        //    the pill comes back on the next app resume (there'd be no
+        //    controller otherwise).
+        val pillSession = ExploreSessionStore.activeSessionState
+        if (pillSession != null &&
+            AppPreferences.exploreSessionsEnabledState &&
+            !pillSession.pillHidden
+        ) {
+            ExploreSessionPill(
+                session = pillSession,
+                onTogglePause = {
+                    val s = ExploreSessionStore.activeSessionState ?: return@ExploreSessionPill
+                    if (s.paused) ExploreSessionStore.resumeSession(context)
+                    else ExploreSessionStore.pauseSession(context)
+                    // Keep the notification in step with the pill.
+                    ExploreSessionService.sync(context)
+                },
+                onStop = {
+                    ExploreSessionStore.clearSession(context)
+                    ExploreReminderScheduler.cancel(context)
+                    ExploreSessionService.stop(context)
+                },
+                onHide = {
+                    ExploreSessionStore.setPillHidden(context, true)
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 
     // ── Done-exploring prompt (app return while a session is active) ────
     val activeSession = ExploreSessionStore.activeSessionState
     if (showDoneDialog && activeSession != null) {
         // Live elapsed time — ticks every second while the dialog is open
-        // (recomputed from the session's original start, so it survives
-        // process restarts too). Cancels automatically on dismiss.
+        // (pause-aware: session.elapsedMillis banks paused time, so a paused
+        // session shows a frozen reading). Cancels on dismiss.
         var elapsedMillis by remember(activeSession.startMillis) {
-            mutableStateOf(System.currentTimeMillis() - activeSession.startMillis)
+            mutableStateOf(activeSession.elapsedMillis())
         }
-        LaunchedEffect(activeSession.startMillis) {
+        LaunchedEffect(activeSession.startMillis, activeSession.paused) {
             while (true) {
-                elapsedMillis = System.currentTimeMillis() - activeSession.startMillis
+                elapsedMillis = activeSession.elapsedMillis()
                 delay(1_000)
             }
         }
@@ -362,13 +409,16 @@ fun CurioNavHost(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         CurioIcon(
-                            name = CurioIcons.Timer,
+                            name = if (activeSession.paused) CurioIcons.Pause else CurioIcons.Timer,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                             size = 18.dp
                         )
                         Text(
-                            "You've been exploring for ${formatElapsed(elapsedMillis)}",
+                            if (activeSession.paused)
+                                "Paused at ${formatElapsed(elapsedMillis)} — tap Resume on the pill or notification to continue"
+                            else
+                                "You've been exploring for ${formatElapsed(elapsedMillis)}",
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
                         )
                     }

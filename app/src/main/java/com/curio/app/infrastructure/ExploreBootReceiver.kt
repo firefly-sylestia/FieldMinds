@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.curio.app.data.AppPreferences
+import com.curio.app.data.ExploreReminderScheduler
 import com.curio.app.data.ExploreSessionStore
 
 /**
@@ -25,6 +26,11 @@ class ExploreBootReceiver : BroadcastReceiver() {
         }
         if (!AppPreferences.isExploreSessionsEnabled(context)) return
         val session = ExploreSessionStore.getActiveSession(context) ?: return
-        ExploreSessionService.start(context, session)
+        // Always re-arm the reminder after reboot/app-update/clock change —
+        // it fires even when live notifications are off (no service).
+        ExploreReminderScheduler.schedule(context, session.startMillis, session.durationMinutes)
+        if (AppPreferences.isLiveNotificationsEnabled(context)) {
+            ExploreSessionService.start(context, session)
+        }
     }
 }

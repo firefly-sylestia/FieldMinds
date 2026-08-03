@@ -47,6 +47,7 @@ object AppPreferences {
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
+    private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
     private const val KEY_TOPIC_SENTIMENTS = "topic_sentiments"  // JSON object: "CATEGORY:topicId" -> "like"/"dislike"
@@ -102,6 +103,13 @@ object AppPreferences {
     var exploreSessionsEnabledState by mutableStateOf(true)
         private set
 
+    // Live explore notifications — the persistent chronometer notification
+    // with Pause/Stop controls shown while exploring (like Samsung/Google's
+    // live-updating ongoing notifications). Default ON; off means no ongoing
+    // notification at all — only the end-of-session reminder + in-app pill.
+    var liveNotificationsEnabledState by mutableStateOf(true)
+        private set
+
     /**
      * Reactive pinned-topics state — updated by [pinTopic] / [unpinTopic] so
      * the Topic Reveal pin button and the Topic History "Pinned" section
@@ -135,6 +143,7 @@ object AppPreferences {
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
         exploreSessionsEnabledState = isExploreSessionsEnabled(context)
+        liveNotificationsEnabledState = isLiveNotificationsEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
         savedQuotesState = getSavedQuotes(context)
         topicSentimentsState = getTopicSentiments(context)
@@ -198,6 +207,29 @@ object AppPreferences {
             // down so the timer, reminder and done-prompt all stop.
             ExploreSessionStore.clearSession(context)
             ExploreReminderScheduler.cancel(context)
+            com.curio.app.infrastructure.ExploreSessionService.stop(context)
+        }
+    }
+
+    /**
+     * Whether the persistent live explore notification is on. Default ON.
+     * Off = no ongoing notification; the in-app pill + end reminder stay.
+     */
+    fun isLiveNotificationsEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_LIVE_NOTIFICATIONS_ENABLED, true)
+
+    fun setLiveNotificationsEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_LIVE_NOTIFICATIONS_ENABLED, enabled).apply()
+        liveNotificationsEnabledState = enabled
+        if (enabled) {
+            // Flipped ON mid-session: bring the live notification back for
+            // the currently active session.
+            ExploreSessionStore.getActiveSession(context)?.let {
+                com.curio.app.infrastructure.ExploreSessionService.start(context, it)
+            }
+        } else {
+            // Flipped OFF mid-session: drop the persistent notification but
+            // keep the session + reminder + pill alive.
             com.curio.app.infrastructure.ExploreSessionService.stop(context)
         }
     }

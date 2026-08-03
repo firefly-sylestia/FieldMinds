@@ -57,6 +57,7 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioTopic
+import com.curio.app.data.ExploreReminderScheduler
 import com.curio.app.data.ExploreSession
 import com.curio.app.data.ExploreSessionStore
 import com.curio.app.data.TopicCatalog
@@ -186,7 +187,12 @@ fun TopicRevealScreen(
         )
         if (AppPreferences.isExploreSessionsEnabled(context)) {
             ExploreSessionStore.startSession(context, session)
-            ExploreSessionService.start(context, session)
+            // Reminder always — fires even without the live notification
+            // (live notifications off → no foreground service to arm it).
+            ExploreReminderScheduler.schedule(context, session.startMillis, session.durationMinutes)
+            if (AppPreferences.isLiveNotificationsEnabled(context)) {
+                ExploreSessionService.start(context, session)
+            }
         }
         showExploreDialog = false
         // Open the Google search, then land back on Home — returning to the

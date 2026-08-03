@@ -2,6 +2,52 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating explore-timer pill (draggable, theme-aware) + live-notification toggle + upgraded timer notification + pause support**
+
+### What was asked
+
+A new pill-shaped floating pill that shows a timer when exploring starts, with Pause, Stop and Hide options (hiding leaves the notification as the controller); a Settings option to enable live notifications (like Samsung/Google's live-updating ongoing notifications); make the notification better; make the pill theme-aware.
+
+User chose (ask_user): **draggable anywhere** (snaps to edge, Messenger-style); **pause = timer only** (reminder still fires at original start + duration); **live-notification toggle controls the persistent notification** (ON default = chronometer with controls, OFF = only the end-of-session reminder); **keep the Home "Currently exploring" card** alongside the pill; and do a proper multi-level review (imports etc.) so it doesn't fail CI.
+
+### What was done
+
+**1 — Session pause + pill state (`ExploreSession.kt`)**
+- `ExploreSession` gained `paused` / `pausedAtMillis` / `accumulatedPausedMillis` / `pillHidden` (all defaulted → legacy sessions decode cleanly); new `elapsedMillis(now)` helper banks paused time so elapsed freezes while paused and continues after resume. JSON round-trip handles `pausedAtMillis` null-vs-value.
+- Store gained `pauseSession` / `resumeSession` / `setPillHidden` (reuse `startSession` so prefs + reactive state stay in sync).
+
+**2 — Live-notification toggle (`AppPreferences.kt`, `SettingsScreen.kt`)**
+- New `live_notifications_enabled` pref (default true) + reactive state; the setter starts the FGS for the active session when flipped ON and stops it when flipped OFF (session + reminder + pill unaffected).
+- Settings → Notifications gained a "Live explore notification" row under Explore sessions (icon + subtitle + switch).
+
+**3 — Better notification (`ExploreSessionService.kt`, rewritten)**
+- Tinted with the topic's category accent (`accent.toArgb()`), `CATEGORY_PROGRESS`, `setOnlyAlertOnce`, BigTextStyle.
+- **Pause/Resume** action (PendingIntent.getService → `ACTION_TOGGLE_PAUSE` flips the store and re-renders) + existing **Done exploring** action.
+- Paused render: chronometer dropped, frozen "Paused · 12m 5s" text + Resume action. Running render: chronometer anchored at `startMillis + accumulatedPausedMillis` so it shows ACTIVE elapsed after pause/resume cycles.
+- `ACTION_SYNC` re-renders from the persisted session (pill → notification in step); both branches + `sync()` guard on the live-notification toggle so a turned-off setting can never resurrect the notification.
+
+**4 — Reminder wiring without the service**
+- Reminder scheduling moved to session start (`TopicRevealScreen`) + `ExploreBootReceiver` always re-arms it, so it fires even when live notifications are OFF (no FGS to arm it); service start is now conditional on the toggle. Scheduling is idempotent (cancel-then-set, same request code).
+
+**5 — Draggable floating pill (`ExploreSessionPill.kt`, new)**
+- Hosted at the `CurioNavHost` root (Scaffold wrapped in a Box; pill drawn above all screens while a session is active and not hidden). Full-screen `BoxWithConstraints` with no pointer input → touches pass through to screens below; only the pill itself is interactive.
+- Messenger-style drag (`detectDragGestures` + offset state) that snaps to the nearest horizontal edge and clamps between the status and nav bars; initial placement bottom-center, clear of the bottom nav bar (88dp first-margin per review).
+- Shows category glyph chip, topic name (width-capped → ellipsizes), live elapsed, and **Pause/Resume · Stop · Hide** circular buttons. Theme-aware: `surfaceContainerHigh`/`onSurface`/`error` from MaterialTheme (light/dark/AMOLED/Material) + category accent/ink.
+- **Hide** persists `pillHidden` on the session; ON_RESUME auto-restores the pill when it was hidden AND live notifications are off (otherwise there'd be no controller).
+
+**6 — Pause-aware surfaces (`CurioNavHost.kt`, `HomeScreen.kt`)**
+- Done-exploring dialog + Home `CurrentlyExploringCard` now use `session.elapsedMillis()` (frozen while paused) and show a "Paused at …" readout with a Pause icon; dialog's ticker re-keys on `paused`.
+
+### Validation
+
+- Multi-level review: code-reviewer pass caught (1) initial pill placement overlapping the bottom nav bar → 88dp first-placement margin; (2) unbounded pill width on long topic names → `widthIn(max = 150.dp)`. Confirmed: pill imports all used, `Surface(onClick)` stable in this M3 (already app-wide), PendingIntent codes (4201/4202/4204) don't collide with scheduler 4210 / receiver 4212-4213, reminder scheduling idempotent across service/reveal/boot, notification-pause stays in sync with the pill via reactive store state, full-screen Box doesn't block touches.
+- Structural: brace/paren balance on all 9 touched files (the +1 paren in TopicRevealScreen is pre-existing, verified against HEAD). Import audit: only pre-existing unused imports remain in NavHost (Intent/PaddingValues, were unused in HEAD too). `mutableLongStateOf` matches the app's existing `mutableIntStateOf` (Compose state 1.5+).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board watermark pattern reworked — guaranteed no-overlap collage, weird middle glyph removed, edge-anchored drawing**
 
 ### What was asked

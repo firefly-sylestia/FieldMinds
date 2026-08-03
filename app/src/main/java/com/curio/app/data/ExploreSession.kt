@@ -23,8 +23,28 @@ data class ExploreSession(
     val durationMinutes: Int,
     val instruction: String,
     val searchUrl: String,
-    val startMillis: Long
-)
+    val startMillis: Long,
+    // Pause state — freezes the visible timer only (the reminder still
+    // fires at the original start + duration). [pausedAtMillis] is the
+    // instant the current pause began; [accumulatedPausedMillis] banks
+    // paused time from completed pauses so elapsed = now - start - total
+    // paused. Legacy sessions decode both to the defaults below.
+    val paused: Boolean = false,
+    val pausedAtMillis: Long? = null,
+    val accumulatedPausedMillis: Long = 0L,
+    // The user hid the floating explore pill for this session — persisted
+    // so it doesn't pop back on every recomposition or navigation.
+    val pillHidden: Boolean = false
+) {
+    /**
+     * Active explore time — frozen while paused. [now] defaults to the
+     * wall clock; pass a captured "now" when ticking in a coroutine.
+     */
+    fun elapsedMillis(now: Long = System.currentTimeMillis()): Long {
+        val effectiveNow = pausedAtMillis ?: now
+        return (effectiveNow - startMillis - accumulatedPausedMillis).coerceAtLeast(0L)
+    }
+}
 
 /**
  * A topic the user engaged with (tapped Explore) — recently-explored list.
@@ -103,6 +123,37 @@ object ExploreSessionStore {
     fun clearSession(context: Context) {
         prefs(context).edit().remove(KEY_ACTIVE_SESSION).apply()
         activeSessionState = null
+    }
+
+    /** Pauses the timer — freezes elapsed display; reminder is unaffected. */
+    fun pauseSession(context: Context) {
+        val current = activeSessionState ?: return
+        if (current.paused) return
+        val updated = current.copy(
+            paused = true,
+            pausedAtMillis = System.currentTimeMillis()
+        )
+        startSession(context, updated)
+    }
+
+    /** Resumes a paused timer, banking the paused span into the session. */
+    fun resumeSession(context: Context) {
+        val current = activeSessionState ?: return
+        val pausedAt = current.pausedAtMillis ?: return
+        val now = System.currentTimeMillis()
+        val updated = current.copy(
+            paused = false,
+            pausedAtMillis = null,
+            accumulatedPausedMillis = current.accumulatedPausedMillis + (now - pausedAt).coerceAtLeast(0L)
+        )
+        startSession(context, updated)
+    }
+
+    /** Hides (or re-shows) the floating explore pill for the session. */
+    fun setPillHidden(context: Context, hidden: Boolean) {
+        val current = activeSessionState ?: return
+        if (current.pillHidden == hidden) return
+        startSession(context, current.copy(pillHidden = hidden))
     }
 
     private fun readSession(context: Context): ExploreSession? {
@@ -266,7 +317,12 @@ fun parseExploreSession(raw: String): ExploreSession? {
             durationMinutes = obj.optInt("durationMinutes"),
             instruction = obj.optString("instruction"),
             searchUrl = obj.optString("searchUrl"),
-            startMillis = obj.optLong("startMillis")
+            startMillis = obj.optLong("startMillis"),
+            paused = obj.optBoolean("paused"),
+            pausedAtMillis = if (obj.has("pausedAtMillis") && !obj.isNull("pausedAtMillis"))
+                obj.optLong("pausedAtMillis") else null,
+            accumulatedPausedMillis = obj.optLong("accumulatedPausedMillis"),
+            pillHidden = obj.optBoolean("pillHidden")
         )
     }.getOrNull()
 }
@@ -281,6 +337,10 @@ private fun ExploreSession.toJson(): JSONObject = JSONObject()
     .put("instruction", instruction)
     .put("searchUrl", searchUrl)
     .put("startMillis", startMillis)
+    .put("paused", paused)
+    .put("pausedAtMillis", pausedAtMillis ?: JSONObject.NULL)
+    .put("accumulatedPausedMillis", accumulatedPausedMillis)
+    .put("pillHidden", pillHidden)
 
 /**
  * Formats elapsed explore time as a friendly reading — "34s", "12m 5s",

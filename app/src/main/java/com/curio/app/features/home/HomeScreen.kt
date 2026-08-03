@@ -1357,15 +1357,17 @@ private fun CurrentlyExploringCard(
     onKeepExploring: () -> Unit
 ) {
     val accent = CurioCategories.byId(session.categoryId).themedAccent()
-    // Live elapsed time — recomputed from the persisted session start so it
-    // survives process restarts; the tick cancels when the card leaves
-    // composition (session ended / Home left).
+    // Live elapsed time — pause-aware (session.elapsedMillis banks paused
+    // time, so a paused session shows a frozen reading) and recomputed from
+    // the persisted session start so it survives process restarts; the tick
+    // cancels when the card leaves composition.
     var elapsedMillis by remember(session.startMillis) {
-        mutableStateOf(System.currentTimeMillis() - session.startMillis)
+        mutableStateOf(session.elapsedMillis())
     }
-    LaunchedEffect(session.startMillis) {
+    LaunchedEffect(session.startMillis, session.paused) {
+        if (session.paused) return@LaunchedEffect
         while (true) {
-            elapsedMillis = System.currentTimeMillis() - session.startMillis
+            elapsedMillis = session.elapsedMillis()
             delay(1_000)
         }
     }
@@ -1415,13 +1417,16 @@ private fun CurrentlyExploringCard(
             Spacer(Modifier.height(8.dp))
             val overRecommended = elapsedMillis >= session.durationMinutes * 60_000L
             Text(
-                if (overRecommended) {
-                    "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far — past the ~${session.durationMinutes} min mark"
-                } else {
-                    "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far · ~${session.durationMinutes} min recommended"
+                when {
+                    session.paused ->
+                        "Paused at ${formatElapsed(elapsedMillis)} — ${session.verb.lowercase()} ${session.targetName}"
+                    overRecommended ->
+                        "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far — past the ~${session.durationMinutes} min mark"
+                    else ->
+                        "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far · ~${session.durationMinutes} min recommended"
                 },
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (session.paused) accent else MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
