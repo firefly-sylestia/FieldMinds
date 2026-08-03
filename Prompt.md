@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Removed 700 fake/placeholder topic entries — kept real ones; albums + artists untouched**
+
+### What was asked
+
+Except albums and artists, remove all other fake topic entries and keep the real ones — more will be added later.
+
+### What was done
+
+- Identified the fake entries: AI placeholder names matching the `{Adjective} {Noun} #{N}` pattern ("Hidden Scribe #1", "Forgotten Canvas #4", "Eternal Finding #9"…). Verified the pattern matches every `#`-named entry with ZERO unmatched, and that lookalike REAL titles (Unknown Pleasures, Superunknown, Eternal Sunshine (2004), Catch-22 (1961), Untitled (1991) by Gonzalez-Torres…) were NOT removed.
+- Removed **700 placeholders** from the 9 non-music files (albums.json 448 + artists.json 304 fully kept): authors 76→130, books 89→149, directors 70→109, discoveries 83→124, painters 85→117, scientists 92→132, wildcard 78→154, films 79→120, artworks 48→56.
+- Textual per-entry removal preserved the pretty-printed JSON byte-for-byte (split on `\n  {`, re-add newline on join) — final diff is pure deletions (13,300 lines removed, 0 insertions).
+
+### Validation
+
+- Node mirror of `validateTopics` (the Gradle gate): every file is a non-empty bare array, ids unique cross-file, categoryId matches filename, required fields + exploreAction fields present, instruction ≤ 450 chars (the real CI limit — scripts/validate_topics.py's 280 is stale), tier 1..3 when present — ALL OK before and after.
+- `TopicCatalog.sampleEntries()` IDs (artist-bowie, album-ziggy…) are real named entries, not placeholders; no non-JSON code references placeholder IDs (grep 0 matches).
+- NO local Gradle build (per AGENTS.md) — CI validates on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mixed-deck gradient rework — non-linear hero arrangements, screen wears THE blend color**
 
 ### What was asked
