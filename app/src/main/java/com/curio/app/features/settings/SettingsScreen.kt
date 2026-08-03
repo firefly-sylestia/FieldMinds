@@ -117,25 +117,51 @@ fun SettingsScreen(navController: NavController) {
     var backupStatus by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     var lastBackupAt by remember { mutableStateOf(CurioBackupManager.lastBackupAtMillis(context)) }
     val scope = rememberCoroutineScope()
+    // ── Notification permission (Android 13+) — requested on demand when
+    //    the user turns ON a notification feature. The granted callback
+    //    runs the EXACT action the user was trying to perform, so a request
+    //    from one toggle never silently enables a different one.
+    var pendingNotificationEnable by remember { mutableStateOf<(() -> Unit)?>(null) }
     val requestNotifications = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted) {
-            AppPreferences.setReminderEnabled(context, true)
+        val action = pendingNotificationEnable
+        pendingNotificationEnable = null
+        if (granted) action?.invoke()
+    }
+
+    fun notificationPermissionMissing(): Boolean =
+        Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+
+    /** Runs [onGranted] now, or right after the user grants the permission. */
+    fun requestNotificationPermission(onGranted: () -> Unit) {
+        if (!notificationPermissionMissing()) {
+            onGranted()
+        } else {
+            pendingNotificationEnable = onGranted
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
     fun setReminder(enabled: Boolean) {
         if (!enabled) {
             AppPreferences.setReminderEnabled(context, false)
-        } else if (
-            Build.VERSION.SDK_INT >= 33 &&
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else {
-            AppPreferences.setReminderEnabled(context, true)
+            requestNotificationPermission {
+                AppPreferences.setReminderEnabled(context, true)
+            }
+        }
+    }
+
+    fun setLiveNotifications(enabled: Boolean) {
+        if (!enabled) {
+            AppPreferences.setLiveNotificationsEnabled(context, false)
+        } else {
+            requestNotificationPermission {
+                AppPreferences.setLiveNotificationsEnabled(context, true)
+            }
         }
     }
 
@@ -560,7 +586,7 @@ fun SettingsScreen(navController: NavController) {
                             }
                             Switch(
                                 checked = AppPreferences.liveNotificationsEnabledState,
-                                onCheckedChange = { AppPreferences.setLiveNotificationsEnabled(context, it) }
+                                onCheckedChange = ::setLiveNotifications
                             )
                         }
                         if (reminderEnabled) {

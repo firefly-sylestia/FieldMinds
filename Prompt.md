@@ -2,6 +2,35 @@
 
 ## Latest Request (COMPLETED)
 
+**Fix: floating explore pill never renders + POST_NOTIFICATIONS never requested for the live-notification flow**
+
+### What was asked
+
+"The floating pill doesn't work, neither its permission, neither the live notification." — the explore-timer feature shipped as if dead: no pill, no permission prompt, no ongoing notification.
+
+### Root causes found
+
+1. **Pill deadlock (never renders).** `ExploreSessionPill` only composed its `Surface` when `offsetX/Y` were non-null, but those were only set after `onSizeChanged` measured the pill — composition gated on the offset, offset gated on measurement → the pill NEVER appeared. The full-screen Box existed but was empty, so nothing visibly happened when a session started.
+2. **Permission never requested for the explore flow.** `POST_NOTIFICATIONS` was only asked at onboarding and via the daily-reminder toggle in Settings. The "Live explore notification" toggle enabled the pref directly, and starting a session started the FGS directly — on Android 13+ the FGS notification is invisible without the permission, so "live notification doesn't work" was the default outcome for anyone who skipped/denied onboarding.
+
+### What was done
+
+**1 — Pill placement rewritten (`ExploreSessionPill.kt`)** — the `Surface` is now ALWAYS composed; only its offset, `graphicsLayer` alpha (0 until placed, avoids a top-left flash) and `pointerInput` drag (attached only once placed) wait on `placed = offsetX != null && offsetY != null`. `onSizeChanged` now always fires → the initial-placement `LaunchedEffect` (keyed on `placed`) positions the pill bottom-center, 88dp clear of the nav bar. Same snap-to-edge/clamp behavior as before.
+
+**2 — Settings live-notification toggle requests permission (`SettingsScreen.kt`)** — new pending-action launcher pattern: `pendingNotificationEnable` + `requestNotificationPermission(onGranted)`; the granted callback runs the EXACT action the user was performing, so a request from one toggle never silently enables another. `setLiveNotifications` (and the existing `setReminder`) route through it. Toggling "Live explore notification" ON now asks for `POST_NOTIFICATIONS` first (Android 13+).
+
+**3 — Explore-now requests permission before the browser opens (`TopicRevealScreen.kt`)** — starting a session with live notifications ON and no permission stores `pendingNotificationSession` and launches the permission request, deferring the browser-open + Home navigation to the callback (`openExploreBrowserAndGoHome`). The callback starts the FGS while the activity is STILL FOREGROUND (reviewer catch: the original order fired the browser immediately after `launch()`, so the grant callback ran backgrounded → `ForegroundServiceStartNotAllowedException` crash on Android 12+). Denied/dismissed → the flow still proceeds (pill + reminder work without the notification). Added `hasNotificationPermission` helper (API < 33 = granted).
+
+### Validation
+
+- `check_braces.py` BALANCED on all 3 touched files.
+- Code-reviewer pass (2 rounds): first round caught the background-FGS-start crash risk in the permission callback ordering → fixed with the continuation pattern; second round confirmed the restructure (no background start possible, early `return` correct, pending read at callback time, imports all used, deny/dismiss/permanently-denied all proceed without hanging). Minor accepted trade-off: `pendingNotificationSession` is plain `remember` — a rotation mid-dialog drops the continuation but the session is already persisted and the user just taps "Explore now" again (noted in a comment).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Floating explore-timer pill (draggable, theme-aware) + live-notification toggle + upgraded timer notification + pause support**
 
 ### What was asked

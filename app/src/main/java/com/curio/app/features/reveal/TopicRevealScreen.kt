@@ -1,8 +1,14 @@
 package com.curio.app.features.reveal
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +58,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
@@ -165,6 +172,46 @@ fun TopicRevealScreen(
     var engaged by rememberSaveable { mutableStateOf(false) }
     var showExploreDialog by rememberSaveable { mutableStateOf(false) }
 
+    // Android 13+ needs POST_NOTIFICATIONS before the persistent explore
+    // notification can show — requested when the user starts exploring with
+    // live notifications on (the session, pill and reminder work either way).
+    // Plain `remember` (not saveable): a rotation mid-dialog drops the
+    // continuation, but the session is already persisted and the user can
+    // simply tap "Explore now" again.
+    var pendingNotificationSession by remember { mutableStateOf<ExploreSession?>(null) }
+
+    /** Opens the Google search, then lands back on Home — returning to the
+     *  app triggers the "are you done exploring?" prompt. Deferred into the
+     *  permission callback when a notification-permission request is in
+     *  flight, so the foreground service starts while this activity is still
+     *  foreground (a background FGS start throws on Android 12+). */
+    fun openExploreBrowserAndGoHome(session: ExploreSession) {
+        showExploreDialog = false
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(session.searchUrl)))
+        }
+        navController.navigate(CurioRoutes.HOME) {
+            popUpTo(CurioRoutes.HOME) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
+
+    val requestNotifications = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        val pending = pendingNotificationSession
+        pendingNotificationSession = null
+        if (pending != null) {
+            if (granted && AppPreferences.isLiveNotificationsEnabled(context)) {
+                // The browser hasn't opened yet (proceed is deferred to
+                // here), so the activity is still foreground — starting the
+                // foreground service is allowed.
+                ExploreSessionService.start(context, pending)
+            }
+            openExploreBrowserAndGoHome(pending)
+        }
+    }
+
     /** Starts a timed explore session, opens the Google search, back to Home. */
     fun startExploreSession(topic: CurioTopic) {
         engaged = true
@@ -191,19 +238,21 @@ fun TopicRevealScreen(
             // (live notifications off → no foreground service to arm it).
             ExploreReminderScheduler.schedule(context, session.startMillis, session.durationMinutes)
             if (AppPreferences.isLiveNotificationsEnabled(context)) {
-                ExploreSessionService.start(context, session)
+                if (hasNotificationPermission(context)) {
+                    ExploreSessionService.start(context, session)
+                } else {
+                    // Ask for POST_NOTIFICATIONS first (Android 13+ hides
+                    // the notification without it). The permission callback
+                    // starts the service — while this activity is still
+                    // foreground — and then opens the browser + Home, so no
+                    // background FGS start (which throws on Android 12+).
+                    pendingNotificationSession = session
+                    requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    return
+                }
             }
         }
-        showExploreDialog = false
-        // Open the Google search, then land back on Home — returning to the
-        // app triggers the "are you done exploring?" prompt.
-        runCatching {
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(session.searchUrl)))
-        }
-        navController.navigate(CurioRoutes.HOME) {
-            popUpTo(CurioRoutes.HOME) { inclusive = false }
-            launchSingleTop = true
-        }
+        openExploreBrowserAndGoHome(session)
     }
 
     Box(
@@ -793,3 +842,9 @@ private fun SentimentButton(
         }
     }
 }
+
+/** POST_NOTIFICATIONS is a no-op below API 33 — treated as granted. */
+private fun hasNotificationPermission(context: Context): Boolean =
+    Build.VERSION.SDK_INT < 33 ||
+        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED

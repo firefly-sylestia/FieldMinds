@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -134,10 +135,14 @@ fun ExploreSessionPill(
             }
         }
 
-        // Initial placement: bottom-center, clear of the nav bar. Runs once
-        // the host + pill are both measured.
-        LaunchedEffect(hostW, hostH, pillW, pillH, offsetX == null) {
-            if (pillW > 0 && pillH > 0 && offsetX == null) {
+        // Initial placement: bottom-center, clear of the nav bar. The
+        // Surface below is ALWAYS composed (only its offset + alpha wait),
+        // so onSizeChanged fires and this effect can place the pill —
+        // gating composition on the offset would deadlock (no measurement
+        // → no offset → no composition → the pill never renders).
+        val placed = offsetX != null && offsetY != null
+        LaunchedEffect(hostW, hostH, pillW, pillH, placed) {
+            if (pillW > 0 && pillH > 0 && !placed) {
                 val wPx = with(density) { hostW.toPx() }
                 val hPx = with(density) { hostH.toPx() }
                 val navPx = with(density) { navBottom.toPx() }
@@ -150,99 +155,104 @@ fun ExploreSessionPill(
             }
         }
 
-        val x = offsetX
-        val y = offsetY
-        if (x != null && y != null) {
-            Surface(
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                border = BorderStroke(1.dp, accent.copy(alpha = 0.45f)),
-                shadowElevation = 8.dp,
-                modifier = Modifier
-                    .offset { IntOffset(x.roundToInt(), y.roundToInt()) }
-                    .onSizeChanged { pillW = it.width; pillH = it.height }
-                    .pointerInput(Unit) {
-                        detectDragGestures(
-                            onDrag = { change, dragAmount ->
-                                change.consume()
-                                offsetX = (offsetX ?: 0f) + dragAmount.x
-                                offsetY = (offsetY ?: 0f) + dragAmount.y
-                            },
-                            onDragEnd = { snapToEdge() },
-                            onDragCancel = { snapToEdge() }
-                        )
-                    }
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            border = BorderStroke(1.dp, accent.copy(alpha = 0.45f)),
+            shadowElevation = 8.dp,
+            modifier = Modifier
+                .offset { IntOffset((offsetX ?: 0f).roundToInt(), (offsetY ?: 0f).roundToInt()) }
+                // Invisible until the initial-placement effect has run, so
+                // there's no top-left flash before the pill is positioned.
+                .graphicsLayer { alpha = if (placed) 1f else 0f }
+                .onSizeChanged { pillW = it.width; pillH = it.height }
+                // Drag only once placed — while unplaced the pill is hidden
+                // at (0,0) and must not swallow touches.
+                .then(
+                    if (placed) {
+                        Modifier.pointerInput(Unit) {
+                            detectDragGestures(
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    offsetX = (offsetX ?: 0f) + dragAmount.x
+                                    offsetY = (offsetY ?: 0f) + dragAmount.y
+                                },
+                                onDragEnd = { snapToEdge() },
+                                onDragCancel = { snapToEdge() }
+                            )
+                        }
+                    } else Modifier
+                )
+        ) {
+            Row(
+                modifier = Modifier.padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                // ── Category glyph chip ─────────────────────────────
+                Box(
+                    modifier = Modifier
+                        .size(34.dp)
+                        .clip(CircleShape)
+                        .background(accent.copy(alpha = 0.18f)),
+                    contentAlignment = Alignment.Center
                 ) {
-                    // ── Category glyph chip ─────────────────────────────
-                    Box(
-                        modifier = Modifier
-                            .size(34.dp)
-                            .clip(CircleShape)
-                            .background(accent.copy(alpha = 0.18f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CurioIcon(
-                            name = category.iconGlyph,
-                            contentDescription = null,
-                            tint = ink,
-                            size = 18.dp
-                        )
-                    }
-
-                    // ── Topic + live timer (capped width so long topic
-                    //    names ellipsize instead of stretching the pill) ──
-                    Column(
-                        modifier = Modifier
-                            .weight(1f, fill = false)
-                            .widthIn(max = 150.dp)
-                    ) {
-                        Text(
-                            text = session.topicName,
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = if (session.paused)
-                                "Paused · ${formatElapsed(elapsed)}"
-                            else
-                                "${formatElapsed(elapsed)} · ${session.verb.lowercase()} ${session.targetName}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = if (session.paused) accent
-                                    else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    // ── Pause / Resume ─────────────────────────────────
-                    PillIconButton(
-                        icon = if (session.paused) CurioIcons.PlayArrow else CurioIcons.Pause,
-                        contentDescription = if (session.paused) "Resume exploring" else "Pause exploring",
-                        tint = accent,
-                        onClick = onTogglePause
-                    )
-
-                    // ── Stop ───────────────────────────────────────────
-                    PillIconButton(
-                        icon = CurioIcons.Stop,
-                        contentDescription = "Stop exploring",
-                        tint = MaterialTheme.colorScheme.error,
-                        onClick = onStop
-                    )
-
-                    // ── Hide (notification takes over) ─────────────────
-                    PillIconButton(
-                        icon = CurioIcons.KeyboardArrowDown,
-                        contentDescription = "Hide this timer",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        onClick = onHide
+                    CurioIcon(
+                        name = category.iconGlyph,
+                        contentDescription = null,
+                        tint = ink,
+                        size = 18.dp
                     )
                 }
+
+                // ── Topic + live timer (capped width so long topic
+                //    names ellipsize instead of stretching the pill) ──
+                Column(
+                    modifier = Modifier
+                        .weight(1f, fill = false)
+                        .widthIn(max = 150.dp)
+                ) {
+                    Text(
+                        text = session.topicName,
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = if (session.paused)
+                            "Paused · ${formatElapsed(elapsed)}"
+                        else
+                            "${formatElapsed(elapsed)} · ${session.verb.lowercase()} ${session.targetName}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (session.paused) accent
+                                else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                // ── Pause / Resume ─────────────────────────────────
+                PillIconButton(
+                    icon = if (session.paused) CurioIcons.PlayArrow else CurioIcons.Pause,
+                    contentDescription = if (session.paused) "Resume exploring" else "Pause exploring",
+                    tint = accent,
+                    onClick = onTogglePause
+                )
+
+                // ── Stop ───────────────────────────────────────────
+                PillIconButton(
+                    icon = CurioIcons.Stop,
+                    contentDescription = "Stop exploring",
+                    tint = MaterialTheme.colorScheme.error,
+                    onClick = onStop
+                )
+
+                // ── Hide (notification takes over) ─────────────────
+                PillIconButton(
+                    icon = CurioIcons.KeyboardArrowDown,
+                    contentDescription = "Hide this timer",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    onClick = onHide
+                )
             }
         }
     }
