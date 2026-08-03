@@ -1,8 +1,11 @@
 package com.curio.app.features.settings
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -162,6 +165,37 @@ fun SettingsScreen(navController: NavController) {
             requestNotificationPermission {
                 AppPreferences.setLiveNotificationsEnabled(context, true)
             }
+        }
+    }
+
+    // ── Floating explore bubble — needs the "Display over other apps"
+    //    special access (no runtime dialog on Android 10+, so we open the
+    //    system settings screen and apply the toggle on return).
+    val requestOverlaySettings = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { _ ->
+        if (Settings.canDrawOverlays(context)) {
+            AppPreferences.setOverlayBubbleEnabled(context, true)
+        }
+    }
+
+    fun openOverlaySettings() {
+        runCatching {
+            requestOverlaySettings.launch(
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:${context.packageName}")
+                )
+            )
+        }
+    }
+
+    fun setOverlayBubble(enabled: Boolean) {
+        if (enabled && !Settings.canDrawOverlays(context)) {
+            // Granting the permission first (the toggle applies on return).
+            openOverlaySettings()
+        } else {
+            AppPreferences.setOverlayBubbleEnabled(context, enabled)
         }
     }
 
@@ -567,7 +601,7 @@ fun SettingsScreen(navController: NavController) {
                         //    chronometer notification with Pause/Stop controls
                         //    (like Samsung/Google's live-updating ongoing
                         //    notifications). Off = no ongoing notification,
-                        //    only the end-of-session reminder + in-app pill.
+                        //    only the end-of-session reminder + bubble.
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 4.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -588,6 +622,52 @@ fun SettingsScreen(navController: NavController) {
                                 checked = AppPreferences.liveNotificationsEnabledState,
                                 onCheckedChange = ::setLiveNotifications
                             )
+                        }
+                        // ── Floating explore bubble — a Messenger-style timer
+                        //    bubble that floats over OTHER apps (the browser)
+                        //    while exploring. Needs the "Display over other
+                        //    apps" special access; tapping the row opens the
+                        //    system settings page when it's missing.
+                        Surface(
+                            onClick = {
+                                if (AppPreferences.overlayBubbleEnabledState) {
+                                    if (!Settings.canDrawOverlays(context)) {
+                                        openOverlaySettings()
+                                    }
+                                } else {
+                                    setOverlayBubble(true)
+                                }
+                            },
+                            shape = RoundedCornerShape(16.dp),
+                            color = Color.Transparent,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                CurioIcon(CurioIcons.BubbleChart, null, tint = CurioColors.CoralBlush, size = 22.dp)
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text("Floating explore bubble", style = MaterialTheme.typography.bodyLarge)
+                                    Text(
+                                        when {
+                                            !AppPreferences.overlayBubbleEnabledState ->
+                                                "Off · timer lives in the notification only"
+                                            Settings.canDrawOverlays(context) ->
+                                                "Floats over other apps while exploring"
+                                            else ->
+                                                "Needs \"Display over other apps\" — tap to allow"
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Switch(
+                                    checked = AppPreferences.overlayBubbleEnabledState,
+                                    onCheckedChange = ::setOverlayBubble
+                                )
+                            }
                         }
                         if (reminderEnabled) {
                             Row(

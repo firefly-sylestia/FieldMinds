@@ -2,6 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating explore bubble — a system overlay that floats over OTHER apps (the browser), replacing the in-app pill**
+
+### What was asked
+
+"Yess thats what i actually want not inside my app" — the user wants a Messenger-style bubble that floats OVER other apps while exploring (not the in-app pill). ask_user: **Settings toggle (default ON)** for the bubble, and **no in-app pill fallback** when the permission is missing (notification only).
+
+### What was done
+
+**1 — Permission + manifest** — `SYSTEM_ALERT_WINDOW` ("Display over other apps", a special-access permission with no runtime dialog on Android 10+) added to the manifest. Flows to grant it: Settings → Notifications row opens `ACTION_MANAGE_OVERLAY_PERMISSION` (package URI, `StartActivityForResult`, applies on return); TopicRevealScreen shows a ONE-TIME prompt when starting a session with the bubble on and the permission missing (Allow → system settings → ON_RESUME continuation; "Not now" proceeds without).
+
+**2 — Bubble window in `ExploreSessionService` (rewritten)** — unified `render()`: live notifications ON → full chronometer notification; bubble wanted (toggle ON + `canDrawOverlays` + not hidden) → adds a `TYPE_APPLICATION_OVERLAY` window hosting a `ComposeView`; only-bubble → quiet minimal FGS notification (Android mandates one); neither → service stops quietly. Bubble: Messenger-style drag via slop-gated View-level `OnTouchListener` (taps still hit the Compose buttons), snaps to the nearest horizontal edge, initial placement bottom-center; Pause/Resume/Stop/Hide buttons operate the store in-process and re-render. `windowManager.addView` guarded with `runCatching` (reviewer catch: an uncaught throw in a START_STICKY service would crash-loop). `onDestroy` removes the window.
+
+**3 — Theme for the overlay** — extracted `curioColorScheme()` from `CurioTheme` so the bubble renders with the app palette (light/dark/AMOLED/Material) WITHOUT the Activity-window SideEffect (would crash on a service context).
+
+**4 — Settings toggle** — "Floating explore bubble" row in Notifications: switch + subtitle (Off / floats over other apps / "Needs Display over other apps — tap to allow"); row tap opens the permission page when needed. `AppPreferences`: `overlay_bubble_enabled` (default true, reactive) + `overlay_prompt_seen` + `exploreServiceShouldRun()`; `setLiveNotificationsEnabled(false)` keeps the service when the bubble still wants it; `setOverlayBubbleEnabled` starts/stops accordingly.
+
+**5 — In-app pill removed** — `ExploreSessionPill.kt` deleted; its visuals extracted to `ExploreBubbleContent.kt` (shared by the overlay). `CurioNavHost`: pill block gone, ON_RESUME restores the bubble when hidden + live notifications off + bubble enabled (and re-arms the service — also covers permissions granted mid-session), startup path re-arms too. Boot receiver uses `exploreServiceShouldRun`.
+
+### Validation
+
+- `check_braces.py` BALANCED on all 9 touched files; no `ExploreSessionPill`/`ACTION_HIDE_OVERLAY`/`bubbleParams` refs remain.
+- Code-reviewer pass: caught + fixed (1) unguarded `addView` crash-loop risk (wrapped), (2) dead `ACTION_HIDE_OVERLAY` constant + write-only `bubbleParams` (removed), (3) rotation mid-dialog trade-off (documented comment), (4) unguarded settings intent (runCatching). Confirmed: `return@ExploreBubbleContent` label valid (matches existing `return@Surface`), `maximumWindowMetrics` API-30 guarded, `doOnLayout` from core-ktx, all FGS starts foreground/exempt (no background starts), render state machine coherent.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Fix: floating explore pill never renders + POST_NOTIFICATIONS never requested for the live-notification flow**
 
 ### What was asked

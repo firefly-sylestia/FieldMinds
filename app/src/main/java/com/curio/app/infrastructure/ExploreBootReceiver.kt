@@ -27,9 +27,9 @@ class ExploreBootReceiver : BroadcastReceiver() {
         if (!AppPreferences.isExploreSessionsEnabled(context)) return
         val session = ExploreSessionStore.getActiveSession(context) ?: return
         // Always re-arm the reminder after reboot/app-update/clock change —
-        // it fires even when live notifications are off (no service).
+        // it fires even when the service isn't running.
         ExploreReminderScheduler.schedule(context, session.startMillis, session.durationMinutes)
-        if (AppPreferences.isLiveNotificationsEnabled(context)) {
+        if (AppPreferences.exploreServiceShouldRun(context)) {
             ExploreSessionService.start(context, session)
         }
     }

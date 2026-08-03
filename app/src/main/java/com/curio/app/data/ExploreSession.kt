@@ -32,8 +32,9 @@ data class ExploreSession(
     val paused: Boolean = false,
     val pausedAtMillis: Long? = null,
     val accumulatedPausedMillis: Long = 0L,
-    // The user hid the floating explore pill for this session — persisted
-    // so it doesn't pop back on every recomposition or navigation.
+    // The user hid the floating explore bubble for this session — persisted
+    // so it doesn't pop back on every recomposition or navigation. (Field
+    // name kept as `pillHidden` for JSON/legacy compatibility.)
     val pillHidden: Boolean = false
 ) {
     /**
@@ -149,7 +150,7 @@ object ExploreSessionStore {
         startSession(context, updated)
     }
 
-    /** Hides (or re-shows) the floating explore pill for the session. */
+    /** Hides (or re-shows) the floating explore bubble for the session. */
     fun setPillHidden(context: Context, hidden: Boolean) {
         val current = activeSessionState ?: return
         if (current.pillHidden == hidden) return

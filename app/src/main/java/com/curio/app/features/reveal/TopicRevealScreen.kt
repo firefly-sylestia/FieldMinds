@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,6 +40,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -59,6 +61,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
@@ -174,7 +179,7 @@ fun TopicRevealScreen(
 
     // Android 13+ needs POST_NOTIFICATIONS before the persistent explore
     // notification can show — requested when the user starts exploring with
-    // live notifications on (the session, pill and reminder work either way).
+    // live notifications on (the session, bubble and reminder work either way).
     // Plain `remember` (not saveable): a rotation mid-dialog drops the
     // continuation, but the session is already persisted and the user can
     // simply tap "Explore now" again.
@@ -212,6 +217,51 @@ fun TopicRevealScreen(
         }
     }
 
+    // ── Floating explore bubble permission (one-time prompt) ──────────
+    //    "Display over other apps" has no runtime dialog on Android 10+, so
+    //    Allow opens the system special-access page; ON_RESUME below resumes
+    //    the deferred flow (and starts the bubble service if granted).
+    //    Plain `remember` (not saveable): a rotation mid-dialog drops the
+    //    continuation, but the session is already persisted and the user can
+    //    simply tap "Explore now" again.
+    var pendingOverlaySession by remember { mutableStateOf<ExploreSession?>(null) }
+    var overlayNeedsNotification by remember { mutableStateOf(false) }
+    var showOverlayPermissionDialog by rememberSaveable { mutableStateOf(false) }
+
+    /** Continues the explore flow after the overlay-permission step resolves. */
+    fun continueExploreFlow(session: ExploreSession) {
+        if (overlayNeedsNotification &&
+            AppPreferences.isLiveNotificationsEnabled(context) &&
+            !hasNotificationPermission(context)
+        ) {
+            pendingNotificationSession = session
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            openExploreBrowserAndGoHome(session)
+        }
+    }
+
+    // When the user returns from the "Display over other apps" settings page
+    // (opened by the overlay prompt), resume the deferred flow and start the
+    // bubble service if the permission was granted.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                val pending = pendingOverlaySession
+                if (pending != null) {
+                    pendingOverlaySession = null
+                    if (Settings.canDrawOverlays(context)) {
+                        ExploreSessionService.start(context, pending)
+                    }
+                    continueExploreFlow(pending)
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
     /** Starts a timed explore session, opens the Google search, back to Home. */
     fun startExploreSession(topic: CurioTopic) {
         engaged = true
@@ -237,20 +287,37 @@ fun TopicRevealScreen(
             // Reminder always — fires even without the live notification
             // (live notifications off → no foreground service to arm it).
             ExploreReminderScheduler.schedule(context, session.startMillis, session.durationMinutes)
-            if (AppPreferences.isLiveNotificationsEnabled(context)) {
-                if (hasNotificationPermission(context)) {
-                    ExploreSessionService.start(context, session)
-                } else {
-                    // Ask for POST_NOTIFICATIONS first (Android 13+ hides
-                    // the notification without it). The permission callback
-                    // starts the service — while this activity is still
-                    // foreground — and then opens the browser + Home, so no
-                    // background FGS start (which throws on Android 12+).
-                    pendingNotificationSession = session
-                    requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    return
-                }
-            }
+        }
+        val needsOverlay = AppPreferences.isOverlayBubbleEnabled(context) &&
+            !Settings.canDrawOverlays(context)
+        val needsNotification = AppPreferences.isLiveNotificationsEnabled(context) &&
+            !hasNotificationPermission(context)
+
+        if (needsOverlay && !AppPreferences.isOverlayPromptSeen(context)) {
+            // One-time ask: the bubble floats over other apps and needs the
+            // "Display over other apps" special access. Defer the browser
+            // until the user answers (Allow → system settings → ON_RESUME).
+            AppPreferences.setOverlayPromptSeen(context)
+            overlayNeedsNotification = needsNotification
+            pendingOverlaySession = session
+            showOverlayPermissionDialog = true
+            return
+        }
+        if (needsNotification) {
+            // Ask for POST_NOTIFICATIONS first (Android 13+ hides the
+            // notification without it). The permission callback starts the
+            // service — while this activity is still foreground — and then
+            // opens the browser + Home, so no background FGS start (which
+            // throws on Android 12+).
+            pendingNotificationSession = session
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+            return
+        }
+        // Start the service for whatever can show right now (bubble and/or
+        // live notification); the permission paths above defer their start
+        // to their callbacks.
+        if (AppPreferences.exploreServiceShouldRun(context)) {
+            ExploreSessionService.start(context, session)
         }
         openExploreBrowserAndGoHome(session)
     }
@@ -523,6 +590,62 @@ fun TopicRevealScreen(
             resolved?.let { ExploreSessionStore.recordUnexplored(context, cat.id, it.name) }
         }
         navController.popBackStack()
+    }
+
+    if (showOverlayPermissionDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showOverlayPermissionDialog = false
+                val s = pendingOverlaySession
+                pendingOverlaySession = null
+                if (s != null) continueExploreFlow(s)
+            },
+            title = { Text("Floating explore bubble?") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "Curio can show a small timer bubble that floats over " +
+                        "other apps — even while you're in the browser. It needs " +
+                        "the \"Display over other apps\" permission."
+                    )
+                    Text(
+                        "You can also manage it anytime in Settings → Notifications.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showOverlayPermissionDialog = false
+                    val s = pendingOverlaySession
+                    if (s != null) {
+                        val launched = runCatching {
+                            context.startActivity(
+                                Intent(
+                                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:${context.packageName}")
+                                )
+                            )
+                        }.isSuccess
+                        if (!launched) {
+                            // No handler for the settings intent — don't
+                            // leave the flow stuck; continue without it.
+                            pendingOverlaySession = null
+                            continueExploreFlow(s)
+                        }
+                    }
+                }) { Text("Allow") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showOverlayPermissionDialog = false
+                    val s = pendingOverlaySession
+                    pendingOverlaySession = null
+                    if (s != null) continueExploreFlow(s)
+                }) { Text("Not now") }
+            }
+        )
     }
 
     if (showExploreDialog && resolved != null) {

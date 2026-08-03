@@ -3,6 +3,7 @@ package com.curio.app.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -156,10 +157,15 @@ fun isCurioDarkTheme(): Boolean {
     }
 }
 
+/**
+ * The [ColorScheme] the active theme style wears — Curio (warm cream /
+ * midnight), AMOLED (pure black), or the device's Material You dynamic
+ * palette. Shared by [CurioTheme] and the floating explore bubble, which
+ * renders outside an Activity window and therefore can't use the
+ * [CurioTheme] window SideEffect.
+ */
 @Composable
-fun CurioTheme(
-    content: @Composable () -> Unit
-) {
+fun curioColorScheme(): ColorScheme {
     val context = LocalContext.current
     val isDark = isCurioDarkTheme()
     // Theme style decides the color scheme:
@@ -167,7 +173,7 @@ fun CurioTheme(
     //  - AMOLED: the pure-black scheme (always dark).
     //  - Material: the device's Material You dynamic palette (still
     //    following the Light/Dark/System setting).
-    val colorScheme = when (AppPreferences.themeStyleState) {
+    return when (AppPreferences.themeStyleState) {
         AppPreferences.THEME_STYLE_AMOLED -> CurioAmoledColorScheme
         AppPreferences.THEME_STYLE_MATERIAL ->
             // Material You's dynamic palette requires API 31 (Android 12);
@@ -180,6 +186,13 @@ fun CurioTheme(
             }
         else -> if (isDark) CurioDarkColorScheme else CurioLightColorScheme
     }
+}
+
+@Composable
+fun CurioTheme(
+    content: @Composable () -> Unit
+) {
+    val colorScheme = curioColorScheme()
 
     val view = LocalView.current
     if (!view.isInEditMode) {

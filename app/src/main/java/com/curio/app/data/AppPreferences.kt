@@ -1,6 +1,7 @@
 package com.curio.app.data
 
 import android.content.Context
+import android.provider.Settings
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -48,6 +49,8 @@ object AppPreferences {
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
+    private const val KEY_OVERLAY_BUBBLE_ENABLED = "overlay_bubble_enabled"
+    private const val KEY_OVERLAY_PROMPT_SEEN = "overlay_prompt_seen"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
     private const val KEY_TOPIC_SENTIMENTS = "topic_sentiments"  // JSON object: "CATEGORY:topicId" -> "like"/"dislike"
@@ -106,8 +109,15 @@ object AppPreferences {
     // Live explore notifications — the persistent chronometer notification
     // with Pause/Stop controls shown while exploring (like Samsung/Google's
     // live-updating ongoing notifications). Default ON; off means no ongoing
-    // notification at all — only the end-of-session reminder + in-app pill.
+    // notification at all — only the end-of-session reminder + bubble.
     var liveNotificationsEnabledState by mutableStateOf(true)
+        private set
+
+    // Floating explore bubble — a Messenger-style timer bubble drawn over
+    // OTHER apps (the browser) via SYSTEM_ALERT_WINDOW. Default ON; off
+    // means the timer lives only in the notification (when live
+    // notifications are on) — there is no in-app pill fallback.
+    var overlayBubbleEnabledState by mutableStateOf(true)
         private set
 
     /**
@@ -144,6 +154,7 @@ object AppPreferences {
         entryMetaEnabledState = isEntryMetaEnabled(context)
         exploreSessionsEnabledState = isExploreSessionsEnabled(context)
         liveNotificationsEnabledState = isLiveNotificationsEnabled(context)
+        overlayBubbleEnabledState = isOverlayBubbleEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
         savedQuotesState = getSavedQuotes(context)
         topicSentimentsState = getTopicSentiments(context)
@@ -213,7 +224,7 @@ object AppPreferences {
 
     /**
      * Whether the persistent live explore notification is on. Default ON.
-     * Off = no ongoing notification; the in-app pill + end reminder stay.
+     * Off = no ongoing notification; the end reminder + bubble stay.
      */
     fun isLiveNotificationsEnabled(context: Context): Boolean =
         prefs(context).getBoolean(KEY_LIVE_NOTIFICATIONS_ENABLED, true)
@@ -221,17 +232,70 @@ object AppPreferences {
     fun setLiveNotificationsEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_LIVE_NOTIFICATIONS_ENABLED, enabled).apply()
         liveNotificationsEnabledState = enabled
+        val session = ExploreSessionStore.getActiveSession(context) ?: return
         if (enabled) {
             // Flipped ON mid-session: bring the live notification back for
-            // the currently active session.
-            ExploreSessionStore.getActiveSession(context)?.let {
-                com.curio.app.infrastructure.ExploreSessionService.start(context, it)
+            // the currently active session (the bubble stays if wanted).
+            com.curio.app.infrastructure.ExploreSessionService.start(context, session)
+        } else {
+            // Flipped OFF mid-session: drop the chronometer notification.
+            // Keep the service alive when the floating bubble still wants it
+            // (it swaps to the minimal bubble-active notification); otherwise
+            // stop it — the session + reminder survive either way.
+            if (isOverlayBubbleEnabled(context) && Settings.canDrawOverlays(context)) {
+                com.curio.app.infrastructure.ExploreSessionService.sync(context)
+            } else {
+                com.curio.app.infrastructure.ExploreSessionService.stop(context)
+            }
+        }
+    }
+
+    /**
+     * Whether the floating explore bubble is on. Default ON. Off = the
+     * timer lives only in the notification (when live notifications are on).
+     */
+    fun isOverlayBubbleEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_OVERLAY_BUBBLE_ENABLED, true)
+
+    fun setOverlayBubbleEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_OVERLAY_BUBBLE_ENABLED, enabled).apply()
+        overlayBubbleEnabledState = enabled
+        val session = ExploreSessionStore.getActiveSession(context) ?: return
+        if (enabled) {
+            // Flipped ON mid-session: bring the bubble back (permission must
+            // be granted — callers gate on it; the render decides).
+            if (Settings.canDrawOverlays(context)) {
+                com.curio.app.infrastructure.ExploreSessionService.start(context, session)
             }
         } else {
-            // Flipped OFF mid-session: drop the persistent notification but
-            // keep the session + reminder + pill alive.
-            com.curio.app.infrastructure.ExploreSessionService.stop(context)
+            // Flipped OFF mid-session: drop the bubble. Keep the service
+            // alive when live notifications still want it, else stop it.
+            if (isLiveNotificationsEnabled(context)) {
+                com.curio.app.infrastructure.ExploreSessionService.sync(context)
+            } else {
+                com.curio.app.infrastructure.ExploreSessionService.stop(context)
+            }
         }
+    }
+
+    /**
+     * Whether the explore foreground service should run: live notifications
+     * ON, OR the floating bubble is enabled AND the "Display over other
+     * apps" permission is granted (the overlay is what needs the service
+     * when live notifications are off).
+     */
+    fun exploreServiceShouldRun(context: Context): Boolean =
+        isExploreSessionsEnabled(context) && (
+            isLiveNotificationsEnabled(context) ||
+                (isOverlayBubbleEnabled(context) && Settings.canDrawOverlays(context))
+            )
+
+    /** Whether the one-time "floating bubble" permission prompt has been shown. */
+    fun isOverlayPromptSeen(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_OVERLAY_PROMPT_SEEN, false)
+
+    fun setOverlayPromptSeen(context: Context) {
+        prefs(context).edit().putBoolean(KEY_OVERLAY_PROMPT_SEEN, true).apply()
     }
 
     // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────

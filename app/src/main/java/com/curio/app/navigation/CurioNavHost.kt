@@ -71,7 +71,6 @@ import com.curio.app.features.spin.SpinScreen
 import com.curio.app.features.home.HomeScreen
 import com.curio.app.features.splash.SplashScreen
 import com.curio.app.ui.components.CurioBottomBar
-import com.curio.app.ui.components.ExploreSessionPill
 import com.curio.app.ui.theme.CurioMotion
 
 /**
@@ -129,13 +128,21 @@ fun CurioNavHost(
                 if (AppPreferences.isExploreSessionsEnabled(context)) {
                     val resumed = ExploreSessionStore.getActiveSession(context)
                     showDoneDialog = resumed != null
-                    // If the user hid the pill but live notifications are
-                    // OFF, bring the pill back on return — otherwise there'd
-                    // be no visible timer controller at all.
+                    // If the user hid the bubble but no other controller
+                    // exists (live notifications off) and the bubble is
+                    // still enabled, bring it back on return — otherwise
+                    // there'd be no visible timer controller at all.
                     if (resumed != null && resumed.pillHidden &&
-                        !AppPreferences.liveNotificationsEnabledState
+                        !AppPreferences.liveNotificationsEnabledState &&
+                        AppPreferences.isOverlayBubbleEnabled(context)
                     ) {
                         ExploreSessionStore.setPillHidden(context, false)
+                    }
+                    // Re-arm the explore service (live notification + bubble)
+                    // after returning to the app — covers permissions granted
+                    // mid-session, Settings toggles, and the restore above.
+                    if (resumed != null && AppPreferences.exploreServiceShouldRun(context)) {
+                        ExploreSessionService.start(context, resumed)
                     }
                 }
             }
@@ -145,19 +152,22 @@ fun CurioNavHost(
     }
     // Startup restore: the observer above is added after the activity is
     // already RESUMED on launch, so a persisted session from a killed
-    // process surfaces here instead.
+    // process surfaces here instead (dialog + re-armed service).
     LaunchedEffect(Unit) {
         if (!startupPromptDone) {
             startupPromptDone = true
             if (AppPreferences.isExploreSessionsEnabled(context)) {
-                showDoneDialog = ExploreSessionStore.getActiveSession(context) != null
+                val session = ExploreSessionStore.getActiveSession(context)
+                showDoneDialog = session != null
+                if (session != null && AppPreferences.exploreServiceShouldRun(context)) {
+                    ExploreSessionService.start(context, session)
+                }
             }
         }
     }
 
-    // The floating explore pill overlays the whole app, so the Scaffold
-    // sits inside a Box with the pill drawn on top (all screens, while a
-    // session is active).
+    // The floating explore bubble now lives in the explore service's overlay
+    // window (over other apps), so the Scaffold simply fills the screen.
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             bottomBar = {
@@ -351,37 +361,6 @@ fun CurioNavHost(
             }
         }
         }
-
-        // ── Floating explore pill — the draggable live-timer controller.
-        //    Shows on every screen while a session is active and the pill
-        //    hasn't been hidden for it. Hidden + live notifications off →
-        //    the pill comes back on the next app resume (there'd be no
-        //    controller otherwise).
-        val pillSession = ExploreSessionStore.activeSessionState
-        if (pillSession != null &&
-            AppPreferences.exploreSessionsEnabledState &&
-            !pillSession.pillHidden
-        ) {
-            ExploreSessionPill(
-                session = pillSession,
-                onTogglePause = {
-                    val s = ExploreSessionStore.activeSessionState ?: return@ExploreSessionPill
-                    if (s.paused) ExploreSessionStore.resumeSession(context)
-                    else ExploreSessionStore.pauseSession(context)
-                    // Keep the notification in step with the pill.
-                    ExploreSessionService.sync(context)
-                },
-                onStop = {
-                    ExploreSessionStore.clearSession(context)
-                    ExploreReminderScheduler.cancel(context)
-                    ExploreSessionService.stop(context)
-                },
-                onHide = {
-                    ExploreSessionStore.setPillHidden(context, true)
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-        }
     }
 
     // ── Done-exploring prompt (app return while a session is active) ────
@@ -416,7 +395,7 @@ fun CurioNavHost(
                         )
                         Text(
                             if (activeSession.paused)
-                                "Paused at ${formatElapsed(elapsedMillis)} — tap Resume on the pill or notification to continue"
+                                "Paused at ${formatElapsed(elapsedMillis)} — tap Resume on the bubble or notification to continue"
                             else
                                 "You've been exploring for ${formatElapsed(elapsedMillis)}",
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
