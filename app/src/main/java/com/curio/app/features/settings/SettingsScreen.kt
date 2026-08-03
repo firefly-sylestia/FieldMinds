@@ -546,35 +546,50 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
-                        // ── Deck card redesign (v7.6, EXPERIMENTAL) — the
-                        //    Spin deck's background peek cards get a top-lit
-                        //    gradient fill, category-tinted hairline border,
-                        //    soft shadows, and two-line near-card titles.
-                        //    OFF by default — the classic flat deck stays
+                        // ── Deck cards (v7.7, EXPERIMENTAL) — the Spin deck's
+                        //    peek-card look is four independent toggles so each
+                        //    upgrade can be A/B'd on its own: top-lit gradient
+                        //    fill, category-tinted hairline edges, soft ambient
+                        //    shadows, and roomier two-line near-card titles.
+                        //    Each OFF by default — the classic flat deck stays
                         //    the shipping look until the experiment settles.
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            CurioIcon(
-                                CurioIcons.Layers, null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 22.dp
-                            )
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Deck card redesign", style = MaterialTheme.typography.bodyLarge)
-                                Text(
-                                    "Top-lit deck cards with tinted edges and roomier titles",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Switch(
-                                checked = AppPreferences.peekDeckRedesignState,
-                                onCheckedChange = { AppPreferences.setPeekDeckRedesignEnabled(context, it) }
-                            )
-                        }
+                        Text(
+                            "Deck cards",
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
+                        )
+                        DeckCardToggleRow(
+                            icon = CurioIcons.Layers,
+                            title = "Top-lit gradient",
+                            subtitle = "Peek cards catch light at the top edge",
+                            checked = AppPreferences.peekGradientState,
+                            onCheckedChange = { AppPreferences.setPeekGradientEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
+                        DeckCardToggleRow(
+                            icon = CurioIcons.Colorize,
+                            title = "Tinted card edges",
+                            subtitle = "Category-tinted hairline border on each card",
+                            checked = AppPreferences.peekHairlineState,
+                            onCheckedChange = { AppPreferences.setPeekHairlineEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
+                        DeckCardToggleRow(
+                            icon = CurioIcons.AutoAwesome,
+                            title = "Soft shadows",
+                            subtitle = "Gentle ambient shadow under each card",
+                            checked = AppPreferences.peekShadowsState,
+                            onCheckedChange = { AppPreferences.setPeekShadowsEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
+                        DeckCardToggleRow(
+                            icon = CurioIcons.FormatText,
+                            title = "Roomier titles",
+                            subtitle = "Two-line near titles with light tracking",
+                            checked = AppPreferences.peekTitlesState,
+                            onCheckedChange = { AppPreferences.setPeekTitlesEnabled(context, it) }
+                        )
                         CurioSettingsDivider()
                         // ── Entry date & mood — the meta card (date / time /
                         //    mood / type) on saved entries + the journal's mood
@@ -977,6 +992,38 @@ private fun AudioQualityDialog(
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text("Close", fontWeight = FontWeight.Bold) } }
     )
+}
+
+// ── Deck-card experimental toggles (v7.7) ────────────────────────────────
+/** One experimental deck-card toggle row in the Appearance card. */
+@Composable
+private fun DeckCardToggleRow(
+    icon: String,
+    title: String,
+    subtitle: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        CurioIcon(
+            icon, null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            size = 22.dp
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
 }
 
 // ── Smart density — segment labels + summary copy for the 3-way picker ──

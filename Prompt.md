@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Color fixes: pastel watermark visibility, pastel peek-card colors, and per-feature Deck-cards toggles (v7.7)**
+
+### What was asked
+
+“no lets do more color fixes specially the new pastel have background watermark issue they are barely visible. and also the peek cards doesnt get the card colors properly. also why theres only 1 toggle added for this i thought there will be differnt ones for each” — the modern-batches “more” request was dropped at the user's direction.
+
+### What was done
+
+- **Watermark visibility (v7.7)** — `CurioWatermarkBackdrop` tinted every glyph with `themedAccent()`, which in pastel mode is an airy pastel drawn over a near-pastel page wash → pastel-on-pastel, nearly invisible. Glyphs now switch to the category INK twins in pastel mode (`categoryInk()`: deep accent in light, light twin in dark) and get a modest alpha bump via a new shared `watermarkAlpha()` helper (active 0.30→0.38 light / 0.22→0.28 dark; inactive 0.15→0.22 / 0.11→0.15). Applied to both backdrop layouts and the mood-board backdrop.
+- **Peek-card card colors (v7.7)** — the peek fills in pastel mode used `lerp(pastelAccent, Black, 0.28/0.42)`, which produced muddy mid-tones (neither pastel nor deep accent). Pastel mode now keeps the peeks in the pastel CARD family: light mode fades toward white (far pair drifting toward the pale wash), dark mode only gently deepens the muted pastel twin. Non-pastel look unchanged.
+- **Four toggles instead of one** — the single “Deck card redesign” pref was replaced by four independent prefs (`peek_gradient`, `peek_hairline`, `peek_shadows`, `peek_titles`, each OFF by default): Settings → Appearance → “Deck cards” now has Top-lit gradient / Tinted card edges / Soft shadows / Roomier titles, each A/B-able alone via the new `DeckCardToggleRow` helper.
+- **Docs:** fastlane changelog `20260808.txt`; `PEEK_CARD_DESIGN_SUGGESTIONS.md` status updated; Prompt.md.
+
+### Validation
+
+- Braces balanced on all touched files; code-reviewer pass; NO local Gradle build per AGENTS.md — CI validates on push. Committed & pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Modern batches in Albums & Artists — 50 contemporary artists + 50 modern albums (2010s–2020s), The 1975 included**
 
 ### What was asked

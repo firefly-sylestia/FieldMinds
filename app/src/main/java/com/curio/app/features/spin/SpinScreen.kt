@@ -263,15 +263,19 @@ import kotlin.random.Random
  *     so each step completes before the next tick and the reel reads as
  *     calm and smooth instead of fast and glitchy.
  *
- * v7.6 changes (EXPERIMENTAL, toggleable):
- * 30. **Deck card redesign toggle** — Settings → Appearance → "Deck card
- *     redesign" (OFF by default) swaps the flat peek-card slabs for the
- *     recommended set from PEEK_CARD_DESIGN_SUGGESTIONS.md: a top-lit
- *     two-stop gradient fill, a category-tinted hairline border (deep ink
- *     in light, light twin in dark), soft ambient shadows, and roomier
- *     near-card titles (16sp SemiBold, light tracking, two lines) with
- *     proportional glyphs (22dp near / 18dp far). The classic flat deck
- *     stays the shipping look until the experiment settles.
+ * v7.7 changes (EXPERIMENTAL, four independent toggles):
+ * 30. **Deck card redesign toggles** — Settings → Appearance → "Deck
+ *     cards" (each OFF by default) swaps the flat peek-card slabs for the
+ *     recommended set from PEEK_CARD_DESIGN_SUGGESTIONS.md, one upgrade per
+ *     toggle so each can be A/B'd alone: a top-lit two-stop gradient fill,
+ *     a category-tinted hairline border (deep ink in light, light twin in
+ *     dark), soft ambient shadows, and roomier near-card titles (16sp
+ *     SemiBold, light tracking, two lines) with proportional glyphs (22dp
+ *     near / 18dp far). The classic flat deck stays the shipping look
+ *     until the experiment settles.
+ * 31. **Pastel peek cards** — the peek fills now wear the pastel card
+ *     family in pastel mode (airy pale layers in light, softly deepened
+ *     muted twins in dark) instead of the old lerp-toward-black mid-tones.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -2027,36 +2031,50 @@ private fun PeekCard(
     // far cards step down again, so the deck fades into the background in
     // distinct layers. White content stays readable on the dimmed fill.
     // Mixed decks shade the blended accent so the whole deck reads mixed.
-    val cardColor = remember(accent, far) {
-        lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
+    // v7.7 — pastel mode keeps the peeks in the pastel CARD family instead
+    // of the old lerp-toward-black mid-tones (which read neither pastel nor
+    // deep accent): light mode fades toward white (airy pastel layers, the
+    // far pair drifting toward the pale wash), dark mode only gently
+    // deepens the muted pastel twin so the layers stay soft over midnight.
+    val pastelMode = AppPreferences.pastelColorsState
+    val darkMode = isCurioDarkTheme()
+    val cardColor = remember(accent, far, pastelMode, darkMode) {
+        when {
+            pastelMode && !darkMode -> lerp(accent, Color.White, if (far) 0.35f else 0.10f)
+            pastelMode -> lerp(accent, Color.Black, if (far) 0.22f else 0.12f)
+            else -> lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
+        }
     }
     // v7.5 — pastel mode lightens the peek fill, so content flips to a deep
     // ink of the deck color (light mode) / a light tint (dark).
     val ink = pastelFillInk(accent)
 
-    // v7.6 — deck card redesign (EXPERIMENTAL, Settings toggle, OFF by
-    // default): the flat shade becomes a top-lit two-stop gradient, the
-    // generic hairline is tinted with the category's own colors, near cards
-    // gain soft shadows, and near titles get two readable lines. Reads the
-    // reactive preference directly so flipping the toggle recomposes the
-    // deck instantly; when OFF every value below resolves to the classic
-    // flat-deck look.
-    val redesign = AppPreferences.peekDeckRedesignState
+    // v7.7 — deck card redesign (EXPERIMENTAL, four independent Settings
+    // toggles, each OFF by default): the flat shade becomes a top-lit
+    // two-stop gradient, the generic hairline is tinted with the category's
+    // own colors, near cards gain soft shadows, and near titles get two
+    // readable lines. Reads each reactive preference directly so flipping
+    // any toggle recomposes the deck instantly; when a flag is OFF its
+    // feature resolves to the classic flat-deck look.
+    val gradientOn = AppPreferences.peekGradientState
+    val hairlineOn = AppPreferences.peekHairlineState
+    val shadowsOn = AppPreferences.peekShadowsState
+    val titlesOn = AppPreferences.peekTitlesState
     // 1a — top-lit gradient: crown = a whisper of light at the card top,
-    // base = the classic level shade. The top peek catching more light also
-    // whispers "next up" on the reel.
-    val fillBrush = remember(accent, far) {
-        val base = lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
-        val crown = lerp(accent, Color.White, if (far) 0.10f else 0.14f)
-        Brush.verticalGradient(listOf(crown, base))
+    // base = the level shade. The top peek catching more light also
+    // whispers "next up" on the reel. (Gated by the gradient toggle.)
+    val fillBrush = remember(accent, far, pastelMode, darkMode) {
+        val crown = if (pastelMode && !darkMode) lerp(cardColor, Color.White, 0.12f)
+                    else lerp(accent, Color.White, if (far) 0.10f else 0.14f)
+        Brush.verticalGradient(listOf(crown, cardColor))
     }
     // 1b — category-tinted hairline so each deck layer whispers its
     // category instead of a generic white rule. The light twin reads on the
     // DARK deck fills (both non-pastel light and dark mode); in pastel
     // light mode the fills are pale, so the deep accent ink carries the
     // edge instead (a deep-on-deep hairline would vanish — reviewer catch).
-    val hairline = if (redesign) {
-        if (AppPreferences.pastelColorsState && !isCurioDarkTheme()) {
+    val hairline = if (hairlineOn) {
+        if (pastelMode && !darkMode) {
             cat.categoryInk().copy(alpha = if (far) 0.22f else 0.30f)
         } else {
             cat.lightAccent.copy(alpha = if (far) 0.28f else 0.40f)
@@ -2120,10 +2138,10 @@ private fun PeekCard(
         ) { currentTopic ->
             Surface(
                 shape = RoundedCornerShape(corner),
-                color = if (redesign) Color.Transparent else cardColor,
+                color = if (gradientOn) Color.Transparent else cardColor,
                 // 2 — soft ambient shadows lift the deck off the tinted page
                 // (near cards sit higher than the far pair).
-                shadowElevation = if (redesign) (if (far) 1.dp else 3.dp) else 0.dp,
+                shadowElevation = if (shadowsOn) (if (far) 1.dp else 3.dp) else 0.dp,
                 tonalElevation = 0.dp,
                 // Subtle hairline outline — kept very light so the rotated
                 // stroke stays crisp instead of aliasing into pixel noise —
@@ -2132,7 +2150,7 @@ private fun PeekCard(
                 modifier = Modifier
                     .fillMaxSize()
                     .then(
-                        if (redesign && fillBrush != null) {
+                        if (gradientOn) {
                             Modifier.background(brush = fillBrush, shape = RoundedCornerShape(corner))
                         } else {
                             Modifier
@@ -2153,11 +2171,11 @@ private fun PeekCard(
                             name = cat.iconGlyph,
                             contentDescription = null,
                             tint = ink.copy(alpha = if (far) 0.55f else 0.75f),
-                            size = if (redesign) (if (far) 18.dp else 22.dp) else 20.dp
+                            size = if (titlesOn) (if (far) 18.dp else 22.dp) else 20.dp
                         )
                         Text(
                             text = currentTopic?.name ?: "…",
-                            style = if (redesign) {
+                            style = if (titlesOn) {
                                 if (far) {
                                     // 3 — far cards are hints, not reads: a
                                     // smaller, softer single line.
@@ -2180,9 +2198,9 @@ private fun PeekCard(
                             },
                             // Far deck cards dim their content too, reinforcing
                             // the layered fade into the background.
-                            color = if (redesign && far) ink.copy(alpha = 0.72f)
+                            color = if (titlesOn && far) ink.copy(alpha = 0.72f)
                                     else ink.copy(alpha = if (far) 0.65f else 1f),
-                            maxLines = if (redesign && !far) 2 else 1,
+                            maxLines = if (titlesOn && !far) 2 else 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     }

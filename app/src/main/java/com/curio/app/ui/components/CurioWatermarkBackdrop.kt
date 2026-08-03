@@ -17,10 +17,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.themedAccent
 import kotlin.math.roundToInt
@@ -69,7 +71,14 @@ fun CurioWatermarkBackdrop(
     // deck. Wildcard's glyph picks up the brand coral automatically.
     // Rebuilt in the composable body (NOT remember) so the Material style's
     // device-color blend updates the backdrop glyphs when the style changes.
-    val accentByGlyph = CurioCategories.all.associate { it.iconGlyph to it.themedAccent() }
+    // v7.7 — pastel mode: the airy pastel accents melt into the pale pastel
+    // page wash, so the glyphs switch to the category's INK twins (deep
+    // accent in light, light twin in dark) to stay visible — and get a
+    // modest alpha bump (see [watermarkAlpha]).
+    val pastelMode = AppPreferences.pastelColorsState
+    val accentByGlyph = CurioCategories.all.associate {
+        it.iconGlyph to if (pastelMode) it.categoryInk() else it.themedAccent()
+    }
 
     if (topClearance > 0.dp) {
         // Lower-band layout (screens with a hero banner): the glyphs are
@@ -146,11 +155,10 @@ private fun BoxScope.WatermarkGlyph(
     val accent = accentByGlyph[glyph] ?: CurioColors.WarmWatermarkInk
     // Dark mode: glyphs are muted ghosts but must stay visible (raised from
     // 0.07/0.15 which barely read on the midnight surface). Light mode gets
-    // a modest bump too so the palette stays present over cream.
-    val alpha = when {
-        active -> if (isDark) 0.22f else 0.30f
-        else -> if (isDark) 0.11f else 0.15f
-    }
+    // a modest bump too so the palette stays present over cream. Pastel
+    // mode raises both a step further — its washes are paler (light) and
+    // the ink-twins read lighter over them, so the old values vanished.
+    val alpha = watermarkAlpha(active, isDark, AppPreferences.pastelColorsState)
     CurioIcon(
         name = glyph,
         contentDescription = null,
@@ -193,10 +201,8 @@ private fun BoxWithConstraintsScope.LowerBandGlyph(
 ) {
     val active = glyph == activeCat.iconGlyph
     val accent = accentByGlyph[glyph] ?: CurioColors.WarmWatermarkInk
-    val alpha = when {
-        active -> if (isDark) 0.22f else 0.30f
-        else -> if (isDark) 0.11f else 0.15f
-    }
+    // Same pastel-aware alpha as [WatermarkGlyph].
+    val alpha = watermarkAlpha(active, isDark, AppPreferences.pastelColorsState)
     val size = (shortSide * sizeFactor).coerceIn(36.dp, 88.dp)
     val density = LocalDensity.current
     val sizePx = with(density) { size.toPx() }
@@ -217,6 +223,17 @@ private fun BoxWithConstraintsScope.LowerBandGlyph(
             .offset { IntOffset(x, y) }
             .graphicsLayer { rotationZ = rotation }
     )
+}
+
+/**
+ * Theme + pastel-aware alpha for watermark glyphs. Pastel mode's page
+ * washes are paler (light) and its glyph tints switch to the category ink
+ * twins, so both the active boost and the inactive ghosts get a modest
+ * raise — the old values rendered pastel-on-pastel and nearly invisible.
+ */
+private fun watermarkAlpha(active: Boolean, isDark: Boolean, pastel: Boolean): Float = when {
+    active -> if (isDark) (if (pastel) 0.28f else 0.22f) else (if (pastel) 0.38f else 0.30f)
+    else -> if (isDark) (if (pastel) 0.15f else 0.11f) else (if (pastel) 0.22f else 0.15f)
 }
 
 /**
@@ -253,7 +270,13 @@ fun CurioMoodBoardBackdrop(
     val isDark = isCurioDarkTheme()
     // Rebuilt in the composable body (NOT remember) so the Material style's
     // device-color blend updates the backdrop glyphs when the style changes.
-    val accentByGlyph = CurioCategories.all.associate { it.iconGlyph to it.themedAccent() }
+    // v7.7 — pastel mode switches to the ink twins (same reason as
+    // [CurioWatermarkBackdrop]) so the collage doesn't vanish on the pale
+    // tinted canvas.
+    val pastelMode = AppPreferences.pastelColorsState
+    val accentByGlyph = CurioCategories.all.associate {
+        it.iconGlyph to if (pastelMode) it.categoryInk() else it.themedAccent()
+    }
     val glyphs = remember {
         CurioCategories.all.map { it.iconGlyph }
     }
@@ -269,8 +292,11 @@ fun CurioMoodBoardBackdrop(
             // draw time so light/dark toggles apply immediately. Dark mode
             // was raised from 0.05 so the collage is actually visible on the
             // midnight surface (bumped again 0.10→0.12 / 0.14→0.16 with the
-            // denser collage so the interior ring reads too).
-            val alpha = (if (isDark) 0.12f else 0.16f) * p.alphaBoost
+            // denser collage so the interior ring reads too). v7.7 — pastel
+            // mode bumps both bases a step (ink twins over paler washes).
+            val baseAlpha = if (isDark) (if (pastelMode) 0.15f else 0.12f)
+                            else (if (pastelMode) 0.22f else 0.16f)
+            val alpha = baseAlpha * p.alphaBoost
             // Anchor the icon on its CENTRE: the pattern's (xFrac, yFrac)
             // is the glyph centre, but [Modifier.offset] shifts the icon's
             // top-left — so back off by half the glyph's pixel size. Without

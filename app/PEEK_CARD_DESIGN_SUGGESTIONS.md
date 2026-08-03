@@ -1,11 +1,15 @@
 # Peek Card Design Suggestions (pending user review)
 
-> **Status: RECOMMENDED SET IMPLEMENTED (v7.6, behind a Settings toggle).**
+> **Status: RECOMMENDED SET IMPLEMENTED (v7.7, behind four Settings toggles).**
 > The recommended set — 1a top-lit gradient, 1b category-tinted hairline,
-> soft shadows, two-line near titles — is live in `SpinScreen.kt` behind the
-> **Settings → Appearance → "Deck card redesign"** toggle, OFF by default
-> (the classic flat deck stays the shipping look until the experiment
-> settles). 1c (light-paper deck) is still unimplemented — say the word to
+> soft shadows, two-line near titles — is live in `SpinScreen.kt` behind
+> **Settings → Appearance → "Deck cards"** with ONE TOGGLE PER UPGRADE
+> (Top-lit gradient / Tinted card edges / Soft shadows / Roomier titles),
+> each OFF by default (the classic flat deck stays the shipping look until
+> the experiment settles). v7.7 also fixes the peek fills in pastel mode —
+> they now wear the pastel card family (airy pale layers in light, softly
+> deepened muted twins in dark) instead of muddy lerp-toward-black
+> mid-tones. 1c (light-paper deck) is still unimplemented — say the word to
 > add it to the toggle.
 
 ## Where the peek cards are today
