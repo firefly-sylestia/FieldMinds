@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board watermark pattern reworked — guaranteed no-overlap collage, weird middle glyph removed, edge-anchored drawing**
+
+### What was asked
+
+The mood-board watermark pattern still needs proper refinement; the middle glyph looks weird; sometimes glyphs still overlap.
+
+### What was done
+
+**`CurioWatermarkBackdrop.kt` / `buildMoodBoardPattern` — full rework of the scatter algorithm:**
+- The old fixed-bias slot ring only LOOKED collision-free: slots crowd at the corners, the ±0.05 jitter let neighbours drift into each other, and the two centre slots sat close enough to collide on smaller canvases — the overlapping glyphs the user kept seeing.
+- NEW jittered-grid, Poisson-disc-style sampler: positions are NORMALIZED canvas fractions; candidates are generated on a grid (cell = 0.185 × short side, jitter = 0.32 of the cell), sorted far-from-centre first, and accepted ONLY if they clear the centre exclusion (radius 0.225 × short side) AND stay a **radius-sum × 1.06 spacing margin** away from every already-placed glyph (checked in canvas dp, so the guarantee holds at any board size). Glyph size grows 34→54dp toward the edges and shrinks toward the middle, so the collage reads as a natural scatter that fades out where the tiles sit. Counts scale with canvas AREA (8-16 per perimeter, 360×460dp reference) so the inline card and the expanded full-screen board keep the same density.
+- **Middle glyph REMOVED entirely** — the board's centre stays completely clear for the tiles (the old lone centre icon was the "weird middle glyph"). 1-2 ring glyphs were tried (validated in simulation) but any glyph near the middle still reads as an odd lone icon, so they're gone.
+- **Draw-anchor fix** (reviewer catch): the placement math treats (xFrac, yFrac) as the glyph CENTRE, but `Modifier.offset` shifts the icon's top-left — so every glyph rendered down-right of its placement and the edge glyphs could clip past the board's right/bottom borders. The draw loop now backs off by half the glyph's pixel size so the icon is centred on its placement point.
+
+### Validation
+
+- EXACT-model JS simulation of the Kotlin algorithm (raw dp radii, no scaling, matching the draw loop): 40 seeds × 6 canvas sizes (300×420 … 430×900 dp) — min centre-distance ratio ≥ 1.06 ALWAYS (no overlap, no crowding), all glyphs fully in bounds, middle always clear, full requested count always places. Earlier variants (spiral, ring, loose grid) were rejected by the same simulator because they placed too few glyphs or allowed tight/overlapping ratios.
+- Code-reviewer pass: found + fixed the top-left-vs-centre anchor mismatch (the simulator's bounds check assumed centre anchoring, so it couldn't catch the render shift) and removed a dead `placements` list left over from the mid-glyph version. All imports used (cos/sin gone, only fully-qualified `kotlin.math.hypot` remains), `remember(seed, accentByGlyph, …)` caching is correct since Kotlin Map equality is structural, negative entry-id seeds are safe for `Random(Int)`.
+- Seeds are stable at both call sites (`remember(boardSeed, initialData)` in GalleryWallFormat, `remember(entry.id) { entry.id.hashCode() }` in EntryDetailScreen), so the pattern never re-scatters mid-edit.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Capture-flow fixes: back/exit never silently drops drafts, format-switch gains "Save and switch", mood board carries a mood, formatting icons readable in dark/AMOLED**
 
 ### What was asked
