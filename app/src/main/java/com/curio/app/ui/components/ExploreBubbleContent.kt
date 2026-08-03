@@ -1,18 +1,12 @@
 package com.curio.app.ui.components
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -194,25 +188,16 @@ fun ExploreBubbleContent(
             // so the expanded bubble carries no dead clickable semantics.
             .then(if (minimized) Modifier.clickable { minimized = false } else Modifier)
     ) {
-        // targetState overload (NOT transitionState — that overload doesn't
-        // exist in the resolved animation version and fails CI). The
-        // updateTransition above still drives the corner morph + isRunning
-        // gate; both animate on the same `minimized` flip, so the size and
-        // shape stay in sync.
+        // v6.12.1 — the custom transitionSpec (slide + fade + SizeTransform)
+        // didn't resolve against the pinned animation 1.11.2 API, so the
+        // bubble uses the DEFAULT AnimatedContent transition instead: it
+        // crossfades the pill ⇄ panel AND animates the size via its built-in
+        // SizeTransform, so the overlay window still grows/shrinks smoothly
+        // (no more instant resize). The updateTransition above keeps driving
+        // the corner morph + the isRunning size-gate; all animate on the
+        // same `minimized` flip.
         AnimatedContent(
             targetState = minimized,
-            transitionSpec = {
-                // The incoming state rises in from just below as the outgoing
-                // glides up and fades — reads as the bubble unfurling when it
-                // expands and folding back when it collapses. The size spring
-                // (SizeTransform) does the actual resizing smoothly.
-                (fadeIn(tween(160, delayMillis = 40)) +
-                    slideInVertically(animationSpec = tween(240, easing = FastOutSlowInEasing)) { it / 4 })
-                    togetherWith
-                    (fadeOut(tween(120)) +
-                        slideOutVertically(animationSpec = tween(200, easing = FastOutSlowInEasing)) { -it / 6 })
-                    using SizeTransform(clip = false)
-            },
             label = "bubbleState"
         ) { isMinimized ->
             if (isMinimized) {

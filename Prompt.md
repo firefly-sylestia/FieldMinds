@@ -16,7 +16,7 @@
 
 ### What was done
 
-**CI fix — `ui/components/ExploreBubbleContent.kt`:** `onSizeChanged` now takes the single `IntSize` and forwards `size.width / size.height`; `AnimatedContent` switched to the `targetState = minimized` overload (the `updateTransition` still drives the corner morph + `isRunning` size-gate — both animate on the same `minimized` flip). The bubble expand/collapse unfurl is otherwise unchanged.
+**CI fix — `ui/components/ExploreBubbleContent.kt`:** `onSizeChanged` now takes the single `IntSize` and forwards `size.width / size.height`; `AnimatedContent` switched to the `targetState = minimized` overload (the `updateTransition` still drives the corner morph + `isRunning` size-gate — both animate on the same `minimized` flip). **Follow-up (v6.12.1, second CI round):** the custom `transitionSpec` (slide + fade + `SizeTransform`) still didn’t resolve against the pinned **animation 1.11.2** API (`togetherWith` receiver mismatch — even though the identical pattern compiles in SpinScreen), so the bubble now uses the DEFAULT `AnimatedContent` transition — crossfade + built-in SizeTransform size spring — with the corner morph + window centering unchanged. Six now-unused imports removed.
 
 **Spin smart layout — `SpinScreen.kt` (v7.2):**
 - **Low-density rule (always on):** `densityDpi < 440` → compact layout no matter the height (`SpinLowDensityDpi`).
