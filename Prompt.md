@@ -2,6 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
+**Mixed-deck gradient rework — non-linear hero arrangements, screen wears THE blend color**
+
+### What was asked
+
+Work on the mixed gradient (Spin screen's multi-category deck): the linear vertical gradient looks bad — do something better; the screen's background tint should be THE one color the mixing results in; add more mixed combinations and support different gradient arrangements too.
+
+### What was done
+
+- **`CurioColors.kt` / `CurioMixedDeck`**:
+  - `mixedDeckGradient` is now a lean duotone glide — each accent followed by the curated pair blend with its neighbor ([a, mid(a,b), b, mid(b,c), c, …]) instead of the old 5-stop-per-pair HSL-intermediate ribbon (9+ stops = rainbow banding). Cap raised take(3) → take(4), so up to 4 accents sweep (more mixing in one gradient). Removed the now-unused private `hslLerp`.
+  - NEW `mixedDeckWash(blend)` — the page wash derived PURELY from the mix result (light: 32% of a 30%-lightened blend over cream; dark: 24% of a 22%-lightened blend over midnight) — markedly stronger than the single-category wash, honors the tint toggle/theme style.
+  - NEW `mixedDeckHeroBrush(stops, wPx, hPx, seed)` — lays the stops out non-linearly: diagonal ↘ / diagonal ↗ / radial glow (center behind the watermark glyph), chosen by `((seed % 3) + 3) % 3`.
+- **`SpinScreen.kt`**: `mixSeed = remember(activeCatIds) { activeCatIds.sorted().hashCode() }` (stable per deck composition); `pageWash = mixedDeckWash(deckAccent)` when mixed else `deckCat.categoryBackgroundWash()` — used for the screen background AND the `CurioNavTint` publish; `isMixed` + `mixSeed` threaded Carousel → HeroTicketCard, which builds `ticketBrush` at the card's pixel size (LocalDensity, 286×310dp) and replaces `Brush.verticalGradient`. Single decks keep the plain vertical theme-aware card gradient (no regression).
+
+### Validation
+
+- Brace/paren balance verified on both files (node script). No leftover `hslLerp`/`ticketGradient` refs.
+- Code-reviewer pass: API signatures (linear/radialGradient colors+start/end+center/radius), radial radius covers the far corner (294.5dp > 244dp), declaration order (pageWash after isMixedDeck/deckCat/deckAccent — no forward refs), single-deck + AMOLED/Material tint-off paths unchanged, imports all used. Applied its feedback: wash fractions strengthened (0.24→0.32 light, 0.16→0.24 dark) and dropped the redundant `spinPageWash` alias.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+### Notes / follow-ups
+
+- "More mixed combination" delivered in the SWEEP (4-accent cap + blend seams); the single blend color for 4+ decks still uses the runtime `hslCentroid` (a curated 4-accent table is a possible follow-up).
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Saved-entry hero blends seamlessly into the page — square edges, no fade scrim**
 
 ### What was asked

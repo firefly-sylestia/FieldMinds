@@ -2,8 +2,11 @@ package com.curio.app.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import com.curio.app.data.AppPreferences
 import kotlin.math.pow
 
 /**
@@ -223,12 +226,14 @@ object CurioMixedDeck {
     /**
      * Hero-card gradient stops. Single accent → the standard theme-aware
      * [CurioGradients.cardGradient]. Two+ accents → a smooth multi-accent
-     * sweep: HSL-shortest-path intermediates centered on the curated pair
-     * blend between consecutive accents, so the gradient glides through
-     * premium blended hues instead of banding through muddy RGB midpoints
-     * (the old raw-stop version — teal↔amber and sky↔amber cross the olive
-     * dead zone). Capped to the first 3 accents so a five-way mix doesn't
-     * slide into rainbow.
+     * sweep: each accent followed by the curated pair blend with its
+     * neighbor, so the gradient glides through premium blended hues instead
+     * of banding through muddy RGB midpoints (the old raw-stop version —
+     * teal↔amber and sky↔amber cross the olive dead zone). Leaner than the
+     * original (no redundant HSL intermediates on either side of each
+     * blend), so the sweep reads as a duotone glide instead of a
+     * stop-heavy rainbow ribbon. Supports up to four accents — beyond that
+     * a single sweep slides into rainbow regardless of interpolation.
      */
     @Composable
     fun mixedDeckGradient(accents: List<Color>): List<Color> {
@@ -239,38 +244,75 @@ object CurioMixedDeck {
             return CurioGradients.cardGradient(mixedDeckAccent(distinct))
         }
         val stops = mutableListOf<Color>()
-        distinct.take(3).forEachIndexed { i, accent ->
-            if (i > 0) {
-                val prev = distinct[i - 1]
-                // Seam through the curated pair blend (saturation-boosted,
-                // dead-zone steered), with HSL intermediates on each side so
-                // the transitions stay vivid rather than graying out.
-                val mid = mixedDeckAccent(listOf(prev, accent))
-                stops.add(hslLerp(prev, mid, 0.5f))
-                stops.add(mid)
-                stops.add(hslLerp(mid, accent, 0.5f))
-            }
+        distinct.take(4).forEachIndexed { i, accent ->
             stops.add(accent)
+            // Seam through the curated pair blend (saturation-boosted,
+            // dead-zone steered) so the transition stays vivid rather than
+            // graying out.
+            if (i < 3 && i < distinct.size - 1) {
+                stops.add(mixedDeckAccent(listOf(accent, distinct[i + 1])))
+            }
         }
         return stops
     }
 
     /**
-     * HSL interpolation between two colors along the shortest hue path, at
-     * fraction [t] in 0..1. Same HSL machinery as [hslBlend], so gradient
-     * intermediates stay vivid — RGB-lerped stops between deep accents pass
-     * through muddy gray/brown, the exact failure the curated blends avoid.
+     * The mixed deck's page wash — the Spin screen wears THE blended color
+     * the mix resolves to (not the first category's wash), so the whole page
+     * reads in the deck's mixed color story. A stronger tint than the
+     * single-category wash, purely derived from the blend in both themes.
+     * Honors the manual tint toggle and theme style like the category wash.
      */
-    private fun hslLerp(a: Color, b: Color, t: Float): Color {
-        val ha = toHsl(a)
-        val hb = toHsl(b)
-        var dh = hb.h - ha.h
-        if (dh > 180f) dh -= 360f
-        if (dh < -180f) dh += 360f
-        val hue = ((ha.h + dh * t) + 360f) % 360f
-        val sat = (ha.s + (hb.s - ha.s) * t).coerceIn(0f, 1f)
-        val light = (ha.l + (hb.l - ha.l) * t).coerceIn(0f, 1f)
-        return fromHsl(hue, sat, light)
+    @Composable
+    fun mixedDeckWash(blend: Color): Color {
+        val background = MaterialTheme.colorScheme.background
+        if (!AppPreferences.tintWashEffective()) return background
+        return if (isCurioDarkTheme()) {
+            // A pastel twin of the blend over midnight — a clear, deep tint
+            // so the mixed page visibly wears the hue while staying dark
+            // enough for the paper cards to read.
+            lerp(background, lerp(blend, Color.White, 0.22f), 0.24f)
+        } else {
+            // A lightened blend over cream, markedly stronger than the
+            // category wash so the mixed page plainly wears the mix.
+            lerp(background, lerp(blend, Color.White, 0.30f), 0.32f)
+        }
+    }
+
+    /**
+     * Lays the mixed-deck hero stops out in a non-linear arrangement picked
+     * deterministically from [seed] (the deck's sorted category ids), so
+     * different mixes get different treatments — a diagonal sweep for some,
+     * a reversed diagonal for others, a radial glow for the rest — while a
+     * given deck always renders the same way. [widthPx]/[heightPx] are the
+     * hero card's pixel size, so the brush geometry matches the card.
+     */
+    fun mixedDeckHeroBrush(
+        stops: List<Color>,
+        widthPx: Float,
+        heightPx: Float,
+        seed: Int
+    ): Brush {
+        val idx = ((seed % 3) + 3) % 3
+        return when (idx) {
+            0 -> Brush.linearGradient(
+                stops,
+                start = Offset(0f, 0f),
+                end = Offset(widthPx, heightPx)
+            )
+            1 -> Brush.linearGradient(
+                stops,
+                start = Offset(0f, heightPx),
+                end = Offset(widthPx, 0f)
+            )
+            else -> Brush.radialGradient(
+                stops,
+                // Glow from behind the watermark glyph (center-right) out to
+                // the card's far corner, so the last stop fills every edge.
+                center = Offset(widthPx * 0.72f, heightPx * 0.42f),
+                radius = widthPx.coerceAtLeast(heightPx) * 0.95f
+            )
+        }
     }
 
     /**

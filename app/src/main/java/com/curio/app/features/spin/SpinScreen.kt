@@ -72,6 +72,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -444,14 +445,24 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         }
     }
 
+    // ── Mixed-deck arrangement seed (v6.9) ───────────────────────────────
+    // A deck's hero-gradient arrangement is keyed off its sorted category
+    // ids, so different mixes get different non-linear treatments (diagonal
+    // sweep / reversed diagonal / radial glow) while a given deck stays
+    // stable. Single decks keep the plain vertical card gradient.
+    val mixSeed = remember(activeCatIds) { activeCatIds.sorted().hashCode() }
+
     // Publish the page wash so the bottom nav bar (rendered by the NavHost
     // scaffold, outside this screen) can blend with the tinted Spin page. The
     // bar gates on its own route (spin prefix only), so publishing here never
     // tints Home or Cabinet. Keys on the resolved color so theme/dark-mode
-    // and category changes republish automatically.
-    val spinPageWash = deckCat.categoryBackgroundWash()
-    LaunchedEffect(spinPageWash) {
-        CurioNavTint.publishSpinWash(spinPageWash)
+    // and category changes republish automatically. A mixed deck wears THE
+    // blended color the mix resolves to (mixedDeckWash) instead of the first
+    // category's wash, so the page reads in the deck's mixed color story.
+    val pageWash = if (isMixedDeck) CurioMixedDeck.mixedDeckWash(deckAccent)
+                   else deckCat.categoryBackgroundWash()
+    LaunchedEffect(pageWash) {
+        CurioNavTint.publishSpinWash(pageWash)
     }
     // Hygiene: clear the handoff when Spin leaves composition so a stale wash
     // never lingers for a future route that might share the tint.
@@ -582,12 +593,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             // Category tint wash — the Spin page wears a faint wash of the
-            // active category's color over the theme background (same wash
-            // as Topic Reveal / Save / Cabinet), so the page feels tied to
-            // the deck being spun. Theme-aware: deep accent over cream in
-            // light, pastel twin glow over midnight in dark (deep accents
-            // look muddy on the dark surface).
-            .background(deckCat.categoryBackgroundWash())
+            // deck's color over the theme background (same wash language as
+            // Topic Reveal / Save / Cabinet). Mixed decks wear THE blended
+            // color the mix resolves to (pageWash), so the page visibly reads
+            // in the deck's mixed color story.
+            .background(pageWash)
     ) {
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
@@ -623,6 +633,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             cat = deckCat,
             deckAccent = deckAccent,
             deckGradient = deckGradient,
+            isMixed = isMixedDeck,
+            mixSeed = mixSeed,
             displayPool = displayPool,
             cycleIndex = cycleIndex,
             shuffling = shuffling,
@@ -1212,6 +1224,8 @@ private fun Carousel(
     cat: CurioCategory,
     deckAccent: Color,
     deckGradient: List<Color>,
+    isMixed: Boolean,
+    mixSeed: Int,
     displayPool: List<CurioTopic>,
     cycleIndex: Int,
     shuffling: Boolean,
@@ -1244,6 +1258,8 @@ private fun Carousel(
                     HeroTicketCard(
                         accent = deckAccent,
                         gradient = deckGradient,
+                        isMixed = isMixed,
+                        mixSeed = mixSeed,
                         glyph = cat.iconGlyph,
                         topic = topic,
                         cat = cat,
@@ -1314,6 +1330,8 @@ private fun EmptyPoolHint(cat: CurioCategory) {
 private fun HeroTicketCard(
     accent: Color,
     gradient: List<Color>,
+    isMixed: Boolean,
+    mixSeed: Int,
     glyph: String,
     topic: CurioTopic?,
     cat: CurioCategory,
@@ -1327,9 +1345,19 @@ private fun HeroTicketCard(
     // touch more prominent on the deck.
     val w = 286.dp
     val h = 310.dp
-    // Mixed decks pass a multi-accent gradient; single decks keep the
-    // standard theme-aware card gradient via CurioMixedDeck.mixedDeckGradient.
-    val ticketGradient = gradient
+    // Mixed decks render the multi-accent stops in a non-linear arrangement
+    // (diagonal sweep / reversed diagonal / radial glow, keyed off the
+    // deck's category set); single decks keep the plain vertical theme-aware
+    // card gradient. Built at the card's pixel size so the brush geometry
+    // matches the ticket exactly.
+    val density = LocalDensity.current
+    val wPx = with(density) { w.toPx() }
+    val hPx = with(density) { h.toPx() }
+    val ticketBrush = if (isMixed) {
+        CurioMixedDeck.mixedDeckHeroBrush(gradient, wPx, hPx, mixSeed)
+    } else {
+        Brush.verticalGradient(gradient)
+    }
 
     // ── Per-tick shuffle pulse — the front card bounces in sync with the
     //    wheel: every time the displayed topic switches, the card kicks
@@ -1438,7 +1466,7 @@ private fun HeroTicketCard(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            Brush.verticalGradient(ticketGradient),
+                            ticketBrush,
                             RoundedCornerShape(30.dp)
                         )
                 ) {
