@@ -2,6 +2,40 @@
 
 ## Latest Request (COMPLETED)
 
+**Bubble UX rework: drag now works (Compose-level), minimized-by-default pill with expand/minimize, richer + audible live notification with progress bar**
+
+### What was asked
+
+"the floating overlay works but i cant reposition it and also add minimise and by default make it small too also the live notification doesnt work and rework on the notification view." ask_user: minimize + default-small **always-on** (no toggle); notification — **just want it richer**.
+
+### Root causes
+
+1. **Drag broken** — the drag listener was a View-level `setOnTouchListener` on the overlay's `ComposeView`. The composed child (`AndroidComposeView`) consumes every touch, so the ViewGroup's dispatch returns true at the child and the View's own `onTouchEvent` (and its listener) never fires. Dragging had to move into Compose.
+2. **No minimize, always full-size** — the bubble only had one (expanded) shape; nothing smaller to collapse to.
+3. **Live notification too quiet** — channel was `IMPORTANCE_LOW` (collapses into the silent section — easily missed), text only re-rendered on start/pause (progress/elapsed went stale on long runs), and the expanded view was minimal.
+
+### What was done
+
+**`ExploreBubbleContent.kt`** —
+- **Drag moved into Compose**: the root `Surface` now has `Modifier.pointerInput(Unit) { detectDragGestures(...) }` reporting raw deltas via new `onDragBy(dx, dy)` and release via `onDragEnd`. Slop-gated and placed OUTER to the pill's clickable, so taps on pill/buttons still land while real drags reposition the window (local-coordinate deltas self-cancel against the window movement — the window tracks the finger exactly, no drift).
+- **Minimized by default**: `var minimized by remember { mutableStateOf(true) }` — the bubble starts as a compact chip + topic + chronometer-style timer (`compactElapsed` → "12:34") + expand chevron; the whole pill is tappable to expand (conditional `Modifier.clickable`, applied only while minimized — no dead clickable semantics when expanded).
+- **Expanded controls**: existing Pause/Resume + Stop, NEW **Minimize** button (KeyboardArrowDown) collapsing back to the pill, and Hide's icon changed KeyboardArrowDown → **Close** (X) so it reads as dismiss, not collapse.
+
+**`ExploreSessionService.kt`** —
+- Removed the dead View-level listener + drag fields + `MotionEvent`/`ViewConfiguration`/`hypot`/`View` imports. New `bubbleParams` field; window params are now created BEFORE the ComposeView so the content closures capture them; `onDragBy` moves the window (`runCatching` — never crash the START_STICKY service), `onDragEnd` → field-based `snapBubble()` (same edge-snap + clamp).
+- **Richer live notification**: channel `IMPORTANCE_LOW → IMPORTANCE_DEFAULT` (actually seen/heard; `onlyAlertOnce` prevents nagging) + `PRIORITY_DEFAULT`, added a **progress bar** (`setProgress(durationMinutes, elapsedMinutes, false)`, clamped), richer `BigTextStyle` (category `displayName`, verb/target, "Elapsed: X of ~Y min recommended"; paused branch keeps frozen readout + frozen progress).
+- **Periodic refresh**: a main-looper `Handler` tick (`NOTIFICATION_REFRESH_MS = 60s`) re-runs `render()` while a live notification is wanted — the progress bar creeps forward and the expanded text never goes stale (single chain via `removeCallbacks` before `postDelayed`; cleared in `onDestroy`; `render()` stops the service — and the loop — when nothing wants it).
+
+### Validation
+
+- `check_braces.py` BALANCED on both files; grep: zero stale `makeBubbleTouchListener`/`MotionEvent`/`ViewConfiguration`/`dragStartX`/`dragTouchX`/`dragging`/`hypot` refs.
+- Code-reviewer pass (no blockers): gesture ordering verified (drag outer vs clickable inner — slop-gated drag wins in the Initial pass, taps land on the innermost clickable, nested buttons don't double-fire), drag-delta feedback cancels exactly (window tracks the finger), closure capture of `params` safe, `displayName` field confirmed, progress clamped, chronometer anchor preserved, channel re-create bumps importance on existing installs unless user-modified. Applied its 2 nits: conditional clickable (no dead semantics on expanded) + the periodic notification refresh so progress/text stay live.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Saved-entry detail polish: roomier text boxes, 'Rate quality' caption, lighter star card, mirrored (non-random) hero watermark**
 
 ### What was asked
@@ -22,8 +56,6 @@
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
 
 ---
-
-## Previous Requests (COMPLETED)
 
 **Mood-board watermark rework: expanded board is no longer sparse — interior ring fills the middle, denser counts keep the same density on big canvases**
 

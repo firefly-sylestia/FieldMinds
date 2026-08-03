@@ -11,13 +11,12 @@ import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewConfiguration
 import android.view.WindowManager
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.toArgb
@@ -50,7 +49,6 @@ import com.curio.app.ui.components.ExploreBubbleContent
 import com.curio.app.ui.theme.CurioShapes
 import com.curio.app.ui.theme.CurioTypography
 import com.curio.app.ui.theme.curioColorScheme
-import kotlin.math.hypot
 
 /**
  * Foreground service behind an active explore session.
@@ -58,16 +56,18 @@ import kotlin.math.hypot
  * Two jobs, both controlled by the session + Settings:
  *
  * 1. **Live explore notification** (when "Live explore notification" is ON):
- *    a persistent notification with a live elapsed-time chronometer, topic
- *    name, and Pause/Resume + "Done exploring" actions, tinted with the
- *    topic's category accent. An elapsed clock, NOT a countdown.
+ *    a persistent, audible notification with a live elapsed-time chronometer,
+ *    a progress bar against the recommended duration, topic + category info,
+ *    and Pause/Resume + "Done exploring" actions, tinted with the topic's
+ *    category accent. An elapsed clock, NOT a countdown.
  *
  * 2. **Floating explore bubble** (when "Floating explore bubble" is ON and
  *    the "Display over other apps" permission is granted): a Messenger-style
  *    bubble rendered in a `TYPE_APPLICATION_OVERLAY` window that floats over
  *    OTHER apps — including the browser — while the session runs. It shows
- *    the same topic + live timer with Pause/Resume, Stop and Hide, and can
- *    be dragged anywhere (snaps to the nearest horizontal edge on release).
+ *    the same topic + live timer with Pause/Resume, Stop, Minimize and Hide,
+ *    starts minimized (compact chip + timer), and can be dragged anywhere
+ *    (snaps to the nearest horizontal edge on release).
  *
  * The service runs while EITHER is active. When only the bubble is on, the
  * mandatory FGS notification downgrades to a quiet, non-chronometer
@@ -83,6 +83,22 @@ class ExploreSessionService : Service() {
 
     // ── Overlay bubble window ─────────────────────────────────────────
     private var bubbleView: ComposeView? = null
+    private var bubbleParams: WindowManager.LayoutParams? = null
+
+    // ── Periodic live-notification refresh ─────────────────────────────
+    // The shade chronometer ticks live, but the progress bar and expanded
+    // text only update when the notification is re-posted. A gentle
+    // every-minute tick re-renders while a live notification is showing, so
+    // the progress bar creeps forward and the text never goes stale.
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val notificationTick = object : Runnable {
+        override fun run() {
+            // Re-render from the persisted session — refreshes the progress
+            // bar + expanded text; render() re-schedules this tick while a
+            // live notification is wanted and stops the service otherwise.
+            render()
+        }
+    }
 
     // ── Overlay-window owner ─────────────────────────────────────────
     // A TYPE_APPLICATION_OVERLAY window has no Activity behind it, so the
@@ -128,14 +144,6 @@ class ExploreSessionService : Service() {
             get() = controller.savedStateRegistry
     }
 
-    // Drag state (view-level touch listener — slop-gated so taps on the
-    // bubble's Compose buttons still land while drags move the window).
-    private var dragStartX = 0f
-    private var dragStartY = 0f
-    private var dragTouchX = 0f
-    private var dragTouchY = 0f
-    private var dragging = false
-
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
@@ -171,6 +179,11 @@ class ExploreSessionService : Service() {
 
         promote(if (liveNotif) liveNotification(session) else bubbleOnlyNotification(session))
         if (bubbleWanted) showBubble() else removeBubble()
+        // Keep a single periodic refresh chain (never stack ticks): the
+        // chronometer in the shade ticks on its own, this keeps the progress
+        // bar + expanded text honest while a live notification is showing.
+        mainHandler.removeCallbacks(notificationTick)
+        if (liveNotif) mainHandler.postDelayed(notificationTick, NOTIFICATION_REFRESH_MS)
         return START_STICKY
     }
 
@@ -223,28 +236,40 @@ class ExploreSessionService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-    /** Full chronometer notification — used when live notifications are ON. */
+    /**
+     * Full live-timer notification — used when live notifications are ON. A
+     * default-importance channel so it's actually seen/heard, with a live
+     * chronometer, a progress bar against the recommended duration, and a
+     * richer expanded summary (category + verb/target + elapsed).
+     */
     private fun liveNotification(session: ExploreSession): Notification {
-        val accent = CurioCategories.byId(session.categoryId).accent.toArgb()
+        val category = CurioCategories.byId(session.categoryId)
+        val accent = category.accent.toArgb()
         val elapsed = session.elapsedMillis()
         val paused = session.paused
+        val totalMins = session.durationMinutes.coerceAtLeast(1)
+        // Progress bar: elapsed minutes vs. the recommended duration (capped
+        // so a long explore simply fills the bar).
+        val progressMins = (elapsed / 60_000L).toInt().coerceAtMost(totalMins)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setColor(accent)
             .setCategory(NotificationCompat.CATEGORY_PROGRESS)
             .setContentTitle(
-                if (paused) "Paused — exploring ${session.topicName}"
+                if (paused) "Paused — ${session.topicName}"
                 else "Exploring ${session.topicName}"
             )
             .setContentIntent(openAppIntent())
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setProgress(totalMins, progressMins, false)
 
         if (paused) {
             // Frozen readout — the chronometer would keep counting, so drop
-            // it and print the banked elapsed time as text instead.
+            // it and print the banked elapsed time as text instead. The
+            // progress bar freezes where the timer paused.
             builder
                 .setUsesChronometer(false)
                 .setShowWhen(false)
@@ -254,30 +279,33 @@ class ExploreSessionService : Service() {
                 .setStyle(
                     NotificationCompat.BigTextStyle()
                         .bigText(
-                            "Paused · ${formatElapsed(elapsed)}.\n" +
+                            "Paused · ${formatElapsed(elapsed)} in.\n" +
                             "${session.verb.lowercase()} ${session.targetName} · " +
-                            "~${session.durationMinutes} min recommended."
+                            "${category.displayName} · ~${session.durationMinutes} min recommended.\n" +
+                            "Tap Resume to keep going."
                         )
                 )
                 .addAction(0, "Resume", togglePauseIntent())
         } else {
             // Live chronometer anchored at start + banked pauses, so it shows
             // active elapsed time even after pause/resume cycles — the system
-            // ticks it in the shade without any app wakeups.
+            // ticks it in the shade without any app wakeups. The progress bar
+            // re-renders on pause/resume (the chronometer ticks in between).
             builder
                 .setUsesChronometer(true)
                 .setShowWhen(true)
                 .setWhen(session.startMillis + session.accumulatedPausedMillis)
                 .setContentText(
-                    "${session.verb.lowercase()} ${session.targetName} · " +
-                    "~${session.durationMinutes} min recommended"
+                    "${formatElapsed(elapsed)} in · ${session.verb.lowercase()} ${session.targetName} · " +
+                    "~${session.durationMinutes} min"
                 )
                 .setStyle(
                     NotificationCompat.BigTextStyle()
                         .bigText(
                             "${session.verb.lowercase()} ${session.targetName} — " +
-                            "timing your explore.\n~${session.durationMinutes} min recommended; " +
-                            "you're ${formatElapsed(elapsed)} in."
+                            "${category.displayName}, timing your explore.\n" +
+                            "Elapsed: ${formatElapsed(elapsed)} of ~${session.durationMinutes} min recommended.\n" +
+                            "Done? Tap Done exploring to wrap up."
                         )
                 )
                 .addAction(0, "Pause", togglePauseIntent())
@@ -312,7 +340,11 @@ class ExploreSessionService : Service() {
             NotificationChannel(
                 CHANNEL_ID,
                 "Explore session timer",
-                NotificationManager.IMPORTANCE_LOW
+                // DEFAULT (not LOW) so the live timer is actually seen and
+                // heard when an explore starts — the user asked for a live
+                // notification, and a LOW channel collapses into the silent
+                // section and gets missed. onlyAlertOnce prevents nagging.
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Shows how long you've been exploring a topic and when to wrap up."
             }
@@ -324,6 +356,20 @@ class ExploreSessionService : Service() {
     /** Adds the bubble window if it isn't already showing. */
     private fun showBubble() {
         if (bubbleView != null) return
+
+        // Window params are created FIRST so the compose content below can
+        // capture them for drag updates (the content composes on attach, by
+        // which point this local is fully initialized).
+        val params = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+        }
 
         val view = ComposeView(this).apply {
             // Overlay windows have no Activity to supply the ViewTree owners
@@ -363,22 +409,24 @@ class ExploreSessionService : Service() {
                             onHide = {
                                 ExploreSessionStore.setPillHidden(this@ExploreSessionService, true)
                                 render()
-                            }
+                            },
+                            // Drag lives in Compose (the composed child of an
+                            // overlay ComposeView consumes every View-level
+                            // touch, so a View listener never fires). Each
+                            // delta moves the window; release snaps it to the
+                            // nearest horizontal edge.
+                            onDragBy = { dx, dy ->
+                                params.x = (params.x + dx).toInt()
+                                params.y = (params.y + dy).toInt()
+                                bubbleView?.let { v ->
+                                    runCatching { windowManager.updateViewLayout(v, params) }
+                                }
+                            },
+                            onDragEnd = { snapBubble() }
                         )
                     }
                 }
             }
-        }
-
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-            PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.TOP or Gravity.START
         }
 
         val added = runCatching { windowManager.addView(view, params) }.isSuccess
@@ -390,6 +438,7 @@ class ExploreSessionService : Service() {
             // restart it into the same failure — a crash loop).
             return
         }
+        bubbleParams = params
         // Initial placement: bottom-center, clear of the nav-bar area.
         view.doOnLayout {
             val bounds = windowBounds()
@@ -399,7 +448,6 @@ class ExploreSessionService : Service() {
             params.y = (bounds.height() - view.height - (96 * density).toInt()).coerceAtLeast(margin)
             windowManager.updateViewLayout(view, params)
         }
-        view.setOnTouchListener(makeBubbleTouchListener(view, params))
         bubbleView = view
     }
 
@@ -408,65 +456,16 @@ class ExploreSessionService : Service() {
         bubbleView?.let { v ->
             runCatching { windowManager.removeView(v) }
             bubbleView = null
-        }
-    }
-
-    /**
-     * Slop-gated drag: taps (no movement beyond touch slop) fall through to
-     * the bubble's Compose buttons; real drags move the window and snap to
-     * the nearest horizontal edge on release.
-     */
-    private fun makeBubbleTouchListener(
-        view: View,
-        params: WindowManager.LayoutParams
-    ): View.OnTouchListener {
-        val slop = ViewConfiguration.get(this).scaledTouchSlop
-        val density = resources.displayMetrics.density
-        val marginPx = (12 * density).toInt()
-        return View.OnTouchListener { _, event ->
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    dragStartX = params.x.toFloat()
-                    dragStartY = params.y.toFloat()
-                    dragTouchX = event.rawX
-                    dragTouchY = event.rawY
-                    dragging = false
-                    false
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val dx = event.rawX - dragTouchX
-                    val dy = event.rawY - dragTouchY
-                    if (!dragging && hypot(dx, dy) > slop) dragging = true
-                    if (dragging) {
-                        params.x = (dragStartX + dx).toInt()
-                        params.y = (dragStartY + dy).toInt()
-                        windowManager.updateViewLayout(view, params)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    if (dragging) {
-                        dragging = false
-                        snapBubble(view, params, marginPx)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                MotionEvent.ACTION_CANCEL -> {
-                    dragging = false
-                    false
-                }
-                else -> false
-            }
+            bubbleParams = null
         }
     }
 
     /** Snaps the bubble to the nearest horizontal edge, clamped on-screen. */
-    private fun snapBubble(view: View, params: WindowManager.LayoutParams, marginPx: Int) {
+    private fun snapBubble() {
+        val view = bubbleView ?: return
+        val params = bubbleParams ?: return
         val bounds = windowBounds()
+        val marginPx = (12 * resources.displayMetrics.density).toInt()
         val snapLeft = params.x + view.width / 2 <= bounds.width() / 2
         params.x = if (snapLeft) {
             marginPx
@@ -477,7 +476,7 @@ class ExploreSessionService : Service() {
             marginPx,
             (bounds.height() - view.height - marginPx).coerceAtLeast(marginPx)
         )
-        windowManager.updateViewLayout(view, params)
+        runCatching { windowManager.updateViewLayout(view, params) }
     }
 
     private fun windowBounds(): Rect =
@@ -489,6 +488,7 @@ class ExploreSessionService : Service() {
         }
 
     override fun onDestroy() {
+        mainHandler.removeCallbacks(notificationTick)
         removeBubble()
         overlayOwner.registry.currentState = Lifecycle.State.DESTROYED
         super.onDestroy()
@@ -501,6 +501,8 @@ class ExploreSessionService : Service() {
         const val ACTION_SYNC = "com.curio.app.action.SYNC_EXPLORE_SESSION"
         const val CHANNEL_ID = "explore_session_timer"
         const val NOTIFICATION_ID = 4211
+        // How often the live notification re-renders (progress bar + text).
+        const val NOTIFICATION_REFRESH_MS = 60_000L
 
         /** Starts the explore foreground service for [session]. */
         fun start(context: Context, session: ExploreSession) {
