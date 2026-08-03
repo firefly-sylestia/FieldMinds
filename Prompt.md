@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Dark/AMOLED detail-page hero gradient — smooth theme-aware fade instead of the bottom plunge**
+
+### What was asked
+
+In AMOLED mode or dark mode the color blending on the saved-entry detail page looks bad.
+
+User chose (ask_user): smooth gradual fade — start the fade higher up the banner and spread it over the bottom third; light mode stays exactly as it is now.
+
+### What was done
+
+- **`EntryDetailScreen.kt`** — the saved-entry hero banner's gradient was a single 3-stop brush (`0.00 → heroStart`, `0.90 → heroStart 18% toward wash`, `1.00 → wash`). Because the 0.90 stop held the accent nearly flat, the ENTIRE color transition was compressed into the bottom 10% of the 380dp banner. In light mode that band brightens into the cream page (reads as a paper wash-out — fine); but in dark/AMOLED the wash is a near-black tint (pure black in AMOLED), so the band PLUNGED from a vivid accent into darkness — e.g. wildcard `#C56E80 → #2E1A2A`, music `#362F9F → #1B1F36`, AMOLED → `#000000` — the muddy band the user saw.
+- The gradient is now theme-aware via `isCurioDarkTheme()`: dark/AMOLED uses 4 stops — `0.00 → heroStart`, `0.72 → heroStart` (keeps the vivid accent behind the icon + title), `0.90 → heroStart 50% toward wash`, `1.00 → wash` — gliding over the bottom third (steepest segment ≈ half of light mode's). Light mode keeps the original 3 stops pixel-identical. The final stop is still exactly `wash` by construction, so the hero-to-page seam stays invisible.
+
+### Validation
+
+- Node color-math check: sampled the gradient every 5% from 0.70–1.00 for all six families — the OLD brush held flat 0.70–0.90 then plunged; the NEW brush glides evenly (e.g. coral `#E68193 → #D7798A → #BD6A7C → #A45C6D → #8A4E5F → #5C3444 → #2E1A2A`).
+- Code-reviewer pass below; `isCurioDarkTheme` / `lerp` / `Brush` imports were already present in the file.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Topic Reveal gains the watermark backdrop; background-level cards confirmed opaque**
 
 ### What was asked

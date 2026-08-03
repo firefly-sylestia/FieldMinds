@@ -211,17 +211,35 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // into the background with no visible seam. The wash-out only begins
         // below the title + frosted bar zone, so white-on-glass stays
         // legible even for two-line titles.
+        //
+        // Theme-aware stops. Light mode keeps the original design: the
+        // vivid accent holds until 0.90 and only the bottom band washes
+        // out, BRIGHTENING into the cream page like paper. In dark / AMOLED
+        // the wash is a near-black tint (pure black in AMOLED), so the same
+        // bottom-10% band would PLUNGE from the accent into darkness — a
+        // hard, muddy band. There the fade instead begins just below the
+        // title zone (0.72) and glides to the wash over the bottom third,
+        // ending exactly on the page color so the merge stays seamless.
         val heroStart = CurioGradients.categoryCardFill(cat.themedAccent())
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(380.dp)
                 .background(
-                    Brush.verticalGradient(
-                        0.00f to heroStart,
-                        0.90f to lerp(heroStart, wash, 0.18f),
-                        1.00f to wash
-                    )
+                    if (isCurioDarkTheme()) {
+                        Brush.verticalGradient(
+                            0.00f to heroStart,
+                            0.72f to heroStart,
+                            0.90f to lerp(heroStart, wash, 0.50f),
+                            1.00f to wash
+                        )
+                    } else {
+                        Brush.verticalGradient(
+                            0.00f to heroStart,
+                            0.90f to lerp(heroStart, wash, 0.18f),
+                            1.00f to wash
+                        )
+                    }
                 ),
             contentAlignment = Alignment.Center
         ) {
