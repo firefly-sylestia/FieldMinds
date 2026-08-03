@@ -236,7 +236,11 @@ sealed class CaptureData {
         val quoteStyles: List<NotePaperStyle> = emptyList(),
         val quoteColors: List<NotePaperColor> = emptyList(),
         // Take-level note-paper style — legacy fallback.
-        val paperStyle: NotePaperStyle? = null
+        val paperStyle: NotePaperStyle? = null,
+        // Mood — picked in the editor's shared "How did it make you feel?"
+        // row, shown in the saved entry's meta card. Legacy entries omit it
+        // (Gson → null) → no mood.
+        val mood: JournalMood? = null
     ) : CaptureData()
 
     /** Field Notes (§8.5): three-section observation journal. */

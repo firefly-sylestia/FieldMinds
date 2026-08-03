@@ -182,13 +182,20 @@ fun GalleryWallFormat(
         defaultColor = initialData?.captionColor ?: NotePaperColor.CREAM
     )
     var boardExpanded by remember { mutableStateOf(false) }
+    // Mood — the shared "How did it make you feel?" row. The board carries
+    // its own mood field now (CaptureData.GalleryWall.mood); legacy entries
+    // have none (Gson → null).
+    var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
     // New board: fresh random pattern. Edit mode: reuse the caller-provided
     // seed (entry-id hash) so the editor matches the saved view's backdrop.
     val seed = remember(boardSeed, initialData) { boardSeed ?: Random.nextInt() }
 
-    val canSave = tiles.isNotEmpty() || quoteCards.hasContent
+    // A caption-only board is still a draft — it must save and must trigger
+    // the leave / format-switch guards (the old tiles/quotes-only rule let
+    // a caption-only take exit silently and lose the caption).
+    val canSave = tiles.isNotEmpty() || quoteCards.hasContent || caption.isNotBlank()
     LaunchedEffect(
-        canSave, caption, tiles.toList(), captionStyle, captionColor,
+        canSave, caption, tiles.toList(), captionStyle, captionColor, mood,
         quoteCards.quotes.toList(), quoteCards.spans.toList(), quoteCards.tilts.toList(),
         quoteCards.styles.toList(), quoteCards.colors.toList()
     ) {
@@ -207,7 +214,8 @@ fun GalleryWallFormat(
                 quoteStyles = quoteCards.styles.toList(),
                 quoteColors = quoteCards.colors.toList(),
                 // Legacy fallback — mirror the caption's style.
-                paperStyle = captionStyle
+                paperStyle = captionStyle,
+                mood = mood
             )
             else null
         )

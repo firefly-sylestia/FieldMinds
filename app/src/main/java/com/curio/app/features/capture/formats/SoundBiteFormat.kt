@@ -237,10 +237,16 @@ fun SoundBiteFormat(
     }
 
     // ── Report can-save + capture data ───────────────────────────────────
-    val canSave = recordingState == AudioRecorder.State.STOPPED &&
-                  recordingSeconds > 0 &&
-                  savedFilePath != null &&
-                  !trimInProgress
+    // A completed recording is the primary content, but a take that only
+    // holds typed content (title / note / quotes, no recording) is still a
+    // saveable draft — the old recording-only rule silently dropped those
+    // on back/switch.
+    val hasRecording = recordingState == AudioRecorder.State.STOPPED &&
+                       recordingSeconds > 0 &&
+                       savedFilePath != null &&
+                       !trimInProgress
+    val hasTypedContent = title.isNotBlank() || note.isNotBlank() || quoteCards.hasContent
+    val canSave = hasRecording || hasTypedContent
     LaunchedEffect(
         canSave, savedFilePath, title, note, noteSpans, titleStyle, noteStyle,
         titleColor, noteColor, mood, quoteCards.quotes.toList(), quoteCards.spans.toList(),

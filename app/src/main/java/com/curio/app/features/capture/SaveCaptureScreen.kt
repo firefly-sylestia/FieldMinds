@@ -150,6 +150,12 @@ fun SaveCaptureScreen(
     }
 
     var canSave by remember { mutableStateOf(false) }
+    // True when ANY take holds drafted content — text, quotes, a rating,
+    // images, an audio note, tiles, or a live recording — even if that
+    // content alone wouldn't satisfy the format's canSave rule (e.g. only
+    // optional fields filled). This (not canSave) gates the leave dialog:
+    // canSave's blind spot let back/exit silently drop optional-only drafts.
+    var hasAnyDraft by remember { mutableStateOf(false) }
     var currentCaptureData by remember { mutableStateOf<CaptureData?>(null) }
     var saveInProgress by remember { mutableStateOf(false) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
@@ -159,7 +165,10 @@ fun SaveCaptureScreen(
 
     // System back while editing → the same three-way leave dialog as the
     // top-bar back button (save and switch / keep editing / discard).
-    BackHandler(enabled = canSave) {
+    // Gated on ANY drafted content, not just canSave, so optional-only
+    // drafts (rating without review, images without text…) also get the
+    // chance to save instead of silently exiting.
+    BackHandler(enabled = hasAnyDraft || saveInProgress) {
         showDiscardDialog = true
     }
 
@@ -264,7 +273,7 @@ fun SaveCaptureScreen(
         ) {
             CurioBackButton(
                 onClick = {
-                    if (canSave) showDiscardDialog = true
+                    if (hasAnyDraft || saveInProgress) showDiscardDialog = true
                     else navController.popBackStack()
                 }
             )
@@ -359,6 +368,7 @@ fun SaveCaptureScreen(
                             // watermark pattern matches the saved view exactly.
                             boardSeed = editEntryId?.hashCode(),
                             onCanSaveChange = { canSave = it && topic != null && (editEntryId == null || editingEntry != null) },
+                            onDraftChange = { hasAnyDraft = it },
                             onDataChanged = { currentCaptureData = it }
                         )
                     }
@@ -519,6 +529,7 @@ private fun FormatBodyForCategory(
     category: CurioCategory,
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit,
+    onDraftChange: (Boolean) -> Unit = {},
     entryFormat: CaptureFormat? = null,
     initialData: CaptureData? = null,
     boardSeed: Int? = null
@@ -608,8 +619,13 @@ private fun FormatBodyForCategory(
             sections.map { CaptureData.CaptureSection(it.format, it.data!!) }
         )
     }
-    LaunchedEffect(allReady, combinedData) {
+    // ANY take holding drafted content (or a live recording) — the leave /
+    // switch / remove guards key on this, so a rating, images or a voice
+    // note without the required text still count as "content you'd lose".
+    val hasAnyDraft = sections.any { it.data != null || it.busy }
+    LaunchedEffect(allReady, combinedData, hasAnyDraft, sections.toList()) {
         onCanSaveChange(allReady)
+        onDraftChange(hasAnyDraft)
         onDataChanged(combinedData)
     }
 
@@ -622,16 +638,10 @@ private fun FormatBodyForCategory(
         // ACTIVE take's mood; picking one writes it into that take's data
         // (behind the "Entry date & mood" setting).
         val active = sections.getOrNull(activeIndex)
-        // Mood-board (GalleryWall) takes have no mood field, so the row is
-        // hidden for them — otherwise a picked mood would animate and then
-        // silently not persist. OpenNotebook wraps a sub-format, so check
-        // what it actually contains.
-        val moodCapable = when (active?.format) {
-            CaptureFormat.GalleryWall -> false
-            CaptureFormat.OpenNotebook ->
-                (active.data as? CaptureData.OpenNotebook)?.subData !is CaptureData.GalleryWall
-            else -> true
-        }
+        // Every format (including the mood board) carries the shared mood
+        // row now — GalleryWall gained a mood field so a picked mood persists.
+        // OpenNotebook wraps a sub-format which always carries mood too.
+        val moodCapable = true
         if (AppPreferences.entryMetaEnabledState && active != null && moodCapable) {
             MoodChipsRow(
                 mood = active.mood,
@@ -663,10 +673,14 @@ private fun FormatBodyForCategory(
                     Surface(
                         onClick = {
                             if (active.format != fmt) {
-                                // Confirm when this take has content OR a live
-                                // recording is in progress; an empty take (and
-                                // no active recording) switches freely.
-                                if ((active.canSave && active.data != null) || active.busy) {
+                                // Confirm when this take holds ANY content —
+                                // text, quotes, a rating, images, a voice note,
+                                // tiles or a live recording. canSave's rule
+                                // (primary text only) let optional-only drafts
+                                // switch silently and vanish; hasAnyDraft keeps
+                                // every draft protected. An empty take switches
+                                // freely.
+                                if (active.data != null || active.busy) {
                                     pendingFormatSwitch = fmt
                                 } else {
                                     applyFormat(active, fmt)
@@ -762,11 +776,11 @@ private fun FormatBodyForCategory(
                             Surface(
                                 onClick = {
                                     val section = sections.getOrNull(i)
-                                    // Confirm removal when the take has drafted
-                                    // content or a live recording in progress;
-                                    // an empty take (and no recording) removes
-                                    // freely.
-                                    if ((section?.canSave == true && section.data != null) || section?.busy == true) {
+                                    // Confirm removal when the take holds ANY
+                                    // drafted content (text, quotes, a rating,
+                                    // images, a voice note, tiles) or a live
+                                    // recording; an empty take removes freely.
+                                    if (section != null && (section.data != null || section.busy)) {
                                         pendingRemoveIndex = i
                                     } else {
                                         removeSection(i)
@@ -893,23 +907,54 @@ private fun FormatBodyForCategory(
     }
 
     // ── Confirm before switching a filled take's format ──────────────────
+    // Offers THREE paths: keep the current content as its own take and
+    // switch this one (Save and switch), clear this take and switch
+    // (Switch), or stay put (Keep editing).
     pendingFormatSwitch?.let { fmt ->
         AlertDialog(
             onDismissRequest = { pendingFormatSwitch = null },
             title = { Text("Switch format?") },
-            text = { Text("This will clear what you've added to this take (including any live recording) and switch to ${fmt.shortName}.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    val section = sections.getOrNull(activeIndex)
-                    if (section != null) applyFormat(section, fmt)
-                    pendingFormatSwitch = null
-                }) {
-                    Text("Switch")
-                }
-            },
+            text = { Text("Switch to ${fmt.shortName}? You can keep what you've added here as its own take first, or switch and clear it.") },
             dismissButton = {
                 TextButton(onClick = { pendingFormatSwitch = null }) {
                     Text("Keep editing")
+                }
+            },
+            confirmButton = {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    TextButton(onClick = {
+                        val section = sections.getOrNull(activeIndex)
+                        if (section != null) applyFormat(section, fmt)
+                        pendingFormatSwitch = null
+                    }) {
+                        Text("Switch and clear", color = MaterialTheme.colorScheme.error)
+                    }
+                    Button(
+                        onClick = {
+                            val section = sections.getOrNull(activeIndex)
+                            if (section != null) {
+                                // Snapshot the drafted content into a NEW take
+                                // at this position, then switch this take's
+                                // format — nothing is lost, and the drafts live
+                                // on as their own tabs.
+                                val saved = CaptureSectionState(nextId++, section.format).apply {
+                                    seed = section.data
+                                    data = section.data
+                                    mood = section.mood
+                                    canSave = section.canSave
+                                }
+                                sections.add(activeIndex, saved)
+                                // activeIndex still points at the ORIGINAL take
+                                // (the new one was inserted BEFORE it) — switch
+                                // that one to the new format.
+                                applyFormat(section, fmt)
+                            }
+                            pendingFormatSwitch = null
+                        },
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        Text("Save and switch")
+                    }
                 }
             }
         )
@@ -946,8 +991,9 @@ private fun CaptureData?.moodOf(): JournalMood? = when (this) {
     is CaptureData.ReelNotes -> mood
     is CaptureData.Marginalia -> mood
     is CaptureData.FieldNotes -> mood
+    is CaptureData.GalleryWall -> mood
     is CaptureData.OpenNotebook -> subData.moodOf()
-    else -> null // GalleryWall carries no mood
+    else -> null
 }
 
 /** Returns [this] with [mood] stamped on (recursing into OpenNotebook). */
@@ -956,8 +1002,9 @@ private fun CaptureData.withMood(mood: JournalMood?): CaptureData = when (this) 
     is CaptureData.ReelNotes -> copy(mood = mood)
     is CaptureData.Marginalia -> copy(mood = mood)
     is CaptureData.FieldNotes -> copy(mood = mood)
+    is CaptureData.GalleryWall -> copy(mood = mood)
     is CaptureData.OpenNotebook -> copy(subData = subData.withMood(mood))
-    else -> this // GalleryWall carries no mood
+    else -> this
 }
 
 /**

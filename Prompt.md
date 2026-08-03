@@ -2,6 +2,39 @@
 
 ## Latest Request (COMPLETED)
 
+**Capture-flow fixes: back/exit never silently drops drafts, format-switch gains "Save and switch", mood board carries a mood, formatting icons readable in dark/AMOLED**
+
+### What was asked
+
+1. Going to write about a topic then pressing back just exits and whatever was written is gone.
+2. Why doesn't the switch-format dialog show "Save and switch" — and why doesn't it even show up in some fields (the optional ones)?
+3. Why isn't "How did it make you feel?" in the mood board?
+4. The bold/italic icons, the color-change icon, and the Add quote option look bad in dark and AMOLED mode — change their color in those two modes for better visibility.
+
+### What was done
+
+**1 + 2 — draft-safe leave + format-switch (SaveCaptureScreen.kt, + the 4 format editors)**
+- The leave dialog (system back + top-bar back) was gated on `canSave`, which only counts a format's PRIMARY field — optional-only drafts (a rating without a review, images without text, a caption-only mood board, a typed title without a recording…) emitted null data, so back just exited and the content vanished. NEW `hasAnyDraft` state (any section with `data != null || busy`) gates both back paths via a new `onDraftChange` callback; the switch-format confirmation and the take-remove confirmation now trigger on the same any-draft rule.
+- The switch-format dialog gained **"Save and switch"** (primary): it snapshots the drafted take into a NEW take at the same position (data/seed/mood/canSave copied), then switches the original take to the new format — nothing is lost, the draft lives on as its own tab. "Switch and clear" (error-colored) and "Keep editing" (moved to the dismiss slot) remain.
+- To close the rating-only / caption-only / title-only holes at the source, each format's `canSave` now also counts optional content: ReelNotes (+ `rating > 0 || imageUris.isNotEmpty()`), GalleryWall (+ `caption.isNotBlank()`), SoundBite (typed title/note/quotes now saveable even without a recording). Marginalia and FieldNotes already counted attachments.
+
+**3 — mood board mood (CaptureData.kt, GalleryWallFormat.kt, EntryDetailScreen.kt, SaveCaptureScreen.kt)**
+- `CaptureData.GalleryWall` gained `mood: JournalMood? = null` (Gson legacy-safe); `GalleryWallFormat` holds + emits it; the universal mood row is no longer hidden for GalleryWall (`moodCapable = true`); `moodOf()`/`withMood()` cover GalleryWall (incl. OpenNotebook recursion); `EntryMetaCard` reads the mood for GalleryWall directly and inside OpenNotebook.
+
+**4 — toolbar visibility in dark/AMOLED (PaperPalette.kt, RichTextEditor.kt)**
+- The paper-mode toolbar/controls used the fixed warm amber `paperAccent()` (#9A7B2F — a brown that vanished on the midnight page). NEW theme-aware `paperControlAccent()`: bright amber #E3B84F in dark/AMOLED, unchanged in light (the paper slips themselves stay cream in both themes).
+- Toolbar buttons gained dark-aware alphas (border/icon/active-fill 0.45/0.75/0.18 light → 0.75/1.0/0.28 dark) threaded through FormatToolbar / SelectionFormatBar / StyleToggleButton / SizePickerButton / FormatToolButton; the selection bar border too. Removed the unused `paperAccent` import.
+
+### Validation
+
+- Code-reviewer pass: caught that canSave-based gaps remained (rating-only/images-only/caption-only/title-only) → fixed at the format level so every draft emits saveable data; verified the insert-at-activeIndex "Save and switch" keeps activeIndex on the original take, `key(current.id)` stays stable, withMood/moodOf exhaustive, paperControlAccent composable-safe, new toolbar params default to the old constants (untouched call sites compile). Applied its nit: "Keep editing" moved to the dialog's dismiss slot.
+- Structural checks: all toolbar call sites consistent (named args), no orphaned imports/refs, GalleryWall constructor sites (TopicCatalog, CaptureEntity) use the new default.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Detail hero gradient now blends accent→wash in HSL space ("proper gradient blend") — fixes muddy RGB banding in light, dark AND AMOLED**
 
 ### What was asked

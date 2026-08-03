@@ -1,0 +1,4 @@
+• Backing out of a capture with any draft now offers Save and switch, Keep editing, or Discard — optional fields (rating, images, captions) are protected too
+• Switching formats keeps your draft: Save and switch, or switch and clear
+• Mood board captures now have the "How did it make you feel?" mood picker
+• Bold/italic/highlight and paper-style icons are clearly visible in dark and AMOLED mode

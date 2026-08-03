@@ -64,9 +64,10 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
-import com.curio.app.ui.theme.paperAccent
+import com.curio.app.ui.theme.paperControlAccent
 import com.curio.app.ui.theme.paperHighlight
 import com.curio.app.ui.theme.PatrickHandFontFamily
+import com.curio.app.ui.theme.isCurioDarkTheme
 
 /**
  * The rich-text flags the toolbar can apply. [TextSpan] stores each as a
@@ -431,9 +432,22 @@ fun RichTextEditor(
     // BOTH themes, so a theme-aware accent (e.g. the dark-mode tertiary) can
     // read washed-out against the paper. The ink follows the chosen sheet
     // color so text stays readable on every pastel.
+    //
+    // The paper CONTROL accent is theme-aware ([paperControlAccent]): the
+    // slips stay cream in both themes, but the toolbar row + cursor render
+    // OUTSIDE the slip on the page background, and the warm amber brown
+    // vanished against midnight/AMOLED. Dark mode swaps to a brighter amber
+    // so the B / I / highlight / palette icons actually read.
     val effectiveFieldPadding = if (paper) PaddingValues(0.dp) else fieldPadding
-    val effectiveAccent = if (paper) paperAccent() else accent
+    val effectiveAccent = if (paper) paperControlAccent() else accent
     val effectiveInk = if (paper) notePaperInk(paperColor) else ink
+    // Toolbar buttons on the dark page background need stronger definition
+    // than on cream — bump the border/icon alphas in dark/AMOLED so the
+    // icons stay clearly visible (they looked washed-out against midnight).
+    val toolbarBorderAlpha = if (isCurioDarkTheme()) 0.75f else 0.45f
+    val toolbarIconAlpha = if (isCurioDarkTheme()) 1f else 0.75f
+    val toolbarActiveBorderAlpha = if (isCurioDarkTheme()) 0.9f else 0.6f
+    val toolbarActiveFillAlpha = if (isCurioDarkTheme()) 0.28f else 0.18f
 
     LaunchedEffect(text, spans) {
         if (tfv.text != text) {
@@ -665,6 +679,10 @@ fun RichTextEditor(
                     accent = effectiveAccent,
                     enabled = enabled,
                     currentSp = currentSizeSp(),
+                    toolbarBorderAlpha = toolbarBorderAlpha,
+                    toolbarIconAlpha = toolbarIconAlpha,
+                    toolbarActiveBorderAlpha = toolbarActiveBorderAlpha,
+                    toolbarActiveFillAlpha = toolbarActiveFillAlpha,
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
                     onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
@@ -675,6 +693,8 @@ fun RichTextEditor(
                     StyleToggleButton(
                         expanded = styleExpanded,
                         accent = effectiveAccent,
+                        borderAlpha = toolbarBorderAlpha,
+                        fillAlpha = toolbarActiveFillAlpha,
                         enabled = enabled,
                         onToggle = { styleExpanded = !styleExpanded },
                         modifier = Modifier.padding(bottom = 6.dp)
@@ -707,6 +727,8 @@ fun RichTextEditor(
                     StyleToggleButton(
                         expanded = styleExpanded,
                         accent = effectiveAccent,
+                        borderAlpha = toolbarBorderAlpha,
+                        fillAlpha = toolbarActiveFillAlpha,
                         enabled = enabled,
                         onToggle = { styleExpanded = !styleExpanded },
                         modifier = Modifier.padding(bottom = 4.dp)
@@ -758,6 +780,10 @@ fun RichTextEditor(
                     accent = effectiveAccent,
                     enabled = enabled,
                     currentSp = currentSizeSp(),
+                    toolbarBorderAlpha = toolbarBorderAlpha,
+                    toolbarIconAlpha = toolbarIconAlpha,
+                    toolbarActiveBorderAlpha = toolbarActiveBorderAlpha,
+                    toolbarActiveFillAlpha = toolbarActiveFillAlpha,
                     onBold = { applyFlag(RichFlag.BOLD) },
                     onItalic = { applyFlag(RichFlag.ITALIC) },
                     onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
@@ -846,6 +872,10 @@ fun RichTextEditor(
                                 accent = effectiveAccent,
                                 enabled = enabled,
                                 currentSp = currentSizeSp(),
+                                toolbarBorderAlpha = toolbarBorderAlpha,
+                                toolbarIconAlpha = toolbarIconAlpha,
+                                toolbarActiveBorderAlpha = toolbarActiveBorderAlpha,
+                                toolbarActiveFillAlpha = toolbarActiveFillAlpha,
                                 onBold = { applyFlag(RichFlag.BOLD) },
                                 onItalic = { applyFlag(RichFlag.ITALIC) },
                                 onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
@@ -940,6 +970,10 @@ private fun SelectionFormatBar(
     accent: Color,
     enabled: Boolean,
     currentSp: Float,
+    toolbarBorderAlpha: Float,
+    toolbarIconAlpha: Float,
+    toolbarActiveBorderAlpha: Float,
+    toolbarActiveFillAlpha: Float,
     onBold: () -> Unit,
     onItalic: () -> Unit,
     onHighlight: () -> Unit,
@@ -949,7 +983,7 @@ private fun SelectionFormatBar(
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 4.dp,
-        border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+        border = BorderStroke(1.dp, accent.copy(alpha = toolbarBorderAlpha)),
         modifier = Modifier.padding(bottom = 2.dp)
     ) {
         Row(
@@ -963,6 +997,10 @@ private fun SelectionFormatBar(
                 active = boldActive,
                 accent = accent,
                 enabled = enabled,
+                borderAlpha = toolbarBorderAlpha,
+                iconAlpha = toolbarIconAlpha,
+                activeBorderAlpha = toolbarActiveBorderAlpha,
+                activeFillAlpha = toolbarActiveFillAlpha,
                 onClick = onBold
             )
             FormatToolButton(
@@ -971,6 +1009,10 @@ private fun SelectionFormatBar(
                 active = italicActive,
                 accent = accent,
                 enabled = enabled,
+                borderAlpha = toolbarBorderAlpha,
+                iconAlpha = toolbarIconAlpha,
+                activeBorderAlpha = toolbarActiveBorderAlpha,
+                activeFillAlpha = toolbarActiveFillAlpha,
                 onClick = onItalic
             )
             FormatToolButton(
@@ -979,6 +1021,10 @@ private fun SelectionFormatBar(
                 active = highlightActive,
                 accent = accent,
                 enabled = enabled,
+                borderAlpha = toolbarBorderAlpha,
+                iconAlpha = toolbarIconAlpha,
+                activeBorderAlpha = toolbarActiveBorderAlpha,
+                activeFillAlpha = toolbarActiveFillAlpha,
                 onClick = onHighlight
             )
             SizePickerButton(
@@ -988,6 +1034,10 @@ private fun SelectionFormatBar(
                 accent = accent,
                 enabled = enabled,
                 currentSp = currentSp,
+                borderAlpha = toolbarBorderAlpha,
+                iconAlpha = toolbarIconAlpha,
+                activeBorderAlpha = toolbarActiveBorderAlpha,
+                activeFillAlpha = toolbarActiveFillAlpha,
                 onPick = onSizePick
             )
             SizePickerButton(
@@ -997,6 +1047,10 @@ private fun SelectionFormatBar(
                 accent = accent,
                 enabled = enabled,
                 currentSp = currentSp,
+                borderAlpha = toolbarBorderAlpha,
+                iconAlpha = toolbarIconAlpha,
+                activeBorderAlpha = toolbarActiveBorderAlpha,
+                activeFillAlpha = toolbarActiveFillAlpha,
                 onPick = onSizePick
             )
         }
@@ -1013,6 +1067,10 @@ private fun FormatToolbar(
     accent: Color,
     enabled: Boolean,
     currentSp: Float,
+    toolbarBorderAlpha: Float,
+    toolbarIconAlpha: Float,
+    toolbarActiveBorderAlpha: Float,
+    toolbarActiveFillAlpha: Float,
     onBold: () -> Unit,
     onItalic: () -> Unit,
     onHighlight: () -> Unit,
@@ -1029,6 +1087,10 @@ private fun FormatToolbar(
             active = boldActive,
             accent = accent,
             enabled = enabled,
+            borderAlpha = toolbarBorderAlpha,
+            iconAlpha = toolbarIconAlpha,
+            activeBorderAlpha = toolbarActiveBorderAlpha,
+            activeFillAlpha = toolbarActiveFillAlpha,
             onClick = onBold
         )
         FormatToolButton(
@@ -1037,6 +1099,10 @@ private fun FormatToolbar(
             active = italicActive,
             accent = accent,
             enabled = enabled,
+            borderAlpha = toolbarBorderAlpha,
+            iconAlpha = toolbarIconAlpha,
+            activeBorderAlpha = toolbarActiveBorderAlpha,
+            activeFillAlpha = toolbarActiveFillAlpha,
             onClick = onItalic
         )
         FormatToolButton(
@@ -1045,6 +1111,10 @@ private fun FormatToolbar(
             active = highlightActive,
             accent = accent,
             enabled = enabled,
+            borderAlpha = toolbarBorderAlpha,
+            iconAlpha = toolbarIconAlpha,
+            activeBorderAlpha = toolbarActiveBorderAlpha,
+            activeFillAlpha = toolbarActiveFillAlpha,
             onClick = onHighlight
         )
         // A+/A− — per-letter font size: tapping opens a dropdown of fixed
@@ -1060,6 +1130,10 @@ private fun FormatToolbar(
             accent = accent,
             enabled = enabled,
             currentSp = currentSp,
+            borderAlpha = toolbarBorderAlpha,
+            iconAlpha = toolbarIconAlpha,
+            activeBorderAlpha = toolbarActiveBorderAlpha,
+            activeFillAlpha = toolbarActiveFillAlpha,
             onPick = onSizePick
         )
         SizePickerButton(
@@ -1069,6 +1143,10 @@ private fun FormatToolbar(
             accent = accent,
             enabled = enabled,
             currentSp = currentSp,
+            borderAlpha = toolbarBorderAlpha,
+            iconAlpha = toolbarIconAlpha,
+            activeBorderAlpha = toolbarActiveBorderAlpha,
+            activeFillAlpha = toolbarActiveFillAlpha,
             onPick = onSizePick
         )
     }
@@ -1080,14 +1158,16 @@ private fun StyleToggleButton(
     accent: Color,
     enabled: Boolean,
     onToggle: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    borderAlpha: Float = 0.35f,
+    fillAlpha: Float = 0.15f
 ) {
     Surface(
         onClick = onToggle,
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
-        color = if (expanded) accent.copy(alpha = 0.15f) else Color.Transparent,
-        border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+        color = if (expanded) accent.copy(alpha = fillAlpha) else Color.Transparent,
+        border = BorderStroke(1.dp, accent.copy(alpha = borderAlpha)),
         modifier = modifier
     ) {
         CurioIcon(
@@ -1107,16 +1187,20 @@ private fun FormatToolButton(
     active: Boolean,
     accent: Color,
     enabled: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    borderAlpha: Float = 0.45f,
+    iconAlpha: Float = 0.75f,
+    activeBorderAlpha: Float = 0.6f,
+    activeFillAlpha: Float = 0.18f
 ) {
     Surface(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
-        color = if (active) accent.copy(alpha = 0.18f) else Color.Transparent,
+        color = if (active) accent.copy(alpha = activeFillAlpha) else Color.Transparent,
         border = BorderStroke(
             1.dp,
-            if (active) accent.copy(alpha = 0.6f) else accent.copy(alpha = 0.45f)
+            if (active) accent.copy(alpha = activeBorderAlpha) else accent.copy(alpha = borderAlpha)
         )
     ) {
         CurioIcon(
@@ -1127,8 +1211,9 @@ private fun FormatToolButton(
             // old 0.45 alpha vanished on the dark page background in dark
             // mode (the toolbar row sits OUTSIDE the paper slip). The
             // stronger alpha keeps the same hue legible on both cream and
-            // midnight.
-            tint = if (active) accent else accent.copy(alpha = 0.75f),
+            // midnight. Dark/AMOLED pass fuller alphas (see the caller) so
+            // the icons read clearly against the midnight page.
+            tint = if (active) accent else accent.copy(alpha = iconAlpha),
             size = 16.dp,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
         )
@@ -1152,7 +1237,11 @@ private fun SizePickerButton(
     accent: Color,
     enabled: Boolean,
     currentSp: Float,
-    onPick: (Float) -> Unit
+    onPick: (Float) -> Unit,
+    borderAlpha: Float = 0.45f,
+    iconAlpha: Float = 0.75f,
+    activeBorderAlpha: Float = 0.6f,
+    activeFillAlpha: Float = 0.18f
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box {
@@ -1162,6 +1251,10 @@ private fun SizePickerButton(
             active = active,
             accent = accent,
             enabled = enabled,
+            borderAlpha = borderAlpha,
+            iconAlpha = iconAlpha,
+            activeBorderAlpha = activeBorderAlpha,
+            activeFillAlpha = activeFillAlpha,
             onClick = { expanded = true }
         )
         DropdownMenu(

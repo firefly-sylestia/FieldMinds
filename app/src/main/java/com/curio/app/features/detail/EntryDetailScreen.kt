@@ -613,11 +613,13 @@ private fun EntryMetaCard(entry: CurioEntry) {
         is CaptureData.ReelNotes -> d.mood
         is CaptureData.SoundBite -> d.mood
         is CaptureData.FieldNotes -> d.mood
+        is CaptureData.GalleryWall -> d.mood
         is CaptureData.OpenNotebook -> when (val sub = d.subData) {
             is CaptureData.Marginalia -> sub.mood
             is CaptureData.ReelNotes -> sub.mood
             is CaptureData.SoundBite -> sub.mood
             is CaptureData.FieldNotes -> sub.mood
+            is CaptureData.GalleryWall -> sub.mood
             else -> null
         }
         else -> null

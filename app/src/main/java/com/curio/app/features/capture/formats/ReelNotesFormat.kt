@@ -39,8 +39,10 @@ import com.curio.app.ui.theme.paperInk
  *   - Optional up-to-3 image attachments (poster / stills) shown as a
  *     row of [ImageThumb] placeholders + an [AddImageButton] until 3 reached
  *
- * [onCanSaveChange] fires true when the review text field has any content.
- * (Star rating and images stay optional, per spec §8.2.)
+ * [onCanSaveChange] fires true when the review text field has any content,
+ * OR the take holds optional-only content (a star rating, attached images)
+ * — optional-only drafts must still save and must still trigger the leave /
+ * format-switch guards, or back/switch would silently drop them.
  */
 @Composable
 fun ReelNotesFormat(
@@ -99,7 +101,8 @@ fun ReelNotesFormat(
         imageUris = (imageUris + uris.map { it.toString() }).take(3)
     }
 
-    val canSave = reviewText.isNotBlank() || quoteCards.hasContent
+    val canSave = reviewText.isNotBlank() || quoteCards.hasContent ||
+        rating > 0 || imageUris.isNotEmpty()
     // Key on every input, not just canSave: rating, review text, quotes and
     // images added AFTER the first character must re-emit, or saving would
     // persist stale data (text/rating/quotes/images silently dropped from
