@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Star rating polish — roomier review text box, "Rate quality" help text, lighter palette-matched rating card, redesigned stars (gradient fill + hollow slots) in entry and saved detail**
+
+### What was asked
+
+"The text box feels cramped—give it more padding inside. Add subtle help text under the star rating ('Rate quality'). Star section background could be slightly lighter to match the palette better. And the star design can be more better in both entry and saved detail view."
+
+### What was done
+
+**1 — Star redesign (`CaptureFormatComponents.kt`, shared `FilledStar` → both views)** — filled stars now draw a vertical-gradient fill (18% white-lightened crown → base color; moderated so dark-mode pastel ink doesn't wash out) plus the crisp outline stroke; the inner radius was finessed 42% → 45% for a sleeker silhouette. Unfilled stars are now clean HOLLOW outlines (no fill), so a rating row reads filled-or-slot. `StarRating` (the capture picker) gained a bouncy per-star pop (`animateFloatAsState` 1.14×, `CurioMotion.Springs.Bouncy` — the same language as the mood chips) and the row spacing grew 4dp → 6dp. New imports: `Brush`, `lerp`.
+
+**2 — Roomier review box (`ReelNotesFormat.kt`)** — the review field's note-paper content padding grew 16/14 → 20/16 (air off the paper edges + a touch more vertical; the ruled lines anchor to the top padding, so they stay aligned under the text lines).
+
+**3 — "Rate quality" help text (`ReelNotesFormat.kt`)** — a subtle `bodySmall` caption under the star picker (onSurfaceVariant at 0.75 alpha).
+
+**4 — Lighter rating card (`EntryDetailScreen.kt`)** — the saved Reel Notes rating section's background swapped from `themedAccent().copy(alpha = 0.08f)` (muddy / near-invisible in dark) to the palette-matched `category.categorySurface(surfaceContainerHigh)` (soft pastel in light, visible mid-tone in dark; degrades to plain surface when the tint toggle is off).
+
+### Validation
+
+- `check_braces.py` BALANCED on all 3 files; greps confirm the gradient/scale/help-text/surface swaps are in place.
+- Code-reviewer pass: clean — confirmed the vararg `Brush.verticalGradient` overload (this BOM lacks the List overload), imports present/used, modifier order scale-before-clickable fine, ruled-line alignment invariant to top padding, TornPaperCard floors (16/14) don't conflict with 20/16. Applied its one nit: gradient crown lightening 22% → 18% so bright pastel stars don't wash out in dark/AMOLED.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Floating explore bubble — a system overlay that floats over OTHER apps (the browser), replacing the in-app pill**
 
 ### What was asked

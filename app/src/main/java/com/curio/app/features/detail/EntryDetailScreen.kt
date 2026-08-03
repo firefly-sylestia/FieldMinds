@@ -1246,7 +1246,10 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         if (data.rating > 0) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = category.themedAccent().copy(alpha = 0.08f),
+                // Palette-matched tinted surface — lighter and warmer than
+                // the old 8% deep-accent wash, and it reads properly in
+                // dark/AMOLED where 8% of a deep accent was near-invisible.
+                color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(

@@ -153,6 +153,13 @@ fun ReelNotesFormat(
                 },
                 accent = accent
             )
+            // Subtle helper line — guides first-time raters, quiet enough
+            // to ignore once the rating is set.
+            Text(
+                text = "Rate quality",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
+            )
         }
 
         // ── Review text field — rich text behind a small format toggle ──
@@ -178,7 +185,10 @@ fun ReelNotesFormat(
             onPaperStyleChange = { reviewStyle = it },
             paperColor = reviewColor,
             onPaperColorChange = { reviewColor = it },
-            paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+            // Roomier slip — the review text breathes off the paper edges
+            // (the ruled lines are anchored to the top padding, so they stay
+            // aligned under the text lines).
+            paperContentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp)
         )
 
         // ── Quote cards — the SHARED hand-placed paper notecard section ──

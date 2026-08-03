@@ -37,9 +37,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
@@ -81,15 +83,16 @@ import kotlin.math.sin
  */
 
 /**
- * A FILLED 5-pointed star with a crisp outline — drawn as a solid Canvas
- * path plus a stroke.
+ * A FILLED 5-pointed star with a crisp outline — drawn as a Canvas path
+ * with a dimensional crown-to-base gradient.
  *
  * The bundled icon font is Material Symbols *Outlined*, where even the
  * `star` ligature renders as a hollow outline — so filled rating stars
  * were just outlines with a tint. Drawing the path directly guarantees a
- * solid fill in any color. When [filled] is false the SAME solid path is
- * drawn at low alpha, so a rating row reads filled-or-ghost, never hollow.
- * Both states carry an outline stroke so the stars read as outlined.
+ * solid fill in any color. When [filled] is false the star renders as a
+ * clean HOLLOW outline (an empty slot), so a rating row reads
+ * filled-or-slot, never filled-or-ghost-blob. Both states carry the same
+ * crisp outline stroke.
  */
 @Composable
 fun FilledStar(
@@ -102,23 +105,48 @@ fun FilledStar(
         val radius = this.size.minDimension / 2f
         val center = Offset(this.size.width / 2f, this.size.height / 2f)
         val star = Path()
-        // 5-pointed star: outer points at full radius, inner at ~42%.
+        // 5-pointed star: outer points at full radius, inner at ~45% — a
+        // slightly fuller, sleeker silhouette than the old 42%.
         for (i in 0 until 10) {
             val angle = Math.toRadians(-90.0 + i * 36.0)
-            val r = if (i % 2 == 0) radius else radius * 0.42f
+            val r = if (i % 2 == 0) radius else radius * 0.45f
             val x = center.x + (r * cos(angle)).toFloat()
             val y = center.y + (r * sin(angle)).toFloat()
             if (i == 0) star.moveTo(x, y) else star.lineTo(x, y)
         }
         star.close()
-        // Solid fill (ghost at low alpha when unrated) PLUS an outline
-        // stroke, so the stars read as outlined instead of flat blobs.
-        drawPath(star, color = if (filled) color else color.copy(alpha = 0.25f))
-        drawPath(
-            star,
-            color = color.copy(alpha = if (filled) 0.85f else 0.45f),
-            style = Stroke(width = this.size.minDimension * 0.07f)
-        )
+        val outlineWidth = this.size.minDimension * 0.07f
+        if (filled) {
+            // Dimensional fill — a vertical gradient from a lighter crown to
+            // the base color, so the star reads as lit from above instead of
+            // a flat blob. The gradient spans the whole canvas and the outer
+            // points touch its edges, so the crown lands on the top points.
+            // The crown lightens only moderately (18%) so deep accents get
+            // a real shine while bright pastels (dark-mode ink) don't wash
+            // out.
+            drawPath(
+                star,
+                brush = Brush.verticalGradient(
+                    0f to lerp(color, Color.White, 0.18f),
+                    1f to color
+                )
+            )
+            // Crisp outline — the same hue at high alpha, so the filled star
+            // keeps a sharp silhouette on light or dark backgrounds.
+            drawPath(
+                star,
+                color = color.copy(alpha = 0.85f),
+                style = Stroke(width = outlineWidth)
+            )
+        } else {
+            // Empty slot — a clean hollow outline (no fill), so an unrated
+            // star reads as an available slot instead of a washed ghost.
+            drawPath(
+                star,
+                color = color.copy(alpha = 0.38f),
+                style = Stroke(width = outlineWidth)
+            )
+        }
     }
 }
 
@@ -135,15 +163,24 @@ fun StarRating(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         repeat(5) { i ->
             val starNumber = i + 1
             val filled = i < rating
+            // Filled stars sit slightly elevated — the same bouncy pop the
+            // mood chips use, so selecting a star reads as a physical
+            // press-and-settle instead of a hard state snap.
+            val starScale by animateFloatAsState(
+                targetValue = if (filled) 1.14f else 1f,
+                animationSpec = CurioMotion.Springs.Bouncy,
+                label = "ratingStarScale$starNumber"
+            )
             FilledStar(
                 color = if (filled) accent else MaterialTheme.colorScheme.outline,
                 filled = filled,
                 starSize = 32.dp,
                 modifier = Modifier
+                    .scale(starScale)
                     .semantics {
                         // Canvas has no automatic label — restore the label
                         // the old CurioIcon used to carry.
