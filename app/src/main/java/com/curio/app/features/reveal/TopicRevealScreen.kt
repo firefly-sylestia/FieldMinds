@@ -88,6 +88,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
@@ -373,7 +374,7 @@ fun TopicRevealScreen(
                 CurioIcon(
                     name = if (isPinned) CurioIcons.Bookmark else CurioIcons.BookmarkBorder,
                     contentDescription = if (isPinned) "Unpin this topic" else "Pin this topic for later",
-                    tint = if (isPinned) Color.White else MaterialTheme.colorScheme.onSurface,
+                    tint = if (isPinned) cat.onAccent() else MaterialTheme.colorScheme.onSurface,
                     size = 22.dp,
                     modifier = Modifier.padding(8.dp)
                 )
@@ -492,6 +493,7 @@ fun TopicRevealScreen(
                             label = "Dislike",
                             active = sentiment == AppPreferences.SENTIMENT_DISLIKE,
                             accent = cat.themedAccent(),
+                            ink = cat.onAccent(),
                             onClick = {
                                 AppPreferences.setTopicSentiment(
                                     context, cat.id, resolved.id,
@@ -506,6 +508,7 @@ fun TopicRevealScreen(
                             label = "Like",
                             active = sentiment == AppPreferences.SENTIMENT_LIKE,
                             accent = cat.themedAccent(),
+                            ink = cat.onAccent(),
                             onClick = {
                                 AppPreferences.setTopicSentiment(
                                     context, cat.id, resolved.id,
@@ -535,9 +538,9 @@ fun TopicRevealScreen(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.themedAccent(),
-                        contentColor = Color.White,
+                        contentColor = cat.onAccent(),
                         disabledContainerColor = cat.themedAccent().copy(alpha = 0.35f),
-                        disabledContentColor = Color.White.copy(alpha = 0.45f)
+                        disabledContentColor = cat.onAccent().copy(alpha = 0.45f)
                     ),
                     contentPadding = PaddingValues(horizontal = 28.dp, vertical = 18.dp),
                     modifier = Modifier
@@ -548,7 +551,7 @@ fun TopicRevealScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = cat.onAccent(), size = 20.dp)
                         Text(
                             text = "Start exploring",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
@@ -726,6 +729,9 @@ private fun HeroCard(
 ) {
     val action = resolved?.exploreAction
     val heroGradient = CurioGradients.cardGradient(cat.themedAccent())
+    // v7.5 — pastel mode lightens the hero gradient, so the pill content
+    // flips from white to the deep accent (light) / light twin (dark).
+    val ink = cat.onAccent()
 
     Surface(
         modifier = modifier
@@ -757,7 +763,7 @@ private fun HeroCard(
             if (action != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.22f),
+                    color = ink.copy(alpha = 0.18f),
                     shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.TopStart)
@@ -772,12 +778,12 @@ private fun HeroCard(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(Color.White)
+                                .background(ink)
                         )
                         Text(
                             text = "${action.verb} for ~${action.durationMinutes} min",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White
+                            color = ink
                         )
                     }
                 }
@@ -796,7 +802,7 @@ private fun HeroCard(
             if (byline != null && bylineLabel != null) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.22f),
+                    color = ink.copy(alpha = 0.18f),
                     shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
@@ -810,13 +816,13 @@ private fun HeroCard(
                         CurioIcon(
                             name = CurioIcons.Person,
                             contentDescription = null,
-                            tint = Color.White,
+                            tint = ink,
                             size = 14.dp
                         )
                         Text(
                             text = "$bylineLabel · $byline",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = Color.White,
+                            color = ink,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -827,7 +833,7 @@ private fun HeroCard(
             if (resolved?.subtype?.isNotBlank() == true) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = Color.White.copy(alpha = 0.22f),
+                    color = ink.copy(alpha = 0.18f),
                     shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -836,7 +842,7 @@ private fun HeroCard(
                     Text(
                         text = resolved.subtype,
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = Color.White,
+                        color = ink,
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
                     )
                 }
@@ -980,6 +986,7 @@ private fun SentimentButton(
     label: String,
     active: Boolean,
     accent: Color,
+    ink: Color = Color.White,
     onClick: () -> Unit
 ) {
     Surface(
@@ -997,13 +1004,13 @@ private fun SentimentButton(
             CurioIcon(
                 name = icon,
                 contentDescription = label,
-                tint = if (active) Color.White else MaterialTheme.colorScheme.onSurface,
+                tint = if (active) ink else MaterialTheme.colorScheme.onSurface,
                 size = 18.dp
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                color = if (active) Color.White else MaterialTheme.colorScheme.onSurface
+                color = if (active) ink else MaterialTheme.colorScheme.onSurface
             )
         }
     }

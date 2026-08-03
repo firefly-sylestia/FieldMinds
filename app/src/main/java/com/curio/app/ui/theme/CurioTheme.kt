@@ -1,6 +1,8 @@
 package com.curio.app.ui.theme
 
 import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -154,6 +156,24 @@ fun isCurioDarkTheme(): Boolean {
         "light"  -> false
         "dark"   -> true
         else     -> isSystemInDarkTheme()
+    }
+}
+
+/**
+ * Non-composable dark check for services/workers — mirrors [isCurioDarkTheme]
+ * but reads the system night flag from [Context] instead of the @Composable
+ * [isSystemInDarkTheme], so plain functions (e.g. notification tinting in
+ * [com.curio.app.infrastructure.ExploreSessionService]) can resolve the same
+ * dark/light state the UI uses.
+ */
+fun isCurioDarkThemeForContext(context: Context): Boolean {
+    // AMOLED is always dark by definition (pure-black surfaces).
+    if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_AMOLED) return true
+    return when (AppPreferences.themeModeState) {
+        "light" -> false
+        "dark" -> true
+        else -> (context.resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
 }
 

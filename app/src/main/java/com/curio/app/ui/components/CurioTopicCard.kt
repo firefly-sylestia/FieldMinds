@@ -41,6 +41,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
@@ -110,7 +111,7 @@ fun CurioEntryCard(
                 CurioIcon(
                     name = cat.iconGlyph,
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.9f),
+                    tint = cat.onAccent().copy(alpha = 0.9f),
                     size = 60.dp
                 )
             }

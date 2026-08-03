@@ -88,6 +88,7 @@ import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -281,6 +282,10 @@ fun HomeScreen(navController: NavController) {
             // covers both the Surprise and named-category cases.
             val accent = chosen?.themedAccent() ?: CurioColors.CategoryCoral
             val questGradient = CurioGradients.cardGradient(accent)
+            // v7.5 — pastel mode lightens the gradient, so the quest content
+            // flips from white to a deep ink of the accent (or the brand
+            // maroon on the coral wildcard). White when pastel mode is off.
+            val questInk = pastelFillInk(accent)
             Surface(
                     onClick = {
                         // Both quest branches go through the tab switch helper
@@ -315,7 +320,7 @@ fun HomeScreen(navController: NavController) {
                         CurioIcon(
                             name = if (chosen != null) chosen.iconGlyph else CurioIcons.Casino,
                             contentDescription = null,
-                            tint = Color.White.copy(alpha = 0.20f),
+                            tint = questInk.copy(alpha = 0.20f),
                             size = 140.dp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
@@ -336,7 +341,7 @@ fun HomeScreen(navController: NavController) {
                                     modifier = Modifier
                                         .width(3.dp)
                                         .height(16.dp)
-                                        .background(Color.White.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
+                                        .background(questInk.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
                                 )
                                 Text(
                                     text = "TODAY'S QUEST",
@@ -344,7 +349,7 @@ fun HomeScreen(navController: NavController) {
                                         fontWeight = FontWeight.ExtraBold,
                                         letterSpacing = 1.2.sp
                                     ),
-                                    color = Color.White.copy(alpha = 0.88f)
+                                    color = questInk.copy(alpha = 0.88f)
                                 )
                             }
                             Column {
@@ -352,7 +357,7 @@ fun HomeScreen(navController: NavController) {
                                 Text(
                                     text = chosen?.displayName ?: "Shuffle the deck",
                                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                                    color = Color.White,
+                                    color = questInk,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -364,7 +369,7 @@ fun HomeScreen(navController: NavController) {
                             ) {
                                 Surface(
                                     shape = RoundedCornerShape(50),
-                                    color = Color.White.copy(alpha = 0.22f)
+                                    color = questInk.copy(alpha = 0.18f)
                                 ) {
                                     Row(
                                         modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
@@ -373,13 +378,13 @@ fun HomeScreen(navController: NavController) {
                                     ) {
                                         CurioIcon(
                                             CurioIcons.Casino, null,
-                                            tint = Color.White,
+                                            tint = questInk,
                                             size = 16.dp
                                         )
                                         Text(
                                             text = if (isWildcard) "Shuffle" else "Shuffle",
                                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                                            color = Color.White
+                                            color = questInk
                                         )
                                     }
                                 }
@@ -763,6 +768,9 @@ private fun CategoryChip(
     // Muted selected fill — same treatment as the picker cards: the raw
     // accent is deepened just a touch toward black so it stays rich.
     val selectedContainer = lerp(accent, Color.Black, 0.10f)
+    // v7.5 — pastel mode lightens the selected fill, so the chip content
+    // flips to a deep ink of the accent instead of white.
+    val selectedInk = pastelFillInk(accent)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(22.dp),
@@ -780,7 +788,7 @@ private fun CategoryChip(
                     name = iconGlyph,
                     contentDescription = null,
                     modifier = Modifier.padding(end = 6.dp),
-                    tint = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+                    tint = if (selected) selectedInk else MaterialTheme.colorScheme.onSurface,
                     size = 18.dp
                 )
             }
@@ -789,7 +797,7 @@ private fun CategoryChip(
                 style = MaterialTheme.typography.labelLarge.copy(
                     fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
                 ),
-                color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface
+                color = if (selected) selectedInk else MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -1440,7 +1448,7 @@ private fun CurrentlyExploringCard(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = accent,
-                        contentColor = Color.White
+                        contentColor = pastelFillInk(accent)
                     ),
                     modifier = Modifier.weight(1f)
                 ) {

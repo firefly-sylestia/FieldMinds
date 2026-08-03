@@ -30,12 +30,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CategoryId
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
@@ -68,6 +70,15 @@ fun CurioHeroShuffleCard(
         else -> CurioColors.CoralBlush
     }
     val cardGradient = CurioGradients.cardGradient(activeAccent)
+    // v7.5 — pastel mode lightens the gradient, so the content ink flips
+    // from white to the deep accent (or the brand maroon on the coral
+    // wildcard, whose accent is already pastel). Returns White when pastel
+    // mode is off, preserving today's look exactly.
+    val contentInk: Color = when {
+        selectedCategory != null -> selectedCategory.onAccent()
+        AppPreferences.pastelColorsState -> CurioColors.DeepPlum
+        else -> Color.White
+    }
 
     // ── Press scale animation ─────────────────────────────────────────────
     val pressScale by animateFloatAsState(
@@ -104,7 +115,7 @@ fun CurioHeroShuffleCard(
             CurioIcon(
                 name = CurioIcons.AutoAwesome,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.16f),
+                tint = contentInk.copy(alpha = 0.16f),
                 size = 180.dp,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -126,14 +137,14 @@ fun CurioHeroShuffleCard(
                     Text(
                         text = "SHUFFLE",
                         style = MaterialTheme.typography.displayLarge.copy(
-                            color = Color.White,
+                            color = contentInk,
                             fontWeight = FontWeight.ExtraBold
                         )
                     )
                     CurioIcon(
                         name = CurioIcons.AutoAwesome,
                         contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.45f),
+                        tint = contentInk.copy(alpha = 0.45f),
                         size = 20.dp
                     )
                 }
@@ -141,7 +152,7 @@ fun CurioHeroShuffleCard(
                     Text(
                         text = "the wheel",
                         style = MaterialTheme.typography.headlineMedium.copy(
-                            color = Color.White
+                            color = contentInk
                         )
                     )
                     Spacer(Modifier.height(4.dp))
@@ -153,7 +164,7 @@ fun CurioHeroShuffleCard(
                                 ?: if (wildcardSelected) "Surprise me"
                                 else "Tap to discover something new",
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                color = Color.White.copy(alpha = 0.92f)
+                                color = contentInk.copy(alpha = 0.92f)
                             )
                         )
                     }

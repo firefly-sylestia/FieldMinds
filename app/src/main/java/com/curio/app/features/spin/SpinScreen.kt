@@ -111,6 +111,8 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.onAccent
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlin.math.cos
@@ -465,8 +467,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // Resolved in the composable body (NOT remember) so the Material style's
     // device-color blend of each accent updates when the theme style changes.
     val deckAccents = activeCatIds.map { CurioCategories.byId(it).themedAccent() }
-    val deckAccent = remember(deckAccents) {
-        CurioMixedDeck.mixedDeckAccent(deckAccents)
+    // v7.5 — pastel mode: the curated pair/triple blends are deep, so the
+    // resolved deck accent softens to its theme-aware pastel twin (airy in
+    // light, muted deep pastel in dark). `dark` is resolved here (the
+    // remember block is not a @Composable context).
+    val pastelMode = AppPreferences.pastelColorsState
+    val darkMode = isCurioDarkTheme()
+    val deckAccent = remember(deckAccents, pastelMode, darkMode) {
+        CurioMixedDeck.mixedDeckAccent(deckAccents, pastel = pastelMode, dark = darkMode)
     }
     val deckGradient = CurioMixedDeck.mixedDeckGradient(deckAccents)
 
@@ -1194,6 +1202,7 @@ private fun FilterSheet(
                             ActiveFilterChip(
                                 label = st,
                                 accent = cat.themedAccent(),
+                                ink = cat.onAccent(),
                                 onRemove = { draftSubtypes = draftSubtypes - st }
                             )
                         }
@@ -1201,6 +1210,7 @@ private fun FilterSheet(
                             ActiveFilterChip(
                                 label = tag,
                                 accent = cat.themedAccent(),
+                                ink = cat.onAccent(),
                                 onRemove = { draftFilters = draftFilters - tag }
                             )
                         }
@@ -1252,6 +1262,7 @@ private fun FilterSheet(
                                 label = st,
                                 selected = st in draftSubtypes,
                                 accent = cat.themedAccent(),
+                                ink = cat.onAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1274,6 +1285,7 @@ private fun FilterSheet(
                                 label = tag,
                                 selected = tag in draftFilters,
                                 accent = cat.themedAccent(),
+                                ink = cat.onAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1293,6 +1305,7 @@ private fun FilterSheet(
                                 label = era,
                                 selected = era in draftFilters,
                                 accent = cat.themedAccent(),
+                                ink = cat.onAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1312,6 +1325,7 @@ private fun FilterSheet(
                                 label = origin,
                                 selected = origin in draftFilters,
                                 accent = cat.themedAccent(),
+                                ink = cat.onAccent(),
                                 chipSurface = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                                 chipBorder = cat.categoryBorder(
                                     fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1333,14 +1347,14 @@ private fun FilterSheet(
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = cat.themedAccent(),
-                    contentColor = Color.White
+                    contentColor = cat.onAccent()
                 ),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 18.dp)
+                CurioIcon(CurioIcons.Check, null, tint = cat.onAccent(), size = 18.dp)
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
@@ -1356,6 +1370,7 @@ private fun FilterSheet(
 private fun ActiveFilterChip(
     label: String,
     accent: Color,
+    ink: Color = Color.White,
     onRemove: () -> Unit
 ) {
     Surface(
@@ -1371,7 +1386,7 @@ private fun ActiveFilterChip(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
-                color = Color.White
+                color = ink
             )
             Surface(
                 shape = CircleShape,
@@ -1407,6 +1422,7 @@ private fun CompactChip(
     label: String,
     selected: Boolean,
     accent: Color,
+    ink: Color = Color.White,
     chipSurface: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     chipBorder: BorderStroke? = null,
     onClick: () -> Unit
@@ -1427,7 +1443,7 @@ private fun CompactChip(
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
                 ),
-                color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+                color = if (selected) ink else MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -1677,6 +1693,10 @@ private fun HeroTicketCard(
     } else {
         Brush.verticalGradient(gradient)
     }
+    // v7.5 — pastel mode lightens the ticket gradient, so the content ink
+    // flips from white to a deep ink of the deck color (light mode) / a
+    // light tint (dark). White when pastel mode is off.
+    val ink = if (isMixed) pastelFillInk(accent) else cat.onAccent()
 
     // ── Per-tick shuffle pulse — the front card bounces in sync with the
     //    wheel: every time the displayed topic switches, the card kicks
@@ -1775,10 +1795,11 @@ private fun HeroTicketCard(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
                 shadowElevation = 0.dp,
-                // Subtle outline — a slim white edge that traces the ticket
+                // Subtle outline — a slim edge that traces the ticket
                 // silhouette so the hero card reads as a distinct surface
-                // above the dimmer peek cards behind it.
-                border = BorderStroke(1.5.dp, Color.White.copy(alpha = 0.35f)),
+                // above the dimmer peek cards behind it (ink-colored in
+                // pastel mode so it doesn't vanish on the pastel fill).
+                border = BorderStroke(1.5.dp, ink.copy(alpha = 0.35f)),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
@@ -1794,7 +1815,7 @@ private fun HeroTicketCard(
                     CurioIcon(
                         name = glyph,
                         contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.16f),
+                        tint = ink.copy(alpha = 0.16f),
                         size = 150.dp,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
@@ -1816,12 +1837,12 @@ private fun HeroTicketCard(
                         ) {
                             Surface(
                                 shape = RoundedCornerShape(50),
-                                color = Color.White.copy(alpha = 0.22f)
+                                color = ink.copy(alpha = 0.18f)
                             ) {
                                 Text(
                                     text = topic?.subtype ?: "…",
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = Color.White,
+                                    color = ink,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
@@ -1829,7 +1850,7 @@ private fun HeroTicketCard(
                                 Surface(shape = CircleShape, color = Color.White) {
                                     CurioIcon(
                                         CurioIcons.Check, null,
-                                        tint = accent,
+                                        tint = ink,
                                         size = 16.dp,
                                         modifier = Modifier.padding(3.dp)
                                     )
@@ -1882,7 +1903,7 @@ private fun HeroTicketCard(
                                     fontWeight = FontWeight.ExtraBold,
                                     lineHeight = 34.sp
                                 ),
-                                color = Color.White,
+                                color = ink,
 
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
@@ -1893,12 +1914,12 @@ private fun HeroTicketCard(
                                     currentTopic.tags.take(2).forEach { tag ->
                                         Surface(
                                             shape = RoundedCornerShape(50),
-                                color = Color.White.copy(alpha = 0.22f)
+                                color = ink.copy(alpha = 0.18f)
                             ) {
                                 Text(
                                     text = tag,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = Color.White,
+                                    color = ink,
                                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                             )
                                         }
@@ -1910,7 +1931,7 @@ private fun HeroTicketCard(
                                 Text(
                                     text = currentTopic.teaser,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = Color.White.copy(alpha = 0.88f),
+                                    color = ink.copy(alpha = 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -1926,16 +1947,16 @@ private fun HeroTicketCard(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             if (opening) {
-                                OpeningPulseDot()
+                                OpeningPulseDot(tint = ink)
                                 Text(
                                     text = "Opening…",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = Color.White.copy(alpha = 0.88f)
+                                    color = ink.copy(alpha = 0.88f)
                                 )
                             } else {
                                 CurioIcon(
                                     if (landed) CurioIcons.ChevronRight else CurioIcons.Casino, null,
-                                    tint = Color.White,
+                                    tint = ink,
                                     size = 16.dp
                                 )
                                 Text(
@@ -1945,7 +1966,7 @@ private fun HeroTicketCard(
                                         else -> "Press Shuffle"
                                     },
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = Color.White.copy(alpha = 0.88f)
+                                    color = ink.copy(alpha = 0.88f)
                                 )
                             }
                         }
@@ -1998,6 +2019,9 @@ private fun PeekCard(
     val cardColor = remember(accent, far) {
         lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
     }
+    // v7.5 — pastel mode lightens the peek fill, so content flips to a deep
+    // ink of the deck color (light mode) / a light tint (dark).
+    val ink = pastelFillInk(accent)
 
     Box(
         modifier = Modifier
@@ -2062,7 +2086,7 @@ private fun PeekCard(
                 // lets each deck layer read as a distinct card.
                 border = BorderStroke(
                     width = 1.dp,
-                    color = Color.White.copy(alpha = if (far) 0.14f else 0.22f)
+                    color = ink.copy(alpha = if (far) 0.14f else 0.22f)
                 ),
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -2079,7 +2103,7 @@ private fun PeekCard(
                         CurioIcon(
                             name = cat.iconGlyph,
                             contentDescription = null,
-                            tint = Color.White.copy(alpha = if (far) 0.55f else 0.75f),
+                            tint = ink.copy(alpha = if (far) 0.55f else 0.75f),
                             size = 20.dp
                         )
                         Text(
@@ -2087,7 +2111,7 @@ private fun PeekCard(
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                             // Far deck cards dim their content too, reinforcing
                             // the layered fade into the background.
-                            color = Color.White.copy(alpha = if (far) 0.65f else 1f),
+                            color = ink.copy(alpha = if (far) 0.65f else 1f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -2161,7 +2185,7 @@ private fun SpinButton(
                     label = "diceMorph"
                 ) { shuffling ->
                     if (shuffling) {
-                        ShuffleGlyph(tint = Color.White, modifier = Modifier.size(72.dp))
+                        ShuffleGlyph(tint = pastelFillInk(tint), modifier = Modifier.size(72.dp))
                     } else {
                         // Gentle idle breathe on the resting die — a slow,
                         // even pulse so the settled dice stays alive.
@@ -2177,7 +2201,7 @@ private fun SpinButton(
                         )
                         CurioIcon(
                             CurioIcons.Casino, null,
-                            tint = Color.White,
+                            tint = pastelFillInk(tint),
                             size = if (landedTopic != null) 52.dp else 60.dp,
                             modifier = Modifier.graphicsLayer {
                                 scaleX = 1f + breathe * 0.05f
@@ -2290,7 +2314,7 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
  * pause — the subtle heartbeat that says the reveal is about to happen.
  */
 @Composable
-private fun OpeningPulseDot() {
+private fun OpeningPulseDot(tint: Color = Color.White) {
     val infinite = rememberInfiniteTransition(label = "openingPulse")
     val pulse by infinite.animateFloat(
         initialValue = 0f,
@@ -2310,7 +2334,9 @@ private fun OpeningPulseDot() {
                 this.alpha = 1f - pulse * 0.4f
             }
             .clip(CircleShape)
-            .background(Color.White.copy(alpha = 0.9f))
+            // v7.5 — wears the ticket's ink so the heartbeat reads on the
+            // pastel-lightened ticket fill (white when pastel mode is off).
+            .background(tint.copy(alpha = 0.9f))
     )
 }
 
@@ -2444,14 +2470,14 @@ private fun VerticalDeckButton(
         ) {
             CurioIcon(
                 icon, null,
-                tint = if (selected) Color.White else cat.categoryInk(),
+                tint = if (selected) cat.onAccent() else cat.categoryInk(),
                 size = 22.dp
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = if (selected) Color.White else cat.categoryInk(),
+                color = if (selected) cat.onAccent() else cat.categoryInk(),
                 textAlign = TextAlign.Center,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -2493,7 +2519,7 @@ private fun DeckControlButton(
         ) {
             CurioIcon(
                 icon, null,
-                tint = if (selected) Color.White else cat.categoryInk(),
+                tint = if (selected) cat.onAccent() else cat.categoryInk(),
                 size = 24.dp
             )
             Text(
@@ -2504,7 +2530,7 @@ private fun DeckControlButton(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
-                color = if (selected) Color.White else cat.categoryInk(),
+                color = if (selected) cat.onAccent() else cat.categoryInk(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

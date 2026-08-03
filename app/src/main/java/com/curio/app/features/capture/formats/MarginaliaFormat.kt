@@ -39,6 +39,7 @@ import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.paperInk
+import com.curio.app.ui.theme.pastelFillInk
 import kotlinx.coroutines.delay
 
 /**
@@ -404,7 +405,7 @@ private fun JournalVoiceNoteRow(
                 ) {
                     CurioIcon(
                         CurioIcons.Stop, "Stop recording",
-                        tint = Color.White, size = 18.dp,
+                        tint = pastelFillInk(accent), size = 18.dp,
                         modifier = Modifier.padding(6.dp)
                     )
                 }

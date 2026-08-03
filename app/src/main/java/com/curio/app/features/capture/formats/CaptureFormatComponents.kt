@@ -63,6 +63,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.glyph
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.paperAccent
 import com.curio.app.ui.theme.paperBorder
@@ -758,7 +759,9 @@ fun MoodChipsRow(
                     label = "moodChipBg"
                 )
                 val chipInk by animateColorAsState(
-                    targetValue = if (selected) Color.White
+                    // v7.5 — pastel mode lightens the selected chip fill, so
+                    // the ink flips to a deep ink of the accent.
+                    targetValue = if (selected) pastelFillInk(accent)
                                   else MaterialTheme.colorScheme.onSurfaceVariant,
                     animationSpec = tween(CurioMotion.Durations.Standard),
                     label = "moodChipInk"

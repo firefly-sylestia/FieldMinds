@@ -86,6 +86,7 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -414,7 +415,7 @@ fun SaveCaptureScreen(
                         shape = RoundedCornerShape(32.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (tintWash) cat.tint else cat.themedAccent(),
-                            contentColor = if (tintWash) cat.categoryInk() else Color.White,
+                            contentColor = if (tintWash) cat.categoryInk() else cat.onAccent(),
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
@@ -425,7 +426,7 @@ fun SaveCaptureScreen(
                     ) {
                         if (saveInProgress) {
                             CircularProgressIndicator(
-                                color = if (tintWash) cat.categoryInk() else Color.White,
+                                color = if (tintWash) cat.categoryInk() else cat.onAccent(),
                                 strokeWidth = 2.dp,
                                 modifier = Modifier.size(22.dp)
                             )
@@ -438,7 +439,7 @@ fun SaveCaptureScreen(
                             CurioIcon(
                                 name = CurioIcons.Check,
                                 contentDescription = null,
-                                tint = if (tintWash) cat.categoryInk() else Color.White,
+                                tint = if (tintWash) cat.categoryInk() else cat.onAccent(),
                                 size = 20.dp
                             )
                             Spacer(Modifier.width(8.dp))
@@ -711,11 +712,13 @@ private fun FormatBodyForCategory(
                                 // light tint wash the ink is the category's
                                 // theme-aware ink (deep in light, pastel twin in
                                 // dark); with the wash off (AMOLED/Material) the
-                                // chip is a solid deep accent so the content
-                                // must flip to white — deep-accent text on a
-                                // deep-accent chip was invisible in AMOLED.
+                                // chip is a solid accent so the content must
+                                // flip to onAccent() (white normally, deep ink
+                                // on pastel fills in pastel mode) — deep-accent
+                                // text on a deep-accent chip was invisible in
+                                // AMOLED.
                                 tint = if (active.format == fmt)
-                                       (if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White)
+                                       (if (AppPreferences.tintWashEffective()) category.categoryInk() else category.onAccent())
                                        else MaterialTheme.colorScheme.onSurfaceVariant,
                                 size = 16.dp
                             )
@@ -725,7 +728,7 @@ private fun FormatBodyForCategory(
                                     fontWeight = if (active.format == fmt) FontWeight.SemiBold else FontWeight.Normal
                                 ),
                                 color = if (active.format == fmt)
-                                        (if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White)
+                                        (if (AppPreferences.tintWashEffective()) category.categoryInk() else category.onAccent())
                                         else MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -763,14 +766,14 @@ private fun FormatBodyForCategory(
                         CurioIcon(
                             name = formatGlyph(s.format),
                             contentDescription = null,
-                            tint = if (i == activeIndex) Color.White
+                            tint = if (i == activeIndex) category.onAccent()
                                    else MaterialTheme.colorScheme.onSurfaceVariant,
                             size = 14.dp
                         )
                         Text(
                             text = "${i + 1} · ${s.format.shortName}",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                            color = if (i == activeIndex) Color.White else MaterialTheme.colorScheme.onSurface
+                            color = if (i == activeIndex) category.onAccent() else MaterialTheme.colorScheme.onSurface
                         )
                         if (sections.size > 1) {
                             Surface(
@@ -792,7 +795,7 @@ private fun FormatBodyForCategory(
                                 CurioIcon(
                                     name = CurioIcons.Close,
                                     contentDescription = "Remove take",
-                                    tint = if (i == activeIndex) Color.White
+                                    tint = if (i == activeIndex) category.onAccent()
                                            else MaterialTheme.colorScheme.onSurfaceVariant,
                                     size = 16.dp,
                                     modifier = Modifier.padding(4.dp)
@@ -820,13 +823,13 @@ private fun FormatBodyForCategory(
                     CurioIcon(
                         name = CurioIcons.Add,
                         contentDescription = null,
-                        tint = if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White,
+                        tint = if (AppPreferences.tintWashEffective()) category.categoryInk() else category.onAccent(),
                         size = 16.dp
                     )
                     Text(
                         text = "Add take",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = if (AppPreferences.tintWashEffective()) category.categoryInk() else Color.White
+                        color = if (AppPreferences.tintWashEffective()) category.categoryInk() else category.onAccent()
                     )
                 }
             }

@@ -74,6 +74,7 @@ import com.curio.app.ui.components.moodBoardPainter
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.pastelFillInk
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -568,13 +569,13 @@ private fun MoodBoardCanvas(
                         CurioIcon(
                             name = CurioIcons.Add,
                             contentDescription = "Add images",
-                            tint = Color.White,
+                            tint = pastelFillInk(accent),
                             size = 20.dp
                         )
                         Text(
                             text = "Add images",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                            color = Color.White
+                            color = pastelFillInk(accent)
                         )
                     }
                 }

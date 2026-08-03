@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Pastel color mode complete — Settings toggle + pastel-ized mixed-deck blends and blended page tints in light & dark**
+
+### What was asked
+
+“add a pastel color mode which also affects the mixed colors and also the blended colors everything properly in dark and light continue this from the last session” — continuing the v7.5 pastel work (helpers + Spin/Reveal/Save ink were already in place; the Settings toggle, the mixed-deck blend pastel-ization, the blended surfaces, and the remaining screens were not).
+
+### What was done
+
+- **Settings — the Appearance card gained a “Pastel colors” switch** (`AppPreferences.pastelColorsState`, default OFF, reactive; new `CurioIcons.Colorize` eyedropper glyph). Independent of theme style (Curio / AMOLED / Material) and the Light/Dark/System pick.
+- **CurioMixedDeck pastel-ized (CurioColors.kt)** — `mixedDeckAccent` gained `pastel`/`dark` params so the DEEP curated pair/triple blends soften to their theme-aware pastel twin ([pastelAccent]); `mixedDeckGradient` softens the seam blends so the whole sweep reads pastel; `mixedDeckWash` is pastel-aware (light: the airy blend washes over cream at high strength; dark: the muted pastel washes at moderate strength instead of deepening toward a jewel tone).
+- **Blended surfaces pastel-ized (CategoryInk.kt)** — `categoryBackgroundWash` in light mode becomes a whisper pastel (0.20/0.90) so the pastel fills pop instead of melting into the page, and dark mode builds its mid-tone from the muted pastel accent; `categorySurface` / `categoryChipSurface` / `categorySurfaceMoodBoard` follow (dark mid-tones from the pastel base, light via the pastel-tuned `lightSurfaceTint`).
+- **Content-ink flips on every accent fill** so pastel fills keep deep readable ink in light (and light ink in dark): Home quest card + category chips + explore CTA, Profile hero, TopicReveal CTA sparkle, SaveCapture format chips, EntryDetail hero (title / glyph / frosted bar / watermark scatter), format tabs, play buttons, share card + AudioPlayerBar, SoundBite/Marginalia/GalleryWall record + trim + add-image buttons, mood chips, Spin hero watermark, CurioHeroCard ghosts, CurioCategoryCard sheen/ghost.
+- **Explore notification** — the service’s `notificationAccent` pastel-izes the category accent via the new non-composable `isCurioDarkThemeForContext` (mirrors `isCurioDarkTheme` using the uiMode flag).
+
+### Validation
+
+- `check_braces.py` BALANCED on all touched files; zero stale white-on-accent-fill spots remain outside brand/decorative surfaces (onboarding, lightbox, crash screen, trim handles — untouched by design).
+- Code-reviewer pass: clean (see review results).
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Spin density 2x tier + layout pinning — 3-way density picker (Off / Compact / 2x), Categories/Filter pinned to the nav bar, category-picker Mix button always visible**
 
 ### What was asked

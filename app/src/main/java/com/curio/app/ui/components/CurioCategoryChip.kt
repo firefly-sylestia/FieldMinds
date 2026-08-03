@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.curio.app.data.CurioCategory
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.themedAccent
+import com.curio.app.ui.theme.categoryInk
 
 /**
  * A Curio category chip — used in Home's category chip row (§3), Category
@@ -51,7 +51,10 @@ fun CurioCategoryChip(
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = if (selected) category.themedAccent()
+                // categoryInk (the deep accent in light / light twin in dark),
+                // NOT themedAccent — in pastel mode the pastel accent would
+                // disappear on the light chip surface.
+                tint = if (selected) category.categoryInk()
                        else MaterialTheme.colorScheme.onSurfaceVariant,
                 size = 18.dp
             )
@@ -60,13 +63,13 @@ fun CurioCategoryChip(
         colors = FilterChipDefaults.filterChipColors(
             containerColor = if (selected) category.tint
                              else MaterialTheme.colorScheme.surface,
-            labelColor = if (selected) category.themedAccent()
+            labelColor = if (selected) category.categoryInk()
                          else MaterialTheme.colorScheme.onSurfaceVariant,
-            iconColor = if (selected) category.themedAccent()
+            iconColor = if (selected) category.categoryInk()
                        else MaterialTheme.colorScheme.onSurfaceVariant,
             selectedContainerColor = category.tint,
-            selectedLabelColor = category.themedAccent(),
-            selectedLeadingIconColor = category.themedAccent()
+            selectedLabelColor = category.categoryInk(),
+            selectedLeadingIconColor = category.categoryInk()
         ),
         border = FilterChipDefaults.filterChipBorder(
             enabled = true,

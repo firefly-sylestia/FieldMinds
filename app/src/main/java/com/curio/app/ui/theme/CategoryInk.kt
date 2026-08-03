@@ -23,8 +23,18 @@ import com.curio.app.data.CurioCategory
  * text/icons stay readable in both light and dark mode.
  */
 @Composable
-fun CurioCategory.categoryInk(): Color =
-    if (isCurioDarkTheme()) lightAccent else themedAccent()
+fun CurioCategory.categoryInk(): Color {
+    // The DEEP accent (not themedAccent) in light mode: pastel mode softens
+    // themedAccent but text/icons on plain surfaces must stay deep to read.
+    if (isCurioDarkTheme()) return lightAccent
+    // v7.5 — pastel mode: accents that are already pale (the mixed-deck
+    // blend, the wildcard coral) can't serve as their own ink on the light
+    // surfaces — a pastel-on-pastel would wash out (e.g. a mixed deck's
+    // non-selected pills). Return a deep twin of the same hue, mirroring
+    // [onAccent]'s pale-accent rule. Deep accents stay themselves.
+    if (AppPreferences.pastelColorsState && accent.isPale()) return deepHueInk(accent)
+    return accent
+}
 
 /**
  * The accent color a category WEARS in the active theme style.
@@ -44,7 +54,68 @@ fun CurioCategory.categoryInk(): Color =
  *    gradients stay vivid and recognizable.
  */
 @Composable
-fun CurioCategory.themedAccent(): Color = accent
+fun CurioCategory.themedAccent(): Color {
+    // Pastel color mode (v7.5) — every accent softens to its pastel twin so
+    // fills, gradients, chips and the mixed-deck blends all read pastel. The
+    // twin is theme-aware: an airy pastel on the cream surface in light mode,
+    // a muted deep pastel over midnight in dark mode. Content on these fills
+    // flips to [onAccent] (deep ink in light, light twin in dark).
+    if (!AppPreferences.pastelColorsState) return accent
+    return pastelAccent(accent, isCurioDarkTheme())
+}
+
+/**
+ * Ink color for content sitting ON an accent fill (buttons, selected cards,
+ * chips, hero gradients).
+ *
+ * Deep accents carry white content (the pre-pastel contract). In pastel mode
+ * the fills lighten, so light mode flips the ink to the DEEP accent (dark ink
+ * on the pastel fill) and dark mode to the light twin (light ink on the muted
+ * pastel) — the same dark/light resolution as [categoryInk]. Returns White
+ * when pastel mode is off, so existing call sites keep their exact look.
+ */
+@Composable
+fun CurioCategory.onAccent(): Color = when {
+    !AppPreferences.pastelColorsState -> Color.White
+    isCurioDarkTheme() -> lightAccent
+    // The wildcard's accent is ALREADY a pastel pink — a deep hue twin (the
+    // brand maroon) reads on it, not the pale accent itself.
+    accent.isPale() -> CurioColors.DeepPlum
+    else -> accent
+}
+
+/**
+ * Ink that reads on an accent FILL in pastel mode — used by deck surfaces
+ * that don't map 1:1 to a category (mixed-deck blends, peek cards, the spin
+ * button). Deep fills keep white; pastel light-mode fills get a deep ink of
+ * the SAME hue; muted dark pastels get a light tint. Returns White when
+ * pastel mode is off, preserving today's look exactly.
+ */
+@Composable
+fun pastelFillInk(fill: Color): Color = when {
+    !AppPreferences.pastelColorsState -> Color.White
+    isCurioDarkTheme() -> lerp(fill, Color.White, 0.85f)
+    else -> {
+        val a = toHsl(fill)
+        fromHsl(a.h, a.s.coerceIn(0.15f, 0.60f), 0.30f)
+    }
+}
+
+/** Whether a color is pale enough to need a deep ink twin instead of itself. */
+private fun Color.isPale(): Boolean {
+    val lum = 0.2126f * red + 0.7152f * green + 0.0722f * blue
+    return lum > 0.50f
+}
+
+/**
+ * Deep ink of the SAME hue as a pale/pastel color — the light-mode ink twin
+ * used by [categoryInk] (and equivalent to [pastelFillInk]'s light branch,
+ * but unconditional so it never resolves to white).
+ */
+private fun deepHueInk(color: Color): Color {
+    val a = toHsl(color)
+    return fromHsl(a.h, a.s.coerceIn(0.15f, 0.60f), 0.30f)
+}
 
 /**
  * Theme-aware wash color for a category-aware page BACKGROUND (Spin, Topic
@@ -83,10 +154,18 @@ fun CurioCategory.categoryBackgroundWash(): Color {
     if (!AppPreferences.tintWashEffective()) return background
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
-        val midTone = tuning.resolveMidTone(accent, lightAccent)
+        // v7.5 — pastel mode: the mid-tone is built from the muted deep
+        // pastel accent instead of the deep accent, so dark pages read
+        // pastel too instead of deep jewel tones.
+        val accentBase = if (AppPreferences.pastelColorsState) pastelAccent(accent, true) else accent
+        val midTone = tuning.resolveMidTone(accentBase, lightAccent)
         lerp(background, midTone, tuning.blendFraction)
     } else {
-        lightAccentTint(accent)
+        // v7.5 — pastel mode: a whisper pastel page (lighter + less
+        // saturated than the standard wash) so the airy pastel fills pop
+        // instead of melting into the background.
+        if (AppPreferences.pastelColorsState) lightAccentTint(accent, saturation = 0.20f, lightness = 0.90f)
+        else lightAccentTint(accent)
     }
 }
 
@@ -106,12 +185,14 @@ fun CurioCategory.categorySurface(base: Color = MaterialTheme.colorScheme.surfac
     if (!AppPreferences.tintWashEffective()) return base
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
-        val midTone = tuning.resolveMidTone(accent, lightAccent)
+        val accentBase = if (AppPreferences.pastelColorsState) pastelAccent(accent, true) else accent
+        val midTone = tuning.resolveMidTone(accentBase, lightAccent)
         // Dark cards blend the proper dark mid-tone much harder than the
         // page wash (which stays deep) — same "cards = wash's stronger
         // sibling" relationship as light mode — so tiles and chips visibly
         // wear their category tint on the midnight page instead of sinking
-        // into a near-invisible +0.10 whisper.
+        // into a near-invisible +0.10 whisper. In pastel mode the mid-tone
+        // is the muted pastel twin, so the cards read soft pastel too.
         lerp(base, midTone, tuning.blendFraction + 0.30f)
     } else {
         lightSurfaceTint(accent)
@@ -131,7 +212,8 @@ fun CurioCategory.categorySurfaceMoodBoard(base: Color = MaterialTheme.colorSche
     if (!AppPreferences.tintWashEnabledState) return base
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
-        val midTone = tuning.resolveMidTone(accent, lightAccent)
+        val accentBase = if (AppPreferences.pastelColorsState) pastelAccent(accent, true) else accent
+        val midTone = tuning.resolveMidTone(accentBase, lightAccent)
         lerp(base, midTone, tuning.blendFraction + 0.30f)
     } else {
         lightSurfaceTint(accent)
@@ -157,7 +239,8 @@ fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.su
     if (!AppPreferences.tintWashEffective()) return base
     return if (isCurioDarkTheme()) {
         val tuning = DARK_WASH_TUNING[family] ?: DEFAULT_DARK_WASH
-        val midTone = tuning.resolveMidTone(accent, lightAccent)
+        val accentBase = if (AppPreferences.pastelColorsState) pastelAccent(accent, true) else accent
+        val midTone = tuning.resolveMidTone(accentBase, lightAccent)
         // Pull the mid-tone toward neutral grey (less saturated), then blend
         // harder than the page wash (which uses blendFraction) so the chip
         // reads brighter than the tinted background for contrast.
@@ -176,7 +259,11 @@ fun CurioCategory.categoryChipSurface(base: Color = MaterialTheme.colorScheme.su
  * definition keeps the three surface families in sync.
  */
 private fun lightSurfaceTint(accent: Color): Color =
-    lightAccentTint(accent, saturation = 0.36f, lightness = 0.86f)
+    // v7.5 — pastel mode: cards/chips stay a touch stronger than the whisper
+    // page wash (0.28/0.86) so tinted tiles read elevated under the pastel
+    // fills instead of dissolving into the background.
+    if (AppPreferences.pastelColorsState) lightAccentTint(accent, saturation = 0.28f, lightness = 0.86f)
+    else lightAccentTint(accent, saturation = 0.36f, lightness = 0.86f)
 
 /**
  * Theme-aware border for CARDS and BUTTONS that wear a tinted surface on a

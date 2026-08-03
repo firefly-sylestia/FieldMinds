@@ -515,6 +515,37 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
+                        // ── Pastel colors (v7.5) — a soft recolor of every
+                        //    category accent, the mixed-deck blends and the
+                        //    blended page tints: airy pastels with deep ink in
+                        //    light mode, muted deep pastels with light ink in
+                        //    dark. Independent of the theme style (Curio /
+                        //    AMOLED / Material) and the Light/Dark pick.
+                        //    Default OFF.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Colorize, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Pastel colors", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    "Soft pastel accents, blends and page tints in light & dark",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.pastelColorsState,
+                                onCheckedChange = { AppPreferences.setPastelColorsEnabled(context, it) }
+                            )
+                        }
+                        CurioSettingsDivider()
                         // ── Entry date & mood — the meta card (date / time /
                         //    mood / type) on saved entries + the journal's mood
                         //    and attachment sections. Default ON.

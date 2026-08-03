@@ -106,6 +106,7 @@ object CurioIcons {
     const val MenuBook    = "menu_book"
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
+    const val Colorize    = "colorize"   // eyedropper — Pastel colors mode
 
     // ── Note-paper style chips (Ruled/Torn/Coffee/Folded/Red-margin)
     const val LocalCafe     = "local_cafe"        // coffee-stain paper

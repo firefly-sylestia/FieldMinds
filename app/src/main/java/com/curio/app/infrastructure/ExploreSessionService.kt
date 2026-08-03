@@ -40,6 +40,7 @@ import com.curio.app.MainActivity
 import com.curio.app.R
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.CurioCategory
 import com.curio.app.data.ExploreReminderScheduler
 import com.curio.app.data.ExploreSession
 import com.curio.app.data.ExploreSessionStore
@@ -49,6 +50,8 @@ import com.curio.app.ui.components.ExploreBubbleContent
 import com.curio.app.ui.theme.CurioShapes
 import com.curio.app.ui.theme.CurioTypography
 import com.curio.app.ui.theme.curioColorScheme
+import com.curio.app.ui.theme.isCurioDarkThemeForContext
+import com.curio.app.ui.theme.pastelAccent
 
 /**
  * Foreground service behind an active explore session.
@@ -251,7 +254,7 @@ class ExploreSessionService : Service() {
      */
     private fun liveNotification(session: ExploreSession): Notification {
         val category = CurioCategories.byId(session.categoryId)
-        val accent = category.accent.toArgb()
+        val accent = notificationAccent(category)
         val elapsed = session.elapsedMillis()
         val paused = session.paused
         val totalMins = session.durationMinutes.coerceAtLeast(1)
@@ -305,7 +308,7 @@ class ExploreSessionService : Service() {
      * foreground service). No chronometer; the bubble carries the live timer.
      */
     private fun bubbleOnlyNotification(session: ExploreSession): Notification {
-        val accent = CurioCategories.byId(session.categoryId).accent.toArgb()
+        val accent = notificationAccent(CurioCategories.byId(session.categoryId))
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setColor(accent)
@@ -317,6 +320,19 @@ class ExploreSessionService : Service() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .addAction(0, "Done exploring", stopSessionIntent())
             .build()
+    }
+
+    /**
+     * The category accent a notification wears — resolved the same way the
+     * UI resolves it. v7.5 — pastel mode softens the accent to its pastel
+     * twin (muted deep pastel in dark, airy pastel in light) so the shade
+     * matches the rest of the app; the raw deep accent is used otherwise.
+     */
+    private fun notificationAccent(category: CurioCategory): Int {
+        val raw = category.accent
+        return if (AppPreferences.isPastelColorsEnabled(this))
+            pastelAccent(raw, isCurioDarkThemeForContext(this)).toArgb()
+        else raw.toArgb()
     }
 
     private fun createChannel() {

@@ -57,6 +57,7 @@ object AppPreferences {
     private const val KEY_DISPLAY_NAME = "display_name"
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
     private const val KEY_THEME_STYLE = "theme_style"      // "default", "amoled", "material"
+    private const val KEY_PASTEL_COLORS_ENABLED = "pastel_colors_enabled"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
@@ -97,6 +98,15 @@ object AppPreferences {
      * a style in Settings. Seeded from prefs in [initThemeMode].
      */
     var themeStyleState by mutableStateOf(THEME_STYLE_DEFAULT)
+        private set
+
+    // Pastel color mode (v7.5) — a user toggle that softens every category
+    // accent (fills become pastel with deep-matching ink in light mode,
+    // muted deep pastels in dark) and pastel-izes the mixed-deck blends and
+    // every blended/tinted color derived from the accents. Independent of
+    // theme STYLE (combines with Curio, AMOLED and Material) and theme MODE.
+    // Default OFF. Seeded from prefs in [initThemeMode].
+    var pastelColorsState by mutableStateOf(false)
         private set
 
     var reminderEnabledState by mutableStateOf(false)
@@ -178,6 +188,7 @@ object AppPreferences {
     fun initThemeMode(context: Context) {
         themeModeState = getThemeMode(context)
         themeStyleState = getThemeStyle(context)
+        pastelColorsState = isPastelColorsEnabled(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
@@ -207,6 +218,16 @@ object AppPreferences {
     fun setThemeStyle(context: Context, style: String) {
         prefs(context).edit().putString(KEY_THEME_STYLE, style).apply()
         themeStyleState = style
+    }
+
+    // ── Pastel color mode ─────────────────────────────────────────────
+    /** Whether the pastel color mode is on (default off). */
+    fun isPastelColorsEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_PASTEL_COLORS_ENABLED, false)
+
+    fun setPastelColorsEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_PASTEL_COLORS_ENABLED, enabled).apply()
+        pastelColorsState = enabled
     }
 
     // ── Category tint wash ────────────────────────────────────────────

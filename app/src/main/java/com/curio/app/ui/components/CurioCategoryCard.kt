@@ -42,6 +42,7 @@ import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
@@ -109,7 +110,7 @@ fun CurioCategoryCard(
         color = Color.Transparent,
         shadowElevation = 0.dp,
         tonalElevation = 0.dp,
-        border = if (isSelected) BorderStroke(2.dp, Color.White)
+        border = if (isSelected) BorderStroke(2.dp, category.onAccent())
                  else category.categoryBorder(),
         modifier = modifier
             .fillMaxWidth()
@@ -143,23 +144,27 @@ fun CurioCategoryCard(
             //    the selected tile reads as clearly raised, distinct from the
             //    idle tile (no check badge).
             if (isSelected) {
+                // v7.5 — the sheen wears the theme-aware onAccent ink (white
+                // when pastel mode is off, a deep/light ink on the pastel
+                // gradient in pastel mode) so it reads on the lightened fill.
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            Color.White.copy(alpha = 0.16f),
+                            category.onAccent().copy(alpha = 0.14f),
                             RoundedCornerShape(22.dp)
                         )
                 )
             }
 
             // Ghost icon — tinted with the card's gradient accent color
-            // (echoed softly toward white) so the watermark carries the
-            // same palette as the main-card gradient, not a flat white ghost.
+            // (echoed softly toward the onAccent ink) so the watermark
+            // carries the same palette as the main-card gradient, not a
+            // flat white ghost. onAccent resolves to white off pastel mode.
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = if (isSelected) lerp(cardColor, Color.White, 0.55f).copy(alpha = 0.18f)
+                tint = if (isSelected) lerp(cardColor, category.onAccent(), 0.55f).copy(alpha = 0.18f)
                        else idleInk.copy(alpha = 0.16f),
                 size = 64.dp,
                 modifier = Modifier
@@ -180,14 +185,14 @@ fun CurioCategoryCard(
                     Text(
                         text = category.displayName,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface,
+                        color = if (isSelected) category.onAccent() else MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = if (isWildcard) "Surprise mix" else "$topicCount topics",
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (isSelected) Color.White.copy(alpha = 0.85f)
+                        color = if (isSelected) category.onAccent().copy(alpha = 0.85f)
                                 else MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1
                     )

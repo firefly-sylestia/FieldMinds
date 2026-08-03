@@ -67,6 +67,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.launch
 
@@ -298,6 +299,10 @@ private fun ProfileHero(
 ) {
     val initial = name.firstOrNull()?.uppercase().orEmpty()
     val gradient = CurioGradients.cardGradient(accent)
+    // v7.5 — pastel mode lightens the hero gradient, so the hero content
+    // flips from white to a deep ink of the lane accent (brand maroon on the
+    // coral before your first save). White when pastel mode is off.
+    val ink = pastelFillInk(accent)
     Surface(
         shape = RoundedCornerShape(28.dp),
         color = Color.Transparent,
@@ -315,7 +320,7 @@ private fun ProfileHero(
             CurioIcon(
                 glyph,
                 null,
-                tint = Color.White.copy(alpha = 0.20f),
+                tint = ink.copy(alpha = 0.20f),
                 size = 120.dp,
                 modifier = Modifier.align(Alignment.BottomEnd)
             )
@@ -329,7 +334,7 @@ private fun ProfileHero(
                         modifier = Modifier
                             .width(3.dp)
                             .height(16.dp)
-                            .background(Color.White.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
+                            .background(ink.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
                     )
                     Text(
                         "YOUR PROFILE",
@@ -337,7 +342,7 @@ private fun ProfileHero(
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = 1.2.sp
                         ),
-                        color = Color.White.copy(alpha = 0.88f)
+                        color = ink.copy(alpha = 0.88f)
                     )
                 }
                 // ── Avatar + name ──────────────────────────────────────
@@ -349,27 +354,27 @@ private fun ProfileHero(
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.22f)),
+                            .background(ink.copy(alpha = 0.22f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             initial,
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
-                            color = Color.White
+                            color = ink
                         )
                     }
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             name,
                             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = Color.White,
+                            color = ink,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             taglineForStreak(streakDays),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White.copy(alpha = 0.78f),
+                            color = ink.copy(alpha = 0.78f),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -384,8 +389,8 @@ private fun ProfileHero(
                     Surface(
                         onClick = onEditName,
                         shape = RoundedCornerShape(50),
-                        color = Color.White.copy(alpha = 0.22f),
-                        contentColor = Color.White,
+                        color = ink.copy(alpha = 0.18f),
+                        contentColor = ink,
                         shadowElevation = 0.dp
                     ) {
                         Row(
@@ -393,22 +398,22 @@ private fun ProfileHero(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            CurioIcon(CurioIcons.Edit, null, tint = Color.White, size = 16.dp)
-                            Text("Edit profile", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                            CurioIcon(CurioIcons.Edit, null, tint = ink, size = 16.dp)
+                            Text("Edit profile", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = ink)
                         }
                     }
                     if (streakDays > 0) {
                         Surface(
                             shape = RoundedCornerShape(50.dp),
-                            color = Color.White.copy(alpha = 0.22f)
+                            color = ink.copy(alpha = 0.18f)
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(5.dp)
                             ) {
-                                CurioIcon(CurioIcons.LocalFire, null, tint = Color.White, size = 16.dp)
-                                Text("$streakDays-day streak", style = MaterialTheme.typography.labelMedium, color = Color.White, fontWeight = FontWeight.Bold)
+                                CurioIcon(CurioIcons.LocalFire, null, tint = ink, size = 16.dp)
+                                Text("$streakDays-day streak", style = MaterialTheme.typography.labelMedium, color = ink, fontWeight = FontWeight.Bold)
                             }
                         }
                     }

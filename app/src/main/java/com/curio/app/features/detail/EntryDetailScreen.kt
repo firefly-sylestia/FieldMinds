@@ -130,6 +130,8 @@ import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.categorySurfaceMoodBoard
 import com.curio.app.ui.theme.lightAccentTint
+import com.curio.app.ui.theme.onAccent
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.glyph
@@ -184,6 +186,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     // a plain patch. Hoisted once and shared with the hero's gradient so the
     // hero's final stop is, by construction, exactly the page color behind it.
     val wash = cat.categoryBackgroundWash()
+    // v7.5 — pastel mode lightens the hero gradient, so the hero content
+    // (glyph, title, frosted bar, watermark scatter) flips from white to the
+    // theme-aware onAccent ink — deep accent in light, light twin in dark.
+    // White when pastel mode is off, preserving the exact pre-pastel look.
+    val heroInk = cat.onAccent()
     // v5.8 — saveable so rotation doesn't close the menu/dialog unexpectedly.
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
     var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
@@ -299,7 +306,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 CurioIcon(
                     name = cat.iconGlyph,
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.92f),
+                    tint = heroInk.copy(alpha = 0.92f),
                     size = 76.dp
                 )
                 Spacer(Modifier.height(14.dp))
@@ -308,7 +315,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color.White,
+                    color = heroInk,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -325,10 +332,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     CurioIcons.Inventory2 else formatGlyph(resolvedEntry.format)
                 Surface(
                     shape = RoundedCornerShape(18.dp),
-                    // 0.20 fill keeps white-on-glass readable even where the
-                    // gradient lightens toward the theme background.
-                    color = Color.White.copy(alpha = 0.20f),
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.34f)),
+                    // 0.18 fill keeps the ink-on-glass readable even where
+                    // the gradient lightens toward the theme background.
+                    color = heroInk.copy(alpha = 0.18f),
+                    border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
                     shadowElevation = 0.dp
                 ) {
                     Row(
@@ -339,16 +346,18 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             icon = CurioIcons.CalendarToday,
                             title = formatCapturedDate(resolvedEntry.capturedAtMillis),
                             subtitle = "Date",
+                            ink = heroInk,
                             modifier = Modifier.weight(1f)
                         )
                         VerticalDivider(
                             modifier = Modifier.height(30.dp),
-                            color = Color.White.copy(alpha = 0.34f)
+                            color = heroInk.copy(alpha = 0.30f)
                         )
                         FrostedSegment(
                             icon = heroTypeGlyph,
                             title = heroTypeLabel,
                             subtitle = "Type",
+                            ink = heroInk,
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -565,12 +574,17 @@ private val EntryDetailHeroClearance = EntryDetailHeroHeight + 20.dp
  * reads as a deliberate symmetric frame around the title instead of
  * randomly placed icons. Five tiers keep the glyphs clear of each other,
  * the centered content column (icon + title + frosted bar) and the top
- * back/more buttons, drawn in solid white at a soft alpha so they read
- * clearly against the vivid gradient (never a transparent wash).
+ * back/more buttons, drawn in the hero's onAccent ink (white when pastel
+ * mode is off) at a soft alpha so they read clearly against the gradient
+ * (never a transparent wash).
  */
 @Composable
 private fun BoxScope.HeroSymbolScatter(cat: CurioCategory) {
     val symbols = CurioIcons.heroWatermarkSymbols(cat.family)
+    // v7.5 — the scatter draws in the theme-aware onAccent ink (deep in
+    // light, light twin in dark) so it stays visible on the pastel-lightened
+    // gradient; solid white when pastel mode is off.
+    val ink = cat.onAccent()
     // Mirrored pairs: biasX magnitude + biasY (-1..1), glyph size, rotation
     // magnitude, alpha. The left glyph is drawn at (-biasX, biasY) with
     // -rotation, the right at (+biasX, biasY) with +rotation.
@@ -588,8 +602,8 @@ private fun BoxScope.HeroSymbolScatter(cat: CurioCategory) {
     )
     pairs.forEachIndexed { i, pair ->
         // The 10-symbol family list maps 1:1 onto the 5 mirrored pairs.
-        HeroWatermarkGlyph(symbols[i * 2], BiasAlignment(-pair.biasX, pair.biasY), pair.size, -pair.rotation, pair.alpha)
-        HeroWatermarkGlyph(symbols[i * 2 + 1], BiasAlignment(pair.biasX, pair.biasY), pair.size, pair.rotation, pair.alpha)
+        HeroWatermarkGlyph(symbols[i * 2], BiasAlignment(-pair.biasX, pair.biasY), pair.size, -pair.rotation, pair.alpha, ink)
+        HeroWatermarkGlyph(symbols[i * 2 + 1], BiasAlignment(pair.biasX, pair.biasY), pair.size, pair.rotation, pair.alpha, ink)
     }
 }
 
@@ -600,12 +614,13 @@ private fun BoxScope.HeroWatermarkGlyph(
     alignment: Alignment,
     size: Dp,
     rotation: Float,
-    alpha: Float
+    alpha: Float,
+    tint: Color = Color.White
 ) {
     CurioIcon(
         name = glyph,
         contentDescription = null,
-        tint = Color.White.copy(alpha = alpha),
+        tint = tint.copy(alpha = alpha),
         size = size,
         modifier = Modifier
             .align(alignment)
@@ -704,13 +719,15 @@ private fun EntryMetaCard(entry: CurioEntry) {
 
 /**
  * One half of the hero's frosted date/type bar — icon over value over a
- * "Date"/"Type" label, all in white so it reads on the gradient glass.
+ * "Date"/"Type" label, in the hero's ink ([ink], white by default) so it
+ * reads on the gradient glass in every theme and pastel mode.
  */
 @Composable
 private fun FrostedSegment(
     icon: String,
     title: String,
     subtitle: String,
+    ink: Color = Color.White,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -721,20 +738,20 @@ private fun FrostedSegment(
         CurioIcon(
             name = icon,
             contentDescription = null,
-            tint = Color.White.copy(alpha = 0.95f),
+            tint = ink.copy(alpha = 0.95f),
             size = 18.dp
         )
         Text(
             text = title,
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-            color = Color.White,
+            color = ink,
             maxLines = 1,
             softWrap = false
         )
         Text(
             text = subtitle,
             style = MaterialTheme.typography.labelSmall,
-            color = Color.White.copy(alpha = 0.85f)
+            color = ink.copy(alpha = 0.85f)
         )
     }
 }
@@ -827,13 +844,13 @@ private fun PortfolioRender(entry: CurioEntry, category: CurioCategory, navContr
                         CurioIcon(
                             name = formatGlyph(s.format),
                             contentDescription = null,
-                            tint = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                            tint = if (selected) category.onAccent() else MaterialTheme.colorScheme.onSurfaceVariant,
                             size = 14.dp
                         )
                         Text(
                             text = s.format.shortName,
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                            color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface
+                            color = if (selected) category.onAccent() else MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -879,7 +896,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     CurioIcon(
                         name = CurioIcons.PlayArrow,
                         contentDescription = "Play",
-                        tint = Color.White,
+                        tint = category.onAccent(),
                         size = 32.dp,
                         modifier = Modifier.padding(8.dp)
                     )
@@ -1140,7 +1157,9 @@ private fun AudioPlayerBar(
                     CurioIcon(
                         name = if (isPlaying) CurioIcons.Pause else CurioIcons.PlayArrow,
                         contentDescription = if (isPlaying) "Pause" else "Play",
-                        tint = Color.White,
+                        // v7.5 — pastel mode lightens the accent fill, so the
+                        // glyph flips to a deep ink of the accent.
+                        tint = pastelFillInk(accent),
                         size = 24.dp
                     )
                 }
@@ -2284,6 +2303,10 @@ private fun CurioShareCard(
     category: CurioCategory
 ) {
     val bgColor = category.themedAccent().copy(alpha = 0.9f)
+    // v7.5 — pastel mode lightens the card fill, so the share card content
+    // flips from white to a deep ink of the accent. White when pastel mode
+    // is off, preserving the exact pre-pastel share card.
+    val ink = pastelFillInk(category.themedAccent())
 
     val daysAgoText = when (entry.capturedAtDaysAgo) {
         0 -> "Captured today"
@@ -2300,7 +2323,7 @@ private fun CurioShareCard(
         CurioIcon(
             name = category.iconGlyph,
             contentDescription = null,
-            tint = Color.White.copy(alpha = 0.08f),
+            tint = ink.copy(alpha = 0.08f),
             size = 200.dp,
             modifier = Modifier.align(Alignment.Center)
         )
@@ -2320,7 +2343,7 @@ private fun CurioShareCard(
             ) {
                 Surface(
                     shape = RoundedCornerShape(14.dp),
-                    color = Color.White.copy(alpha = 0.2f)
+                    color = ink.copy(alpha = 0.18f)
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -2330,7 +2353,7 @@ private fun CurioShareCard(
                         CurioIcon(
                             name = category.iconGlyph,
                             contentDescription = null,
-                            tint = Color.White,
+                            tint = ink,
                             size = 14.dp
                         )
                         Text(
@@ -2338,14 +2361,14 @@ private fun CurioShareCard(
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = Color.White
+                            color = ink
                         )
                     }
                 }
                 CurioIcon(
                     name = CurioIcons.AutoAwesome,
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.5f),
+                    tint = ink.copy(alpha = 0.5f),
                     size = 20.dp
                 )
             }
@@ -2361,7 +2384,7 @@ private fun CurioShareCard(
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.ExtraBold
                     ),
-                    color = Color.White,
+                    color = ink,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -2369,7 +2392,7 @@ private fun CurioShareCard(
                 Text(
                     text = entry.topic.teaser,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.White.copy(alpha = 0.85f),
+                    color = ink.copy(alpha = 0.85f),
                     textAlign = TextAlign.Center,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
@@ -2389,25 +2412,25 @@ private fun CurioShareCard(
                 ) {
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = Color.White.copy(alpha = 0.15f)
+                        color = ink.copy(alpha = 0.15f)
                     ) {
                         Text(
                             text = entry.format.name.replace(Regex("([a-z])([A-Z])"), "$1 $2"),
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Medium
                             ),
-                            color = Color.White,
+                            color = ink,
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
                     }
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = Color.White.copy(alpha = 0.15f)
+                        color = ink.copy(alpha = 0.15f)
                     ) {
                         Text(
                             text = daysAgoText,
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color.White.copy(alpha = 0.8f),
+                            color = ink.copy(alpha = 0.8f),
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
                     }
@@ -2421,7 +2444,7 @@ private fun CurioShareCard(
                     CurioIcon(
                         name = CurioIcons.AutoAwesome,
                         contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.6f),
+                        tint = ink.copy(alpha = 0.6f),
                         size = 18.dp
                     )
                     Text(
@@ -2429,13 +2452,13 @@ private fun CurioShareCard(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.ExtraBold
                         ),
-                        color = Color.White.copy(alpha = 0.9f)
+                        color = ink.copy(alpha = 0.9f)
                     )
                 }
                 Text(
                     text = "Stay curious",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color.White.copy(alpha = 0.5f)
+                    color = ink.copy(alpha = 0.5f)
                 )
             }
         }

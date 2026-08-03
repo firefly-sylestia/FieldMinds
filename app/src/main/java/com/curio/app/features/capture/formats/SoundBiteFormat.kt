@@ -52,6 +52,7 @@ import com.curio.app.ui.components.AudioTrimmer
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
 import com.curio.app.ui.theme.paperInk
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.TrimWaveform
 import com.curio.app.ui.components.WaveformExtractor
@@ -533,7 +534,7 @@ private fun TrimSection(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = accent,
-                    contentColor = Color.White,
+                    contentColor = pastelFillInk(accent),
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
@@ -542,7 +543,7 @@ private fun TrimSection(
             ) {
                 if (trimInProgress) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = pastelFillInk(accent),
                         strokeWidth = 2.dp,
                         modifier = Modifier.size(18.dp)
                     )
@@ -582,7 +583,7 @@ private fun IdleControls(
                 CurioIcon(
                     name = CurioIcons.Mic,
                     contentDescription = "Start recording",
-                    tint = Color.White,
+                    tint = pastelFillInk(accent),
                     size = 48.dp
                 )
             }
@@ -634,7 +635,7 @@ private fun LiveControls(
                     CurioIcon(
                         name = if (isPaused) CurioIcons.MicNone else CurioIcons.Mic,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = pastelFillInk(accent),
                         size = 48.dp
                     )
                 }

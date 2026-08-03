@@ -94,7 +94,7 @@ object CurioColors {
 private data class Hsl(val h: Float, val s: Float, val l: Float)
 
 /** Standard RGB → HSL conversion (channels in [0,1], hue in degrees). */
-private fun toHsl(color: Color): Hsl {
+internal fun toHsl(color: Color): Hsl {
     val r = color.red
     val g = color.green
     val b = color.blue
@@ -113,7 +113,7 @@ private fun toHsl(color: Color): Hsl {
 }
 
 /** Standard HSL → RGB conversion (hue in degrees, s/l in [0,1]). */
-private fun fromHsl(h: Float, s: Float, l: Float): Color {
+internal fun fromHsl(h: Float, s: Float, l: Float): Color {
     val c = (1f - kotlin.math.abs(2f * l - 1f)) * s
     val hp = h / 60f
     val x = c * (1f - kotlin.math.abs(hp % 2f - 1f))
@@ -161,6 +161,27 @@ internal fun lightAccentTint(
 ): Color {
     val a = toHsl(accent)
     return fromHsl(a.h, saturation.coerceIn(0f, 1f), lightness.coerceIn(0f, 1f))
+}
+
+/**
+ * Pastel twin of a category accent for the Pastel color mode (v7.5).
+ *
+ * Light mode: an AIRY pastel — the accent's own hue at high lightness with
+ * lightly-held saturation, so indigo becomes periwinkle, rose soft pink,
+ * teal mint, sky azure. Fills wearing this read with the DEEP accent as ink
+ * ([com.curio.app.ui.theme.CurioCategory.onAccent]).
+ *
+ * Dark mode: a MUTED DEEP pastel — desaturated and pulled down in lightness
+ * so the soft look stays understated over the midnight surface (per user
+ * direction) while light ink stays readable on top.
+ */
+internal fun pastelAccent(accent: Color, dark: Boolean): Color {
+    val a = toHsl(accent)
+    return if (dark) {
+        fromHsl(a.h, (a.s * 0.55f).coerceIn(0f, 0.55f), 0.42f)
+    } else {
+        fromHsl(a.h, (a.s * 0.80f).coerceIn(0f, 0.72f), 0.80f)
+    }
 }
 
 /**
@@ -316,18 +337,28 @@ object CurioMixedDeck {
      * triples use the curated tables; four+ use the order-independent
      * [hslCentroid] (circular hue mean), so every mix stays vivid, white-label
      * safe, and never depends on selection order.
+     *
+     * Pastel color mode (v7.5): pass `pastel = true` + the active dark state
+     * so the DEEP curated pair/triple blends soften to the theme-aware pastel
+     * twin ([pastelAccent]) — airy pastels in light mode, muted deep pastels
+     * in dark. Single accents arrive already pastel (callers resolve them via
+     * [com.curio.app.ui.theme.CurioCategory.themedAccent]) and the 4+ path
+     * ([hslCentroid]) keeps pastel inputs at their mean lightness, so neither
+     * is re-softened here.
      */
-    fun mixedDeckAccent(accents: List<Color>): Color {
+    fun mixedDeckAccent(accents: List<Color>, pastel: Boolean = false, dark: Boolean = false): Color {
         // Color is a value class — value-based equality means distinct() alone
         // dedupes (toArgb() isn't part of the Compose BOM resolved here).
         val distinct = accents.distinct()
-        return when (distinct.size) {
+        val blend = when (distinct.size) {
             0 -> CurioColors.CategoryCoral
             1 -> distinct.first()
             2 -> PairBlends[distinct.toSet()] ?: hslBlend(distinct[0], distinct[1])
-            3 -> TripleBlends[distinct.toSet()] ?: hslCentroid(distinct)
-            else -> hslCentroid(distinct)
+            3 -> TripleBlends[distinct.toSet()] ?: hslCentroid(distinct, pastel)
+            else -> hslCentroid(distinct, pastel)
         }
+        if (pastel && distinct.size in 2..3) return pastelAccent(blend, dark)
+        return blend
     }
 
     /**
@@ -350,14 +381,20 @@ object CurioMixedDeck {
         if (distinct.size <= 1) {
             return CurioGradients.cardGradient(mixedDeckAccent(distinct))
         }
+        val dark = isCurioDarkTheme()
+        val pastel = AppPreferences.pastelColorsState
         val stops = mutableListOf<Color>()
         distinct.take(4).forEachIndexed { i, accent ->
             stops.add(accent)
             // Seam through the curated pair blend (saturation-boosted,
             // dead-zone steered) so the transition stays vivid rather than
-            // graying out.
+            // graying out. v7.5 — pastel mode softens the DEEP seam blends
+            // to their pastel twin so the whole sweep reads pastel end-to-end
+            // (the accent stops arrive already pastel via themedAccent()).
             if (i < 3 && i < distinct.size - 1) {
-                stops.add(mixedDeckAccent(listOf(accent, distinct[i + 1])))
+                var seam = mixedDeckAccent(listOf(accent, distinct[i + 1]))
+                if (pastel) seam = pastelAccent(seam, dark)
+                stops.add(seam)
             }
         }
         return stops
@@ -379,18 +416,32 @@ object CurioMixedDeck {
         val background = MaterialTheme.colorScheme.background
         if (!AppPreferences.tintWashEffective()) return background
         return if (isCurioDarkTheme()) {
-            // A deep, muted jewel tone: the blend darkened toward black
-            // (~35%) and mixed at a moderate strength (~45%) over midnight.
-            // The old 70% PURE blend rendered as a loud, saturated banner
-            // (e.g. a vivid purple page) in dark mode; this keeps each mix's
-            // hue clearly distinguishable while reading as a tasteful dark
-            // background the white ink and paper cards can sit on.
-            lerp(background, lerp(blend, Color.Black, 0.35f), 0.45f)
+            if (AppPreferences.pastelColorsState) {
+                // Pastel mode: the blend is already a muted deep pastel — a
+                // moderate-strength wash over midnight keeps the soft hue on
+                // the page instead of deepening it toward a jewel tone.
+                lerp(background, blend, 0.55f)
+            } else {
+                // A deep, muted jewel tone: the blend darkened toward black
+                // (~35%) and mixed at a moderate strength (~45%) over midnight.
+                // The old 70% PURE blend rendered as a loud, saturated banner
+                // (e.g. a vivid purple page) in dark mode; this keeps each mix's
+                // hue clearly distinguishable while reading as a tasteful dark
+                // background the white ink and paper cards can sit on.
+                lerp(background, lerp(blend, Color.Black, 0.35f), 0.45f)
+            }
         } else {
-            // A pastel twin of the blend over cream at high strength — the
-            // hue is unmistakable per mix while staying light enough for the
-            // dark maroon ink on top.
-            lerp(background, lerp(blend, Color.White, 0.40f), 0.85f)
+            if (AppPreferences.pastelColorsState) {
+                // Pastel mode: the blend is already an airy pastel — a strong
+                // wash over cream keeps the pastel hue unmistakably on the
+                // page (the cream end would otherwise read as a plain page).
+                lerp(background, blend, 0.80f)
+            } else {
+                // A pastel twin of the blend over cream at high strength — the
+                // hue is unmistakable per mix while staying light enough for the
+                // dark maroon ink on top.
+                lerp(background, lerp(blend, Color.White, 0.40f), 0.85f)
+            }
         }
     }
 
@@ -458,19 +509,29 @@ object CurioMixedDeck {
      * unmapped pair/triple): circular mean of the hues, mean saturation with
      * a small boost, then lightness steered to the brightest shade that still
      * clears WCAG AA (4.5:1) against white — matching the curated tables.
+     *
+     * Pastel mode keeps the inputs' mean lightness (the accents are already
+     * pastel / muted pastel) instead of steering toward a deep shade that
+     * clears 4.5:1 against white — the white-label steering only applies to
+     * the deep accents.
      */
-    private fun hslCentroid(colors: List<Color>): Color {
+    private fun hslCentroid(colors: List<Color>, pastel: Boolean = false): Color {
         val hs = colors.map { toHsl(it) }
         val n = hs.size.toFloat()
         var sx = 0f
         var sy = 0f
+        var lightnessSum = 0f
         for (h in hs) {
             val rad = h.h * (kotlin.math.PI.toFloat() / 180f)
             sx += kotlin.math.cos(rad)
             sy += kotlin.math.sin(rad)
+            lightnessSum += h.l
         }
         val hue = (kotlin.math.atan2(sy, sx) * (180f / kotlin.math.PI.toFloat()) + 360f) % 360f
         val sat = (hs.sumOf { it.s.toDouble() }.toFloat() / n + 0.05f).coerceIn(0f, 1f)
+        if (pastel) {
+            return fromHsl(hue, sat.coerceIn(0f, 1f), (lightnessSum / n).coerceIn(0f, 1f))
+        }
         return steerLightness(hue, sat, 4.5f)
     }
 
