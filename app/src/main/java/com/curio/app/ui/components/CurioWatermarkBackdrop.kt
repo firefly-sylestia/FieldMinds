@@ -24,6 +24,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.isCurioDarkTheme
+import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -260,6 +261,11 @@ private fun watermarkAlpha(active: Boolean, isDark: Boolean, pastel: Boolean): F
  * centred on [accent] tones so it stays legible behind tiles. The seed is
  * stable per board — derive it from the entry id when re-rendering a saved
  * board, or a fresh random value when creating one.
+ *
+ * v7.9 — pastel mode: the dominant glyph tint switches from the airy pastel
+ * accent (pastel-on-pastel over the tinted canvas — faint) to the accent's
+ * INK — deep hue twin in light mode, light tint in dark — so the collage
+ * reads as ink-on-pastel, matching the page backdrops.
  */
 @Composable
 fun CurioMoodBoardBackdrop(
@@ -277,6 +283,11 @@ fun CurioMoodBoardBackdrop(
     val accentByGlyph = CurioCategories.all.associate {
         it.iconGlyph to if (pastelMode) it.categoryInk() else it.themedAccent()
     }
+    // v7.9 — pastel mode: the DOMINANT (80%) glyph tint switches from the
+    // airy pastel accent (which melts into the tinted pastel canvas) to the
+    // accent's INK — deep hue twin in light, light tint in dark — so the
+    // whole collage reads instead of just the 20% category-glyph accents.
+    val boardTint = if (pastelMode) pastelFillInk(accent) else accent
     val glyphs = remember {
         CurioCategories.all.map { it.iconGlyph }
     }
@@ -284,8 +295,8 @@ fun CurioMoodBoardBackdrop(
         val canvasW = maxWidth
         val canvasH = maxHeight
         val density = LocalDensity.current
-        val pattern = remember(seed, accentByGlyph, glyphs, canvasW, canvasH) {
-            buildMoodBoardPattern(seed, accent, accentByGlyph, glyphs, canvasW, canvasH)
+        val pattern = remember(seed, boardTint, accentByGlyph, glyphs, canvasW, canvasH) {
+            buildMoodBoardPattern(seed, boardTint, accentByGlyph, glyphs, canvasW, canvasH)
         }
         pattern.forEach { p ->
             // Theme-aware base alpha × the glyph's seeded boost, computed at
@@ -293,9 +304,11 @@ fun CurioMoodBoardBackdrop(
             // was raised from 0.05 so the collage is actually visible on the
             // midnight surface (bumped again 0.10→0.12 / 0.14→0.16 with the
             // denser collage so the interior ring reads too). v7.7 — pastel
-            // mode bumps both bases a step (ink twins over paler washes).
-            val baseAlpha = if (isDark) (if (pastelMode) 0.15f else 0.12f)
-                            else (if (pastelMode) 0.22f else 0.16f)
+            // mode bumps both bases a step (ink twins over paler washes);
+            // v7.9 — bumped again (0.22→0.26 light / 0.15→0.18 dark) so the
+            // ink-tinted collage clearly reads on the tinted pastel canvas.
+            val baseAlpha = if (isDark) (if (pastelMode) 0.18f else 0.12f)
+                            else (if (pastelMode) 0.26f else 0.16f)
             val alpha = baseAlpha * p.alphaBoost
             // Anchor the icon on its CENTRE: the pattern's (xFrac, yFrac)
             // is the glyph centre, but [Modifier.offset] shifts the icon's

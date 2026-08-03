@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**v7.9 mood-board pastel fix — entry-detail collage reads as ink-on-pastel**
+
+### What was asked
+
+Follow-up suggestion clicked: “Also fix the mood-board collage on the entry-detail page — check it reads well in pastel mode too.”
+
+### What was done
+
+- **Root cause** — `CurioMoodBoardBackdrop`’s dominant (80%) glyph tint used the passed `accent` (= `themedAccent()` = airy pastel in pastel mode), drawn over the tinted pastel canvas (`categorySurfaceMoodBoard` ≈ L 0.86) → pastel-on-pastel, faint. The v7.7 pass had only fixed the 20% category-glyph accents.
+- **Fix (CurioWatermarkBackdrop.kt)** — in pastel mode the dominant board tint is now `pastelFillInk(accent)` — deep hue twin in light mode, light tint in dark — so the whole collage reads like the page backdrops (ink-on-pastel). The `remember` is keyed on the new `boardTint`; pastel base alpha bumped 0.22→0.26 (light) / 0.15→0.18 (dark). Covers all three call sites (EntryDetail inline board + fullscreen dialog, GalleryWall editor) since the fix is inside the shared composable.
+- **Docs:** changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- Braces balanced; code-reviewer pass; NO local Gradle build per AGENTS.md — CI validates on push. Committed & pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **v7.8.1 pastel brightness — shuffle main card no longer dimmed; pastel peeks re-balanced darker than the hero**
 
 ### What was asked
