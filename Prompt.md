@@ -2,6 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
+**Always-on crash-loop guard: repeated crashes flip "safe mode" — stops the explore service + reminder, routes to the crash-log screen, and restarts cleanly**
+
+### What was asked
+
+"Add a crash prevent which kills the task so i can see the logs in app and restart safely." ask_user: **always-on** guard (no Settings toggle), and safe mode should **stop the crash source and show logs**.
+
+### Why it was needed
+
+The existing `CurioCrashReporter` (persists crash log + pending flag → splash routes to the crash screen) had NO loop protection: when the crashing component kept getting re-armed (explore service re-started by NavHost restore / ON_RESUME / boot receiver / settings toggles), each relaunch died before the splash could render the crash screen — "keeps crashing, nothing shows up".
+
+### What was done
+
+- **`CurioCrashReporter.kt` — crash-loop guard (always-on).** Gap-based detection: crash timestamps persisted in `curio_crash_logs`; 3+ crashes within a 90s window → `safe_mode = true`. Old stamps decay out of the window, so a lone crash after a healthy stretch never trips it. On loop detection the uncaught handler ACTIVELY stops the explore service (`stopService`, runCatching) and cancels the explore reminder — killing the re-arm source so the loop ends. New `isSafeMode()` / `resetLoopGuard()` (clears pending + safe mode + timestamps, keeps history). **Reviewer catch applied:** the handler-path prefs writes (`persistCrash`, timestamps, safe_mode) switched from `.apply()` to `.commit()` — the process is killed right after and the 300ms sleep runs ON the crashing thread, so async apply() flushes were not guaranteed (a lost flag = the feature silently doing nothing).
+- **`ExploreSessionService.kt` — single choke point.** Companion `start()` and `sync()` return early when `CurioCrashReporter.isSafeMode(context)` — covers every re-arm path (NavHost ×2, boot receiver, AppPreferences toggles, TopicRevealScreen, notification action intents).
+- **`ExploreBootReceiver.kt`** — early return in safe mode (no background re-arms after reboot/app-update).
+- **`SplashScreen.kt`** — routes to the crash screen when `hasPendingCrash || isSafeMode`.
+- **`CurioCrashScreen.kt`** — new "Repeated crashes detected" banner (errorContainer) explaining that the explore timer/bubble/reminders were paused so the app could open. **Restart Curio**: in safe mode → `resetLoopGuard()` + relaunch MainActivity with `FLAG_ACTIVITY_CLEAR_TASK | NEW_TASK` (+ finishAffinity) — a true task-kill + clean restart; for a single crash → existing fast path (clear pending + navigate Home).
+
+### Validation
+
+- `check_braces.py` BALANCED on all 5 touched files.
+- Code-reviewer pass: confirmed loop logic (no single-crash false positives, decay), choke point covers all callers, stopService-from-handler safe, CLEAR_TASK restart correct, navController still used (no unused param), imports all used/scoped (same-package service/reporter = no import needed). Applied its one real catch: `.commit()` for the dying-process writes.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Crash fix: tapping Explore crashed the whole app — overlay-owner init order (`Restarter must be created only during owner's initialization stage`)**
 
 ### What was asked

@@ -502,6 +502,10 @@ class ExploreSessionService : Service() {
 
         /** Starts the explore foreground service for [session]. */
         fun start(context: Context, session: ExploreSession) {
+            // Crash-loop safe mode: never re-arm the service while the app is
+            // recovering on the crash screen — an automatic start here is what
+            // kept re-triggering the crash before the user could see the logs.
+            if (CurioCrashReporter.isSafeMode(context)) return
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, ExploreSessionService::class.java)
@@ -516,6 +520,7 @@ class ExploreSessionService : Service() {
          * nothing wants the service (the render stops it quietly).
          */
         fun sync(context: Context) {
+            if (CurioCrashReporter.isSafeMode(context)) return
             val session = ExploreSessionStore.getActiveSession(context) ?: return
             ContextCompat.startForegroundService(
                 context,

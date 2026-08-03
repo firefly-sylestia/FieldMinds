@@ -24,6 +24,9 @@ class ExploreBootReceiver : BroadcastReceiver() {
         ) {
             return
         }
+        // Crash-loop safe mode: don't re-arm anything in the background — the
+        // user should first see the crash screen and restart cleanly.
+        if (CurioCrashReporter.isSafeMode(context)) return
         if (!AppPreferences.isExploreSessionsEnabled(context)) return
         val session = ExploreSessionStore.getActiveSession(context) ?: return
         // Always re-arm the reminder after reboot/app-update/clock change —
