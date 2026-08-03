@@ -675,23 +675,34 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // visibly repaints the page in its own blended color story.
             .background(pageWash)
     ) {
-        // ── Smart layout tiers (v7.2) ────────────────────────────────
-        // 1. LOW-DENSITY — devices under [SpinLowDensityDpi] get the
-        //    compact (scrollable-band) layout no matter the height. This
-        //    rule is ALWAYS on (not toggleable).
-        // 2. DIMENSION — the screen-height rule is toggleable via Settings
-        //    → Smart Spin layout: heights under [SpinCompactThresholdHeight]
-        //    switch to the compact layout, and heights under
+        // ── Smart layout tiers (v7.3) ────────────────────────────────
+        // 1. DENSITY (two-way, toggleable via Settings → Smart density
+        //    layout) — devices under [SpinLowDensityDpi] get the compact
+        //    (scrollable-band) layout no matter the height, and devices at
+        //    or above [SpinHighDensityDpi] get a roomier deck (slightly
+        //    LARGER scale), so low-dpi screens feel smaller and high-dpi
+        //    screens feel bigger. The whole rule is gated by one switch.
+        // 2. DIMENSION (toggleable via Settings → Smart Spin layout) —
+        //    heights under [SpinCompactThresholdHeight] switch to the
+        //    compact layout, and heights under
         //    [SpinExtraCompactThresholdHeight] get the EXTRA-compact tier —
         //    a smaller deck AND Categories/Filter as tall vertical pills
         //    pinned to the left/right screen edges.
-        val lowDensity = context.resources.displayMetrics.densityDpi < SpinLowDensityDpi
+        val densityEnabled = AppPreferences.smartDensityLayoutState
+        val densityDpi = context.resources.displayMetrics.densityDpi
+        val lowDensity = densityEnabled && densityDpi < SpinLowDensityDpi
+        val highDensity = densityEnabled && densityDpi >= SpinHighDensityDpi
         val smartLayout = AppPreferences.smartSpinLayoutState
         val heightCompact = maxHeight < SpinCompactThresholdHeight
         val extraCompact = smartLayout && maxHeight < SpinExtraCompactThresholdHeight
         // Extra-compact implies heightCompact (600 < 680), so this stays
         // true whenever the smaller tier is active.
         val compactHeight = lowDensity || (smartLayout && heightCompact)
+        // Roomy tier — high-density screens get a slightly LARGER deck so
+        // the density rule works both ways. Keyed off the RAW height (not
+        // the toggle-gated compactHeight) so a short high-density screen
+        // never gets the bigger deck even when the dimension rule is off.
+        val roomy = highDensity && !heightCompact
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
         //    space around the deck still carries a whisper of the Curio
@@ -730,6 +741,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 SpinDeckSection(
                     compact = true,
                     extraCompact = extraCompact,
+                    roomy = false,
                     cat = deckCat,
                     deckAccent = deckAccent,
                     deckGradient = deckGradient,
@@ -752,6 +764,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             // ── Normal layout — the exact pre-compact stack ──────────
             SpinDeckSection(
                 compact = false,
+                roomy = roomy,
                 cat = deckCat,
                 deckAccent = deckAccent,
                 deckGradient = deckGradient,
@@ -858,6 +871,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 private fun ColumnScope.SpinDeckSection(
     compact: Boolean,
     extraCompact: Boolean = false,
+    roomy: Boolean = false,
     cat: CurioCategory,
     deckAccent: Color,
     deckGradient: List<Color>,
@@ -874,8 +888,18 @@ private fun ColumnScope.SpinDeckSection(
     onSpinClick: () -> Unit
 ) {
     // ── Breathing room — keeps the header off the deck (tighter when the
-    //    screen is short so the deck fits between the pinned bars) ─────
-    Spacer(Modifier.height(if (compact) (if (extraCompact) 12.dp else 20.dp) else 44.dp))
+    //    screen is short so the deck fits between the pinned bars; roomier
+    //    on high-density screens so the bigger deck has space) ─────────
+    Spacer(
+        Modifier.height(
+            when {
+                extraCompact -> 12.dp
+                compact -> 20.dp
+                roomy -> 56.dp
+                else -> 44.dp
+            }
+        )
+    )
 
     // ── Carousel (interactive cards) ───────────────────────────────
     // Tapping the center card opens a landed topic only; the bottom
@@ -894,6 +918,7 @@ private fun ColumnScope.SpinDeckSection(
         enabled = enabled,
         compact = compact,
         extraCompact = extraCompact,
+        roomy = roomy,
         onCardTap = onCardTap,
         modifier = Modifier.fillMaxWidth()
     )
@@ -903,8 +928,8 @@ private fun ColumnScope.SpinDeckSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = if (compact) (if (extraCompact) 12.dp else 16.dp) else 32.dp,
-                bottom = if (compact) (if (extraCompact) 8.dp else 10.dp) else 20.dp
+                top = if (compact) (if (extraCompact) 12.dp else 16.dp) else if (roomy) 40.dp else 32.dp,
+                bottom = if (compact) (if (extraCompact) 8.dp else 10.dp) else if (roomy) 26.dp else 20.dp
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -1427,17 +1452,27 @@ private val SpinCompactThresholdHeight = 680.dp
 private val SpinExtraCompactThresholdHeight = 600.dp
 
 /**
- * Low-density threshold (v7.2) — devices under this density ALWAYS get the
- * compact layout regardless of height (not toggleable; the screen-height
- * rule is the toggleable "Smart Spin layout" setting).
+ * Low-density threshold (v7.2) — devices under this density get the
+ * compact layout regardless of height (gated by the "Smart density
+ * layout" setting since v7.3).
  */
 private const val SpinLowDensityDpi = 440
+
+/**
+ * High-density threshold (v7.3) — devices at or above this density get the
+ * roomy tier (a slightly LARGER deck), so the density rule scales both
+ * ways: low dpi → smaller, high dpi → larger.
+ */
+private const val SpinHighDensityDpi = 440
 
 /** Deck scale factor applied in compact (short-screen) mode. */
 private const val SpinCompactDeckScale = 0.88f
 
 /** Deck scale factor applied in extra-compact mode. */
 private const val SpinExtraCompactDeckScale = 0.78f
+
+/** Deck scale factor applied in roomy (high-density) mode. */
+private const val SpinRoomyDeckScale = 1.05f
 
 @Composable
 private fun Carousel(
@@ -1454,26 +1489,32 @@ private fun Carousel(
     enabled: Boolean,
     compact: Boolean = false,
     extraCompact: Boolean = false,
+    roomy: Boolean = false,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val poolSize = displayPool.size
     // v6.11 — compact screens shrink the whole fan ~12% so the deck keeps
     // its proportions inside the shorter box; v7.2 — extra-compact scales
-    // a further step (~22% total) so the whole fan fits very short screens.
+    // a further step (~22% total) so the whole fan fits very short screens;
+    // v7.3 — roomy scales the fan UP ~5% on high-density screens so the
+    // density rule works both ways (low → smaller, high → larger).
     val deckScale = when {
         extraCompact -> SpinExtraCompactDeckScale
         compact -> SpinCompactDeckScale
+        roomy -> SpinRoomyDeckScale
         else -> 1f
     }
     Box(
         // v6.3 — grew with the hero ticket so the bigger card keeps its
         // breathing room above/below. The extra-compact box scales with the
-        // fan so proportions stay identical.
+        // fan so proportions stay identical; the roomy box grows ~6% to
+        // match the up-scaled fan.
         modifier = modifier.height(
             when {
                 extraCompact -> 350.dp
                 compact -> 390.dp
+                roomy -> 470.dp
                 else -> 444.dp
             }
         ),

@@ -2,6 +2,37 @@
 
 ## Latest Request (COMPLETED)
 
+**Smart density layout — two-way Spin sizing (toggleable): low-dpi phones get a smaller deck, high-dpi phones a roomier one**
+
+### What was asked
+
+“the low density thing we added give it a toggle and make it work revrse like if its a low dpi suppose 360 380 ddpi then the screen gets smaller and when its more dpi suppose 440 450 then its becomes larger you get it ?” — plus the earlier paper-texture request (real crumpled/torn texture; torn pages also getting folded + coffee options; redesigning the coffee & folded paper styles), sequenced AFTER this per ask_user. ask_user: density rule = **two-way scaling** (one toggle gates BOTH low → smaller AND high → larger); work order = **Spin toggle first, then paper redesign**.
+
+### What was done
+
+- **AppPreferences.kt:** new `smartDensityLayoutState` (default ON) + `KEY_SMART_DENSITY_LAYOUT` + is/set + seed in `initThemeMode` — mirrors the `smartSpinLayoutState` pattern exactly.
+- **SpinScreen.kt (v7.3):** the density rule is now gated by that toggle and works BOTH ways:
+  - `lowDensity = enabled && dpi < 440` → compact (smaller) — as before, but no longer always-on.
+  - `highDensity = enabled && dpi >= 440` → new **roomy tier**: `SpinRoomyDeckScale` 1.05, carousel box 470dp (vs 444), roomier `SpinDeckSection` spacing (56dp spacer, 40/26 spin-button padding).
+  - `roomy = highDensity && !heightCompact` — keyed off the RAW height (not the toggle-gated `compactHeight`), so a short high-dpi screen never gets the bigger deck even when the dimension rule is off.
+  - New constants: `SpinHighDensityDpi = 440`, `SpinRoomyDeckScale = 1.05f`.
+- **CurioIcons.kt:** added `PhotoSizeSelectLarge` glyph.
+- **SettingsScreen.kt:** Experimental card gained a “Smart density layout” switch (“Smaller on low-density phones · larger on high-density”); Smart Spin layout subtitle simplified.
+
+### Validation
+
+- `check_braces.py` BALANCED on all 4 touched files; tier logic read back correctly.
+- Code-reviewer: clean after one fix — it caught that `roomy` gated on the toggle-gated `compactHeight` could fire on a SHORT high-dpi screen when Smart Spin layout is off; keyed to raw `heightCompact` instead.
+- NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
+
+### Next
+
+Paper-texture redesign (real crumpled/torn texture, torn + folded/coffee combos, coffee/folded quality pass) — sequenced next per ask_user.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Profile + Settings full revamp — quest-card hero, identity & stats Profile, Settings grouped into sections with an Experimental area, dead shared components deleted**
 
 ### What was asked
@@ -31,8 +62,6 @@ The old Profile used a fixed coral/peach/yellow gradient hero + deep-plum text t
 - NO local Gradle build (per AGENTS.md) — CI validates compilation on push. Pushed.
 
 ---
-
-## Previous Requests (COMPLETED)
 
 **CI compile fix for the bubble unfurl + Spin smart-layout system (low-density + short-screen compact tiers with vertical edge buttons, toggleable)**
 

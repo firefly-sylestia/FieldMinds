@@ -50,6 +50,7 @@ object AppPreferences {
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
     private const val KEY_ENTRY_META_ENABLED = "entry_meta_enabled"
     private const val KEY_SMART_SPIN_LAYOUT = "smart_spin_layout"
+    private const val KEY_SMART_DENSITY_LAYOUT = "smart_density_layout"
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
     private const val KEY_OVERLAY_BUBBLE_ENABLED = "overlay_bubble_enabled"
@@ -104,10 +105,14 @@ object AppPreferences {
     var entryMetaEnabledState by mutableStateOf(true)
     // Smart Spin layout — the DIMENSION rule of the Spin page's smart
     // compact system: short screens get the compact (or extra-compact)
-    // layout. Low-density devices (under 440 dpi) ALWAYS compact regardless
-    // of this switch — only the screen-height fitting is toggleable. Default
-    // ON. Seeded from prefs in [initThemeMode].
+    // layout. Default ON. Seeded from prefs in [initThemeMode].
     var smartSpinLayoutState by mutableStateOf(true)
+    // Smart density layout — the DENSITY rule of the Spin page's smart
+    // sizing: low-density devices (under 440 dpi) get the compact layout
+    // AND high-density devices (440+ dpi) get a roomier deck — both gated
+    // by this one switch, so the sizing works in both directions. Default
+    // ON. Seeded from prefs in [initThemeMode].
+    var smartDensityLayoutState by mutableStateOf(true)
     // Explore sessions — the explore-now timer/reminder/done flow. Default
     // ON; off disables the timer notification + reminder + done prompt while
     // Explore-now still opens the browser and records recently-explored.
@@ -161,6 +166,7 @@ object AppPreferences {
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
         smartSpinLayoutState = isSmartSpinLayoutEnabled(context)
+        smartDensityLayoutState = isSmartDensityLayoutEnabled(context)
         exploreSessionsEnabledState = isExploreSessionsEnabled(context)
         liveNotificationsEnabledState = isLiveNotificationsEnabled(context)
         overlayBubbleEnabledState = isOverlayBubbleEnabled(context)
@@ -221,6 +227,14 @@ object AppPreferences {
     fun setSmartSpinLayoutEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_SMART_SPIN_LAYOUT, enabled).apply()
         smartSpinLayoutState = enabled
+    }
+
+    fun isSmartDensityLayoutEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SMART_DENSITY_LAYOUT, true)
+
+    fun setSmartDensityLayoutEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_SMART_DENSITY_LAYOUT, enabled).apply()
+        smartDensityLayoutState = enabled
     }
 
     /** Whether the explore-session flow (timer/reminder/done prompt) is on. */

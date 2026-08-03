@@ -775,7 +775,7 @@ fun SettingsScreen(navController: NavController) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text("Smart Spin layout", style = MaterialTheme.typography.bodyLarge)
                                 Text(
-                                    "Fits the Spin page on short screens · low-density phones always compact",
+                                    "Fits the Spin page on short screens",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -783,6 +783,36 @@ fun SettingsScreen(navController: NavController) {
                             Switch(
                                 checked = AppPreferences.smartSpinLayoutState,
                                 onCheckedChange = { AppPreferences.setSmartSpinLayoutEnabled(context, it) }
+                            )
+                        }
+                        CurioSettingsDivider()
+                        // ── Smart density layout — the DENSITY rule of the
+                        //    Spin page's smart sizing, working BOTH ways:
+                        //    low-density phones (< 440 dpi) get the compact
+                        //    layout and high-density phones (440+ dpi) get a
+                        //    slightly larger, roomier deck. One switch gates
+                        //    the whole rule.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.PhotoSizeSelectLarge, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Smart density layout", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    "Smaller on low-density phones · larger on high-density",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.smartDensityLayoutState,
+                                onCheckedChange = { AppPreferences.setSmartDensityLayoutEnabled(context, it) }
                             )
                         }
                         Text(

@@ -91,6 +91,7 @@ object CurioIcons {
     const val Image       = "image"
     const val Fullscreen  = "fullscreen"   // ⤢ — expand mood board
     const val AspectRatio = "aspect_ratio" // ▭ — Smart Spin layout (small-screen fit)
+    const val PhotoSizeSelectLarge = "photo_size_select_large" // ⤢ size — Smart density layout (deck scale)
     const val PlayArrow   = "play_arrow"
     const val Pause       = "pause"
     const val Stop        = "stop"
