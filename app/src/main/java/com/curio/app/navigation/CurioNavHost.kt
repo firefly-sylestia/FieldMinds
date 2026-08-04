@@ -1,7 +1,7 @@
 package com.curio.app.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -9,6 +9,7 @@ import androidx.compose.animation.slideInHorizontally
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.slideOutHorizontally
+import androidx.navigation.NavBackStackEntry
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -82,6 +83,20 @@ private fun safeDecode(raw: String?): String =
     runCatching { Uri.decode(raw.orEmpty()) }.getOrDefault(raw.orEmpty())
 
 /**
+ * True when a navigation is a bottom-nav TAB switch — both the screen being
+ * left and the screen being shown are tab routes. Tab switches crossfade
+ * (no directional slide): the tabs are peer screens that restore saved
+ * state, and sliding them (worse, with the old underdamped spring) read as
+ * the page-switch glitch.
+ */
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.isTabSwitch(
+    initialState: NavBackStackEntry,
+    targetState: NavBackStackEntry
+): Boolean =
+    initialState.destination.route?.substringBefore("/") in CurioRoutes.bottomNavRoutePrefixes &&
+        targetState.destination.route?.substringBefore("/") in CurioRoutes.bottomNavRoutePrefixes
+
+/**
  * The Curio NavHost — single-NavHost scaffold for the active app.
  *
  * All routes are flat. The bottom nav is rendered by a [Scaffold] wrapper
@@ -96,10 +111,14 @@ private fun safeDecode(raw: String?): String =
  * back stack across switches.
  *
  * Upgraded navigation transitions:
- *  - Forward navigations: slide left + fade, with morph spring
- *  - Back navigations: slide right + fade, with morph spring
+ *  - Forward navigations: slide left + fade (matched tweens)
+ *  - Back navigations: slide right + fade (matched tweens)
  *  - Tab switches (bottom nav): simple crossfade (no directional slide)
- *  - Reveal screen: special elastic entrance
+ *  - Splash → Home / Onboarding: fade-only reveal
+ * v7.17 — the old exit/pop-enter slides used underdamped springs that
+ * overshot and bounced (and never matched their paired fade) — the
+ * page-switch glitch. All transitions now use matched tweens, and tab
+ * switches crossfade.
  */
 @Composable
 fun CurioNavHost(
@@ -214,6 +233,15 @@ fun CurioNavHost(
                 .fillMaxSize()
                 .padding(innerPadding),
             // ── Animated screen transitions ────────────────────────────────
+            // v7.17 — page-switch glitch fix. The old exit/pop-enter slides
+            // used an UNDERDAMPED spring (damping 0.9): it overshot past the
+            // target and bounced back, and its timing never matched the
+            // paired fade — the "weird glitchy" look on page switches. All
+            // slides are now matched tweens (slide + fade finish together,
+            // no overshoot), and bottom-nav TAB switches crossfade instead
+            // of sliding (peer tabs restore saved state; sliding them reads
+            // glitchy — this was promised in the header doc but never
+            // implemented).
             enterTransition = {
                 when {
                     // Splash → Home / Onboarding: special elastic morph
@@ -224,6 +252,9 @@ fun CurioNavHost(
                                 delayMillis = 0
                             )
                         )
+                    // Tab switches: simple crossfade (no directional slide)
+                    isTabSwitch(initialState, targetState) ->
+                        fadeIn(animationSpec = tween(CurioMotion.Durations.Standard))
                     // Other forward navigations: slide left + fade
                     else -> slideInHorizontally(
                         initialOffsetX = { fullWidth -> fullWidth / 4 },
@@ -236,29 +267,37 @@ fun CurioNavHost(
                     // Navigating away from splash: no exit needed
                     initialState.destination.route == CurioRoutes.SPLASH ->
                         fadeOut(animationSpec = tween(CurioMotion.Durations.Quick))
+                    isTabSwitch(initialState, targetState) ->
+                        fadeOut(animationSpec = tween(CurioMotion.Durations.Standard))
                     // Other exits: slide out slightly + fade
                     else -> slideOutHorizontally(
                         targetOffsetX = { fullWidth -> -fullWidth / 6 },
-                        animationSpec = spring(
-                            dampingRatio = 0.9f,
-                            stiffness = 300f
-                        )
+                        animationSpec = tween(CurioMotion.Durations.Morph, easing = FastOutSlowInEasing)
                     ) + fadeOut(animationSpec = tween(CurioMotion.Durations.Quick))
                 }
             },
             popEnterTransition = {
-                // Back navigation: slide right + fade
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> -fullWidth / 6 },
-                    animationSpec = spring(dampingRatio = 0.9f, stiffness = 300f)
-                ) + fadeIn(animationSpec = tween(CurioMotion.Durations.Quick))
+                // Tab switch back: crossfade too (no directional slide).
+                if (isTabSwitch(initialState, targetState)) {
+                    fadeIn(animationSpec = tween(CurioMotion.Durations.Standard))
+                } else {
+                    // Back navigation: slide right + fade
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> -fullWidth / 6 },
+                        animationSpec = tween(CurioMotion.Durations.Morph, easing = FastOutSlowInEasing)
+                    ) + fadeIn(animationSpec = tween(CurioMotion.Durations.Quick))
+                }
             },
             popExitTransition = {
-                // Pop exit: slide right + fade out
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth / 4 },
-                    animationSpec = tween(CurioMotion.Durations.Morph, easing = FastOutSlowInEasing)
-                ) + fadeOut(animationSpec = tween(CurioMotion.Durations.Morph))
+                if (isTabSwitch(initialState, targetState)) {
+                    fadeOut(animationSpec = tween(CurioMotion.Durations.Standard))
+                } else {
+                    // Pop exit: slide right + fade out
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> fullWidth / 4 },
+                        animationSpec = tween(CurioMotion.Durations.Morph, easing = FastOutSlowInEasing)
+                    ) + fadeOut(animationSpec = tween(CurioMotion.Durations.Morph))
+                }
             }
         ) {
             // ── Splash + Onboarding (no bottom nav) ──────────────────────────

@@ -10,3 +10,4 @@
 • Paper makeover: every note gets its own unique grain pattern (no more identical texture), the heavy crease streaks are gone, and normal paper is now sharp-edged like a real sheet
 • Coffee, red margin and the folded corner are now universal decorations — the same options work on both torn and ruled paper (cleaner picker, no duplicated choices)
 • Mood board v2: the small card now shows the MIDDLE of the collage in a tight cropper look, the watermark pattern is identical small vs expanded, and the double-tap zoom never hides behind the caption/quotes
+• Page-switch animations are smooth again — no more glitchy bounce when screens transition, and switching bottom tabs now crossfades cleanly instead of sliding

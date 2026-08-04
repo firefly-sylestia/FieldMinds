@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Page-switch animation glitch fixed — matched tween transitions (no spring overshoot/bounce) + bottom-nav tab switches now crossfade**
+
+### What was asked
+
+“when the pages switch sometimes theres a weird glitch which happens and makes the animation looks glitchy”
+
+### What was done
+
+- **Root cause (CurioNavHost.kt)** — the `exitTransition` and `popEnterTransition` slides used an UNDERDAMPED spring (`dampingRatio = 0.9`, `stiffness = 300`): it overshoots past the target and bounces back, and its ~400-500ms timing never matches the paired fade (`tween Quick` = 150ms) — the two halves of one transition finish at different times. The most visible case: popEnter’s page reaches full opacity in 150ms then visibly springs/overshoots while settling. Tab switches (the most common page switch) also got the directional slide with saved-state-restored peer screens, despite the header doc promising a crossfade.
+- **Fix** — ALL four NavHost transitions now use matched tweens: every slide is `tween(Morph, FastOutSlowInEasing)` (no overshoot, same easing family as the rest of the app) and every fade is a tween; directional forward/back slides keep their offsets (1/4 in / −1/6 out, −1/6 in / 1/4 out). Bottom-nav TAB switches (both routes in `CurioRoutes.bottomNavRoutePrefixes` = Home/Shuffle/Cabinet) now CROSSFADE (`fadeIn`/`fadeOut` at Standard 300ms) — no directional slide — via a new private `AnimatedContentTransitionScope<NavBackStackEntry>.isTabSwitch(initialState, targetState)` extension used by all four lambdas. Splash’s fade-only reveal is untouched. Removed the now-unused `spring` import; added `AnimatedContentTransitionScope` + `NavBackStackEntry`; header doc updated to match reality.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced; code-reviewer pass — extension receiver matches the transition-lambda receiver, initialState/targetState resolve correctly, SPLASH ordering safe (not a tab), prefix set matches the real 3 tabs, no remaining `spring(` refs, null-route handling safe, pop-path crossfade branches harmless/defensive. Reviewer noted (non-blocker): exit/popEnter still pair a 150ms fade with a 700ms slide — standard “old page fades fast, new page slides in” pattern, not a glitch.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood board v2 — small card is a center-crop of the middle art, watermark pattern is truly identical small vs expanded, double-tap zoom no longer hides behind the text box**
 
 ### What was asked
