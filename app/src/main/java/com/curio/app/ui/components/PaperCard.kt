@@ -214,7 +214,7 @@ fun PaperCard(
             // corner, and the flap triangle + crease shadow sit on the paper.
             if (folded) {
                 Canvas(modifier = Modifier.matchParentSize()) {
-                    drawFoldFlap(size, density, paperSurface, paperEdge)
+                    drawFoldFlap(size, density, paperSurface, paperEdge, paperInkColor)
                 }
             }
         }
@@ -247,41 +247,46 @@ private val PaperMarginRed = Color(0xFFC4524A)
 // instead of the old duplicated per-base options. The enum keeps its
 // flat names for persistence; these flag views decode it, and
 // [notePaperStyleOf] re-encodes any combination back into one value.
+// v7.18 — decorations STACK: coffee / folded / red margin are independent,
+// so any combination renders (a folded coffee page with a red margin is
+// legal). The flag views decode purely from the enum NAME (startsWith /
+// contains), so the appended v7.18 combo values need no per-value logic.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** True when the slip wears the ragged torn outline instead of the sharp ruled page. */
 val NotePaperStyle.torn: Boolean
-    get() = this == NotePaperStyle.TORN || this == NotePaperStyle.TORN_RULED ||
-        this == NotePaperStyle.TORN_COFFEE || this == NotePaperStyle.TORN_FOLDED ||
-        this == NotePaperStyle.TORN_RED_MARGIN || this == NotePaperStyle.TORN_RULED_COFFEE ||
-        this == NotePaperStyle.TORN_RULED_FOLDED || this == NotePaperStyle.TORN_RULED_RED_MARGIN
+    get() = name.startsWith("TORN")
 
-/** True when the sheet draws the notebook ruled lines (paper always ruled; torn optional). */
+/**
+ * True when the sheet draws the notebook ruled lines. The ruled paper base
+ * is always ruled (its name carries no RULED segment — but it isn't torn,
+ * so it rules by definition); the torn slip only when its name carries
+ * RULED.
+ */
 val NotePaperStyle.ruled: Boolean
-    get() = this == NotePaperStyle.RULED || this == NotePaperStyle.TORN_RULED ||
-        this == NotePaperStyle.COFFEE || this == NotePaperStyle.FOLDED ||
-        this == NotePaperStyle.RED_MARGIN || this == NotePaperStyle.TORN_RULED_COFFEE ||
-        this == NotePaperStyle.TORN_RULED_FOLDED || this == NotePaperStyle.TORN_RULED_RED_MARGIN
+    get() = !torn || name.contains("RULED")
 
 /** True when the sheet wears the coffee-stain blotches along its edges. */
 val NotePaperStyle.coffee: Boolean
-    get() = this == NotePaperStyle.COFFEE || this == NotePaperStyle.TORN_COFFEE ||
-        this == NotePaperStyle.TORN_RULED_COFFEE
+    get() = name.contains("COFFEE")
 
 /** True when the top-right corner is folded into a dog-ear. */
 val NotePaperStyle.folded: Boolean
-    get() = this == NotePaperStyle.FOLDED || this == NotePaperStyle.TORN_FOLDED ||
-        this == NotePaperStyle.TORN_RULED_FOLDED
+    get() = name.contains("FOLDED")
 
 /** True when the sheet draws the red school-notebook margin line. */
 val NotePaperStyle.redMargin: Boolean
-    get() = this == NotePaperStyle.RED_MARGIN || this == NotePaperStyle.TORN_RED_MARGIN ||
-        this == NotePaperStyle.TORN_RULED_RED_MARGIN
+    get() = name.contains("RED_MARGIN")
 
 /**
  * Re-encodes a (base + decorations) combination into its [NotePaperStyle]
- * value. The decorations are single-select — one of coffee / folded / red
- * margin at a time — plus the optional rules lines on the torn base.
+ * value by composing the enum NAME from its parts. v7.18 — decorations
+ * STACK: coffee / folded / red margin are independent flags, so this
+ * builds the exact combo name (e.g. torn + rules + coffee + folded →
+ * TORN_RULED_COFFEE_FOLDED). The old single-select when-chain is gone.
+ * Note: [ruled] is only meaningful when [torn] — the ruled paper base is
+ * always ruled by definition, so callers pass ruled=true for paper (the
+ * toggle does; direct callers should too).
  */
 fun notePaperStyleOf(
     torn: Boolean,
@@ -289,19 +294,18 @@ fun notePaperStyleOf(
     coffee: Boolean = false,
     folded: Boolean = false,
     redMargin: Boolean = false
-): NotePaperStyle = when {
-    !torn && coffee -> NotePaperStyle.COFFEE
-    !torn && folded -> NotePaperStyle.FOLDED
-    !torn && redMargin -> NotePaperStyle.RED_MARGIN
-    !torn -> NotePaperStyle.RULED
-    torn && ruled && coffee -> NotePaperStyle.TORN_RULED_COFFEE
-    torn && ruled && folded -> NotePaperStyle.TORN_RULED_FOLDED
-    torn && ruled && redMargin -> NotePaperStyle.TORN_RULED_RED_MARGIN
-    torn && ruled -> NotePaperStyle.TORN_RULED
-    torn && coffee -> NotePaperStyle.TORN_COFFEE
-    torn && folded -> NotePaperStyle.TORN_FOLDED
-    torn && redMargin -> NotePaperStyle.TORN_RED_MARGIN
-    else -> NotePaperStyle.TORN
+): NotePaperStyle {
+    val deco = buildString {
+        if (coffee) append("_COFFEE")
+        if (folded) append("_FOLDED")
+        if (redMargin) append("_RED_MARGIN")
+    }
+    val name = when {
+        !torn -> if (deco.isEmpty()) "RULED" else deco.trimStart('_')
+        ruled -> "TORN_RULED$deco"
+        else -> "TORN$deco"
+    }
+    return NotePaperStyle.valueOf(name)
 }
 
 /**
@@ -582,26 +586,32 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCoffeeStains(
 }
 
 /**
- * The folded flap + crease shadow for the dog-ear (v7.12 quality pass).
+ * The folded flap + crease shadow for the dog-ear (v7.18 quality pass).
  * The flap is the reflected corner triangle with a rich THREE-stop gradient
- * — dark along the crease (the underside of the bend), lightening toward
- * the tip. A pronounced drop shadow casts onto the page underneath, a
- * specular highlight catches the fold ridge, and the crease itself reads
- * with a soft halo + crisp hairline. The fold size is bumped to 26dp so
- * the dog-ear reads clearly instead of the old subtle 22dp whisper.
+ * — darkest along the crease (the underside of the bend), lightening toward
+ * the tip. v7.18 — every color is derived from the PAPER's own palette
+ * ([paperInk] / [paperEdge]) instead of raw black/white, so the fold reads
+ * naturally on every sheet (cream + the pastel swatches) and in dark mode:
+ * the flap is the paper's shaded backside, the shadow is a warm ink-tinted
+ * feather, and the crease hairline stays on the sheet's own edge tone. A
+ * soft specular still catches the fold ridge; the drop shadow is a feathered
+ * wedge that fades to transparent (reads as lift on the torn grain too,
+ * instead of a hard black triangle pasted over the rips).
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     canvasSize: Size,
     density: Density,
     paperSurface: Color,
-    paperEdge: Color
+    paperEdge: Color,
+    paperInk: Color
 ) {
     val f = with(density) { 26.dp.toPx() }
     val s = with(density) { 4.dp.toPx() }
     val w = canvasSize.width
-    // Deeper drop shadow — the flap casts a wider, darker wedge onto the
-    // page below (down-left of the crease), fading as it recedes. Bigger
-    // and darker than before so the fold actually reads as lifted.
+    // Feathered drop shadow — an ink-tinted wedge (NOT raw black: on the
+    // torn grain and pastel sheets a hard black triangle reads as pasted
+    // on) that casts down-left of the crease and fades out softly, so the
+    // flap reads as genuinely lifted off the paper.
     drawPath(
         Path().apply {
             moveTo(w - f - s, s)
@@ -611,16 +621,17 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
         },
         brush = Brush.linearGradient(
             colors = listOf(
-                Color.Black.copy(alpha = 0.22f),
-                Color.Black.copy(alpha = 0.12f),
+                paperInk.copy(alpha = 0.16f),
+                paperInk.copy(alpha = 0.07f),
                 Color.Transparent
             ),
             start = Offset(w - f, s),
-            end = Offset(w - f - s * 1.5f, f + s)
+            end = Offset(w - f - s * 1.8f, f + s)
         )
     )
-    // The flap itself — the paper's BACK side: darkest along the crease,
-    // lightening toward the tip with a light catch at the corner.
+    // The flap itself — the paper's BACK side: darkest along the crease
+    // (a shade of the sheet's own ink, not black), lightening toward the
+    // tip with a faint light catch at the corner.
     val flap = Path().apply {
         moveTo(w - f, 0f)
         lineTo(w, f)
@@ -631,9 +642,9 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
         flap,
         brush = Brush.linearGradient(
             colors = listOf(
-                lerp(paperSurface, Color.Black, 0.30f),
-                lerp(paperSurface, Color.Black, 0.12f),
-                lerp(paperSurface, Color.White, 0.10f)
+                lerp(paperSurface, paperInk, 0.22f),
+                lerp(paperSurface, paperInk, 0.09f),
+                lerp(paperSurface, Color.White, 0.06f)
             ),
             start = Offset(w - f / 2f, f / 2f),
             end = Offset(w - f * 0.10f, f * 1.05f)
@@ -642,21 +653,22 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     // Specular highlight — a thin light stroke just below the crease on
     // the flap body, where the folded paper bulges and catches the light.
     drawLine(
-        color = Color.White.copy(alpha = 0.20f),
+        color = Color.White.copy(alpha = 0.14f),
         start = Offset(w - f + s * 1.2f, s * 0.5f),
         end = Offset(w - s * 0.5f, f - s * 0.6f),
         strokeWidth = with(density) { 1.4.dp.toPx() }
     )
-    // Soft crease halo — a wide, faint dark blur along the fold line.
+    // Soft crease halo — a wide, faint ink blur along the fold line.
     drawLine(
-        color = Color.Black.copy(alpha = 0.14f),
+        color = paperInk.copy(alpha = 0.10f),
         start = Offset(w - f, 0f),
         end = Offset(w, f),
         strokeWidth = with(density) { 3.5.dp.toPx() }
     )
-    // Crisp crease hairline — the actual fold edge, darker than before.
+    // Crisp crease hairline — the actual fold edge, darkened toward the
+    // sheet's ink so it stays crisp on cream AND pastel AND dark paper.
     drawLine(
-        color = lerp(paperEdge, Color.Black, 0.45f),
+        color = lerp(paperEdge, paperInk, 0.35f),
         start = Offset(w - f, 0f),
         end = Offset(w, f),
         strokeWidth = with(density) { 1.1.dp.toPx() }
@@ -664,7 +676,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     // Corner-tip lift — the outermost point catches a brighter spot of
     // light, selling the "peeled-up corner" read.
     drawCircle(
-        color = Color.White.copy(alpha = 0.14f),
+        color = Color.White.copy(alpha = 0.10f),
         radius = with(density) { 2.8.dp.toPx() },
         center = Offset(w - f, 0f)
     )
@@ -1020,10 +1032,12 @@ fun TornPaperCard(
             // Fold flap drawn ABOVE the content — the flap + crease shadow
             // sit on the torn paper, covering the ragged corner like a real
             // dog-ear (Surface clips to the torn outline, so the missing
-            // corner shows the page background behind the flap).
+            // corner shows the page background behind the flap). The flap is
+            // shaded with the sheet's OWN ink so it reads as the paper's
+            // backside on the torn grain instead of a pasted-on black wedge.
             if (folded) {
                 Canvas(modifier = Modifier.matchParentSize()) {
-                    drawFoldFlap(size, density, surface, edge)
+                    drawFoldFlap(size, density, surface, edge, paperInkColor)
                 }
             }
         }
@@ -1083,13 +1097,13 @@ fun NotePaperCard(
 /**
  * The per-text-box note-paper picker — v7.16 UNIVERSAL: a base row
  * (Ruled / Torn) plus a decoration row whose chips work on EITHER base.
- * Coffee / Folded / Red Margin are single-select universal decorations
- * (one at a time, same as the old base styles) and, while the torn base is
- * active, a "+ Rules" chip toggles the ruled lines onto the torn slip.
- * Switching bases keeps the chosen decoration, so nothing is lost. Lives in
- * the field's own toolbar (alongside the format toolbox), NOT in a
- * section-level row — so each text box keeps its own independent paper
- * look.
+ * v7.18 — decorations STACK: Coffee / Folded / Red Margin are independent
+ * toggles, so any combination can be on at once (a folded coffee page with
+ * a red margin is legal), and, while the torn base is active, a "+ Rules"
+ * chip toggles the ruled lines onto the torn slip. Switching bases keeps
+ * the chosen decorations, so nothing is lost. Lives in the field's own
+ * toolbar (alongside the format toolbox), NOT in a section-level row — so
+ * each text box keeps its own independent paper look.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -1129,14 +1143,32 @@ fun NotePaperStyleToggle(
                     onStyleChange(notePaperStyleOf(true, !style.ruled, style.coffee, style.folded, style.redMargin))
                 }
             }
+            // Independent STACKABLE toggles (v7.18) — each chip flips ONLY
+            // its own flag and passes the others through, so decorations
+            // combine instead of cancelling each other.
             CompactPaperChip("+ Coffee", style.coffee, accent, enabled) {
-                onStyleChange(notePaperStyleOf(style.torn, style.ruled, coffee = !style.coffee))
+                onStyleChange(notePaperStyleOf(
+                    style.torn, style.ruled,
+                    coffee = !style.coffee,
+                    folded = style.folded,
+                    redMargin = style.redMargin
+                ))
             }
             CompactPaperChip("+ Folded", style.folded, accent, enabled) {
-                onStyleChange(notePaperStyleOf(style.torn, style.ruled, folded = !style.folded))
+                onStyleChange(notePaperStyleOf(
+                    style.torn, style.ruled,
+                    coffee = style.coffee,
+                    folded = !style.folded,
+                    redMargin = style.redMargin
+                ))
             }
             CompactPaperChip("+ Red Margin", style.redMargin, accent, enabled) {
-                onStyleChange(notePaperStyleOf(style.torn, style.ruled, redMargin = !style.redMargin))
+                onStyleChange(notePaperStyleOf(
+                    style.torn, style.ruled,
+                    coffee = style.coffee,
+                    folded = style.folded,
+                    redMargin = !style.redMargin
+                ))
             }
         }
     }

@@ -26,7 +26,17 @@ enum class NotePaperStyle {
     // v7.16 — universal decorations: coffee / red margin / folded can now
     // apply to EITHER base (torn or ruled paper), and the torn slip can
     // combine the ruled lines with any single decoration.
-    TORN_RED_MARGIN, TORN_RULED_COFFEE, TORN_RULED_FOLDED, TORN_RULED_RED_MARGIN
+    TORN_RED_MARGIN, TORN_RULED_COFFEE, TORN_RULED_FOLDED, TORN_RULED_RED_MARGIN,
+    // v7.18 — STACKED decorations: coffee / folded / red margin can now be
+    // combined in any combination on either base (a page can be folded AND
+    // coffee-stained AND red-margined at once). The flag views in PaperCard
+    // decode purely from the enum NAME (contains/startsWith), so these
+    // appended values need no per-value logic — every combo Just Works.
+    COFFEE_FOLDED, COFFEE_RED_MARGIN, FOLDED_RED_MARGIN, COFFEE_FOLDED_RED_MARGIN,
+    TORN_COFFEE_FOLDED, TORN_COFFEE_RED_MARGIN, TORN_FOLDED_RED_MARGIN,
+    TORN_COFFEE_FOLDED_RED_MARGIN,
+    TORN_RULED_COFFEE_FOLDED, TORN_RULED_COFFEE_RED_MARGIN,
+    TORN_RULED_FOLDED_RED_MARGIN, TORN_RULED_COFFEE_FOLDED_RED_MARGIN
 }
 
 /**

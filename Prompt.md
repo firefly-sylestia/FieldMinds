@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Paper styles STACK (coffee + folded + red margin combine freely) + folded dog-ear redrawn with paper-true shading for ruled AND torn**
+
+### What was asked
+
+“make the paper style stacks and also the folded style isnt good for both paper and torn so fix it”
+
+### What was done
+
+- **Stackable decorations (CaptureData.kt + PaperCard.kt)** — the decoration chips were SINGLE-select: toggling coffee ON dropped folded/redMargin (each `onStyleChange` passed only its own flag, and `notePaperStyleOf` was a single-decoration when-chain). Now Coffee / Folded / Red Margin are INDEPENDENT toggles — each flips only its own flag and passes the others through, so any combination stacks (a folded coffee page with a red margin is legal) on either base. `NotePaperStyle` grew 12→24 values (appended only — Gson name persistence safe: old values parse, new combos only appear when picked): COFFEE_FOLDED, COFFEE_RED_MARGIN, FOLDED_RED_MARGIN, COFFEE_FOLDED_RED_MARGIN + the torn and torn+rules variants. The flag views (torn/ruled/coffee/folded/redMargin) were rewritten from explicit `==` lists to NAME-BASED decoding (`startsWith("TORN")` / `contains(...)`), so all 24 values — current and future — decode with zero per-value maintenance; `notePaperStyleOf` now COMPOSES the name (`RULED` / `COFFEE_FOLDED` / `TORN_RULED$deco` / `TORN$deco`). Script-verified: all 24 combos encode→decode round-trip to the exact original flags.
+- **Folded dog-ear redesigned (PaperCard.kt `drawFoldFlap`)** — the fold used raw `Color.Black`/`Color.White` everywhere: a hard black drop-shadow wedge (looked pasted on the torn grain), a black-shaded flap, and black crease lines that clashed on pastel sheets and dark paper. Now every color derives from the paper's own palette via a new `paperInk` param: feathered ink-tinted drop shadow, flap shaded toward the sheet's ink (the paper's backside), crease hairline = `lerp(paperEdge, paperInk)`. The specular highlight + corner-tip light stay white (intentional light catches). Both call sites (PaperCard + TornPaperCard) pass `paperInkColor`. NotePaperCard + RichTextEditor dispatch on the same flags, so stacked styles render automatically in editor and saved views.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on both files; python round-trip script: all 24 legal flag combos encode to existing enum names AND decode back to the identical flags. No exhaustive `when` over NotePaperStyle anywhere else (grep: only RULED defaults + type refs). Code-reviewer pass — no compile risks or logic bugs; noted (non-blocker) that the Ruled→Torn base switch carries `style.ruled` into the torn slip (pre-existing v7.16 behavior, unchanged), and added a doc note that `ruled` only matters when `torn`.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Save-entry feature upgrades: draft autosave + resume, voice-to-text for SoundBite, custom tags (all always-on)**
 
 ### What was asked
