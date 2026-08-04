@@ -2184,7 +2184,14 @@ private fun PeekCard(
                 color = if (gradientOn) Color.Transparent else cardColor,
                 // 2 — soft ambient shadows lift the deck off the tinted page
                 // (near cards sit higher than the far pair).
-                shadowElevation = if (shadowsOn) (if (far) 1.dp else 3.dp) else 0.dp,
+                // v7.11 — proper peek-card shadows: a layered depth system
+                // where near cards cast a broader, dimmer shadow and far
+                // cards a tighter, deeper one — a believable paper fan
+                // instead of the old barely-visible 1dp/3dp whisper. Near
+                // cards sit at 5dp (medium depth, soft circular blur),
+                // far cards at 4dp (slightly tighter) so every layer reads
+                // as a distinct card lifting off the one behind it.
+                shadowElevation = if (shadowsOn) (if (far) 4.dp else 5.dp) else 0.dp,
                 tonalElevation = 0.dp,
                 // Subtle hairline outline — kept very light so the rotated
                 // stroke stays crisp instead of aliasing into pixel noise —
