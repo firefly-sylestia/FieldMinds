@@ -1,6 +1,15 @@
 package com.curio.app.features.detail
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
@@ -84,6 +93,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.ContextCompat
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.components.NotePaperCard
@@ -840,7 +850,16 @@ private fun RowScope.MetaSegment(icon: String, title: String, subtitle: String) 
 }
 
 @Composable
-private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController: NavController) {
+private fun FormatBody(
+    entry: CurioEntry,
+    category: CurioCategory,
+    navController: NavController,
+    // v7.18 — whether a SoundBite body may persist dictation straight to
+    // Room. False for synthesized sub-entries (Portfolio sections /
+    // OpenNotebook takes share the parent entry's id — a save there would
+    // overwrite the whole entry with just that section).
+    allowTranscribe: Boolean = true
+) {
     // Multi-section entries render a compact section switcher that flips
     // between the individual format bodies (never merged into one page).
     if (entry.captureData is CaptureData.Portfolio) {
@@ -848,7 +867,7 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory, navController
         return
     }
     when (entry.format) {
-        CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
+        CaptureFormat.SoundBite -> SoundBiteRender(entry, category, allowTranscribe)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category, navController)
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
@@ -916,15 +935,111 @@ private fun PortfolioRender(entry: CurioEntry, category: CurioCategory, navContr
             title = section.title ?: entry.title,
             capturedAtMillis = entry.capturedAtMillis
         )
-        FormatBody(entry = subEntry, category = category, navController = navController)
+        // Synthesized section entry — must NOT persist dictation (it shares
+        // the parent entry's id; a save would overwrite the whole portfolio).
+        FormatBody(entry = subEntry, category = category, navController = navController, allowTranscribe = false)
     }
 }
 
 // ── Per-format render composables ─────────────────────────────────────
 
 @Composable
-private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
+private fun SoundBiteRender(
+    entry: CurioEntry,
+    category: CurioCategory,
+    allowTranscribe: Boolean = true
+) {
     val data = entry.captureData as? CaptureData.SoundBite ?: return
+
+    // ── Transcribe on the saved note (v7.18) — a small mic chip lets a
+    // saved voice note grow its text afterwards: dictation lands in the
+    // entry's note field and is persisted to Room, so a take can hold BOTH
+    // the voice recording and its text alongside each other.
+    val detailContext = LocalContext.current
+    val detailScope = rememberCoroutineScope()
+    var noteTranscribing by remember { mutableStateOf(false) }
+    var notePartial by remember { mutableStateOf("") }
+    var noteError by remember { mutableStateOf<String?>(null) }
+    val noteRecognizer = remember(detailContext) {
+        if (SpeechRecognizer.isRecognitionAvailable(detailContext)) {
+            SpeechRecognizer.createSpeechRecognizer(detailContext)
+        } else {
+            null
+        }
+    }
+    fun startNoteTranscription() {
+        val recognizer = noteRecognizer ?: run {
+            noteError = "Speech recognition isn't available on this device."
+            return
+        }
+        noteTranscribing = true
+        noteError = null
+        notePartial = ""
+        recognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onError(error: Int) {
+                noteTranscribing = false
+                noteError = when (error) {
+                    SpeechRecognizer.ERROR_NO_MATCH -> "No speech heard — try again."
+                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Listening timed out — try again."
+                    SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Microphone access is needed to transcribe."
+                    SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT ->
+                        "Speech service unreachable — check your connection."
+                    SpeechRecognizer.ERROR_CLIENT -> "Speech recognition isn't available on this device."
+                    else -> "Couldn't transcribe — try again."
+                }
+                notePartial = ""
+            }
+            override fun onResults(results: Bundle?) {
+                noteTranscribing = false
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                val final = matches?.firstOrNull().orEmpty()
+                notePartial = ""
+                if (final.isNotBlank()) {
+                    // Append to the saved note and persist the updated entry
+                    // (REPLACE by id — the detail flow refreshes reactively).
+                    detailScope.launch {
+                        val merged = if (data.note.isNullOrBlank()) final else "${data.note}\n$final"
+                        runCatching {
+                            CurioRepositoryHolder.repo.save(
+                                entry.copy(captureData = data.copy(note = merged))
+                            )
+                        }
+                    }
+                }
+            }
+            override fun onPartialResults(partialResults: Bundle?) {
+                val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                notePartial = matches?.firstOrNull().orEmpty()
+            }
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
+        recognizer.startListening(
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toLanguageTag())
+                putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+                putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+                // Same generous silence windows as the editor's dictation.
+                putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2_500)
+                putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1_500)
+            }
+        )
+    }
+    val notePermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) startNoteTranscription()
+        else noteError = "Microphone access is needed to transcribe."
+    }
+    DisposableEffect(Unit) {
+        onDispose { noteRecognizer?.destroy() }
+    }
+
     Surface(
         shape = RoundedCornerShape(20.dp),
         color = if (AppPreferences.tintWashEffective()) category.tint
@@ -1005,6 +1120,95 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                     surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                     border = category.categoryBorder()
                 )
+            }
+
+            // ── Transcribe the saved note (v7.18) — small mic chip that
+            // dictates straight into the entry's note (persisted to Room).
+            // Hidden for synthesized sub-entries (Portfolio/OpenNotebook
+            // sections — a save there would overwrite the parent entry).
+            if (allowTranscribe) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (noteTranscribing || noteError != null) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = category.themedAccent().copy(alpha = 0.10f),
+                            border = BorderStroke(1.dp, category.themedAccent().copy(alpha = 0.35f)),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Text(
+                                    text = if (noteError != null) noteError else "Listening… speak now",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = if (noteError != null) MaterialTheme.colorScheme.error
+                                            else category.themedAccent()
+                                )
+                                if (notePartial.isNotBlank()) {
+                                    Text(
+                                        text = notePartial,
+                                        style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+                        }
+                        Surface(
+                            onClick = {
+                                noteRecognizer?.cancel()
+                                noteTranscribing = false
+                                notePartial = ""
+                                noteError = null
+                            },
+                            shape = RoundedCornerShape(8.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.Close,
+                                contentDescription = "Stop transcribing",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 16.dp,
+                                modifier = Modifier.padding(6.dp)
+                            )
+                        }
+                    } else {
+                        Surface(
+                            onClick = {
+                                val granted = ContextCompat.checkSelfPermission(
+                                    detailContext, Manifest.permission.RECORD_AUDIO
+                                ) == PackageManager.PERMISSION_GRANTED
+                                if (granted) startNoteTranscription()
+                                else notePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            },
+                            shape = RoundedCornerShape(8.dp),
+                            color = category.themedAccent().copy(alpha = 0.10f),
+                            border = BorderStroke(1.dp, category.themedAccent().copy(alpha = 0.40f))
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                CurioIcon(
+                                    name = CurioIcons.Mic,
+                                    contentDescription = null,
+                                    tint = category.themedAccent(),
+                                    size = 16.dp
+                                )
+                                Text(
+                                    text = "Transcribe note",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = category.themedAccent()
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
             // ── Note — shown on the same note-paper slip the editor used ──
@@ -1965,19 +2169,39 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     modifier = Modifier.fillMaxSize()
                 )
 
-                // The INLINE card is a CENTER-CROP of the collage — cover-
-                // scaled so the middle art FILLS the card (a tight "cropper"
-                // look) with the overflow clipped by the card's rounded
-                // shape. The EXPANDED dialog shows the whole collage
-                // (contain-fit + centered). The two views are intentionally
-                // different: small = tight middle crop, expanded = all of it.
-                // The zoom overlays below use the same cover-scaled geometry
-                // so what you magnify matches what the crop shows.
-                val fit = fitTileLayout(data.tileLayouts, canvasW, canvasH, cover = true)
-                val scaledTiles = fit.scaledTiles
-                val boardW = fit.boardW
-                val boardH = fit.boardH
-                val tileScale = fit.scale
+                // v7.18 — the inline card is a MIDDLE-BAND CROP of the FULL
+                // collage: the board is width-fit (the SAME arrangement the
+                // expanded dialog shows — portrait collages there are also
+                // width-driven), then the card's clip trims to the center
+                // band, so art pinned near the top or bottom of the expanded
+                // board stays hidden in the small view (the cropper look).
+                // The old cover-fit re-scaled the whole collage to squeeze
+                // into the card, shifting every tile's size/position — the
+                // "arrangements look different" bug.
+                // maxOfOrNull: legacy GalleryWall entries store only
+                // imageCount (no tileLayouts) — an empty-list maxOf would
+                // crash the detail screen before the isNotEmpty() guard.
+                val maxX = data.tileLayouts.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+                val maxY = data.tileLayouts.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+                val widthScale = if (maxX > 0f) canvasW / maxX else 1f
+                // Edge case for wide/short collages: a width-fit board would
+                // shrink to a sliver below the card — height-fit instead so
+                // the collage stays presentable (nothing to crop then).
+                val boardScale = if (maxY * widthScale < canvasH * 0.55f && maxY > 0f)
+                    canvasH / maxY else widthScale
+                val scaledTiles = data.tileLayouts.map {
+                    CaptureData.TileLayout(
+                        uri = it.uri,
+                        offsetXPx = it.offsetXPx * boardScale,
+                        offsetYPx = it.offsetYPx * boardScale,
+                        rotationDeg = it.rotationDeg,
+                        widthPx = it.widthPx * boardScale,
+                        heightPx = it.heightPx * boardScale
+                    )
+                }
+                val boardW = maxX * boardScale
+                val boardH = maxY * boardScale
+                val tileScale = boardScale
 
                 if (data.tileLayouts.isNotEmpty()) {
                     // ── Edit button — reopen this board in the editor ──────
@@ -2414,7 +2638,9 @@ private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory, navCo
             format = data.subFormat,
             captureData = data.subData
         )
-        FormatBody(entry = subEntry, category = category, navController = navController)
+        // Synthesized sub-entry — must NOT persist dictation (shares the
+        // parent entry's id; a save would overwrite the whole OpenNotebook).
+        FormatBody(entry = subEntry, category = category, navController = navController, allowTranscribe = false)
     }
 }
 

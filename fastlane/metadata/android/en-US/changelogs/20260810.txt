@@ -16,3 +16,6 @@
 • Save-page upgrades: drafts autosave as you type (resume them any time), speak-to-text for voice takes (transcribe instead of recording), and custom tags to find captures later — searchable in the Cabinet and shown on every entry
 • Paper styles now STACK — combine coffee stains, the folded corner and the red margin however you like, on ruled or torn paper
 • The folded dog-ear is redrawn with paper-true shading — a natural ink-toned flap and feathered shadow that reads right on torn slips, pastel sheets and dark mode
+• Mood boards: the small board view is now a true center crop — same arrangement as the full-screen view, with art pinned to the top or bottom of the expanded board hidden until you expand
+• Dictation that doesn't quit on you — longer silence tolerance and auto re-listen, plus a small mic button on the title and note fields to dictate into either
+• Voice notes and text together — add a transcription to a saved voice note anytime from its detail page

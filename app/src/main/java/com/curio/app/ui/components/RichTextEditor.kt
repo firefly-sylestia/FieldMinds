@@ -394,7 +394,10 @@ fun RichTextEditor(
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     onPaperColorChange: (NotePaperColor) -> Unit = {},
     /** Content inset of the paper card when [paper] is true. */
-    paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+    paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+    /** Optional trailing action (e.g. a small dictation button) rendered at
+     *  the END of the field's own toolbar row, opposite the format toggle. */
+    trailingAction: (@Composable () -> Unit)? = null
 ) {
     // NOTE: NOT keyed on [text] — the parent echoes our edits back, so a
     // keyed remember would rebuild the field (and drop the cursor) on every
@@ -750,6 +753,7 @@ fun RichTextEditor(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
+                trailingAction?.invoke()
             }
             if (paper && styleExpanded) {
                 NotePaperStyleToggle(

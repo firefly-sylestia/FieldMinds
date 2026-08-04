@@ -1,12 +1,16 @@
 package com.curio.app.ui.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -145,12 +149,33 @@ fun ExploreBubbleContent(
     // transition so the per-second timer tick can never nudge the bubble.
     val transition = updateTransition(targetState = minimized, label = "bubbleExpand")
     val corner by transition.animateDp(
-        transitionSpec = { tween(280, easing = FastOutSlowInEasing) },
+        // Same duration as the size tween below — one shared clock so the
+        // corner morph finishes exactly when the growth does (previously the
+        // corner beat the size to the end and the shape/card desynced).
+        transitionSpec = { tween(EXPAND_ANIM_MS, easing = FastOutSlowInEasing) },
         label = "bubbleCorner"
     ) { isMinimized -> if (isMinimized) PILL_CORNER_RADIUS else PANEL_CORNER_RADIUS }
-    // True while the size/corner animation runs — size callbacks are only
-    // forwarded to the service during this window.
-    val sizeAnimating = transition.isRunning
+    // True while the expand/collapse animation runs — size callbacks are only
+    // forwarded to the service during this window. Driven by a fixed timer
+    // (NOT transition.isRunning): the old gate followed the 280ms corner
+    // tween while the content's spring size kept growing for hundreds of
+    // milliseconds after it closed, so the overlay window froze mid-growth
+    // and the panel outgrew it — the laggy, glitchy unfurl. A timer that
+    // matches the size tween exactly keeps the window and the content in
+    // lock-step for the whole animation.
+    var sizeAnimating by remember { mutableStateOf(false) }
+    var firstToggle by remember { mutableStateOf(true) }
+    LaunchedEffect(minimized) {
+        if (firstToggle) {
+            // Skip the initial composition — the window mounts at pill size
+            // and must not run the compensation dance on first layout.
+            firstToggle = false
+            return@LaunchedEffect
+        }
+        sizeAnimating = true
+        delay(EXPAND_ANIM_MS.toLong())
+        sizeAnimating = false
+    }
 
     // Drag — slop-gated Compose detector: taps on the pill/buttons still
     // land, real drags report deltas for the service to move the window.
@@ -188,16 +213,22 @@ fun ExploreBubbleContent(
             // so the expanded bubble carries no dead clickable semantics.
             .then(if (minimized) Modifier.clickable { minimized = false } else Modifier)
     ) {
-        // v6.12.1 — the custom transitionSpec (slide + fade + SizeTransform)
-        // didn't resolve against the pinned animation 1.11.2 API, so the
-        // bubble uses the DEFAULT AnimatedContent transition instead: it
-        // crossfades the pill ⇄ panel AND animates the size via its built-in
-        // SizeTransform, so the overlay window still grows/shrinks smoothly
-        // (no more instant resize). The updateTransition above keeps driving
-        // the corner morph + the isRunning size-gate; all animate on the
-        // same `minimized` flip.
+        // v7.18 — bounded tween EVERYWHERE. The DEFAULT AnimatedContent
+        // transition crossfades fine but sizes the content with a
+        // spring(StiffnessMediumLow) — a long asymptotic tail that felt
+        // laggy and outlived the corner morph. Now the size runs on the
+        // same FastOutSlowIn tween as the corner and the [sizeAnimating]
+        // gate above, so the overlay window follows the content in lock-step
+        // for the whole animation and everything lands together.
         AnimatedContent(
             targetState = minimized,
+            transitionSpec = {
+                (fadeIn(tween(EXPAND_FADE_IN_MS, easing = FastOutSlowInEasing)) togetherWith
+                    fadeOut(tween(EXPAND_FADE_OUT_MS, easing = LinearEasing)))
+                    .using(SizeTransform(clip = false) { _, _ ->
+                        tween(EXPAND_ANIM_MS, easing = FastOutSlowInEasing)
+                    })
+            },
             label = "bubbleState"
         ) { isMinimized ->
             if (isMinimized) {
@@ -546,3 +577,12 @@ private val EXPANDED_TOPIC_WIDTH = 180.dp
 private const val MARQUEE_PX_PER_MS = 0.042f
 private const val MARQUEE_START_HOLD_MS = 900L
 private const val MARQUEE_END_HOLD_MS = 1_100L
+
+// Expand/collapse timing — ONE shared clock so the size, the corner morph
+// and the crossfade all finish together. The old default spring size tail
+// dragged on hundreds of ms after the corner stopped (and past the size-
+// forwarding gate), which read as lag. 300ms FastOutSlowIn is fast enough
+// to feel snappy, long enough to read as a deliberate unfurl.
+private const val EXPAND_ANIM_MS = 300
+private const val EXPAND_FADE_IN_MS = 240
+private const val EXPAND_FADE_OUT_MS = 120

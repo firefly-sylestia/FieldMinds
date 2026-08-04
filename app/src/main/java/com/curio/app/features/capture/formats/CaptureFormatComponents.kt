@@ -368,15 +368,27 @@ fun PaperLineField(
     /** Note-paper COLOR — cream / butter / pink / mint / sky / lilac. */
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     /** When provided, shows the per-field color swatches next to the label. */
-    onPaperColorChange: ((NotePaperColor) -> Unit)? = null
+    onPaperColorChange: ((NotePaperColor) -> Unit)? = null,
+    /** Optional trailing action (e.g. a small dictation button) shown at the
+     *  field's top-right, level with the label. */
+    trailingAction: (@Composable () -> Unit)? = null
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        if (label != null) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        if (label != null || trailingAction != null) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (label != null) {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                trailingAction?.invoke()
+            }
         }
         // The style chips live on their OWN full-width scrollable row — six
         // styles + the rules chip overflow a phone-width label row (Rows

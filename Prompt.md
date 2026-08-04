@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board center-crop fix + dictation reliability + per-field mic buttons + transcribe-on-saved-voice-note + floating-bubble expand animation lag fix**
+
+### What was asked
+
+“the attachments issue is still there for the moodboard … it can only show the middle part … where the bottom and top place for the view is hidden in the small view … the voice to text stops too early sometimes … make it a small button per note field and add it for voice note after i save it … let me add voice note and the text alongside” (+ the interrupted floating-pill expand lag fix)
+
+### What was done
+
+- **Mood board center crop (`EntryDetailScreen.kt` `GalleryWallRender`)** — the inline card was cover-fit: for portrait collages it re-scaled the whole board to squeeze into the 460dp card, shifting every tile's size/position (the “arrangements look different” bug) and cropping only a sliver of top/bottom. Now the board is WIDTH-fit — the same arrangement the expanded dialog shows (portrait collages there are also width-driven) — and the card's clip trims to the CENTER BAND: art pinned to the top or bottom of the expanded board stays hidden in the small view (the cropper look). `maxOfOrNull` guards legacy GalleryWall entries that store only imageCount (an empty-list `maxOf` would crash — reviewer catch). Wide/short collages fall back to height-fit so they never shrink to a sliver.
+- **Dictation that doesn't stop early (`SoundBiteFormat.kt`)** — the recognizer intent now sets `EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS = 2500` + `EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS = 1500` (defaults give up after ~0.5s of quiet), and `onError` silently re-listens up to `TRANSCRIBE_MAX_RETRIES = 2` on `ERROR_NO_MATCH` / `ERROR_SPEECH_TIMEOUT` before surfacing an error.
+- **Small mic button per note field** — dictation now targets a FIELD (`TranscribeTarget.TITLE | NOTE`): the title slip and the note field each carry a compact `DictateFieldButton` mic chip (additive `trailingAction` params on `PaperLineField` + `RichTextEditor`; enabled in every non-recording state via `dictateEnabled`; shared `requestDictation(target)` handles the permission path). The old big “Transcribe to text” idle pill was removed and `TranscribePanel` moved OUTSIDE the recording state machine, so dictation works in IDLE **and** STOPPED — a take can hold a voice note AND its text alongside.
+- **Transcribe a saved voice note (`SoundBiteRender`)** — a “Transcribe note” chip + inline listening panel on the saved voice note dictates into the entry's note and persists it via `CurioRepositoryHolder.repo.save(entry.copy(captureData = data.copy(note = merged)))` (Room REPLACE by id — the detail flow refreshes reactively). `allowTranscribe` threads through `FormatBody` and is FALSE for synthesized sub-entries (Portfolio sections / OpenNotebook takes share the parent id — a save would overwrite the whole entry). SpeechRecognizer + RECORD_AUDIO permission launcher + DisposableEffect destroy.
+- **Floating-bubble expand animation lag (`ExploreBubbleContent.kt`)** — the bubble ran TWO independent clocks: an updateTransition corner tween (280ms) gating the window-size forwarding via `transition.isRunning`, and AnimatedContent's DEFAULT transition whose SizeTransform spring (StiffnessMediumLow) kept growing content for hundreds of ms after the gate closed — the overlay window froze mid-growth (clipped, glitchy, laggy). Now ONE bounded 300ms FastOutSlowIn clock: custom AnimatedContent `transitionSpec` (fadeIn 240 togetherWith fadeOut 120 `.using(SizeTransform(clip=false){ tween(300) })`), corner tween matched to 300ms, and the size gate driven by a deterministic `LaunchedEffect(minimized)` timer (300ms) with a firstToggle guard so the initial window mount never runs the compensation dance.
+
+### Validation
+
+- check_braces balanced on all touched files; code-reviewer pass — one real catch fixed (empty-list `maxOf` crash on legacy moodboards → `maxOfOrNull`); bubble review verified API correctness (`.using(SizeTransform)` valid on animation 1.11.2, tween Int vs delay Long typing, firstToggle guard).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Paper styles STACK (coffee + folded + red margin combine freely) + folded dog-ear redrawn with paper-true shading for ruled AND torn**
 
 ### What was asked
