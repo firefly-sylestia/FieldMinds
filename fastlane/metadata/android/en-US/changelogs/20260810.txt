@@ -23,3 +23,4 @@
 • Double-tap a mood-board image and the whole board — background included — glides to it, centers it, then the image pops; zooming back out snaps shut instead of lagging
 • Mood-board quote notes are now draggable — drag a paper note anywhere on the collage and it stays exactly there in the saved entry (positions scale with the board, small view and full-screen alike)
 • Double-tapping a mood-board image now swoops: the whole board arcs along a curved path to the tile instead of sliding in a straight line — smooth glide in, snappy snap out
+• Entry heroes get a frosted-glass makeover — blurred backdrop, glassy glowing title, and your mood badge right in the frosted Date · Mood · Type bar

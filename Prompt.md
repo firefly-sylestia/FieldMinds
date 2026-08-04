@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Entry hero glassmorphism + mood in the frosted bar**
+
+### What was asked
+
+“In the detail view add the mood status to the hero's 2 grid card, make it frosted blur the background, and make the title text glass like”
+
+### What was done
+
+- **Mood in the hero bar (EntryDetailScreen.kt)** — the frosted Date · Type bar (the "2 grid card") now carries a third Mood segment (mood glyph + label + divider) between Date and Type, shown only when the entry has a mood. Extracted the inline mood `when` from `EntryMetaCard` into a shared `private fun CurioEntry.moodOf(): JournalMood?` (still unwraps OpenNotebook wildcard takes) used by BOTH the hero and the meta card.
+- **Frosted blur backdrop** — the hero is now two layers: a fillMaxSize backdrop Box (gradient + `HeroSymbolScatter`) with `Modifier.blur(14.dp)` so the symbols bloom into soft color behind the content, and a crisp content layer (glyph, glass title, frosted bar) on top. Back/more buttons stay a later sibling so they draw above both. (RenderEffect on 31+, slower software blur below.)
+- **Glass title** — the topic name is now a dual-copy treatment: a blurred translucent aura copy (`heroInk@0.38`, `blur(9.dp)`, `clearAndSetSemantics { }` so TalkBack reads it once) behind the crisp copy (`heroInk@0.97`) with a soft shadow lifting the letterforms off the glass.
+- **FrostedSegment** title gained `overflow = TextOverflow.Ellipsis` so the 3-segment bar (e.g. "Overwhelmed") can't overflow on narrow screens.
+
+### Validation
+
+- check_braces balanced; code-reviewer pass (modifier order background→blur correct, dual-Text layout parity, moodOf extraction identical, all 4 new imports used, buttons z-order confirmed).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Zoom-to-tile glide now arcs — the board swoops along a curved path instead of sliding in a straight line**
 
 ### What was asked

@@ -65,10 +65,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -109,6 +112,7 @@ import com.curio.app.data.CaptureData
 import com.curio.app.data.ImageStorageManager
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.JournalMood
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
@@ -311,87 +315,142 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight)
-                // This Compose version's verticalGradient only offers the
-                // vararg overload — the named `colorStops` List form doesn't
-                // exist, so spread the sampled stops as an array.
-                .background(Brush.verticalGradient(*heroStops.toTypedArray())),
-            contentAlignment = Alignment.Center
         ) {
-            // ── Hero watermark — a scatter of the entry's category-family
-            //     symbols (instruments for Music, camera kit for Movies,
-            //     books for Books, art tools for Visual Art, lab symbols
-            //     for Science, curiosities for Wildcard) pinned around the
-            //     banner's perimeter. Only in the hero — the page backdrop
-            //     keeps its own muted glyph wash.
-            HeroSymbolScatter(cat = cat)
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+            // ── Frosted backdrop — the gradient + symbol scatter blurred
+            // together, so the banner reads as frosted glass and the crisp
+            // content (glyph, glass title, frosted bar) floats above it.
+            Box(
                 modifier = Modifier
-                    .padding(horizontal = 28.dp)
-                    // Keep the centered content (glyph + title + frosted bar)
-                    // clear of the overlaid back / more buttons at the top of
-                    // the banner — without this floor, a two-line title (or
-                    // the frosted bar) pushes the column up under the buttons.
-                    .padding(top = 80.dp, bottom = 16.dp)
+                    .fillMaxSize()
+                    // This Compose version's verticalGradient only offers the
+                    // vararg overload — the named `colorStops` List form
+                    // doesn't exist, so spread the sampled stops as an array.
+                    .background(Brush.verticalGradient(*heroStops.toTypedArray()))
+                    // Glass frost: blurring the backdrop turns the symbol
+                    // scatter into soft color blooms behind the content.
+                    // (Renders via RenderEffect on API 31+; older devices
+                    // fall back to a slower software blur.)
+                    .blur(14.dp)
             ) {
-                CurioIcon(
-                    name = cat.iconGlyph,
-                    contentDescription = null,
-                    tint = heroInk.copy(alpha = 0.92f),
-                    size = 76.dp
-                )
-                Spacer(Modifier.height(14.dp))
-                Text(
-                    text = resolvedEntry.topic.name,
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = heroInk,
-                    textAlign = TextAlign.Center,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(Modifier.height(18.dp))
+                // ── Hero watermark — a scatter of the entry's category-family
+                //     symbols (instruments for Music, camera kit for Movies,
+                //     books for Books, art tools for Visual Art, lab symbols
+                //     for Science, curiosities for Wildcard) pinned around the
+                //     banner's perimeter. Only in the hero — the page backdrop
+                //     keeps its own muted glyph wash.
+                HeroSymbolScatter(cat = cat)
+            }
 
-                // ── Frosted date + type bar — the meta card's date and
-                // type segments moved into the hero, on translucent glass
-                // so the gradient glows through behind them. The date's
-                // label reads "Date" right under the value.
-                val heroTypeLabel = if (resolvedEntry.captureData is CaptureData.Portfolio)
-                    "Portfolio" else resolvedEntry.format.shortName
-                val heroTypeGlyph = if (resolvedEntry.captureData is CaptureData.Portfolio)
-                    CurioIcons.Inventory2 else formatGlyph(resolvedEntry.format)
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    // 0.18 fill keeps the ink-on-glass readable even where
-                    // the gradient lightens toward the theme background.
-                    color = heroInk.copy(alpha = 0.18f),
-                    border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
-                    shadowElevation = 0.dp
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(horizontal = 28.dp)
+                        // Keep the centered content (glyph + title + frosted bar)
+                        // clear of the overlaid back / more buttons at the top of
+                        // the banner — without this floor, a two-line title (or
+                        // the frosted bar) pushes the column up under the buttons.
+                        .padding(top = 80.dp, bottom = 16.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    CurioIcon(
+                        name = cat.iconGlyph,
+                        contentDescription = null,
+                        tint = heroInk.copy(alpha = 0.92f),
+                        size = 76.dp
+                    )
+                    Spacer(Modifier.height(14.dp))
+
+                    // ── Glass title — the topic name floats on frosted glass:
+                    // a blurred, translucent aura copy behind the crisp text
+                    // (light passing through the pane) plus a soft shadow that
+                    // lifts the letterforms off the frosted backdrop.
+                    val heroTitleStyle = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = resolvedEntry.topic.name,
+                            style = heroTitleStyle.copy(
+                                shadow = Shadow(Color.Black.copy(alpha = 0.35f), Offset(0f, 4f), 14f)
+                            ),
+                            color = heroInk.copy(alpha = 0.38f),
+                            textAlign = TextAlign.Center,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.blur(9.dp)
+                        )
+                        Text(
+                            text = resolvedEntry.topic.name,
+                            style = heroTitleStyle.copy(
+                                shadow = Shadow(Color.Black.copy(alpha = 0.30f), Offset(0f, 2f), 9f)
+                            ),
+                            color = heroInk.copy(alpha = 0.97f),
+                            textAlign = TextAlign.Center,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            // The aura copy is decorative — hide it from
+                            // TalkBack so the title isn't announced twice.
+                            modifier = Modifier.clearAndSetSemantics { }
+                        )
+                    }
+                    Spacer(Modifier.height(18.dp))
+
+                    // ── Frosted date / mood / type bar — the meta card's
+                    // date, mood and type segments moved into the hero, on
+                    // translucent glass so the gradient glows through behind
+                    // them. Mood shows only when the entry has one.
+                    val heroMood = resolvedEntry.moodOf()
+                    val heroTypeLabel = if (resolvedEntry.captureData is CaptureData.Portfolio)
+                        "Portfolio" else resolvedEntry.format.shortName
+                    val heroTypeGlyph = if (resolvedEntry.captureData is CaptureData.Portfolio)
+                        CurioIcons.Inventory2 else formatGlyph(resolvedEntry.format)
+                    Surface(
+                        shape = RoundedCornerShape(18.dp),
+                        // 0.18 fill keeps the ink-on-glass readable even where
+                        // the gradient lightens toward the theme background.
+                        color = heroInk.copy(alpha = 0.18f),
+                        border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
+                        shadowElevation = 0.dp
                     ) {
-                        FrostedSegment(
-                            icon = CurioIcons.CalendarToday,
-                            title = formatCapturedDate(resolvedEntry.capturedAtMillis),
-                            subtitle = "Date",
-                            ink = heroInk,
-                            modifier = Modifier.weight(1f)
-                        )
-                        VerticalDivider(
-                            modifier = Modifier.height(30.dp),
-                            color = heroInk.copy(alpha = 0.30f)
-                        )
-                        FrostedSegment(
-                            icon = heroTypeGlyph,
-                            title = heroTypeLabel,
-                            subtitle = "Type",
-                            ink = heroInk,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            FrostedSegment(
+                                icon = CurioIcons.CalendarToday,
+                                title = formatCapturedDate(resolvedEntry.capturedAtMillis),
+                                subtitle = "Date",
+                                ink = heroInk,
+                                modifier = Modifier.weight(1f)
+                            )
+                            VerticalDivider(
+                                modifier = Modifier.height(30.dp),
+                                color = heroInk.copy(alpha = 0.30f)
+                            )
+                            if (heroMood != null) {
+                                FrostedSegment(
+                                    icon = heroMood.glyph,
+                                    title = heroMood.label,
+                                    subtitle = "Mood",
+                                    ink = heroInk,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                VerticalDivider(
+                                    modifier = Modifier.height(30.dp),
+                                    color = heroInk.copy(alpha = 0.30f)
+                                )
+                            }
+                            FrostedSegment(
+                                icon = heroTypeGlyph,
+                                title = heroTypeLabel,
+                                subtitle = "Type",
+                                ink = heroInk,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
                     }
                 }
             }
@@ -735,26 +794,31 @@ private fun formatCapturedDate(millis: Long): String =
  * (no category tint), so it stays neutral in every theme style.
  */
 @Composable
-private fun EntryMetaCard(entry: CurioEntry) {
-    // Mood can live on ANY format now — every editor shows the shared mood
-    // row. Unwrap OpenNotebook wildcard takes so a mood picked there still
-    // shows in the card.
-    val mood = when (val d = entry.captureData) {
-        is CaptureData.Marginalia -> d.mood
-        is CaptureData.ReelNotes -> d.mood
-        is CaptureData.SoundBite -> d.mood
-        is CaptureData.FieldNotes -> d.mood
-        is CaptureData.GalleryWall -> d.mood
-        is CaptureData.OpenNotebook -> when (val sub = d.subData) {
-            is CaptureData.Marginalia -> sub.mood
-            is CaptureData.ReelNotes -> sub.mood
-            is CaptureData.SoundBite -> sub.mood
-            is CaptureData.FieldNotes -> sub.mood
-            is CaptureData.GalleryWall -> sub.mood
-            else -> null
-        }
+/**
+ * The entry's mood — every format carries the shared mood row, and
+ * OpenNotebook wildcard takes keep theirs inside
+ * [CaptureData.OpenNotebook.subData], so unwrap those before reporting.
+ * Shared by the hero's frosted bar and the meta card.
+ */
+private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
+    is CaptureData.Marginalia -> d.mood
+    is CaptureData.ReelNotes -> d.mood
+    is CaptureData.SoundBite -> d.mood
+    is CaptureData.FieldNotes -> d.mood
+    is CaptureData.GalleryWall -> d.mood
+    is CaptureData.OpenNotebook -> when (val sub = d.subData) {
+        is CaptureData.Marginalia -> sub.mood
+        is CaptureData.ReelNotes -> sub.mood
+        is CaptureData.SoundBite -> sub.mood
+        is CaptureData.FieldNotes -> sub.mood
+        is CaptureData.GalleryWall -> sub.mood
         else -> null
     }
+    else -> null
+}
+
+private fun EntryMetaCard(entry: CurioEntry) {
+    val mood = entry.moodOf()
     if (mood == null) return
     Surface(
         shape = RoundedCornerShape(16.dp),
@@ -804,7 +868,8 @@ private fun FrostedSegment(
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
             color = ink,
             maxLines = 1,
-            softWrap = false
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = subtitle,
