@@ -1183,6 +1183,37 @@ fun SettingsScreen(navController: NavController) {
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 6.dp, bottom = 2.dp)
                         )
+                        CurioSettingsDivider()
+                        // ── Voice-to-text (experimental, opt-in) ───────────
+                        // Recording from the Sound Bite mic remains available;
+                        // this switch controls only speech transcription.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Mic,
+                                null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Voice-to-text", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    if (AppPreferences.voiceToTextEnabledState)
+                                        "Dictation buttons appear on voice-note text fields"
+                                    else
+                                        "Off by default · enable to dictate into voice-note text",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.voiceToTextEnabledState,
+                                onCheckedChange = { AppPreferences.setVoiceToTextEnabled(context, it) }
+                            )
+                        }
                         Text(
                             "These features are still finding their shape — they may change in future updates.",
                             style = MaterialTheme.typography.bodySmall,

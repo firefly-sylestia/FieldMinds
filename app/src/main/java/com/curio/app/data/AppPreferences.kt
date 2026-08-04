@@ -90,6 +90,9 @@ object AppPreferences {
     private const val KEY_EXPLORE_SESSIONS_ENABLED = "explore_sessions_enabled"
     private const val KEY_LIVE_NOTIFICATIONS_ENABLED = "live_notifications_enabled"
     private const val KEY_OVERLAY_BUBBLE_ENABLED = "overlay_bubble_enabled"
+    // Experimental voice-to-text/dictation. Default OFF so microphone
+    // transcription never appears or starts until the user opts in.
+    private const val KEY_VOICE_TO_TEXT_ENABLED = "voice_to_text_enabled"
     private const val KEY_PINNED_TOPICS = "pinned_topics"   // JSON array of PinnedTopic
     private const val KEY_SAVED_QUOTES = "saved_quotes"      // JSON array of SavedQuote
     private const val KEY_TOPIC_SENTIMENTS = "topic_sentiments"  // JSON object: "CATEGORY:topicId" -> "like"/"dislike"
@@ -237,6 +240,12 @@ object AppPreferences {
     var overlayBubbleEnabledState by mutableStateOf(true)
         private set
 
+    // Voice-to-text/dictation (experimental) — opt-in only. This controls
+    // dictation in Sound Bite fields and saved voice-note details; ordinary
+    // microphone recording remains available regardless of this toggle.
+    var voiceToTextEnabledState by mutableStateOf(false)
+        private set
+
     /**
      * Reactive pinned-topics state — updated by [pinTopic] / [unpinTopic] so
      * the Topic Reveal pin button and the Topic History "Pinned" section
@@ -286,6 +295,7 @@ object AppPreferences {
         exploreSessionsEnabledState = isExploreSessionsEnabled(context)
         liveNotificationsEnabledState = isLiveNotificationsEnabled(context)
         overlayBubbleEnabledState = isOverlayBubbleEnabled(context)
+        voiceToTextEnabledState = isVoiceToTextEnabled(context)
         pinnedTopicsState = getPinnedTopics(context)
         savedQuotesState = getSavedQuotes(context)
         topicSentimentsState = getTopicSentiments(context)
@@ -557,6 +567,15 @@ object AppPreferences {
                 com.curio.app.infrastructure.ExploreSessionService.stop(context)
             }
         }
+    }
+
+    /** Whether experimental voice-to-text is enabled (default OFF). */
+    fun isVoiceToTextEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_VOICE_TO_TEXT_ENABLED, false)
+
+    fun setVoiceToTextEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_VOICE_TO_TEXT_ENABLED, enabled).apply()
+        voiceToTextEnabledState = enabled
     }
 
     /**

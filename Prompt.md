@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Default-off experimental voice-to-text**
+
+### What was requested
+
+Make voice-to-text disabled by default and expose an opt-in toggle in Settings → Experimental.
+
+### What changed
+
+- Added a persisted `AppPreferences.voiceToTextEnabledState` preference with a default of `false`.
+- Added the discoverable Experimental → Voice-to-text switch; ordinary voice recording remains unaffected.
+- Gated Sound Bite dictation buttons, transcription panels, recognizer creation, and permission callbacks.
+- Gated saved voice-note transcription in Entry Detail.
+- Cancels active dictation, clears pending requests, and destroys recognizers when the experiment is disabled or the screen is disposed.
+
+### Validation
+
+- `scripts/check_braces.py` passed for all changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Restrict FieldMind observation session to legacy entries**
 
 ### What was requested

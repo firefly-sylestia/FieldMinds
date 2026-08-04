@@ -52,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import java.util.Locale
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -113,6 +114,7 @@ fun SoundBiteFormat(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val voiceToTextEnabled = AppPreferences.voiceToTextEnabledState
     val recorder = remember(context) { AudioRecorder(context) }
     // Edit mode: restore a saved recording as STOPPED with its file + title so
     // re-saving preserves the original capture (no silent wipe). Keyed on
@@ -187,8 +189,8 @@ fun SoundBiteFormat(
     var transcribeRequested by remember { mutableStateOf(false) }
     var transcribeTarget by remember { mutableStateOf(TranscribeTarget.NOTE) }
     var transcribeRetries by remember { mutableIntStateOf(0) }
-    val speechRecognizer = remember(context) {
-        if (SpeechRecognizer.isRecognitionAvailable(context)) {
+    val speechRecognizer = remember(context, voiceToTextEnabled) {
+        if (voiceToTextEnabled && SpeechRecognizer.isRecognitionAvailable(context)) {
             SpeechRecognizer.createSpeechRecognizer(context)
         } else {
             null
@@ -206,6 +208,7 @@ fun SoundBiteFormat(
     }
 
     fun startTranscription(target: TranscribeTarget = TranscribeTarget.NOTE) {
+        if (!voiceToTextEnabled) return
         val recognizer = speechRecognizer ?: run {
             transcribeError = "Speech recognition isn't available on this device."
             return
@@ -315,11 +318,14 @@ fun SoundBiteFormat(
         if (granted) {
             permissionDenied = false
             if (transcribeRequested) {
-                // Grant was for dictation — start the recognizer, not the
-                // recorder (transcribeRequested is consumed so a later
-                // record-tap can't accidentally transcribe).
+                // Consume a pending dictation grant even if the user turned
+                // the experiment off while Android's permission dialog was
+                // open. Never fall through to ordinary recording in that
+                // case; recording was not what this permission request meant.
                 transcribeRequested = false
-                startTranscription(transcribeTarget)
+                if (voiceToTextEnabled) {
+                    startTranscription(transcribeTarget)
+                }
             } else {
                 try {
                     recorder.start()
@@ -335,6 +341,18 @@ fun SoundBiteFormat(
             // Denied for dictation — drop the pending flag so a later grant
             // from the RECORD path can't accidentally start transcription.
             transcribeRequested = false
+        }
+    }
+
+    // Turning the experiment off while a dictation or permission flow is
+    // active must release the recognizer and clear the pending request.
+    LaunchedEffect(voiceToTextEnabled) {
+        if (!voiceToTextEnabled) {
+            speechRecognizer?.cancel()
+            transcribeRequested = false
+            transcribing = false
+            partialTranscript = ""
+            transcribeError = null
         }
     }
 
@@ -391,12 +409,14 @@ fun SoundBiteFormat(
     DisposableEffect(Unit) {
         onDispose {
             recorder.release()
-            speechRecognizer?.destroy()
             // Tell the parent the take is no longer busy (live recording or
             // a live dictation lost with this editor) so format-switch
             // confirmation can't be skipped.
             onBusyChange(false)
         }
+    }
+    DisposableEffect(speechRecognizer) {
+        onDispose { speechRecognizer?.destroy() }
     }
 
     // ── Report busy state (recording OR dictation in progress) so the
@@ -462,11 +482,12 @@ fun SoundBiteFormat(
     // v7.18 — per-field dictation: a small mic button sits on the title
     // slip and the note field. Enabled in every non-recording state, so a
     // take can pair a voice note with text (dictate after recording too).
-    val dictateEnabled = !transcribing &&
+    val dictateEnabled = voiceToTextEnabled && !transcribing &&
         recordingState != AudioRecorder.State.RECORDING &&
         recordingState != AudioRecorder.State.PAUSED
 
     fun requestDictation(target: TranscribeTarget) {
+        if (!voiceToTextEnabled) return
         if (hasMicrophonePermission()) {
             startTranscription(target)
         } else {
@@ -602,7 +623,7 @@ fun SoundBiteFormat(
         // stop control. Stays up while an error is displayed (errors flip
         // transcribing off, so a bare `if (transcribing)` would silently
         // drop the message).
-        if (transcribing || transcribeError != null) {
+        if (voiceToTextEnabled && (transcribing || transcribeError != null)) {
             TranscribePanel(
                 accent = accent,
                 partial = partialTranscript,
@@ -638,14 +659,16 @@ fun SoundBiteFormat(
             onPaperStyleChange = { titleStyle = it },
             paperColor = titleColor,
             onPaperColorChange = { titleColor = it },
-            trailingAction = {
-                DictateFieldButton(
-                    accent = accent,
-                    enabled = dictateEnabled,
-                    contentDescription = "Dictate title",
-                    onClick = { requestDictation(TranscribeTarget.TITLE) }
-                )
-            }
+            trailingAction = if (voiceToTextEnabled) {
+                {
+                    DictateFieldButton(
+                        accent = accent,
+                        enabled = dictateEnabled,
+                        contentDescription = "Dictate title",
+                        onClick = { requestDictation(TranscribeTarget.TITLE) }
+                    )
+                }
+            } else null
         )
 
         // Rich-text note — formatting behind a small toggle. The toolbar
@@ -674,14 +697,16 @@ fun SoundBiteFormat(
             paperContentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
             // v7.18 — the small mic button on the note field's toolbar row
             // dictates into the note (works before OR after recording).
-            trailingAction = {
-                DictateFieldButton(
-                    accent = MaterialTheme.colorScheme.tertiary,
-                    enabled = dictateEnabled,
-                    contentDescription = "Dictate note",
-                    onClick = { requestDictation(TranscribeTarget.NOTE) }
-                )
-            }
+            trailingAction = if (voiceToTextEnabled) {
+                {
+                    DictateFieldButton(
+                        accent = MaterialTheme.colorScheme.tertiary,
+                        enabled = dictateEnabled,
+                        contentDescription = "Dictate note",
+                        onClick = { requestDictation(TranscribeTarget.NOTE) }
+                    )
+                }
+            } else null
         )
 
         // ── Quote cards — the SHARED hand-placed paper notecard section ──

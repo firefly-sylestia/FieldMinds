@@ -1032,6 +1032,7 @@ private fun SoundBiteRender(
     allowTranscribe: Boolean = true
 ) {
     val data = entry.captureData as? CaptureData.SoundBite ?: return
+    val voiceToTextEnabled = AppPreferences.voiceToTextEnabledState
 
     // ── Transcribe on the saved note (v7.18) — a small mic chip lets a
     // saved voice note grow its text afterwards: dictation lands in the
@@ -1042,14 +1043,15 @@ private fun SoundBiteRender(
     var noteTranscribing by remember { mutableStateOf(false) }
     var notePartial by remember { mutableStateOf("") }
     var noteError by remember { mutableStateOf<String?>(null) }
-    val noteRecognizer = remember(detailContext) {
-        if (SpeechRecognizer.isRecognitionAvailable(detailContext)) {
+    val noteRecognizer = remember(detailContext, voiceToTextEnabled) {
+        if (voiceToTextEnabled && SpeechRecognizer.isRecognitionAvailable(detailContext)) {
             SpeechRecognizer.createSpeechRecognizer(detailContext)
         } else {
             null
         }
     }
     fun startNoteTranscription() {
+        if (!voiceToTextEnabled) return
         val recognizer = noteRecognizer ?: run {
             noteError = "Speech recognition isn't available on this device."
             return
@@ -1125,7 +1127,15 @@ private fun SoundBiteRender(
         if (granted) startNoteTranscription()
         else noteError = "Microphone access is needed to transcribe."
     }
-    DisposableEffect(Unit) {
+    LaunchedEffect(voiceToTextEnabled) {
+        if (!voiceToTextEnabled) {
+            noteRecognizer?.cancel()
+            noteTranscribing = false
+            notePartial = ""
+            noteError = null
+        }
+    }
+    DisposableEffect(noteRecognizer) {
         onDispose { noteRecognizer?.destroy() }
     }
 
@@ -1215,7 +1225,7 @@ private fun SoundBiteRender(
             // dictates straight into the entry's note (persisted to Room).
             // Hidden for synthesized sub-entries (Portfolio/OpenNotebook
             // sections — a save there would overwrite the parent entry).
-            if (allowTranscribe) {
+            if (allowTranscribe && voiceToTextEnabled) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
@@ -1273,8 +1283,8 @@ private fun SoundBiteRender(
                                 val granted = ContextCompat.checkSelfPermission(
                                     detailContext, Manifest.permission.RECORD_AUDIO
                                 ) == PackageManager.PERMISSION_GRANTED
-                                if (granted) startNoteTranscription()
-                                else notePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                                if (voiceToTextEnabled && granted) startNoteTranscription()
+                                else if (voiceToTextEnabled) notePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                             },
                             shape = RoundedCornerShape(8.dp),
                             color = category.themedAccent().copy(alpha = 0.10f),
