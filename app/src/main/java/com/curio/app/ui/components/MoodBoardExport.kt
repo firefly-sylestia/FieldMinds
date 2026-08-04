@@ -250,12 +250,30 @@ object MoodBoardExport {
                         )
                     }
                 }
-                layoutParams = ViewGroup.LayoutParams(width, height)
-                val widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
-                val heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
-                measure(widthSpec, heightSpec)
-                layout(0, 0, width, height)
             }
+            // v7.26 — Android 16 crash fix: a ComposeView that is never
+            // attached to a window cannot resolve a windowRecomposer, and
+            // measure() → ensureCompositionCreated → getWindowRecomposer
+            // throws IllegalStateException ("Cannot locate windowRecomposer").
+            // Host the off-screen view inside an INVISIBLE FrameLayout added
+            // to the activity's decor so it IS window-attached, then tear the
+            // host down right after the capture — no flicker, no leak.
+            val host = android.widget.FrameLayout(context).apply {
+                visibility = View.INVISIBLE
+                addView(composeView, ViewGroup.LayoutParams(width, height))
+            }
+            val decor = (context as? android.app.Activity)?.window?.decorView as? ViewGroup
+            if (decor == null) {
+                // No window to attach to (non-Activity context) — the measure()
+                // below would throw "Cannot locate windowRecomposer" again, so
+                // fail the export gracefully instead of crashing.
+                return@withContext null
+            }
+            decor.addView(host, ViewGroup.LayoutParams(width, height))
+            val widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
+            val heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+            composeView.measure(widthSpec, heightSpec)
+            composeView.layout(0, 0, width, height)
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
@@ -264,22 +282,31 @@ object MoodBoardExport {
             // suspendCancellableCoroutine whose onCancellation parameter
             // flips between optional (<1.9) and required (1.9+) and broke the
             // CI build on both forms.
+            // Plain suspendCoroutine: it has NO onCancellation parameter in ANY
+            // coroutines version (unlike suspendCancellableCoroutine, whose
+            // onCancellation is optional in <1.9 but REQUIRED in 1.9+ — which
+            // is why the CI build failed on both forms). The capture always
+            // runs to completion in the posted frame, so there is nothing to
+            // cancel. resumeWith is the Continuation INTERFACE method (stdlib,
+            // every version) — no kotlinx extension import needed.
             val result = kotlin.coroutines.suspendCoroutine<Bitmap?> { cont ->
                 composeView.post {
-                    val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                    val canvas = android.graphics.Canvas(bmp)
-                    canvas.drawColor(android.graphics.Color.WHITE)
-                    composeView.draw(canvas)
-                    lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-                    // Plain suspendCoroutine: it has NO onCancellation parameter
-                    // in ANY coroutines version (unlike suspendCancellable-
-                    // Coroutine, whose onCancellation is optional in <1.9 but
-                    // REQUIRED in 1.9+ — which is why the CI build failed on
-                    // both forms). The capture always runs to completion in
-                    // the posted frame, so there is nothing to cancel.
-                    // resumeWith is the Continuation INTERFACE method (stdlib,
-                    // every version) — no kotlinx extension import needed.
-                    cont.resumeWith(Result.success(bmp))
+                    try {
+                        val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                        val canvas = android.graphics.Canvas(bmp)
+                        canvas.drawColor(android.graphics.Color.WHITE)
+                        composeView.draw(canvas)
+                        cont.resumeWith(Result.success(bmp))
+                    } catch (t: Throwable) {
+                        // Never crash the caller — a capture failure reports
+                        // as a failed save/share instead.
+                        cont.resumeWith(Result.success(null))
+                    } finally {
+                        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+                        // Detach the invisible host so the window is left
+                        // exactly as we found it.
+                        runCatching { decor.removeView(host) }
+                    }
                 }
             }
             result

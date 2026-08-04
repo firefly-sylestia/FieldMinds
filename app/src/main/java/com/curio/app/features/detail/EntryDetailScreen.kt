@@ -2193,13 +2193,23 @@ private fun MoodBoardExportActions(
 ) {
     val context = LocalContext.current
     var busy by remember { mutableStateOf(false) }
+    // v7.26 — Save/Share wear the same WHITE FROSTED-GLASS look as the hero's
+    // Date · Mood · Type grid card: a translucent pane (the page wash blurred)
+    // under a white 0.78 glass tint, a hairline slate rim, and deep-slate ink
+    // that reads on white in every theme.
+    val frostInk = Color(0xFF232A35)
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Surface(
+        FrostedExportButton(
+            busy = busy,
+            icon = CurioIcons.Image,
+            label = "Save PNG",
+            frostInk = frostInk,
+            category = category,
             onClick = {
-                if (busy) return@Surface
+                if (busy) return@FrostedExportButton
                 busy = true
                 MoodBoardExport.saveMoodBoardPng(
                     context = context,
@@ -2219,32 +2229,16 @@ private fun MoodBoardExportActions(
                     ).show()
                 }
             },
-            shape = RoundedCornerShape(12.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             modifier = Modifier.weight(1f)
-        ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
-                horizontalArrangement = Arrangement.spacedBy(7.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CurioIcon(
-                    name = CurioIcons.Image,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 16.dp
-                )
-                Text(
-                    text = if (busy) "Rendering…" else "Save PNG",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-        }
-        Surface(
+        )
+        FrostedExportButton(
+            busy = busy,
+            icon = CurioIcons.Share,
+            label = "Share PNG",
+            frostInk = frostInk,
+            category = category,
             onClick = {
-                if (busy) return@Surface
+                if (busy) return@FrostedExportButton
                 busy = true
                 MoodBoardExport.shareMoodBoardPng(
                     context = context,
@@ -2258,26 +2252,72 @@ private fun MoodBoardExportActions(
                     busy = false
                 }
             },
-            shape = RoundedCornerShape(12.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             modifier = Modifier.weight(1f)
-        ) {
+        )
+    }
+}
+
+/**
+ * v7.26 — one Save/Share export button in the WHITE FROSTED-GLASS language
+ * of the hero's Date · Mood · Type grid card: a translucent pane carrying
+ * the page's category wash blurred + clipped to the button, a white 0.78
+ * glass tint on top, a hairline deep-slate rim, and deep-slate ink content
+ * that reads on white in every theme (mirrors the hero card exactly — the
+ * slate was chosen because white/onAccent ink would vanish on the white
+ * pane). [busy] swaps the label to "Rendering…" and the disabled state.
+ */
+@Composable
+private fun FrostedExportButton(
+    busy: Boolean,
+    icon: String,
+    label: String,
+    frostInk: Color,
+    category: CurioCategory,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        color = Color.Transparent,
+        border = BorderStroke(1.dp, frostInk.copy(alpha = 0.20f)),
+        modifier = modifier
+    ) {
+        Box(Modifier.fillMaxWidth()) {
+            // ── Frosted pane: the page's category wash blurred + clipped to
+            // the button, sitting BEHIND the crisp content — same structure
+            // as the hero grid card's pane (the wash is what's actually
+            // behind these buttons).
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(Brush.verticalGradient(listOf(category.categoryBackgroundWash(), category.categorySurface(MaterialTheme.colorScheme.surface))))
+                    .blur(18.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+            // ── Frosted white glass tint ── the blurred color blooms behind
+            // stay faintly visible, but the button reads as WHITE frosted
+            // glass with deep-slate content (no theme tint).
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(Color.White.copy(alpha = 0.78f))
+            )
             Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
                 horizontalArrangement = Arrangement.spacedBy(7.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CurioIcon(
-                    name = CurioIcons.Share,
+                    name = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface,
+                    tint = frostInk.copy(alpha = 0.95f),
                     size = 16.dp
                 )
                 Text(
-                    text = if (busy) "Rendering…" else "Share PNG",
+                    text = if (busy) "Rendering…" else label,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = frostInk
                 )
             }
         }

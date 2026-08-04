@@ -55,13 +55,29 @@ fun shareComposableCard(
         lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
         setContent { card() }
-
-        layoutParams = ViewGroup.LayoutParams(widthPx, heightPx)
-        val widthSpec  = MeasureSpec.makeMeasureSpec(widthPx,  MeasureSpec.EXACTLY)
-        val heightSpec = MeasureSpec.makeMeasureSpec(heightPx, MeasureSpec.EXACTLY)
-        measure(widthSpec, heightSpec)
-        layout(0, 0, widthPx, heightPx)
     }
+
+    // v7.26 — Android 16 crash fix (same as MoodBoardExport): a ComposeView
+    // that is never attached to a window cannot resolve a windowRecomposer,
+    // and measure() → getWindowRecomposer throws IllegalStateException.
+    // Host the off-screen view inside an INVISIBLE FrameLayout attached to
+    // the activity's decor so it IS window-attached, then remove the host
+    // right after the capture — no flicker, no leak.
+    val host = android.widget.FrameLayout(context).apply {
+        visibility = android.view.View.INVISIBLE
+        addView(composeView, ViewGroup.LayoutParams(widthPx, heightPx))
+    }
+    val decor = (context as? android.app.Activity)?.window?.decorView as? ViewGroup
+    if (decor == null) {
+        // No window to attach to (non-Activity context) — measure() would
+        // throw "Cannot locate windowRecomposer" again, so bail out.
+        return
+    }
+    decor.addView(host, ViewGroup.LayoutParams(widthPx, heightPx))
+    val widthSpec  = MeasureSpec.makeMeasureSpec(widthPx,  MeasureSpec.EXACTLY)
+    val heightSpec = MeasureSpec.makeMeasureSpec(heightPx, MeasureSpec.EXACTLY)
+    composeView.measure(widthSpec, heightSpec)
+    composeView.layout(0, 0, widthPx, heightPx)
 
     // Move lifecycle to STARTED so Compose begins composition.
     lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
@@ -69,31 +85,35 @@ fun shareComposableCard(
 
     // Post the capture to run after the layout/render pass completes.
     composeView.post {
-        val bitmap = Bitmap.createBitmap(widthPx, heightPx, Bitmap.Config.ARGB_8888)
-        val canvas = android.graphics.Canvas(bitmap)
-        // Fill white background so transparent areas don't show as black.
-        canvas.drawColor(android.graphics.Color.WHITE)
-        composeView.draw(canvas)
+        try {
+            val bitmap = Bitmap.createBitmap(widthPx, heightPx, Bitmap.Config.ARGB_8888)
+            val canvas = android.graphics.Canvas(bitmap)
+            // Fill white background so transparent areas don't show as black.
+            canvas.drawColor(android.graphics.Color.WHITE)
+            composeView.draw(canvas)
 
-        // Save PNG to share cache.
-        val file = File(shareDir, "curio_share_${System.currentTimeMillis()}.png")
-        FileOutputStream(file).use { fos ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 95, fos)
+            // Save PNG to share cache.
+            val file = File(shareDir, "curio_share_${System.currentTimeMillis()}.png")
+            FileOutputStream(file).use { fos ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 95, fos)
+            }
+            bitmap.recycle()
+
+            // Build and launch share intent.
+            val uri = FileProvider.getUriForFile(context, authority, file)
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/png"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            context.startActivity(Intent.createChooser(intent, "Share your Curio card"))
+            onShared()
+        } finally {
+            // Clean up the synthetic lifecycle + detach the invisible host so
+            // the window is left exactly as we found it.
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            runCatching { decor.removeView(host) }
         }
-        bitmap.recycle()
-
-        // Clean up the synthetic lifecycle.
-        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-
-        // Build and launch share intent.
-        val uri = FileProvider.getUriForFile(context, authority, file)
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/png"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        context.startActivity(Intent.createChooser(intent, "Share your Curio card"))
-        onShared()
     }
 }
 

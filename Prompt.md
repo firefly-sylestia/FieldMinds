@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board Save/Share crash fixed (Android 16 windowRecomposer) + Save/Share buttons redesigned as frosted WHITE glass (matching the hero grid card)**
+
+### What was asked
+
+“when i tried saving it this happened fix it. also redesign the save and share button look to match that white frosty look in the grid card in detail page” + a crash report: `IllegalStateException: Cannot locate windowRecomposer; View ComposeView{…} is not attached to a window` at `MoodBoardExport.renderBoardBitmap (MoodBoardExport.kt:256)` on Android 16 (SDK 36).
+
+### Save/Share crash (MoodBoardExport.kt + ShareCardCapture.kt)
+
+- **Root cause** — the export rendered the board in an off-screen `ComposeView` that was never attached to a window. On Android 16, `measure()` → `ensureCompositionCreated` → `getWindowRecomposer` now throws `IllegalStateException` for an unattached view (the call used to be tolerant). `shareComposableCard` had the identical latent crash.
+- **Fix** — both capture paths now host the off-screen `ComposeView` inside an INVISIBLE `FrameLayout` added to the activity's decor view BEFORE `measure()`/`layout()` (so the view IS window-attached and the recomposer resolves), then remove the host in the posted capture's `finally` (no flicker, no leak). Capture bodies wrapped so any draw failure resumes `null` (failed save/share toast) instead of crashing; the share path also detaches in `finally`. `layoutParams`/`measure`/`layout` moved off the `apply{}` block so the host attach happens before them.
+
+### Save/Share button redesign (EntryDetailScreen.kt)
+
+- **New `FrostedExportButton`** — both buttons now wear the SAME white frosted-glass language as the hero's Date · Mood · Type grid card: transparent Surface + hairline `frostInk@0.20` rim (16dp radius), behind the content a blurred translucent pane sampling the page's category wash (`categoryBackgroundWash` → `categorySurface`), a `Color.White @ 0.78` glass tint on top, and deep-slate (`frostInk = #232A35`) icon + label that read on white in every theme. Busy state still swaps the label to “Rendering…”. (Previously: plain `surfaceContainerHigh` + `outlineVariant` — flat grey, not frosted.)
+- **Docs:** Prompt.md. (Changelog entry: none needed — fixes/restyle of the existing Save/Share PNG feature; changelog 20260810 already covers PNG export.)
+
+### Validation
+
+- braces/parens/brackets balanced on all 3 files; NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board image zoom fixed — opens centered instead of offset/outside the screen; small tiles easier to expand in the editor**
 
 ### What was asked
