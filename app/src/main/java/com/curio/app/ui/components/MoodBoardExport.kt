@@ -13,26 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -40,9 +27,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -50,17 +34,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import coil.imageLoader
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CurioCategory
-import com.curio.app.data.NotePaperColor
-import com.curio.app.ui.theme.CurioIcon
-import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.PatrickHandFontFamily
-import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurfaceMoodBoard
-import com.curio.app.ui.theme.notePaperInk
-import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 import java.io.File
 import java.io.FileOutputStream
@@ -91,6 +69,10 @@ object MoodBoardExport {
     /** Captured PNG long side in px — ~2.5x a 1080p screen, still a sane file size. */
     private const val EXPORT_LONG_SIDE = 2400
 
+    /** Short-side floor for the full-bleed canvas — a very wide/short board
+     *  can't collapse the other axis below this. */
+    private const val MIN_EXPORT_SIDE = 1000
+
     /**
      * Renders the board and saves the PNG to the gallery. [onDone] is invoked
      * on the main thread with the saved file path (or null on failure).
@@ -101,7 +83,6 @@ object MoodBoardExport {
         data: CaptureData.GalleryWall,
         category: CurioCategory,
         boardSeed: Int,
-        topicName: String,
         entryId: String,
         onDone: (String?) -> Unit
     ) {
@@ -110,7 +91,7 @@ object MoodBoardExport {
         // share path — plain callers just get [onDone] on the main thread.
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
         scope.launch {
-            val path = exportBoard(context, data, category, boardSeed, topicName, entryId) { bitmap, fileName ->
+            val path = exportBoard(context, data, category, boardSeed, entryId) { bitmap, fileName ->
                 withContext(Dispatchers.IO) {
                     val p = saveBitmapToGallery(context, bitmap, fileName)
                     bitmap.recycle()
@@ -131,13 +112,12 @@ object MoodBoardExport {
         data: CaptureData.GalleryWall,
         category: CurioCategory,
         boardSeed: Int,
-        topicName: String,
         entryId: String,
         onDone: () -> Unit
     ) {
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
         scope.launch {
-            val path = exportBoard(context, data, category, boardSeed, topicName, entryId) { bitmap, fileName ->
+            val path = exportBoard(context, data, category, boardSeed, entryId) { bitmap, fileName ->
                 withContext(Dispatchers.IO) {
                     try {
                         val file = File(context.cacheDir, "share").apply { mkdirs() }
@@ -176,7 +156,6 @@ object MoodBoardExport {
         data: CaptureData.GalleryWall,
         category: CurioCategory,
         boardSeed: Int,
-        topicName: String,
         entryId: String,
         emit: suspend (Bitmap, String) -> String?
     ): String? {
@@ -184,12 +163,21 @@ object MoodBoardExport {
         // off-screen capture never races an async Coil load. Always recycled
         // when the export finishes — including on any failure/early-return
         // path — so a bad render never leaks ARGB memory.
+        // v7.27 — memory cache DISABLED: the preloaded bitmaps must NOT be
+        // the same instances Coil's memory cache hands to the UI's
+        // AsyncImagePainters. The old code preloaded straight from the shared
+        // cache and then recycled them in the finally — poisoning the cache,
+        // so the next time a board was expanded (or any tile re-drew), Coil
+        // served the recycled bitmap and the app crashed with "Canvas:
+        // trying to use a recycled bitmap". A fresh decode owned by the
+        // export is safe to recycle without touching the UI's cache.
         val bitmaps = withContext(Dispatchers.IO) {
             data.tileLayouts.map { t ->
                 runCatching {
                     val request = ImageRequest.Builder(context)
                         .data(t.uri)
                         .allowHardware(false)
+                        .memoryCachePolicy(CachePolicy.DISABLED)
                         .build()
                     (context.imageLoader.execute(request).drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
                 }.getOrNull()
@@ -199,7 +187,7 @@ object MoodBoardExport {
         return try {
             withContext(Dispatchers.Main) {
                 val fileName = "moodboard_${entryId.take(8)}.png"
-                val bitmap = renderBoardBitmap(context, data, category, boardSeed, topicName, bitmaps)
+                val bitmap = renderBoardBitmap(context, data, category, boardSeed, bitmaps)
                     ?: return@withContext null
                 emit(bitmap, fileName)
             }
@@ -213,21 +201,23 @@ object MoodBoardExport {
      * resolution. The board is drawn by a real composition pass in an
      * off-screen [ComposeView] (same technique as [shareComposableCard]) so
      * the exported image is a faithful, theme-accurate picture of the saved
-     * entry — surface color, watermark backdrop, collage, floating quote
-     * cards, caption and below-board quote boxes included.
+     * entry — surface color, watermark backdrop, collage and floating quote
+     * cards included, full-bleed edge to edge.
      */
     private suspend fun renderBoardBitmap(
         context: Context,
         data: CaptureData.GalleryWall,
         category: CurioCategory,
         boardSeed: Int,
-        topicName: String,
         bitmaps: List<Bitmap?>
     ): Bitmap? {
-        // Square export canvas; the board card is composed with a vertical
-        // layout (board collage + caption + quotes) so use a 3:4 portrait.
-        val width = EXPORT_LONG_SIDE
-        val height = (EXPORT_LONG_SIDE * 1.33f).toInt()
+        // v7.27 — FULL-BLEED export: the canvas mirrors the BOARD's own
+        // aspect ratio (not a fixed 3:4 card), so the board fills the image
+        // edge to edge — exactly the expanded full-screen view — with no
+        // header, caption or below-board quote boxes around it.
+        val maxX = data.tileLayouts.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+        val maxY = data.tileLayouts.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+        val (width, height) = exportCanvasSize(maxX, maxY)
 
         return withContext(Dispatchers.Main) {
             val lifecycleOwner = SyntheticLifecycleOwner()
@@ -245,7 +235,6 @@ object MoodBoardExport {
                             data = data,
                             category = category,
                             boardSeed = boardSeed,
-                            topicName = topicName,
                             bitmaps = bitmaps
                         )
                     }
@@ -314,6 +303,22 @@ object MoodBoardExport {
     }
 
     /**
+     * Full-bleed canvas for the board's raw extent: the LONG side is
+     * [EXPORT_LONG_SIDE] and the other axis follows the board's own aspect
+     * (floored at [MIN_EXPORT_SIDE] so a weirdly wide/short board never
+     * collapses to a sliver). Empty/legacy layouts fall back to a square.
+     */
+    private fun exportCanvasSize(maxX: Float, maxY: Float): Pair<Int, Int> {
+        if (maxX <= 0f || maxY <= 0f) return EXPORT_LONG_SIDE to EXPORT_LONG_SIDE
+        val aspect = maxX / maxY
+        return if (aspect >= 1f) {
+            EXPORT_LONG_SIDE to (EXPORT_LONG_SIDE / aspect).toInt().coerceAtLeast(MIN_EXPORT_SIDE)
+        } else {
+            (EXPORT_LONG_SIDE * aspect).toInt().coerceAtLeast(MIN_EXPORT_SIDE) to EXPORT_LONG_SIDE
+        }
+    }
+
+    /**
      * Writes [bitmap] to the gallery. MediaStore insert on API 29+ (no
      * permission needed); app-external Pictures + media scan on 26–28.
      */
@@ -378,23 +383,27 @@ object MoodBoardExport {
 }
 
 /**
- * Self-contained render of the FULL saved mood board — the exact picture the
- * entry's detail page shows, composed for off-screen capture:
+ * Self-contained FULL-BLEED render of the saved mood board — exactly the
+ * expanded full-screen board view, composed for off-screen capture:
  *
- *  1. category-tinted board surface + seeded watermark backdrop (the whole
- *     collage background),
- *  2. the tile collage, contain-fit to the export card and centered,
- *  3. floating on-board quote cards at their saved spots,
- *  4. the caption slip and below-board quote boxes under the board.
+ *  1. the category-tinted board surface with the seeded watermark backdrop
+ *     BEHIND everything (visible through the gaps, never covered by an
+ *     opaque collage box — the old card put an opaque background on the
+ *     collage container, which is why the watermark didn't render),
+ *  2. the tile collage laid out at the board's OWN coordinates, scaled so
+ *     it fills the canvas edge to edge (the canvas mirrors the board's
+ *     aspect ratio — see [MoodBoardExport.exportCanvasSize]),
+ *  3. floating on-board quote cards at their saved spots.
  *
- * Tiles draw from [bitmaps] (preloaded) so the capture never waits on Coil.
+ * No header, no caption slip, no below-board quote boxes — the board and
+ * only the board, edge to edge. Tiles draw from [bitmaps] (preloaded) so
+ * the capture never waits on Coil.
  */
 @Composable
 private fun MoodBoardShareCard(
     data: CaptureData.GalleryWall,
     category: CurioCategory,
     boardSeed: Int,
-    topicName: String,
     bitmaps: List<Bitmap?>
 ) {
     val density = LocalDensity.current
@@ -403,178 +412,75 @@ private fun MoodBoardShareCard(
             .fillMaxSize()
             .background(category.categorySurfaceMoodBoard())
     ) {
-        // ── Seeded watermark backdrop — same pattern as the saved view ──
+        // ── Seeded watermark backdrop — the whole collage background, kept
+        // BEHIND the tiles (no opaque container on top of it).
         CurioMoodBoardBackdrop(
             seed = boardSeed,
             accent = category.themedAccent(),
             modifier = Modifier.fillMaxSize()
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 28.dp, vertical = 36.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            // ── Header: category + topic ────────────────────────────────
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Surface(
-                    shape = RoundedCornerShape(14.dp),
-                    color = category.themedAccent()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 7.dp),
-                        horizontalArrangement = Arrangement.spacedBy(7.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CurioIcon(
-                            name = category.iconGlyph,
-                            contentDescription = null,
-                            tint = category.onAccent(),
-                            size = 15.dp
-                        )
-                        Text(
-                            text = category.displayName,
-                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                            color = category.onAccent()
-                        )
+        // ── Full-bleed collage — the board's own coordinates scaled to the
+        // canvas (aspect-matched, so the board fills it edge to edge).
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val viewW = maxWidth.value * density.density
+            val viewH = maxHeight.value * density.density
+            if (data.tileLayouts.isNotEmpty() && viewW > 0f && viewH > 0f) {
+                val maxX = data.tileLayouts.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+                val maxY = data.tileLayouts.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+                val scale = if (maxX > 0f && maxY > 0f) {
+                    (viewW / maxX).coerceAtMost(viewH / maxY)
+                } else 1f
+                val boardW = maxX * scale
+                val boardH = maxY * scale
+                val offsetX = (viewW - boardW) / 2f
+                val offsetY = (viewH - boardH) / 2f
+
+                Box(
+                    modifier = Modifier.offset {
+                        IntOffset(offsetX.roundToInt(), offsetY.roundToInt())
                     }
-                }
-                Text(
-                    text = topicName,
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = category.categoryInk(),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            // ── Collage — contain-fit + centered, floating quotes on top ──
-            BoxWithConstraints(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(category.categorySurfaceMoodBoard())
-            ) {
-                val viewW = maxWidth.value * density.density
-                val viewH = maxHeight.value * density.density
-                if (data.tileLayouts.isNotEmpty() && viewW > 0f && viewH > 0f) {
-                    val maxX = data.tileLayouts.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
-                    val maxY = data.tileLayouts.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
-                    val scale = if (maxX > 0f && maxY > 0f) {
-                        (viewW / maxX).coerceAtMost(viewH / maxY)
-                    } else 1f
-                    val boardW = maxX * scale
-                    val boardH = maxY * scale
-                    val offsetX = (viewW - boardW) / 2f
-                    val offsetY = (viewH - boardH) / 2f
-
-                    Box(
-                        modifier = Modifier
-                            .offset {
-                                IntOffset(offsetX.roundToInt(), offsetY.roundToInt())
-                            }
-                    ) {
-                        data.tileLayouts.forEachIndexed { i, tile ->
-                            val bmp = bitmaps.getOrNull(i)
-                            if (bmp == null) return@forEachIndexed
-                            Box(
-                                modifier = Modifier
-                                    .offset {
-                                        IntOffset(
-                                            (tile.offsetXPx * scale).roundToInt(),
-                                            (tile.offsetYPx * scale).roundToInt()
-                                        )
-                                    }
-                                    .size(
-                                        width = with(density) { (tile.widthPx * scale).toDp() },
-                                        height = with(density) { (tile.heightPx * scale).toDp() }
+                ) {
+                    data.tileLayouts.forEachIndexed { i, tile ->
+                        val bmp = bitmaps.getOrNull(i)
+                        if (bmp == null) return@forEachIndexed
+                        Box(
+                            modifier = Modifier
+                                .offset {
+                                    IntOffset(
+                                        (tile.offsetXPx * scale).roundToInt(),
+                                        (tile.offsetYPx * scale).roundToInt()
                                     )
-                                    .rotate(tile.rotationDeg)
-                            ) {
-                                Image(
-                                    bitmap = bmp.asImageBitmap(),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Fit,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(14.dp))
+                                }
+                                .size(
+                                    width = with(density) { (tile.widthPx * scale).toDp() },
+                                    height = with(density) { (tile.heightPx * scale).toDp() }
                                 )
-                            }
-                        }
-
-                        // Floating on-board quote cards at their saved spots.
-                        if (data.quotes.orEmpty().isNotEmpty()) {
-                            MoodBoardFloatingCards(
-                                quotes = data.quotes.orEmpty(),
-                                styles = data.quoteStyles.orEmpty(),
-                                colors = data.quoteColors.orEmpty(),
-                                tilts = data.quoteTilts.orEmpty(),
-                                positions = data.quotePositions.orEmpty(),
-                                onBoard = data.quoteOnBoard.orEmpty(),
-                                canvasWPx = maxX,
-                                canvasHPx = maxY,
-                                boardScale = scale
+                                .rotate(tile.rotationDeg)
+                        ) {
+                            Image(
+                                bitmap = bmp.asImageBitmap(),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(14.dp))
                             )
                         }
                     }
-                }
-            }
 
-            // ── Caption slip ────────────────────────────────────────────
-            if (!data.caption.isNullOrBlank()) {
-                val sheet = data.captionColor ?: NotePaperColor.CREAM
-                NotePaperCard(
-                    style = data.captionStyle ?: NotePaperStyleFallback(data),
-                    paperColor = sheet,
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = data.caption,
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
-                        color = notePaperInk(sheet)
-                    )
-                }
-            }
-
-            // ── Below-board quote boxes ─────────────────────────────────
-            val belowFlags = data.quoteOnBoard.orEmpty()
-            data.quotes.orEmpty().forEachIndexed { i, q ->
-                if (q.isNullOrBlank()) return@forEachIndexed
-                if (belowFlags.getOrElse(i) { true }) return@forEachIndexed
-                val sheet = data.quoteColors.orEmpty().getOrNull(i) ?: NotePaperColor.CREAM
-                val tilt = data.quoteTilts.orEmpty().getOrNull(i) ?: 0f
-                NotePaperCard(
-                    style = data.quoteStyles.orEmpty().getOrNull(i)
-                        ?: NotePaperStyleFallback(data),
-                    paperColor = sheet,
-                    contentPadding = PaddingValues(horizontal = 18.dp, vertical = 16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .rotate(tilt)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        CurioIcon(
-                            name = CurioIcons.FormatQuote,
-                            contentDescription = null,
-                            tint = notePaperInk(sheet).copy(alpha = 0.45f),
-                            size = 20.dp
-                        )
-                        Text(
-                            text = "\u201C$q\u201D",
-                            style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
-                            color = notePaperInk(sheet)
+                    // Floating on-board quote cards at their saved spots.
+                    if (data.quotes.orEmpty().isNotEmpty()) {
+                        MoodBoardFloatingCards(
+                            quotes = data.quotes.orEmpty(),
+                            styles = data.quoteStyles.orEmpty(),
+                            colors = data.quoteColors.orEmpty(),
+                            tilts = data.quoteTilts.orEmpty(),
+                            positions = data.quotePositions.orEmpty(),
+                            onBoard = data.quoteOnBoard.orEmpty(),
+                            canvasWPx = maxX,
+                            canvasHPx = maxY,
+                            boardScale = scale
                         )
                     }
                 }
@@ -582,7 +488,3 @@ private fun MoodBoardShareCard(
         }
     }
 }
-
-/** Legacy fallback paper style for caption / below-board quote slips. */
-private fun NotePaperStyleFallback(data: CaptureData.GalleryWall) =
-    data.paperStyle ?: com.curio.app.data.NotePaperStyle.RULED

@@ -2259,7 +2259,6 @@ private fun MoodBoardExportActions(
                     data = data,
                     category = category,
                     boardSeed = boardSeed,
-                    topicName = "Mood board",
                     entryId = entryId
                 ) { path ->
                     busy = false
@@ -2288,7 +2287,6 @@ private fun MoodBoardExportActions(
                     data = data,
                     category = category,
                     boardSeed = boardSeed,
-                    topicName = "Mood board",
                     entryId = entryId
                 ) {
                     busy = false
