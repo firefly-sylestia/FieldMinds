@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -529,6 +530,32 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                // ── Custom tags (v7.17) — the labels added on the save page,
+                // rendered as small #chips under the captured-at line.
+                if (resolvedEntry.tags.isNotEmpty()) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        resolvedEntry.tags.forEach { tag ->
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = if (AppPreferences.tintWashEffective()) cat.tint.copy(alpha = 0.14f)
+                                        else MaterialTheme.colorScheme.surfaceVariant,
+                                border = BorderStroke(1.dp, cat.themedAccent().copy(alpha = 0.4f))
+                            ) {
+                                Text(
+                                    text = "#$tag",
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                                    color = if (AppPreferences.tintWashEffective()) cat.categoryInk() else cat.themedAccent(),
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
 
                 // ── Theme-aware meta card — date & time / mood / type ──
                 if (AppPreferences.entryMetaEnabledState) {

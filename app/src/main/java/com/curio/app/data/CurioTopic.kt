@@ -95,7 +95,13 @@ data class CurioEntry(
     val format: CaptureFormat,
     val captureData: CaptureData,
     val title: String? = null,
-    val capturedAtMillis: Long = System.currentTimeMillis()
+    val capturedAtMillis: Long = System.currentTimeMillis(),
+    /**
+     * Free-form user tags added on the save page (v7.17) — searchable in
+     * the Cabinet and shown as chips on the entry detail page. Stored in
+     * Room's `tagsJson` column; legacy entries default to empty.
+     */
+    val tags: List<String> = emptyList()
 ) {
     /** One-line preview for Cabinet cards. */
     val bodyPreview: String get() = captureData.toPreview()

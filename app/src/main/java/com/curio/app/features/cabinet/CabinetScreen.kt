@@ -117,7 +117,9 @@ fun CabinetScreen(navController: NavController) {
         if (q.isNotEmpty()) {
             result = result.filter {
                 it.topic.name.contains(q, ignoreCase = true) ||
-                    it.title?.contains(q, ignoreCase = true) == true
+                    it.title?.contains(q, ignoreCase = true) == true ||
+                    // v7.17 — custom tags are searchable too.
+                    it.tags.any { tag -> tag.contains(q, ignoreCase = true) }
             }
         }
         if (sortNewestFirst) result.sortedByDescending { it.capturedAtMillis }

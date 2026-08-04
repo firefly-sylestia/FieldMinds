@@ -2,22 +2,23 @@
 
 ## Latest Request (COMPLETED)
 
-**Explore notification Cancel button + always-on back dialog on the save-entry page**
+**Save-entry feature upgrades: draft autosave + resume, voice-to-text for SoundBite, custom tags (all always-on)**
 
 ### What was asked
 
-“the notification is great now for the explore now but theres no cancel button and also add a back dialog when someone taps back in the save entry page. and suggest some feature upgradtes for the save entries”
+Picked three upgrades from the save-entry suggestions (ask_user): Draft autosave, Voice-to-text for SoundBite, Custom tags. Shipping mode (ask_user): **all always-on** — no Settings toggles.
 
 ### What was done
 
-- **Notification Cancel (ExploreReminderReceiver.kt + ExploreSessionService.kt)** — “Done exploring” tore the session down AND navigated to the write-it-down page; there was no way to just stop. Added `ACTION_CANCEL` (broadcast, request code 4203): the receiver now shares one teardown for STOP/CANCEL (clear session + cancel reminder + stop service) and only STOP navigates (session read scoped into that branch per review). `cancelSessionIntent()` added; both the live and bubble-only notifications now carry a “Cancel” action (live = Pause/Resume + Done + Cancel = 3, Android’s max).
-- **Save-entry back dialog (SaveCaptureScreen.kt)** — back already asked when a draft existed; now it ALWAYS asks. `BackHandler(enabled = !saveInProgress)` and the top-bar back button both open the dialog (fully ignored mid-save, which also fixed the old mid-save dialog bug). Dialog is context-aware: drafted → three-way (Save and switch / Keep editing / Discard); nothing newly drafted → light confirm — “Discard your edits? / Your changes to this entry won’t be saved” in edit mode vs “Leave this capture? / You haven’t added anything yet” for a fresh capture (reviewer catch: edit mode preloads content, so the empty-page wording was wrong there).
-- **Feature suggestions for save entries** — presented to the user via ask_user (draft autosave, save-and-add-another, quick-share, voice transcription, location, tags, etc.) pending their pick.
+- **Custom tags (data layer)** — `CurioEntry.tags: List<String> = emptyList()` (default → all constructor sites compile); `CaptureEntity.tagsJson` column (Gson array string, default "[]"); `toEntity` writes `Gson().toJson(tags)`, `toEntry` parses via new `deserializeTags()` (null/blank/malformed → empty). Room DB v1→v2: `MIGRATION_1_2` (`ALTER TABLE captures ADD COLUMN tagsJson TEXT NOT NULL DEFAULT '[]'`) wired via `.addMigrations`. Backup restore normalizes null `tagsJson` → "[]" AND copies from `updated` (not the original `capture`) in both the audio and image rewrite paths so the normalization isn't reverted (reviewer-grade catch).
+- **Custom tags (UI)** — `TagEditorRow` on the save page (FlowRow of removable #chips + OutlinedTextField with IME-Done add; 12 max / 24 chars / deduped / trimStart('#')), tags written into BOTH the fresh `CurioEntry` and the edit-mode copy. Display: #chips on the entry detail meta (under captured-at, always shown when tags exist), searchable in the Cabinet (tags match the query), and up to 2 #chips (+N overflow) on the Cabinet card.
+- **Draft autosave** — new `CaptureDraftStore` (SharedPreferences JSON array, cap 8, upsert newest-first, keyed categorySlug+topicName). `FormatBodyForCategory` gained `onDraftDataChanged` emitting a BEST-EFFORT snapshot (single section → its data; multi → Portfolio of filled sections — non-null even when not every take is complete, unlike the allReady-gated `combinedData`). SaveCaptureScreen debounces 700ms into the store (edit mode skipped; saveInProgress keys + guards the write so an in-flight debounce can't resurrect a cleared draft — draftData also nulled on save success), shows a Resume-draft dialog on reopen (Resume seeds `initialData`; Discard draft clears the store; dismiss keeps it stored for the next visit), and clears the draft after a successful save.
+- **Voice-to-text for SoundBite** — `SpeechRecognizer` (created in remember, null-guarded via `isRecognitionAvailable`, destroyed on dispose). IDLE state gains a “Transcribe to text” pill beside the record mic; live partials stream into a `TranscribePanel` (pulsing mic + partial text); `onResults` commits the final transcript into the note field (append with newline if non-blank); friendly error mapping (no-match / timeout / network / client / permissions). The shared RECORD_AUDIO permission launcher branches on a `transcribeRequested` flag (consumed on grant AND reset on denial so a later record-path grant can't accidentally transcribe); transcribing reports busy so format-switch confirmation triggers; the error panel stays visible (transcribing flips off on error — a bare `if (transcribing)` would swallow the message) with a Dismiss action.
 - **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
 
 ### Validation
 
-- check_braces balanced on all 3 files (a mid-edit imbalance in the receiver was caught + fixed); code-reviewer pass — merged STOP/CANCEL branch structure sound, PendingIntent codes unique, 3-action limit OK, edit-mode dialog wording fixed per review, save-in-flight back fully ignored.
+- check_braces balanced on all touched files; code-reviewer pass — 4 issues found and fixed: (1) bare `onAccent()` in TagEditorRow would fail to compile (extension on CurioCategory) → now a passed-in `onAccentContent` color; (2) transcription errors were never shown (panel only rendered while transcribing) → panel renders on `transcribing || transcribeError != null` with Dismiss; (3) `transcribeRequested` stuck true on denial → reset in the denied branch; (4) autosave race could resurrect a cleared draft → saveInProgress guards + `draftData = null` on save success. Dead code (`has()`, `clearAll()`) removed.
 - NO local Gradle build per AGENTS.md — CI validates compilation on push.
 
 ---

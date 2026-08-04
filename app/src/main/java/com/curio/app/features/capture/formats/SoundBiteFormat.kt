@@ -1,9 +1,15 @@
 package com.curio.app.features.capture.formats
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,9 +46,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import java.util.Locale
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
@@ -150,22 +159,113 @@ fun SoundBiteFormat(
     var endTrim by remember { mutableFloatStateOf(1f) }
     var trimInProgress by remember { mutableStateOf(false) }
 
-    // Runtime permission launcher
+    // ── Voice-to-text (v7.17) ───────────────────────────────────────────
+    // The same RECORD_AUDIO permission powers both recording and dictation.
+    // `transcribeRequested` disambiguates a grant: the launcher starts the
+    // recognizer when the user asked for transcription, the recorder when
+    // they asked for a voice note.
+    var transcribing by remember { mutableStateOf(false) }
+    var partialTranscript by remember { mutableStateOf("") }
+    var transcribeError by remember { mutableStateOf<String?>(null) }
+    var transcribeRequested by remember { mutableStateOf(false) }
+    val speechRecognizer = remember(context) {
+        if (SpeechRecognizer.isRecognitionAvailable(context)) {
+            SpeechRecognizer.createSpeechRecognizer(context)
+        } else {
+            null
+        }
+    }
+
+    fun startTranscription() {
+        val recognizer = speechRecognizer ?: run {
+            transcribeError = "Speech recognition isn't available on this device."
+            return
+        }
+        transcribing = true
+        transcribeError = null
+        partialTranscript = ""
+        recognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onError(error: Int) {
+                transcribing = false
+                transcribeError = when (error) {
+                    SpeechRecognizer.ERROR_NO_MATCH ->
+                        "No speech heard — try again."
+                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT ->
+                        "Listening timed out — try again."
+                    SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ->
+                        "Microphone access is needed to transcribe."
+                    SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT ->
+                        "Speech service unreachable — check your connection."
+                    SpeechRecognizer.ERROR_CLIENT ->
+                        "Speech recognition isn't available on this device."
+                    else -> "Couldn't transcribe — try again."
+                }
+                partialTranscript = ""
+            }
+            override fun onResults(results: Bundle?) {
+                transcribing = false
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                val final = matches?.firstOrNull().orEmpty()
+                partialTranscript = ""
+                if (final.isNotBlank()) {
+                    // Commit to the note field — append (with a line break) if
+                    // the user already typed something, else replace.
+                    note = if (note.isBlank()) final else "$note\n$final"
+                }
+            }
+            override fun onPartialResults(partialResults: Bundle?) {
+                val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                partialTranscript = matches?.firstOrNull().orEmpty()
+            }
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toLanguageTag())
+            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+        }
+        recognizer.startListening(intent)
+    }
+
+    fun stopTranscription() {
+        speechRecognizer?.cancel()
+        transcribing = false
+        partialTranscript = ""
+    }
+
+    // Runtime permission launcher — shared by recording AND dictation.
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
-            try {
-                recorder.start()
-                restoredRecording = false
-                recordingState = recorder.state
-                recordingSeconds = 0
-                permissionDenied = false
-            } catch (_: Exception) {
-                recordingState = AudioRecorder.State.IDLE
+            permissionDenied = false
+            if (transcribeRequested) {
+                // Grant was for dictation — start the recognizer, not the
+                // recorder (transcribeRequested is consumed so a later
+                // record-tap can't accidentally transcribe).
+                transcribeRequested = false
+                startTranscription()
+            } else {
+                try {
+                    recorder.start()
+                    restoredRecording = false
+                    recordingState = recorder.state
+                    recordingSeconds = 0
+                } catch (_: Exception) {
+                    recordingState = AudioRecorder.State.IDLE
+                }
             }
         } else {
             permissionDenied = true
+            // Denied for dictation — drop the pending flag so a later grant
+            // from the RECORD path can't accidentally start transcription.
+            transcribeRequested = false
         }
     }
 
@@ -218,22 +318,25 @@ fun SoundBiteFormat(
         }
     }
 
-    // ── Clean up recorder on dispose ─────────────────────────────────────
+    // ── Clean up recorder + recognizer on dispose ────────────────────────
     DisposableEffect(Unit) {
         onDispose {
             recorder.release()
-            // Tell the parent the take is no longer busy (live recording lost
-            // with this editor) so format-switch confirmation can't be skipped.
+            speechRecognizer?.destroy()
+            // Tell the parent the take is no longer busy (live recording or
+            // a live dictation lost with this editor) so format-switch
+            // confirmation can't be skipped.
             onBusyChange(false)
         }
     }
 
-    // ── Report busy state (recording in progress) so the universal picker
-    // can confirm before switching format on a live take ──────────────────
-    LaunchedEffect(recordingState) {
+    // ── Report busy state (recording OR dictation in progress) so the
+    // universal picker can confirm before switching format on a live take ──
+    LaunchedEffect(recordingState, transcribing) {
         onBusyChange(
             recordingState == AudioRecorder.State.RECORDING ||
-                recordingState == AudioRecorder.State.PAUSED
+                recordingState == AudioRecorder.State.PAUSED ||
+                transcribing
         )
     }
 
@@ -291,25 +394,78 @@ fun SoundBiteFormat(
     ) {
         // ── Format body (state-dependent) ────────────────────────────────
         when (recordingState) {
-            AudioRecorder.State.IDLE -> IdleControls(
-                accent = accent,
-                hasPermission = hasPermission,
-                permissionDenied = permissionDenied,
-                onRecord = {
-                    if (hasPermission) {
-                        try {
-                            recorder.start()
-                            restoredRecording = false
-                            recordingState = recorder.state
-                            recordingSeconds = 0
-                        } catch (_: Exception) {
-                            recordingState = AudioRecorder.State.IDLE
+            AudioRecorder.State.IDLE -> {
+                IdleControls(
+                    accent = accent,
+                    hasPermission = hasPermission,
+                    permissionDenied = permissionDenied,
+                    onRecord = {
+                        if (hasPermission) {
+                            try {
+                                recorder.start()
+                                restoredRecording = false
+                                recordingState = recorder.state
+                                recordingSeconds = 0
+                            } catch (_: Exception) {
+                                recordingState = AudioRecorder.State.IDLE
+                            }
+                        } else {
+                            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                         }
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                    }
+                )
+
+                // ── Voice-to-text (v7.17) — a second way to capture a take:
+                // record the audio note as before, OR speak and have it typed
+                // into the note field. Lives on the idle state so both paths
+                // are offered side by side. The panel stays up while an error
+                // is displayed (errors flip transcribing off, so a bare
+                // `if (transcribing)` would silently drop the message).
+                if (transcribing || transcribeError != null) {
+                    TranscribePanel(
+                        accent = accent,
+                        partial = partialTranscript,
+                        error = transcribeError,
+                        onStop = {
+                            stopTranscription()
+                            transcribeError = null
+                        }
+                    )
+                } else {
+                    Surface(
+                        onClick = {
+                            if (hasPermission) {
+                                startTranscription()
+                            } else {
+                                transcribeRequested = true
+                                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            }
+                        },
+                        shape = RoundedCornerShape(50),
+                        color = accent.copy(alpha = 0.1f),
+                        border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.Mic,
+                                contentDescription = null,
+                                tint = accent,
+                                size = 18.dp
+                            )
+                            Text(
+                                text = "Transcribe to text",
+                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                                color = accent
+                            )
+                        }
                     }
                 }
-            )
+            }
             AudioRecorder.State.RECORDING,
             AudioRecorder.State.PAUSED -> LiveControls(
                 accent = accent,
@@ -561,6 +717,93 @@ private fun TrimSection(
 // ═══════════════════════════════════════════════════════════════════════════
 // Private sub-composables
 // ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Live voice-to-text panel (v7.17) — shown while [SpeechRecognizer] is
+ * listening. Live partial results stream in; a pulsing mic + stop control
+ * mirror the recording state's visual language so dictation reads as the
+ * sibling of a voice note. Errors render in place.
+ */
+@Composable
+private fun TranscribePanel(
+    accent: Color,
+    partial: String,
+    error: String?,
+    onStop: () -> Unit
+) {
+    val pulseScale = rememberPulseScale(active = true)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = accent.copy(alpha = 0.1f),
+            border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Pulsing mic — same ring language as live recording.
+                Box(
+                    modifier = Modifier.size(64.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Surface(
+                        shape = CircleShape,
+                        color = accent.copy(alpha = 0.2f),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .scale(pulseScale)
+                    ) {}
+                    Surface(
+                        shape = CircleShape,
+                        color = accent,
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            CurioIcon(
+                                name = CurioIcons.Mic,
+                                contentDescription = null,
+                                tint = pastelFillInk(accent),
+                                size = 24.dp
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = if (error != null) error else "Listening… speak now",
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = if (error != null) MaterialTheme.colorScheme.error else accent,
+                    textAlign = TextAlign.Center
+                )
+                if (partial.isNotBlank()) {
+                    Text(
+                        text = partial,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                // Error panel needs its own dismissal (transcribing is off,
+                // so the plain button below would otherwise stay hidden and
+                // the message would be stuck on screen).
+                TextButton(
+                    onClick = onStop,
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = if (error != null) "Dismiss" else "Stop transcription",
+                        color = if (error != null) MaterialTheme.colorScheme.error else accent
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun IdleControls(

@@ -13,3 +13,4 @@
 • Page-switch animations are smooth again — no more glitchy bounce when screens transition, and switching bottom tabs now crossfades cleanly instead of sliding
 • The explore timer notification now has a Cancel button — end the session quietly from the shade (Done exploring still jumps to write-it-down)
 • Leaving the save-entry page always asks first — save / keep editing / discard when you've added something, a simple confirm when it's empty
+• Save-page upgrades: drafts autosave as you type (resume them any time), speak-to-text for voice takes (transcribe instead of recording), and custom tags to find captures later — searchable in the Cabinet and shown on every entry

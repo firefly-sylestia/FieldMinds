@@ -207,8 +207,13 @@ object CurioBackupManager {
             AudioStorageManager.deleteAllAudio(context)
             ImageStorageManager.deleteAllImages(context)
             payload.captures.map { capture ->
+                // Tags (v7.17): backups predating the tags column deserialize
+                // tagsJson to null (Gson Unsafe allocation skips constructor
+                // defaults) — normalize to the empty array so the NOT NULL
+                // column insert can't fail.
+                var updated = if (capture.tagsJson == null) capture.copy(tagsJson = "[]") else capture
                 // Audio (v2): write the recording and point the capture at it.
-                var updated = capture
+                updated = updated
                 audioFiles[capture.id]?.let { bytes ->
                     val newPath = runCatching {
                         AudioStorageManager.restoreAudio(context, capture.id, bytes)
@@ -217,7 +222,7 @@ object CurioBackupManager {
                         runCatching {
                             CaptureConverters.deserializeCaptureData(capture.formatDataJson)
                                 .withAudioPath(newPath)
-                        }.getOrNull()?.let { updated = capture.copy(formatDataJson = Gson().toJson(it)) }
+                        }.getOrNull()?.let { updated = updated.copy(formatDataJson = Gson().toJson(it)) }
                     }
                 }
                 // Images (v3): write each bundled photo and rewrite every
@@ -244,7 +249,7 @@ object CurioBackupManager {
                         // Only rewrite the JSON when a photo actually moved
                         // (skips pointless round-trips on legacy backups).
                         if (remappedAny) {
-                            updated = capture.copy(formatDataJson = Gson().toJson(remapped))
+                            updated = updated.copy(formatDataJson = Gson().toJson(remapped))
                         }
                     }
                 }

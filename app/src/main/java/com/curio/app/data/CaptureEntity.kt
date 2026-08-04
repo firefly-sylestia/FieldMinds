@@ -26,7 +26,11 @@ data class CaptureEntity(
     val format: String,          // CaptureFormat enum name
     val capturedAtMillis: Long,
     val title: String?,
-    val formatDataJson: String    // JSON-serialized CaptureData
+    val formatDataJson: String,    // JSON-serialized CaptureData
+    // v7.17 — user tags, stored as a Gson JSON array string ("[\"a\",\"b\"]").
+    // Room migration v1→v2 adds this column with DEFAULT '[]' so existing
+    // rows read as empty; backup restore normalizes nulls defensively.
+    val tagsJson: String = "[]"
 )
 
 /**
@@ -128,7 +132,8 @@ fun CurioEntry.toEntity(): CaptureEntity = CaptureEntity(
     format = format.name,
     capturedAtMillis = capturedAtMillis,
     title = title,
-    formatDataJson = Gson().toJson(captureData)
+    formatDataJson = Gson().toJson(captureData),
+    tagsJson = Gson().toJson(tags)
 )
 
 /**
@@ -194,6 +199,24 @@ fun CaptureEntity.toEntry(): CurioEntry {
         format = CaptureFormat.valueOf(format),
         captureData = captureData,
         title = title,
-        capturedAtMillis = capturedAtMillis
+        capturedAtMillis = capturedAtMillis,
+        tags = deserializeTags(tagsJson)
     )
+}
+
+/**
+ * Parse the stored [CaptureEntity.tagsJson] array defensively — legacy rows,
+ * null blobs (Gson decodes a missing field to null), or malformed JSON all
+ * degrade to an empty list instead of crashing the Cabinet grid.
+ */
+private fun deserializeTags(tagsJson: String?): List<String> {
+    if (tagsJson.isNullOrBlank()) return emptyList()
+    return try {
+        val type = object : TypeToken<List<String>>() {}.type
+        (Gson().fromJson<List<String>>(tagsJson, type) ?: emptyList())
+            .filter { it.isNotBlank() }
+            .distinct()
+    } catch (_: Exception) {
+        emptyList()
+    }
 }

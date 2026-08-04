@@ -10,6 +10,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,13 +24,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,11 +53,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioStorageManager
+import com.curio.app.data.CaptureConverters
 import com.curio.app.data.CaptureData
+import com.curio.app.data.CaptureDraftStore
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CaptureRepository
 import com.curio.app.data.JournalMood
@@ -88,6 +96,7 @@ import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
+import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -164,6 +173,66 @@ fun SaveCaptureScreen(
     var savedEntryId by remember { mutableStateOf<String?>(null) }
     var showDiscardDialog by remember { mutableStateOf(false) }
 
+    // ── Custom tags (v7.17) — free-form labels added on the save page and
+    // persisted on the entry (Room tagsJson column). Shown as chips on the
+    // detail page and matched by Cabinet search. Edit mode prefills from the
+    // saved entry so re-saving keeps existing tags.
+    var tags by remember { mutableStateOf<List<String>>(emptyList()) }
+    var tagInput by remember { mutableStateOf("") }
+    LaunchedEffect(editingEntry) {
+        if (editEntryId != null) tags = editingEntry?.tags.orEmpty()
+    }
+
+    // ── Draft autosave (v7.17) ──────────────────────────────────────────
+    // While on this page, the current capture data is debounce-snapshotted
+    // to [CaptureDraftStore] so a stray back / app kill / rotation never
+    // silently loses drafted content. Reopening the SAME topic's save page
+    // offers to resume the stored draft (see the resume dialog below); a
+    // successful save clears it.
+    var resumedDraftData by remember { mutableStateOf<CaptureData?>(null) }
+    var pendingDraft by remember { mutableStateOf<CaptureData?>(null) }
+    var showResumeDraftDialog by remember { mutableStateOf(false) }
+    // Best-effort snapshot emitted by the format body — non-null for partial
+    // drafts too (vs [currentCaptureData], which is only set when every
+    // section is ready). Drives the debounced autosave.
+    var draftData by remember { mutableStateOf<CaptureData?>(null) }
+
+    // Load the stored draft ONCE per screen open (keyed on category+topic;
+    // edit mode skips — the saved entry is the source of truth there). The
+    // dialog only offers to RESUME; dismissing it keeps the stored draft for
+    // the next visit without seeding this one.
+    LaunchedEffect(categorySlug, topicName) {
+        if (editEntryId != null) return@LaunchedEffect
+        val draft = CaptureDraftStore.get(context, categorySlug, topicName)
+            ?: return@LaunchedEffect
+        val data = runCatching {
+            CaptureConverters.deserializeCaptureData(draft.dataJson)
+        }.getOrNull() ?: return@LaunchedEffect
+        pendingDraft = data
+        showResumeDraftDialog = true
+    }
+
+    // Debounced autosave — 700ms of quiet after the last change snapshots
+    // the take to the draft store. Skipped while nothing is drafted.
+    // saveInProgress keys + guards the write: when a save lands, the draft is
+    // cleared, and a debounced write that was already in flight must NOT
+    // re-save it (that would resurrect a "Resume draft?" prompt for a topic
+    // that was just saved).
+    LaunchedEffect(draftData, hasAnyDraft, topic?.name, categorySlug, saveInProgress) {
+        if (editEntryId != null) return@LaunchedEffect
+        if (saveInProgress) return@LaunchedEffect
+        if (!hasAnyDraft) return@LaunchedEffect
+        val data = draftData ?: return@LaunchedEffect
+        val resolvedTopic = topic ?: return@LaunchedEffect
+        delay(700)
+        // Re-check after the debounce window — the user may have saved.
+        if (saveInProgress) return@LaunchedEffect
+        val stillCurrent = draftData ?: return@LaunchedEffect
+        CaptureDraftStore.save(
+            context, categorySlug, resolvedTopic.name, Gson().toJson(stillCurrent)
+        )
+    }
+
     // v7.17 — back ALWAYS asks before leaving this capture page (both the
     // system back and the top-bar back button): leaving drops you out of
     // the capture flow, so a stray back should never silently discard
@@ -211,7 +280,8 @@ fun SaveCaptureScreen(
                     // Edit mode: keep id/topic/title/timestamp, swap the data.
                     existingEntry.copy(
                         format = formatOf(persistedData),
-                        captureData = persistedData
+                        captureData = persistedData,
+                        tags = tags
                     )
                 } else {
                     CurioEntry(
@@ -221,13 +291,19 @@ fun SaveCaptureScreen(
                         // entry uses its first section's format so Cabinet glyph
                         // and detail dispatch stay correct.
                         format = formatOf(persistedData),
-                        captureData = persistedData
+                        captureData = persistedData,
+                        tags = tags
                     )
                 }
                 runCatching { CurioRepositoryHolder.repo.save(entry) }
                     .onSuccess {
                         savedEntryId = entry.id
                         StreakTracker.recordActivity(context)
+                        // Saved — the autosaved draft is now redundant. Null the
+                        // snapshot too, so a debounced write that re-fires when
+                        // saveInProgress flips back can't resurrect it.
+                        draftData = null
+                        CaptureDraftStore.clear(context, categorySlug, resolvedTopic.name)
                         delay(400)
                         confettiTrigger++
                         emberTrigger++
@@ -368,15 +444,39 @@ fun SaveCaptureScreen(
                             // Dispatch on the SAVED entry's format in edit mode so
                             // the right body renders regardless of category default.
                             entryFormat = editingEntry?.format,
-                            initialData = editingEntry?.captureData,
+                            // Edit mode seeds from the saved entry; a fresh capture
+                            // seeds from the RESUMED autosaved draft (if any).
+                            initialData = editingEntry?.captureData ?: resumedDraftData,
                             // Reuse the saved entry's id-derived seed so the editor's
                             // watermark pattern matches the saved view exactly.
                             boardSeed = editEntryId?.hashCode(),
                             onCanSaveChange = { canSave = it && topic != null && (editEntryId == null || editingEntry != null) },
                             onDraftChange = { hasAnyDraft = it },
-                            onDataChanged = { currentCaptureData = it }
+                            onDataChanged = { currentCaptureData = it },
+                            onDraftDataChanged = { draftData = it }
                         )
                     }
+
+                    // ── Custom tags (v7.17) — free-form labels to find this
+                    // capture later. Rendered under the format body so the
+                    // tags ride along with the take content in the scroll.
+                    TagEditorRow(
+                        tags = tags,
+                        tagInput = tagInput,
+                        onTagInputChange = { tagInput = it },
+                        onAddTag = { raw ->
+                            val clean = raw.trim().trimStart('#').trim()
+                            if (clean.isNotBlank() && clean.length <= 24 && tags.size < 12) {
+                                tags = (tags + clean).distinct()
+                            }
+                            tagInput = ""
+                        },
+                        onRemoveTag = { tag -> tags = tags.filterNot { it == tag } },
+                        accent = cat.themedAccent(),
+                        tint = cat.tint,
+                        ink = cat.categoryInk(),
+                        onAccentContent = cat.onAccent()
+                    )
             }
         }
 
@@ -528,6 +628,40 @@ fun SaveCaptureScreen(
         }
     }
 
+    // ── Resume-draft dialog (v7.17) ────────────────────────────────────
+    // Shown when an autosaved draft exists for this category+topic. Resume
+    // seeds the format body with the stored snapshot; Discard permanently
+    // clears it; tapping outside keeps it stored for the next visit without
+    // loading it now.
+    if (showResumeDraftDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                pendingDraft = null
+                showResumeDraftDialog = false
+            },
+            title = { Text("Resume draft?") },
+            text = { Text("You have an autosaved draft for this topic. Pick up where you left off, or start fresh.") },
+            dismissButton = {
+                TextButton(onClick = {
+                    CaptureDraftStore.clear(context, categorySlug, topicName)
+                    pendingDraft = null
+                    showResumeDraftDialog = false
+                }) {
+                    Text("Discard draft", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    resumedDraftData = pendingDraft
+                    pendingDraft = null
+                    showResumeDraftDialog = false
+                }) {
+                    Text("Resume")
+                }
+            }
+        )
+    }
+
     // ── Confetti + ember celebration ────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
@@ -546,6 +680,106 @@ fun SaveCaptureScreen(
             modifier = Modifier.fillMaxSize(),
             onComplete = {}
         )
+    }
+}
+
+/**
+ * Custom-tags editor (v7.17) — a compact label row on the save page.
+ * Entered tags render as removable #chips (FlowRow wrap); the input field
+ * adds on the add-button or the IME Done action. Kept minimal: 12 tags max,
+ * 24 chars each, deduped, trimmed of leading '#'s.
+ */
+@Composable
+private fun TagEditorRow(
+    tags: List<String>,
+    tagInput: String,
+    onTagInputChange: (String) -> Unit,
+    onAddTag: (String) -> Unit,
+    onRemoveTag: (String) -> Unit,
+    accent: Color,
+    tint: Color,
+    ink: Color,
+    onAccentContent: Color
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "Tags",
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        if (tags.isNotEmpty()) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                tags.forEach { tag ->
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = if (AppPreferences.tintWashEffective()) tint.copy(alpha = 0.14f)
+                                else MaterialTheme.colorScheme.surfaceVariant,
+                        border = BorderStroke(1.dp, accent.copy(alpha = 0.4f))
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(start = 10.dp, end = 2.dp, top = 4.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            Text(
+                                text = "#$tag",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (AppPreferences.tintWashEffective()) ink else accent
+                            )
+                            Surface(
+                                onClick = { onRemoveTag(tag) },
+                                shape = CircleShape,
+                                color = Color.Transparent
+                            ) {
+                                CurioIcon(
+                                    name = CurioIcons.Close,
+                                    contentDescription = "Remove tag $tag",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    size = 14.dp,
+                                    modifier = Modifier.padding(4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedTextField(
+                value = tagInput,
+                onValueChange = { onTagInputChange(it.take(24)) },
+                placeholder = { Text("Add a tag…") },
+                singleLine = true,
+                shape = RoundedCornerShape(50),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { onAddTag(tagInput) }),
+                modifier = Modifier.weight(1f)
+            )
+            Surface(
+                onClick = { onAddTag(tagInput) },
+                shape = RoundedCornerShape(50),
+                color = if (AppPreferences.tintWashEffective()) tint else accent
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Add,
+                    contentDescription = "Add tag",
+                    tint = if (AppPreferences.tintWashEffective()) ink else onAccentContent,
+                    size = 20.dp,
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+        }
     }
 }
 
@@ -572,7 +806,8 @@ private fun FormatBodyForCategory(
     onDraftChange: (Boolean) -> Unit = {},
     entryFormat: CaptureFormat? = null,
     initialData: CaptureData? = null,
-    boardSeed: Int? = null
+    boardSeed: Int? = null,
+    onDraftDataChanged: (CaptureData?) -> Unit = {}
 ) {
     // Wildcard has no dedicated page — default its first take to Voice.
     val defaultFormat = if (category.defaultFormat == CaptureFormat.OpenNotebook)
@@ -663,10 +898,25 @@ private fun FormatBodyForCategory(
     // switch / remove guards key on this, so a rating, images or a voice
     // note without the required text still count as "content you'd lose".
     val hasAnyDraft = sections.any { it.data != null || it.busy }
+    // BEST-EFFORT draft snapshot for autosave — unlike [combinedData] this
+    // is non-null even before every section is complete, so a partial
+    // multi-section draft (one take filled, one empty) still autosaves the
+    // filled content instead of nothing.
+    val draftData: CaptureData? = when {
+        sections.isEmpty() -> null
+        sections.size == 1 -> sections[0].data
+        else -> {
+            val filled = sections.mapNotNull { s ->
+                s.data?.let { CaptureData.CaptureSection(s.format, it) }
+            }
+            if (filled.isNotEmpty()) CaptureData.Portfolio(filled) else null
+        }
+    }
     LaunchedEffect(allReady, combinedData, hasAnyDraft, sections.toList()) {
         onCanSaveChange(allReady)
         onDraftChange(hasAnyDraft)
         onDataChanged(combinedData)
+        onDraftDataChanged(draftData)
     }
 
     Column(
