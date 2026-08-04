@@ -1,35 +1,32 @@
 # Prompt.md — Request Log
 
-## Latest Request (COMPLETED)
+## Latest Request (IN PROGRESS → COMPLETED)
 
-**Further detail hero tear refinement**
+**FieldMind restore metadata cards, separate Legacy Cabinet, and Curio observation session**
 
 ### What was requested
 
-Improve the detail hero's seeded wavy tear so it never reads as a straight line, has more than two or three broad waves, and gives the white under-layer a slightly bumpy handmade edge instead of a rigid plain line. Preserve the unique, deterministic look per saved entry and the existing small white reveal below the hero.
+- Preserve FieldMind observation/note metadata and species information during legacy restore.
+- Show dedicated metadata and species cards in Curio detail without affecting native entries.
+- Keep restored legacy entries in a separate Cabinet section rather than mixing them with normal Curio captures.
+- Add an always-available FieldMind-style observation session action in the detail overflow menu, using Curio UI and saving safely into the existing Curio repository.
 
 ### What was done
 
-- Increased the seeded soft tear personality from 2.5–4.5 broad undulations to 6–9 across the full hero width.
-- Added a continuous signed wave field alongside seeded value noise, preventing long visually flat plateaus while keeping the edge irregular rather than mechanically repetitive.
-- Retained seeded tilt, depth variation, and fine fiber texture so each entry remains unique and stable across recompositions/reopens.
-- Added a restrained, independently seeded bump layer to the bottom edge of the white under-sheet. The sheet remains a small lip behind the hero, but its lower silhouette is no longer a rigid straight line.
-- Updated the tear documentation to match the new geometry.
+- Extended optional `FieldMindMetadata` with weather condition, session start/end, and source identifiers; existing native capture constructors remain backward-compatible because all new fields default.
+- Improved archive parsing and species matching using FieldMind's `speciesInfo`, taxonomy, conservation, structured details, timestamps, location, weather, quality, status, project, source, and tags.
+- Added a dedicated Curio-styled FieldMind metadata card with weather, coordinates, duration, status, tags, structured details, and nested taxonomy/species presentation. The card renders only when restored provenance exists.
+- Added an explicit Legacy Cabinet mode. Normal Cabinet mode excludes legacy imports; the Legacy chip opens a separate "Legacy Cabinet" view and clears category filters.
+- Added an always-available `fieldmind-observation` route and Curio-styled timed observation screen. Saving produces a normal Field Notes entry with optional FieldMind provenance, so native Curio flows and storage remain unchanged.
+- Added the observation-session action to the Entry Detail overflow menu.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `PaperCard.kt` and `EntryDetailScreen.kt`.
+- `scripts/check_braces.py` passed on all changed Kotlin files.
 - `git diff --check` passed.
-- Code review found no compile/runtime blocker; deterministic alignment and the hero-only tear layering remain intact.
-- Local Gradle commands were not run because the repository's AGENTS.md explicitly forbids them; CI remains the compilation gate.
+- Gradle/build commands were not run because the repository's AGENTS.md forbids local Android compilation; CI remains the compilation gate.
+- Plain `archive.json` media can only restore files that remain accessible through the exported URI/path; packaged `.fieldmind` media remains the reliable complete-media path.
 
----
+### Follow-up note
 
-## Previous Request (COMPLETED)
-
-**Fix Kotlin compile failure from FieldMind importer KDoc**
-
-- Removed dangerous `/*` wildcard path notation from importer KDoc.
-- Pushed as commit `95eb42cf`.
-
----
+The session screen is intentionally a lightweight Curio-native session capture rather than a second FieldMind database. Future enhancement can add species picker, GPS/weather capture, and attachments without changing the current persistence boundary.

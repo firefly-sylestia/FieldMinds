@@ -191,7 +191,8 @@ object FieldMindLegacyImport {
         val location: String,
         val weather: String,
         val tags: List<String>,
-        val metadata: String
+        val metadata: String,
+        val fieldMindMetadata: FieldMindMetadata
     )
 
     private data class NoteRecord(
@@ -201,7 +202,8 @@ object FieldMindLegacyImport {
         val category: String,
         val tags: List<String>,
         val timestamp: Long,
-        val metadata: String
+        val metadata: String,
+        val fieldMindMetadata: FieldMindMetadata
     )
 
     private data class MediaFile(
@@ -333,7 +335,76 @@ object FieldMindLegacyImport {
             throw IllegalArgumentException("That file isn't a FieldMind archive.")
         }
 
+        val speciesRecords = root.optJSONArray("species").mapObjects { o ->
+            FieldMindSpecies(
+                commonName = o.optString("commonName"),
+                scientificName = o.optString("scientificName"),
+                kingdom = o.optString("kingdom"),
+                phylum = o.optString("phylum"),
+                className = o.optString("classs"),
+                order = o.optString("order"),
+                family = o.optString("family"),
+                genus = o.optString("genus"),
+                species = o.optString("species"),
+                conservationStatus = o.optString("conservationStatus"),
+                observationCount = o.optInt("observationCount", -1).takeIf { it >= 0 },
+                notes = o.optString("notes")
+            )
+        }
+        fun JSONObject.optionalDouble(key: String): Double? =
+            optDouble(key).takeIf { !it.isNaN() }
+        fun speciesFor(o: JSONObject): FieldMindSpecies? {
+            val details = runCatching { JSONObject(o.optString("structuredDetailsJson")) }.getOrNull()
+            val speciesInfo = details?.optJSONObject("speciesInfo")
+            val name = details?.optString("speciesName").orEmpty()
+                .ifBlank { speciesInfo?.optString("speciesName").orEmpty() }
+                .ifBlank { o.optString("subject") }
+            val scientific = details?.optString("scientificName").orEmpty()
+                .ifBlank { speciesInfo?.optString("scientificName").orEmpty() }
+            val matched = speciesRecords.firstOrNull { record ->
+                listOf(record.commonName, record.scientificName, record.species)
+                    .any { it.isNotBlank() && (it.equals(name, true) || it.equals(scientific, true)) }
+            }
+            return matched ?: if (name.isNotBlank() && !name.equals(o.optString("subject"), true) || scientific.isNotBlank()) {
+                FieldMindSpecies(
+                    commonName = name.takeIf { it != o.optString("subject") }.orEmpty(),
+                    scientificName = scientific,
+                    conservationStatus = details?.optString("conservationStatus").orEmpty()
+                        .ifBlank { speciesInfo?.optString("conservationStatus").orEmpty() },
+                    notes = speciesInfo?.optString("speciesDescription").orEmpty()
+                )
+            } else null
+        }
+
         val observations = root.optJSONArray("observations").mapObjects { o ->
+            val fieldMind = FieldMindMetadata(
+                recordType = "observation",
+                category = o.optString("category"),
+                confidence = o.optString("confidenceLevel"),
+                date = o.optString("date"),
+                time = o.optString("time"),
+                location = o.optString("manualLocation"),
+                latitude = o.optionalDouble("latitude"),
+                longitude = o.optionalDouble("longitude"),
+                weather = buildWeather(o),
+                weatherCondition = o.optString("weatherCondition"),
+                weatherTemperature = o.optionalDouble("weatherTemperature"),
+                humidity = o.optInt("weatherHumidity", -1).takeIf { it >= 0 },
+                windSpeed = o.optionalDouble("weatherWindSpeed"),
+                cloudCover = o.optInt("weatherCloudCover", -1).takeIf { it >= 0 },
+                pressure = o.optionalDouble("weatherPressure"),
+                durationMs = o.optLong("durationMs", -1L).takeIf { it >= 0L },
+                startedAt = o.optLong("startedAt", -1L).takeIf { it >= 0L },
+                endedAt = o.optLong("endedAt", -1L).takeIf { it >= 0L },
+                timeNote = o.optString("timeNote"),
+                status = o.optString("status"),
+                projectId = o.optLong("projectId", -1L).takeIf { it >= 0L },
+                sourceId = o.optLong("sourceId", -1L).takeIf { it >= 0L },
+                qualityScore = o.optInt("qualityScore", -1).takeIf { it >= 0 },
+                tags = splitTags(o.optString("tags")),
+                structuredDetailsJson = o.optString("structuredDetailsJson"),
+                species = speciesFor(o)
+            )
             ObsRecord(
                 id = o.optLong("id", 0L),
                 subject = o.optString("subject", "Field observation"),
@@ -346,11 +417,20 @@ object FieldMindLegacyImport {
                 location = o.optString("manualLocation"),
                 weather = buildWeather(o),
                 tags = splitTags(o.optString("tags")),
-                metadata = observationMetadata(o)
+                metadata = observationMetadata(o),
+                fieldMindMetadata = fieldMind
             )
         }
 
         val notes = root.optJSONArray("notes").mapObjects { o ->
+            val fieldMind = FieldMindMetadata(
+                recordType = "note",
+                category = o.optString("category"),
+                status = o.optString("status"),
+                projectId = o.optLong("projectId", -1L).takeIf { it >= 0L },
+                sourceId = o.optLong("sourceId", -1L).takeIf { it >= 0L },
+                tags = splitTags(o.optString("tags"))
+            )
             NoteRecord(
                 id = o.optLong("id", 0L),
                 title = o.optString("title", "FieldMind note"),
@@ -358,7 +438,8 @@ object FieldMindLegacyImport {
                 category = o.optString("category"),
                 tags = splitTags(o.optString("tags")),
                 timestamp = o.optLong("timestamp", o.optLong("createdAt", System.currentTimeMillis())),
-                metadata = noteMetadata(o)
+                metadata = noteMetadata(o),
+                fieldMindMetadata = fieldMind
             )
         }
 
@@ -394,7 +475,8 @@ object FieldMindLegacyImport {
                 observed = obs.facts,
                 surprised = joinPreserved(obs.evidence, obs.metadata),
                 learnNext = obs.context,
-                imageUris = images
+                imageUris = images,
+                fieldMindMetadata = obs.fieldMindMetadata
             ),
             capturedAtMillis = obs.timestamp,
             tags = legacyTags(obs.category, obs.tags).let { base ->
@@ -416,7 +498,8 @@ object FieldMindLegacyImport {
             captureData = CaptureData.Marginalia(
                 journalText = joinPreserved(note.body, note.metadata),
                 quotes = emptyList(),
-                imageUris = images
+                imageUris = images,
+                fieldMindMetadata = note.fieldMindMetadata
             ),
             capturedAtMillis = note.timestamp,
             tags = legacyTags(note.category, note.tags)

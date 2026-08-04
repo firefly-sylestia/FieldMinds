@@ -118,6 +118,8 @@ import com.curio.app.data.TextSpan
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.FieldMindMetadata
+import com.curio.app.data.formatElapsed
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.shortName
 import com.curio.app.features.capture.formats.FilledStar
@@ -570,6 +572,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
                             )
                         }
+                        DropdownMenuItem(
+                            text = { Text("FieldMind observation session") },
+                            onClick = {
+                                menuExpanded = false
+                                navController.navigate(CurioRoutes.FIELDMIND_OBSERVATION) { launchSingleTop = true }
+                            },
+                            leadingIcon = { CurioIcon(name = CurioIcons.ScienceGlyph, contentDescription = null, size = 20.dp) }
+                        )
                         DropdownMenuItem(
                             text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
                             onClick = {
@@ -1880,6 +1890,9 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
 private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.Marginalia ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        data.fieldMindMetadata?.let { metadata ->
+            FieldMindMetadataCard(metadata = metadata, category = category)
+        }
         // ── Journal — "My thoughts" on a note-paper page ──────────────
         if (!data.journalText.isNullOrBlank()) {
             MarginaliaSectionHeader(label = "My thoughts", category = category)
@@ -2837,6 +2850,9 @@ private fun ExpandedMoodBoardDialog(
 private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.FieldNotes ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        data.fieldMindMetadata?.let { metadata ->
+            FieldMindMetadataCard(metadata = metadata, category = category)
+        }
         data.observed.takeIf { it.isNotBlank() }?.let { text ->
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.categoryInk())
@@ -2909,6 +2925,82 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                             contentScale = ContentScale.Fit,
                             modifier = Modifier.fillMaxSize().padding(4.dp)
                         )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCategory) {
+    val species = metadata.species
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
+        border = category.categoryBorder(),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                CurioIcon(CurioIcons.ScienceGlyph, null, tint = category.themedAccent(), size = 22.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("FieldMind metadata", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                    Text(metadata.recordType.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            val rows = buildList {
+                fun addRow(label: String, value: String) { if (value.isNotBlank()) add(label to value) }
+                addRow("Category", metadata.category)
+                addRow("Confidence", metadata.confidence)
+                addRow("Date", listOf(metadata.date, metadata.time).filter { it.isNotBlank() }.joinToString(" · "))
+                addRow("Location", metadata.location)
+                if (metadata.latitude != null && metadata.longitude != null) addRow("Coordinates", "${metadata.latitude}, ${metadata.longitude}")
+                addRow("Weather", listOf(metadata.weather, metadata.weatherCondition).filter { it.isNotBlank() }.distinct().joinToString(" · "))
+                metadata.weatherTemperature?.let { addRow("Temperature", "${it}°") }
+                metadata.humidity?.let { addRow("Humidity", "$it%") }
+                metadata.windSpeed?.let { addRow("Wind", it.toString()) }
+                metadata.cloudCover?.let { addRow("Cloud cover", "$it%") }
+                metadata.pressure?.let { addRow("Pressure", it.toString()) }
+                metadata.durationMs?.let { addRow("Duration", formatElapsed(it)) }
+                addRow("Status", metadata.status)
+                metadata.projectId?.let { addRow("Project", it.toString()) }
+                metadata.sourceId?.let { addRow("Source", it.toString()) }
+                metadata.qualityScore?.let { addRow("Quality", it.toString()) }
+                addRow("Time note", metadata.timeNote)
+            }
+            rows.forEach { (label, value) ->
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(label, style = MaterialTheme.typography.labelMedium, color = category.categoryInk(), modifier = Modifier.width(92.dp))
+                    Text(value, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                }
+            }
+            if (metadata.tags.isNotEmpty()) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    metadata.tags.forEach { tag ->
+                        Surface(shape = RoundedCornerShape(50), color = category.themedAccent().copy(alpha = 0.12f)) {
+                            Text("#$tag", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                        }
+                    }
+                }
+            }
+            if (metadata.structuredDetailsJson.isNotBlank()) {
+                Text("Structured details", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = category.categoryInk())
+                Text(metadata.structuredDetailsJson, style = MaterialTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth())
+            }
+            species?.let { item ->
+                Surface(shape = RoundedCornerShape(16.dp), color = category.themedAccent().copy(alpha = 0.10f), modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            CurioIcon(CurioIcons.ScienceGlyph, null, tint = category.themedAccent(), size = 18.dp)
+                            Text("Species", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                        }
+                        Text(item.commonName.ifBlank { item.scientificName.ifBlank { "Unknown species" } }, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+                        if (item.scientificName.isNotBlank()) Text(item.scientificName, style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        val taxonomy = listOf("Kingdom" to item.kingdom, "Phylum" to item.phylum, "Class" to item.className, "Order" to item.order, "Family" to item.family, "Genus" to item.genus, "Species" to item.species, "Conservation" to item.conservationStatus).filter { it.second.isNotBlank() }
+                        taxonomy.forEach { (label, value) -> Text("$label · $value", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                        item.observationCount?.let { Text("Recorded observations · $it", style = MaterialTheme.typography.labelSmall) }
+                        if (item.notes.isNotBlank()) Text(item.notes, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }

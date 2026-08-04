@@ -86,6 +86,7 @@ private val CategoryIdSaver = Saver<CategoryId?, String>(
 @Composable
 fun CabinetScreen(navController: NavController) {
     var selectedFilter by rememberSaveable(stateSaver = CategoryIdSaver) { mutableStateOf<CategoryId?>(null) }
+    var showLegacyOnly by rememberSaveable { mutableStateOf(false) }
     // Saveable-backed scroll state — the grid keeps its position on rotation.
     val gridState = rememberLazyGridState()
 
@@ -110,10 +111,15 @@ fun CabinetScreen(navController: NavController) {
         }
     }
 
-    val visibleEntries = remember(entries, selectedFilter, searchQuery, sortNewestFirst) {
+    val visibleEntries = remember(entries, selectedFilter, showLegacyOnly, searchQuery, sortNewestFirst) {
         val q = searchQuery.trim()
         var result = if (selectedFilter == null) entries
             else entries.filter { it.topic.categoryId == selectedFilter }
+        // Legacy captures live in their own Cabinet section. The normal
+        // Cabinet never mixes restored FieldMind records with native Curio
+        // captures; selecting Legacy is the explicit opt-in view.
+        result = if (showLegacyOnly) result.filter { it.isLegacy }
+                 else result.filterNot { it.isLegacy }
         if (q.isNotEmpty()) {
             result = result.filter {
                 it.topic.name.contains(q, ignoreCase = true) ||
@@ -216,13 +222,14 @@ fun CabinetScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if (selectedFilter != null) {
+                    if (selectedFilter != null || showLegacyOnly) {
                         // Same top back button as the filters page — tapping it
-                        // dismisses the active category filter back to "All".
-                        CurioBackButton(onClick = { selectedFilter = null })
+                        // dismisses the active category/legacy section back to
+                        // native Curio captures.
+                        CurioBackButton(onClick = { selectedFilter = null; showLegacyOnly = false })
                     }
                     Text(
-                        text = "The Cabinet",
+                        text = if (showLegacyOnly) "Legacy Cabinet" else "The Cabinet",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
@@ -299,8 +306,20 @@ fun CabinetScreen(navController: NavController) {
                     ink = MaterialTheme.colorScheme.onPrimaryContainer,
                     chipSurface = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
                     chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                    selected = selectedFilter == null,
-                    onClick = { selectedFilter = null }
+                    selected = selectedFilter == null && !showLegacyOnly,
+                    onClick = { selectedFilter = null; showLegacyOnly = false }
+                )
+            }
+            item("legacy") {
+                FilterChipLite(
+                    label = "Legacy",
+                    accent = MaterialTheme.colorScheme.tertiary,
+                    tint = MaterialTheme.colorScheme.tertiaryContainer,
+                    ink = MaterialTheme.colorScheme.onTertiaryContainer,
+                    chipSurface = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                    chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    selected = showLegacyOnly,
+                    onClick = { selectedFilter = null; showLegacyOnly = !showLegacyOnly }
                 )
             }
             items(CurioCategories.visible) { cat ->
@@ -316,8 +335,8 @@ fun CabinetScreen(navController: NavController) {
                     chipBorder = cat.categoryBorder(
                         fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                     ),
-                    selected = selectedFilter == cat.id,
-                    onClick = { selectedFilter = cat.id }
+                    selected = selectedFilter == cat.id && !showLegacyOnly,
+                    onClick = { selectedFilter = cat.id; showLegacyOnly = false }
                 )
             }
         }
@@ -341,7 +360,16 @@ fun CabinetScreen(navController: NavController) {
                             searchActive = false
                         }
                     )
-                } else if (selectedFilter == null) {
+                } else if (showLegacyOnly) {
+                    CurioEmptyState(
+                        glyph = CurioIcons.History,
+                        headline = "No legacy captures yet",
+                        subtext = "Restore a FieldMind archive from Settings to keep old observations separate from Curio.",
+                        tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
+                        ctaLabel = "Open settings",
+                        onCtaClick = { navController.navigate(CurioRoutes.SETTINGS) { launchSingleTop = true } }
+                    )
+                } else if (selectedFilter == null && !showLegacyOnly) {
                     CurioEmptyState(
                         glyph = CurioIcons.Inventory2,
                         headline = "Your Cabinet is empty",

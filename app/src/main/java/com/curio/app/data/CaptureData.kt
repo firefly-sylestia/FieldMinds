@@ -96,6 +96,52 @@ data class TextSpan(
     val fontSizeSp: Float? = null
 )
 
+/** Structured FieldMind provenance preserved on a restored observation or note. */
+data class FieldMindMetadata(
+    val recordType: String = "observation",
+    val category: String = "",
+    val confidence: String = "",
+    val date: String = "",
+    val time: String = "",
+    val location: String = "",
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val weather: String = "",
+    val weatherCondition: String = "",
+    val weatherTemperature: Double? = null,
+    val humidity: Int? = null,
+    val windSpeed: Double? = null,
+    val cloudCover: Int? = null,
+    val pressure: Double? = null,
+    val durationMs: Long? = null,
+    val startedAt: Long? = null,
+    val endedAt: Long? = null,
+    val timeNote: String = "",
+    val status: String = "",
+    val projectId: Long? = null,
+    val sourceId: Long? = null,
+    val qualityScore: Int? = null,
+    val tags: List<String> = emptyList(),
+    val structuredDetailsJson: String = "",
+    val species: FieldMindSpecies? = null
+)
+
+/** Taxonomy/species data associated with a restored FieldMind observation. */
+data class FieldMindSpecies(
+    val commonName: String = "",
+    val scientificName: String = "",
+    val kingdom: String = "",
+    val phylum: String = "",
+    val className: String = "",
+    val order: String = "",
+    val family: String = "",
+    val genus: String = "",
+    val species: String = "",
+    val conservationStatus: String = "",
+    val observationCount: Int? = null,
+    val notes: String = ""
+)
+
 /**
  * Sealed class hierarchy for structured capture data produced by each format.
  *
@@ -219,7 +265,9 @@ sealed class CaptureData {
         val audioFilePath: String? = null,
         val audioDurationSeconds: Int = 0,
         val audioFileSizeBytes: Long = 0,
-        val audioEncodingFormat: String = "AAC"
+        val audioEncodingFormat: String = "AAC",
+        // Structured FieldMind provenance; absent for native Curio captures.
+        val fieldMindMetadata: FieldMindMetadata? = null
     ) : CaptureData()
 
     /** A single tile's layout on the mood board canvas. */
@@ -306,7 +354,9 @@ sealed class CaptureData {
         val paperStyle: NotePaperStyle? = null,
         // Mood — picked in the editor, shown in the saved entry's meta
         // card. Legacy entries omit it (Gson → null) → no mood.
-        val mood: JournalMood? = null
+        val mood: JournalMood? = null,
+        // Structured FieldMind provenance; absent for native Curio captures.
+        val fieldMindMetadata: FieldMindMetadata? = null
     ) : CaptureData()
 
     /**

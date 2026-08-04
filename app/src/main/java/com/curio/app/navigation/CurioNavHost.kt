@@ -71,6 +71,7 @@ import com.curio.app.features.reveal.TopicRevealScreen
 import com.curio.app.features.spin.SpinScreen
 import com.curio.app.features.home.HomeScreen
 import com.curio.app.features.splash.SplashScreen
+import com.curio.app.features.fieldmind.FieldMindObservationScreen
 import com.curio.app.ui.components.CurioBottomBar
 import com.curio.app.ui.theme.CurioMotion
 
@@ -414,6 +415,9 @@ fun CurioNavHost(
             }
             composable(CurioRoutes.BUG_REPORT) {
                 BugReportScreen(navController = navController)
+            }
+            composable(CurioRoutes.FIELDMIND_OBSERVATION) {
+                FieldMindObservationScreen(navController = navController)
             }
             composable(route = CurioRoutes.LIGHTBOX) {
                 // The image URI is handed off out-of-band via LightboxTarget
