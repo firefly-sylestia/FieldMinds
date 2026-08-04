@@ -2,6 +2,7 @@ package com.curio.app.ui.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -14,6 +15,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -244,7 +246,7 @@ fun rememberMoodBoardZoomState(): MoodBoardZoomState = remember { MoodBoardZoomS
  * tail (the old 280-stiffness spring took ~half a second to settle and
  * the overlay only removed itself after that).
  */
-private fun moodBoardZoomSpec(closing: Boolean) =
+private fun moodBoardZoomSpec(closing: Boolean): FiniteAnimationSpec<Float> =
     if (closing) tween(durationMillis = 170, easing = FastOutSlowInEasing)
     else spring(dampingRatio = 0.8f, stiffness = 320f)
 

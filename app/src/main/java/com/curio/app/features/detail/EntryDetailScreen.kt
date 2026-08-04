@@ -1142,7 +1142,9 @@ private fun SoundBiteRender(
                                 verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 Text(
-                                    text = if (noteError != null) noteError else "Listening… speak now",
+                                    // noteError is a delegated var → no smart
+                                    // cast; Elvis keeps the arg non-null.
+                                    text = noteError ?: "Listening… speak now",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                                     color = if (noteError != null) MaterialTheme.colorScheme.error
                                             else category.themedAccent()
