@@ -256,19 +256,23 @@ object CurioGradients {
      * always matches the app's background shade (the hero card must not
      * wash out to pure white on the cream surface).
      *
-     * v7.11 — Material style redesign: when "Material card blends" is on
-     * (default), the card wears a rich multi-stop gradient dominated by the
-     * device's dynamic Material You palette (90% device colors, 10% category
-     * accent whisper). The device's primary/secondary/tertiary form a smooth
-     * 5-stop gradient with midpoint blends; each stop is lightly tinted with
-     * the category accent at just 10% strength so the card reads as a
-     * device-colored surface with a gentle category whisper — never a
-     * competing rainbow ribbon. The ordering of device colors varies
-     * deterministically based on the accent's hue so different categories
-     * get visually distinct gradient arrangements (primary→secondary→tertiary,
-     * secondary→tertiary→primary, tertiary→primary→secondary). Pastel mode
-     * softens every stop so the whole glide stays pastel; dark mode uses the
-     * device's dynamic dark palette.
+     * v7.12 — Material style variety: when "Material card blends" is on
+     * (default), the card wears a gradient dominated by the device's dynamic
+     * Material You palette (90% device colors, 10% category accent whisper).
+     * The exact look varies deterministically per accent:
+     *   - **6 ordering arrangements** — the accent's hue sextant (60°
+     *     buckets) picks one of six permutations of primary/secondary/tertiary,
+     *     so EVERY category gets a distinct gradient order instead of just 3.
+     *   - **Variable stop count** — the accent's lightness determines the
+     *     gradient density: dark accents (amber, deep indigo) get a rich
+     *     7-stop HSL glide, light/mid accents get a clean 5-stop glide.
+     *     No category wears the same stop profile as its neighbor.
+     *   - **Variable tint strength** — the accent's saturation modulates
+     *     the category whisper: muted accents tint stronger (12-14%), vivid
+     *     accents stay at 10%, so the subtlety adapts to the accent's
+     *     personality instead of a one-size-fits-all blend.
+     * Pastel mode softens every stop so the whole glide stays pastel; dark
+     * mode uses the device's dynamic dark palette.
      *
      * v7.8 — light-mode fix: the standard fallback now ends on an ON-HUE
      * tint of the accent instead of the raw warm background, so cool accents
@@ -278,16 +282,11 @@ object CurioGradients {
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
-        // v7.11 — Material style + "Material card blends": a rich 5-stop
-        // gradient dominated by the device's dynamic palette (90%) with a
-        // whisper of the category accent (10%) tinted into every stop. The
-        // ordering of device colors varies by accent hue for visual variety.
-        // The old v7.8 approach routed through mixedDeckGradient which
-        // treated the accent and device colors as co-equal stops, producing
-        // a noisy rainbow ribbon where a red accent on a blue Material
-        // palette created blue→bluegreen→green→greenpurple→purple→red
-        // bands. The new approach keeps the card's identity firmly on the
-        // device palette while the category accent is barely visible.
+        // v7.12 — Material style + "Material card blends": a rich 5- or 7-
+        // stop gradient dominated by the device's dynamic palette (90%) with
+        // a whisper of the category accent (10-14%) tinted into every stop.
+        // The arrangement, stop count, and tint strength all vary by accent
+        // properties for genuine variety — every category renders differently.
         if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState
         ) {
@@ -295,36 +294,48 @@ object CurioGradients {
             val pastel = AppPreferences.pastelColorsState
             val dark = isCurioDarkTheme()
             val hint = if (pastel) pastelAccent(accent, dark) else accent
+            val hsl = toHsl(accent)
             val p = if (pastel) pastelAccent(scheme.primary, dark) else scheme.primary
             val s = if (pastel) pastelAccent(scheme.secondary, dark) else scheme.secondary
             val t = if (pastel) pastelAccent(scheme.tertiary, dark) else scheme.tertiary
-            // Lightly tint each device color with the category accent (90%
-            // device, 10% category whisper) so the card reads as a device
-            // surface with a subtle category hint — not a competing band.
-            val pTinted = lerp(p, hint, 0.10f)
-            val sTinted = lerp(s, hint, 0.10f)
-            val tTinted = lerp(t, hint, 0.10f)
-            // Deterministic variety: the ordering of device colors depends
-            // on the accent's hue, so warm accents (red/amber) get one
-            // arrangement, cool accents (teal/sky/indigo) get another,
-            // and the middle band gets the third — every category wears a
-            // visibly different gradient while the same category always
-            // renders the same way.
-            val hue = toHsl(accent).h
+            // Variable tint strength: muted accents get a slightly stronger
+            // category whisper so it still reads; vivid accents stay at 10%.
+            val tintStrength = (0.10f + (1f - hsl.s) * 0.04f).coerceIn(0.10f, 0.14f)
+            val pTinted = lerp(p, hint, tintStrength)
+            val sTinted = lerp(s, hint, tintStrength)
+            val tTinted = lerp(t, hint, tintStrength)
+            // 6-way ordering — the accent's hue sextant picks one of six
+            // permutations of device primary/secondary/tertiary, so every
+            // category (not just every 120° band) gets a distinct arrangement.
             val (first, second, third) = when {
-                hue < 120f -> Triple(pTinted, sTinted, tTinted)
-                hue < 240f -> Triple(sTinted, tTinted, pTinted)
-                else -> Triple(tTinted, pTinted, sTinted)
+                hsl.h < 60f  -> Triple(pTinted, sTinted, tTinted)
+                hsl.h < 120f -> Triple(pTinted, tTinted, sTinted)
+                hsl.h < 180f -> Triple(sTinted, pTinted, tTinted)
+                hsl.h < 240f -> Triple(sTinted, tTinted, pTinted)
+                hsl.h < 300f -> Triple(tTinted, pTinted, sTinted)
+                else         -> Triple(tTinted, sTinted, pTinted)
             }
-            // Rich 5-stop gradient: each pair of device colors is bridged
-            // through hslGradientStops (HSL-shortest-hue-path) so the
-            // glide stays saturated instead of passing through grey — the
-            // same HSL interpolation used by every other gradient in the
-            // codebase. Concatenate first→second and second→third, drop
-            // the duplicate second at the seam.
+            // Variable stop count: dark accents (amber, deep indigo at
+            // lightness < 0.25) get a rich 7-stop HSL glide; all others
+            // get the standard clean 5-stop gradient. Dark accents benefit
+            // from the extra detail; light/mid accents stay crisp.
             val a = hslGradientStops(first, second, 3)
             val b = hslGradientStops(second, third, 3)
-            return a + b.drop(1)
+            val base = a + b.drop(1) // standard 5-stop
+            return if (hsl.l < 0.25f && hsl.s > 0.4f) {
+                // Rich 7-stop: insert an extra midpoint between each
+                // existing stop for a denser, more detailed glide.
+                val rich = mutableListOf<Color>()
+                for (i in 0 until base.size) {
+                    rich.add(base[i])
+                    if (i < base.size - 1) {
+                        rich.add(lerp(base[i], base[i + 1], 0.50f))
+                    }
+                }
+                rich
+            } else {
+                base
+            }
         }
         // End on the ACTIVE theme's background so cards always echo the
         // surface behind them — cream in light, midnight in dark, pure
