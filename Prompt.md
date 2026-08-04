@@ -30,3 +30,9 @@
 ### Follow-up note
 
 The session screen is intentionally a lightweight Curio-native session capture rather than a second FieldMind database. Future enhancement can add species picker, GPS/weather capture, and attachments without changing the current persistence boundary.
+
+## Latest Request (IN PROGRESS)
+
+**Persist legacy provenance explicitly**
+
+FieldMind imports must be marked legacy at restore time, not inferred from category, subtype, or another display field. Add a persisted Room provenance flag, migrate existing imported rows safely, pass the flag through entity/domain conversion, and keep native Curio captures false.

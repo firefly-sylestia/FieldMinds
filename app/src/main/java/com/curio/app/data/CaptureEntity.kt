@@ -30,7 +30,9 @@ data class CaptureEntity(
     // v7.17 — user tags, stored as a Gson JSON array string ("[\"a\",\"b\"]").
     // Room migration v1→v2 adds this column with DEFAULT '[]' so existing
     // rows read as empty; backup restore normalizes nulls defensively.
-    val tagsJson: String = "[]"
+    val tagsJson: String = "[]",
+    // v3 — explicit FieldMind restore provenance. Native Curio saves remain false.
+    val isLegacy: Boolean = false
 )
 
 /**
@@ -133,7 +135,8 @@ fun CurioEntry.toEntity(): CaptureEntity = CaptureEntity(
     capturedAtMillis = capturedAtMillis,
     title = title,
     formatDataJson = Gson().toJson(captureData),
-    tagsJson = Gson().toJson(tags)
+    tagsJson = Gson().toJson(tags),
+    isLegacy = isLegacy
 )
 
 /**
@@ -200,7 +203,8 @@ fun CaptureEntity.toEntry(): CurioEntry {
         captureData = captureData,
         title = title,
         capturedAtMillis = capturedAtMillis,
-        tags = deserializeTags(tagsJson)
+        tags = deserializeTags(tagsJson),
+        isLegacy = this.isLegacy
     )
 }
 

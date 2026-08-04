@@ -52,10 +52,9 @@ data class FieldMindRestoreSummary(
  * The restore is deliberately NON-DESTRUCTIVE and idempotent: it only INSERTS
  * entries with the deterministic ids `fieldmind-obs-{id}` /
  * `fieldmind-note-{id}` (already-present ids are skipped), never touches or
- * wipes existing Curio captures, and every failure degrades to a reported
- * message instead of a crash. Restored entries are marked legacy via
- * [CurioEntry.isLegacy] (topic subtype "Legacy"), which drives the small
- * "LEGACY" badge on Cabinet cards and the detail page.
+ * wipes existing Curio captures, and every failure degrades to a reported     * message instead of a crash. Restored entries are marked legacy by the
+ * explicit persisted [CurioEntry.isLegacy] provenance flag, which drives the
+ * small "LEGACY" badge on Cabinet cards and the detail page.
  */
 object FieldMindLegacyImport {
 
@@ -479,6 +478,7 @@ object FieldMindLegacyImport {
                 fieldMindMetadata = obs.fieldMindMetadata
             ),
             capturedAtMillis = obs.timestamp,
+            isLegacy = true,
             tags = legacyTags(obs.category, obs.tags).let { base ->
                 base + listOfNotNull(
                     obs.confidence.takeIf { it.isNotBlank() && !it.equals("Needs Verification", true) },
@@ -502,6 +502,7 @@ object FieldMindLegacyImport {
                 fieldMindMetadata = note.fieldMindMetadata
             ),
             capturedAtMillis = note.timestamp,
+            isLegacy = true,
             tags = legacyTags(note.category, note.tags)
         )
     }

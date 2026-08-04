@@ -51,7 +51,7 @@ import kotlinx.coroutines.withContext
 object CurioBackupManager {
 
     /** Bump when the payload shape changes. Restore accepts version <= this. */
-    const val FORMAT_VERSION = 3
+    const val FORMAT_VERSION = 4
 
     /** MIME type used by the file pickers. */
     const val MIME_TYPE = "application/json"
@@ -213,6 +213,13 @@ object CurioBackupManager {
                 // defaults) — normalize to the empty array so the NOT NULL
                 // column insert can't fail.
                 var updated = if (capture.tagsJson == null) capture.copy(tagsJson = "[]") else capture
+                // Backward compatibility for v3: backups created before the
+                // explicit provenance column have no isLegacy field. Preserve
+                // their already-imported rows once, while new FieldMind
+                // restores set the flag directly and never infer it here.
+                if (!updated.isLegacy && updated.topicSubtype == FieldMindLegacyImport.LEGACY_SUBTYPE) {
+                    updated = updated.copy(isLegacy = true)
+                }
                 // Audio (v2): write the recording and point the capture at it.
                 updated = updated
                 audioFiles[capture.id]?.let { bytes ->

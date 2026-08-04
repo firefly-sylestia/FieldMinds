@@ -1,3 +1,4 @@
+• FieldMind restores now carry an explicit persisted legacy marker, so restored records stay separated from native Curio captures even if display metadata changes
 • FieldMind restore upgraded: legacy observations and notes now preserve structured metadata, species/taxonomy details, weather, location, timing, tags, and supported media; Curio backup carries the imported species catalog
 • Restored FieldMind records now live in a separate Legacy Cabinet section with dedicated detail metadata and species cards, keeping native Curio captures unchanged
 • Added an always-available Curio-styled FieldMind observation session from the entry menu; timed sessions save as normal Field Notes entries with provenance

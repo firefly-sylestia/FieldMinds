@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [CaptureEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class CurioDatabase : RoomDatabase() {
@@ -31,6 +31,18 @@ abstract class CurioDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * v2 → v3: persist explicit FieldMind restore provenance. The
+         * backfill keeps entries imported by older Curio builds marked as
+         * legacy while all native captures default to false.
+         */
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE captures ADD COLUMN isLegacy INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("UPDATE captures SET isLegacy = 1 WHERE topicSubtype = 'Legacy'")
+            }
+        }
+
         fun getInstance(context: Context): CurioDatabase {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
@@ -45,7 +57,7 @@ abstract class CurioDatabase : RoomDatabase() {
                     // text store, so the write-throughput tradeoff is negligible —
                     // backup integrity wins.
                     .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .fallbackToDestructiveMigration(false)
                     .build()
                     .also { INSTANCE = it }

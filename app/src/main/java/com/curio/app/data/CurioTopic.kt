@@ -101,7 +101,13 @@ data class CurioEntry(
      * the Cabinet and shown as chips on the entry detail page. Stored in
      * Room's `tagsJson` column; legacy entries default to empty.
      */
-    val tags: List<String> = emptyList()
+    val tags: List<String> = emptyList(),
+    /**
+     * Explicit provenance marker. This is set by the FieldMind restore path
+     * and persisted separately from the synthetic topic/category used to
+     * render the imported entry.
+     */
+    val isLegacy: Boolean = false
 ) {
     /** One-line preview for Cabinet cards. */
     val bodyPreview: String get() = captureData.toPreview()
@@ -113,13 +119,7 @@ data class CurioEntry(
         return (diff / (1000 * 60 * 60 * 24)).toInt().coerceAtLeast(0)
     }
 
-    /**
-     * True when the entry was imported from a FieldMind legacy archive (its
-     * topic wears the "Legacy" subtype) — Cabinet cards and the detail page
-     * show a small legacy badge so restored items stay recognizable next to
-     * native Curio captures.
-     */
-    val isLegacy: Boolean get() = topic.subtype == FieldMindLegacyImport.LEGACY_SUBTYPE
+    /** True when this entry was explicitly restored from FieldMind. */
 }
 
 /**
