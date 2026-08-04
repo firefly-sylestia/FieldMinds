@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Detail hero gradient blend redesigned as a SOFT torn-paper edge — layered white sheets with their own rounded torn textures at the meeting point of the blur**
+
+### What was asked
+
+“we will be changing the gradient blend of detail screen to a paper like torn look not the torn paper but a new style … layering of white with its own different torn texture … the torn side style will be more rounded with very small textures not sharp … this would be in the meeting and the ending point of the blur. use research and svg codes maybe to achieve that to achieve real torn paper style”. ask_user: **always-on** (no Settings toggle), **hero bottom edge only** (not the frosted card).
+
+### What was done
+
+- **New soft torn shapes (PaperCard.kt)** — `SoftTornBottomShape` / `SoftTornTopShape` (public, size-cached) wrap a private `SoftTornEdgeShape` whose `buildSoftTornPath` tears ONE long edge with SMALL, ROUNDED textures — single-octave smooth value-noise displacement (~2.2dp tooth + ~0.9dp fiber micro-layer, 4dp sampling step), so the edge reads as fine rounded torn-paper grain instead of the sharp multi-octave jagged rip of `TornPaperShape`. The opposite long side stays straight. Reuses the file's existing `valueNoise`.
+- **Hero torn seam (EntryDetailScreen.kt)** — the hero gradient backdrop (`fillMaxSize`) is now clipped by `SoftTornBottomShape(tearSeed)` (tearSeed = `entryId.hashCode() and 0x7fffffff`, stable per entry) so the banner's lower edge — where the gradient dissolves into the page, i.e. the meeting/end point of the blur — ends in a torn paper seam instead of a straight dissolve. BEHIND it (drawn first, so they sit under the clipped gradient) two full-width white paper sheets, each with its OWN torn top texture (different seeds, `SoftTornTopShape`): back sheet = 14dp tall, warm `#F4F1EA @0.92`, offset `EntryDetailHeroHeight + 4dp`; front sheet = 10dp tall, bright `#FDFCF9 @0.95`, offset `EntryDetailHeroHeight`. Both protrude below the hero's bottom edge so the stacked torn edges are actually visible (the reviewer caught that the original in-hero alignment left them hidden behind the opaque gradient) — the front sheet's torn top interlocks with the gradient's torn bottom at the seam like the two halves of a torn sheet, and the back sheet peeks through the front's deeper tears. The protrusion sits inside the 20dp buffer before the Topic-meta block (398dp max vs 400dp content start) and never reaches the frosted card (its bottom is 16dp above the hero edge; the tear intrudes ≤ ~3.1dp). Bottom watermark glyph pair nudged biasY 0.95 → 0.92 so the tear can't shave it.
+- **Docs:** Prompt.md. (No changelog entry — visual restyle of the hero already covered by changelog 20260810.)
+
+### Validation
+
+- braces/parens/brackets balanced on both files (comment/string-stripped check); code-reviewer pass — z-order verified (sheets drawn before the clipped gradient), clip-before-background order correct, no overlap with the frosted card, protrusion fits the meta buffer, imports valid (`offset`/`clip`/`SoftTorn*Shape`). Reviewer nits applied: sheets moved below the hero edge (were hidden), bottom glyphs nudged clear.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board Save/Share crash fixed (Android 16 windowRecomposer) + Save/Share buttons redesigned as frosted WHITE glass (matching the hero grid card)**
 
 ### What was asked

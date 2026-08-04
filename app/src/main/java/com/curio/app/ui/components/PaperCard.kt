@@ -834,6 +834,125 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
 }
 
 /**
+ * A SOFT torn-paper edge — the hero's gradient blend. Unlike the sharp
+ * multi-octave [TornPaperShape] (jagged rip), this edge is torn with small,
+ * ROUNDED textures: single-octave smooth noise sampled at a fine step, so
+ * each tooth is a gentle rounded bump (a real torn-fiber feel) rather than
+ * a sharp zigzag. Amplitudes are tiny (≤ ~3dp) so the tear reads as fine
+ * torn paper grain, not a shredded edge.
+ *
+ * Only ONE side is torn — the opposite long side stays straight — because
+ * the hero clip tears just the lower edge where the gradient dissolves into
+ * the page; the two white under-sheets layered behind it each carry their
+ * OWN seed, so the seam reads as layered paper sheets with slightly
+ * different tears.
+ */
+private class SoftTornEdgeShape(
+    private val seed: Int,
+    private val tornSide: SoftTornSide
+) : Shape {
+    private var cachedSize: Size? = null
+    private var cachedOutline: Outline? = null
+
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        cachedOutline?.let { cached ->
+            if (cachedSize == size) return cached
+        }
+        val outline = Outline.Generic(buildSoftTornPath(seed, size, density, tornSide))
+        cachedSize = size
+        cachedOutline = outline
+        return outline
+    }
+}
+
+/** Which long edge of a [SoftTornEdgeShape] carries the soft tear. */
+private enum class SoftTornSide { BOTTOM, TOP }
+
+/** Public bottom-torn clip — the hero's lower edge (meeting point of the blur). */
+class SoftTornBottomShape(seed: Int) : Shape {
+    private val inner = SoftTornEdgeShape(seed, SoftTornSide.BOTTOM)
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
+        inner.createOutline(size, layoutDirection, density)
+}
+
+/** Public top-torn clip — the white under-sheets peeking behind the hero. */
+class SoftTornTopShape(seed: Int) : Shape {
+    private val inner = SoftTornEdgeShape(seed, SoftTornSide.TOP)
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
+        inner.createOutline(size, layoutDirection, density)
+}
+
+/**
+ * Builds the soft torn outline: three straight edges + one softly torn
+ * long edge. The torn edge is sampled every ~4dp along its length with a
+ * SINGLE-octave smooth value-noise displacement (rounded, small amplitude
+ * — the real-torn-paper feel), plus a whisper of a second octave for fine
+ * fiber micro-texture. Pure function of (seed, size, density), cached per
+ * size by [SoftTornEdgeShape].
+ */
+private fun buildSoftTornPath(
+    seed: Int,
+    size: Size,
+    density: Density,
+    tornSide: SoftTornSide
+): Path {
+    val w = size.width
+    val h = size.height
+    val path = Path()
+    if (w <= 0f || h <= 0f) {
+        path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
+        return path
+    }
+    // Small rounded amplitudes: the main tooth ~2.2dp + a fiber micro-layer
+    // ~0.9dp, so the tear reads as fine rounded paper grain. Sampling step
+    // ~4dp keeps the bumps smooth (each sample is a gentle curve, no sharp
+    // corners).
+    val tooth = with(density) { 2.2.dp.toPx() }
+    val micro = with(density) { 0.9.dp.toPx() }
+    val step = with(density) { 4.dp.toPx() }
+    // Single-octave smooth displacement (rounded bumps) + a fine second
+    // octave for fiber texture.
+    fun disp(x: Float): Float {
+        val main = (valueNoise(seed, x * 0.045f, 0.5f) - 0.5f) * 2f * tooth
+        val fiber = (valueNoise(seed + 71, x * 0.16f, 3.5f) - 0.5f) * 2f * micro
+        return main + fiber
+    }
+
+    if (tornSide == SoftTornSide.BOTTOM) {
+        // Clockwise: straight top, straight right, torn bottom (right→left),
+        // straight left, close.
+        path.moveTo(0f, 0f)
+        path.lineTo(w, 0f)
+        path.lineTo(w, h + disp(w))
+        var x = w - step
+        while (x > 0f) {
+            path.lineTo(x, h + disp(x))
+            x -= step
+        }
+        path.lineTo(0f, h + disp(0f))
+        path.close()
+    } else {
+        // Torn TOP (the under-sheets): torn top (left→right), straight
+        // right, straight bottom, straight left, close.
+        path.moveTo(0f, disp(0f))
+        var x = step
+        while (x < w) {
+            path.lineTo(x, disp(x))
+            x += step
+        }
+        path.lineTo(w, disp(w))
+        path.lineTo(w, h)
+        path.lineTo(0f, h)
+        path.close()
+    }
+    return path
+}
+
+/**
  * Pre-renders the torn note's grunge texture — a tiled bitmap of faint ink
  * speckles + fiber dashes, generated once (see [sharedGrainBitmap]). Drawn
  * as a single shader rect every frame instead of ~300 drawCircle calls (the

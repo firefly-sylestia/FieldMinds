@@ -132,6 +132,8 @@ import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.formatGlyph
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
+import com.curio.app.ui.components.SoftTornBottomShape
+import com.curio.app.ui.components.SoftTornTopShape
 import com.curio.app.data.AppPreferences
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -320,14 +322,53 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight)
         ) {
+            // ── Torn paper under-sheets — two white sheets layered BEHIND
+            // the hero gradient at its lower edge, each with its OWN soft
+            // tear (a different seed, so the textures never match). The
+            // front sheet's torn top interlocks with the gradient's torn
+            // bottom right at the seam (like the two halves of a torn
+            // sheet), and the back sheet's torn top peeks through where the
+            // front's tears dip low — so the meeting point of the blur reads
+            // as layered torn paper (a real ripped stack), not a hard clip.
+            // Both protrude below the hero's bottom edge so the stacked torn
+            // edges are actually visible (the Topic-meta block below starts
+            // 20dp lower, so the protrusion sits inside that buffer).
+            val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
+            // Back sheet — dimmer warm white, its torn top centered ~4dp
+            // below the seam, peeking through the front sheet's deeper tears.
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(14.dp)
+                    .offset(y = EntryDetailHeroHeight + 4.dp)
+                    .clip(SoftTornTopShape(tearSeed + 17))
+                    .background(Color(0xFFF4F1EA).copy(alpha = 0.92f))
+            )
+            // Front sheet — bright paper white, its torn top centered on the
+            // seam (the hero's bottom edge), interlocking with the gradient's
+            // torn bottom.
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .offset(y = EntryDetailHeroHeight)
+                    .clip(SoftTornTopShape(tearSeed + 29))
+                    .background(Color(0xFFFDFCF9).copy(alpha = 0.95f))
+            )
+
             // ── Hero backdrop — the crisp gradient + symbol scatter. The
             // banner itself is NOT blurred (the frosted look belongs to the
             // date / mood / type grid card below, which carries its own
             // blurred glass pane); the glyph scatter stays sharp so it reads
-            // as a deliberate patterned backdrop.
+            // as a deliberate patterned backdrop. The bottom edge is torn
+            // with the SOFT rounded shape (small textures, not the sharp
+            // jagged [TornPaperShape] of the note cards) — the gradient now
+            // ends in a real torn-paper seam into the layered white sheets
+            // below instead of a straight dissolve.
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .clip(SoftTornBottomShape(tearSeed))
                     // This Compose version's verticalGradient only offers the
                     // vararg overload — the named `colorStops` List form
                     // doesn't exist, so spread the sampled stops as an array.
@@ -756,8 +797,9 @@ private fun BoxScope.HeroSymbolScatter(cat: CurioCategory) {
         HeroWatermarkPair(biasX = 0.94f, biasY = -0.12f, size = 56.dp, rotation = 14f, alpha = 0.21f),
         // Lower inner pair — outside the frosted bar's width.
         HeroWatermarkPair(biasX = 0.56f, biasY = 0.54f, size = 50.dp, rotation = 10f, alpha = 0.19f),
-        // Bottom corners.
-        HeroWatermarkPair(biasX = 0.94f, biasY = 0.95f, size = 44.dp, rotation = 6f, alpha = 0.16f)
+        // Bottom corners — biasY 0.92 keeps them clear of the hero's torn
+        // bottom edge (the soft tear can dip up to ~3dp into the banner).
+        HeroWatermarkPair(biasX = 0.94f, biasY = 0.92f, size = 44.dp, rotation = 6f, alpha = 0.16f)
     )
     pairs.forEachIndexed { i, pair ->
         // The 10-symbol family list maps 1:1 onto the 5 mirrored pairs.
