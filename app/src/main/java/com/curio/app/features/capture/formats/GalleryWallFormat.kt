@@ -441,11 +441,22 @@ private fun MoodBoardCanvas(
     // exactly. Full-screen editing keeps the raw 1:1 board space for precise
     // placement. boardScale/boardOffsetX/Y are threaded into the tiles and
     // floating quote cards (display = raw * scale + offset; commits stay raw).
+    //
+    // v7.25 — the inline board is CENTERED inside the card, so raw-space
+    // drags must be clamped to the BOARD's raw bounds, never the full canvas:
+    // a tile clamped to [0, canvasW] could be dragged into the centered
+    // margins (displayed outside the visible board — the "inaccurate" small-
+    // view dragging). boardMaxX/Y = the collage's raw extent (full canvas in
+    // the full-screen editor and on empty boards).
+    val boardMaxX = if (fullScreen || tiles.isEmpty()) canvasWPx
+        else tiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+    val boardMaxY = if (fullScreen || tiles.isEmpty()) canvasHPx
+        else tiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
     val (boardScale, boardOffsetX, boardOffsetY) = if (fullScreen || tiles.isEmpty()) {
         Triple(1f, 0f, 0f)
     } else {
-        val maxX = tiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
-        val maxY = tiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+        val maxX = boardMaxX
+        val maxY = boardMaxY
         val widthScale = if (maxX > 0f) canvasWPx / maxX else 1f
         // Same height-fit fallback as the saved card: a width-fit board that
         // would shrink to a sliver (<55% of the card height) fills the height
@@ -492,8 +503,12 @@ private fun MoodBoardCanvas(
             } else {
                 baseW to baseH
             }
-            val maxX = (canvasWPx - tileW).coerceAtLeast(0f)
-            val maxY = (canvasHPx - tileH).coerceAtLeast(0f)
+            // v7.25 — new tiles land INSIDE the visible board (its raw
+            // bounds), not the full canvas — the board is centered in the
+            // inline card, so a tile placed in raw canvas space could render
+            // in the empty margins. Empty board → the full canvas.
+            val maxX = (boardMaxX - tileW).coerceAtLeast(0f)
+            val maxY = (boardMaxY - tileH).coerceAtLeast(0f)
             tiles.add(
                 MoodTile(
                     id = (tiles.maxOfOrNull { it.id } ?: -1) + 1,
@@ -627,10 +642,15 @@ private fun MoodBoardCanvas(
                                     // never snaps or collapses when released.
                                     // Drag deltas are SCREEN px — divide by the
                                     // board scale so commits land in raw space.
-                                    val cw = if (canvasWPx > 0f) canvasWPx else t.widthPx
-                                    val ch = if (canvasHPx > 0f) canvasHPx else t.heightPx
-                                    val newW = (t.widthPx * preview.scale).coerceIn(minTilePx, cw)
-                                    val newH = (t.heightPx * preview.scale).coerceIn(minTilePx, ch)
+                                    // v7.25 — clamp to the BOARD's raw bounds
+                                    // (matches the preview), so a committed tile
+                                    // can never land in the centered margins.
+                                    val cw = if (boardMaxX > 0f) boardMaxX
+                                             else if (canvasWPx > 0f) canvasWPx else t.widthPx
+                                    val ch = if (boardMaxY > 0f) boardMaxY
+                                             else if (canvasHPx > 0f) canvasHPx else t.heightPx
+                                    val newW = (t.widthPx * preview.scale).coerceIn(minTilePx, cw.coerceAtLeast(minTilePx))
+                                    val newH = (t.heightPx * preview.scale).coerceIn(minTilePx, ch.coerceAtLeast(minTilePx))
                                     val newX = (t.offsetXPx + preview.dx / boardScale)
                                         .coerceIn(0f, (cw - newW).coerceAtLeast(0f))
                                     val newY = (t.offsetYPx + preview.dy / boardScale)
@@ -656,7 +676,9 @@ private fun MoodBoardCanvas(
                             onDragEnd = { draggingTileId = null },
                             boardScale = boardScale,
                             boardOffsetX = boardOffsetX,
-                            boardOffsetY = boardOffsetY
+                            boardOffsetY = boardOffsetY,
+                            boardMaxX = boardMaxX,
+                            boardMaxY = boardMaxY
                         )
                     }
                 }
@@ -858,13 +880,18 @@ private fun MoodBoardCanvas(
             // v7.24 — glides the tapped image from its spot on the editor
             // canvas to the canvas center (arc), pinch/pan refine, tap closes.
             tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
+                // v7.25 — the overlay lives in DISPLAY space (the canvas), and
+                // the inline board is fit-scaled + centered, so report the
+                // tile's DISPLAY position (raw × scale + offset), not its raw
+                // board position — otherwise the zoom glides from / centers
+                // on the wrong spot in the small view.
                 MoodBoardZoomOverlay(
                     zoomState = zoomState,
                     tileUri = tile.uri,
-                    tileX = tile.offsetXPx,
-                    tileY = tile.offsetYPx,
-                    widthPx = tile.widthPx,
-                    heightPx = tile.heightPx,
+                    tileX = tile.offsetXPx * boardScale + boardOffsetX,
+                    tileY = tile.offsetYPx * boardScale + boardOffsetY,
+                    widthPx = tile.widthPx * boardScale,
+                    heightPx = tile.heightPx * boardScale,
                     viewW = canvasWPx,
                     viewH = canvasHPx
                 )
@@ -956,7 +983,11 @@ private fun MoodBoardEditorTile(
     // by the scale so commits land in raw space (1.0 = full-screen editor).
     boardScale: Float = 1f,
     boardOffsetX: Float = 0f,
-    boardOffsetY: Float = 0f
+    boardOffsetY: Float = 0f,
+    // v7.25 — the board's raw bounds (drag clamps). 0 = fall back to the
+    // full canvas (full-screen editor / pre-measure first frame).
+    boardMaxX: Float = 0f,
+    boardMaxY: Float = 0f
 ) {
     val density = LocalDensity.current
     // Preview lives INSIDE the tile so per-frame writes recompose only this
@@ -965,11 +996,29 @@ private fun MoodBoardEditorTile(
     // pointerInput never restarts (its key is tile.id), so the gesture
     // coroutine must read the LATEST tile — never the first composition's.
     val currentTile by rememberUpdatedState(tile)
+    // v7.25 — the board scale/offset also change as tiles commit (the inline
+    // board re-fits to the collage), so the never-restarting gesture must
+    // read them fresh too — stale values made drags/zoom drift in the small
+    // view after the first commit.
+    val currentBoardScale by rememberUpdatedState(boardScale)
+    val currentBoardOffsetX by rememberUpdatedState(boardOffsetX)
+    val currentBoardOffsetY by rememberUpdatedState(boardOffsetY)
+    // v7.25 — onCommit is captured by the never-restarting pointerInput, so it
+    // must also be the LATEST instance — the parent's lambda closes over the
+    // current board bounds/scale, and a stale one would commit drags against
+    // the pre-fit geometry (snap-back in the small view).
+    val currentOnCommit by rememberUpdatedState(onCommit)
 
     // Before the canvas size is measured (first frame), fall back to the
     // tile's stored size so tiles never flash at 0x0 or drift to the corner.
     val canvasW = if (canvasWPx > 0f) canvasWPx else tile.widthPx
     val canvasH = if (canvasHPx > 0f) canvasHPx else tile.heightPx
+    // v7.25 — RAW-space drag clamps are the BOARD's raw bounds (the visible
+    // collage), not the full canvas: the inline board is centered inside the
+    // card, so canvas-sized clamps let tiles slide into the margins. The
+    // full-screen editor passes canvasW/H via boardMaxX/Y = canvas (1:1).
+    val clampW = if (boardMaxX > 0f) boardMaxX else canvasW
+    val clampH = if (boardMaxY > 0f) boardMaxY else canvasH
     val preview = dragPreview.value
     val scale = preview?.scale ?: 1f
     // Drag deltas arrive in SCREEN px; the display is scaled by boardScale,
@@ -978,10 +1027,10 @@ private fun MoodBoardEditorTile(
     val rawDy = (preview?.dy ?: 0f) / boardScale
     // RAW-space tile geometry (the stored/committed space, clamped to the
     // raw board bounds).
-    val rawW = (tile.widthPx * scale).coerceIn(minTilePx, canvasW)
-    val rawH = (tile.heightPx * scale).coerceIn(minTilePx, canvasH)
-    val rawX = (tile.offsetXPx + rawDx).coerceIn(0f, (canvasW - rawW).coerceAtLeast(0f))
-    val rawY = (tile.offsetYPx + rawDy).coerceIn(0f, (canvasH - rawH).coerceAtLeast(0f))
+    val rawW = (tile.widthPx * scale).coerceIn(minTilePx, clampW.coerceAtLeast(minTilePx))
+    val rawH = (tile.heightPx * scale).coerceIn(minTilePx, clampH.coerceAtLeast(minTilePx))
+    val rawX = (tile.offsetXPx + rawDx).coerceIn(0f, (clampW - rawW).coerceAtLeast(0f))
+    val rawY = (tile.offsetYPx + rawDy).coerceIn(0f, (clampH - rawH).coerceAtLeast(0f))
     // SCALED display geometry — what the user sees (matches the saved card).
     val renderW = rawW * boardScale
     val renderH = rawH * boardScale
@@ -1001,7 +1050,17 @@ private fun MoodBoardEditorTile(
                     // Double-tap zooms the image in place instead of opening
                     // a full-screen page.
                     onDoubleTap = {
-                        onZoomIn(currentTile.uri, currentTile.offsetXPx, currentTile.offsetYPx, currentTile.widthPx, currentTile.heightPx, canvasW, canvasH)
+                        // v7.25 — report the DISPLAY position (raw × scale +
+                        // offset) so the zoom overlay glides from the tile's
+                        // actual spot on the fit-scaled inline board.
+                        onZoomIn(
+                            currentTile.uri,
+                            currentTile.offsetXPx * currentBoardScale + currentBoardOffsetX,
+                            currentTile.offsetYPx * currentBoardScale + currentBoardOffsetY,
+                            currentTile.widthPx * currentBoardScale,
+                            currentTile.heightPx * currentBoardScale,
+                            canvasW, canvasH
+                        )
                     }
                 )
             }
@@ -1048,16 +1107,21 @@ private fun MoodBoardEditorTile(
                                 dx += dragAmount.x
                                 dy += dragAmount.y
                                 dragPreview.value = TileDragPreview(dx, dy, gestureScale, gestureRotation, byDrag = true)
-                                // Highlight the pin zone (the parent only
-                                // recomposes when the value actually flips).
-                                onPinZoneChange(currentTile.offsetYPx + dy < pinZoneHeightPx)
+                                // Highlight the pin zone — compare against the
+                                // tile's DISPLAY Y (raw × scale + offset), the
+                                // same space the zone lives in; raw+screen
+                                // deltas were mixed before v7.25.
+                                onPinZoneChange(
+                                    (currentTile.offsetYPx + dy / currentBoardScale) * currentBoardScale +
+                                        currentBoardOffsetY < pinZoneHeightPx
+                                )
                             }
                         }
                         if (pressed.isEmpty()) break
                     } while (true)
 
                     if (dragged || multiTouch) {
-                        onCommit(tile.id, TileDragPreview(dx, dy, gestureScale, gestureRotation, byDrag = dragged))
+                        currentOnCommit(tile.id, TileDragPreview(dx, dy, gestureScale, gestureRotation, byDrag = dragged))
                     }
                     dragPreview.value = null
                     onDragEnd()
@@ -1082,7 +1146,18 @@ private fun MoodBoardEditorTile(
 
         // ── Zoom-in-place button (bottom-end) ─────────────────────────
         Surface(
-            onClick = { onZoomIn(tile.uri, tile.offsetXPx, tile.offsetYPx, tile.widthPx, tile.heightPx, canvasW, canvasH) },
+            onClick = {
+                // v7.25 — display coords (raw × scale + offset), matching the
+                // double-tap path above.
+                onZoomIn(
+                    tile.uri,
+                    tile.offsetXPx * boardScale + boardOffsetX,
+                    tile.offsetYPx * boardScale + boardOffsetY,
+                    tile.widthPx * boardScale,
+                    tile.heightPx * boardScale,
+                    canvasW, canvasH
+                )
+            },
             shape = CircleShape,
             color = Color.Black.copy(alpha = 0.48f),
             modifier = Modifier

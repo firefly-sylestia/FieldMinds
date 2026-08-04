@@ -228,6 +228,11 @@ fun SoundBiteFormat(
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1_500)
         }
         fun beginListening() {
+            // v7.25 — a recognizer reused across sessions (second dictation,
+            // or a retry after NO_MATCH) can throw IllegalStateException /
+            // silently never call back on many devices unless the previous
+            // session is cancelled first.
+            runCatching { recognizer.cancel() }
             recognizer.setRecognitionListener(object : RecognitionListener {
                 override fun onReadyForSpeech(params: Bundle?) {}
                 override fun onBeginningOfSpeech() {}
@@ -266,9 +271,25 @@ fun SoundBiteFormat(
                 override fun onResults(results: Bundle?) {
                     transcribing = false
                     val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    val final = matches?.firstOrNull().orEmpty()
+                    // v7.25 — some engines finish with an EMPTY RESULTS list
+                    // but deliver the transcript as the final partial (or the
+                    // first match is blank) — fall back to the last partial we
+                    // already showed so a finished session never lands nothing.
+                    val final = matches?.firstOrNull { it.isNotBlank() }
+                        ?: partialTranscript.takeIf { it.isNotBlank() }.orEmpty()
                     partialTranscript = ""
-                    if (final.isNotBlank()) commitTranscript(final)
+                    if (final.isNotBlank()) {
+                        commitTranscript(final)
+                    } else if (transcribeRetries < TRANSCRIBE_MAX_RETRIES) {
+                        // No text at all — same recovery as a NO_MATCH: re-
+                        // listen a couple of times before surfacing an error.
+                        transcribeRetries++
+                        transcribing = true
+                        beginListening()
+                    } else {
+                        transcribing = false
+                        transcribeError = "No speech heard — try again."
+                    }
                 }
                 override fun onPartialResults(partialResults: Bundle?) {
                     val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -430,10 +451,13 @@ fun SoundBiteFormat(
     }
 
     // ── Check initial permission state ───────────────────────────────────
-    val hasPermission = remember {
+    // v7.25 — computed LIVE per dictation request (not remember-once): the
+    // remember-cached value stayed false forever after the user granted
+    // permission via the launcher, so every later mic tap re-launched the
+    // permission dialog instead of dictating.
+    fun hasMicrophonePermission(): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
-        PackageManager.PERMISSION_GRANTED
-    }
+            PackageManager.PERMISSION_GRANTED
 
     // v7.18 — per-field dictation: a small mic button sits on the title
     // slip and the note field. Enabled in every non-recording state, so a
@@ -443,7 +467,7 @@ fun SoundBiteFormat(
         recordingState != AudioRecorder.State.PAUSED
 
     fun requestDictation(target: TranscribeTarget) {
-        if (hasPermission) {
+        if (hasMicrophonePermission()) {
             startTranscription(target)
         } else {
             transcribeTarget = target
@@ -462,10 +486,10 @@ fun SoundBiteFormat(
             AudioRecorder.State.IDLE -> {
                 IdleControls(
                     accent = accent,
-                    hasPermission = hasPermission,
+                    hasPermission = hasMicrophonePermission(),
                     permissionDenied = permissionDenied,
                     onRecord = {
-                        if (hasPermission) {
+                        if (hasMicrophonePermission()) {
                             try {
                                 recorder.start()
                                 restoredRecording = false

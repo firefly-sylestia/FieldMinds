@@ -862,8 +862,9 @@ private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
 
 /**
  * One half of the hero's frosted date/type bar — icon over value over a
- * "Date"/"Type" label, in the card's ink ([ink], deep slate from the hero)
- * so it reads on the frosted white glass in every theme and pastel mode.
+ * "Date"/"Type" label, in the card's ink ([ink], deep slate, defined with
+ * the hero's inks) so it reads on the frosted white glass in every theme
+ * and pastel mode.
  */
 @Composable
 private fun FrostedSegment(
@@ -1027,6 +1028,9 @@ private fun SoundBiteRender(
         noteTranscribing = true
         noteError = null
         notePartial = ""
+        // v7.25 — cancel any prior session before starting a new one (a
+        // reused recognizer can throw / go silent otherwise).
+        runCatching { recognizer.cancel() }
         recognizer.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
@@ -1049,7 +1053,11 @@ private fun SoundBiteRender(
             override fun onResults(results: Bundle?) {
                 noteTranscribing = false
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                val final = matches?.firstOrNull().orEmpty()
+                // v7.25 — some engines finish with an empty RESULTS list but
+                // deliver the text as the final partial — fall back to it so
+                // a finished session never lands nothing in the note.
+                val final = matches?.firstOrNull { it.isNotBlank() }
+                    ?: notePartial.takeIf { it.isNotBlank() }.orEmpty()
                 notePartial = ""
                 if (final.isNotBlank()) {
                     // Append to the saved note and persist the updated entry

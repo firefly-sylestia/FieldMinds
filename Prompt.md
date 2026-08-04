@@ -2,6 +2,32 @@
 
 ## Latest Request (COMPLETED)
 
+**Speech-to-text fixes (no text lands) + mood-board inline editor coordinate fixes (broken/inaccurate/glitchy in the small view)**
+
+### What was asked
+
+“the speech to text isnt working properly and also the moodboard editing in small view is broken and very inaccurate and its glithy just in small view”. ask_user: STT symptom = “listens and finishes but nothing lands in the title/note field”; mood board = the small INLINE editor on the capture page.
+
+### Speech-to-text (SoundBiteFormat.kt + EntryDetailScreen.kt)
+
+- **Stale permission (root cause of the dead dictation path)** — `hasPermission` was `remember { checkSelfPermission }`, computed ONCE at first composition. After the user granted mic access via the launcher, it stayed false forever → every later mic tap re-launched the permission dialog instead of dictating. Replaced with a live `hasMicrophonePermission()` computed per request (SoundBiteFormat).
+- **No text lands** — `onResults` took `matches?.firstOrNull().orEmpty()` and silently dropped a blank result. Now: first non-blank match, else the last live partial (many engines deliver the transcript only as the final partial / an empty RESULTS list), and if still blank, re-listens up to `TRANSCRIBE_MAX_RETRIES` (like a NO_MATCH) before surfacing “No speech heard — try again”. Same partial-fallback fix in EntryDetailScreen's saved-note transcribe.
+- **Recognizer reuse** — a reused `SpeechRecognizer` can throw `IllegalStateException` / go silent when `startListening` is called without cancelling the prior session; `runCatching { recognizer.cancel() }` now precedes every `startListening` (retries + fresh sessions) in both files.
+
+### Mood-board inline editor (GalleryWallFormat.kt)
+
+- **Root cause** — the v7.23 inline editor fit-scales + centers the board (display = raw×scale+offset) but the drag math stayed in raw space against the FULL canvas: clamps used `canvasWPx/H` (so tiles slid into the centered margins), `onZoomIn`/`MoodBoardZoomOverlay` got RAW coords (double-tap zoom glided from the wrong spot), the pin-zone highlight mixed raw offset + screen delta, and the never-restarting `pointerInput(tile.id)` gesture captured stale board geometry after the first commit.
+- **Fixes** — new `boardMaxX/Y` = the collage's raw extent (full canvas in full-screen/empty); drag preview + commit + new-tile placement all clamp to it (tiles can no longer escape into the margins, and the board no longer re-fits under the finger). `rememberUpdatedState` wrappers (`currentBoardScale/OffsetX/OffsetY`, `currentOnCommit`) feed the live geometry to the gesture. `onZoomIn` (double-tap + zoom button) and the `MoodBoardZoomOverlay` call now report DISPLAY coords (raw×scale+offset); the pin-zone highlight compares the tile's display Y. Full-screen editor path is byte-for-byte unchanged (scale=1, offset=0, boardMax=canvas).
+
+### Validation
+
+- braces/parens/brackets balanced on all 3 files; code-reviewer pass — coordinate math consistent across preview/commit/pin-zone/zoom, full-screen path provably unchanged, cancel-before-start correct (no API misuse), live permission check sound. Reviewer flag (accepted, intended): the small view now clamps to the collage extent, so the edge-defining tile is pinned and new tiles can't expand the board there — full-screen remains the expansion path (matches the existing “Use full-screen editing” hint).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Detail-page hero grid card (Date · Mood · Type) is now frosted WHITE glass instead of the blue gradient tint**
 
 ### What was asked
