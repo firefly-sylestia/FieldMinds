@@ -143,6 +143,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -253,7 +254,29 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         //    holds it through the title zone, then melts into true black
         //    over the bottom two-fifths — a long on-hue fade with no hard
         //    edge and no grey midtones.
-        val heroStart = CurioGradients.categoryCardFill(cat.themedAccent())
+        // v7.14 — when Material card blends are on, the hero opens on the
+        // same category × material blend the cards wear (its first stop), so
+        // the detail page's hero carries the proper blend colors instead of
+        // the plain accent. Non-pastel dark mode keeps the deep accent hold:
+        // the device's dark palette is pastel-pale and would wash out the
+        // white frosted-glass content — and a contrast guard catches the
+        // non-dynamic fallback palette (API < 31 Material style falls back
+        // to the light Curio palette whose pale primary can't hold white
+        // glass). The glide still ends exactly on [wash] so the hero's
+        // lower edge dissolves into the page.
+        val blendActive = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
+            AppPreferences.materialCardBlendsState &&
+            !(isCurioDarkTheme() && !AppPreferences.pastelColorsState)
+        val heroStart = if (blendActive) {
+            val blendStart = CurioGradients.cardGradient(cat.themedAccent()).first()
+            // Keep the frosted-glass ink legible: if the blend's first stop
+            // is too pale against [heroInk] (the white/onAccent content),
+            // fall back to the deep category hold instead.
+            if (contrastRatio(blendStart, heroInk) >= 3.0f) blendStart
+            else CurioGradients.categoryCardFill(cat.themedAccent())
+        } else {
+            CurioGradients.categoryCardFill(cat.themedAccent())
+        }
         val isAmoledStyle = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_AMOLED
         val heroStops = if (isAmoledStyle) {
             // Deeper, moodier start for the pure-black style (~25% toward
@@ -1278,6 +1301,19 @@ private fun formatFileSize(bytes: Long): String {
         bytes < 1024 * 1024 -> "${bytes / 1024} KB"
         else -> "%.1f MB".format(bytes.toDouble() / (1024 * 1024))
     }
+}
+
+/** WCAG contrast ratio of [a] against [b] — used to keep the hero's frosted
+ *  glass legible when the blend's first stop comes from the pale non-dynamic
+ *  fallback palette. */
+private fun contrastRatio(a: Color, b: Color): Float {
+    fun linear(c: Float): Float =
+        if (c <= 0.03928f) c / 12.92f else ((c + 0.055f) / 1.055f).pow(2.4f)
+    fun luminance(c: Color): Float =
+        0.2126f * linear(c.red) + 0.7152f * linear(c.green) + 0.0722f * linear(c.blue)
+    val la = luminance(a)
+    val lb = luminance(b)
+    return (maxOf(la, lb) + 0.05f) / (minOf(la, lb) + 0.05f)
 }
 
 @Composable

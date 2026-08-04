@@ -2,3 +2,4 @@
 • Pastel colors brightened: card fills open on the full pastel accent (no darkening) and the pastels got a richer saturation, so the shuffle main card no longer looks dimmed in either mode
 • Pastel peek cards re-balanced: they now sit a step darker than the main card instead of glowing brighter than it
 • The mood-board collage (entry detail + gallery) now reads clearly in pastel mode — its glyphs switch to deep ink / light tint instead of pastel-on-pastel
+• Material card blends reworked: every category now gets its own gradient arrangement (a touch of the category color over your device's Material palette) instead of the same look — light mode leads with your palette colors, dark mode stays deep and readable

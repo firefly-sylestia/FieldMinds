@@ -219,6 +219,27 @@ object CurioGradients {
         if (AppPreferences.pastelColorsState) accent else lerp(accent, Color.Black, 0.10f)
 
     /**
+     * Lightness floor for light-mode material stops — see [floorForWhiteInk].
+     * 0.30 luminance keeps white large/bold card titles ≥ ~3:1 (WCAG large
+     * text AA); the small teaser copy sits near the card's darker base.
+     */
+    private const val WhiteInkLightnessFloor = 0.30f
+
+    /**
+     * Floors a light-mode material stop's luminance to
+     * [WhiteInkLightnessFloor] so white card content stays readable on it.
+     * Dynamic Material You light palettes are already dark enough for white
+     * by design (white-on-primary ≥ 4.5:1), so this is a no-op there — it
+     * only deepens the pale non-dynamic fallback palette (API < 31 Material
+     * style). The material HUE is untouched; only lightness is pulled down.
+     */
+    private fun floorForWhiteInk(c: Color): Color {
+        val lum = 0.2126f * c.red + 0.7152f * c.green + 0.0722f * c.blue
+        if (lum <= WhiteInkLightnessFloor) return c
+        return lerp(c, Color.Black, (lum - WhiteInkLightnessFloor) / lum)
+    }
+
+    /**
      * Interpolates [from] → [to] in HSL space (shortest hue path) and
      * returns [steps] evenly-spaced colors INCLUDING both endpoints. Naive
      * RGB lerp between a deep accent and a light/dark page wash passes
@@ -256,23 +277,31 @@ object CurioGradients {
      * always matches the app's background shade (the hero card must not
      * wash out to pure white on the cream surface).
      *
-     * v7.13 — Material card blend variety: when "Material card blends" is on
-     * (default), every category card wears a unique 3-stop gradient where the
-     * category accent takes ONE stop at a hue-determined position (top /
-     * middle / bottom) and the device's Material You palette fills the other
-     * two — so every category looks genuinely different instead of a uniform
-     * 90%-device wash. The category stop is pure (slightly deepened), and the
-     * material stops carry a 40-55% category tint so the whole card still
-     * reads in the category's color story.
+     * v7.14 — Material card blend rework: when "Material card blends" is on
+     * (default), every category card wears a 3-stop gradient with ONE stop
+     * carrying the category color (the "little" category presence) and the
+     * other two being the device's Material You colors — so the material
+     * palette DOMINATES and each category reads as a distinct arrangement
+     * of the same device family.
      *
-     * The arrangement wheel (8 hue bands, 40° each):
-     *  - 0-40° (reds):    category TOP → secondary → tertiary
-     *  - 40-80° (orange): secondary → category MIDDLE → tertiary
-     *  - 80-120° (amber):  primary → secondary → category BOTTOM
-     *  - 120-200° (green): category TOP → primary → tertiary
-     *  - 200-260° (cyan):  secondary → category MIDDLE → primary
-     *  - 260-320° (blue):  primary → tertiary → category BOTTOM
-     *  - 320-360° (purple): category TOP → secondary → primary
+     * The 6-band arrangement wheel (60° each) gives every shipped category a
+     * distinct combination of WHICH material colors appear and WHERE the
+     * category stop sits (top / middle / bottom):
+     *  - 0-60°    (amber):   category TOP    → [cat, secondary, tertiary]
+     *  - 60-120°  (yellow):  category MID    → [secondary, cat, primary]
+     *  - 120-180° (green):   category TOP    → [cat, primary, tertiary]
+     *  - 180-240° (cyan):    category MID    → [tertiary, cat, primary]
+     *  - 240-300° (blue):    category BOTTOM → [primary, secondary, cat]
+     *  - 300-360° (pink):    category BOTTOM → [secondary, primary, cat]
+     *
+     * The old v7.13 wheel collided (amber 26°, rose 345° and coral 349° all
+     * landed under 40° → the SAME arrangement) and its 40-55% category tint
+     * pulled every stop toward the accent, so cards read as one samey deep
+     * blob. The material stops now carry only a WHISPER of category tint in
+     * light mode (~12-20%) so the material colors show through; dark mode
+     * pulls harder toward the accent (~42-52%) because the device's dark
+     * palette is pastel-pale and would wash out the white card content —
+     * the fixed wheel still keeps categories distinct there.
      *
      * Pastel mode softens every stop; dark mode uses the device's dark
      * dynamic palette. Off / non-Material style: falls through to the
@@ -280,45 +309,55 @@ object CurioGradients {
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
-        // v7.13 — Material card blends: a 3-stop gradient where the
-        // category accent owns ONE stop (at a hue-determined position)
-        // and the device's Material You palette fills the other two,
-        // so every category card reads genuinely different instead of
-        // a uniform 90%-device, 10%-whisper wash. The material stops
-        // carry a 40-55% category tint so the whole card stays in the
-        // category's color story.
         if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState
         ) {
             val scheme = MaterialTheme.colorScheme
             val pastel = AppPreferences.pastelColorsState
             val dark = isCurioDarkTheme()
-            // Category stop — the accent, slightly deepened so it reads
-            // as a solid anchor in the gradient.
+            // Category stop — the ONE accent presence on the card, slightly
+            // deepened so it reads as a solid anchor in the gradient.
             val catStop = if (pastel) pastelAccent(accent, dark) else lerp(accent, Color.Black, 0.08f)
             // Material palette stops — pastel-softened when pastel mode
             // is on, raw device colors otherwise.
             val p = if (pastel) pastelAccent(scheme.primary, dark) else scheme.primary
             val s = if (pastel) pastelAccent(scheme.secondary, dark) else scheme.secondary
             val t = if (pastel) pastelAccent(scheme.tertiary, dark) else scheme.tertiary
-            // Material stops carry a 40-55% category tint so the whole
-            // card wears the category's personality, not just one stop.
+            // Category presence on the material stops: a whisper in light
+            // mode (the material palette dominates — the category shows via
+            // its own stop + the arrangement), but a stronger pull in dark
+            // mode where the device's pale pastel palette would wash out the
+            // white card content — pulling toward the deep accent keeps the
+            // fill readable while the fixed wheel keeps categories distinct.
             val hsl = toHsl(accent)
-            val tint = (0.40f + hsl.s * 0.15f).coerceIn(0.40f, 0.55f)
+            val tint = if (dark && !pastel) {
+                (0.42f + hsl.s * 0.10f).coerceIn(0.42f, 0.52f)
+            } else {
+                (0.12f + hsl.s * 0.08f).coerceIn(0.12f, 0.20f)
+            }
             val pCat = lerp(p, catStop, tint)
             val sCat = lerp(s, catStop, tint)
             val tCat = lerp(t, catStop, tint)
-            // 8-way arrangement wheel — the accent's hue picks which
+            // v7.14 — light mode floors the material stops' lightness so the
+            // white card content stays readable even when the active palette
+            // is pale (the API<31 Material fallback reuses the Curio pastels).
+            // Dynamic Material You light palettes are already dark enough for
+            // white by design, so real devices are unaffected — only the hue
+            // stays, lightness is pulled down.
+            val light = !dark && !pastel
+            val pF = if (light) floorForWhiteInk(pCat) else pCat
+            val sF = if (light) floorForWhiteInk(sCat) else sCat
+            val tF = if (light) floorForWhiteInk(tCat) else tCat
+            // 6-band arrangement wheel — the accent's hue picks which
             // material colors sit at which positions and where the
             // category accent appears (top / middle / bottom).
             return when {
-                hsl.h < 40f  -> listOf(catStop, sCat, tCat)       // reds: cat top
-                hsl.h < 80f  -> listOf(sCat, catStop, tCat)       // orange: cat mid
-                hsl.h < 120f -> listOf(pCat, sCat, catStop)       // amber: cat bottom
-                hsl.h < 200f -> listOf(catStop, pCat, tCat)       // greens: cat top
-                hsl.h < 260f -> listOf(sCat, catStop, pCat)       // cyan: cat mid
-                hsl.h < 320f -> listOf(pCat, tCat, catStop)       // blues: cat bottom
-                else          -> listOf(catStop, sCat, pCat)       // purples: cat top
+                hsl.h < 60f   -> listOf(catStop, sF, tF)           // amber: cat top
+                hsl.h < 120f  -> listOf(sF, catStop, pF)           // yellow: cat mid
+                hsl.h < 180f  -> listOf(catStop, pF, tF)           // green: cat top
+                hsl.h < 240f  -> listOf(tF, catStop, pF)           // cyan: cat mid
+                hsl.h < 300f  -> listOf(pF, sF, catStop)           // blue: cat bottom
+                else          -> listOf(sF, pF, catStop)           // pink: cat bottom
             }
         }
         // End on the ACTIVE theme's background so cards always echo the

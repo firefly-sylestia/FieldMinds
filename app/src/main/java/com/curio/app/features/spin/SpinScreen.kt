@@ -103,6 +103,7 @@ import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.components.CurioNavTint
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioMixedDeck
 import com.curio.app.ui.theme.CurioIcons
@@ -2085,42 +2086,48 @@ private fun PeekCard(
     // the muted pastel twin (near 0.14 / far 0.26).
     val pastelMode = AppPreferences.pastelColorsState
     val darkMode = isCurioDarkTheme()
-    val cardColor = remember(accent, far, pastelMode, darkMode) {
-        when {
-            // v7.8.1 — pastel peeks sit a step DARKER than the hero ticket
-            // (which opens on the pure pastel accent now), so the deck keeps
-            // the classic level hierarchy. The old white-fade (0.10/0.35)
-            // made the peeks BRIGHTER than the main card — the hero looked
-            // dimmed by contrast and the far pair read near-white.
-            // Bumped ~5% brighter on user request: near 0.16→0.13, far
-            // 0.28→0.22 in light; near 0.14→0.11, far 0.26→0.21 in dark.
-            pastelMode && !darkMode -> lerp(accent, Color.Black, if (far) 0.22f else 0.13f)
-            pastelMode -> lerp(accent, Color.Black, if (far) 0.21f else 0.11f)
-            else -> lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
+    // v7.14 — peek cards wear the SAME card-gradient family as the hero
+    // (the Material card blend when active, the classic category gradient
+    // otherwise), stepped a level DARKER so the deck keeps its hierarchy
+    // (hero brightest, near a step down, far a step further). Previously
+    // the peeks were a flat black-lerp of the accent and carried none of
+    // the material palette. The level crush keeps the classic depth:
+    // near 0.28 / far 0.42 in light; pastel light near 0.13 / far 0.22;
+    // pastel dark near 0.11 / far 0.21 (kept from v7.8.1).
+    val blendStops = CurioGradients.cardGradient(accent)
+    val cardStops = remember(blendStops, far, pastelMode, darkMode) {
+        val level = when {
+            pastelMode && !darkMode -> if (far) 0.22f else 0.13f
+            pastelMode -> if (far) 0.21f else 0.11f
+            else -> if (far) 0.42f else 0.28f
         }
+        blendStops.map { lerp(it, Color.Black, level) }
     }
     // v7.5 — pastel mode lightens the peek fill, so content flips to a deep
     // ink of the deck color (light mode) / a light tint (dark).
     val ink = pastelFillInk(accent)
 
     // v7.7 — deck card redesign (EXPERIMENTAL, four independent Settings
-    // toggles, each OFF by default): the flat shade becomes a top-lit
-    // two-stop gradient, the generic hairline is tinted with the category's
-    // own colors, near cards gain soft shadows, and near titles get two
+    // toggles, each OFF by default): the blend gradient is now the BASE
+    // peek fill, the generic hairline is tinted with the category's own
+    // colors, near cards gain soft shadows, and near titles get two
     // readable lines. Reads each reactive preference directly so flipping
     // any toggle recomposes the deck instantly; when a flag is OFF its
-    // feature resolves to the classic flat-deck look.
+    // feature resolves to the classic look.
     val gradientOn = AppPreferences.peekGradientState
     val hairlineOn = AppPreferences.peekHairlineState
     val shadowsOn = AppPreferences.peekShadowsState
     val titlesOn = AppPreferences.peekTitlesState
-    // 1a — top-lit gradient: crown = a whisper of light at the card top,
-    // base = the level shade. The top peek catching more light also
-    // whispers "next up" on the reel. (Gated by the gradient toggle.)
-    val fillBrush = remember(accent, far, pastelMode, darkMode) {
-        val crown = if (pastelMode && !darkMode) lerp(cardColor, Color.White, 0.12f)
-                    else lerp(accent, Color.White, if (far) 0.10f else 0.14f)
-        Brush.verticalGradient(listOf(crown, cardColor))
+    // 1a — top-lit crown: a whisper of light at the card top so the top
+    // peek catches light and whispers "next up" on the reel. The base is
+    // always the level-darkened blend; the gradient toggle layers the
+    // crown lighten on top.
+    val fillBrush = remember(cardStops, far, pastelMode, darkMode, gradientOn) {
+        val base = Brush.verticalGradient(cardStops)
+        if (!gradientOn) return@remember base
+        val crown = if (pastelMode && !darkMode) lerp(cardStops.first(), Color.White, 0.12f)
+                    else lerp(cardStops.first(), Color.White, if (far) 0.10f else 0.14f)
+        Brush.verticalGradient(listOf(crown) + cardStops.drop(1))
     }
     // 1b — category-tinted hairline so each deck layer whispers its
     // category instead of a generic white rule. The light twin reads on the
@@ -2192,7 +2199,10 @@ private fun PeekCard(
         ) { currentTopic ->
             Surface(
                 shape = RoundedCornerShape(corner),
-                color = if (gradientOn) Color.Transparent else cardColor,
+                // v7.14 — the fill is always the level-darkened blend brush,
+                // so the Surface stays transparent and the brush (applied
+                // below) is what the eye sees.
+                color = Color.Transparent,
                 // 2 — soft ambient shadows lift the deck off the tinted page
                 // (near cards sit higher than the far pair).
                 // v7.11 — proper peek-card shadows: a layered depth system
@@ -2210,13 +2220,7 @@ private fun PeekCard(
                 border = BorderStroke(width = 1.dp, color = hairline),
                 modifier = Modifier
                     .fillMaxSize()
-                    .then(
-                        if (gradientOn) {
-                            Modifier.background(brush = fillBrush, shape = RoundedCornerShape(corner))
-                        } else {
-                            Modifier
-                        }
-                    )
+                    .background(brush = fillBrush, shape = RoundedCornerShape(corner))
             ) {
                 Column(
                     modifier = Modifier

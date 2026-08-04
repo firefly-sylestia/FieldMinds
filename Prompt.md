@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Material card blend rework — per-category gradient variety, material colors lead, blend extended to peeks + detail hero, dark mode**
+
+### What was asked
+
+“the material style are bad … they should have each of [them] on category color a little and then the 2nd or 3rd color would be the material color … but no they all look the same so fix it and also do and adjust it for dark mode too … the category tint is too much in category card and most of the things dont even get a tint the peek cards the color blend in detail screen … i want the material color have to be more and proper beautiful gradient mixed so fully implement it”
+
+### What was done
+
+- **Root causes (CurioColors.kt `cardGradient`)** — the v7.13 wheel collided: amber (26°), rose (345°) and coral (349°) ALL landed under 40° → the identical arrangement, and the 40-55% category tint pulled every stop toward the accent, so cards read as one samey deep blob.
+- **New 6-band wheel (60° each)** — every shipped category gets a distinct combination of which Material You colors appear and where the category stop sits: amber→[cat, sec, tert], teal→[cat, pri, tert], sky→[tert, cat, pri], indigo→[pri, sec, cat], rose/coral→[sec, pri, cat]. ONE stop carries the category (the “little” presence); the other two are the device palette.
+- **Tint split by mode** — light: whisper 12-20% category tint on material stops (material palette dominates; was 40-55%); dark: 42-52% pull toward the deep accent because the device’s dark palette is pastel-pale and would wash out the white card content. Added `floorForWhiteInk` (light-mode luminance floor 0.30) so the API<31 non-dynamic fallback palette (pale Curio pastels) still holds white text — a no-op on real dynamic-color devices.
+- **Peek cards (SpinScreen.kt `PeekCard`)** — peeks now wear the same card-gradient family as the hero (the blend when active, the classic gradient otherwise), stepped a level darker for the deck hierarchy (near 0.28/far 0.42 light; pastel levels kept). Surface is always transparent with an always-applied vertical brush; the experimental peek-gradient toggle now layers the crown lighten on top of the blend base.
+- **Detail hero (EntryDetailScreen.kt)** — when blends are active, the hero opens on the blend’s first stop (non-pastel dark keeps the deep accent hold), guarded by a new `contrastRatio` helper (falls back to the deep accent if < 3.0 vs the glass ink). The glide still ends exactly on the page wash. TopicReveal hero already used `cardGradient` → fixed automatically.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on all 3 files; code-reviewer pass (wheel math verified against the six category hues; no leftover `cardColor` refs; imports/Composable contexts/remember keying clean; the one flagged risk — light fallback contrast — fixed with the luminance floor).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Hero shuffle card — topic title no longer hugs the top edge after badge-row removal**
 
 ### What was asked
