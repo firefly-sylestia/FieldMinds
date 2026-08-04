@@ -340,7 +340,14 @@ object CurioGradients {
         // End on the ACTIVE theme's background so cards always echo the
         // surface behind them — cream in light, midnight in dark, pure
         // black in AMOLED, the device's dynamic background in Material.
-        val start = categoryCardFill(accent)
+        val start = if (AppPreferences.pastelColorsState && AppPreferences.pastelCrownDepthState) {
+            // v7.12 — subtle 5% black deepen at the very top of pastel
+            // gradients so every pastel card reads with a gentle darker
+            // crown instead of a uniform pastel from edge to edge.
+            lerp(categoryCardFill(accent), Color.Black, 0.05f)
+        } else {
+            categoryCardFill(accent)
+        }
         // v7.8 — on tint-washed Curio pages the card melts into the washed
         // background on the category's OWN hue (same recipe as the page
         // wash), not the raw cream that dragged cool accents off-family.

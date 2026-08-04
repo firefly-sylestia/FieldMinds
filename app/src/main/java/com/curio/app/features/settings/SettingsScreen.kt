@@ -546,6 +546,38 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
+                        // ── Pastel crown depth (v7.12, EXPERIMENTAL) — when
+                        //    pastel mode is ON, pastel card gradients get a
+                        //    subtle 5% black deepen at the very top so every
+                        //    card wears a gentle darker crown for depth instead
+                        //    of uniform pastel from edge to edge. Default ON;
+                        //    only visible while pastel mode is active.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Palette, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Pastel crown depth", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    if (AppPreferences.pastelColorsState)
+                                        "Cards get a subtle darker crown at the top for depth"
+                                    else "Only takes effect when Pastel color mode is on",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.pastelCrownDepthState,
+                                onCheckedChange = { AppPreferences.setPastelCrownDepthEnabled(context, it) }
+                            )
+                        }
+                        CurioSettingsDivider()
                         // ── Material card blends (v7.8, EXPERIMENTAL) — in the
                         //    Material theme style, cards wear a MIXED gradient
                         //    of the category accent + the device's dynamic

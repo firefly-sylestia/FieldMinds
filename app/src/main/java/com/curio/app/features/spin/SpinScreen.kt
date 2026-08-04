@@ -529,8 +529,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     // non-pastel keep the classic card gradient (the muted pastel twins
     // already match the dark peeks).
     val deckGradient = if (pastelMode && !darkMode && !isMixedDeck) {
+        // v7.12 — pastel crown depth: when the toggle is on, the top stop
+        // gets a subtle 5% black deepen instead of the old 4% white lift,
+        // so the card reads with a gentle darker crown for depth.
+        val topCrown = if (AppPreferences.pastelCrownDepthState) {
+            lerp(deckAccent, Color.Black, 0.05f)
+        } else {
+            lerp(deckAccent, Color.White, 0.04f)
+        }
         listOf(
-            lerp(deckAccent, Color.White, 0.04f),
+            topCrown,
             lightAccentTint(deckAccent, saturation = 0.22f, lightness = 0.80f)
         )
     } else {

@@ -58,6 +58,7 @@ object AppPreferences {
     private const val KEY_THEME_MODE = "theme_mode"        // "light", "dark", "system"
     private const val KEY_THEME_STYLE = "theme_style"      // "default", "amoled", "material"
     private const val KEY_PASTEL_COLORS_ENABLED = "pastel_colors_enabled"
+    private const val KEY_PASTEL_CROWN_DEPTH = "pastel_crown_depth"
     // v7.7 — experimental peek-card redesign, four independent toggles so
     // each upgrade can be A/B'd on its own: top-lit gradient fill, tinted
     // hairline, soft shadows, roomier two-line near titles. Each OFF by
@@ -118,6 +119,14 @@ object AppPreferences {
     // theme STYLE (combines with Curio, AMOLED and Material) and theme MODE.
     // Default OFF. Seeded from prefs in [initThemeMode].
     var pastelColorsState by mutableStateOf(false)
+        private set
+
+    // Pastel crown depth (v7.12, EXPERIMENTAL) — when pastel mode is ON
+    // and this toggle is ON, the top of pastel card gradients gets a
+    // subtle 5% black deepen so every card reads with a gentle darker
+    // crown for depth instead of a uniform pastel from edge to edge.
+    // Default ON. Only takes effect when pastel mode is active.
+    var pastelCrownDepthState by mutableStateOf(true)
         private set
 
     // Peek-deck redesign (v7.7, EXPERIMENTAL) — the Spin deck's background
@@ -235,6 +244,7 @@ object AppPreferences {
         themeModeState = getThemeMode(context)
         themeStyleState = getThemeStyle(context)
         pastelColorsState = isPastelColorsEnabled(context)
+        pastelCrownDepthState = isPastelCrownDepthEnabled(context)
         peekGradientState = isPeekGradientEnabled(context)
         peekHairlineState = isPeekHairlineEnabled(context)
         peekShadowsState = isPeekShadowsEnabled(context)
@@ -280,6 +290,16 @@ object AppPreferences {
     fun setPastelColorsEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_PASTEL_COLORS_ENABLED, enabled).apply()
         pastelColorsState = enabled
+    }
+
+    // ── Pastel crown depth (v7.12 experimental) ───────────────────────
+    /** Whether pastel card gradients get a subtle 5% black deepen at the top (default on). */
+    fun isPastelCrownDepthEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_PASTEL_CROWN_DEPTH, true)
+
+    fun setPastelCrownDepthEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_PASTEL_CROWN_DEPTH, enabled).apply()
+        pastelCrownDepthState = enabled
     }
 
     // ── Peek-deck redesign (v7.7 experimental) ────────────────────────
