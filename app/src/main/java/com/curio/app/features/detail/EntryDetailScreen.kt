@@ -659,10 +659,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     }
                 }
 
-                // ── Theme-aware meta card — date & time / mood / type ──
-                if (AppPreferences.entryMetaEnabledState) {
-                    EntryMetaCard(entry = resolvedEntry)
-                }
+                // ── Mood meta ───────────────────────────────────────────────
+                // The mood is shown once, in the hero's frosted bar above — the
+                // standalone mood card below was removed to avoid a duplicate.
             }
         }
 
@@ -852,28 +851,6 @@ private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
     else -> null
 }
 
-@Composable
-private fun EntryMetaCard(entry: CurioEntry) {
-    val mood = entry.moodOf()
-    if (mood == null) return
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.padding(vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            MetaSegment(
-                icon = mood.glyph,
-                title = mood.label,
-                subtitle = "Mood"
-            )
-        }
-    }
-}
 
 /**
  * One half of the hero's frosted date/type bar — icon over value over a
@@ -915,38 +892,6 @@ private fun FrostedSegment(
     }
 }
 
-/** One equal-weight segment of [EntryMetaCard] — icon over label pair. */
-@Composable
-private fun RowScope.MetaSegment(icon: String, title: String, subtitle: String) {
-    Column(
-        modifier = Modifier.weight(1f),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(2.dp)
-    ) {
-        CurioIcon(
-            name = icon,
-            contentDescription = null,
-            // Not the theme primary (CoralBlush) — a cream pastel that reads
-            // washed-out on the dark meta card; the neutral surface variant
-            // stays crisp in light and dark.
-            tint = if (isCurioDarkTheme()) MaterialTheme.colorScheme.onSurfaceVariant
-                   else MaterialTheme.colorScheme.primary,
-            size = 20.dp
-        )
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-            softWrap = false
-        )
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
 
 @Composable
 private fun FormatBody(
