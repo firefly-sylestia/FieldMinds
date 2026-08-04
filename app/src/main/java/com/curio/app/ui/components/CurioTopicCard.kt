@@ -1,7 +1,9 @@
 package com.curio.app.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,11 +55,14 @@ import com.curio.app.ui.theme.themedAccent
  *  - Press scale animation for tactile feel
  *  - Breathing shimmer on card image header
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CurioEntryCard(
     entry: CurioEntry,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selected: Boolean = false,
+    onLongClick: (() -> Unit)? = null
 ) {
     var pressed by remember { mutableStateOf(false) }
     val cat = CurioCategories.byId(entry.topic.categoryId)
@@ -77,20 +82,28 @@ fun CurioEntryCard(
     }
 
     Surface(
-        onClick = {
-            pressed = true
-            onClick()
-        },
-        modifier = modifier.scale(pressScale),
+        modifier = modifier
+            .scale(pressScale)
+            .combinedClickable(
+                onClick = {
+                    pressed = true
+                    onClick()
+                },
+                onLongClick = onLongClick
+            ),
         shape = RoundedCornerShape(20.dp),
         // surfaceContainerHigh (not plain surface): in the AMOLED style
         // `surface` is pure black, which made the whole Cabinet grid of
         // cards invisible on the black page. The high container step keeps
         // a faint grey lift so cards read as boxes in every theme.
         color = cat.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
-        border = cat.categoryBorder(
-            fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-        ),
+        border = if (selected) {
+            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+        } else {
+            cat.categoryBorder(
+                fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            )
+        },
         shadowElevation = 0.dp,
         tonalElevation = 1.dp
     ) {
@@ -116,6 +129,25 @@ fun CurioEntryCard(
                     tint = cat.onAccent().copy(alpha = 0.9f),
                     size = 60.dp
                 )
+                if (selected) {
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(28.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            CurioIcon(
+                                name = CurioIcons.Check,
+                                contentDescription = "Selected",
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                size = 18.dp
+                            )
+                        }
+                    }
+                }
                 // Legacy badge — restored FieldMind entries wear a small
                 // dark pill in the header corner so they stay recognizable
                 // next to native Curio captures.

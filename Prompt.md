@@ -1,5 +1,30 @@
 # Prompt.md — Request Log
 
+## Latest Request (COMPLETED)
+
+**Thin shared-wave detail tear and Cabinet bulk delete**
+
+### What was requested
+
+- Keep the detail hero's paper tear, but make the exposed white backing very thin and uneven.
+- Give the hero and white backing the same broad wave rhythm while keeping their fine bumps slightly different for a realistic layered-paper tear.
+- Add Cabinet mass delete triggered by long-press selection, with category/filter-scoped select-all.
+
+### What was changed
+
+- Reduced the detail white backing to a 6dp lip with a 10dp baseline and 12dp reserved layout extent.
+- Split the seeded tear math into a shared broad-wave foundation and independent fine tooth; the white sheet now follows the broad waves at reduced amplitude with its own shallow bump layer.
+- Added long-press selection to Cabinet cards, selected-state styling, category/search-scoped Select all, cancel selection, confirmation, and bulk delete.
+- Bulk deletion removes Room rows first through a single `WHERE id IN (...)` DAO query, then cleans each entry's audio and image files.
+- Native detail navigation remains unchanged outside selection mode; normal taps open detail, while selection-mode taps toggle entries.
+
+### Validation
+
+- `scripts/check_braces.py` passed for all changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+
 ## Latest Request (IN PROGRESS → COMPLETED)
 
 **FieldMind restore metadata cards, separate Legacy Cabinet, and Curio observation session**

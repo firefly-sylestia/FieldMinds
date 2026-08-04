@@ -951,24 +951,27 @@ private class SoftTearParams(private val seed: Int, density: Density) {
     /** The torn-edge displacement at horizontal position [x] (px) across a
      *  [w]-wide edge. Broad waves + smaller bumpy ripples + fine fiber
      *  tooth, down-biased (see the class kdoc). */
-    fun disp(x: Float, w: Float): Float {
-        val slant = tilt * (x / w - 0.5f)
+    fun broadDisp(x: Float, w: Float): Float {
+        val normalizedX = x / w
+        val slant = tilt * (normalizedX - 0.5f)
         // The low-frequency sine establishes 2–3 large waves. Seeded value
         // noise bends their shoulders so they remain hand-torn rather than
         // reading as a perfect mechanical sine.
-        val normalizedX = x / w
         val waveAngle = normalizedX * waves * (Math.PI * 2.0).toFloat() + phase
         val rhythmic = sin(waveAngle) * tooth * 0.58f
         val main = (valueNoise(seed, normalizedX * waves, phase) - 0.5f) * 2f * tooth * 0.58f
         val deepWave = (valueNoise(seed + 101, normalizedX * (waves * 0.42f), phase + 17f) - 0.5f) * 2f * deep
-        // Three-to-five small bumps per broad wave: enough texture to keep
-        // the silhouette continuously wavy, but shallow enough that the
-        // large waves remain the visual structure.
+        val raw = slant + rhythmic + main + deepWave
+        return if (raw > 0f) raw * 0.55f else raw
+    }
+
+    fun disp(x: Float, w: Float): Float {
+        val normalizedX = x / w
         val rippleAngle = normalizedX * rippleWaves * (Math.PI * 2.0).toFloat() + phase * 1.7f
         val smallRipple = sin(rippleAngle) * ripple * 0.45f +
             (valueNoise(seed + 71, normalizedX * rippleWaves * 1.35f, phase + 29f) - 0.5f) * 2f * ripple * 0.55f
         val fiber = (valueNoise(seed + 47, x * 0.14f, 3.5f) - 0.5f) * 2f * micro
-        val raw = slant + rhythmic + main + deepWave + smallRipple + fiber
+        val raw = broadDisp(x, w) + smallRipple + fiber
         return if (raw > 0f) raw * 0.55f else raw
     }
 }
@@ -1037,22 +1040,22 @@ private fun buildSoftSheetPath(
     }
     val p = SoftTearParams(seed, density)
     val step = with(density) { 4.dp.toPx() }
-    // The sheet's lower edge carries the SAME 2–3 broad waves plus the
-    // smaller bumpy ripple rhythm as the hero. A restrained extra wobble
-    // keeps the exposed white edge from looking mechanically parallel while
-    // preserving a continuous sheet with no background gaps.
+    // Keep the hero and sheet on the SAME broad wave rhythm, but do not
+    // duplicate the hero's fine tooth. The exposed white gets only a small,
+    // separately seeded paper wobble so it feels like a second sheet edge
+    // following the tear rather than a rigid parallel ruler.
     fun bottomBump(x: Float): Float {
         val normalizedX = x / w
-        val sharedShape = p.disp(x, w) * 0.30f
-        val rippleAngle = normalizedX * (p.rippleWaves * 1.05f) * (Math.PI * 2.0).toFloat() + p.phase * 1.35f
-        val extraRipple = sin(rippleAngle) * with(density) { 0.8.dp.toPx() } +
-            (valueNoise(seed + 257, normalizedX * p.rippleWaves, p.phase + 53f) - 0.5f) *
-                2f * with(density) { 0.5.dp.toPx() }
+        val sharedShape = p.broadDisp(x, w) * 0.82f
+        val rippleAngle = normalizedX * (p.rippleWaves * 0.86f) * (Math.PI * 2.0).toFloat() + p.phase * 1.11f
+        val extraRipple = sin(rippleAngle) * with(density) { 0.35.dp.toPx() } +
+            (valueNoise(seed + 257, normalizedX * p.rippleWaves * 0.9f, p.phase + 53f) - 0.5f) *
+                2f * with(density) { 0.25.dp.toPx() }
         return sharedShape + extraRipple
     }
-    // Clockwise: torn top (left→right), right side down to the lip, torn
-    // bottom running PARALLEL to the top with small seeded bumps, close up
-    // the left.
+    // Clockwise: torn top (left→right), right side down to the thin lip,
+    // then a closely following lower tear edge with the same broad wave
+    // rhythm and only a restrained independent tooth. Close up the left.
     path.moveTo(0f, baselinePx + p.disp(0f, w))
     var x = step
     while (x < w) {

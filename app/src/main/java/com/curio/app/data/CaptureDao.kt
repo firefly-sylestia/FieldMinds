@@ -28,6 +28,9 @@ interface CaptureDao {
     @Query("SELECT * FROM captures WHERE categoryId = :categoryId ORDER BY capturedAtMillis DESC")
     suspend fun getByCategory(categoryId: String): List<CaptureEntity>
 
+    @Query("DELETE FROM captures WHERE id IN (:ids)")
+    suspend fun deleteByIds(ids: List<String>): Int
+
     @Query("DELETE FROM captures WHERE id = :id")
     suspend fun deleteById(id: String)
 

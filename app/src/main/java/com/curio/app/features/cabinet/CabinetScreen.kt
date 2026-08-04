@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -36,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -49,6 +52,8 @@ import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.AudioStorageManager
+import com.curio.app.data.ImageStorageManager
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioBackButton
@@ -96,6 +101,11 @@ fun CabinetScreen(navController: NavController) {
     var searchActive by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var sortNewestFirst by rememberSaveable { mutableStateOf(true) }
+    var selectionMode by rememberSaveable { mutableStateOf(false) }
+    var selectedEntryIds by rememberSaveable { mutableStateOf<Set<String>>(emptySet()) }
+    var showBulkDeleteConfirm by rememberSaveable { mutableStateOf(false) }
+    val deleteScope = rememberCoroutineScope()
+    val context = androidx.compose.ui.platform.LocalContext.current
     val searchFocus = remember { FocusRequester() }
     LaunchedEffect(searchActive) {
         if (searchActive) {
@@ -130,6 +140,47 @@ fun CabinetScreen(navController: NavController) {
         }
         if (sortNewestFirst) result.sortedByDescending { it.capturedAtMillis }
         else result.sortedBy { it.capturedAtMillis }
+    }
+
+    val categorySelectionIds = visibleEntries.map { it.id }.toSet()
+    LaunchedEffect(selectedFilter, showLegacyOnly, searchQuery) {
+        selectedEntryIds = selectedEntryIds.intersect(categorySelectionIds)
+        if (selectedEntryIds.isEmpty()) selectionMode = false
+    }
+    val allVisibleSelected = categorySelectionIds.isNotEmpty() &&
+        categorySelectionIds.all { it in selectedEntryIds }
+
+    if (showBulkDeleteConfirm) {
+        AlertDialog(
+            onDismissRequest = { showBulkDeleteConfirm = false },
+            title = { Text("Delete selected captures?", fontWeight = FontWeight.Bold) },
+            text = { Text("This permanently deletes ${selectedEntryIds.size} selected capture(s), including their attached media.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showBulkDeleteConfirm = false
+                    val ids = selectedEntryIds.toList()
+                    deleteScope.launch {
+                        val selectedEntries = entries.filter { it.id in ids }
+                        val deleted = runCatching {
+                            CurioRepositoryHolder.repo.deleteByIds(ids)
+                        }.isSuccess
+                        if (deleted) {
+                            selectedEntries.forEach { entry ->
+                                entry.captureData.audioFilePaths().forEach { path ->
+                                    AudioStorageManager.deleteAudio(context, path)
+                                }
+                                ImageStorageManager.deleteImagesForEntry(context, entry.id)
+                            }
+                            selectedEntryIds = emptySet()
+                            selectionMode = false
+                        }
+                    }
+                }) { Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showBulkDeleteConfirm = false }) { Text("Cancel") }
+            }
+        )
     }
 
     // The Cabinet wears the active filter's category wash — the same tinted
@@ -228,18 +279,69 @@ fun CabinetScreen(navController: NavController) {
                         // native Curio captures.
                         CurioBackButton(onClick = { selectedFilter = null; showLegacyOnly = false })
                     }
-                    Text(
-                        text = if (showLegacyOnly) "Legacy Cabinet" else "The Cabinet",
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = if (selectionMode) "${selectedEntryIds.size} selected"
+                            else if (showLegacyOnly) "Legacy Cabinet" else "The Cabinet",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        if (selectionMode) {
+                            Text(
+                                text = "Long-press cards to select · ${if (showLegacyOnly) "legacy" else "current filter"}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    if (selectionMode) {
+                        Surface(
+                            onClick = {
+                                selectedEntryIds = if (allVisibleSelected) {
+                                    selectedEntryIds - categorySelectionIds
+                                } else {
+                                    selectedEntryIds + categorySelectionIds
+                                }
+                            },
+                            shape = RoundedCornerShape(50),
+                            color = MaterialTheme.colorScheme.primaryContainer
+                        ) {
+                            Text(
+                                if (allVisibleSelected) "Clear" else "Select all",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp)
+                            )
+                        }
+                        Surface(
+                            onClick = { showBulkDeleteConfirm = true },
+                            enabled = selectedEntryIds.isNotEmpty(),
+                            shape = RoundedCornerShape(50),
+                            color = if (selectedEntryIds.isNotEmpty()) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Delete,
+                                "Delete selected",
+                                tint = if (selectedEntryIds.isNotEmpty()) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp,
+                                modifier = Modifier.padding(9.dp)
+                            )
+                        }
+                        Surface(
+                            onClick = { selectionMode = false; selectedEntryIds = emptySet() },
+                            shape = RoundedCornerShape(50),
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            CurioIcon(CurioIcons.Close, "Cancel selection", size = 22.dp, modifier = Modifier.padding(9.dp))
+                        }
+                    }
                     // Sort toggle — newest-first (⬇) / oldest-first (⬆). The
                     // arrow points in the direction the list now runs.
                     Surface(
@@ -418,10 +520,23 @@ fun CabinetScreen(navController: NavController) {
                 items(visibleEntries, key = { it.id }) { entry ->
                     CurioEntryCard(
                         entry = entry,
+                        selected = entry.id in selectedEntryIds,
+                        onLongClick = {
+                            selectionMode = true
+                            selectedEntryIds = selectedEntryIds + entry.id
+                        },
                         onClick = {
-                            navController.navigate(
-                                CurioRoutes.entryDetail(entry.id)
-                            ) { launchSingleTop = true }
+                            if (selectionMode) {
+                                selectedEntryIds = if (entry.id in selectedEntryIds) {
+                                    selectedEntryIds - entry.id
+                                } else {
+                                    selectedEntryIds + entry.id
+                                }
+                            } else {
+                                navController.navigate(
+                                    CurioRoutes.entryDetail(entry.id)
+                                ) { launchSingleTop = true }
+                            }
                         }
                     )
                 }

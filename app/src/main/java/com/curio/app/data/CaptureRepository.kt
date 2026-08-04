@@ -37,6 +37,11 @@ class CaptureRepository(private val dao: CaptureDao) {
         dao.deleteById(id)
     }
 
+    /** Delete several captures in one Room transaction-friendly batch. */
+    suspend fun deleteByIds(ids: Collection<String>) {
+        if (ids.isNotEmpty()) dao.deleteByIds(ids.toList())
+    }
+
     /** Count total captures. */
     suspend fun count(): Int = dao.count()
 
