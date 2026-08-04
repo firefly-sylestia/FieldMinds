@@ -149,6 +149,8 @@ data class FieldMindSpecies(
     val genus: String = "",
     val species: String = "",
     val conservationStatus: String = "",
+    val lifeStage: String = "",
+    val sex: String = "",
     val observationCount: Int? = null,
     val notes: String = ""
 )

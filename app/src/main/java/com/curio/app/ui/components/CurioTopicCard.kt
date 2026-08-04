@@ -66,6 +66,13 @@ fun CurioEntryCard(
 ) {
     var pressed by remember { mutableStateOf(false) }
     val cat = CurioCategories.byId(entry.topic.categoryId)
+    val accent = cat.themedAccent()
+    // Cabinet cards are recomposed while the grid settles and while the
+    // toolbar/search state changes. Keep the header brush stable per accent
+    // so opening the Cabinet does not allocate a new gradient for every card.
+    val headerBrush = remember(accent) {
+        Brush.verticalGradient(CurioGradients.cardGradient(accent))
+    }
 
     val pressScale by androidx.compose.animation.core.animateFloatAsState(
         targetValue = if (pressed) 0.94f else 1f,
@@ -116,11 +123,7 @@ fun CurioEntryCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(128.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            CurioGradients.cardGradient(cat.themedAccent())
-                        )
-                    ),
+                    .background(headerBrush),
                 contentAlignment = Alignment.Center
             ) {
                 CurioIcon(

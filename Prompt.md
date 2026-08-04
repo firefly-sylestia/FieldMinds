@@ -128,6 +128,31 @@ FieldMind imports must be marked legacy at restore time, not inferred from categ
 
 - Added and pushed explicit persisted legacy provenance in commit `fbfa4633`.
 
+## Latest Request (COMPLETED)
+
+**Cabinet discoverability, faster loading, and detail tear-gap fix**
+
+### What was requested
+
+- Restore the Cabinet search option and make the delete action visible.
+- Make Cabinet opening less laggy without changing its capture content.
+- Fill occasional straight-edge gaps in the detail hero's torn paper seam.
+
+### What changed
+
+- Added an always-visible Cabinet `Select` action; selection mode exposes Select all, Delete, and Cancel while preserving long-press selection.
+- Kept search and sort visible in the normal toolbar and preserved filter/search-scoped selection behavior.
+- Moved Room entity-to-domain conversion onto `Dispatchers.Default` so Gson/topic reconstruction does not block the Compose collector during Cabinet startup.
+- Memoized Cabinet card header gradients by category accent to reduce recomposition allocations.
+- Tightened the white under-sheet to a thin, uneven lip, overlapped it farther behind the hero, and clamped its lower tear path inside the measured sheet so seeded peaks cannot reveal page-wash gaps.
+- Updated the store changelog entry for the shipped UI/performance refinements.
+
+### Validation
+
+- `scripts/check_braces.py` passed for all changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
 ## Latest Request (IN PROGRESS)
 
 **Refine detail hero torn seam**

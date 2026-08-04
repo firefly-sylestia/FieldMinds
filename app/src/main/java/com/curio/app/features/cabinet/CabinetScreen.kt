@@ -271,6 +271,7 @@ fun CabinetScreen(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(
+                    modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -343,10 +344,32 @@ fun CabinetScreen(navController: NavController) {
                             CurioIcon(CurioIcons.Close, "Cancel selection", size = 22.dp, modifier = Modifier.padding(9.dp))
                         }
                     }
-                    // Sort toggle — newest-first (⬇) / oldest-first (⬆). The
-                    // arrow points in the direction the list now runs.
-                    Surface(
-                        onClick = { sortNewestFirst = !sortNewestFirst },
+                    if (!selectionMode) {
+                        // Selection is explicit as well as long-press driven,
+                        // so bulk delete is discoverable without guessing the
+                        // gesture. Once active, the toolbar replaces search
+                        // and sort with Select all / Delete / Cancel.
+                        Surface(
+                            onClick = {
+                                selectionMode = true
+                                selectedEntryIds = emptySet()
+                            },
+                            shape = RoundedCornerShape(50),
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                        ) {
+                            Text(
+                                text = "Select",
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.padding(horizontal = 11.dp, vertical = 10.dp)
+                            )
+                        }
+
+                        // Sort toggle — newest-first (⬇) / oldest-first (⬆). The
+                        // arrow points in the direction the list now runs.
+                        Surface(
+                            onClick = { sortNewestFirst = !sortNewestFirst },
                         shape = RoundedCornerShape(50),
                         color = if (sortNewestFirst) {
                             MaterialTheme.colorScheme.primaryContainer
@@ -368,21 +391,22 @@ fun CabinetScreen(navController: NavController) {
                             modifier = Modifier.padding(10.dp)
                         )
                     }
-                    Surface(
-                        onClick = { searchActive = true },
-                        shape = RoundedCornerShape(50),
-                        // Always neutral — the search button never wears the category
-                        // tint, only the page background does (when a filter is set).
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-                    ) {
-                        CurioIcon(
-                            name = CurioIcons.Search,
-                            contentDescription = "Search captures",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            size = 24.dp,
-                            modifier = Modifier.padding(8.dp)
-                        )
+                        Surface(
+                            onClick = { searchActive = true },
+                            shape = RoundedCornerShape(50),
+                            // Always neutral — the search button never wears the category
+                            // tint, only the page background does (when a filter is set).
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.Search,
+                                contentDescription = "Search captures",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                size = 24.dp,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        }
                     }
                 }
             }

@@ -1,7 +1,9 @@
 package com.curio.app.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
 import java.util.UUID
 
 /**
@@ -13,7 +15,12 @@ class CaptureRepository(private val dao: CaptureDao) {
 
     /** Observe all captures as [CurioEntry] flow for reactive UI updates. */
     fun observeAll(): Flow<List<CurioEntry>> =
-        dao.getAllFlow().map { entities -> entities.map { it.toEntry() } }
+        // Entity → domain conversion includes Gson decoding and topic lookup;
+        // keep that work off the Compose/main collector so opening Cabinet
+        // stays responsive even with a large restored FieldMind archive.
+        dao.getAllFlow()
+            .map { entities -> entities.map { it.toEntry() } }
+            .flowOn(Dispatchers.Default)
 
     /** Get all captures (one-shot). */
     suspend fun getAll(): List<CurioEntry> =

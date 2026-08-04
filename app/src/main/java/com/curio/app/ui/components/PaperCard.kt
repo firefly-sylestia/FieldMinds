@@ -1014,15 +1014,13 @@ private fun buildSoftTornPath(
 }
 
 /**
- * Builds the white under-sheet outline behind the hero's torn bottom edge:
- * the TOP edge is the SAME torn curve as the hero (same seed → identical
- * displacement, so the two align pixel-perfect and the sheet's torn top is
- * hidden behind the opaque hero), and the BOTTOM edge is that same curve
- * pushed down by a constant [lipPx] — the visible white is a DEEP continuous
- * sheet below the tear everywhere (no page wash showing through the teeth,
- * no interlocking halves, nothing below the lip). [baselinePx] lifts the
- * sheet's torn top above the box's own top edge so the hero's up-bites
- * behind the card still read white.
+ * Builds the white under-sheet outline behind the hero's torn bottom edge.
+ * The sheet is SOLID at the top and only its exposed lower edge is uneven;
+ * the tear therefore belongs to the hero side, not to an intersecting second
+ * torn edge. The bottom edge follows a restrained shared wave rhythm,
+ * pushed down by [lipPx], so the visible white is continuous below the
+ * hero with no page wash showing through. [baselinePx] is retained as the
+ * seeded lower-edge offset used to keep the lip aligned beneath the hero.
  */
 private fun buildSoftSheetPath(
     seed: Int,
@@ -1046,30 +1044,37 @@ private fun buildSoftSheetPath(
     // following the tear rather than a rigid parallel ruler.
     fun bottomBump(x: Float): Float {
         val normalizedX = x / w
-        val sharedShape = p.broadDisp(x, w) * 0.82f
+        // Keep the exposed backing genuinely thin: it follows only a
+        // restrained fraction of the hero's broad wave, plus a tiny paper
+        // wobble. Reusing the full broad displacement here made the lower
+        // edge dive into long straight-looking sections and could clip at
+        // the sheet box boundary, exposing page-wash gaps.
+        val sharedShape = p.broadDisp(x, w) * 0.18f
         val rippleAngle = normalizedX * (p.rippleWaves * 0.86f) * (Math.PI * 2.0).toFloat() + p.phase * 1.11f
-        val extraRipple = sin(rippleAngle) * with(density) { 0.35.dp.toPx() } +
+        val extraRipple = sin(rippleAngle) * with(density) { 0.45.dp.toPx() } +
             (valueNoise(seed + 257, normalizedX * p.rippleWaves * 0.9f, p.phase + 53f) - 0.5f) *
-                2f * with(density) { 0.25.dp.toPx() }
+                2f * with(density) { 0.30.dp.toPx() }
         return sharedShape + extraRipple
     }
-    // Clockwise: torn top (left→right), right side down to the thin lip,
-    // then a closely following lower tear edge with the same broad wave
-    // rhythm and only a restrained independent tooth. Close up the left.
-    path.moveTo(0f, baselinePx + p.disp(0f, w))
-    var x = step
-    while (x < w) {
-        path.lineTo(x, baselinePx + p.disp(x, w))
-        x += step
+    // Clockwise: a SOLID top (hidden behind the hero), down the right side,
+    // then the restrained uneven lower lip. Only the lower edge is torn so
+    // anti-aliased hero peaks can never reveal a second sheet intersection.
+    // Keep the backing path inside its measured box even for a seeded peak;
+    // the overlap behind the hero handles the top edge, while this clamp
+    // guarantees the lower white sheet can never be clipped into a gap.
+    val topAt: (Float) -> Float = { x -> baselinePx + p.disp(x, w) }
+    val bottomAt: (Float) -> Float = { x ->
+        (topAt(x) + lipPx + bottomBump(x)).coerceAtMost(h - 0.5f)
     }
-    path.lineTo(w, baselinePx + p.disp(w, w))
-    path.lineTo(w, baselinePx + p.disp(w, w) + lipPx + bottomBump(w))
+    path.moveTo(0f, 0f)
+    path.lineTo(w, 0f)
+    path.lineTo(w, bottomAt(w))
     x = w - step
     while (x > 0f) {
-        path.lineTo(x, baselinePx + p.disp(x, w) + lipPx + bottomBump(x))
+        path.lineTo(x, bottomAt(x))
         x -= step
     }
-    path.lineTo(0f, baselinePx + p.disp(0f, w) + lipPx + bottomBump(0f))
+    path.lineTo(0f, bottomAt(0f))
     path.close()
     return path
 }

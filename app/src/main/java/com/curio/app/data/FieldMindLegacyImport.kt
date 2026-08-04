@@ -1,6 +1,7 @@
 package com.curio.app.data
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import org.json.JSONArray
 import org.json.JSONObject
@@ -348,6 +349,9 @@ object FieldMindLegacyImport {
                 genus = o.optString("genus"),
                 species = o.optString("species"),
                 conservationStatus = o.optString("conservationStatus"),
+                lifeStage = o.optString("lifeStage").ifBlank { o.optString("life_stage") }
+                    .ifBlank { o.optString("stage") },
+                sex = o.optString("sex"),
                 observationCount = o.optInt("observationCount", -1).takeIf { it >= 0 },
                 notes = o.optString("notes")
             )
@@ -362,17 +366,32 @@ object FieldMindLegacyImport {
                 .ifBlank { o.optString("subject") }
             val scientific = details?.optString("scientificName").orEmpty()
                 .ifBlank { speciesInfo?.optString("scientificName").orEmpty() }
+            val lifeStage = details?.optString("lifeStage").orEmpty()
+                .ifBlank { details?.optString("life_stage").orEmpty() }
+                .ifBlank { details?.optString("stage").orEmpty() }
+                .ifBlank { speciesInfo?.optString("lifeStage").orEmpty() }
+                .ifBlank { o.optString("lifeStage") }
+                .ifBlank { o.optString("life_stage") }
+                .ifBlank { o.optString("stage") }
+            val sex = details?.optString("sex").orEmpty()
+                .ifBlank { speciesInfo?.optString("sex").orEmpty() }
+                .ifBlank { o.optString("sex") }
             val matched = speciesRecords.firstOrNull { record ->
                 listOf(record.commonName, record.scientificName, record.species)
                     .any { it.isNotBlank() && (it.equals(name, true) || it.equals(scientific, true)) }
             }
-            return matched ?: if (name.isNotBlank() && !name.equals(o.optString("subject"), true) || scientific.isNotBlank()) {
+            val genericSubject = name.equals("Field observation", true) || name.equals("Observation", true)
+            return matched ?: if ((name.isNotBlank() && !genericSubject) || scientific.isNotBlank() || lifeStage.isNotBlank() || sex.isNotBlank()) {
                 FieldMindSpecies(
-                    commonName = name.takeIf { it != o.optString("subject") }.orEmpty(),
+                    commonName = name.takeIf { it.isNotBlank() && !genericSubject }.orEmpty(),
                     scientificName = scientific,
                     conservationStatus = details?.optString("conservationStatus").orEmpty()
-                        .ifBlank { speciesInfo?.optString("conservationStatus").orEmpty() },
+                        .ifBlank { speciesInfo?.optString("conservationStatus").orEmpty() }
+                        .ifBlank { o.optString("conservationStatus") },
+                    lifeStage = lifeStage,
+                    sex = sex,
                     notes = speciesInfo?.optString("speciesDescription").orEmpty()
+                        .ifBlank { details?.optString("speciesDescription").orEmpty() }
                 )
             } else null
         }
@@ -574,12 +593,36 @@ object FieldMindLegacyImport {
             if (bytes.isEmpty()) null else ImageStorageManager.restoreImage(context, entryId, index, bytes)
         }.getOrNull()?.let { Uri.fromFile(File(it)).toString() }
 
+    /**
+     * Accept image bytes even when FieldMind exported a misleading filename
+     * or generic MIME type (some archives contain image bytes named `.bat`).
+     * Content sniffing is the source of truth; extensions are only a fallback
+     * for formats Android's BitmapFactory can still decode.
+     */
     private fun isSupportedImage(media: MediaFile): Boolean {
         val mime = media.mimeType.lowercase()
         if (mime.startsWith("image/")) return true
+        val bytes = runCatching { media.file.readBytes() }.getOrNull() ?: return false
+        val hasJpegHeader = bytes.size >= 3 &&
+            bytes[0] == 0xFF.toByte() && bytes[1] == 0xD8.toByte() && bytes[2] == 0xFF.toByte()
+        val hasPngHeader = bytes.size >= 8 && bytes.copyOf(8).contentEquals(
+            byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        )
+        val hasGifHeader = bytes.size >= 6 &&
+            String(bytes, 0, 6, Charsets.US_ASCII).let { it == "GIF87a" || it == "GIF89a" }
+        val hasWebpHeader = bytes.size >= 12 &&
+            String(bytes, 0, 4, Charsets.US_ASCII) == "RIFF" &&
+            String(bytes, 8, 4, Charsets.US_ASCII) == "WEBP"
+        val hasBmpHeader = bytes.size >= 2 && bytes[0] == 'B'.code.toByte() && bytes[1] == 'M'.code.toByte()
+        if (hasJpegHeader || hasPngHeader || hasGifHeader || hasWebpHeader || hasBmpHeader) return true
+        // Some valid formats (including HEIC variants and vendor exports) do
+        // not have a simple signature we can recognize. Let Android's image
+        // decoder decide from the bytes before falling back to the filename.
+        if (BitmapFactory.decodeByteArray(bytes, 0, bytes.size) != null) return true
         val name = media.file.name.lowercase()
         return name.endsWith(".jpg") || name.endsWith(".jpeg") ||
-            name.endsWith(".png") || name.endsWith(".webp") || name.endsWith(".gif")
+            name.endsWith(".png") || name.endsWith(".webp") || name.endsWith(".gif") ||
+            name.endsWith(".heic") || name.endsWith(".heif")
     }
 
     private fun joinPreserved(primary: String, metadata: String): String =
@@ -610,7 +653,6 @@ object FieldMindLegacyImport {
         o.optLong("changeObservedAt", -1L).takeIf { it >= 0L }?.let { add("Change observed at: $it") }
         o.optLong("changeDurationMs", -1L).takeIf { it >= 0L }?.let { add("Change duration: ${it}ms") }
         o.optString("timeNote").takeIf { it.isNotBlank() }?.let { add("Time note: $it") }
-        o.optString("structuredDetailsJson").takeIf { it.isNotBlank() }?.let { add("Structured details: $it") }
         o.optString("status").takeIf { it.isNotBlank() }?.let { add("Status: $it") }
         o.optLong("projectId", -1L).takeIf { it >= 0L }?.let { add("Project ID: $it") }
         o.optLong("parentObservationId", -1L).takeIf { it >= 0L }?.let { add("Parent observation: $it") }

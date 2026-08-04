@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import org.json.JSONArray
+import org.json.JSONObject
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -291,16 +293,17 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             // caches would never hit).
             val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
             val sheetShape = remember(tearSeed) {
-                SoftTornSheetShape(tearSeed, lip = 6.dp, baseline = 10.dp)
+                SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(32.dp)
+                    .height(42.dp)
                     // Baseline lifts the sheet's torn top above this box's
-                    // own top edge (behind the hero), while the thin sheet
-                    // continues just below the hero as an uneven paper lip.
-                    .offset(y = EntryDetailHeroHeight - 10.dp)
+                    // own top edge (behind the hero), while the sheet extends
+                    // far enough below the hero that anti-aliased wave edges
+                    // cannot reveal a page-wash gap.
+                    .offset(y = EntryDetailHeroHeight - 18.dp)
                     .clip(sheetShape)
                     .background(Color(0xFFFDFCF9))
             )
@@ -574,16 +577,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
                             )
                         }
-                        if (resolvedEntry.isLegacy) {
-                            DropdownMenuItem(
-                                text = { Text("FieldMind observation session") },
-                                onClick = {
-                                    menuExpanded = false
-                                    navController.navigate(CurioRoutes.FIELDMIND_OBSERVATION) { launchSingleTop = true }
-                                },
-                                leadingIcon = { CurioIcon(name = CurioIcons.ScienceGlyph, contentDescription = null, size = 20.dp) }
-                            )
-                        }
                         DropdownMenuItem(
                             text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
                             onClick = {
@@ -743,7 +736,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
  */
 private val EntryDetailHeroHeight = 380.dp
 /** Extra layout space reserved for the white sheet below the clipped hero. */
-private val EntryDetailSheetExtent = 12.dp
+private val EntryDetailSheetExtent = 24.dp
 
 /** Hero height + a small gap — the watermark's top clearance on this page
  *  (keeps the backdrop glyphs clear of the thin white under-sheet lip below
@@ -2948,6 +2941,43 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
     }
 }
 
+private fun structuredDetailRows(raw: String): List<Pair<String, String>> {
+    if (raw.isBlank()) return emptyList()
+    val root = runCatching { JSONObject(raw) }.getOrNull() ?: return emptyList()
+    val rows = mutableListOf<Pair<String, String>>()
+
+    fun titleize(key: String): String = key
+        .replace(Regex("([a-z])([A-Z])"), "$1 $2")
+        .replace('_', ' ')
+        .replace('-', ' ')
+        .split(' ')
+        .filter { it.isNotBlank() }
+        .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
+
+    fun flatten(value: Any?, path: String) {
+        when (value) {
+            is JSONObject -> {
+                value.keys().forEach { key ->
+                    val childPath = if (path.isBlank()) titleize(key) else "$path · ${titleize(key)}"
+                    flatten(value.opt(key), childPath)
+                }
+            }
+            is JSONArray -> {
+                val values = (0 until value.length()).mapNotNull { index -> value.opt(index) }
+                if (values.isNotEmpty()) rows += path to values.joinToString(", ") { it.toString() }
+            }
+            null, JSONObject.NULL -> Unit
+            else -> {
+                val text = value.toString().trim()
+                if (text.isNotBlank()) rows += path to text
+            }
+        }
+    }
+
+    flatten(root, "")
+    return rows
+}
+
 @Composable
 private fun formatMetadataTimestamp(millis: Long): String =
     SimpleDateFormat("MMM d, yyyy · h:mm a", Locale.getDefault()).format(Date(millis))
@@ -3019,9 +3049,40 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                     }
                 }
             }
-            if (!metadata.structuredDetailsJson.isNullOrBlank()) {
-                Text("Structured details", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = category.categoryInk())
-                Text(metadata.structuredDetailsJson.orEmpty(), style = MaterialTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth())
+            val structuredRows = structuredDetailRows(metadata.structuredDetailsJson)
+            if (structuredRows.isNotEmpty()) {
+                Text(
+                    "Structured details",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                    color = category.categoryInk()
+                )
+                structuredRows.forEach { (label, value) ->
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f),
+                        border = category.categoryBorder(
+                            fallback = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Text(
+                                label,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = category.categoryInk(),
+                                modifier = Modifier.width(112.dp)
+                            )
+                            Text(
+                                value,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
             }
             species?.let { item ->
                 Surface(shape = RoundedCornerShape(16.dp), color = category.themedAccent().copy(alpha = 0.10f), modifier = Modifier.fillMaxWidth()) {
@@ -3032,8 +3093,33 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                         }
                         Text(item.commonName.orEmpty().ifBlank { item.scientificName.orEmpty().ifBlank { "Unknown species" } }, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
                         if (!item.scientificName.isNullOrBlank()) Text(item.scientificName.orEmpty(), style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        val taxonomy = listOf("Kingdom" to item.kingdom, "Phylum" to item.phylum, "Class" to item.className, "Order" to item.order, "Family" to item.family, "Genus" to item.genus, "Species" to item.species, "Conservation" to item.conservationStatus).map { it.first to it.second.orEmpty() }.filter { it.second.isNotBlank() }
-                        taxonomy.forEach { (label, value) -> Text("$label · $value", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                        val taxonomy = listOf(
+                            "Kingdom" to item.kingdom,
+                            "Phylum" to item.phylum,
+                            "Class" to item.className,
+                            "Order" to item.order,
+                            "Family" to item.family,
+                            "Genus" to item.genus,
+                            "Species" to item.species,
+                            "Life stage" to item.lifeStage,
+                            "Sex" to item.sex,
+                            "Conservation" to item.conservationStatus
+                        ).filter { it.second.isNotBlank() }
+                        taxonomy.forEach { (label, value) ->
+                            Surface(
+                                shape = RoundedCornerShape(10.dp),
+                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(label, style = MaterialTheme.typography.labelSmall, color = category.categoryInk(), modifier = Modifier.width(92.dp))
+                                    Text(value, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
                         item.observationCount?.let { Text("Recorded observations · $it", style = MaterialTheme.typography.labelSmall) }
                         if (!item.notes.isNullOrBlank()) Text(item.notes.orEmpty(), style = MaterialTheme.typography.bodySmall)
                     }
