@@ -1162,15 +1162,15 @@ private fun MoodBoardEditorTile(
             color = Color.Black.copy(alpha = 0.48f),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(7.dp)
-                .size(26.dp)
+                .padding(6.dp)
+                .size(32.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 CurioIcon(
                     name = CurioIcons.Search,
                     contentDescription = "Zoom image",
                     tint = Color.White,
-                    size = 14.dp
+                    size = 16.dp
                 )
             }
         }

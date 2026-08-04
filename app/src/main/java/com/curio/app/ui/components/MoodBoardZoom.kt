@@ -93,9 +93,13 @@ class MoodBoardZoomState {
 
     /**
      * Double-tap a tile: only that image zooms. The overlay glides it from
-     * its resting spot to the viewport CENTER ([centerX]/[centerY] = the
-     * tile's center in viewport coordinates) at the fit-based zoom level,
+     * its resting spot to the viewport CENTER at the fit-based zoom level,
      * so the screen visibly swoops to the image without moving the board.
+     * [tileW]/[tileH] are the tile's on-screen size and [viewW]/[viewH] the
+     * viewport it glides within — the centering target is derived purely
+     * from those (the resting spot lives in the overlay, which reports the
+     * tile's position itself). [centerX]/[centerY] are accepted for call-site
+     * compatibility but not used by the target math.
      */
     fun zoomIn(
         uri: String,
@@ -115,11 +119,17 @@ class MoodBoardZoomState {
         }
         defaultScale = fitZoomScale(tileW, tileH, viewW, viewH)
         scaleTarget = defaultScale
-        // Glide target: with the image scaled around its own center, the
-        // transform that places its center at the viewport center is
-        //   translation = scaleTarget · (viewportCenter − imageCenter)
-        offsetX = scaleTarget * (viewW / 2f - centerX)
-        offsetY = scaleTarget * (viewH / 2f - centerY)
+        // Glide target: the overlay lays the image out at the viewport's
+        // top-left and its graphicsLayer scales about the image's OWN center
+        // (default transformOrigin), so the image's visual center = its
+        // layout center + translation at ANY scale. Centering it on the
+        // viewport therefore needs a SCALE-INDEPENDENT translation:
+        //   offsetX = viewW/2 − w/2,  offsetY = viewH/2 − h/2
+        // (the scaled image stays centered as it zooms). The tile's resting
+        // spot is NOT part of this target — the overlay owns it via its own
+        // tileX/tileY and returns there on close.
+        offsetX = viewW / 2f - tileW / 2f
+        offsetY = viewH / 2f - tileH / 2f
     }
 
     /**
@@ -301,9 +311,12 @@ fun MoodBoardZoomOverlay(
     // ── Arc glide clock — ONE shared clock drives scale + pan in phase so
     // the image swoops from its resting spot to the centered target, and
     // back on close. Plain float states (the arc writes them per-frame).
-    var glideScale by remember { mutableFloatStateOf(1f) }
-    var glideX by remember { mutableFloatStateOf(tileX) }
-    var glideY by remember { mutableFloatStateOf(tileY) }
+    // Keyed on the tile URI so switching the zoomed tile resets the glide
+    // to the NEW tile's resting spot (a stale glideX/Y from the previous
+    // tile would make the next open start from the wrong place).
+    var glideScale by remember(tileUri) { mutableFloatStateOf(1f) }
+    var glideX by remember(tileUri) { mutableFloatStateOf(tileX) }
+    var glideY by remember(tileUri) { mutableFloatStateOf(tileY) }
     val glideProgress = remember { Animatable(0f) }
 
     // ── Pinch / pan refinement — applied ON TOP of the glide (neutral at
@@ -360,14 +373,24 @@ fun MoodBoardZoomOverlay(
     ) {
         // Resting spot: the tile's own position at scale 1. Target: the
         // image centered at the fit zoom ([offsetX]/[offsetY] are the
-        // translation that centers it). The arc bows perpendicular to the
-        // travel direction, peaking mid-flight, straight on close.
+        // translation that centers it). On CLOSE, glide back to the TILE's
+        // resting spot ([tileX]/[tileY]) — zoomOut() zeroes the offsets for
+        // the latch, so the overlay must target the tile itself, not (0,0)
+        // (the top-left corner). The arc bows perpendicular to the travel
+        // direction, peaking mid-flight, straight on close.
         val fromScale = glideScale
         val fromX = glideX
         val fromY = glideY
-        val toScale = zoomState.scaleTarget
-        val toX = zoomState.offsetX
-        val toY = zoomState.offsetY
+        // The user's pinch/pan rides ON TOP of the glide, so on close the
+        // whole transform must return to the resting spot: glide → the
+        // tile, pinch → neutral. Capturing the CURRENT pinch lets the close
+        // tween fold it back in smoothly instead of popping.
+        val fromPinchScale = pinchScale
+        val fromPinchX = pinchX
+        val fromPinchY = pinchY
+        val toScale = if (zoomState.closing) 1f else zoomState.scaleTarget
+        val toX = if (zoomState.closing) tileX else zoomState.offsetX
+        val toY = if (zoomState.closing) tileY else zoomState.offsetY
         val dx = toX - fromX
         val dy = toY - fromY
         val len = sqrt(dx * dx + dy * dy)
@@ -386,6 +409,13 @@ fun MoodBoardZoomOverlay(
             glideScale = lerp(fromScale, toScale, t)
             glideX = lerp(fromX, toX, t) + perpX * bulge
             glideY = lerp(fromY, toY, t) + perpY * bulge
+            // Fold the pinch/pan back to neutral in the same clock so the
+            // closed image sits EXACTLY on its tile (no residual offset).
+            if (zoomState.closing) {
+                pinchScale = lerp(fromPinchScale, 1f, t)
+                pinchX = lerp(fromPinchX, 0f, t)
+                pinchY = lerp(fromPinchY, 0f, t)
+            }
         }
         // The glide (open or close) finished — reset the pinch so the next
         // open starts neutral.
@@ -394,9 +424,13 @@ fun MoodBoardZoomOverlay(
         pinchY = 0f
     }
 
-    // Remove the overlay once the close animation settles back at 1x.
-    LaunchedEffect(glideScale) {
-        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && glideScale <= 1.01f) {
+    // Remove the overlay once the close animation settles back at 1x AND the
+    // pinch is neutral again — otherwise the overlay could vanish while the
+    // image is still visibly enlarged/offset.
+    LaunchedEffect(glideScale, pinchScale) {
+        if (zoomState.closing && zoomState.scaleTarget <= 1.01f &&
+            glideScale <= 1.01f && pinchScale <= 1.01f
+        ) {
             zoomState.zoomedUri = null
             zoomState.closing = false
         }
@@ -442,8 +476,13 @@ fun MoodBoardZoomOverlay(
                         pinchY += gesturePan.y
                     }
                 }
-            },
-        contentAlignment = Alignment.Center
+            }
+        // NO contentAlignment here: the image must lay out at the viewport's
+        // top-left so the graphicsLayer translation IS its top-left position.
+        // Centering the child (the old contentAlignment = Center) added a
+        // (viewW − w)/2 shift on TOP of the translation, double-offsetting the
+        // zoomed image — it opened shifted/outside the screen. The dismiss
+        // button below uses explicit .align(), which is unaffected.
     ) {
         // The zoomed image — glides from its board spot to center, then
         // follows the user's pinch/pan. The whole transform lives in the

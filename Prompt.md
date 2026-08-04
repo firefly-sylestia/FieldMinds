@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board image zoom fixed — opens centered instead of offset/outside the screen; small tiles easier to expand in the editor**
+
+### What was asked
+
+“okay the moodboard is fixed the only issue is now the image zoom is very offset its opening ourside of the screen and also its very difficul to expand small images during editing. so fix it.”
+
+### What was done
+
+- **Root cause (MoodBoardZoom.kt)** — two compounding geometry bugs in `MoodBoardZoomOverlay`:
+  1. The overlay's parent Box used `contentAlignment = Alignment.Center`, which laid the zoomed image out at the viewport CENTER — but the glide math (and the graphicsLayer translation) assumes the image sits at the viewport's TOP-LEFT so translation = top-left position. The centering added a (viewW−w)/2 shift ON TOP of the translation → the image opened double-offset, drifting outside the screen.
+  2. `zoomIn` computed its centering target with the OLD formula `offsetX = scaleTarget · (viewW/2 − centerX)` — a leftover from the whole-board zoom model. With the single-image overlay (image laid out at top-left, default center transformOrigin), the image's visual center = layout center + translation at ANY scale, so centering needs a SCALE-INDEPENDENT translation: `offsetX = viewW/2 − tileW/2`. The old formula also baked the tile's resting position into the target, double-shifting it.
+- **Fixes** — removed `contentAlignment` (image now lays out at top-left; dismiss button keeps its explicit `.align(TopEnd)`); `zoomIn` targets `viewW/2 − tileW/2`, `viewH/2 − tileH/2`; the CLOSE animation now glides back to the TILE's resting spot `(tileX, tileY)` (previously `(0,0)` — the top-left corner) and folds the user's pinch/pan back to neutral in the same 170ms tween so the closed image lands EXACTLY on its tile; the removal latch now also waits for `pinchScale ≤ 1.01` before tearing the overlay down. Glide states keyed on `tileUri` so switching the zoomed tile resets the glide to the new tile's resting spot.
+- **Small tiles easier to expand (GalleryWallFormat.kt)** — the editor tile's zoom-in-place button grew 26dp → 32dp (icon 14 → 16, padding 7 → 6), giving small images a real tap target (double-tap on a tiny tile was nearly impossible).
+- **Docs:** Prompt.md. (No changelog entry — this is a fix to the v7.24 zoom already covered by changelog 20260810.)
+
+### Validation
+
+- braces/parens/brackets balanced on both files; code-reviewer pass — centering math verified (visual center = layout center + translation at any scale with default center transformOrigin), close lands exactly on the tile, no missing imports, editor button safe on minimum-size tiles. Reviewer nits applied: `zoomIn` KDoc updated (centerX/centerY now documented as call-site-compat only, not target inputs).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Topic catalog batch expansion — all 11 categories grown in one batch (+521 topics), name pools replenished**
 
 ### What was asked
