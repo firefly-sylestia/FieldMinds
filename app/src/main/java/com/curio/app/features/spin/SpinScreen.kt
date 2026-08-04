@@ -2081,8 +2081,10 @@ private fun PeekCard(
             // the classic level hierarchy. The old white-fade (0.10/0.35)
             // made the peeks BRIGHTER than the main card — the hero looked
             // dimmed by contrast and the far pair read near-white.
-            pastelMode && !darkMode -> lerp(accent, Color.Black, if (far) 0.28f else 0.16f)
-            pastelMode -> lerp(accent, Color.Black, if (far) 0.26f else 0.14f)
+            // Bumped ~5% brighter on user request: near 0.16→0.13, far
+            // 0.28→0.22 in light; near 0.14→0.11, far 0.26→0.21 in dark.
+            pastelMode && !darkMode -> lerp(accent, Color.Black, if (far) 0.22f else 0.13f)
+            pastelMode -> lerp(accent, Color.Black, if (far) 0.21f else 0.11f)
             else -> lerp(accent, Color.Black, if (far) 0.42f else 0.28f)
         }
     }
