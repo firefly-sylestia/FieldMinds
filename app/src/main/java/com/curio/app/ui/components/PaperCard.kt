@@ -834,22 +834,22 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
 }
 
 /**
- * A SOFT torn-paper edge — the hero's gradient blend. Unlike the sharp
- * multi-octave [TornPaperShape] (jagged rip), this edge is torn with small,
- * ROUNDED textures: smooth value-noise displacement sampled at a fine step,
- * so each tooth is a gentle rounded bump (a real torn-fiber feel) rather than
- * a sharp zigzag. The main wave (~8dp, ~2–3 broad undulations across the
- * width) makes the tear visibly wavy and unique per entry, while the deep
- * and micro layers add uneven slopes and fiber tooth.
+ * A SOFT torn-paper edge — the hero's torn bottom seam. Unlike the sharp
+ * multi-octave [TornPaperShape] (jagged rip), this edge is torn with broad,
+ * ROUNDED waves: smooth value-noise displacement sampled at a fine step, so
+ * the tear reads as a few big wavy rips (2.5–4.5 undulations across the
+ * width, see [buildSoftTornPath]) instead of a near-straight line of fine
+ * grain. The whole tear personality — wave count, depths, tilt and phase —
+ * is drawn from the tear seed, so every entry tears differently but the
+ * same entry always tears identically.
  *
  * Only ONE side is torn — the opposite long side stays straight — because
- * the hero clip tears just the lower edge where the gradient dissolves into
- * the page; the white sheet layered behind it carries the SAME seed so the
- * two edges interlock like the two halves of a single torn sheet.
+ * the hero clip tears just its lower edge; the white under-sheet behind it
+ * reuses the SAME seeded tear curve (see [SoftTornSheetShape]) so the two
+ * edges align pixel-perfect.
  */
 private class SoftTornEdgeShape(
-    private val seed: Int,
-    private val tornSide: SoftTornSide
+    private val seed: Int
 ) : Shape {
     private var cachedSize: Size? = null
     private var cachedOutline: Outline? = null
@@ -862,28 +862,101 @@ private class SoftTornEdgeShape(
         cachedOutline?.let { cached ->
             if (cachedSize == size) return cached
         }
-        val outline = Outline.Generic(buildSoftTornPath(seed, size, density, tornSide))
+        val outline = Outline.Generic(buildSoftTornPath(seed, size, density))
         cachedSize = size
         cachedOutline = outline
         return outline
     }
 }
 
-/** Which long edge of a [SoftTornEdgeShape] carries the soft tear. */
-private enum class SoftTornSide { BOTTOM, TOP }
-
 /** Public bottom-torn clip — the hero's lower edge (meeting point of the blur). */
 class SoftTornBottomShape(seed: Int) : Shape {
-    private val inner = SoftTornEdgeShape(seed, SoftTornSide.BOTTOM)
+    private val inner = SoftTornEdgeShape(seed)
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
         inner.createOutline(size, layoutDirection, density)
 }
 
-/** Public top-torn clip — the white under-sheets peeking behind the hero. */
-class SoftTornTopShape(seed: Int) : Shape {
-    private val inner = SoftTornEdgeShape(seed, SoftTornSide.TOP)
-    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
-        inner.createOutline(size, layoutDirection, density)
+/**
+ * Public under-sheet clip — the SOLID white sheet behind the hero's torn
+ * bottom edge. Its top edge is the SAME seeded torn curve as the hero (the
+ * two shapes derive their displacement from the same seed, so they align
+ * pixel-perfect and the sheet's torn top hides behind the opaque hero — the
+ * tear lives ONLY on the hero card). Its bottom edge is that same curve
+ * pushed DOWN by a constant [lip], so the visible white is a uniform lip
+ * below the tear everywhere, with the page wash starting right after it —
+ * no interlocking halves, no wash showing through the teeth. [baseline]
+ * lifts the torn top above the box's own top edge (behind the hero) so the
+ * hero's up-bites still read white.
+ */
+class SoftTornSheetShape(
+    private val seed: Int,
+    private val lip: Dp,
+    private val baseline: Dp = 0.dp
+) : Shape {
+    private var cachedSize: Size? = null
+    private var cachedOutline: Outline? = null
+
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        cachedOutline?.let { cached ->
+            if (cachedSize == size) return cached
+        }
+        val outline = Outline.Generic(buildSoftSheetPath(
+            seed, size, density,
+            lipPx = with(density) { lip.toPx() },
+            baselinePx = with(density) { baseline.toPx() }
+        ))
+        cachedSize = size
+        cachedOutline = outline
+        return outline
+    }
+}
+
+/**
+ * The seeded tear personality for a soft torn edge — wave count, depths,
+ * tilt and phase are all drawn from ONE random stream derived from the tear
+ * seed, so every entry tears differently but the same seed always
+ * reproduces the identical edge (constant across reopens). The hero clip
+ * and its white under-sheet each build a [SoftTearParams] from the same
+ * seed, so their torn edges align pixel-perfect.
+ *
+ * The displacement is DOWN-BIASED (positive dips scaled to 55%): the tear
+ * bites UP into the card in big rounded waves (white shows behind the card
+ * through the bites) while dipping only a modest amount below the nominal
+ * edge — so the white under-sheet stays small and clean.
+ */
+private class SoftTearParams(seed: Int, density: Density) {
+    private val rnd = Random(seed * 31 + 0x0BADC0DE)
+    // 2.5–4.5 BIG undulations across the full width (see [disp]: the noise
+    // is sampled against x/w, so the wave count is width-independent).
+    val waves = 2.5f + rnd.nextFloat() * 2f
+    val tooth = with(density) { (8f + rnd.nextFloat() * 4f).dp.toPx() }
+    val deep = with(density) { (4f + rnd.nextFloat() * 2f).dp.toPx() }
+    val micro = with(density) { 1.1.dp.toPx() }
+    // Seeded tilt — the whole edge drifts from -tilt/2 at the left to
+    // +tilt/2 at the right, unique per entry but stable across reopens.
+    val tilt = (rnd.nextFloat() - 0.5f) * 2f * with(density) { (3f + rnd.nextFloat() * 3f).dp.toPx() }
+    val phase = rnd.nextFloat() * 100f
+
+    /** The torn-edge displacement at horizontal position [x] (px) across a
+     *  [w]-wide edge. Broad waves + a slower second wander + fine fiber
+     *  tooth, down-biased (see the class kdoc). */
+    fun disp(x: Float, w: Float): Float {
+        val slant = tilt * (x / w - 0.5f)
+        // `waves` lattice cells across the full width → a few big rounded
+        // waves, not a near-straight line of fine grain (the old fixed-
+        // frequency ripples read as ~14 tiny waves on a phone).
+        val main = (valueNoise(seed, x / w * waves, phase) - 0.5f) * 2f * tooth
+        // A slower second wander (~1–2 cells) for uneven slopes between waves.
+        val deepWave = (valueNoise(seed + 101, x / w * (waves * 0.4f), phase + 17f) - 0.5f) * 2f * deep
+        // Fine fiber tooth — keeps the edge softly fibrous instead of smooth.
+        val fiber = (valueNoise(seed + 71, x * 0.14f, 3.5f) - 0.5f) * 2f * micro
+        val raw = slant + main + deepWave + fiber
+        return if (raw > 0f) raw * 0.55f else raw
+    }
 }
 
 /**
@@ -892,13 +965,13 @@ class SoftTornTopShape(seed: Int) : Shape {
  * SINGLE-octave smooth value-noise displacement (rounded, small amplitude
  * — the real-torn-paper feel), plus a whisper of a second octave for fine
  * fiber micro-texture. Pure function of (seed, size, density), cached per
- * size by [SoftTornEdgeShape].
+ * size by [SoftTornEdgeShape]. The tear is WAVY and unique per entry — see
+ * [SoftTearParams].
  */
 private fun buildSoftTornPath(
     seed: Int,
     size: Size,
-    density: Density,
-    tornSide: SoftTornSide
+    density: Density
 ): Path {
     val w = size.width
     val h = size.height
@@ -907,55 +980,67 @@ private fun buildSoftTornPath(
         path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
         return path
     }
-    // Visible wavy tear — the main tooth (~8dp) carries ~2–3 broad waves
-    // across the width (frequency 0.012 = ~520px period), so the edge reads
-    // as a genuinely uneven hand-torn sheet instead of a near-straight line
-    // with tiny grain. A slower deep-tear octave (~5dp) adds longer wandering
-    // slopes, and the fine fiber micro-layer (~1dp) keeps the rounded paper
-    // tooth. Sampling step ~4dp keeps every bump smooth (rounded, not sharp).
-    val tooth = with(density) { 8.dp.toPx() }
-    val deep = with(density) { 5.dp.toPx() }
-    val micro = with(density) { 1.0.dp.toPx() }
+    val p = SoftTearParams(seed, density)
     val step = with(density) { 4.dp.toPx() }
-    // Seeded TILT — the whole torn edge drifts from -tilt/2 at the left to
-    // +tilt/2 at the right (~±5dp total across the width), unique per entry
-    // (derived from the tear seed) but stable across reopens.
-    val tilt = (Random(seed + 977).nextFloat() - 0.5f) * 2f * with(density) { 5.dp.toPx() }
-    fun disp(x: Float): Float {
-        val slant = tilt * (x / w - 0.5f)
-        val main = (valueNoise(seed, x * 0.012f, 0.5f) - 0.5f) * 2f * tooth
-        val deepWave = (valueNoise(seed + 101, x * 0.006f, 4.2f) - 0.5f) * 2f * deep
-        val fiber = (valueNoise(seed + 71, x * 0.16f, 3.5f) - 0.5f) * 2f * micro
-        return slant + main + deepWave + fiber
+    // Clockwise: straight top, straight right, torn bottom (right→left),
+    // straight left, close.
+    path.moveTo(0f, 0f)
+    path.lineTo(w, 0f)
+    path.lineTo(w, h + p.disp(w, w))
+    var x = w - step
+    while (x > 0f) {
+        path.lineTo(x, h + p.disp(x, w))
+        x -= step
     }
+    path.lineTo(0f, h + p.disp(0f, w))
+    path.close()
+    return path
+}
 
-    if (tornSide == SoftTornSide.BOTTOM) {
-        // Clockwise: straight top, straight right, torn bottom (right→left),
-        // straight left, close.
-        path.moveTo(0f, 0f)
-        path.lineTo(w, 0f)
-        path.lineTo(w, h + disp(w))
-        var x = w - step
-        while (x > 0f) {
-            path.lineTo(x, h + disp(x))
-            x -= step
-        }
-        path.lineTo(0f, h + disp(0f))
-        path.close()
-    } else {
-        // Torn TOP (the under-sheets): torn top (left→right), straight
-        // right, straight bottom, straight left, close.
-        path.moveTo(0f, disp(0f))
-        var x = step
-        while (x < w) {
-            path.lineTo(x, disp(x))
-            x += step
-        }
-        path.lineTo(w, disp(w))
-        path.lineTo(w, h)
-        path.lineTo(0f, h)
-        path.close()
+/**
+ * Builds the white under-sheet outline behind the hero's torn bottom edge:
+ * the TOP edge is the SAME torn curve as the hero (same seed → identical
+ * displacement, so the two align pixel-perfect and the sheet's torn top is
+ * hidden behind the opaque hero), and the BOTTOM edge is that same curve
+ * pushed down by a constant [lipPx] — the visible white is a UNIFORM lip
+ * below the tear everywhere (no page wash showing through the teeth, no
+ * interlocking halves, nothing below the lip). [baselinePx] lifts the
+ * sheet's torn top above the box's own top edge so the hero's up-bites
+ * behind the card still read white.
+ */
+private fun buildSoftSheetPath(
+    seed: Int,
+    size: Size,
+    density: Density,
+    lipPx: Float,
+    baselinePx: Float
+): Path {
+    val w = size.width
+    val h = size.height
+    val path = Path()
+    if (w <= 0f || h <= 0f || lipPx <= 0f) {
+        path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
+        return path
     }
+    val p = SoftTearParams(seed, density)
+    val step = with(density) { 4.dp.toPx() }
+    // Clockwise: torn top (left→right), right side down to the lip, torn
+    // bottom running PARALLEL to the top (right→left), close up the left.
+    path.moveTo(0f, baselinePx + p.disp(0f, w))
+    var x = step
+    while (x < w) {
+        path.lineTo(x, baselinePx + p.disp(x, w))
+        x += step
+    }
+    path.lineTo(w, baselinePx + p.disp(w, w))
+    path.lineTo(w, baselinePx + p.disp(w, w) + lipPx)
+    x = w - step
+    while (x > 0f) {
+        path.lineTo(x, baselinePx + p.disp(x, w) + lipPx)
+        x -= step
+    }
+    path.lineTo(0f, baselinePx + p.disp(0f, w) + lipPx)
+    path.close()
     return path
 }
 

@@ -132,7 +132,7 @@ import com.curio.app.ui.components.formatGlyph
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.components.SoftTornBottomShape
-import com.curio.app.ui.components.SoftTornTopShape
+import com.curio.app.ui.components.SoftTornSheetShape
 import com.curio.app.data.AppPreferences
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
@@ -243,13 +243,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // grid card below the title.
         //
         // The banner runs edge-to-edge (square corners — no rounded card
-        // look). Its bottom edge is clipped by a seeded SOFT torn shape and
-        // interlocks with ONE white under-sheet below it (its own tear seed),
-        // with the page's wash showing through the deeper tears behind both
-        // — the hero ends in a torn-paper seam instead of a gradient
-        // dissolve. The tear is seeded from the entry id, so every detail
-        // page gets its own slightly tilted, uneven rip that never changes
-        // when the page is reopened.
+        // look). Its bottom edge is clipped by a seeded SOFT torn shape with
+        // ONE SOLID white under-sheet behind it: the white lip peeks out a
+        // little below the torn edge (a uniform ~12dp, following its waves)
+        // and the page's wash starts right after — no interlocking halves,
+        // no wash showing through the teeth. The tear is seeded from the
+        // entry id, so every detail page gets its own broad, wavy rip (wave
+        // count, depths, tilt and phase are all drawn from the entry's seed)
+        // that never changes when the page is reopened.
         val blendActive = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState &&
             !(isCurioDarkTheme() && !AppPreferences.pastelColorsState)
@@ -265,34 +266,42 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
         // v7.28 — the hero is a SOLID category color, no gradient. The depth
         // comes from the torn-paper seam: the solid banner is clipped by a
-        // seeded soft tear, ONE white sheet sits just below it, and the
-        // page's wash shows through the tears behind the sheet.
+        // seeded soft tear, ONE white sheet sits just behind it, and the
+        // page's wash starts right after the sheet's lip.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight)
         ) {
-            // ── Torn paper under-sheet — ONE white sheet layered BEHIND the
-            // solid hero color at its lower edge, with its OWN soft tear (a
-            // different seed, so the textures never match). The sheet's torn
-            // top interlocks with the hero's torn bottom right at the seam
-            // (like the two halves of a torn sheet), and the page's wash
-            // shows through the deeper tears behind it — the meeting point of
-            // the hero reads as torn paper against the page, not a hard
-            // clip. It protrudes below the hero's bottom edge so the torn
-            // edge is actually visible (the Topic-meta block below starts
-            // 20dp lower, so the protrusion sits inside that buffer). Same
-            // seed as the hero's bottom tear — the sheet's torn top is the
-            // INVERSE of the hero's torn bottom, so the two edges interlock
-            // like the two halves of a single torn sheet.
+            // ── White under-sheet — ONE SOLID white sheet layered BEHIND
+            // the hero's torn bottom edge. The tear lives ONLY on the hero
+            // card: the sheet's top edge is the SAME seeded torn curve as
+            // the hero's bottom edge (same seed → pixel-perfect alignment,
+            // so the sheet's torn top hides behind the opaque hero and the
+            // wavy bite marks read white through the hero's up-bites), and
+            // the sheet's bottom edge is that same curve pushed down by a
+            // constant lip — the visible white is a uniform ~12dp lip below
+            // the tear EVERYWHERE, with the page's wash starting right
+            // after it. No interlocking halves, no wash showing through the
+            // deeper teeth, nothing below the lip.
             val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
+            // Remembered Shape instances so their internal outline caches
+            // survive recompositions (built fresh in the modifier chain, the
+            // caches would never hit).
+            val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
+            val sheetShape = remember(tearSeed) {
+                SoftTornSheetShape(tearSeed, lip = 12.dp, baseline = 26.dp)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(14.dp)
-                    .offset(y = EntryDetailHeroHeight)
-                    .clip(SoftTornTopShape(tearSeed))
-                    .background(Color(0xFFFDFCF9).copy(alpha = 0.95f))
+                    .height(56.dp)
+                    // Baseline lifts the sheet's torn top above this box's
+                    // own top edge (behind the hero), so the hero's up-bites
+                    // still read white instead of the page wash.
+                    .offset(y = EntryDetailHeroHeight - 26.dp)
+                    .clip(sheetShape)
+                    .background(Color(0xFFFDFCF9))
             )
 
             // ── Hero backdrop — the SOLID category color + symbol scatter.
@@ -309,7 +318,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(SoftTornBottomShape(tearSeed))
+                    .clip(heroTornShape)
                     .background(heroStart)
             ) {
                 // ── Hero watermark — a scatter of the entry's category-family
@@ -579,8 +588,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
         // ── Topic meta — the title now lives INSIDE the hero above, so
         // this block keeps the chips + captured-at + meta card only.
+        // 28dp top padding keeps the chips clear of the white under-sheet
+        // lip (which reaches ~24dp past the hero's nominal bottom).
         MorphEntrance {
-            Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(modifier = Modifier.padding(28.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Surface(
                         shape = RoundedCornerShape(12.dp),
@@ -695,8 +706,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
  */
 private val EntryDetailHeroHeight = 380.dp
 
-/** Hero height + a small gap — the watermark's top clearance on this page. */
-private val EntryDetailHeroClearance = EntryDetailHeroHeight + 20.dp
+/** Hero height + a small gap — the watermark's top clearance on this page
+ *  (keeps the backdrop glyphs clear of the white under-sheet lip below the
+ *  hero's torn edge, which can reach ~24dp past the nominal bottom). */
+private val EntryDetailHeroClearance = EntryDetailHeroHeight + 30.dp
 
 /**
  * Decorative watermark for the saved-entry hero — a scatter of the entry's
@@ -731,9 +744,10 @@ private fun BoxScope.HeroSymbolScatter(cat: CurioCategory) {
         HeroWatermarkPair(biasX = 0.94f, biasY = -0.12f, size = 56.dp, rotation = 14f, alpha = 0.21f),
         // Lower inner pair — outside the frosted bar's width.
         HeroWatermarkPair(biasX = 0.56f, biasY = 0.54f, size = 50.dp, rotation = 10f, alpha = 0.19f),
-        // Bottom corners — biasY 0.92 keeps them clear of the hero's torn
-        // bottom edge (the soft tear can dip up to ~3dp into the banner).
-        HeroWatermarkPair(biasX = 0.94f, biasY = 0.92f, size = 44.dp, rotation = 6f, alpha = 0.16f)
+        // Bottom corners — biasY 0.80 keeps them clear of the hero's torn
+        // bottom edge (the soft tear's broad up-bites can reach ~20dp into
+        // the banner).
+        HeroWatermarkPair(biasX = 0.94f, biasY = 0.80f, size = 44.dp, rotation = 6f, alpha = 0.16f)
     )
     pairs.forEachIndexed { i, pair ->
         // The 10-symbol family list maps 1:1 onto the 5 mirrored pairs.
