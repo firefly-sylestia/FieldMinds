@@ -564,9 +564,14 @@ fun MoodBoardZoomCanvas(
     // tile. While a pinch is live (gestureActive) everything SNAPS 1:1 to
     // the targets so the board tracks the fingers; closing stays a fast
     // straight tween so the minimize feels immediate.
-    val overlayScale = remember { Animatable(1f) }
-    val panX = remember { Animatable(0f) }
-    val panY = remember { Animatable(0f) }
+    // Plain float states (not Animatables) for scale + pan: the arc writes
+    // them per-frame, and Animatable.value isn't publicly writable from app
+    // code — only snapTo()/animateTo() are. glideProgress stays an
+    // Animatable because it's the shared clock (driven by animateTo, read
+    // via .value).
+    var overlayScale by remember { mutableFloatStateOf(1f) }
+    var panX by remember { mutableFloatStateOf(0f) }
+    var panY by remember { mutableFloatStateOf(0f) }
     val glideProgress = remember { Animatable(0f) }
     LaunchedEffect(
         zoomState.scaleTarget, zoomState.offsetX, zoomState.offsetY,
@@ -575,14 +580,14 @@ fun MoodBoardZoomCanvas(
         if (zoomState.gestureActive) {
             // Live pinch — track the fingers exactly, no animation.
             glideProgress.snapTo(1f)
-            overlayScale.snapTo(zoomState.scaleTarget)
-            panX.snapTo(zoomState.offsetX)
-            panY.snapTo(zoomState.offsetY)
+            overlayScale = zoomState.scaleTarget
+            panX = zoomState.offsetX
+            panY = zoomState.offsetY
             return@LaunchedEffect
         }
-        val fromScale = overlayScale.value
-        val fromX = panX.value
-        val fromY = panY.value
+        val fromScale = overlayScale
+        val fromX = panX
+        val fromY = panY
         val toScale = zoomState.scaleTarget
         val toX = zoomState.offsetX
         val toY = zoomState.offsetY
@@ -604,9 +609,9 @@ fun MoodBoardZoomCanvas(
             // unclamped so the spring's natural settle still lands softly.
             val arcT = t.coerceIn(0f, 1f)
             val bulge = arcPeak * sin(PI * arcT).toFloat()
-            overlayScale.value = lerp(fromScale, toScale, t)
-            panX.value = lerp(fromX, toX, t) + perpX * bulge
-            panY.value = lerp(fromY, toY, t) + perpY * bulge
+            overlayScale = lerp(fromScale, toScale, t)
+            panX = lerp(fromX, toX, t) + perpX * bulge
+            panY = lerp(fromY, toY, t) + perpY * bulge
         }
     }
 
@@ -617,8 +622,8 @@ fun MoodBoardZoomCanvas(
         }
     }
     // Remove once the close animation settles back at 1x.
-    LaunchedEffect(overlayScale.value) {
-        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale.value <= 1.01f) {
+    LaunchedEffect(overlayScale) {
+        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale <= 1.01f) {
             zoomState.boardZoomed = false
             zoomState.closing = false
         }
@@ -626,7 +631,7 @@ fun MoodBoardZoomCanvas(
 
     // Live visual scale for the pinch handler — lets a pinch that starts
     // mid-open-spring continue from where the board actually is (no jump).
-    val liveScale by rememberUpdatedState(overlayScale.value)
+    val liveScale by rememberUpdatedState(overlayScale)
 
     // ONE box owns the whole overlay: gestures + the collage as a CHILD, so
     // a pinch anywhere over the board magnifier reaches the same transform
@@ -654,10 +659,10 @@ fun MoodBoardZoomCanvas(
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
-                    scaleX = overlayScale.value
-                    scaleY = overlayScale.value
-                    translationX = panX.value
-                    translationY = panY.value
+                    scaleX = overlayScale
+                    scaleY = overlayScale
+                    translationX = panX
+                    translationY = panY
                 }
         ) {
             // The board's own watermark backdrop — inside the transformed
