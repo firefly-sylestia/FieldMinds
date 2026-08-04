@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**CI build fixes — drop the coroutines 1.9-only onCancellation param + the pointer.consume import (compile on every resolved library version)**
+
+### What was asked
+
+CI (resolving older library versions than the version catalog suggests) failed on: `MoodBoardExport.kt:263 No parameter with name 'onCancellation' found` / `:276 No value passed for parameter 'onCancellation'`, and `MoodBoardZoom.kt:43 Unresolved reference 'consume'`. User: “no need to verify they are real errors — fix them.”
+
+### What was done
+
+- **MoodBoardExport.kt** — the export capture used `suspendCancellableCoroutine(onCancellation = {}) { }`, a kotlinx-coroutines 1.9+ named parameter. Reverted to the version-independent `suspendCancellableCoroutine<Bitmap?> { cont -> … }` and wrapped `cont.resume(bmp)` in `try { … } catch (_: IllegalStateException) { }` — resume-after-cancel throws `IllegalStateException` on BOTH old (<1.9) and new (1.9+) coroutines, so the capture still completes and the caller just discards the bitmap when cancelled.
+- **MoodBoardZoom.kt** — removed `import androidx.compose.ui.input.pointer.consume` (the extension wasn't resolvable in the CI's Compose version). Both call sites (`event.changes.forEach { it.consume() }` and `change.consume()`) call the `PointerInputChange` MEMBER `consume()`, which exists in every Compose version (the pre-existing `change.consume()` in the floating-card drag already relied on it without the import).
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces BALANCED on all 4 files; code-reviewer pass — resume-after-cancel throws IllegalStateException on both old and new coroutines (try/catch warranted, single resume, no double-resume risk); member consume() resolves without the import in every Compose version; no other code depends on the removed import/parameter.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Double-tap on the zoomed mood-board image resets the pinch/pan back to the fit zoom (instead of closing)**
 
 ### What was asked

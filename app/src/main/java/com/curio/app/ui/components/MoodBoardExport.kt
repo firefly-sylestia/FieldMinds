@@ -259,21 +259,26 @@ object MoodBoardExport {
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
-            val result = kotlinx.coroutines.suspendCancellableCoroutine(
-                onCancellation = { /* no-op — see below */ }
-            ) { cont ->
+            val result = kotlinx.coroutines.suspendCancellableCoroutine<Bitmap?> { cont ->
                 composeView.post {
                     val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                     val canvas = android.graphics.Canvas(bmp)
                     canvas.drawColor(android.graphics.Color.WHITE)
                     composeView.draw(canvas)
                     lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-                    // kotlinx-coroutines 1.9+ requires onCancellation (the
-                    // default throws on resume-after-cancel). With the no-op
-                    // handler the post lambda still runs to completion, so the
-                    // capture always finishes even if the coroutine is
-                    // cancelled while waiting for the frame.
-                    cont.resume(bmp)
+                    // Resume WITHOUT the kotlinx-coroutines 1.9+ onCancellation
+                    // parameter so the source compiles against every resolved
+                    // coroutines version (the parameter is a named arg in the
+                    // function signature, so it can't be conditionally
+                    // supplied). A resume on an already-cancelled continuation
+                    // throws IllegalStateException, which we swallow — the
+                    // capture still finished, the caller just doesn't use the
+                    // bitmap.
+                    try {
+                        cont.resume(bmp)
+                    } catch (_: IllegalStateException) {
+                        // Cancelled while waiting for the frame — ignore.
+                    }
                 }
             }
             result
