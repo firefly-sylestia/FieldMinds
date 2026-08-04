@@ -89,8 +89,8 @@ object CurioColors {
 
 /**
  * HSL components of a color, computed from its RGBA channels. Internal
- * (shared by [CurioMixedDeck]'s premium blends and the pastel-mode ink
- * helpers in CategoryInk.kt — [pastelFillInk], [deepHueInk]).
+ * (shared by [CurioMixedDeck]'s premium blends, [CurioGradients.hslGradientStops],
+ * and the pastel-mode ink helpers in CategoryInk.kt — [pastelFillInk], [deepHueInk]).
  */
 internal data class Hsl(val h: Float, val s: Float, val l: Float)
 
@@ -217,6 +217,37 @@ object CurioGradients {
      */
     fun categoryCardFill(accent: Color): Color =
         if (AppPreferences.pastelColorsState) accent else lerp(accent, Color.Black, 0.10f)
+
+    /**
+     * Interpolates [from] → [to] in HSL space (shortest hue path) and
+     * returns [steps] evenly-spaced colors INCLUDING both endpoints. Naive
+     * RGB lerp between a deep accent and a light/dark page wash passes
+     * through muddy grey midtones; HSL keeps the hue saturated along the
+     * whole path, so gradient blends glide through proper blended colors
+     * instead of a grey band.
+     */
+    fun hslGradientStops(from: Color, to: Color, steps: Int = 9): List<Color> {
+        require(steps >= 2)
+        val a = toHsl(from)
+        val b = toHsl(to)
+        // Achromatic endpoints (pure black/white/grey) carry no meaningful
+        // hue — anchor the path on the chromatic endpoint's hue so the
+        // blend simply darkens/lightens instead of swinging through foreign
+        // hues (e.g. a deep accent fading to AMOLED black stays on-hue).
+        val hueFrom = if (a.s <= 0.001f) b.h else a.h
+        val hueTo = if (b.s <= 0.001f) hueFrom else b.h
+        var dh = hueTo - hueFrom
+        if (dh > 180f) dh -= 360f
+        if (dh < -180f) dh += 360f
+        return List(steps) { i ->
+            val t = i / (steps - 1).toFloat()
+            fromHsl(
+                (hueFrom + dh * t + 360f) % 360f,
+                (a.s + (b.s - a.s) * t).coerceIn(0f, 1f),
+                (a.l + (b.l - a.l) * t).coerceIn(0f, 1f)
+            )
+        }
+    }
 
     /**
      * Theme-aware category card gradient: opens on [categoryCardFill] (the
