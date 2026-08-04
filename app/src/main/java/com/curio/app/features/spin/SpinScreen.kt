@@ -782,6 +782,31 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         // the toggle-gated compactHeight) so a short high-density screen
         // never gets the bigger deck even when the dimension rule is off.
         val roomy = highDensity && !heightCompact
+        // ── v7.15 — Continuous fit scale ──────────────────────────────
+        // The deck now compresses to the space ACTUALLY available — the
+        // height left between the pinned top bar and bottom bar, AND the
+        // screen width — so on small screens the whole deck shrinks together
+        // with the Category/Filter pills instead of overflowing while the
+        // controls squeeze. The tier scales (compact / extra-compact /
+        // roomy) still apply on top; the fit scale just guarantees the deck
+        // never exceeds its space. Chrome estimates are deliberately
+        // conservative (over-estimate the top bar so the deck never
+        // overflows): the deck section's own breathing spacer + spin-button
+        // block are subtracted per tier, then the leftover height is divided
+        // by the tier's full-size carousel height.
+        val topBarEst = 88.dp
+        val bottomBarEst = if (extraCompact) 108.dp else 80.dp
+        val fitHeight = (maxHeight - topBarEst - bottomBarEst).coerceAtLeast(220.dp)
+        val (fitChrome, fitCarousel) = when {
+            extraCompact -> 144.dp to 350.dp
+            compactHeight -> 158.dp to 390.dp
+            else -> 222.dp to 444.dp
+        }
+        val heightFit = ((fitHeight - fitChrome) / fitCarousel).coerceIn(0.58f, 1f)
+        // The near peek cards are 360dp wide at full scale; keep ~12dp of
+        // page margin on each side so the fan never runs off the screen.
+        val widthFit = ((maxWidth - 24.dp) / 360.dp).coerceIn(0.64f, 1f)
+        val fitScale = minOf(heightFit, widthFit)
         // ── Watermark backdrop — every category glyph scattered around ──
         //    the screen in a muted shade, behind all content, so the quiet
         //    space around the deck still carries a whisper of the Curio
@@ -834,6 +859,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     opening = isOpening,
                     enabled = filteredPool.isNotEmpty() && !shuffling,
                     buttonPulse = buttonPulse,
+                    fitScale = fitScale,
                     onCardTap = onDeckCardTap,
                     onSpinClick = onSpinClick
                 )
@@ -966,6 +992,7 @@ private fun ColumnScope.SpinDeckSection(
     opening: Boolean,
     enabled: Boolean,
     buttonPulse: Float,
+    fitScale: Float = 1f,
     onCardTap: () -> Unit,
     onSpinClick: () -> Unit
 ) {
@@ -984,9 +1011,8 @@ private fun ColumnScope.SpinDeckSection(
         )
     )
 
-    // ── Carousel (interactive cards) ───────────────────────────────
-    // Tapping the center card opens a landed topic only; the bottom
-    // Shuffle CTA owns starting or re-starting the shuffle.
+    // ── Carousel (interactive cards) — fitScale compresses the fan to the
+    //    space actually available (see SpinScreen's fit-scale computation).
     Carousel(
         cat = cat,
         deckAccent = deckAccent,
@@ -1003,6 +1029,7 @@ private fun ColumnScope.SpinDeckSection(
         extraCompact = extraCompact,
         densityExtraCompact = densityExtraCompact,
         roomy = roomy,
+        fitScale = fitScale,
         onCardTap = onCardTap,
         modifier = Modifier.fillMaxWidth()
     )
@@ -1605,6 +1632,7 @@ private fun Carousel(
     extraCompact: Boolean = false,
     densityExtraCompact: Boolean = false,
     roomy: Boolean = false,
+    fitScale: Float = 1f,
     onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -1614,18 +1642,23 @@ private fun Carousel(
     // a further step (~22% total) so the whole fan fits very short screens;
     // v7.3 — roomy scales the fan UP ~5% on high-density screens so the
     // density rule works both ways (low → smaller, high → larger).
-    val deckScale = when {
+    val tierScale = when {
         densityExtraCompact -> SpinDensityExtraCompactDeckScale
         extraCompact -> SpinExtraCompactDeckScale
         compact -> SpinCompactDeckScale
         roomy -> SpinRoomyDeckScale
         else -> 1f
     }
+    // v7.15 — the fit scale (space actually available, from SpinScreen's
+    // BoxWithConstraints) multiplies the tier scale, so short OR narrow
+    // screens compress the fan together with the box below.
+    val deckScale = tierScale * fitScale
     Box(
         // v6.3 — grew with the hero ticket so the bigger card keeps its
         // breathing room above/below. The extra-compact box scales with the
         // fan so proportions stay identical; the roomy box grows ~6% to
-        // match the up-scaled fan.
+        // match the up-scaled fan. v7.15 — the whole box also scales by
+        // [fitScale] so the fan's layout footprint matches its size.
         modifier = modifier.height(
             when {
                 densityExtraCompact -> 325.dp
@@ -1633,7 +1666,7 @@ private fun Carousel(
                 compact -> 390.dp
                 roomy -> 470.dp
                 else -> 444.dp
-            }
+            } * fitScale
         ),
         contentAlignment = Alignment.Center
     ) {

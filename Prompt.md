@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Spin deck now scales to fit any screen — continuous fit-scale so the shuffle deck shrinks together with the Category/Filter pills on short or narrow screens**
+
+### What was asked
+
+“when my screen gets smaller the category and the filter button gets smaller but the main shuffle deck doesnt get smaller can u fix the proper padding so even in small screen they fit properly. all of them”
+
+### What was done
+
+- **Root cause** — the deck had fixed tiers (scale 1.0 / 0.88 / 0.78) driven ONLY by height thresholds + density; there was no width-based scaling and the tiers were tuned for typical phones, so on small screens the pills (weight-based) compressed while the fixed-size deck overflowed.
+- **Continuous fit-scale (SpinScreen.kt)** — in the BoxWithConstraints scope, computed `fitScale = minOf(heightFit, widthFit)`:
+  - `heightFit` = (available height between a conservative top-bar estimate (88dp) and bottom-bar estimate (80dp, 108dp extra-compact), minus the deck section's own breathing-spacer + spin-button block per tier (222/158/144dp)) ÷ the tier's full carousel height (444/390/350dp), clamped 0.58..1.
+  - `widthFit` = (maxWidth − 24dp page margin) ÷ 360dp near-card width, clamped 0.64..1.
+  - Passed to both `SpinDeckSection` calls → `Carousel`, where it multiplies the existing tier scale and scales the carousel Box height by the same factor, so the fan's layout footprint matches its drawn size.
+- **Behavior preserved** — on typical phones (≥834dp height, ≥384dp width) heightFit/widthFit clamp to 1.0 → byte-for-byte unchanged. Estimates are deliberately conservative (over-estimate chrome) so the deck NEVER overflows — the direction the user asked for.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced; code-reviewer pass — confirmed Dp arithmetic/types (Dp·Float, Dp/Dp→Float, Pair destructuring) compile-safe, typical phones end at 1.0 (unchanged), compact/extra-compact tiers now fit their thresholds, and the ~3% conservative shrink on borderline-height (~820dp) phones is the safe direction.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Pastel spin button de-whitened + full redesign of the 4 main-card enhancement toggles (gradient / border / shadow / typography)**
 
 ### What was asked
