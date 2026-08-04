@@ -37,3 +37,4 @@
 • Build fix: PNG export no longer uses the coroutines 1.9-only onCancellation parameter (cancellation-safe resume) and the zoom gesture code relies on the built-in consume member — compiles on every resolved library version
 • Build fix: PNG export capture now uses the stdlib suspendCoroutine (no version-dependent onCancellation parameter) — compiles on every coroutines version
 • Removed the duplicate mood card below the entry body — the mood now shows once, in the hero's frosted bar
+• FieldMind legacy restore: import observations and notes from archive.json or .fieldmind backups into the Cabinet with timestamps, metadata, supported images and a Legacy badge; imports are additive and repeat-safe, and the species catalog travels with Curio backup/restore

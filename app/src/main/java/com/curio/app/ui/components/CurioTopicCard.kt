@@ -116,6 +116,27 @@ fun CurioEntryCard(
                     tint = cat.onAccent().copy(alpha = 0.9f),
                     size = 60.dp
                 )
+                // Legacy badge — restored FieldMind entries wear a small
+                // dark pill in the header corner so they stay recognizable
+                // next to native Curio captures.
+                if (entry.isLegacy) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = Color.Black.copy(alpha = 0.30f),
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(8.dp)
+                    ) {
+                        Text(
+                            text = "LEGACY",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        )
+                    }
+                }
             }
 
             Column(

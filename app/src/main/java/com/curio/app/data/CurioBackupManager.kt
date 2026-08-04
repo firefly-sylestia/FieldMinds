@@ -152,7 +152,8 @@ object CurioBackupManager {
             captures = captures,
             preferences = prefs,
             audioFiles = audioFiles,
-            imageFiles = imageFiles
+            imageFiles = imageFiles,
+            speciesCatalogJson = FieldMindLegacyImport.speciesCatalogJson(context)
         )
         // With audio bundled, the base64 JSON can be tens of MB — serialize
         // and write off the main thread (v2.1).
@@ -264,6 +265,10 @@ object CurioBackupManager {
             restoredCaptures.forEach { dao.insert(it) }
         }
 
+        payload.speciesCatalogJson?.let { speciesJson ->
+            FieldMindLegacyImport.restoreSpeciesCatalog(context, speciesJson)
+        }
+
         payload.preferences.forEach { (name, entries) ->
             val prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE)
             val editor = prefs.edit().clear()
@@ -340,7 +345,9 @@ data class BackupPayload(
     /** SoundBite audio bytes keyed by capture id (v2). Gson encodes ByteArray as base64. */
     val audioFiles: Map<String, ByteArray> = emptyMap(),
     /** Image-attachment bytes keyed by their original URI string (v3). */
-    val imageFiles: Map<String, ByteArray> = emptyMap()
+    val imageFiles: Map<String, ByteArray> = emptyMap(),
+    /** Imported FieldMind species catalog, preserved by Curio backup/restore. */
+    val speciesCatalogJson: String? = null
 )
 
 /**

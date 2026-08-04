@@ -61,6 +61,8 @@ import com.curio.app.data.AppPreferences
 import com.curio.app.data.AudioQuality
 import com.curio.app.data.AudioQualitySettings
 import com.curio.app.data.CurioBackupManager
+import com.curio.app.data.FieldMindArchivePreview
+import com.curio.app.data.FieldMindLegacyImport
 import com.curio.app.data.SmartDensityMode
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
@@ -120,6 +122,11 @@ fun SettingsScreen(navController: NavController) {
     var showRestoreConfirm by remember { mutableStateOf(false) }
     var backupStatus by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     var lastBackupAt by remember { mutableStateOf(CurioBackupManager.lastBackupAtMillis(context)) }
+    // ── Legacy FieldMind restore (observations + notes + species) ─────
+    var legacyPreview by remember { mutableStateOf<FieldMindArchivePreview?>(null) }
+    var legacyPendingUri by remember { mutableStateOf<Uri?>(null) }
+    var legacyBusy by remember { mutableStateOf(false) }
+    var legacyStatus by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     val scope = rememberCoroutineScope()
     // ── Notification permission (Android 13+) — requested on demand when
     //    the user turns ON a notification feature. The granted callback
@@ -241,6 +248,29 @@ fun SettingsScreen(navController: NavController) {
         }
     }
 
+    // Legacy FieldMind import — user picks a .fieldmind / .zip package or a
+    // plain archive.json export. The archive is PREVIEWED first, then the
+    // user confirms (the restore only ADDS legacy entries — current Curio
+    // data is never touched or replaced).
+    val legacyPickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null && !legacyBusy) {
+            scope.launch {
+                legacyBusy = true
+                try {
+                    legacyPreview = FieldMindLegacyImport.preview(context, uri)
+                    legacyPendingUri = uri
+                } catch (e: Exception) {
+                    legacyStatus = false to (e.message?.let { "Couldn't read that file: $it" }
+                        ?: "That file doesn't look like a FieldMind archive.")
+                } finally {
+                    legacyBusy = false
+                }
+            }
+        }
+    }
+
     val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
     val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
     val themeStyles = listOf(
@@ -304,6 +334,69 @@ fun SettingsScreen(navController: NavController) {
         )
     }
 
+    // ── Legacy FieldMind import confirmation — previews what the archive
+    //    holds and confirms the user wants it ADDED to the Cabinet. This
+    //    restore is additive-only: nothing currently in Curio is replaced.
+    val legacyPreviewValue = legacyPreview
+    if (legacyPreviewValue != null && legacyPendingUri != null) {
+        AlertDialog(
+            onDismissRequest = { legacyPreview = null; legacyPendingUri = null },
+            shape = RoundedCornerShape(28.dp),
+            title = { Text("Import FieldMind data?", fontWeight = FontWeight.ExtraBold) },
+            text = {
+                Text(
+                    "Found ${legacyPreviewValue.observations} observation" +
+                        (if (legacyPreviewValue.observations == 1) "" else "s") +
+                        ", ${legacyPreviewValue.notes} note" +
+                        (if (legacyPreviewValue.notes == 1) "" else "s") +
+                        " and ${legacyPreviewValue.images} image" +
+                        (if (legacyPreviewValue.images == 1) "" else "s") +
+                        ". ${legacyPreviewValue.species} species " +
+                        (if (legacyPreviewValue.species == 1) "entry" else "entries") +
+                        " go to the saved catalog.\n\n" +
+                        "They'll be added to your Cabinet as legacy entries — " +
+                        "nothing currently in Curio is touched."
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    val uri = legacyPendingUri
+                    legacyPreview = null
+                    legacyPendingUri = null
+                    if (uri != null) {
+                        scope.launch {
+                            legacyBusy = true
+                            try {
+                                val result = FieldMindLegacyImport.restore(context, uri)
+                                legacyStatus = true to buildString {
+                                    append("Imported ${result.observations} observation")
+                                    if (result.observations != 1) append("s")
+                                    append(", ${result.notes} note")
+                                    if (result.notes != 1) append("s")
+                                    append(" and ${result.images} image")
+                                    if (result.images != 1) append("s")
+                                    append(". ${result.species} species saved to the catalog.")
+                                    if (result.skipped > 0) {
+                                        append(" Skipped ${result.skipped} already-imported record")
+                                        if (result.skipped != 1) append("s")
+                                        append(".")
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                legacyStatus = false to "Import failed: ${e.message ?: "unknown error"}"
+                            } finally {
+                                legacyBusy = false
+                            }
+                        }
+                    }
+                }) { Text("Import", fontWeight = FontWeight.Bold) }
+            },
+            dismissButton = {
+                TextButton(onClick = { legacyPreview = null; legacyPendingUri = null }) { Text("Cancel") }
+            }
+        )
+    }
+
     // ── Restore confirmation — warns that current data gets replaced ──
     if (showRestoreConfirm) {
         AlertDialog(
@@ -324,6 +417,24 @@ fun SettingsScreen(navController: NavController) {
             },
             dismissButton = {
                 TextButton(onClick = { showRestoreConfirm = false }) { Text("Cancel") }
+            }
+        )
+    }
+
+    // ── Legacy FieldMind import result feedback ──────────────────────
+    legacyStatus?.let { (success, message) ->
+        AlertDialog(
+            onDismissRequest = { legacyStatus = null },
+            shape = RoundedCornerShape(28.dp),
+            title = {
+                Text(
+                    if (success) "Done" else "Couldn't do that",
+                    fontWeight = FontWeight.ExtraBold
+                )
+            },
+            text = { Text(message) },
+            confirmButton = {
+                TextButton(onClick = { legacyStatus = null }) { Text("OK", fontWeight = FontWeight.Bold) }
             }
         )
     }
@@ -956,6 +1067,27 @@ fun SettingsScreen(navController: NavController) {
                         CurioSettingsDivider()
                         CurioSettingsRow(CurioIcons.Restore, "Restore from backup", "Replace current data from a file") {
                             showRestoreConfirm = true
+                        }
+                        CurioSettingsDivider()
+                        // ── Legacy FieldMind restore — imports a FieldMind
+                        //    archive (.fieldmind package or archive.json) into
+                        //    the Cabinet as ADDITIVE legacy entries (observations
+                        //    → Field Notes, notes → journal), copying their
+                        //    images and saving the species catalog for later.
+                        CurioSettingsRow(
+                            CurioIcons.History,
+                            "Restore from FieldMind backup",
+                            if (legacyBusy) "Reading archive…"
+                            else "Import observations, notes + species from a FieldMind archive"
+                        ) {
+                            legacyPickerLauncher.launch(
+                                arrayOf(
+                                    "application/zip",
+                                    "application/json",
+                                    "application/octet-stream",
+                                    "application/x-zip-compressed"
+                                )
+                            )
                         }
                         CurioSettingsDivider()
                         val whenLast = if (lastBackupAt > 0L) {

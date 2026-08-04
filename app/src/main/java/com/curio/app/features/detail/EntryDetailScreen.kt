@@ -617,6 +617,29 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             )
                         }
                     }
+                    // Legacy chip — entries imported from a FieldMind archive
+                    // wear this so they stay recognizable on the detail page.
+                    if (resolvedEntry.isLegacy) {
+                        Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                CurioIcon(
+                                    name = CurioIcons.History,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    size = 14.dp
+                                )
+                                Text(
+                                    text = "Legacy",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
                 }
                 Text(
                     text = if (AppPreferences.entryMetaEnabledState) {

@@ -112,6 +112,14 @@ data class CurioEntry(
         val diff = System.currentTimeMillis() - capturedAtMillis
         return (diff / (1000 * 60 * 60 * 24)).toInt().coerceAtLeast(0)
     }
+
+    /**
+     * True when the entry was imported from a FieldMind legacy archive (its
+     * topic wears the "Legacy" subtype) — Cabinet cards and the detail page
+     * show a small legacy badge so restored items stay recognizable next to
+     * native Curio captures.
+     */
+    val isLegacy: Boolean get() = topic.subtype == FieldMindLegacyImport.LEGACY_SUBTYPE
 }
 
 /**
