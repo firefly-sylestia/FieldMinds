@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Hero shuffle card — topic title no longer hugs the top edge after badge-row removal**
+
+### What was asked
+
+“remove the tick button from the categpry card when it shows after the shuffle from this chnage the topic card moved to the top so fix that” → clarification: “the main card topic title got moved up to the top too much thats what i meant”. The tick was already removed (commit b31b6505); the real ask was the title-position regression on the main shuffle card.
+
+### What was done
+
+- **Root cause** — commit 4b1a471b removed the subtype-badge row from `HeroTicketCard`'s content column, which uses `verticalArrangement = Arrangement.SpaceBetween`. With three children (badge, title block, tap hint) SpaceBetween kept the title in the middle third; with two children left, the title slid to the very top edge of the card.
+- **Fix (SpinScreen.kt)** — added a `Spacer(Modifier.height(28.dp))` as the first child of the content column (≈ the removed badge's height: labelSmall + 6dp×2 padding), restoring the three-child distribution so the title returns to its balanced middle position in every state (idle / shuffling / landed).
+- The tick-button request was already satisfied by the previous commit — nothing left to remove.
+
+### Validation
+
+- code-reviewer pass: clean — imports (`Spacer`, `height`) already present, spacer valid in ColumnScope, constant height correct since the old badge rendered in every state and scales with the card.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push. Committed & pushed.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **v7.9 mood-board pastel fix — entry-detail collage reads as ink-on-pastel**
 
 ### What was asked

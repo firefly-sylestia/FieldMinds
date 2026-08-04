@@ -1902,6 +1902,14 @@ private fun HeroTicketCard(
                             .padding(20.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
+                        // v7.14 — the subtype-badge row used to occupy the
+                        // top of the card (it moved to the topic detail),
+                        // keeping the topic title in the balanced middle
+                        // third. With it gone, SpaceBetween slides the title
+                        // to the very top edge; a spacer the height of the
+                        // old badge (~28dp) returns it to that position.
+                        Spacer(Modifier.height(28.dp))
+
                         // Name + tags + teaser — v6.6: reels with the deck.
                         // Previously the hero content snapped instantly on
                         // every tick; now it glides like a card rising from
