@@ -130,7 +130,6 @@ import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.formatGlyph
-import com.curio.app.ui.components.moodBoardPinchZoom
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.data.AppPreferences
@@ -2494,7 +2493,6 @@ private fun ExpandedMoodBoardDialog(
                                     ((dialogH - boardH) / 2f).roundToInt()
                                 )
                             }
-                            .moodBoardPinchZoom(zoomState)
                     ) {
                         MoodBoardTiles(
                             tiles = scaledTiles,

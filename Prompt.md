@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board zoom rebuilt as one-shot — all pinch/pan gestures removed**
+
+### What was asked
+
+“The magnifying zoom isn't what I expected… I didn't mean you to use the pinch zoom to achieve that — it's bad, very bad.” (asked via ask_user: magnified board stays at fixed zoom + remove pinch everywhere)
+
+### What was done
+
+- **One-shot zoom everywhere (MoodBoardZoom.kt)** — double-tap a tile: the whole board swoops (arc glide) toward the tile, centers it, and the tile's image pops over the magnified collage; the magnified view STAYS at that fixed zoom until the user taps (or double-taps) to close. The single-tile zoom (editor double-tap / zoom button) similarly springs up and stays until tap.
+- **Removed all pinch/pan machinery** — `MoodBoardZoomState.gestureActive`, `applyPinch()`, `resetZoom()`, `zoomBoard()`, the `Modifier.moodBoardPinchZoom` extension, both `detectTransformGestures` handlers (overlay + canvas), the overlay's double-tap reset hit-test (`liveScale`/`liveOffsetX`/`liveOffsetY`), the canvas's gestureActive snap branch in the shared-clock arc effect, and the pinch auto-close latch. EntryDetailScreen dropped the `moodBoardPinchZoom` import + the modifier on the expanded board Box. Unused imports (detectTransformGestures/awaitEachGesture/awaitFirstDown/calculatePan/calculateZoom) cleaned; stale docs + the pre-existing dead `isZoomed` removed.
+- **Kept untouched (separate features)** — the editor's per-tile drag/pinch-to-resize (GalleryWallFormat) and LightboxScreen's own gestures. Overlay animation simplified to 3 plain target-keyed LaunchedEffects (spring open, tween(170) close); the canvas keeps its shared-clock arc glide minus the pinch branch.
+
+### Validation
+
+- check_braces balanced; code-reviewer pass (no leftover references, close behavior preserved via zoomOut→targets 1/0/0→tween→removal latch, all remaining imports used).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Fix: mood-board quote cards snapping while dragging**
 
 ### What was asked
