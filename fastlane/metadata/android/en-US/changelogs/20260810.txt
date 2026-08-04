@@ -9,3 +9,4 @@
 • Mood board fix: the small board and the full-screen expanded board now show the exact same tile arrangement (fit + centered), and the watermark pattern scales with the board so it looks identical when expanded
 • Paper makeover: every note gets its own unique grain pattern (no more identical texture), the heavy crease streaks are gone, and normal paper is now sharp-edged like a real sheet
 • Coffee, red margin and the folded corner are now universal decorations — the same options work on both torn and ruled paper (cleaner picker, no duplicated choices)
+• Mood board v2: the small card now shows the MIDDLE of the collage in a tight cropper look, the watermark pattern is identical small vs expanded, and the double-tap zoom never hides behind the caption/quotes

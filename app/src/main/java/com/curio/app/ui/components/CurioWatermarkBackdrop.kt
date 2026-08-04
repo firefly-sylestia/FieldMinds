@@ -254,8 +254,10 @@ private fun watermarkAlpha(active: Boolean, isDark: Boolean, pastel: Boolean): F
  * before ever reaching the interior, leaving the expanded board's middle a
  * huge empty band). Glyph size grows toward the edges and shrinks toward
  * the middle, so it reads as a natural scatter that stays quiet where the
- * content sits. Counts scale with the canvas AREA so the inline card and
- * the full-screen expanded board keep the same visual density.
+ * content sits. v7.17 — the pattern is built ONCE in a reference 360x460dp
+ * space and rendered at any canvas size as a pure zoom (same glyphs, same
+ * positions, sizes scaled by the short side), so the inline card and the
+ * full-screen expanded board show the IDENTICAL collage.
  *
  * Theme-aware (muted in dark mode, slightly stronger in light mode) and
  * centred on [accent] tones so it stays legible behind tiles. The seed is
@@ -295,9 +297,18 @@ fun CurioMoodBoardBackdrop(
         val canvasW = maxWidth
         val canvasH = maxHeight
         val density = LocalDensity.current
-        val pattern = remember(seed, boardTint, accentByGlyph, glyphs, canvasW, canvasH) {
-            buildMoodBoardPattern(seed, boardTint, accentByGlyph, glyphs, canvasW, canvasH)
+        // v7.17 — the pattern is built ONCE from the seed in a reference
+        // 360x460dp space (NOT keyed on the canvas size) and rendered at any
+        // canvas size as a PURE ZOOM: the same glyphs at the same relative
+        // positions, sizes scaled by the short side. The old area-scaled
+        // count + canvas-keyed sampling made the full-screen expanded board
+        // a genuinely DIFFERENT pattern from the inline card.
+        val pattern = remember(seed, boardTint, accentByGlyph, glyphs) {
+            buildMoodBoardPattern(seed, boardTint, accentByGlyph, glyphs)
         }
+        // Glyph sizes are fractions of the reference short side (~360dp);
+        // scale them to THIS canvas's short side at render time.
+        val shortSide = minOf(canvasW, canvasH)
         pattern.forEach { p ->
             // Theme-aware base alpha × the glyph's seeded boost, computed at
             // draw time so light/dark toggles apply immediately. Dark mode
@@ -315,14 +326,14 @@ fun CurioMoodBoardBackdrop(
             // top-left — so back off by half the glyph's pixel size. Without
             // this, every glyph renders down-right of its placement and the
             // edge glyphs clip past the board's right/bottom borders.
-            val half = with(density) { (p.size.toPx() / 2f).roundToInt() }
+            val half = with(density) { ((shortSide * p.sizeFrac).toPx() / 2f).roundToInt() }
             val x = with(density) { (p.xFrac * canvasW.toPx()).roundToInt() } - half
             val y = with(density) { (p.yFrac * canvasH.toPx()).roundToInt() } - half
             CurioIcon(
                 name = p.glyph,
                 contentDescription = null,
                 tint = p.tint.copy(alpha = alpha),
-                size = p.size,
+                size = shortSide * p.sizeFrac,
                 modifier = Modifier
                     .offset { IntOffset(x, y) }
                     .graphicsLayer { rotationZ = p.rotation }
@@ -333,50 +344,46 @@ fun CurioMoodBoardBackdrop(
 
 /**
  * Builds the seeded, distance-checked glyph pattern for
- * [CurioMoodBoardBackdrop]. Pure function of (seed, canvas size) so the
- * same board always lays out identically.
+ * [CurioMoodBoardBackdrop]. Pure function of the SEED (plus tints) — the
+ * layout is computed ONCE in a reference 360x460dp space, so the same
+ * board lays out identically at ANY canvas size.
  *
  * Positions are NORMALIZED canvas fractions (0..1 from the top-left corner)
- * so the pattern adapts to any canvas. Placement is a jittered-grid,
- * Poisson-disc-style sampler in TWO phases: the interior band just outside
- * the tiny centre core is seeded FIRST with small glyphs (so the middle of
- * the collage is never bare), then the perimeter fills far-cells-first up
- * to the target count. Every glyph is accepted ONLY if its circle clears
- * the centre core AND stays a radius-sum times a 1.06 spacing MARGIN away
- * from every already-placed glyph (checked in canvas dp, so the guarantee
- * holds at any board size). Verified by simulation: 40 seeds × 6 canvas
- * sizes (300×600 up to 411×915 dp), min center-distance ratio ≥ 1.06
- * always — glyphs never overlap, all stay in bounds, and the interior ring
- * always places (avg 2 in the middle inline, 3-4 expanded).
+ * and glyph sizes are fractions of the SHORT side, so the render loop can
+ * draw the pattern at any canvas size as a pure zoom — the inline card and
+ * the full-screen expanded board show the EXACT SAME collage. Placement is
+ * a jittered-grid, Poisson-disc-style sampler in TWO phases: the interior
+ * band just outside the tiny centre core is seeded FIRST with small glyphs
+ * (so the middle of the collage is never bare), then the perimeter fills
+ * far-cells-first up to the target count. Every glyph is accepted ONLY if
+ * its circle clears the centre core AND stays a radius-sum times a 1.06
+ * spacing MARGIN away from every already-placed glyph (checked in reference
+ * dp; since positions AND sizes scale together, the guarantee holds at any
+ * rendered size).
  *
  * The old fixed-bias slot ring only LOOKED collision-free: slots crowd at
  * the corners, the jitter let neighbours drift into each other, and the two
  * centre slots sat close enough to collide on smaller canvases — which is
- * what the user kept seeing.
+ * what the user kept seeing. (v7.16's area-scaled count also made the
+ * expanded board a genuinely different pattern — v7.17 keeps the count
+ * constant so small and expanded are identical.)
  */
 private fun buildMoodBoardPattern(
     seed: Int,
     accent: Color,
     accentByGlyph: Map<String, Color>,
-    glyphs: List<String>,
-    canvasW: Dp,
-    canvasH: Dp
+    glyphs: List<String>
 ): List<WatermarkPlacement> {
-    val w = canvasW.value
-    val h = canvasH.value
-    if (w <= 0f || h <= 0f) return emptyList()
+    // Reference canvas — the inline card's ~360x460dp. Laid out here once;
+    // the render loop scales positions (fractions) and sizes (short-side
+    // fractions) to the actual canvas.
+    val w = MoodBoardRefShortDp
+    val h = 460f
     val short = minOf(w, h)
-    val area = w * h
-    // Density-scaled counts: ~9-12 glyphs on the inline board (~360x460dp),
-    // scaling up to ~22 on the full-screen expanded board — the collage
-    // keeps the same visual density instead of thinning out when the canvas
-    // grows (the old 16 cap clipped the expanded count down).
-    // The inline board's short side (~360dp) is the reference both the
-    // count-density and the glyph-size scaling are anchored to, so the
-    // full-screen expanded board renders the SAME collage, just bigger.
-    val refArea = MoodBoardRefShortDp * 460f
-    val density = (area / refArea).coerceIn(1f, 3f)
-    val targetCount = ((9 + Random(seed).nextInt(4)) * density).roundToInt().coerceIn(9, 22)
+    // Constant count (9-12) — NOT area-scaled: scaling the count with the
+    // canvas area made the expanded board a different pattern. A pure zoom
+    // keeps the same glyphs at the same fractional positions.
+    val targetCount = 9 + Random(seed).nextInt(4)
 
     // Geometry as fractions of the SHORT side — kept tight enough that the
     // grid always has room for the full requested count (validated).
@@ -417,17 +424,15 @@ private fun buildMoodBoardPattern(
         // as a natural collage instead of uniform dots. The cap keeps the
         // radius <= the canvas margin, so even the biggest corner glyph
         // stays fully in bounds on any canvas width.
-        // v7.16 — glyph sizes scale with the canvas SHORT side (reference:
-        // the inline board's ~360dp), so the full-screen expanded board
-        // renders the SAME pattern as the inline card, just bigger. Fixed
-        // 26..54dp sizes made the expanded glyphs read proportionally
-        // smaller on the tall full-screen canvas (54dp on a ~915dp board
-        // vs 460dp inline), so the watermark looked like a different
-        // collage instead of a zoom.
+        // v7.17 — sizes are computed in REFERENCE dp and stored as fractions
+        // of the reference short side ([MoodBoardRefShortDp]); the render
+        // loop scales them to the actual canvas short side, so the pattern
+        // is a pure zoom at any board size. Fixed 26..54dp sizes made the
+        // expanded glyphs read proportionally smaller on the tall
+        // full-screen canvas — the old mismatch.
         val t = ((e - 1f) / 5.0f).coerceIn(0f, 1f)
-        val sizeScale = short / MoodBoardRefShortDp
-        val sizeDp = ((26f + t * 28f) * sizeScale)
-            .coerceAtMost(2f * marginFrac * short) // 26..54 dp at inline size
+        val sizeDp = (26f + t * 28f)
+            .coerceAtMost(2f * marginFrac * short) // 26..54 dp in reference space
         if (!clearsAll(x, y, sizeDp / 2f)) return false
         val glyph = glyphs[rng.nextInt(glyphs.size)]
         placed.add(
@@ -437,7 +442,7 @@ private fun buildMoodBoardPattern(
                     glyph = glyph,
                     xFrac = x,
                     yFrac = y,
-                    size = sizeDp.dp,
+                    sizeFrac = sizeDp / short,
                     rotation = -14f + rng.nextFloat() * 28f,
                     tint = if (rng.nextFloat() < 0.80f) accent else (accentByGlyph[glyph] ?: accent),
                     alphaBoost = 0.85f + rng.nextFloat() * 0.35f
@@ -487,17 +492,20 @@ private fun buildMoodBoardPattern(
     return placed.map { it.placement }
 }
 
-/** Reference short side (dp) of the inline mood-board card — the size the
- *  watermark count density and glyph sizes are normalized to, so any larger
- *  canvas (the full-screen expanded board) renders the same pattern. */
+/** Reference short side (dp) of the inline mood-board card — the space the
+ *  watermark pattern is laid out in once, so any canvas (incl. the
+ *  full-screen expanded board) renders the same pattern as a pure zoom. */
 private const val MoodBoardRefShortDp = 360f
 
-/** One seeded glyph placement for [CurioMoodBoardBackdrop]. */
+/** One seeded glyph placement for [CurioMoodBoardBackdrop]. [xFrac]/[yFrac]
+ *  are canvas fractions of the glyph CENTRE; [sizeFrac] is the glyph size as
+ *  a fraction of the canvas SHORT side (so the render loop scales it per
+ *  canvas while keeping the pattern identical). */
 private data class WatermarkPlacement(
     val glyph: String,
     val xFrac: Float,
     val yFrac: Float,
-    val size: Dp,
+    val sizeFrac: Float,
     val rotation: Float,
     val tint: Color,
     val alphaBoost: Float

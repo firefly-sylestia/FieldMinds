@@ -1823,10 +1823,9 @@ private fun MarginaliaSectionHeader(
 /**
  * Result of fitting a saved tile collage into a viewport — the uniformly
  * scaled tiles, the scaled board bounds and the scale. Shared by the inline
- * card and the full-screen expanded dialog so BOTH always show the SAME
- * arrangement (bounds → uniform scale → centered) and can never drift
- * apart again (that drift is what made the small and expanded boards look
- * different).
+ * card (cover/crop) and the full-screen expanded dialog (contain/fit) so
+ * both derive their geometry from the same helper: the expanded dialog
+ * shows the whole collage, the inline card crops to its middle.
  */
 private data class FitTileLayout(
     val scaledTiles: List<CaptureData.TileLayout>,
@@ -1837,21 +1836,26 @@ private data class FitTileLayout(
 
 /**
  * Fits [tiles] into a [viewW]×[viewH] viewport: computes the collage's
- * bounds, scales uniformly to the largest size that fits both dimensions,
- * and returns the scaled tiles + scaled board size + the scale. With no
- * tiles it returns an empty fit (scale 1f) so callers can use the result
- * unconditionally.
+ * bounds, scales uniformly, and returns the scaled tiles + scaled board
+ * size + the scale. [cover] = false scales to the largest size that fits
+ * BOTH dimensions (contain — the expanded full-board view); [cover] = true
+ * scales to FILL the viewport (cover — the inline card's center-crop
+ * "cropper" look, where the collage's middle art fills the card and the
+ * overflow is clipped). With no tiles it returns an empty fit (scale 1f)
+ * so callers can use the result unconditionally.
  */
 private fun fitTileLayout(
     tiles: List<CaptureData.TileLayout>,
     viewW: Float,
-    viewH: Float
+    viewH: Float,
+    cover: Boolean = false
 ): FitTileLayout {
     if (tiles.isEmpty()) return FitTileLayout(emptyList(), 0f, 0f, 1f)
     val maxX = tiles.maxOf { it.offsetXPx + it.widthPx }
     val maxY = tiles.maxOf { it.offsetYPx + it.heightPx }
     val scale = if (maxX > 0f && maxY > 0f) {
-        (viewW / maxX).coerceAtMost(viewH / maxY)
+        if (cover) (viewW / maxX).coerceAtLeast(viewH / maxY)
+        else (viewW / maxX).coerceAtMost(viewH / maxY)
     } else 1f
     val scaledTiles = tiles.map {
         CaptureData.TileLayout(
@@ -1915,7 +1919,13 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             // so a slim theme-aware border (accent in light, light twin in
             // dark via categoryInk) keeps it from blending into the wash.
             border = BorderStroke(1.dp, category.categoryInk().copy(alpha = 0.26f)),
-            modifier = Modifier.fillMaxWidth().height(460.dp)
+            // v7.17 — the whole board (and its in-place zoom overlay) draws
+            // ABOVE the caption + quote cards that follow it in this Column:
+            // the zoomed image overflows the card, and later siblings would
+            // otherwise paint over it (the "zoomed image behind the text
+            // box" bug). zIndex only matters while zoomed — at rest nothing
+            // overlaps.
+            modifier = Modifier.fillMaxWidth().height(460.dp).zIndex(1000f)
         ) {
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val canvasW = with(density) { maxWidth.toPx() }
@@ -1928,14 +1938,15 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     modifier = Modifier.fillMaxSize()
                 )
 
-                // Fit the collage into the card the SAME way the expanded
-                // dialog does — bounds → uniform scale → centered — so the
-                // inline board and the full-screen board always show the
-                // IDENTICAL arrangement ([fitTileLayout] is shared by both).
-                // The old inline view drew tiles at raw stored pixels (no
-                // fit, no centering), so the same layout looked different —
-                // often clipped at the edges — once expanded.
-                val fit = fitTileLayout(data.tileLayouts, canvasW, canvasH)
+                // The INLINE card is a CENTER-CROP of the collage — cover-
+                // scaled so the middle art FILLS the card (a tight "cropper"
+                // look) with the overflow clipped by the card's rounded
+                // shape. The EXPANDED dialog shows the whole collage
+                // (contain-fit + centered). The two views are intentionally
+                // different: small = tight middle crop, expanded = all of it.
+                // The zoom overlays below use the same cover-scaled geometry
+                // so what you magnify matches what the crop shows.
+                val fit = fitTileLayout(data.tileLayouts, canvasW, canvasH, cover = true)
                 val scaledTiles = fit.scaledTiles
                 val boardW = fit.boardW
                 val boardH = fit.boardH
@@ -1993,11 +2004,14 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     // editor). Board-level pinch zoom is only enabled in the
                     // expanded full-screen dialog, so a stray two-finger
                     // pinch on the inline card can't hijack the page scroll.
-                    // The collage is fit-scaled + centered exactly like the
-                    // expanded dialog, so both views always match.
+                    // Cover-scaled + clipped to the card: the board's Surface
+                    // doesn't clip overflowing children, so the explicit
+                    // clip makes the crop clean (tiles past the card's edges
+                    // stay hidden instead of spilling onto the page).
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
+                            .clip(RoundedCornerShape(28.dp))
                             .offset {
                                 IntOffset(
                                     ((canvasW - boardW) / 2f).roundToInt(),

@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood board v2 — small card is a center-crop of the middle art, watermark pattern is truly identical small vs expanded, double-tap zoom no longer hides behind the text box**
+
+### What was asked
+
+“the moodboard fix didnt work also the pattern is differnt like the smaller one have difeernt and hen expanded its differnt and still the picture arrangements are bad like the smaller one should sho me the middle art only in a cropper look also when i double tap the image it shows properly but behind the text box in detail view so fix the z index”
+
+### What was done
+
+- **Watermark pattern finally identical (CurioWatermarkBackdrop.kt)** — the v7.16 fix only scaled glyph SIZES; the count still scaled with canvas AREA (9-12 inline → up to 22 expanded) and the sampling was keyed on canvas dims, so the expanded pattern was genuinely different. Now `buildMoodBoardPattern` lays the collage out ONCE in a reference 360×460dp space with a CONSTANT count (9-12) and stores sizes as `sizeFrac` (fraction of the short side); `CurioMoodBoardBackdrop` remembers the pattern WITHOUT canvas-size keys and renders it at any canvas as a pure zoom (`size = shortSide * sizeFrac`, positions as canvas fractions) → small and expanded show the EXACT same glyphs, positions and relative sizes.
+- **Small board = center-crop (“cropper look”) (EntryDetailScreen.kt)** — the inline card now uses `fitTileLayout(..., cover = true)` (`coerceAtLeast`): the collage is cover-scaled so it FILLS the card and offset so its CENTRE lands on the card centre, with an explicit `Modifier.clip(RoundedCornerShape(28.dp))` on the tiles box (the board Surface doesn’t clip children — proven by the overlay-overflow bug). The expanded dialog keeps contain-fit of the whole collage. The zoom overlays use the same cover-scaled geometry.
+- **Zoom overlay z-order fixed (EntryDetailScreen.kt + GalleryWallFormat.kt)** — the double-tapped image overflowed the board and painted BELOW the caption/quote cards (later siblings in the Column). The board Surface now carries `zIndex(1000f)` (and the editor’s inline canvas the same), lifting the whole board + its overflowing overlay above the following siblings; at rest nothing overlaps so there’s no visual change. The full-screen dialog lives in its own window and was untouched.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on all 3 files; code-reviewer pass — cover math validated (boardW/H ≥ canvas → valid negative center offset), clip-before-offset order confirmed to crop correctly, zIndex lifts the node subtree with no at-rest change, no stale `WatermarkPlacement.size` / old `buildMoodBoardPattern` signature refs, Dp arithmetic type-safe, zoom overlays correctly sit OUTSIDE the clipped tiles box so the magnified image still overflows. Reviewer notes (non-blockers): expanded watermark is now sparser by design (constant count = same pattern), and the zoom overlay still centers on the card center rather than the tapped tile (pre-existing quirk, less noticeable with the crop).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Paper makeover — clean per-card texture (no more big curvy lines, no more identical pattern), universal coffee/red-margin/folded decorations on both torn and ruled paper, sharp normal-paper edges**
 
 ### What was asked

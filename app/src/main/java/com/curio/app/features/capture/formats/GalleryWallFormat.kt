@@ -436,9 +436,14 @@ private fun MoodBoardCanvas(
         // category-colored border keeps it from visually blending into the
         // wash (full-screen editor is on a plain dialog background, no need).
         border = if (fullScreen) null else BorderStroke(1.dp, accent.copy(alpha = 0.26f)),
+        // v7.17 — the inline editor canvas draws ABOVE the caption field +
+        // quote cards below it, so the double-tap zoom overlay (which
+        // overflows the canvas) never hides behind them. The full-screen
+        // dialog lives in its own window and needs no lift.
         modifier = if (fullScreen) Modifier.fillMaxSize() else Modifier
             .fillMaxWidth()
             .height(420.dp)
+            .zIndex(1000f)
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             // Read actual canvas size from constraints (fixes "stuck on left" bug)
