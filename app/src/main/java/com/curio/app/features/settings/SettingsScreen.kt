@@ -581,6 +581,36 @@ fun SettingsScreen(navController: NavController) {
                             )
                         }
                         CurioSettingsDivider()
+                        // ── 3D button gradient & shadow (v7.11, EXPERIMENTAL) ──
+                        //    The Spin shuffle button wears a radial 3D gradient
+                        //    (highlight at top-left, shadow at bottom) with a
+                        //    soft ambient shadow, so it reads as a raised sphere
+                        //    instead of a flat circle. Also fixes orbiting ring
+                        //    dot visibility in pastel mode. Default ON.
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Casino, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 22.dp
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("3D button gradient & shadow", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    "The shuffle button pops with a sphere-like gradient, soft shadow, and visible orbiting dots",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = AppPreferences.threeDButtonState,
+                                onCheckedChange = { AppPreferences.set3DButtonGradientEnabled(context, it) }
+                            )
+                        }
+                        CurioSettingsDivider()
                         // ── Deck cards (v7.7, EXPERIMENTAL) — the Spin deck's
                         //    peek-card look is four independent toggles so each
                         //    upgrade can be A/B'd on its own: top-lit gradient

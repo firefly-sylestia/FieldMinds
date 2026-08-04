@@ -531,7 +531,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     val deckGradient = if (pastelMode && !darkMode && !isMixedDeck) {
         listOf(
             lerp(deckAccent, Color.White, 0.04f),
-            lightAccentTint(deckAccent, saturation = 0.20f, lightness = 0.90f)
+            lightAccentTint(deckAccent, saturation = 0.22f, lightness = 0.80f)
         )
     } else {
         CurioMixedDeck.mixedDeckGradient(deckAccents)
@@ -2283,17 +2283,36 @@ private fun SpinButton(
             onClick = onClick,
             enabled = enabled,
             shape = CircleShape,
-            // v6.2 — the dice button keeps its filled category color in EVERY
-            // state (idle + landed "Tap to open"), so the CTA never goes grey.
-            color = tint,
-            shadowElevation = 0.dp,
+            // v7.11 — 3D button gradient (Settings toggle, default ON): the
+            // shuffle button wears a radial gradient with a highlight toward
+            // the top and a shadow toward the bottom, with a soft ambient
+            // shadow, so it reads as a raised sphere instead of a flat circle.
+            // When OFF, the button keeps its classic flat accent fill.
+            color = if (AppPreferences.threeDButtonState) Color.Transparent else tint,
+            shadowElevation = if (AppPreferences.threeDButtonState) 6.dp else 0.dp,
             modifier = Modifier
                 .size(buttonSize)
                 .scale(pulseScale.coerceIn(0.9f, 1.10f))
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .then(
+                        if (AppPreferences.threeDButtonState) {
+                            Modifier.background(
+                                Brush.radialGradient(
+                                    listOf(
+                                        lerp(tint, Color.White, 0.22f),
+                                        tint,
+                                        lerp(tint, Color.Black, 0.07f)
+                                    ),
+                                    center = Offset(0.42f, 0.33f),
+                                    radius = 1.15f
+                                ),
+                                CircleShape
+                            )
+                        } else Modifier
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 // v5.10 — the dice shows in EVERY state: tumbling while
@@ -2352,6 +2371,12 @@ private fun SpinButton(
 @Composable
 private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifier) {
     if (!active) return
+    // v7.11 — in pastel mode the raw accent color blends into the pastel
+    // background (invisible dots). pastelFillInk resolves to a deep hue ink
+    // in pastel light mode and a light tint in pastel dark mode, so the
+    // orbiting dots stay readable on every background. Non-pastel keeps
+    // the classic accent-colored dots.
+    val dotColor = pastelFillInk(color).copy(alpha = 0.85f)
     val infinite = rememberInfiniteTransition(label = "orbit")
     val rot by infinite.animateFloat(
         initialValue = 0f,
@@ -2373,7 +2398,7 @@ private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifi
                 val dx = cos(a) * radius
                 val dy = sin(a) * radius
                 drawCircle(
-                    color = color.copy(alpha = 0.85f),
+                    color = dotColor,
                     radius = dotR,
                     center = Offset(cx + dx, cy + dy)
                 )

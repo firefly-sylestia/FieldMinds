@@ -68,6 +68,7 @@ object AppPreferences {
     private const val KEY_PEEK_SHADOWS = "peek_shadows"
     private const val KEY_PEEK_TITLES = "peek_titles"
     private const val KEY_MATERIAL_CARD_BLENDS = "material_card_blends"
+    private const val KEY_3D_BUTTON_GRADIENT = "3d_button_gradient"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
     private const val KEY_REMINDER_HOUR = "reminder_hour"
     private const val KEY_TINT_WASH_ENABLED = "tint_wash_enabled"
@@ -142,6 +143,16 @@ object AppPreferences {
     // takes effect while the Material style is active. When the experiment
     // settles, hardcode the winner and remove the toggle.
     var materialCardBlendsState by mutableStateOf(true)
+        private set
+
+    // 3D button gradient & shadow (v7.11, EXPERIMENTAL) — when ON, the
+    // Spin shuffle button wears a radial 3D gradient (highlighted top,
+    // shaded bottom) with a soft ambient shadow so it reads as a raised
+    // sphere instead of a flat circle. Also fixes the orbiting ring dots
+    // in pastel mode (they switch to a contrasting ink so they stay
+    // visible on the pastel surface). Default ON. When the experiment
+    // settles, hardcode the winner and remove the toggle.
+    var threeDButtonState by mutableStateOf(true)
         private set
 
     var reminderEnabledState by mutableStateOf(false)
@@ -229,6 +240,7 @@ object AppPreferences {
         peekShadowsState = isPeekShadowsEnabled(context)
         peekTitlesState = isPeekTitlesEnabled(context)
         materialCardBlendsState = isMaterialCardBlendsEnabled(context)
+        threeDButtonState = is3DButtonGradientEnabled(context)
         reminderEnabledState = isReminderEnabled(context)
         tintWashEnabledState = isTintWashEnabled(context)
         entryMetaEnabledState = isEntryMetaEnabled(context)
@@ -315,6 +327,16 @@ object AppPreferences {
     fun setMaterialCardBlendsEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_MATERIAL_CARD_BLENDS, enabled).apply()
         materialCardBlendsState = enabled
+    }
+
+    // ── 3D button gradient & shadow (v7.11 experimental) ───────────────
+    /** Whether the Spin shuffle button wears a 3D radial gradient + shadow (default on). */
+    fun is3DButtonGradientEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_3D_BUTTON_GRADIENT, true)
+
+    fun set3DButtonGradientEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_3D_BUTTON_GRADIENT, enabled).apply()
+        threeDButtonState = enabled
     }
 
     // ── Category tint wash ────────────────────────────────────────────

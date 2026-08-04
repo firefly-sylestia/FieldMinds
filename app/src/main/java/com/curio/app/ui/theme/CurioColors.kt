@@ -334,7 +334,7 @@ object CurioGradients {
         // background on the category's OWN hue (same recipe as the page
         // wash), not the raw cream that dragged cool accents off-family.
         val end = if (AppPreferences.tintWashEffective() && !isCurioDarkTheme()) {
-            if (AppPreferences.pastelColorsState) lightAccentTint(accent, saturation = 0.20f, lightness = 0.90f)
+            if (AppPreferences.pastelColorsState) lightAccentTint(accent, saturation = 0.22f, lightness = 0.80f)
             else lightAccentTint(accent)
         } else {
             MaterialTheme.colorScheme.background
