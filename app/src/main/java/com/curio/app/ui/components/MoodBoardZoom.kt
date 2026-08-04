@@ -5,13 +5,16 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -19,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -45,7 +50,12 @@ import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.curio.app.data.CaptureData
+import com.curio.app.data.NotePaperColor
+import com.curio.app.data.NotePaperStyle
+import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.PatrickHandFontFamily
+import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.CurioIcons
 import kotlin.math.roundToInt
 
@@ -705,6 +715,186 @@ fun MoodBoardZoomCanvas(
                     size = 18.dp
                 )
             }
+        }
+    }
+}
+
+/** One deterministic floating-card slot on a [boardW]×[boardH] board. */
+private data class MoodQuoteSlot(val x: Float, val y: Float, val w: Float, val h: Float)
+
+private fun moodBoardQuoteSlot(index: Int, boardW: Float, boardH: Float): MoodQuoteSlot {
+    val cols = 2
+    val col = index % cols
+    val row = index / cols
+    val slotW = boardW * 0.5f
+    val cardW = (slotW * 0.82f).coerceIn(120f, 240f)
+    val cardH = cardW * 0.62f
+    val x = col * slotW + (slotW - cardW) / 2f
+    val y = boardH * 0.56f + row * (cardH * 1.02f) + (if (col == 1) cardH * 0.45f else 0f)
+    return MoodQuoteSlot(x, y, cardW, cardH)
+}
+
+/**
+ * v7.20 — the shared floating quote-card layer for mood boards.
+ *
+ * Renders the entry's paper quote boxes floating ON the collage at their
+ * saved positions (editor board-pixel space, mapped into the current board
+ * by [boardScale] — and shifted by [offsetX]/[offsetY] when the board is
+ * centered inside a larger viewport, e.g. the inline card's center crop or
+ * the expanded dialog's contain-fit). Cards never dragged (-1,-1) fall back
+ * to the deterministic slot for their index, so legacy entries and freshly
+ * added cards land exactly where the editor's "Quote" chip shows them.
+ *
+ * The EDITOR passes [onMoveCard] to make the cards draggable (committed to
+ * the entry's [CaptureData.QuotePos] list); saved views pass null so the
+ * cards are read-only there.
+ */
+@Composable
+fun MoodBoardFloatingCards(
+    quotes: List<String>,
+    styles: List<NotePaperStyle>,
+    colors: List<NotePaperColor>,
+    tilts: List<Float>,
+    positions: List<CaptureData.QuotePos>,
+    canvasWPx: Float,
+    canvasHPx: Float,
+    boardScale: Float = 1f,
+    offsetX: Float = 0f,
+    offsetY: Float = 0f,
+    onEditCard: ((Int) -> Unit)? = null,
+    onMoveCard: ((index: Int, x: Float, y: Float) -> Unit)? = null
+) {
+    // Guard the pre-measure first frame (canvas = 0) and degenerate scales
+    // so cards never stack at the top-left or divide by zero.
+    if (canvasWPx <= 0f || canvasHPx <= 0f) return
+    val scale = if (boardScale > 0f) boardScale else 1f
+    quotes.forEachIndexed { i, quote ->
+        val slot = moodBoardQuoteSlot(i, canvasWPx, canvasHPx)
+        val saved = positions.getOrElse(i) { CaptureData.QuotePos(-1f, -1f) }
+        val placed = if (saved.x >= 0f && saved.y >= 0f) saved
+            else CaptureData.QuotePos(slot.x, slot.y)
+        MoodBoardFloatingCard(
+            text = quote,
+            style = styles.getOrElse(i) { NotePaperStyle.RULED },
+            color = colors.getOrElse(i) { NotePaperColor.CREAM },
+            rotation = tilts.getOrElse(i) { (i * 4.2f % 8f) - 4f },
+            x = placed.x * scale + offsetX,
+            y = placed.y * scale + offsetY,
+            w = slot.w * scale,
+            h = slot.h * scale,
+            boardW = canvasWPx * scale,
+            boardH = canvasHPx * scale,
+            onEdit = { onEditCard(i) },
+            onMove = onMoveCard?.let { move ->
+                { rx, ry -> move(i, (rx - offsetX) / scale, (ry - offsetY) / scale) }
+            }
+        )
+    }
+}
+
+/**
+ * One floating paper quote card — tilt + paper look, draggable in the
+ * editor, read-only (tap → no-op) in saved views. Drag preview lives INSIDE
+ * the card (same scoping trick as the editor tiles) so per-frame drags
+ * recompose only this card. Released positions are reported in RENDER
+ * space, clamped to the board bounds.
+ */
+@Composable
+private fun MoodBoardFloatingCard(
+    text: String,
+    style: NotePaperStyle,
+    color: NotePaperColor,
+    rotation: Float,
+    x: Float,
+    y: Float,
+    w: Float,
+    h: Float,
+    boardW: Float,
+    boardH: Float,
+    onEdit: (() -> Unit)? = null,
+    onMove: ((Float, Float) -> Unit)? = null
+) {
+    val density = LocalDensity.current
+    var dragDelta by remember { mutableStateOf(Offset.Zero) }
+    var dragging by remember { mutableStateOf(false) }
+    // pointerInput never restarts, so the gesture coroutine must read the
+    // LATEST geometry/callbacks — never the first composition's.
+    val currentX by rememberUpdatedState(x)
+    val currentY by rememberUpdatedState(y)
+    val currentW by rememberUpdatedState(w)
+    val currentH by rememberUpdatedState(h)
+    val currentBoardW by rememberUpdatedState(boardW)
+    val currentBoardH by rememberUpdatedState(boardH)
+    val currentOnEdit by rememberUpdatedState(onEdit)
+    val currentOnMove by rememberUpdatedState(onMove)
+
+    val renderX = (x + dragDelta.x).coerceIn(0f, (boardW - w).coerceAtLeast(0f))
+    val renderY = (y + dragDelta.y).coerceIn(0f, (boardH - h).coerceAtLeast(0f))
+
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(renderX.roundToInt(), renderY.roundToInt()) }
+            .zIndex(if (dragging) 55f else 50f)
+            .size(
+                width = with(density) { w.toDp() },
+                height = with(density) { h.toDp() }
+            )
+            .rotate(rotation)
+            .then(
+                if (currentOnMove != null) Modifier.pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragStart = { dragging = true },
+                        onDragEnd = {
+                            dragging = false
+                            // Compute the commit from LIVE state inside the
+                            // coroutine: pointerInput(Unit) never restarts, so
+                            // composition-captured renderX/renderY would be the
+                            // FIRST frame's (pre-drag) values and every drop
+                            // would snap the card back. dragDelta is snapshot-
+                            // state-backed, so reading it here is current.
+                            val commitX = (currentX + dragDelta.x)
+                                .coerceIn(0f, (currentBoardW - currentW).coerceAtLeast(0f))
+                            val commitY = (currentY + dragDelta.y)
+                                .coerceIn(0f, (currentBoardH - currentH).coerceAtLeast(0f))
+                            currentOnMove?.invoke(commitX, commitY)
+                        },
+                        onDragCancel = { dragging = false },
+                        onDrag = { change, amount ->
+                            change.consume()
+                            // Clamp the ACCUMULATED delta so the card sticks
+                            // at the edges (clamping only the visual position
+                            // would let the delta run away and snap back).
+                            val nx = (currentX + dragDelta.x + amount.x)
+                                .coerceIn(0f, (currentBoardW - currentW).coerceAtLeast(0f))
+                            val ny = (currentY + dragDelta.y + amount.y)
+                                .coerceIn(0f, (currentBoardH - currentH).coerceAtLeast(0f))
+                            dragDelta = Offset(nx - currentX, ny - currentY)
+                        }
+                    )
+                } else Modifier
+            )
+            // Press-detection (drag) comes BEFORE click-consumption so a drag
+            // never also triggers the edit tap. Saved views pass onEdit = null
+            // → no clickable at all, so taps fall through to the board's own
+            // handlers (e.g. the expanded dialog's tap-to-dismiss).
+            .then(
+                if (currentOnEdit != null) Modifier.clickable(onClick = { currentOnEdit?.invoke() })
+                else Modifier
+            )
+    ) {
+        NotePaperCard(
+            style = style,
+            paperColor = color,
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = text.ifBlank { "Quote…" },
+                style = MaterialTheme.typography.bodySmall.copy(fontFamily = PatrickHandFontFamily),
+                color = notePaperInk(color),
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }

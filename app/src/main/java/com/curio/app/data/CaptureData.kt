@@ -232,6 +232,13 @@ sealed class CaptureData {
         val heightPx: Float
     )
 
+    /** One floating quote-box placement on the mood board — the card's
+     *  top-left corner in the EDITOR board pixel space (same space as
+     *  [TileLayout] offsets; the saved view scales it with the collage).
+     *  (-1,-1) = never dragged — renderers fall back to the deterministic
+     *  slot for that card index. */
+    data class QuotePos(val x: Float, val y: Float)
+
     /** Gallery Wall (§8.4): moodboard collage with caption and tile positions. */
     data class GalleryWall(
         val imageCount: Int,
@@ -253,6 +260,10 @@ sealed class CaptureData {
         val quoteTilts: List<Float> = emptyList(),
         val quoteStyles: List<NotePaperStyle> = emptyList(),
         val quoteColors: List<NotePaperColor> = emptyList(),
+        // v7.20 — per-card placement for the floating quote boxes (editor
+        // board pixels; (-1,-1) = never dragged → deterministic slot).
+        // Legacy entries lack it (Gson → empty) → all cards use slots.
+        val quotePositions: List<QuotePos> = emptyList(),
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null,
         // Mood — picked in the editor's shared "How did it make you feel?"

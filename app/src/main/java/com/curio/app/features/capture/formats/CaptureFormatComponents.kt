@@ -478,7 +478,8 @@ class QuoteCardsState(
     initialStyles: List<NotePaperStyle>,
     initialColors: List<NotePaperColor>,
     defaultStyle: NotePaperStyle,
-    defaultColor: NotePaperColor
+    defaultColor: NotePaperColor,
+    initialPositions: List<CaptureData.QuotePos> = emptyList()
 ) {
     val quotes = mutableStateListOf<String>().apply { addAll(initialQuotes) }
     val spans = mutableStateListOf<List<TextSpan>>().apply {
@@ -504,6 +505,14 @@ class QuoteCardsState(
         // Pad any missing per-quote colors so the list matches 1:1.
         while (size < quotes.size) add(defaultColor)
     }
+    // v7.20 — per-card placement for the mood board's floating quote boxes
+    // (editor board pixels). (-1,-1) = never dragged → renderers fall back
+    // to the deterministic slot for that index. Legacy entries lack the
+    // field → every card starts as a slot.
+    val positions = mutableStateListOf<CaptureData.QuotePos>().apply {
+        addAll(initialPositions)
+        while (size < quotes.size) add(CaptureData.QuotePos(-1f, -1f))
+    }
 
     /** Whether any card has real text — drives the format's canSave. */
     val hasContent: Boolean get() = quotes.any { it.isNotBlank() }
@@ -515,6 +524,8 @@ class QuoteCardsState(
         tilts.add(randomQuoteTilt())
         styles.add(style)
         colors.add(color)
+        // A fresh card starts at the deterministic slot until dragged.
+        positions.add(CaptureData.QuotePos(-1f, -1f))
     }
 
     fun removeCard(index: Int) {
@@ -524,6 +535,13 @@ class QuoteCardsState(
         if (index < tilts.size) tilts.removeAt(index)
         if (index < styles.size) styles.removeAt(index)
         if (index < colors.size) colors.removeAt(index)
+        if (index < positions.size) positions.removeAt(index)
+    }
+
+    /** v7.20 — the mood board commits a dragged card's new top-left here. */
+    fun setPosition(index: Int, x: Float, y: Float) {
+        if (index !in positions.indices) return
+        positions[index] = CaptureData.QuotePos(x, y)
     }
 
     fun setText(index: Int, text: String, cardSpans: List<TextSpan>) {
@@ -554,12 +572,16 @@ fun rememberQuoteCardsState(
     initialStyles: List<NotePaperStyle>,
     initialColors: List<NotePaperColor>,
     defaultStyle: NotePaperStyle,
-    defaultColor: NotePaperColor
+    defaultColor: NotePaperColor,
+    initialPositions: List<CaptureData.QuotePos> = emptyList()
 ): QuoteCardsState = remember(
     initialQuotes, initialSpans, initialTilts, initialStyles, initialColors,
-    defaultStyle, defaultColor
+    defaultStyle, defaultColor, initialPositions
 ) {
-    QuoteCardsState(initialQuotes, initialSpans, initialTilts, initialStyles, initialColors, defaultStyle, defaultColor)
+    QuoteCardsState(
+        initialQuotes, initialSpans, initialTilts, initialStyles, initialColors,
+        defaultStyle, defaultColor, initialPositions
+    )
 }
 
 /**

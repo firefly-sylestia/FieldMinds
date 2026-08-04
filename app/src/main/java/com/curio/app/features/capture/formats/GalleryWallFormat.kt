@@ -8,7 +8,6 @@ import com.curio.app.data.NotePaperStyle
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateRotation
@@ -43,7 +42,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -76,8 +74,6 @@ import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.components.moodBoardPainter
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.theme.CurioIcon
-import com.curio.app.ui.theme.PatrickHandFontFamily
-import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.pastelFillInk
 import kotlin.math.roundToInt
@@ -184,6 +180,8 @@ fun GalleryWallFormat(
         initialTilts = initialData?.quoteTilts.orEmpty(),
         initialStyles = initialData?.quoteStyles.orEmpty(),
         initialColors = initialData?.quoteColors.orEmpty(),
+        // v7.20 — per-card board positions (dragged in the editor).
+        initialPositions = initialData?.quotePositions.orEmpty(),
         defaultStyle = initialData?.captionStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED,
         defaultColor = initialData?.captionColor ?: NotePaperColor.CREAM
     )
@@ -207,7 +205,7 @@ fun GalleryWallFormat(
     LaunchedEffect(
         canSave, caption, tiles.toList(), captionStyle, captionColor, mood,
         quoteCards.quotes.toList(), quoteCards.spans.toList(), quoteCards.tilts.toList(),
-        quoteCards.styles.toList(), quoteCards.colors.toList()
+        quoteCards.styles.toList(), quoteCards.colors.toList(), quoteCards.positions.toList()
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -223,6 +221,9 @@ fun GalleryWallFormat(
                 quoteTilts = quoteCards.tilts.toList(),
                 quoteStyles = quoteCards.styles.toList(),
                 quoteColors = quoteCards.colors.toList(),
+                // v7.20 — dragged card positions (editor board px; (-1,-1)
+                // = never dragged → saved views use the deterministic slot).
+                quotePositions = quoteCards.positions.toList(),
                 // Legacy fallback — mirror the caption's style.
                 paperStyle = captionStyle,
                 mood = mood
@@ -584,29 +585,29 @@ private fun MoodBoardCanvas(
                     }
                 }
 
-                // ── Floating quote boxes (v7.19) — hand-placed paper notes
-                // floating INSIDE the board over the collage, in stable
-                // deterministic slots. Tap one to edit it (full rich-text
-                // editor, color tool hidden). Gated on the measured canvas
-                // size so the first layout frame (canvasWPx=0) can't stack
-                // the cards at the top-left corner.
+                // ── Floating quote boxes (v7.20) — hand-placed paper notes
+                // floating INSIDE the board over the collage. They start in
+                // stable deterministic slots but are now DRAGGABLE: a drag
+                // commits the card's position to the entry (persisted via
+                // quotePositions), and the saved view renders it exactly
+                // where it was left. Tap still opens the edit dialog (full
+                // rich-text editor, color tool hidden). Gated on the
+                // measured canvas size so the first layout frame
+                // (canvasWPx=0) can't stack the cards at the top-left.
                 if (quoteState != null && quoteState.quotes.isNotEmpty() &&
                     canvasWPx > 0f && canvasHPx > 0f
                 ) {
-                    quoteState.quotes.forEachIndexed { i, quote ->
-                        val slot = moodBoardQuoteSlot(i, canvasWPx, canvasHPx)
-                        FloatingQuoteCard(
-                            text = quote,
-                            style = quoteState.styles.getOrElse(i) { NotePaperStyle.RULED },
-                            color = quoteState.colors.getOrElse(i) { NotePaperColor.CREAM },
-                            rotation = quoteState.tilts.getOrElse(i) { (i * 4.2f % 8f) - 4f },
-                            x = slot.x,
-                            y = slot.y,
-                            w = slot.w,
-                            h = slot.h,
-                            onClick = { onEditQuote(i) }
-                        )
-                    }
+                    MoodBoardFloatingCards(
+                        quotes = quoteState.quotes.toList(),
+                        styles = quoteState.styles.toList(),
+                        colors = quoteState.colors.toList(),
+                        tilts = quoteState.tilts.toList(),
+                        positions = quoteState.positions.toList(),
+                        canvasWPx = canvasWPx,
+                        canvasHPx = canvasHPx,
+                        onEditCard = onEditQuote,
+                        onMoveCard = { i, x, y -> quoteState.setPosition(i, x, y) }
+                    )
                 }
 
                 // ── Floating "Add quote" chip — bottom-left, mirroring
@@ -1053,62 +1054,6 @@ private fun decodeImageBounds(context: Context, uri: Uri): Pair<Int, Int>? = run
 // index (a stable bottom rail), so revisits and the saved view look stable.
 // ═══════════════════════════════════════════════════════════════════════════
 
-/** One deterministic floating-card slot on a [boardW]×[boardH] board. */
-private data class MoodQuoteSlot(val x: Float, val y: Float, val w: Float, val h: Float)
-
-private fun moodBoardQuoteSlot(index: Int, boardW: Float, boardH: Float): MoodQuoteSlot {
-    val cols = 2
-    val col = index % cols
-    val row = index / cols
-    val slotW = boardW * 0.5f
-    val cardW = (slotW * 0.82f).coerceIn(120f, 240f)
-    val cardH = cardW * 0.62f
-    val x = col * slotW + (slotW - cardW) / 2f
-    val y = boardH * 0.56f + row * (cardH * 1.02f) + (if (col == 1) cardH * 0.45f else 0f)
-    return MoodQuoteSlot(x, y, cardW, cardH)
-}
-
-/** One floating paper quote card on the board — tilt + paper look, tappable. */
-@Composable
-private fun FloatingQuoteCard(
-    text: String,
-    style: NotePaperStyle,
-    color: NotePaperColor,
-    rotation: Float,
-    x: Float,
-    y: Float,
-    w: Float,
-    h: Float,
-    onClick: () -> Unit
-) {
-    val density = LocalDensity.current
-    Box(
-        modifier = Modifier
-            .offset { IntOffset(x.roundToInt(), y.roundToInt()) }
-            .zIndex(50f)
-            .size(
-                width = with(density) { w.toDp() },
-                height = with(density) { h.toDp() }
-            )
-            .rotate(rotation)
-            .clickable(onClick = onClick)
-    ) {
-        NotePaperCard(
-            style = style,
-            paperColor = color,
-            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Text(
-                text = text.ifBlank { "Quote…" },
-                style = MaterialTheme.typography.bodySmall.copy(fontFamily = PatrickHandFontFamily),
-                color = notePaperInk(color),
-                maxLines = 4,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
 
 /**
  * Full edit dialog for one floating mood-board quote box — reuses the

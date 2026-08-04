@@ -120,6 +120,7 @@ import com.curio.app.data.shortName
 import com.curio.app.features.capture.formats.FilledStar
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardFloatingCards
 import com.curio.app.ui.components.MoodBoardTiles
 import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
@@ -2260,6 +2261,24 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                                 )
                             }
                         )
+
+                        // ── Floating quote cards (v7.20) — the board's paper
+                        // notes float ON the saved collage too, at the exact
+                        // spots they were dragged to in the editor (scaled
+                        // with the same fit the tiles use). Never-dragged
+                        // cards fall back to their deterministic slot. The
+                        // Box above is offset by the center-crop, so the
+                        // cards live in the same board space as the tiles.
+                        MoodBoardFloatingCards(
+                            quotes = data.quotes.orEmpty(),
+                            styles = data.quoteStyles.orEmpty(),
+                            colors = data.quoteColors.orEmpty(),
+                            tilts = data.quoteTilts.orEmpty(),
+                            positions = data.quotePositions.orEmpty(),
+                            canvasWPx = boardW,
+                            canvasHPx = boardH,
+                            boardScale = boardScale
+                        )
                     }
                 } else {
                     // Fallback: show images in a grid if no tile data
@@ -2318,21 +2337,9 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             }
         }
 
-        // ── Quote cards — shared hand-placed paper notecards ─────────────
-        RenderQuoteCards(
-            // orEmpty() guards legacy Gson blobs where the quotes field is
-            // absent — missing Kotlin-default List fields decode to null, not
-            // empty (the mood-board crash).
-            quotes = data.quotes.orEmpty(),
-            spans = data.quoteSpans.orEmpty(),
-            tilts = data.quoteTilts.orEmpty(),
-            styles = data.quoteStyles.orEmpty(),
-            colors = data.quoteColors.orEmpty(),
-            fallbackStyle = data.notePaperStyle(),
-            entryId = entry.id,
-            topicName = entry.topic.name,
-            category = category
-        )
+        // v7.20 — the board's quote cards now float ON the collage (above),
+        // so the below-board section is gone for mood boards — the saved
+        // view mirrors the editor, where cards live on the board itself.
 
         if (boardExpanded) {
             ExpandedMoodBoardDialog(
@@ -2439,6 +2446,20 @@ private fun ExpandedMoodBoardDialog(
                                     viewH = dialogH
                                 )
                             }
+                        )
+
+                        // ── Floating quote cards (v7.20) — same layer as the
+                        // inline card: saved positions scaled by the fit, in
+                        // the already-centered Box's board space.
+                        MoodBoardFloatingCards(
+                            quotes = data.quotes.orEmpty(),
+                            styles = data.quoteStyles.orEmpty(),
+                            colors = data.quoteColors.orEmpty(),
+                            tilts = data.quoteTilts.orEmpty(),
+                            positions = data.quotePositions.orEmpty(),
+                            canvasWPx = boardW,
+                            canvasHPx = boardH,
+                            boardScale = fit.scale
                         )
                     }
 

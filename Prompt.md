@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Draggable floating quote cards on the mood board — positions saved in the entry and rendered on the saved board**
+
+### What was asked
+
+“Make the floating quote cards draggable on the board and save their positions in the entry”
+
+### What was done
+
+- **Data model (CaptureData.kt)** — `CaptureData.QuotePos(x, y)` + `GalleryWall.quotePositions: List<QuotePos> = emptyList()` (Gson-safe: legacy entries lack the field → null → every read site uses `.orEmpty()`).
+- **State (CaptureFormatComponents.kt)** — `QuoteCardsState` gained a `positions: mutableStateListOf<QuotePos>` padded 1:1 with quotes ((-1,-1) = never dragged) + `setPosition(index, x, y)`.
+- **Shared layer (MoodBoardZoom.kt)** — new `MoodBoardFloatingCards` + private `MoodBoardFloatingCard`: renders each card at its saved position mapped by `boardScale`/`offsetX`/`offsetY` (editor px → saved board px), falls back to the deterministic slot when (-1,-1), and is DRAGGABLE when `onMoveCard` is passed. Drag preview is card-local (`dragDelta`/`dragging` snapshot state) so per-frame drags recompose only that card; `rememberUpdatedState` keeps geometry/callbacks fresh for the never-restarting `pointerInput`; accumulated delta is clamped so the card sticks at the edges; commit happens on drag-end. Reviewer catch fixed: `onDragEnd` originally captured first-composition `renderX`/`renderY` (stale closure → snap-back bug) — now computes the commit from live `dragDelta` state inside the coroutine. Read-only saved views pass `onEditCard = null` → no `clickable` at all, so taps fall through to the board's own handlers (expanded-dialog tap-to-dismiss keeps working).
+- **Editor (GalleryWallFormat.kt)** — `rememberQuoteCardsState` now receives `initialPositions`; the `GalleryWall(...)` ctor + `LaunchedEffect` keys include `quotePositions`; the canvas block uses `MoodBoardFloatingCards(onEditCard = onEditQuote, onMoveCard = { i, x, y -> quoteCards.setPosition(i, x, y) })`; the private `moodBoardQuoteSlot`/`MoodQuoteSlot`/`FloatingQuoteCard` were deleted (moved to the shared file) and their now-unused imports cleaned.
+- **Saved views (EntryDetailScreen.kt)** — both the inline card and the expanded dialog overlay `MoodBoardFloatingCards` inside the already-centered tiles Box (boardScale = the fit scale, offset 0), so dragged cards render exactly where they were left, scaling with the collage. The below-board `RenderQuoteCards` section was removed for mood boards only (other formats keep it) — the saved view now mirrors the editor, where quotes live on the board.
+
+### Validation
+
+- check_braces balanced on all 5 files; code-reviewer pass — caught and fixed the stale-closure snap-back bug; confirmed Gson null-guards, pinch-vs-drag non-conflict (editor has no board pinch; saved cards are read-only), forEachIndexed index capture safety, and card-local recomposition scoping.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Floating quote boxes INSIDE the mood board (color tool hidden) + zoom redesign (whole screen magnifies to the tapped tile, then the image pops) + snappy minimize animation**
 
 ### What was asked
