@@ -312,7 +312,7 @@ private fun ProfileHero(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(gradient, RoundedCornerShape(28.dp))
+                .background(Brush.verticalGradient(gradient), RoundedCornerShape(28.dp))
                 .padding(20.dp)
         ) {
             // Watermark glyph — the lane you explore most (sparkles before
@@ -511,7 +511,7 @@ private fun SettingsNavCard(onOpenSettings: () -> Unit) {
                     modifier = Modifier
                         .size(46.dp)
                         .clip(RoundedCornerShape(15.dp))
-                        .background(CurioGradients.cardGradient(CurioColors.CoralBlush)),
+                        .background(Brush.verticalGradient(CurioGradients.cardGradient(CurioColors.CoralBlush))),
                     contentAlignment = Alignment.Center
                 ) {
                     CurioIcon(CurioIcons.Settings, null, tint = Color.White, size = 23.dp)

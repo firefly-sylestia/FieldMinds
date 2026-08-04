@@ -271,35 +271,30 @@ object CurioGradients {
      * warm cream pulled them off-family).
      */
     @Composable
-    fun cardGradient(accent: Color): Brush {
-        // v7.10 — Material style + "Material card blends": the card wears a
-        // subtle RADIAL gradient where the device's dynamic colors DOMINATE
-        // and the category accent is just a very faint whisper (a soft glow
-        // from the card's center). The device palette leads — the primary
-        // color is the base, secondary/tertiary add a whisper, and the
-        // category accent is blended at just ~10% strength so it reads as a
-        // gentle tint rather than a competing color band.
+    fun cardGradient(accent: Color): List<Color> {
+        // v7.8 — Material style + "Material card blends": mix the category
+        // accent with the device's dynamic colors (all three — primary,
+        // secondary, tertiary — so the device palette leads) through the
+        // same mixed-deck mechanism. Guarded: mixedDeckGradient recurses
+        // back into cardGradient for a single distinct accent, so only take
+        // this branch when the mix has at least two distinct colors.
         if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState
         ) {
             val scheme = MaterialTheme.colorScheme
             val pastel = AppPreferences.pastelColorsState
             val dark = isCurioDarkTheme()
-            // The base is the device's primary — the category accent is just
-            // a faint whisper blended in. Secondary/tertiary add subtle depth.
-            val accentHint = if (pastel) pastelAccent(accent, dark) else accent
-            val primary = if (pastel) pastelAccent(scheme.primary, dark) else scheme.primary
-            val secondary = if (pastel) pastelAccent(scheme.secondary, dark) else scheme.secondary
-            val tertiary = if (pastel) pastelAccent(scheme.tertiary, dark) else scheme.tertiary
-            // Radial glow: the center is the category accent at ~10% blended
-            // into the device primary, then it fades out to the device
-            // primary → secondary/tertiary as the edge. This way the card
-            // reads as a device-colored surface with a whisper of the
-            // category accent, not a competing rainbow ribbon.
-            val center = lerp(primary, accentHint, 0.10f)
-            val mid = lerp(primary, secondary, 0.15f)
-            val edge = lerp(mid, tertiary, 0.08f)
-            return Brush.radialGradient(listOf(center, mid, edge))
+            // Pastel-ize the device stops AND the accent stop (mixedDeckGradient
+            // only softens its internal seams — it assumes stops already arrive
+            // pastel). Idempotent for themed pastel accents; keeps raw-accent
+            // callers (e.g. wildcard coral) on-pastel too.
+            val accentStop = if (pastel) pastelAccent(accent, dark) else accent
+            val deviceStops = listOf(scheme.primary, scheme.secondary, scheme.tertiary)
+                .map { if (pastel) pastelAccent(it, dark) else it }
+            val accents = (listOf(accentStop) + deviceStops).distinct()
+            if (accents.size >= 2) {
+                return CurioMixedDeck.mixedDeckGradient(accents)
+            }
         }
         // End on the ACTIVE theme's background so cards always echo the
         // surface behind them — cream in light, midnight in dark, pure
@@ -314,8 +309,7 @@ object CurioGradients {
         } else {
             MaterialTheme.colorScheme.background
         }
-        val stops = listOf(start, lerp(start, end, 0.30f))
-        return Brush.verticalGradient(stops)
+        return listOf(start, lerp(start, end, 0.30f))
     }
 }
 
