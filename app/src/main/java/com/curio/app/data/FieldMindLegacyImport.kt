@@ -112,12 +112,13 @@ object FieldMindLegacyImport {
                             skipped++
                             return@forEach
                         }
-                        val images = archive.media[obs.id].orEmpty()
-                            .filter(::isSupportedImage)
-                            .mapIndexedNotNull { index, media ->
-                                copyMediaToApp(context, entryId, index, media)?.also { copiedImages++ }
-                            }
-                        CurioRepositoryHolder.repo.save(buildObservationEntry(obs, entryId, images))
+                        val media = archive.media[obs.id].orEmpty().filter(::isSupportedImage)
+                        val images = media.mapIndexedNotNull { index, item ->
+                            copyMediaToApp(context, entryId, index, item)?.also { copiedImages++ }
+                        }
+                        CurioRepositoryHolder.repo.save(
+                            buildObservationEntry(obs, entryId, images, media.map { it.caption })
+                        )
                         createdIds += entryId
                         savedObs++
                     }
@@ -128,12 +129,13 @@ object FieldMindLegacyImport {
                             skipped++
                             return@forEach
                         }
-                        val images = archive.noteMedia[note.id].orEmpty()
-                            .filter(::isSupportedImage)
-                            .mapIndexedNotNull { index, media ->
-                                copyMediaToApp(context, entryId, index, media)?.also { copiedImages++ }
-                            }
-                        CurioRepositoryHolder.repo.save(buildNoteEntry(note, entryId, images))
+                        val media = archive.noteMedia[note.id].orEmpty().filter(::isSupportedImage)
+                        val images = media.mapIndexedNotNull { index, item ->
+                            copyMediaToApp(context, entryId, index, item)?.also { copiedImages++ }
+                        }
+                        CurioRepositoryHolder.repo.save(
+                            buildNoteEntry(note, entryId, images, media.map { it.caption })
+                        )
                         createdIds += entryId
                         savedNotes++
                     }
@@ -340,7 +342,7 @@ object FieldMindLegacyImport {
                 scientificName = o.optString("scientificName"),
                 kingdom = o.optString("kingdom"),
                 phylum = o.optString("phylum"),
-                className = o.optString("classs"),
+                className = o.optString("class").ifBlank { o.optString("classs") },
                 order = o.optString("order"),
                 family = o.optString("family"),
                 genus = o.optString("genus"),
@@ -395,6 +397,15 @@ object FieldMindLegacyImport {
                 durationMs = o.optLong("durationMs", -1L).takeIf { it >= 0L },
                 startedAt = o.optLong("startedAt", -1L).takeIf { it >= 0L },
                 endedAt = o.optLong("endedAt", -1L).takeIf { it >= 0L },
+                changeObservedAt = o.optLong("changeObservedAt", -1L).takeIf { it >= 0L },
+                changeDurationMs = o.optLong("changeDurationMs", -1L).takeIf { it >= 0L },
+                weatherSnapshotAt = o.optLong("weatherSnapshotAt", -1L).takeIf { it >= 0L },
+                parentObservationId = o.optLong("parentObservationId", -1L).takeIf { it >= 0L },
+                followUpScheduledAt = o.optLong("followUpScheduledAt", -1L).takeIf { it >= 0L },
+                archivedAt = o.optLong("archivedAt", -1L).takeIf { it >= 0L },
+                deletedAt = o.optLong("deletedAt", -1L).takeIf { it >= 0L },
+                createdAt = o.optLong("createdAt", -1L).takeIf { it >= 0L },
+                updatedAt = o.optLong("updatedAt", -1L).takeIf { it >= 0L },
                 timeNote = o.optString("timeNote"),
                 status = o.optString("status"),
                 projectId = o.optLong("projectId", -1L).takeIf { it >= 0L },
@@ -428,6 +439,10 @@ object FieldMindLegacyImport {
                 status = o.optString("status"),
                 projectId = o.optLong("projectId", -1L).takeIf { it >= 0L },
                 sourceId = o.optLong("sourceId", -1L).takeIf { it >= 0L },
+                createdAt = o.optLong("createdAt", -1L).takeIf { it >= 0L },
+                updatedAt = o.optLong("updatedAt", -1L).takeIf { it >= 0L },
+                archivedAt = o.optLong("archivedAt", -1L).takeIf { it >= 0L },
+                deletedAt = o.optLong("deletedAt", -1L).takeIf { it >= 0L },
                 tags = splitTags(o.optString("tags"))
             )
             NoteRecord(
@@ -464,7 +479,12 @@ object FieldMindLegacyImport {
 
     // ── Entry building ──────────────────────────────────────────────────────
 
-    private fun buildObservationEntry(obs: ObsRecord, entryId: String, images: List<String>): CurioEntry {
+    private fun buildObservationEntry(
+        obs: ObsRecord,
+        entryId: String,
+        images: List<String>,
+        attachmentCaptions: List<String> = emptyList()
+    ): CurioEntry {
         val name = obs.subject.ifBlank { "Field observation" }
         return CurioEntry(
             id = entryId,
@@ -472,7 +492,10 @@ object FieldMindLegacyImport {
             format = CaptureFormat.FieldNotes,
             captureData = CaptureData.FieldNotes(
                 observed = obs.facts,
-                surprised = joinPreserved(obs.evidence, obs.metadata),
+                surprised = joinPreserved(
+                    obs.evidence,
+                    joinPreserved(obs.metadata, attachmentCaptionText(attachmentCaptions))
+                ),
                 learnNext = obs.context,
                 imageUris = images,
                 fieldMindMetadata = obs.fieldMindMetadata
@@ -489,14 +512,22 @@ object FieldMindLegacyImport {
         )
     }
 
-    private fun buildNoteEntry(note: NoteRecord, entryId: String, images: List<String>): CurioEntry {
+    private fun buildNoteEntry(
+        note: NoteRecord,
+        entryId: String,
+        images: List<String>,
+        attachmentCaptions: List<String> = emptyList()
+    ): CurioEntry {
         val name = note.title.ifBlank { "FieldMind note" }
         return CurioEntry(
             id = entryId,
             topic = legacyTopic(entryId, name, note.category),
             format = CaptureFormat.Marginalia,
             captureData = CaptureData.Marginalia(
-                journalText = joinPreserved(note.body, note.metadata),
+                journalText = joinPreserved(
+                    note.body,
+                    joinPreserved(note.metadata, attachmentCaptionText(attachmentCaptions))
+                ),
                 quotes = emptyList(),
                 imageUris = images,
                 fieldMindMetadata = note.fieldMindMetadata
@@ -554,24 +585,54 @@ object FieldMindLegacyImport {
     private fun joinPreserved(primary: String, metadata: String): String =
         listOf(primary, metadata).filter { it.isNotBlank() }.joinToString("\n\n")
 
+    private fun attachmentCaptionText(captions: List<String>): String =
+        captions.filter { it.isNotBlank() }
+            .joinToString("\n")
+            .let { if (it.isBlank()) "" else "Attachment captions:\n$it" }
+
     private fun observationMetadata(o: JSONObject): String = buildList {
         o.optString("date").takeIf { it.isNotBlank() }?.let { add("Date: $it") }
         o.optString("time").takeIf { it.isNotBlank() }?.let { add("Time: $it") }
         o.optDouble("latitude").takeIf { !it.isNaN() }?.let { add("Latitude: $it") }
         o.optDouble("longitude").takeIf { !it.isNaN() }?.let { add("Longitude: $it") }
-        o.optString("structuredDetailsJson").takeIf { it.isNotBlank() }?.let { add("Structured details: $it") }
-        o.optLong("durationMs", -1L).takeIf { it >= 0L }?.let { add("Duration: ${it}ms") }
+        o.optString("manualLocation").takeIf { it.isNotBlank() }?.let { add("Location: $it") }
+        o.optString("confidenceLevel").takeIf { it.isNotBlank() }?.let { add("Confidence: $it") }
+        o.optString("weatherCondition").takeIf { it.isNotBlank() }?.let { add("Weather: $it") }
+        o.optDouble("weatherTemperature").takeIf { !it.isNaN() }?.let { add("Temperature: $it°C") }
         o.optInt("weatherHumidity", -1).takeIf { it >= 0 }?.let { add("Humidity: $it%") }
         o.optDouble("weatherWindSpeed").takeIf { !it.isNaN() }?.let { add("Wind: $it") }
+        o.optInt("weatherCloudCover", -1).takeIf { it >= 0 }?.let { add("Cloud cover: $it%") }
         o.optDouble("weatherPressure").takeIf { !it.isNaN() }?.let { add("Pressure: $it") }
+        o.optLong("weatherSnapshotAt", -1L).takeIf { it >= 0L }?.let { add("Weather snapshot: $it") }
+        o.optLong("durationMs", -1L).takeIf { it >= 0L }?.let { add("Duration: ${it}ms") }
+        o.optLong("startedAt", -1L).takeIf { it >= 0L }?.let { add("Started at: $it") }
+        o.optLong("endedAt", -1L).takeIf { it >= 0L }?.let { add("Ended at: $it") }
+        o.optLong("changeObservedAt", -1L).takeIf { it >= 0L }?.let { add("Change observed at: $it") }
+        o.optLong("changeDurationMs", -1L).takeIf { it >= 0L }?.let { add("Change duration: ${it}ms") }
+        o.optString("timeNote").takeIf { it.isNotBlank() }?.let { add("Time note: $it") }
+        o.optString("structuredDetailsJson").takeIf { it.isNotBlank() }?.let { add("Structured details: $it") }
         o.optString("status").takeIf { it.isNotBlank() }?.let { add("Status: $it") }
         o.optLong("projectId", -1L).takeIf { it >= 0L }?.let { add("Project ID: $it") }
+        o.optLong("parentObservationId", -1L).takeIf { it >= 0L }?.let { add("Parent observation: $it") }
+        o.optLong("followUpScheduledAt", -1L).takeIf { it >= 0L }?.let { add("Follow-up scheduled: $it") }
+        o.optInt("qualityScore", -1).takeIf { it >= 0 }?.let { add("Quality: $it") }
+        o.optLong("createdAt", -1L).takeIf { it >= 0L }?.let { add("Created at: $it") }
+        o.optLong("updatedAt", -1L).takeIf { it >= 0L }?.let { add("Updated at: $it") }
+        o.optLong("archivedAt", -1L).takeIf { it >= 0L }?.let { add("Archived at: $it") }
+        o.optLong("deletedAt", -1L).takeIf { it >= 0L }?.let { add("Deleted at: $it") }
+        splitTags(o.optString("tags")).takeIf { it.isNotEmpty() }?.let { add("Tags: ${it.joinToString(", ")}") }
     }.joinToString("\n").let { if (it.isBlank()) "" else "FieldMind metadata:\n$it" }
 
     private fun noteMetadata(o: JSONObject): String = buildList {
+        o.optString("category").takeIf { it.isNotBlank() }?.let { add("Category: $it") }
+        splitTags(o.optString("tags")).takeIf { it.isNotEmpty() }?.let { add("Tags: ${it.joinToString(", ")}") }
         o.optString("status").takeIf { it.isNotBlank() }?.let { add("Status: $it") }
         o.optLong("projectId", -1L).takeIf { it >= 0L }?.let { add("Project ID: $it") }
         o.optLong("sourceId", -1L).takeIf { it >= 0L }?.let { add("Source ID: $it") }
+        o.optLong("createdAt", -1L).takeIf { it >= 0L }?.let { add("Created at: $it") }
+        o.optLong("updatedAt", -1L).takeIf { it >= 0L }?.let { add("Updated at: $it") }
+        o.optLong("archivedAt", -1L).takeIf { it >= 0L }?.let { add("Archived at: $it") }
+        o.optLong("deletedAt", -1L).takeIf { it >= 0L }?.let { add("Deleted at: $it") }
     }.joinToString("\n").let { if (it.isBlank()) "" else "FieldMind metadata:\n$it" }
 
     private fun extractJsonMedia(

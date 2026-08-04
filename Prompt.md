@@ -55,7 +55,32 @@ The detail hero seam needs 2–3 broad waves with smaller bumpy ripples inside t
 - Increased the white lip to 24dp, baseline to 30dp, and reserved 48dp of layout extent so the sheet cannot overlap the next content section.
 - Static brace and whitespace checks passed; Gradle/build commands remain prohibited by repository instructions.
 
-## Latest Request (IN PROGRESS)
+## Latest Request (COMPLETED)
+
+**Harden Curio backup restore and preserve FieldMind text/metadata**
+
+### What was requested
+
+- Investigate intermittent "Backup failed" / restore failures.
+- Audit whether the multiple FieldMind observation and note text fields are fully accounted for.
+
+### What was changed
+
+- Curio backup restore now rejects unreadable, missing, malformed, or invalid capture payloads before deleting current media or database rows, preventing a corrupt file from being treated as an empty restore.
+- Older backups remain compatible through collection/default normalization and legacy tag-column handling.
+- Backup export tolerates a stale or unreadable supplementary species catalog instead of failing an otherwise valid capture/settings backup.
+- FieldMind observation metadata now preserves timing/change/lifecycle fields, weather snapshot, parent/follow-up references, quality, and all exported text fields.
+- FieldMind note metadata now preserves category, tags, status, project/source references, and lifecycle timestamps.
+- Attachment captions are retained in the imported Curio text instead of being silently discarded.
+- The Curio FieldMind metadata card displays the expanded lifecycle and timing metadata with readable timestamps.
+
+### Validation
+
+- `scripts/check_braces.py` passed for all changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
 
 **Fix FieldMind observation screen CI compile errors**
 

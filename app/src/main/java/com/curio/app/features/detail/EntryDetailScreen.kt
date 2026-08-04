@@ -2938,6 +2938,10 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
 }
 
 @Composable
+private fun formatMetadataTimestamp(millis: Long): String =
+    SimpleDateFormat("MMM d, yyyy · h:mm a", Locale.getDefault()).format(Date(millis))
+
+@Composable
 private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCategory) {
     val species = metadata.species
     Surface(
@@ -2951,26 +2955,41 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                 CurioIcon(CurioIcons.ScienceGlyph, null, tint = category.themedAccent(), size = 22.dp)
                 Column(modifier = Modifier.weight(1f)) {
                     Text("FieldMind metadata", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
-                    Text(metadata.recordType.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(metadata.recordType.orEmpty().replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
             val rows = buildList {
-                fun addRow(label: String, value: String) { if (value.isNotBlank()) add(label to value) }
+                fun addRow(label: String, value: String?) { if (!value.isNullOrBlank()) add(label to value) }
                 addRow("Category", metadata.category)
                 addRow("Confidence", metadata.confidence)
-                addRow("Date", listOf(metadata.date, metadata.time).filter { it.isNotBlank() }.joinToString(" · "))
+                addRow("Date", listOf(metadata.date.orEmpty(), metadata.time.orEmpty()).filter { it.isNotBlank() }.joinToString(" · "))
                 addRow("Location", metadata.location)
                 if (metadata.latitude != null && metadata.longitude != null) addRow("Coordinates", "${metadata.latitude}, ${metadata.longitude}")
-                addRow("Weather", listOf(metadata.weather, metadata.weatherCondition).filter { it.isNotBlank() }.distinct().joinToString(" · "))
+                addRow("Weather", listOf(metadata.weather.orEmpty(), metadata.weatherCondition.orEmpty()).filter { it.isNotBlank() }.distinct().joinToString(" · "))
                 metadata.weatherTemperature?.let { addRow("Temperature", "${it}°") }
                 metadata.humidity?.let { addRow("Humidity", "$it%") }
                 metadata.windSpeed?.let { addRow("Wind", it.toString()) }
                 metadata.cloudCover?.let { addRow("Cloud cover", "$it%") }
                 metadata.pressure?.let { addRow("Pressure", it.toString()) }
                 metadata.durationMs?.let { addRow("Duration", formatElapsed(it)) }
+                metadata.startedAt?.let { addRow("Started", formatMetadataTimestamp(it)) }
+                metadata.endedAt?.let { addRow("Ended", formatMetadataTimestamp(it)) }
+                metadata.changeObservedAt?.let { addRow("Change observed", formatMetadataTimestamp(it)) }
+                metadata.changeDurationMs?.let { addRow("Change duration", formatElapsed(it)) }
+                metadata.weatherSnapshotAt?.let { addRow("Weather snapshot", formatMetadataTimestamp(it)) }
                 addRow("Status", metadata.status)
                 metadata.projectId?.let { addRow("Project", it.toString()) }
                 metadata.sourceId?.let { addRow("Source", it.toString()) }
+                metadata.parentObservationId?.let { addRow("Parent observation", it.toString()) }
+                metadata.followUpScheduledAt?.let { addRow("Follow-up", formatMetadataTimestamp(it)) }
+                metadata.archivedAt?.let { addRow("Archived", formatMetadataTimestamp(it)) }
+                metadata.deletedAt?.let { addRow("Deleted", formatMetadataTimestamp(it)) }
+                metadata.createdAt?.let { addRow("Created", formatMetadataTimestamp(it)) }
+                metadata.updatedAt?.let { addRow("Updated", formatMetadataTimestamp(it)) }
+                metadata.archivedAt?.let { addRow("Archived", formatMetadataTimestamp(it)) }
+                metadata.deletedAt?.let { addRow("Deleted", formatMetadataTimestamp(it)) }
+                metadata.createdAt?.let { addRow("Created", formatMetadataTimestamp(it)) }
+                metadata.updatedAt?.let { addRow("Updated", formatMetadataTimestamp(it)) }
                 metadata.qualityScore?.let { addRow("Quality", it.toString()) }
                 addRow("Time note", metadata.timeNote)
             }
@@ -2980,18 +2999,18 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                     Text(value, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
                 }
             }
-            if (metadata.tags.isNotEmpty()) {
+            if (!metadata.tags.isNullOrEmpty()) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    metadata.tags.forEach { tag ->
+                    metadata.tags.orEmpty().forEach { tag ->
                         Surface(shape = RoundedCornerShape(50), color = category.themedAccent().copy(alpha = 0.12f)) {
                             Text("#$tag", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
                         }
                     }
                 }
             }
-            if (metadata.structuredDetailsJson.isNotBlank()) {
+            if (!metadata.structuredDetailsJson.isNullOrBlank()) {
                 Text("Structured details", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = category.categoryInk())
-                Text(metadata.structuredDetailsJson, style = MaterialTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth())
+                Text(metadata.structuredDetailsJson.orEmpty(), style = MaterialTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth())
             }
             species?.let { item ->
                 Surface(shape = RoundedCornerShape(16.dp), color = category.themedAccent().copy(alpha = 0.10f), modifier = Modifier.fillMaxWidth()) {
@@ -3000,12 +3019,12 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                             CurioIcon(CurioIcons.ScienceGlyph, null, tint = category.themedAccent(), size = 18.dp)
                             Text("Species", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
                         }
-                        Text(item.commonName.ifBlank { item.scientificName.ifBlank { "Unknown species" } }, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-                        if (item.scientificName.isNotBlank()) Text(item.scientificName, style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        val taxonomy = listOf("Kingdom" to item.kingdom, "Phylum" to item.phylum, "Class" to item.className, "Order" to item.order, "Family" to item.family, "Genus" to item.genus, "Species" to item.species, "Conservation" to item.conservationStatus).filter { it.second.isNotBlank() }
+                        Text(item.commonName.orEmpty().ifBlank { item.scientificName.orEmpty().ifBlank { "Unknown species" } }, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+                        if (!item.scientificName.isNullOrBlank()) Text(item.scientificName.orEmpty(), style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        val taxonomy = listOf("Kingdom" to item.kingdom, "Phylum" to item.phylum, "Class" to item.className, "Order" to item.order, "Family" to item.family, "Genus" to item.genus, "Species" to item.species, "Conservation" to item.conservationStatus).map { it.first to it.second.orEmpty() }.filter { it.second.isNotBlank() }
                         taxonomy.forEach { (label, value) -> Text("$label · $value", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                         item.observationCount?.let { Text("Recorded observations · $it", style = MaterialTheme.typography.labelSmall) }
-                        if (item.notes.isNotBlank()) Text(item.notes, style = MaterialTheme.typography.bodySmall)
+                        if (!item.notes.isNullOrBlank()) Text(item.notes.orEmpty(), style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }

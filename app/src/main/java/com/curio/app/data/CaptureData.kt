@@ -116,6 +116,17 @@ data class FieldMindMetadata(
     val durationMs: Long? = null,
     val startedAt: Long? = null,
     val endedAt: Long? = null,
+    // Additional FieldMind observation timing/provenance fields. These stay
+    // optional so older Curio backups and native captures remain compatible.
+    val changeObservedAt: Long? = null,
+    val changeDurationMs: Long? = null,
+    val weatherSnapshotAt: Long? = null,
+    val parentObservationId: Long? = null,
+    val followUpScheduledAt: Long? = null,
+    val archivedAt: Long? = null,
+    val deletedAt: Long? = null,
+    val createdAt: Long? = null,
+    val updatedAt: Long? = null,
     val timeNote: String = "",
     val status: String = "",
     val projectId: Long? = null,

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.room.withTransaction
 import com.google.gson.Gson
+import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -153,7 +154,12 @@ object CurioBackupManager {
             preferences = prefs,
             audioFiles = audioFiles,
             imageFiles = imageFiles,
-            speciesCatalogJson = FieldMindLegacyImport.speciesCatalogJson(context)
+            // A stale/corrupt imported catalog must not make an otherwise
+            // complete Curio backup fail. The catalog is supplementary data;
+            // captures and preferences remain the backup's required payload.
+            speciesCatalogJson = runCatching {
+                FieldMindLegacyImport.speciesCatalogJson(context)
+            }.getOrNull()
         )
         // With audio bundled, the base64 JSON can be tens of MB — serialize
         // and write off the main thread (v2.1).
@@ -189,11 +195,80 @@ object CurioBackupManager {
             } ?: throw IllegalStateException("Could not open the backup file")
         }
 
-        val payload = Gson().fromJson(json, BackupPayload::class.java)
+        val root = runCatching { JSONObject(json) }
+            .getOrNull() ?: throw IllegalArgumentException("That file is not a readable Curio backup.")
+        val rawCaptures = root.optJSONArray("captures")
+            ?: throw IllegalArgumentException("This backup is missing its captures data")
+        require(root.optJSONObject("preferences") != null) {
+            "This backup is missing its settings data"
+        }
+        // Validate the records before deleting any current media or database
+        // rows. A truncated JSON file must never be treated as an empty
+        // backup and erase the user's existing Curio data.
+        for (index in 0 until rawCaptures.length()) {
+            val capture = rawCaptures.optJSONObject(index)
+                ?: throw IllegalArgumentException("Backup capture ${index + 1} is invalid")
+            require(capture.optString("id").isNotBlank()) {
+                "Backup capture ${index + 1} has no id"
+            }
+            require(capture.optString("format").isNotBlank()) {
+                "Backup capture ${index + 1} has no format"
+            }
+            require(capture.has("formatDataJson") && !capture.isNull("formatDataJson")) {
+                "Backup capture ${index + 1} has no capture data"
+            }
+        }
+        require(root.optString("format") == FORMAT_NAME) {
+            "That file isn't a Curio backup"
+        }
+        require(root.optInt("version", -1) >= 0) {
+            "This backup has no valid format version"
+        }
+        val payload = runCatching {
+            Gson().fromJson(json, BackupPayload::class.java)
+        }.getOrNull() ?: throw IllegalArgumentException("That file is not a readable Curio backup.")
         require(payload.format == FORMAT_NAME) { "That file isn't a Curio backup" }
         require(payload.version <= FORMAT_VERSION) {
             "This backup was made by a newer version of Curio"
         }
+
+        // Gson allocates older payloads without Kotlin constructor defaults.
+        // Treat omitted collections as empty so a v1–v3 backup cannot fail
+        // before the actual capture migration begins.
+        val payloadCaptures = payload.captures.orEmpty()
+        require(payloadCaptures.size == rawCaptures.length()) {
+            "This backup contains an invalid captures list"
+        }
+        // Fully validate and normalize every capture before touching current
+        // media or Room. Gson can bypass Kotlin constructor defaults, so this
+        // also protects older backups whose required strings were omitted.
+        val validatedCaptures = payloadCaptures.mapIndexed { index, capture ->
+            val id = capture.id.orEmpty()
+            val format = capture.format.orEmpty()
+            val formatDataJson = capture.formatDataJson.orEmpty()
+            require(id.isNotBlank()) { "Backup capture ${index + 1} has no id" }
+            require(format.isNotBlank()) { "Backup capture ${index + 1} has no format" }
+            require(formatDataJson.isNotBlank()) { "Backup capture ${index + 1} has no capture data" }
+            require(runCatching { CaptureFormat.valueOf(format) }.isSuccess) {
+                "Backup capture ${index + 1} has an unknown format"
+            }
+            runCatching { CaptureConverters.deserializeCaptureData(formatDataJson) }
+                .getOrElse {
+                    throw IllegalArgumentException("Backup capture ${index + 1} has invalid capture data")
+                }
+            capture.copy(
+                id = id,
+                topicId = capture.topicId.orEmpty(),
+                categoryId = capture.categoryId.orEmpty(),
+                topicName = capture.topicName.orEmpty(),
+                topicSubtype = capture.topicSubtype.orEmpty(),
+                topicTeaser = capture.topicTeaser.orEmpty(),
+                format = format,
+                formatDataJson = formatDataJson,
+                tagsJson = capture.tagsJson.orEmpty().ifBlank { "[]" }
+            )
+        }
+        val payloadPreferences = payload.preferences.orEmpty()
 
         // Restore audio (v2): wipe current recordings, then write each
         // bundled one to filesDir/audio/{id}.m4a and rewrite the capture's
@@ -205,9 +280,10 @@ object CurioBackupManager {
         val audioFiles = payload.audioFiles.orEmpty()
         val imageFiles = payload.imageFiles.orEmpty()
         val restoredCaptures = withContext(Dispatchers.IO) {
-            AudioStorageManager.deleteAllAudio(context)
-            ImageStorageManager.deleteAllImages(context)
-            payload.captures.map { capture ->
+            // Media is staged/overwritten only after the payload has been
+            // fully validated above. Do not wipe current media here: if a
+            // later Room insert fails, the existing files must remain usable.
+            validatedCaptures.map { capture ->
                 // Tags (v7.17): backups predating the tags column deserialize
                 // tagsJson to null (Gson Unsafe allocation skips constructor
                 // defaults) — normalize to the empty array so the NOT NULL
@@ -271,17 +347,23 @@ object CurioBackupManager {
             dao.clearAll()
             restoredCaptures.forEach { dao.insert(it) }
         }
+        // Restored audio/image paths are deterministic per capture and are
+        // overwritten as each bundled file is written. Leave unrelated files
+        // in place: deleting the live storage tree here would also delete the
+        // just-restored files. Orphan cleanup can be performed independently
+        // once a future storage index exists.
 
         payload.speciesCatalogJson?.let { speciesJson ->
             FieldMindLegacyImport.restoreSpeciesCatalog(context, speciesJson)
         }
 
-        payload.preferences.forEach { (name, entries) ->
+        payloadPreferences.forEach { (name, entries) ->
             val prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE)
             val editor = prefs.edit().clear()
-            entries.forEach { (key, entry) ->
-                val v = entry.value
-                when (entry.type) {
+            entries.orEmpty().forEach { (key, entry) ->
+                val safeEntry = entry ?: return@forEach
+                val v = safeEntry.value
+                when (safeEntry.type) {
                     TYPE_BOOLEAN -> (v as? Boolean)?.let { editor.putBoolean(key, it) }
                     TYPE_INT -> (v as? Number)?.let { editor.putInt(key, it.toInt()) }
                     TYPE_LONG -> (v as? Number)?.let { editor.putLong(key, it.toLong()) }
@@ -308,7 +390,7 @@ object CurioBackupManager {
         } else {
             DailyReminderScheduler.cancel(context)
         }
-        return RestoreResult(payload.captures.size, payload.preferences.size)
+        return RestoreResult(payloadCaptures.size, payloadPreferences.size)
     }
 
     /** Milliseconds of the last successful export, or 0 if never backed up. */
@@ -347,8 +429,8 @@ data class BackupPayload(
     val format: String,
     val version: Int,
     val exportedAtMillis: Long,
-    val captures: List<CaptureEntity>,
-    val preferences: Map<String, Map<String, PrefEntry>>,
+    val captures: List<CaptureEntity> = emptyList(),
+    val preferences: Map<String, Map<String, PrefEntry>> = emptyMap(),
     /** SoundBite audio bytes keyed by capture id (v2). Gson encodes ByteArray as base64. */
     val audioFiles: Map<String, ByteArray> = emptyMap(),
     /** Image-attachment bytes keyed by their original URI string (v3). */
