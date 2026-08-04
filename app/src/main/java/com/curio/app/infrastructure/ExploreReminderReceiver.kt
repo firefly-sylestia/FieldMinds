@@ -21,32 +21,42 @@ import com.curio.app.navigation.PendingEntryOpen
  * Two jobs for the explore-session flow:
  *  1. When the reminder alarm fires — a nudge that the recommended explore
  *     time is up: "Done exploring <topic>? If you are, write it down."
- *  2. When the "Done exploring" notification action is tapped — clears the
- *     session, cancels the alarm and stops the timer service.
+ *  2. When a notification action is tapped — "Done exploring" clears the
+ *     session and hands the user to the write-it-down page; "Cancel"
+ *     clears it quietly (no navigation). Both cancel the alarm and stop
+ *     the timer service.
  */
 class ExploreReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        if (intent?.action == ACTION_STOP) {
-            // "Done exploring" — tear the session down AND hand the user
-            // straight to the write-it-down entry page for the topic, so the
-            // action lands somewhere useful instead of just dismissing the
-            // shade. The NavHost opens the page with HOME anchored beneath
-            // it, so Back from the entry page returns to the app instead of
-            // exiting it.
-            val session = ExploreSessionStore.getActiveSession(context)
+        if (intent?.action == ACTION_STOP || intent?.action == ACTION_CANCEL) {
+            // Shared teardown: clear the session, cancel the reminder alarm
+            // and stop the timer service. The two actions differ only in
+            // whether the user is handed to the write-it-down page (only
+            // "Done exploring" needs the session for its navigation).
             ExploreSessionStore.clearSession(context)
             ExploreReminderScheduler.cancel(context)
             ExploreSessionService.stop(context)
-            if (session != null) {
-                val open = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP or
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    putExtra(PendingEntryOpen.EXTRA_CATEGORY_SLUG, session.categoryId.routeSlug)
-                    putExtra(PendingEntryOpen.EXTRA_TOPIC_NAME, session.topicName)
+            if (intent.action == ACTION_STOP) {
+                val session = ExploreSessionStore.getActiveSession(context)
+                if (session != null) {
+                    // "Done exploring" — hand the user straight to the
+                    // write-it-down entry page for the topic, so the action
+                    // lands somewhere useful instead of just dismissing the
+                    // shade. The NavHost opens the page with HOME anchored
+                    // beneath it, so Back from the entry page returns to the
+                    // app instead of exiting it.
+                    val open = Intent(context, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP or
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        putExtra(PendingEntryOpen.EXTRA_CATEGORY_SLUG, session.categoryId.routeSlug)
+                        putExtra(PendingEntryOpen.EXTRA_TOPIC_NAME, session.topicName)
+                    }
+                    context.startActivity(open)
                 }
-                context.startActivity(open)
             }
+            // ACTION_CANCEL: teardown only — no navigation. The notification
+            // disappears with the service stop, so the shade is clean.
             return
         }
 
@@ -95,6 +105,7 @@ class ExploreReminderReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_STOP = "com.curio.app.action.STOP_EXPLORE_SESSION"
+        const val ACTION_CANCEL = "com.curio.app.action.CANCEL_EXPLORE_SESSION"
         const val CHANNEL_ID = "explore_reminders"
         const val NOTIFICATION_ID = 4213
     }

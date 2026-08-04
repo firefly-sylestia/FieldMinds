@@ -164,12 +164,15 @@ fun SaveCaptureScreen(
     var savedEntryId by remember { mutableStateOf<String?>(null) }
     var showDiscardDialog by remember { mutableStateOf(false) }
 
-    // System back while editing → the same three-way leave dialog as the
-    // top-bar back button (save and switch / keep editing / discard).
-    // Gated on ANY drafted content, not just canSave, so optional-only
-    // drafts (rating without review, images without text…) also get the
-    // chance to save instead of silently exiting.
-    BackHandler(enabled = hasAnyDraft || saveInProgress) {
+    // v7.17 — back ALWAYS asks before leaving this capture page (both the
+    // system back and the top-bar back button): leaving drops you out of
+    // the capture flow, so a stray back should never silently discard
+    // drafted content. The dialog is context-aware — the full save dialog
+    // (save / keep editing / discard) when anything is drafted, a simple
+    // "Leave this capture?" confirm when the page is empty. While a save is
+    // in flight, back is ignored entirely (the save finishes and navigates
+    // on its own).
+    BackHandler(enabled = !saveInProgress) {
         showDiscardDialog = true
     }
 
@@ -274,8 +277,9 @@ fun SaveCaptureScreen(
         ) {
             CurioBackButton(
                 onClick = {
-                    if (hasAnyDraft || saveInProgress) showDiscardDialog = true
-                    else navController.popBackStack()
+                    // Always confirm before leaving (see BackHandler above) —
+                    // ignored only while a save is in flight.
+                    if (!saveInProgress) showDiscardDialog = true
                 }
             )
             Text(
@@ -458,35 +462,70 @@ fun SaveCaptureScreen(
     //    Shown when leaving with unsaved edits. Discard sits on the LEFT;
     //    the primary "Save and switch" action is the rightmost button.
     if (showDiscardDialog) {
-        AlertDialog(
-            onDismissRequest = { showDiscardDialog = false },
-            title = { Text("Unsaved changes") },
-            text = { Text("You have unsaved edits. Save them and switch away, or leave without saving.") },
-            dismissButton = {
-                TextButton(onClick = {
-                    showDiscardDialog = false
-                    navController.popBackStack()
-                }) {
-                    Text("Discard", color = MaterialTheme.colorScheme.error)
+        if (hasAnyDraft) {
+            // Drafted content → the full three-way leave dialog: save and
+            // switch / keep editing / discard (discard pops the page).
+            AlertDialog(
+                onDismissRequest = { showDiscardDialog = false },
+                title = { Text("Unsaved changes") },
+                text = { Text("You have unsaved edits. Save them and switch away, or leave without saving.") },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showDiscardDialog = false
+                        navController.popBackStack()
+                    }) {
+                        Text("Discard", color = MaterialTheme.colorScheme.error)
+                    }
+                },
+                confirmButton = {
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        TextButton(onClick = { showDiscardDialog = false }) {
+                            Text("Keep editing")
+                        }
+                        Button(
+                            onClick = {
+                                showDiscardDialog = false
+                                performSave()
+                            },
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Text("Save and switch")
+                        }
+                    }
                 }
-            },
-            confirmButton = {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            )
+        } else {
+            // Nothing newly drafted → a light confirm so a stray back
+            // doesn't silently drop the user out of the capture flow. The
+            // message is context-aware: edit mode preloads the saved entry
+            // (the page is full of content even with no NEW edits), while a
+            // fresh capture is genuinely empty.
+            AlertDialog(
+                onDismissRequest = { showDiscardDialog = false },
+                title = { Text(if (editEntryId != null) "Discard your edits?" else "Leave this capture?") },
+                text = {
+                    Text(
+                        if (editEntryId != null)
+                            "Your changes to this entry won't be saved. Leave without saving?"
+                        else
+                            "You haven't added anything yet. Leave the capture page?"
+                    )
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showDiscardDialog = false
+                        navController.popBackStack()
+                    }) {
+                        Text("Leave")
+                    }
+                },
+                confirmButton = {
                     TextButton(onClick = { showDiscardDialog = false }) {
                         Text("Keep editing")
                     }
-                    Button(
-                        onClick = {
-                            showDiscardDialog = false
-                            performSave()
-                        },
-                        shape = RoundedCornerShape(20.dp)
-                    ) {
-                        Text("Save and switch")
-                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     // ── Confetti + ember celebration ────────────────────────────────────

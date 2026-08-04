@@ -11,3 +11,5 @@
 • Coffee, red margin and the folded corner are now universal decorations — the same options work on both torn and ruled paper (cleaner picker, no duplicated choices)
 • Mood board v2: the small card now shows the MIDDLE of the collage in a tight cropper look, the watermark pattern is identical small vs expanded, and the double-tap zoom never hides behind the caption/quotes
 • Page-switch animations are smooth again — no more glitchy bounce when screens transition, and switching bottom tabs now crossfades cleanly instead of sliding
+• The explore timer notification now has a Cancel button — end the session quietly from the shade (Done exploring still jumps to write-it-down)
+• Leaving the save-entry page always asks first — save / keep editing / discard when you've added something, a simple confirm when it's empty

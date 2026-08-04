@@ -237,6 +237,21 @@ class ExploreSessionService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+    /**
+     * "Cancel" — ends the session QUIETLY: same teardown as Done-exploring
+     * (clear session, cancel reminder, stop the service) but NO navigation
+     * to the write-it-down page. The notification simply disappears with
+     * the service stop.
+     */
+    private fun cancelSessionIntent(): PendingIntent =
+        PendingIntent.getBroadcast(
+            this,
+            4203,
+            Intent(this, ExploreReminderReceiver::class.java)
+                .setAction(ExploreReminderReceiver.ACTION_CANCEL),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
     private fun togglePauseIntent(): PendingIntent =
         PendingIntent.getService(
             this,
@@ -298,7 +313,11 @@ class ExploreSessionService : Service() {
                 .setContentText("${formatElapsed(elapsed)} in")
                 .addAction(0, "Pause", togglePauseIntent())
         }
-        builder.addAction(0, "Done exploring", stopSessionIntent())
+        builder
+            .addAction(0, "Done exploring", stopSessionIntent())
+            // Plain cancel — end the session without jumping to the
+            // write-it-down page (Done exploring opens it).
+            .addAction(0, "Cancel", cancelSessionIntent())
         return builder.build()
     }
 
@@ -319,6 +338,7 @@ class ExploreSessionService : Service() {
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .addAction(0, "Done exploring", stopSessionIntent())
+            .addAction(0, "Cancel", cancelSessionIntent())
             .build()
     }
 

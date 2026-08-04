@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Explore notification Cancel button + always-on back dialog on the save-entry page**
+
+### What was asked
+
+“the notification is great now for the explore now but theres no cancel button and also add a back dialog when someone taps back in the save entry page. and suggest some feature upgradtes for the save entries”
+
+### What was done
+
+- **Notification Cancel (ExploreReminderReceiver.kt + ExploreSessionService.kt)** — “Done exploring” tore the session down AND navigated to the write-it-down page; there was no way to just stop. Added `ACTION_CANCEL` (broadcast, request code 4203): the receiver now shares one teardown for STOP/CANCEL (clear session + cancel reminder + stop service) and only STOP navigates (session read scoped into that branch per review). `cancelSessionIntent()` added; both the live and bubble-only notifications now carry a “Cancel” action (live = Pause/Resume + Done + Cancel = 3, Android’s max).
+- **Save-entry back dialog (SaveCaptureScreen.kt)** — back already asked when a draft existed; now it ALWAYS asks. `BackHandler(enabled = !saveInProgress)` and the top-bar back button both open the dialog (fully ignored mid-save, which also fixed the old mid-save dialog bug). Dialog is context-aware: drafted → three-way (Save and switch / Keep editing / Discard); nothing newly drafted → light confirm — “Discard your edits? / Your changes to this entry won’t be saved” in edit mode vs “Leave this capture? / You haven’t added anything yet” for a fresh capture (reviewer catch: edit mode preloads content, so the empty-page wording was wrong there).
+- **Feature suggestions for save entries** — presented to the user via ask_user (draft autosave, save-and-add-another, quick-share, voice transcription, location, tags, etc.) pending their pick.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on all 3 files (a mid-edit imbalance in the receiver was caught + fixed); code-reviewer pass — merged STOP/CANCEL branch structure sound, PendingIntent codes unique, 3-action limit OK, edit-mode dialog wording fixed per review, save-in-flight back fully ignored.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Page-switch animation glitch fixed — matched tween transitions (no spring overshoot/bounce) + bottom-nav tab switches now crossfade**
 
 ### What was asked
