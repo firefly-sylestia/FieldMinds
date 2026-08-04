@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Detail-page hero grid card (Date · Mood · Type) is now frosted WHITE glass instead of the blue gradient tint**
+
+### What was asked
+
+“the detail page grid card blue looks off can u make it more frosty with a white background.”
+
+### What was done
+
+- **Root cause** — the frosted pane behind the Date · Mood · Type grid card redrew the hero gradient's lower band (stops ≥ 0.70, i.e. the blue accent) and laid a `heroInk@0.16` tint on top; in pastel mode `heroInk` IS the deep blue accent, so the card read blue/off in every theme.
+- **Frosted white pane (EntryDetailScreen.kt)** — the blurred gradient pane stays (frost source: soft color blooms + blur 18dp, clipped to the 18dp radius), but the tint Box now paints `Color.White @ 0.78` — the card reads as genuine WHITE frosted glass with just a faint cool hint of the blurred backdrop behind it.
+- **Deep-slate card ink** — new `heroCardInk = Color(0xFF232A35)`; all three `FrostedSegment`s (Date / Mood / Type) + the two `VerticalDivider`s now use it (0.25 alpha), and the hairline rim dropped to `heroCardInk@0.20`. The hero's own title/glyph/scatter keep `heroInk` (white / onAccent) — unchanged.
+- **Docs:** Prompt.md. (Changelog 20260810 already covers the frosted-hero bar; this is a restyle of that same card — no new entry.)
+
+### Validation
+
+- All three segment inks verified (`ink = heroCardInk` ×3, no leftover `ink = heroInk` in the card), pane + tint + rim consistent, comment/docs updated. NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **CI build fixes — drop the coroutines 1.9-only onCancellation param + the pointer.consume import (compile on every resolved library version)**
 
 ### What was asked

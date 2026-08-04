@@ -204,6 +204,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     // theme-aware onAccent ink — deep accent in light, light twin in dark.
     // White when pastel mode is off, preserving the exact pre-pastel look.
     val heroInk = cat.onAccent()
+    // Frosted grid-card ink — the Date · Mood · Type card is frosted WHITE
+    // glass (see the pane below), so its content flips to a deep slate that
+    // reads on white in every theme — heroInk (white / accent) would vanish
+    // against the white pane.
+    val heroCardInk = Color(0xFF232A35)
     // v5.8 — saveable so rotation doesn't close the menu/dialog unexpectedly.
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
     var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
@@ -398,8 +403,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     // card's date, mood and type segments moved into the hero
                     // on a genuine frosted-glass pane: a translucent layer
                     // that samples the gradient behind the bar, BLURS it, and
-                    // renders it clipped to the card, with a soft tint and a
-                    // hairline rim so the card reads as frosted glass while
+                    // renders it clipped to the card, with a white frosted-
+                    // glass tint and a hairline rim so the card reads as
+                    // frosted glass while
                     // the crisp hero backdrop stays sharp around it. Mood
                     // shows only when the entry has one.
                     val heroMood = resolvedEntry.moodOf()
@@ -410,7 +416,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     Surface(
                         shape = RoundedCornerShape(18.dp),
                         color = Color.Transparent,
-                        border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
+                        border = BorderStroke(1.dp, heroCardInk.copy(alpha = 0.20f)),
                         shadowElevation = 0.dp
                     ) {
                         // The card's content Box: the Row below defines the
@@ -442,12 +448,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                     .blur(18.dp)
                                     .clip(RoundedCornerShape(18.dp))
                             )
-                            // Glass tint — keeps the ink-on-glass readable even
-                            // where the gradient lightens toward the wash.
+                            // Frosted white glass — the blurred color blooms
+                            // behind stay faintly visible through the pane,
+                            // but the card now reads as WHITE frosted glass
+                            // (no more blue tint) with deep-slate content.
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
-                                    .background(heroInk.copy(alpha = 0.16f))
+                                    .background(Color.White.copy(alpha = 0.78f))
                             )
                             Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
@@ -457,31 +465,31 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 icon = CurioIcons.CalendarToday,
                                 title = formatCapturedDate(resolvedEntry.capturedAtMillis),
                                 subtitle = "Date",
-                                ink = heroInk,
+                                ink = heroCardInk,
                                 modifier = Modifier.weight(1f)
                             )
                             VerticalDivider(
                                 modifier = Modifier.height(30.dp),
-                                color = heroInk.copy(alpha = 0.30f)
+                                color = heroCardInk.copy(alpha = 0.25f)
                             )
                             if (heroMood != null) {
                                 FrostedSegment(
                                     icon = heroMood.glyph,
                                     title = heroMood.label,
                                     subtitle = "Mood",
-                                    ink = heroInk,
+                                    ink = heroCardInk,
                                     modifier = Modifier.weight(1f)
                                 )
                                 VerticalDivider(
                                     modifier = Modifier.height(30.dp),
-                                    color = heroInk.copy(alpha = 0.30f)
+                                    color = heroCardInk.copy(alpha = 0.25f)
                                 )
                             }
                             FrostedSegment(
                                 icon = heroTypeGlyph,
                                 title = heroTypeLabel,
                                 subtitle = "Type",
-                                ink = heroInk,
+                                ink = heroCardInk,
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -854,8 +862,8 @@ private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
 
 /**
  * One half of the hero's frosted date/type bar — icon over value over a
- * "Date"/"Type" label, in the hero's ink ([ink], white by default) so it
- * reads on the gradient glass in every theme and pastel mode.
+ * "Date"/"Type" label, in the card's ink ([ink], deep slate from the hero)
+ * so it reads on the frosted white glass in every theme and pastel mode.
  */
 @Composable
 private fun FrostedSegment(
