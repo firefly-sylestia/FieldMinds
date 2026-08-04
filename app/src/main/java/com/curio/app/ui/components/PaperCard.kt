@@ -836,10 +836,10 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
 /**
  * A SOFT torn-paper edge — the hero's torn bottom seam. Unlike the sharp
  * multi-octave [TornPaperShape] (jagged rip), this edge is torn with broad,
- * ROUNDED waves: smooth value-noise displacement sampled at a fine step, so
- * the tear reads as a few big wavy rips (2.5–4.5 undulations across the
- * width, see [buildSoftTornPath]) instead of a near-straight line of fine
- * grain. The whole tear personality — wave count, depths, tilt and phase —
+ * ROUNDED waves: a continuous seeded wave field plus smooth value-noise
+ * displacement sampled at a fine step, so the tear keeps moving across the
+ * full width with 6–9 softened undulations instead of falling into a straight
+ * plateau. The whole tear personality — wave count, depths, tilt and phase —
  * is drawn from the tear seed, so every entry tears differently but the
  * same entry always tears identically.
  *
@@ -924,18 +924,22 @@ class SoftTornSheetShape(
  * seed, so their torn edges align pixel-perfect.
  *
  * The displacement is DOWN-BIASED (positive dips scaled to 55%): the tear
- * bites UP into the card in big rounded waves (white shows behind the card
+ * bites UP into the card in rounded waves (white shows behind the card
  * through the bites) while dipping only a modest amount below the nominal
- * edge — so the white under-sheet stays small and clean.
+ * edge — so the white under-sheet stays small and clean. The separate
+ * under-sheet bottom receives only a restrained seeded bump layer, keeping
+ * its white lip handmade without making it extend far below the hero.
  */
 private class SoftTearParams(private val seed: Int, density: Density) {
     private val rnd = Random(seed * 31 + 0x0BADC0DE)
-    // 2.5–4.5 BIG undulations across the full width (see [disp]: the noise
-    // is sampled against x/w, so the wave count is width-independent).
-    val waves = 2.5f + rnd.nextFloat() * 2f
-    val tooth = with(density) { (8f + rnd.nextFloat() * 4f).dp.toPx() }
-    val deep = with(density) { (4f + rnd.nextFloat() * 2f).dp.toPx() }
-    val micro = with(density) { 1.1.dp.toPx() }
+    // 6–9 rounded undulations across the full width (see [disp]: the noise
+    // is sampled against x/w, so the wave count is width-independent). The
+    // higher count prevents a long, visually straight span between only two
+    // or three broad waves while keeping each rise soft and paper-like.
+    val waves = 6f + rnd.nextFloat() * 3f
+    val tooth = with(density) { (6.5f + rnd.nextFloat() * 2.5f).dp.toPx() }
+    val deep = with(density) { (2.5f + rnd.nextFloat() * 1.5f).dp.toPx() }
+    val micro = with(density) { (1.3f + rnd.nextFloat() * 0.7f).dp.toPx() }
     // Seeded tilt — the whole edge drifts from -tilt/2 at the left to
     // +tilt/2 at the right, unique per entry but stable across reopens.
     val tilt = (rnd.nextFloat() - 0.5f) * 2f * with(density) { (3f + rnd.nextFloat() * 3f).dp.toPx() }
@@ -946,25 +950,31 @@ private class SoftTearParams(private val seed: Int, density: Density) {
      *  tooth, down-biased (see the class kdoc). */
     fun disp(x: Float, w: Float): Float {
         val slant = tilt * (x / w - 0.5f)
-        // `waves` lattice cells across the full width → a few big rounded
-        // waves, not a near-straight line of fine grain (the old fixed-
-        // frequency ripples read as ~14 tiny waves on a phone).
-        val main = (valueNoise(seed, x / w * waves, phase) - 0.5f) * 2f * tooth
-        // A slower second wander (~1–2 cells) for uneven slopes between waves.
-        val deepWave = (valueNoise(seed + 101, x / w * (waves * 0.4f), phase + 17f) - 0.5f) * 2f * deep
-        // Fine fiber tooth — keeps the edge softly fibrous instead of smooth.
+        // A signed sine keeps the edge continuously moving across the full
+        // width; seeded value-noise bends its peaks and troughs so it never
+        // reads like a repeated mechanical wave. This avoids long straight
+        // stretches that can appear when smooth noise sits on one lattice
+        // plateau.
+        val normalizedX = x / w
+        val waveAngle = normalizedX * waves * (Math.PI * 2.0).toFloat() + phase
+        val rhythmic = sin(waveAngle) * tooth * 0.58f
+        val main = (valueNoise(seed, normalizedX * waves, phase) - 0.5f) * 2f * tooth * 0.68f
+        // A slower second wander makes neighboring waves rise and fall at
+        // different depths, like a hand-torn edge rather than a sine strip.
+        val deepWave = (valueNoise(seed + 101, normalizedX * (waves * 0.42f), phase + 17f) - 0.5f) * 2f * deep
+        // Fine fiber tooth — deliberately visible but restrained, so the
+        // broad waviness remains the primary silhouette.
         val fiber = (valueNoise(seed + 71, x * 0.14f, 3.5f) - 0.5f) * 2f * micro
-        val raw = slant + main + deepWave + fiber
+        val raw = slant + rhythmic + main + deepWave + fiber
         return if (raw > 0f) raw * 0.55f else raw
     }
 }
 
 /**
- * Builds the soft torn outline: three straight edges + one softly torn
- * long edge. The torn edge is sampled every ~4dp along its length with a
- * SINGLE-octave smooth value-noise displacement (rounded, small amplitude
- * — the real-torn-paper feel), plus a whisper of a second octave for fine
- * fiber micro-texture. Pure function of (seed, size, density), cached per
+ * Builds the soft torn outline: three straight edges + one continuously
+ * moving, softly torn long edge. The torn edge is sampled every ~4dp along
+ * its length with a seeded wave field, smooth noise, and fine fiber
+ * micro-texture. Pure function of (seed, size, density), cached per
  * size by [SoftTornEdgeShape]. The tear is WAVY and unique per entry — see
  * [SoftTearParams].
  */
@@ -1024,8 +1034,20 @@ private fun buildSoftSheetPath(
     }
     val p = SoftTearParams(seed, density)
     val step = with(density) { 4.dp.toPx() }
+    // The sheet's lower edge is not a rigid ruler line: keep the shared tear
+    // profile for alignment, then add a restrained independent paper-bump
+    // layer so the white lip also has a handmade, uneven silhouette.
+    fun bottomBump(x: Float): Float {
+        val normalizedX = x / w
+        val broad = (valueNoise(seed + 211, normalizedX * (p.waves * 0.9f), p.phase + 41f) - 0.5f) *
+            2f * with(density) { 1.6.dp.toPx() }
+        val small = (valueNoise(seed + 257, x * 0.12f, 9.5f) - 0.5f) *
+            2f * with(density) { 0.8.dp.toPx() }
+        return broad + small
+    }
     // Clockwise: torn top (left→right), right side down to the lip, torn
-    // bottom running PARALLEL to the top (right→left), close up the left.
+    // bottom running PARALLEL to the top with small seeded bumps, close up
+    // the left.
     path.moveTo(0f, baselinePx + p.disp(0f, w))
     var x = step
     while (x < w) {
@@ -1033,13 +1055,13 @@ private fun buildSoftSheetPath(
         x += step
     }
     path.lineTo(w, baselinePx + p.disp(w, w))
-    path.lineTo(w, baselinePx + p.disp(w, w) + lipPx)
+    path.lineTo(w, baselinePx + p.disp(w, w) + lipPx + bottomBump(w))
     x = w - step
     while (x > 0f) {
-        path.lineTo(x, baselinePx + p.disp(x, w) + lipPx)
+        path.lineTo(x, baselinePx + p.disp(x, w) + lipPx + bottomBump(x))
         x -= step
     }
-    path.lineTo(0f, baselinePx + p.disp(0f, w) + lipPx)
+    path.lineTo(0f, baselinePx + p.disp(0f, w) + lipPx + bottomBump(0f))
     path.close()
     return path
 }

@@ -2,32 +2,34 @@
 
 ## Latest Request (COMPLETED)
 
-**Fix Kotlin compile failure from FieldMind importer KDoc**
+**Further detail hero tear refinement**
 
 ### What was requested
 
-Fix CI compilation errors reporting `Unresolved reference: FieldMindLegacyImport`, type inference failures in backup restore, and `FieldMindLegacyImport.kt:576:1 Syntax error: Unclosed comment`.
+Improve the detail hero's seeded wavy tear so it never reads as a straight line, has more than two or three broad waves, and gives the white under-layer a slightly bumpy handmade edge instead of a rigid plain line. Preserve the unique, deterministic look per saved entry and the existing small white reveal below the hero.
 
 ### What was done
 
-- Removed the `/*` wildcard path notation from the FieldMind importer KDoc (`media/observations/{id}/*` and `media/notes/{id}/*`). Kotlin interpreted those documentation strings as nested block-comment openers, causing the rest of the file—including the `FieldMindLegacyImport` object—to be parsed as a comment.
-- Replaced the documentation paths with `/<files>`. The unresolved references in `CurioBackupManager`, `CurioTopic`, and `SettingsScreen` were parser-cascade errors and require no caller changes.
+- Increased the seeded soft tear personality from 2.5–4.5 broad undulations to 6–9 across the full hero width.
+- Added a continuous signed wave field alongside seeded value noise, preventing long visually flat plateaus while keeping the edge irregular rather than mechanically repetitive.
+- Retained seeded tilt, depth variation, and fine fiber texture so each entry remains unique and stable across recompositions/reopens.
+- Added a restrained, independently seeded bump layer to the bottom edge of the white under-sheet. The sheet remains a small lip behind the hero, but its lower silhouette is no longer a rigid straight line.
+- Updated the tear documentation to match the new geometry.
 
 ### Validation
 
-- `scripts/check_braces.py` reported `BALANCED` for the importer and all affected callers.
+- `scripts/check_braces.py` passed for `PaperCard.kt` and `EntryDetailScreen.kt`.
 - `git diff --check` passed.
-- Confirmed the dangerous wildcard path strings are gone.
+- Code review found no compile/runtime blocker; deterministic alignment and the hero-only tear layering remain intact.
 - Local Gradle commands were not run because the repository's AGENTS.md explicitly forbids them; CI remains the compilation gate.
 
 ---
 
 ## Previous Request (COMPLETED)
 
-**Mood-board NaN crash, inline editor stability, and Explore overlay crash**
+**Fix Kotlin compile failure from FieldMind importer KDoc**
 
-- Sanitized mood-board geometry and stabilized the centered inline crop while dragging.
-- Fixed the Explore overlay lifecycle owner crash.
-- Pushed as commit `71a4465f`.
+- Removed dangerous `/*` wildcard path notation from importer KDoc.
+- Pushed as commit `95eb42cf`.
 
 ---
