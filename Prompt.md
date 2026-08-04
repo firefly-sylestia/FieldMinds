@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood board consistency — the small board, the full-screen expanded board and the watermark now show the SAME arrangement**
+
+### What was asked
+
+“the mood board have some bugs the arrangements shows differnt on small but when expanded it looks differnt and also the expanded watermark pattern looks differnt so fix it properly”
+
+### What was done
+
+- **Root cause 1 (arrangement)** — the inline saved board (EntryDetail `GalleryWallRender`) rendered `TileLayout`s at RAW stored pixel offsets in a `canvasW × 460dp` box (no fit, no centering), while the full-screen `ExpandedMoodBoardDialog` fit-scaled the collage (bounds → uniform scale → centered). The same saved layout therefore looked like a different arrangement when expanded (often clipped at the inline card's edges).
+- **Fix 1** — extracted a shared `fitTileLayout(tiles, viewW, viewH): FitTileLayout` helper (scaled tiles + board bounds + scale) and used it in BOTH the inline card and the expanded dialog, so the two views are provably identical by construction (can never drift apart again). The inline collage is now drawn fit-scaled + centered via the same `Modifier.offset` centering the dialog uses; the inline `MoodBoardZoomCanvas`/`MoodBoardZoomOverlay` now use the scaled geometry too (`widthPx = tile.widthPx * scale`).
+- **Root cause 2 (watermark)** — `buildMoodBoardPattern` placed glyphs at fixed 26..54dp sizes regardless of canvas, so on the tall full-screen board the glyphs read proportionally smaller (54dp on a ~915dp board vs 460dp inline) and the collage looked like a different pattern.
+- **Fix 2** — glyph sizes now scale with the canvas SHORT side anchored to the inline reference (`MoodBoardRefShortDp = 360f`, shared with the area-density reference): inline ≈ unchanged (1.0×), expanded ≈ 1.14× — the expanded watermark is now a proportional zoom of the inline one. Pattern determinism untouched (size doesn't consume RNG draws).
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on both files; code-reviewer pass — type-safety confirmed (Float math, IntOffset/roundToInt already imported), empty-tileLayouts path safe (guard + empty fit + null firstOrNull on zoom overlays), no clipping (scale ≤ min ratio guarantees boardW/H ≤ canvas), reviewer's DRY suggestion applied (shared `fitTileLayout`) and magic-360 named.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Spin deck now scales to fit any screen — continuous fit-scale so the shuffle deck shrinks together with the Category/Filter pills on short or narrow screens**
 
 ### What was asked

@@ -1820,6 +1820,54 @@ private fun MarginaliaSectionHeader(
     }
 }
 
+/**
+ * Result of fitting a saved tile collage into a viewport — the uniformly
+ * scaled tiles, the scaled board bounds and the scale. Shared by the inline
+ * card and the full-screen expanded dialog so BOTH always show the SAME
+ * arrangement (bounds → uniform scale → centered) and can never drift
+ * apart again (that drift is what made the small and expanded boards look
+ * different).
+ */
+private data class FitTileLayout(
+    val scaledTiles: List<CaptureData.TileLayout>,
+    val boardW: Float,
+    val boardH: Float,
+    val scale: Float
+)
+
+/**
+ * Fits [tiles] into a [viewW]×[viewH] viewport: computes the collage's
+ * bounds, scales uniformly to the largest size that fits both dimensions,
+ * and returns the scaled tiles + scaled board size + the scale. With no
+ * tiles it returns an empty fit (scale 1f) so callers can use the result
+ * unconditionally.
+ */
+private fun fitTileLayout(
+    tiles: List<CaptureData.TileLayout>,
+    viewW: Float,
+    viewH: Float
+): FitTileLayout {
+    if (tiles.isEmpty()) return FitTileLayout(emptyList(), 0f, 0f, 1f)
+    val maxX = tiles.maxOf { it.offsetXPx + it.widthPx }
+    val maxY = tiles.maxOf { it.offsetYPx + it.heightPx }
+    val scale = if (maxX > 0f && maxY > 0f) {
+        (viewW / maxX).coerceAtMost(viewH / maxY)
+    } else 1f
+    val scaledTiles = tiles.map {
+        CaptureData.TileLayout(
+            uri = it.uri,
+            offsetXPx = it.offsetXPx * scale,
+            offsetYPx = it.offsetYPx * scale,
+            rotationDeg = it.rotationDeg,
+            widthPx = it.widthPx * scale,
+            heightPx = it.heightPx * scale
+        )
+    }
+    val boardW = scaledTiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+    val boardH = scaledTiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+    return FitTileLayout(scaledTiles, boardW, boardH, scale)
+}
+
 @Composable
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
@@ -1880,6 +1928,19 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     modifier = Modifier.fillMaxSize()
                 )
 
+                // Fit the collage into the card the SAME way the expanded
+                // dialog does — bounds → uniform scale → centered — so the
+                // inline board and the full-screen board always show the
+                // IDENTICAL arrangement ([fitTileLayout] is shared by both).
+                // The old inline view drew tiles at raw stored pixels (no
+                // fit, no centering), so the same layout looked different —
+                // often clipped at the edges — once expanded.
+                val fit = fitTileLayout(data.tileLayouts, canvasW, canvasH)
+                val scaledTiles = fit.scaledTiles
+                val boardW = fit.boardW
+                val boardH = fit.boardH
+                val tileScale = fit.scale
+
                 if (data.tileLayouts.isNotEmpty()) {
                     // ── Edit button — reopen this board in the editor ──────
                     Surface(
@@ -1932,11 +1993,22 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     // editor). Board-level pinch zoom is only enabled in the
                     // expanded full-screen dialog, so a stray two-finger
                     // pinch on the inline card can't hijack the page scroll.
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    // The collage is fit-scaled + centered exactly like the
+                    // expanded dialog, so both views always match.
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .offset {
+                                IntOffset(
+                                    ((canvasW - boardW) / 2f).roundToInt(),
+                                    ((canvasH - boardH) / 2f).roundToInt()
+                                )
+                            }
+                    ) {
                         MoodBoardTiles(
-                            tiles = data.tileLayouts,
-                            canvasWPx = canvasW,
-                            canvasHPx = canvasH,
+                            tiles = scaledTiles,
+                            canvasWPx = boardW,
+                            canvasHPx = boardH,
                             onTileZoom = { uri, w, h, vw, vh -> zoomState.zoomIn(uri, w, h, vw, vh) }
                         )
                     }
@@ -1957,15 +2029,17 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     }
                 }
 
-                // ── In-place zoom overlays (no separate page) ────────────
+                // ── In-place zoom overlays (no separate page) — use the
+                // same fit-scaled geometry so the magnified board/tile
+                // matches what the collage shows. ─────────────────────────
                 if (zoomState.boardZoomed) {
                     MoodBoardZoomCanvas(
                         zoomState = zoomState,
                         animatedOffsetX = animatedOffsetX,
                         animatedOffsetY = animatedOffsetY,
-                        tiles = data.tileLayouts,
-                        canvasWPx = canvasW,
-                        canvasHPx = canvasH
+                        tiles = scaledTiles,
+                        canvasWPx = boardW,
+                        canvasHPx = boardH
                     )
                 }
                 data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
@@ -1974,8 +2048,8 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         animatedOffsetX = animatedOffsetX,
                         animatedOffsetY = animatedOffsetY,
                         tileUri = tile.uri,
-                        widthPx = tile.widthPx,
-                        heightPx = tile.heightPx
+                        widthPx = tile.widthPx * tileScale,
+                        heightPx = tile.heightPx * tileScale
                     )
                 }
             }
@@ -2094,28 +2168,17 @@ private fun ExpandedMoodBoardDialog(
                 val dialogH = with(density) { maxHeight.toPx() }
 
                 if (data.tileLayouts.isNotEmpty()) {
-                    // Board bounds from stored tile geometry
-                    val maxX = data.tileLayouts.maxOf { it.offsetXPx + it.widthPx }
-                    val maxY = data.tileLayouts.maxOf { it.offsetYPx + it.heightPx }
-                    val scale = if (maxX > 0f && maxY > 0f) {
-                        (dialogW / maxX).coerceAtMost(dialogH / maxY)
-                    } else 1f
-
-                    // Collage scaled to fit the dialog, centered; pinch on the
-                    // board magnifies it; double-tap a tile magnifies the
-                    // tile centered + straight.
-                    val scaledTiles = data.tileLayouts.map {
-                        CaptureData.TileLayout(
-                            uri = it.uri,
-                            offsetXPx = it.offsetXPx * scale,
-                            offsetYPx = it.offsetYPx * scale,
-                            rotationDeg = it.rotationDeg,
-                            widthPx = it.widthPx * scale,
-                            heightPx = it.heightPx * scale
-                        )
-                    }
-                    val boardW = maxX * scale
-                    val boardH = maxY * scale
+                    // Fit the collage to the dialog with the SAME shared
+                    // [fitTileLayout] the inline card uses — bounds →
+                    // uniform scale → centered — so the full-screen board
+                    // always matches the small card. Pinch on the board
+                    // magnifies it; double-tap a tile magnifies the tile
+                    // centered + straight.
+                    val fit = fitTileLayout(data.tileLayouts, dialogW, dialogH)
+                    val scaledTiles = fit.scaledTiles
+                    val boardW = fit.boardW
+                    val boardH = fit.boardH
+                    val scale = fit.scale
                     Box(
                         modifier = Modifier
                             .fillMaxSize()

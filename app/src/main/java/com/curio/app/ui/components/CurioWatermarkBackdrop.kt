@@ -371,7 +371,10 @@ private fun buildMoodBoardPattern(
     // scaling up to ~22 on the full-screen expanded board — the collage
     // keeps the same visual density instead of thinning out when the canvas
     // grows (the old 16 cap clipped the expanded count down).
-    val refArea = 360f * 460f
+    // The inline board's short side (~360dp) is the reference both the
+    // count-density and the glyph-size scaling are anchored to, so the
+    // full-screen expanded board renders the SAME collage, just bigger.
+    val refArea = MoodBoardRefShortDp * 460f
     val density = (area / refArea).coerceIn(1f, 3f)
     val targetCount = ((9 + Random(seed).nextInt(4)) * density).roundToInt().coerceIn(9, 22)
 
@@ -414,8 +417,17 @@ private fun buildMoodBoardPattern(
         // as a natural collage instead of uniform dots. The cap keeps the
         // radius <= the canvas margin, so even the biggest corner glyph
         // stays fully in bounds on any canvas width.
+        // v7.16 — glyph sizes scale with the canvas SHORT side (reference:
+        // the inline board's ~360dp), so the full-screen expanded board
+        // renders the SAME pattern as the inline card, just bigger. Fixed
+        // 26..54dp sizes made the expanded glyphs read proportionally
+        // smaller on the tall full-screen canvas (54dp on a ~915dp board
+        // vs 460dp inline), so the watermark looked like a different
+        // collage instead of a zoom.
         val t = ((e - 1f) / 5.0f).coerceIn(0f, 1f)
-        val sizeDp = (26f + t * 28f).coerceAtMost(2f * marginFrac * short) // 26..54 dp
+        val sizeScale = short / MoodBoardRefShortDp
+        val sizeDp = ((26f + t * 28f) * sizeScale)
+            .coerceAtMost(2f * marginFrac * short) // 26..54 dp at inline size
         if (!clearsAll(x, y, sizeDp / 2f)) return false
         val glyph = glyphs[rng.nextInt(glyphs.size)]
         placed.add(
@@ -474,6 +486,11 @@ private fun buildMoodBoardPattern(
     }
     return placed.map { it.placement }
 }
+
+/** Reference short side (dp) of the inline mood-board card — the size the
+ *  watermark count density and glyph sizes are normalized to, so any larger
+ *  canvas (the full-screen expanded board) renders the same pattern. */
+private const val MoodBoardRefShortDp = 360f
 
 /** One seeded glyph placement for [CurioMoodBoardBackdrop]. */
 private data class WatermarkPlacement(
