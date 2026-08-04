@@ -33,3 +33,4 @@
 • Mood-board zoom rework: double-tap zooms ONLY the tapped image (the board stays still) — it glides to the center along its arc, and pinch-to-zoom + one-finger pan now refine just that image
 • Fixed the mood-board PNG save/share compile errors
 • Double-tap the zoomed mood-board image to reset a pinch/pan back to the fit zoom (instead of closing)
+• Fix compile errors: frosted hero card layers now live in an explicit Box (matchParentSize + List gradient overload), restored the missing @Composable on the mood-board renderer

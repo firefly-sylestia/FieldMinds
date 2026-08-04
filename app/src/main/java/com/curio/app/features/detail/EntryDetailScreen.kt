@@ -413,37 +413,43 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
                         shadowElevation = 0.dp
                     ) {
-                        // ── Frosted pane: the HERO's actual gradient behind
-                        // this card (its lower glide band), blurred + clipped
-                        // to the card, sits BEHIND the crisp segments. The
-                        // card lives in the banner's lower zone — the 0.70→1
-                        // tail of the hero gradient — so sample only that band
-                        // instead of squeezing the full 0→1 ramp into the card
-                        // (which would read as a different gradient).
-                        val paneStops = heroStops
-                            .filter { it.first >= 0.70f }
-                            .map { it.second }
-                            .ifEmpty { listOf(heroStart, wash) }
-                        Box(
-                            modifier = Modifier
-                                .matchParentSize()
-                                // This Compose version's verticalGradient only
-                                // offers the vararg overload — spread the stops.
-                                .background(Brush.verticalGradient(*paneStops.toTypedArray()))
-                                // Frost: blurring the pane turns the gradient
-                                // into soft color blooms behind the content.
-                                // (RenderEffect on API 31+; software blur below.)
-                                .blur(18.dp)
-                                .clip(RoundedCornerShape(18.dp))
-                        )
-                        // Glass tint — keeps the ink-on-glass readable even
-                        // where the gradient lightens toward the wash.
-                        Box(
-                            modifier = Modifier
-                                .matchParentSize()
-                                .background(heroInk.copy(alpha = 0.16f))
-                        )
-                        Row(
+                        // The card's content Box: the Row below defines the
+                        // height, and the frosted pane + glass tint match its
+                        // size (BoxScope — the Surface content scope is NOT
+                        // BoxScope, so matchParentSize must live in an
+                        // explicit Box).
+                        Box(Modifier.fillMaxWidth()) {
+                            // ── Frosted pane: the HERO's actual gradient
+                            // behind this card (its lower glide band), blurred
+                            // + clipped to the card, sits BEHIND the crisp
+                            // segments. The card lives in the banner's lower
+                            // zone — the 0.70→1 tail of the hero gradient — so
+                            // sample only that band instead of squeezing the
+                            // full 0→1 ramp into the card (which would read as
+                            // a different gradient).
+                            val paneStops = heroStops
+                                .filter { it.first >= 0.70f }
+                                .map { it.second }
+                                .ifEmpty { listOf(heroStart, wash) }
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .background(Brush.verticalGradient(paneStops))
+                                    // Frost: blurring the pane turns the
+                                    // gradient into soft color blooms behind
+                                    // the content. (RenderEffect on API 31+;
+                                    // software blur below.)
+                                    .blur(18.dp)
+                                    .clip(RoundedCornerShape(18.dp))
+                            )
+                            // Glass tint — keeps the ink-on-glass readable even
+                            // where the gradient lightens toward the wash.
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .background(heroInk.copy(alpha = 0.16f))
+                            )
+                            Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -478,6 +484,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 ink = heroInk,
                                 modifier = Modifier.weight(1f)
                             )
+                        }
                         }
                     }
                 }
@@ -2210,7 +2217,6 @@ private fun fitTileLayout(
     return FitTileLayout(scaledTiles, boardW, boardH, scale)
 }
 
-@Composable
 /**
  * v7.23 — Save / Share the full mood board as a high-res PNG. Both actions
  * render the complete board off-screen (see [MoodBoardExport]) so the image
@@ -2317,6 +2323,7 @@ private fun MoodBoardExportActions(
     }
 }
 
+@Composable
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
