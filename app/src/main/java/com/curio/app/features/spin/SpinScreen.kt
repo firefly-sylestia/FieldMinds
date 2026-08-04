@@ -69,11 +69,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -1753,15 +1758,30 @@ private fun HeroTicketCard(
     val heroBorderOn = AppPreferences.heroBorderState
     val heroShadowOn = AppPreferences.heroShadowState
     val heroTitlesOn = AppPreferences.heroTitlesState
+    // v7.14 — the enhanced gradient is a top-left-lit DIAGONAL multi-stop
+    // sweep: a bright crown at the top-left catches light, the card's own
+    // stops run through the middle (the Material blend keeps its identity),
+    // and a deepened base at the bottom-right grounds the card. The classic
+    // two-stop fallback gains an HSL-smooth midpoint so the light→base
+    // glide never bands through muddy grey. Pastel light mode softens the
+    // crown so the pale fill doesn't wash to white.
+    val dark = isCurioDarkTheme()
+    val pastelLightHero = AppPreferences.pastelColorsState && !dark
     val ticketBrush = if (isMixed) {
         CurioMixedDeck.mixedDeckHeroBrush(gradient, wPx, hPx, mixSeed)
     } else if (heroGradientOn) {
-        // Enhanced top-lit gradient: a brighter crown at the top stop
-        // catches light and deepens toward the base, giving the hero
-        // card richer depth than the flat vertical gradient.
-        val crown = lerp(gradient.first(), Color.White, 0.12f)
-        val base = gradient.last()
-        Brush.verticalGradient(listOf(crown, base))
+        val crown = lerp(gradient.first(), Color.White, if (pastelLightHero) 0.08f else 0.16f)
+        val base = lerp(gradient.last(), Color.Black, 0.06f)
+        val stops = if (gradient.size > 2) {
+            listOf(crown) + gradient.drop(1).dropLast(1) + listOf(base)
+        } else {
+            CurioGradients.hslGradientStops(crown, base, 3)
+        }
+        Brush.linearGradient(
+            stops,
+            start = Offset(0f, 0f),
+            end = Offset(wPx, hPx)
+        )
     } else {
         Brush.verticalGradient(gradient)
     }
@@ -1856,24 +1876,54 @@ private fun HeroTicketCard(
                 ) else Modifier
             )
     ) {
-        // Inner clip layer centered in outer box — prevents sharp edges during scale
+        // Inner clip layer centered in outer box — prevents sharp edges
+        // during scale. The layered hero shadow sits OUTSIDE the clip (its
+        // modifier comes before .clip), so it renders around the card
+        // instead of being swallowed by the rounded clip.
         Box(
             modifier = Modifier
                 .size(w, h)
                 .align(Alignment.Center)
+                .then(
+                    if (heroShadowOn) {
+                        // v7.14 — layered soft shadow: a broad ambient glow
+                        // tinted with the card's accent (the card lifts with
+                        // a hint of its own hue) plus a tight, dark contact
+                        // shadow that grounds it — two distinct depths
+                        // instead of one flat elevation. clip=false keeps
+                        // both shadows visible around the rounded shape.
+                        Modifier
+                            .shadow(
+                                elevation = 16.dp,
+                                shape = RoundedCornerShape(30.dp),
+                                ambientColor = accent.copy(alpha = 0.30f),
+                                spotColor = accent.copy(alpha = 0.34f),
+                                clip = false
+                            )
+                            .shadow(
+                                elevation = 5.dp,
+                                shape = RoundedCornerShape(30.dp),
+                                ambientColor = Color.Black.copy(alpha = 0.28f),
+                                spotColor = Color.Black.copy(alpha = 0.40f),
+                                clip = false
+                            )
+                    } else Modifier
+                )
                 .clip(RoundedCornerShape(30.dp))
         ) {
             Surface(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
-                shadowElevation = if (heroShadowOn) 6.dp else 0.dp,
-                // Hero card border: OFF = subtle ink outline, ON = accent-
-                // tinted hairline that visibly frames the hero against the
-                // dimmer peek cards behind it.
-                border = if (heroBorderOn)
-                    BorderStroke(1.5.dp, accent.copy(alpha = 0.55f))
-                else
-                    BorderStroke(1.5.dp, ink.copy(alpha = 0.35f)),
+                // v7.14 — elevation shadow moved to the layered
+                // Modifier.shadow chain above; the Surface stays flat.
+                shadowElevation = 0.dp,
+                // Hero card border: OFF keeps the subtle ink outline. ON
+                // drops to a whisper hairline and the accent is drawn as a
+                // gradient rim-light inside (the drawBehind below).
+                border = BorderStroke(
+                    1.5.dp,
+                    ink.copy(alpha = if (heroBorderOn) 0.22f else 0.35f)
+                ),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
@@ -1882,6 +1932,48 @@ private fun HeroTicketCard(
                         .background(
                             ticketBrush,
                             RoundedCornerShape(30.dp)
+                        )
+                        .then(
+                            if (heroBorderOn) {
+                                // v7.14 — gradient rim-light border: the edge
+                                // catches light at the top (brightened ink) and
+                                // deepens to the accent at the bottom, drawn as
+                                // a 2dp stroke inside the clip; a 1dp black
+                                // bevel hairline just inside gives the card a
+                                // machined, premium edge.
+                                Modifier.drawBehind {
+                                    val borderW = 2.dp.toPx()
+                                    val radius = 30.dp.toPx() - borderW / 2f
+                                    drawRoundRect(
+                                        brush = Brush.verticalGradient(
+                                            listOf(
+                                                lerp(ink, Color.White, if (dark) 0.30f else 0.45f),
+                                                lerp(ink, accent, 0.30f)
+                                            )
+                                        ),
+                                        topLeft = Offset(borderW / 2f, borderW / 2f),
+                                        size = Size(size.width - borderW, size.height - borderW),
+                                        cornerRadius = CornerRadius(radius, radius),
+                                        style = Stroke(width = borderW)
+                                    )
+                                    val innerW = 1.dp.toPx()
+                                    val inset = borderW + innerW
+                                    drawRoundRect(
+                                        // Bevel hairline: dark in light mode;
+                                        // in dark mode a black line would
+                                        // vanish on the dark fill, so it flips
+                                        // to a faint light stroke instead.
+                                        color = if (dark)
+                                            lerp(ink, Color.White, 0.60f).copy(alpha = 0.10f)
+                                        else
+                                            Color.Black.copy(alpha = 0.07f),
+                                        topLeft = Offset(inset, inset),
+                                        size = Size(size.width - 2f * inset, size.height - 2f * inset),
+                                        cornerRadius = CornerRadius(radius - innerW, radius - innerW),
+                                        style = Stroke(width = innerW)
+                                    )
+                                }
+                            } else Modifier
                         )
                 ) {
                     // Gradient card — no side rule needed
@@ -1952,10 +2044,17 @@ private fun HeroTicketCard(
                         Column {
                             Text(
                                 text = currentTopic?.name ?: "Ready when you are",
+                                // v7.14 — enhanced typography: a true display
+                                // treatment — ExtraBold geom at 34sp with
+                                // negative tracking and a tight line height,
+                                // so the topic reads as an editorial headline
+                                // instead of a stock M3 headline.
                                 style = if (heroTitlesOn)
-                                    MaterialTheme.typography.headlineLarge.copy(
+                                    MaterialTheme.typography.displaySmall.copy(
+                                        fontSize = 34.sp,
                                         fontWeight = FontWeight.ExtraBold,
-                                        lineHeight = 36.sp
+                                        lineHeight = 38.sp,
+                                        letterSpacing = (-0.5).sp
                                     )
                                 else
                                     MaterialTheme.typography.headlineMedium.copy(
@@ -1963,7 +2062,6 @@ private fun HeroTicketCard(
                                         lineHeight = 34.sp
                                     ),
                                 color = ink,
-
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -1971,15 +2069,31 @@ private fun HeroTicketCard(
                                 Spacer(Modifier.height(10.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                     currentTopic.tags.take(2).forEach { tag ->
+                                        // v7.14 — enhanced tags: accent-tinted
+                                        // pills with tracked bold labels, so the
+                                        // genre/era chips read as designed
+                                        // details rather than flat text plates.
                                         Surface(
                                             shape = RoundedCornerShape(50),
-                                color = ink.copy(alpha = 0.18f)
-                            ) {
-                                Text(
-                                    text = tag,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = ink,
-                                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                            color = if (heroTitlesOn)
+                                                lerp(ink, accent, 0.30f).copy(alpha = 0.22f)
+                                            else
+                                                ink.copy(alpha = 0.18f)
+                                        ) {
+                                            Text(
+                                                text = tag,
+                                                style = if (heroTitlesOn)
+                                                    MaterialTheme.typography.labelMedium.copy(
+                                                        fontWeight = FontWeight.Bold,
+                                                        letterSpacing = 0.3.sp
+                                                    )
+                                                else
+                                                    MaterialTheme.typography.labelSmall,
+                                                color = ink,
+                                                modifier = Modifier.padding(
+                                                    horizontal = if (heroTitlesOn) 12.dp else 10.dp,
+                                                    vertical = if (heroTitlesOn) 5.dp else 4.dp
+                                                )
                                             )
                                         }
                                     }
@@ -1989,11 +2103,16 @@ private fun HeroTicketCard(
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = currentTopic.teaser,
+                                    // v7.14 — enhanced teaser: one step up in
+                                    // size and line height with a brighter ink.
                                     style = if (heroTitlesOn)
-                                        MaterialTheme.typography.bodyMedium
+                                        MaterialTheme.typography.bodyMedium.copy(
+                                            fontSize = 15.sp,
+                                            lineHeight = 22.sp
+                                        )
                                     else
                                         MaterialTheme.typography.bodySmall,
-                                    color = ink.copy(alpha = 0.88f),
+                                    color = ink.copy(alpha = if (heroTitlesOn) 0.92f else 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -2321,13 +2440,17 @@ private fun SpinButton(
                     .fillMaxSize()
                     .then(
                         if (AppPreferences.threeDButtonState) {
+                            // v7.14 — the pastel-light button already wears an
+                            // airy near-white accent, so the old 22% white
+                            // highlight turned the top into a white cap; drop
+                            // it to a soft 12% in pastel light mode so the
+                            // sphere keeps a hint of shine without washing
+                            // out, while darker fills keep their stronger cap.
+                            val pastelLight = AppPreferences.pastelColorsState && !isCurioDarkTheme()
+                            val highlight = lerp(tint, Color.White, if (pastelLight) 0.12f else 0.22f)
                             Modifier.background(
                                 Brush.radialGradient(
-                                    listOf(
-                                        lerp(tint, Color.White, 0.22f),
-                                        tint,
-                                        lerp(tint, Color.Black, 0.07f)
-                                    ),
+                                    listOf(highlight, tint, lerp(tint, Color.Black, 0.07f)),
                                     center = Offset(0.42f, 0.33f),
                                     radius = 1.15f
                                 ),

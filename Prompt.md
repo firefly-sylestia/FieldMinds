@@ -2,6 +2,31 @@
 
 ## Latest Request (COMPLETED)
 
+**Pastel spin button de-whitened + full redesign of the 4 main-card enhancement toggles (gradient / border / shadow / typography)**
+
+### What was asked
+
+“the pastel color buttom white needs to be a little less and also fully redesign the main card enchnaced gradinets accent border soft shadow enhanced typography options witout modifying the current one. fully implemet those properly with my quality expectations meet and make them work. no question ask do your best thinking and do reseracch.”
+
+### What was done
+
+- **Pastel spin button (SpinScreen.kt `SpinButton`)** — the 3D radial highlight `lerp(tint, White, 0.22)` capped the airy pastel-light fill with white; dropped to 0.12 in pastel light (darker fills keep 0.22) so the sphere keeps a hint of shine without the white cap.
+- **Enhanced gradient** — now a top-left-lit DIAGONAL multi-stop sweep: bright crown (16% white, 8% in pastel light), the card's own stops preserved through the middle (Material blend keeps its identity), deepened base (6% black) for grounding. The classic 2-stop fallback gains an HSL-smooth midpoint (`hslGradientStops`) so the light→base glide never bands through grey.
+- **Accent border** — now a drawn gradient rim-light: 2dp stroke, bright ink at the top edge → accent at the bottom, plus a 1dp bevel hairline (dark in light mode, light stroke in dark mode so it doesn't vanish). Base Surface border drops to a whisper when ON.
+- **Soft shadow** — moved OFF the Surface elevation (which was inside the clip Box and effectively swallowed) to a layered `Modifier.shadow` chain placed BEFORE the clip so it actually renders: a broad 16dp accent-tinted ambient glow + a tight 5dp dark contact shadow — two distinct depths.
+- **Enhanced typography** — editorial display treatment: 34sp ExtraBold geom title with -0.5sp tracking (displaySmall-based), accent-tinted tag pills with tracked bold labels, richer teaser (15sp/22, brighter ink).
+- All four toggles remain separate Settings options, default OFF — the current look is byte-for-byte unchanged when off. Research: web research on premium card design (Material 3, iOS-style layered shadows, display type tracking).
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced; code-reviewer pass — confirmed the shadow-before-clip ordering is what makes the shadow render (the old Surface elevation was clipped), composable contexts clean, no dead imports, default look preserved. Reviewer catches applied: pastel highlight 0.08→0.12, dark-mode bevel flipped to a light stroke.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Material card blend rework — per-category gradient variety, material colors lead, blend extended to peeks + detail hero, dark mode**
 
 ### What was asked
