@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Hero glassmorphism correction — frosted blur on the grid card only (not the whole backdrop), glassy topic title**
+
+### What was asked
+
+“You did wrong here — I didn't ask you to make the background frosted blurry, change it back. I asked you to make the GRID CARD background frosted blur and make the topic text glassy (the text font).”
+
+### What was done
+
+- **Whole-hero blur reverted (EntryDetailScreen.kt)** — the previous change blurred the ENTIRE hero banner backdrop (`Modifier.blur(14.dp)` on the gradient + symbol-scatter Box). Removed: the hero backdrop is a crisp gradient + sharp `HeroSymbolScatter` again. The only remaining `.blur()` calls in the file are the glass-title aura copy and the new card pane — both intentional.
+- **Frosted grid card (Date · Mood · Type)** — the card now renders on a genuine frosted pane: a `matchParentSize` Box behind the crisp segments redraws the HERO gradient's lower band (stops ≥ 0.70 — the card lives in the banner's lower glide zone, so sampling the tail matches what's actually behind it; fallback `heroStart`/`wash`), blurred 18dp + clipped to the card's 18dp radius, with a `heroInk` 16% alpha glass tint on top for ink-on-glass readability. Surface stays transparent (children draw), 1dp `heroInk@0.30` hairline rim kept. Modifier order background→blur→clip confirmed correct.
+- **Glass title kept** — the two-layer treatment (blurred translucent aura copy behind the crisp copy + soft shadows) is exactly the “glassy text” look the user wanted and was NOT reverted.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces BALANCED; code-reviewer pass — 0.70 band sampling correct for the card's position, blur-before-clip order right, transparent Surface fine (children draw), contrast floor acceptable (0.30 border + 16% tint; nudge lever noted if a light pastel wash reads weak).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board editor matches the saved card + high-res PNG save/share export**
 
 ### What was asked

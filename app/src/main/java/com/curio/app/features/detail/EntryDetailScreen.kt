@@ -316,9 +316,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight)
         ) {
-            // ── Frosted backdrop — the gradient + symbol scatter blurred
-            // together, so the banner reads as frosted glass and the crisp
-            // content (glyph, glass title, frosted bar) floats above it.
+            // ── Hero backdrop — the crisp gradient + symbol scatter. The
+            // banner itself is NOT blurred (the frosted look belongs to the
+            // date / mood / type grid card below, which carries its own
+            // blurred glass pane); the glyph scatter stays sharp so it reads
+            // as a deliberate patterned backdrop.
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -326,11 +328,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     // vararg overload — the named `colorStops` List form
                     // doesn't exist, so spread the sampled stops as an array.
                     .background(Brush.verticalGradient(*heroStops.toTypedArray()))
-                    // Glass frost: blurring the backdrop turns the symbol
-                    // scatter into soft color blooms behind the content.
-                    // (Renders via RenderEffect on API 31+; older devices
-                    // fall back to a slower software blur.)
-                    .blur(14.dp)
             ) {
                 // ── Hero watermark — a scatter of the entry's category-family
                 //     symbols (instruments for Music, camera kit for Movies,
@@ -398,10 +395,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     }
                     Spacer(Modifier.height(18.dp))
 
-                    // ── Frosted date / mood / type bar — the meta card's
-                    // date, mood and type segments moved into the hero, on
-                    // translucent glass so the gradient glows through behind
-                    // them. Mood shows only when the entry has one.
+                    // ── Frosted date / mood / type grid card — the meta
+                    // card's date, mood and type segments moved into the hero
+                    // on a genuine frosted-glass pane: a translucent layer
+                    // that samples the gradient behind the bar, BLURS it, and
+                    // renders it clipped to the card, with a soft tint and a
+                    // hairline rim so the card reads as frosted glass while
+                    // the crisp hero backdrop stays sharp around it. Mood
+                    // shows only when the entry has one.
                     val heroMood = resolvedEntry.moodOf()
                     val heroTypeLabel = if (resolvedEntry.captureData is CaptureData.Portfolio)
                         "Portfolio" else resolvedEntry.format.shortName
@@ -409,12 +410,40 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         CurioIcons.Inventory2 else formatGlyph(resolvedEntry.format)
                     Surface(
                         shape = RoundedCornerShape(18.dp),
-                        // 0.18 fill keeps the ink-on-glass readable even where
-                        // the gradient lightens toward the theme background.
-                        color = heroInk.copy(alpha = 0.18f),
+                        color = Color.Transparent,
                         border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
                         shadowElevation = 0.dp
                     ) {
+                        // ── Frosted pane: the HERO's actual gradient behind
+                        // this card (its lower glide band), blurred + clipped
+                        // to the card, sits BEHIND the crisp segments. The
+                        // card lives in the banner's lower zone — the 0.70→1
+                        // tail of the hero gradient — so sample only that band
+                        // instead of squeezing the full 0→1 ramp into the card
+                        // (which would read as a different gradient).
+                        val paneStops = heroStops
+                            .filter { it.first >= 0.70f }
+                            .map { it.second }
+                            .ifEmpty { listOf(heroStart, wash) }
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                // This Compose version's verticalGradient only
+                                // offers the vararg overload — spread the stops.
+                                .background(Brush.verticalGradient(*paneStops.toTypedArray()))
+                                // Frost: blurring the pane turns the gradient
+                                // into soft color blooms behind the content.
+                                // (RenderEffect on API 31+; software blur below.)
+                                .blur(18.dp)
+                                .clip(RoundedCornerShape(18.dp))
+                        )
+                        // Glass tint — keeps the ink-on-glass readable even
+                        // where the gradient lightens toward the wash.
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .background(heroInk.copy(alpha = 0.16f))
+                        )
                         Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
                             verticalAlignment = Alignment.CenterVertically
