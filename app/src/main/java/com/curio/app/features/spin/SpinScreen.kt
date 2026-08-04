@@ -1919,16 +1919,6 @@ private fun HeroTicketCard(
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
-                            if (landed) {
-                                Surface(shape = CircleShape, color = Color.White) {
-                                    CurioIcon(
-                                        CurioIcons.Check, null,
-                                        tint = ink,
-                                        size = 16.dp,
-                                        modifier = Modifier.padding(3.dp)
-                                    )
-                                }
-                            }
                         }
 
                         // Name + tags + teaser — v6.6: reels with the deck.
