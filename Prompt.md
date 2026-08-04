@@ -197,3 +197,24 @@ The detail hero seam needs 2–3 broad waves with smaller bumpy ripples inside t
 **Fix FieldMind observation screen CI compile errors**
 
 CI reported `rememberSaveable` as unresolved in `FieldMindObservationScreen.kt`, causing cascading errors around the metadata constructor, `takeIf`, and button negation. The screen imported it from the wrong Compose package; the correct import is `androidx.compose.runtime.saveable.rememberSaveable`.
+
+## Latest Request (COMPLETED)
+
+**Fix Explore overlay crash loop after clearing app data**
+
+The supplied log identified the exact crash when the overlay bubble was first attached:
+`IllegalStateException: Composed into the View which doesn't propagate ViewTreeSavedStateRegistryOwner!` from `ComposeView.resolveComposeViewContext()`.
+
+### What changed
+
+- Added a service-owned `SavedStateRegistryOwner` alongside the existing lifecycle and `ViewModelStore` owners for the `TYPE_APPLICATION_OVERLAY` ComposeView.
+- Attached the saved-state owner before `setContent`, and initialized its controller/lifecycle before WindowManager attaches the view.
+- Added the explicit `androidx.savedstate:savedstate` dependency to the active app module.
+- Guarded overlay-owner construction so a device/OEM saved-state failure falls back to the live notification instead of crashing and restarting the process.
+- Updated the store changelog.
+
+### Validation
+
+- `scripts/check_braces.py` passed for the changed Kotlin file.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
