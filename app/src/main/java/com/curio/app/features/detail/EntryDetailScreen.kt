@@ -76,7 +76,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -237,52 +236,20 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-        // ── Expressive hero banner — one composed card: category glyph
-        // watermark with the topic title UNDER it, both on the gradient,
-        // plus a frosted (blurred-glass) date + type bar below the title.
+        // ── Expressive hero banner — one composed card: the category glyph
+        // watermark with the topic title UNDER it, both on a SOLID category
+        // color (no gradient — the depth comes from the torn-paper seam at
+        // the bottom edge), plus a frosted (blurred-glass) date + mood + type
+        // grid card below the title.
         //
         // The banner runs edge-to-edge (square corners — no rounded card
-        // look) and its gradient's FINAL stop is the page's exact category
-        // wash color ([wash]), so the hero's lower edge dissolves seamlessly
-        // into the background with no visible seam. The wash-out only begins
-        // below the title + frosted bar zone, so white-on-glass stays
-        // legible even for two-line titles.
-        //
-        // Proper gradient blend: the accent → wash glide is sampled in HSL
-        // space ([CurioGradients.hslGradientStops]) instead of naive RGB
-        // lerp, which passes through muddy grey midtones between a deep
-        // accent and a light/dark page wash — that grey band is what read
-        // as "bad blending" in every theme. The vivid accent is still held
-        // behind the icon/title zone (white-on-glass legibility), then the
-        // rich glide takes over and ends EXACTLY on [wash] at the hero's
-        // bottom edge, so the merge into the page stays seamless.
-        //
-        // Theme-aware geometry:
-        //  - Dark: the wash is dark, so the glide can start just below the
-        //    title zone and spread over the bottom third (accent → dark =
-        //    a gentle, even melt — reads great).
-        //  - Light: the wash brightens toward cream, so the accent is held
-        //    a touch longer (through the frosted bar, keeping white glass
-        //    legible) and the accent → cream fade spreads over the bottom
-        //    QUARTER — the old 12% band packed the whole high-contrast
-        //    lighten-up into a thin stripe that read as a weird, out-of-
-        //    place gradient. ~91dp of glide reads as a smooth luminous
-        //    wash-out instead.
-        //  - AMOLED: the wash is pure black, so the refinement deepens the
-        //    accent toward black first (richer, easier on OLED pixels),
-        //    holds it through the title zone, then melts into true black
-        //    over the bottom two-fifths — a long on-hue fade with no hard
-        //    edge and no grey midtones.
-        // v7.14 — when Material card blends are on, the hero opens on the
-        // same category × material blend the cards wear (its first stop), so
-        // the detail page's hero carries the proper blend colors instead of
-        // the plain accent. Non-pastel dark mode keeps the deep accent hold:
-        // the device's dark palette is pastel-pale and would wash out the
-        // white frosted-glass content — and a contrast guard catches the
-        // non-dynamic fallback palette (API < 31 Material style falls back
-        // to the light Curio palette whose pale primary can't hold white
-        // glass). The glide still ends exactly on [wash] so the hero's
-        // lower edge dissolves into the page.
+        // look). Its bottom edge is clipped by a seeded SOFT torn shape and
+        // interlocks with ONE white under-sheet below it (its own tear seed),
+        // with the page's wash showing through the deeper tears behind both
+        // — the hero ends in a torn-paper seam instead of a gradient
+        // dissolve. The tear is seeded from the entry id, so every detail
+        // page gets its own slightly tilted, uneven rip that never changes
+        // when the page is reopened.
         val blendActive = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState &&
             !(isCurioDarkTheme() && !AppPreferences.pastelColorsState)
@@ -296,83 +263,51 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         } else {
             CurioGradients.categoryCardFill(cat.themedAccent())
         }
-        val isAmoledStyle = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_AMOLED
-        val heroStops = if (isAmoledStyle) {
-            // Deeper, moodier start for the pure-black style (~25% toward
-            // black vs the standard 10%) — the fade to OLED black then stays
-            // on-hue from a richer base.
-            val amoledStart = CurioGradients.categoryCardFill(lerp(cat.themedAccent(), Color.Black, 0.15f))
-            val glide = CurioGradients.hslGradientStops(amoledStart, wash, 9)
-            listOf(0.00f to amoledStart, 0.60f to amoledStart) +
-                glide.drop(1).mapIndexed { i, c -> (0.60f + (i + 1) * 0.40f / 8f) to c }
-        } else if (isCurioDarkTheme()) {
-            // drop(1): the first glide sample IS heroStart, already covered
-            // by the hold stop — skipping it keeps stop positions strictly
-            // increasing (no duplicate-position stops for the shader).
-            val glide = CurioGradients.hslGradientStops(heroStart, wash, 9)
-            listOf(0.00f to heroStart, 0.70f to heroStart) +
-                glide.drop(1).mapIndexed { i, c -> (0.70f + (i + 1) * 0.30f / 8f) to c }
-        } else {
-            val glide = CurioGradients.hslGradientStops(heroStart, wash, 9)
-            listOf(0.00f to heroStart, 0.76f to heroStart) +
-                glide.drop(1).mapIndexed { i, c -> (0.76f + (i + 1) * 0.24f / 8f) to c }
-        }
+        // v7.28 — the hero is a SOLID category color, no gradient. The depth
+        // comes from the torn-paper seam: the solid banner is clipped by a
+        // seeded soft tear, ONE white sheet sits just below it, and the
+        // page's wash shows through the tears behind the sheet.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight)
         ) {
-            // ── Torn paper under-sheets — two white sheets layered BEHIND
-            // the hero gradient at its lower edge, each with its OWN soft
-            // tear (a different seed, so the textures never match). The
-            // front sheet's torn top interlocks with the gradient's torn
-            // bottom right at the seam (like the two halves of a torn
-            // sheet), and the back sheet's torn top peeks through where the
-            // front's tears dip low — so the meeting point of the blur reads
-            // as layered torn paper (a real ripped stack), not a hard clip.
-            // Both protrude below the hero's bottom edge so the stacked torn
-            // edges are actually visible (the Topic-meta block below starts
+            // ── Torn paper under-sheet — ONE white sheet layered BEHIND the
+            // solid hero color at its lower edge, with its OWN soft tear (a
+            // different seed, so the textures never match). The sheet's torn
+            // top interlocks with the hero's torn bottom right at the seam
+            // (like the two halves of a torn sheet), and the page's wash
+            // shows through the deeper tears behind it — the meeting point of
+            // the hero reads as torn paper against the page, not a hard
+            // clip. It protrudes below the hero's bottom edge so the torn
+            // edge is actually visible (the Topic-meta block below starts
             // 20dp lower, so the protrusion sits inside that buffer).
             val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
-            // Back sheet — dimmer warm white, its torn top centered ~4dp
-            // below the seam, peeking through the front sheet's deeper tears.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(14.dp)
-                    .offset(y = EntryDetailHeroHeight + 4.dp)
-                    .clip(SoftTornTopShape(tearSeed + 17))
-                    .background(Color(0xFFF4F1EA).copy(alpha = 0.92f))
-            )
-            // Front sheet — bright paper white, its torn top centered on the
-            // seam (the hero's bottom edge), interlocking with the gradient's
-            // torn bottom.
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(10.dp)
+                    .height(15.dp)
                     .offset(y = EntryDetailHeroHeight)
                     .clip(SoftTornTopShape(tearSeed + 29))
                     .background(Color(0xFFFDFCF9).copy(alpha = 0.95f))
             )
 
-            // ── Hero backdrop — the crisp gradient + symbol scatter. The
+            // ── Hero backdrop — the SOLID category color + symbol scatter.
+            // No gradient: the depth comes from the torn seam below. The
             // banner itself is NOT blurred (the frosted look belongs to the
             // date / mood / type grid card below, which carries its own
             // blurred glass pane); the glyph scatter stays sharp so it reads
             // as a deliberate patterned backdrop. The bottom edge is torn
-            // with the SOFT rounded shape (small textures, not the sharp
-            // jagged [TornPaperShape] of the note cards) — the gradient now
-            // ends in a real torn-paper seam into the layered white sheets
-            // below instead of a straight dissolve.
+            // with the SOFT rounded shape (small rounded textures, tilted a
+            // touch, NOT the sharp jagged [TornPaperShape] of the note
+            // cards) — the solid hero ends in a real torn-paper seam into
+            // the white sheet + page wash below instead of a gradient
+            // dissolve.
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(SoftTornBottomShape(tearSeed))
-                    // This Compose version's verticalGradient only offers the
-                    // vararg overload — the named `colorStops` List form
-                    // doesn't exist, so spread the sampled stops as an array.
-                    .background(Brush.verticalGradient(*heroStops.toTypedArray()))
+                    .background(heroStart)
             ) {
                 // ── Hero watermark — a scatter of the entry's category-family
                 //     symbols (instruments for Music, camera kit for Movies,
@@ -474,16 +409,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             // sample only that band instead of squeezing the
                             // full 0→1 ramp into the card (which would read as
                             // a different gradient).
-                            val paneStops = heroStops
-                                .filter { it.first >= 0.70f }
-                                .map { it.second }
-                                .ifEmpty { listOf(heroStart, wash) }
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
-                                    .background(Brush.verticalGradient(paneStops))
+                                    .background(heroStart)
                                     // Frost: blurring the pane turns the
-                                    // gradient into soft color blooms behind
+                                    // solid color into a soft bloom behind
                                     // the content. (RenderEffect on API 31+;
                                     // software blur below.)
                                     .blur(18.dp)

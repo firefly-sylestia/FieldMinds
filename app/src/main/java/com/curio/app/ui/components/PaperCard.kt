@@ -907,19 +907,26 @@ private fun buildSoftTornPath(
         path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
         return path
     }
-    // Small rounded amplitudes: the main tooth ~2.2dp + a fiber micro-layer
-    // ~0.9dp, so the tear reads as fine rounded paper grain. Sampling step
-    // ~4dp keeps the bumps smooth (each sample is a gentle curve, no sharp
-    // corners).
-    val tooth = with(density) { 2.2.dp.toPx() }
-    val micro = with(density) { 0.9.dp.toPx() }
+    // More UNEVEN rounded teeth than the first pass: a main tooth ~3.4dp, a
+    // slow deep-tear octave ~2dp (longer, wandering slopes) and a fine fiber
+    // micro-layer ~1dp. Sampling step ~4dp keeps every bump smooth (rounded,
+    // not sharp) while the multi-scale displacement makes the slopes uneven.
+    val tooth = with(density) { 3.4.dp.toPx() }
+    val deep = with(density) { 2.0.dp.toPx() }
+    val micro = with(density) { 1.0.dp.toPx() }
     val step = with(density) { 4.dp.toPx() }
-    // Single-octave smooth displacement (rounded bumps) + a fine second
-    // octave for fiber texture.
+    // Seeded TILT — the whole torn edge slants slightly (a real rip rarely
+    // comes off perfectly straight). The baseline drifts from -tilt/2 at the
+    // left edge to +tilt/2 at the right (~±3dp total across the width),
+    // unique per entry (derived from the tear seed) but stable across
+    // reopens, so each detail page's tear is its own and never changes.
+    val tilt = (Random(seed + 977).nextFloat() - 0.5f) * 2f * with(density) { 3.dp.toPx() }
     fun disp(x: Float): Float {
+        val slant = tilt * (x / w - 0.5f)
         val main = (valueNoise(seed, x * 0.045f, 0.5f) - 0.5f) * 2f * tooth
+        val deepWave = (valueNoise(seed + 101, x * 0.017f, 4.2f) - 0.5f) * 2f * deep
         val fiber = (valueNoise(seed + 71, x * 0.16f, 3.5f) - 0.5f) * 2f * micro
-        return main + fiber
+        return slant + main + deepWave + fiber
     }
 
     if (tornSide == SoftTornSide.BOTTOM) {
