@@ -1959,7 +1959,10 @@ private fun RenderQuoteCards(
     entryId: String,
     topicName: String,
     category: CurioCategory,
-    label: String = "Favorite quotes"
+    label: String = "Favorite quotes",
+    // v7.22 — optional per-index filter (mood board: render only the
+    // BELOW-board subset; the on-board ones float on the collage).
+    includeIndex: ((Int) -> Boolean)? = null
 ) {
     val context = LocalContext.current
     // Legacy Gson blobs decode missing Kotlin-default List fields to NULL
@@ -1974,7 +1977,10 @@ private fun RenderQuoteCards(
     val spansPadded = spans.toMutableList()
     while (spansPadded.size < safeQuotes.size) spansPadded.add(emptyList())
     val quotePairs = safeQuotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
-        if (pair.first.isNullOrBlank()) null else i to pair
+        if (pair.first.isNullOrBlank()) null
+        // Skip indices the caller excluded (mood board below-board split).
+        else if (includeIndex != null && !includeIndex(i)) null
+        else i to pair
     }
     if (quotePairs.isNotEmpty()) {
         MarginaliaSectionHeader(label = label, category = category, count = quotePairs.size)
@@ -2336,12 +2342,15 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         // cards fall back to their deterministic slot. The
                         // Box above is offset by the center-crop, so the
                         // cards live in the same board space as the tiles.
+                        // v7.22 — only ON-board cards float here; below-board
+                        // ones render under the board in their own section.
                         MoodBoardFloatingCards(
                             quotes = data.quotes.orEmpty(),
                             styles = data.quoteStyles.orEmpty(),
                             colors = data.quoteColors.orEmpty(),
                             tilts = data.quoteTilts.orEmpty(),
                             positions = data.quotePositions.orEmpty(),
+                            onBoard = data.quoteOnBoard.orEmpty(),
                             canvasWPx = boardW,
                             canvasHPx = boardH,
                             boardScale = boardScale
@@ -2404,9 +2413,29 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             }
         }
 
-        // v7.20 — the board's quote cards now float ON the collage (above),
-        // so the below-board section is gone for mood boards — the saved
-        // view mirrors the editor, where cards live on the board itself.
+        // v7.22 — the ON-board quote cards float on the collage above; the
+        // BELOW-board cards (added via the bottom Add-quote button) render
+        // here as separate quote boxes under the board. Legacy entries lack
+        // the flag → all cards are on-board → nothing renders below.
+        val quoteOnBoardFlags = data.quoteOnBoard.orEmpty()
+        val hasBelowBoard = data.quotes.orEmpty().indices.any {
+            quoteOnBoardFlags.getOrElse(it) { true } == false
+        }
+        if (hasBelowBoard) {
+            RenderQuoteCards(
+                quotes = data.quotes.orEmpty(),
+                spans = data.quoteSpans.orEmpty(),
+                tilts = data.quoteTilts.orEmpty(),
+                styles = data.quoteStyles.orEmpty(),
+                colors = data.quoteColors.orEmpty(),
+                fallbackStyle = data.notePaperStyle(),
+                entryId = entry.id,
+                topicName = entry.topic.name,
+                category = category,
+                label = "Quote boxes",
+                includeIndex = { i -> quoteOnBoardFlags.getOrElse(i) { true } == false }
+            )
+        }
 
         if (boardExpanded) {
             ExpandedMoodBoardDialog(
@@ -2516,13 +2545,16 @@ private fun ExpandedMoodBoardDialog(
 
                         // ── Floating quote cards (v7.20) — same layer as the
                         // inline card: saved positions scaled by the fit, in
-                        // the already-centered Box's board space.
+                        // the already-centered Box's board space. v7.22 — only
+                        // on-board cards float; below-board ones stay under the
+                        // board (never inside the expanded dialog).
                         MoodBoardFloatingCards(
                             quotes = data.quotes.orEmpty(),
                             styles = data.quoteStyles.orEmpty(),
                             colors = data.quoteColors.orEmpty(),
                             tilts = data.quoteTilts.orEmpty(),
                             positions = data.quotePositions.orEmpty(),
+                            onBoard = data.quoteOnBoard.orEmpty(),
                             canvasWPx = boardW,
                             canvasHPx = boardH,
                             boardScale = fit.scale

@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board quotes split — the bottom Add-quote button now creates separate quote boxes BELOW the board (chip stays on-board)**
+
+### What was asked
+
+“In moodboard quote the bottom quote button also adds the quote inside the box — make the bottom add separate quote box below”
+
+### What was done
+
+- **Data model (CaptureData.kt)** — `GalleryWall.quoteOnBoard: List<Boolean> = emptyList()` (parallel to quotes; Gson-safe — legacy entries lack it → empty → every card renders on the board, preserving the v7.19 look).
+- **State (CaptureFormatComponents.kt)** — `QuoteCardsState` gained a parallel `onBoard` mutableStateListOf (padded true), `addCard(style, color, onBoard = true)` param, removeCard cleans it, and `rememberQuoteCardsState(initialOnBoard)`. `QuoteCardsSection` gained `cardsFilter: ((Int) -> Boolean)?` (narrows inline cards + header count) and `onAddCard: (() -> Unit)?` (overrides what the Add button creates). Other callers (Marginalia / ReelNotes / SoundBite) pass neither → unchanged behavior.
+- **Shared floating layer (MoodBoardZoom.kt)** — `MoodBoardFloatingCards` gained `onBoard: List<Boolean>? = null`; indices flagged false are SKIPPED (not compacted → original indices preserved for edit/move callbacks); null (legacy) → all float.
+- **Editor (GalleryWallFormat.kt)** — state seeds `initialOnBoard` from saved data; the save pipeline writes `quoteOnBoard` + keys on it; the board's Quote chip adds `onBoard = true`; the bottom `QuoteCardsSection` now renders ONLY below-board cards inline (`cardsInline = true`, `cardsFilter = { !onBoard[i] }`, `onAddCard` adds `onBoard = false`) so the bottom button creates a separate, fully-editable quote box under the board.
+- **Saved view (EntryDetailScreen.kt)** — inline board + expanded dialog pass `onBoard` so only on-board cards float; a `RenderQuoteCards` section below the board renders the below-board subset via a new `includeIndex` filter (label “Quote boxes”), so the saved page mirrors the editor.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces BALANCED on all 5 files; code-reviewer pass — verified parallel-list sync (add/remove/pad), legacy `getOrElse(i){true}` default at every read site, index preservation (skip-not-compact in FloatingCards, mapIndexedNotNull in RenderQuoteCards), other QuoteCardsSection callers byte-identical, no dead code. Reviewer note (non-blocker): existing all-on-board boards now show “Quote boxes” without a count in the editor's bottom section (accurate to the new split).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **One text-size button per toolbar + CI @Composable fix**
 
 ### What was asked

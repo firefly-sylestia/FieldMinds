@@ -640,13 +640,20 @@ fun MoodBoardFloatingCards(
     offsetX: Float = 0f,
     offsetY: Float = 0f,
     onEditCard: ((Int) -> Unit)? = null,
-    onMoveCard: ((index: Int, x: Float, y: Float) -> Unit)? = null
+    onMoveCard: ((index: Int, x: Float, y: Float) -> Unit)? = null,
+    // v7.22 — parallel per-card flag: false = the card renders BELOW the
+    // board, so it must NOT float on the collage. Legacy entries lack the
+    // list → null → every card floats (the v7.19 look).
+    onBoard: List<Boolean>? = null
 ) {
     // Guard the pre-measure first frame (canvas = 0) and degenerate scales
     // so cards never stack at the top-left or divide by zero.
     if (canvasWPx <= 0f || canvasHPx <= 0f) return
     val scale = if (boardScale > 0f) boardScale else 1f
     quotes.forEachIndexed { i, quote ->
+        // Skip below-board cards — they render under the board in their own
+        // section, not on the collage. Missing flags (legacy) → on-board.
+        if (onBoard != null && onBoard.getOrElse(i) { true } == false) return@forEachIndexed
         val slot = moodBoardQuoteSlot(i, canvasWPx, canvasHPx)
         val saved = positions.getOrElse(i) { CaptureData.QuotePos(-1f, -1f) }
         val placed = if (saved.x >= 0f && saved.y >= 0f) saved

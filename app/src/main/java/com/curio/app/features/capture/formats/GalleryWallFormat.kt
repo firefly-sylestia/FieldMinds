@@ -183,6 +183,9 @@ fun GalleryWallFormat(
         initialColors = initialData?.quoteColors.orEmpty(),
         // v7.20 — per-card board positions (dragged in the editor).
         initialPositions = initialData?.quotePositions.orEmpty(),
+        // v7.22 — per-card on-board flag (chip = on the board, bottom
+        // button = below the board). Legacy entries lack it → all on-board.
+        initialOnBoard = initialData?.quoteOnBoard.orEmpty(),
         defaultStyle = initialData?.captionStyle ?: initialData?.paperStyle ?: NotePaperStyle.RULED,
         defaultColor = initialData?.captionColor ?: NotePaperColor.CREAM
     )
@@ -206,7 +209,8 @@ fun GalleryWallFormat(
     LaunchedEffect(
         canSave, caption, tiles.toList(), captionStyle, captionColor, mood,
         quoteCards.quotes.toList(), quoteCards.spans.toList(), quoteCards.tilts.toList(),
-        quoteCards.styles.toList(), quoteCards.colors.toList(), quoteCards.positions.toList()
+        quoteCards.styles.toList(), quoteCards.colors.toList(), quoteCards.positions.toList(),
+        quoteCards.onBoard.toList()
     ) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -225,6 +229,8 @@ fun GalleryWallFormat(
                 // v7.20 — dragged card positions (editor board px; (-1,-1)
                 // = never dragged → saved views use the deterministic slot).
                 quotePositions = quoteCards.positions.toList(),
+                // v7.22 — per-card on-board flag (chip vs bottom button).
+                quoteOnBoard = quoteCards.onBoard.toList(),
                 // Legacy fallback — mirror the caption's style.
                 paperStyle = captionStyle,
                 mood = mood
@@ -278,7 +284,8 @@ fun GalleryWallFormat(
             // v7.19 — floating quote boxes live ON the board.
             quoteState = quoteCards,
             onEditQuote = { editingQuoteIndex = it },
-            onAddQuote = { quoteCards.addCard(captionStyle, captionColor) }
+            // v7.22 — the board chip's quotes float ON the board.
+            onAddQuote = { quoteCards.addCard(captionStyle, captionColor, onBoard = true) }
         )
 
         // ── Caption field — wears the note-paper slip like the other text
@@ -293,17 +300,23 @@ fun GalleryWallFormat(
             onPaperColorChange = { captionColor = it }
         )
 
-        // ── Quote boxes — the cards themselves FLOAT on the board above
-        // (tap one to edit); this row keeps the Add button + count. The
-        // note-paper COLOR tool stays hidden for mood-board quotes (v7.19)
-        // while text formatting + paper style remain fully available.
+        // ── Quote boxes — the board chip's cards float ON the board above;
+        // THIS bottom section is for the separate BELOW-board cards: the
+        // Add button creates one below the board (onBoard = false), and the
+        // cards themselves render inline here (only the below-board subset —
+        // the on-board ones stay on the collage). The note-paper COLOR tool
+        // stays hidden for mood-board quotes (v7.19) while text formatting +
+        // paper style remain fully available.
         QuoteCardsSection(
             state = quoteCards,
             header = "Quote boxes",
             newCardStyle = { captionStyle },
             newCardColor = { captionColor },
             showColorTool = false,
-            cardsInline = false
+            cardsInline = true,
+            // v7.22 — only the below-board cards render + count here.
+            cardsFilter = { i -> quoteCards.onBoard.getOrElse(i) { true } == false },
+            onAddCard = { quoteCards.addCard(captionStyle, captionColor, onBoard = false) }
         )
     }
 
@@ -348,7 +361,8 @@ fun GalleryWallFormat(
                     // full-screen editor.
                     quoteState = quoteCards,
                     onEditQuote = { editingQuoteIndex = it },
-                    onAddQuote = { quoteCards.addCard(captionStyle, captionColor) }
+                    // v7.22 — the board chip's quotes float ON the board.
+                    onAddQuote = { quoteCards.addCard(captionStyle, captionColor, onBoard = true) }
                 )
             }
         }
@@ -604,6 +618,9 @@ private fun MoodBoardCanvas(
                         colors = quoteState.colors.toList(),
                         tilts = quoteState.tilts.toList(),
                         positions = quoteState.positions.toList(),
+                        // v7.22 — only on-board cards float here; below-board
+                        // cards render under the board in their own section.
+                        onBoard = quoteState.onBoard.toList(),
                         canvasWPx = canvasWPx,
                         canvasHPx = canvasHPx,
                         onEditCard = onEditQuote,

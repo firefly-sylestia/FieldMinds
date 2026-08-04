@@ -480,7 +480,8 @@ class QuoteCardsState(
     initialColors: List<NotePaperColor>,
     defaultStyle: NotePaperStyle,
     defaultColor: NotePaperColor,
-    initialPositions: List<CaptureData.QuotePos> = emptyList()
+    initialPositions: List<CaptureData.QuotePos> = emptyList(),
+    initialOnBoard: List<Boolean> = emptyList()
 ) {
     val quotes = mutableStateListOf<String>().apply { addAll(initialQuotes) }
     val spans = mutableStateListOf<List<TextSpan>>().apply {
@@ -514,11 +515,19 @@ class QuoteCardsState(
         addAll(initialPositions)
         while (size < quotes.size) add(CaptureData.QuotePos(-1f, -1f))
     }
+    // v7.22 — per-card placement flag: true = floats ON the board (added via
+    // the board's Quote chip), false = renders BELOW the board (added via
+    // the bottom Add-quote button). Parallel to quotes; legacy entries lack
+    // the field → every card defaults to on-board (the v7.19 look).
+    val onBoard = mutableStateListOf<Boolean>().apply {
+        addAll(initialOnBoard)
+        while (size < quotes.size) add(true)
+    }
 
     /** Whether any card has real text — drives the format's canSave. */
     val hasContent: Boolean get() = quotes.any { it.isNotBlank() }
 
-    fun addCard(style: NotePaperStyle, color: NotePaperColor) {
+    fun addCard(style: NotePaperStyle, color: NotePaperColor, onBoard: Boolean = true) {
         quotes.add("")
         spans.add(emptyList())
         // A fresh card gets its own tilt — and it STAYS that way.
@@ -527,6 +536,7 @@ class QuoteCardsState(
         colors.add(color)
         // A fresh card starts at the deterministic slot until dragged.
         positions.add(CaptureData.QuotePos(-1f, -1f))
+        this.onBoard.add(onBoard)
     }
 
     fun removeCard(index: Int) {
@@ -537,6 +547,7 @@ class QuoteCardsState(
         if (index < styles.size) styles.removeAt(index)
         if (index < colors.size) colors.removeAt(index)
         if (index < positions.size) positions.removeAt(index)
+        if (index < onBoard.size) onBoard.removeAt(index)
     }
 
     /** v7.20 — the mood board commits a dragged card's new top-left here. */
@@ -574,14 +585,15 @@ fun rememberQuoteCardsState(
     initialColors: List<NotePaperColor>,
     defaultStyle: NotePaperStyle,
     defaultColor: NotePaperColor,
-    initialPositions: List<CaptureData.QuotePos> = emptyList()
+    initialPositions: List<CaptureData.QuotePos> = emptyList(),
+    initialOnBoard: List<Boolean> = emptyList()
 ): QuoteCardsState = remember(
     initialQuotes, initialSpans, initialTilts, initialStyles, initialColors,
-    defaultStyle, defaultColor, initialPositions
+    defaultStyle, defaultColor, initialPositions, initialOnBoard
 ) {
     QuoteCardsState(
         initialQuotes, initialSpans, initialTilts, initialStyles, initialColors,
-        defaultStyle, defaultColor, initialPositions
+        defaultStyle, defaultColor, initialPositions, initialOnBoard
     )
 }
 
@@ -597,6 +609,12 @@ fun rememberQuoteCardsState(
  * mood board keeps the picker hidden while keeping full text editing), and
  * [cardsInline] = false renders ONLY the header + Add button (the cards
  * themselves float on the caller's own canvas instead — the mood board).
+ *
+ * v7.22 — [cardsFilter] narrows which cards render inline (and the header
+ * count) to the indices that pass the predicate — the mood board's bottom
+ * section shows only its BELOW-board cards while the on-board ones float on
+ * the collage. [onAddCard] overrides what the Add button creates (the mood
+ * board adds a below-board card with onBoard = false).
  */
 @Composable
 fun QuoteCardsSection(
@@ -609,8 +627,13 @@ fun QuoteCardsSection(
     newCardStyle: () -> NotePaperStyle = { NotePaperStyle.RULED },
     newCardColor: () -> NotePaperColor = { NotePaperColor.CREAM },
     showColorTool: Boolean = true,
-    cardsInline: Boolean = true
+    cardsInline: Boolean = true,
+    cardsFilter: ((Int) -> Boolean)? = null,
+    onAddCard: (() -> Unit)? = null
 ) {
+    // Indices rendered inline + counted: the filtered subset when a filter
+    // is given (mood board below-board cards), ALL cards otherwise.
+    val visibleIndices = state.quotes.indices.filter { i -> cardsFilter?.invoke(i) ?: true }
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -622,9 +645,9 @@ fun QuoteCardsSection(
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            if (state.quotes.isNotEmpty()) {
+            if (visibleIndices.isNotEmpty()) {
                 Text(
-                    text = "${state.quotes.size}",
+                    text = "${visibleIndices.size}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -632,7 +655,7 @@ fun QuoteCardsSection(
         }
 
         if (cardsInline) {
-            state.quotes.forEachIndexed { i, _ ->
+            visibleIndices.forEach { i ->
                 QuoteCardEditor(
                     index = i,
                     state = state,
@@ -646,7 +669,7 @@ fun QuoteCardsSection(
 
         // Add-quote button (dashed-outline placeholder style)
         Surface(
-            onClick = { state.addCard(newCardStyle(), newCardColor()) },
+            onClick = { onAddCard?.invoke() ?: state.addCard(newCardStyle(), newCardColor()) },
             enabled = enabled,
             shape = RoundedCornerShape(14.dp),
             color = paperSurface().copy(alpha = 0.6f),

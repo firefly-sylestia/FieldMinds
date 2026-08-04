@@ -264,6 +264,12 @@ sealed class CaptureData {
         // board pixels; (-1,-1) = never dragged → deterministic slot).
         // Legacy entries lack it (Gson → empty) → all cards use slots.
         val quotePositions: List<QuotePos> = emptyList(),
+        // v7.22 — per-card placement flag: true = the card floats ON the
+        // board (added via the board's Quote chip), false = it renders as a
+        // separate quote box BELOW the board (added via the bottom Add-quote
+        // button). Parallel to [quotes]. Legacy entries lack it (Gson →
+        // empty) → every card renders on the board (the v7.19 look).
+        val quoteOnBoard: List<Boolean> = emptyList(),
         // Take-level note-paper style — legacy fallback.
         val paperStyle: NotePaperStyle? = null,
         // Mood — picked in the editor's shared "How did it make you feel?"
