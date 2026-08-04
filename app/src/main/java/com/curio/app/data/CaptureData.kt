@@ -22,7 +22,11 @@ import com.curio.app.data.CaptureFormat
  * the take-level [CaptureData.paperStyle] or [RULED].
  */
 enum class NotePaperStyle {
-    RULED, TORN, TORN_RULED, COFFEE, FOLDED, RED_MARGIN, TORN_COFFEE, TORN_FOLDED
+    RULED, TORN, TORN_RULED, COFFEE, FOLDED, RED_MARGIN, TORN_COFFEE, TORN_FOLDED,
+    // v7.16 — universal decorations: coffee / red margin / folded can now
+    // apply to EITHER base (torn or ruled paper), and the torn slip can
+    // combine the ruled lines with any single decoration.
+    TORN_RED_MARGIN, TORN_RULED_COFFEE, TORN_RULED_FOLDED, TORN_RULED_RED_MARGIN
 }
 
 /**

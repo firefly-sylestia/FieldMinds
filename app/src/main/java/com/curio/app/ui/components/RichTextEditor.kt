@@ -897,73 +897,31 @@ fun RichTextEditor(
             }
         }
         if (paper) {
-            when (paperStyle) {
-                NotePaperStyle.COFFEE -> PaperCard(
+            // v7.16 — universal style model: the base decides torn vs sharp
+            // ruled paper and the style's flags drive every decoration, so
+            // ALL combinations (incl. the new torn+red-margin / torn+rules+
+            // decoration) render here — same flags as [NotePaperCard].
+            if (paperStyle.torn) {
+                TornPaperCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    ruled = paperStyle.ruled,
+                    coffeeStains = paperStyle.coffee,
+                    folded = paperStyle.folded,
+                    redMargin = paperStyle.redMargin,
+                    paperColor = paperColor,
+                    contentPadding = paperContentPadding
+                ) {
+                    fieldBlock()
+                }
+            } else {
+                PaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = true,
                     paperColor = paperColor,
                     contentPadding = paperContentPadding,
-                    coffeeStains = true
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.FOLDED -> PaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = true,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding,
-                    folded = true
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.RED_MARGIN -> PaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = true,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding,
-                    redMargin = true
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.RULED -> PaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = true,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.TORN -> TornPaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = false,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.TORN_RULED -> TornPaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = true,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.TORN_COFFEE -> TornPaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = false,
-                    coffeeStains = true,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding
-                ) {
-                    fieldBlock()
-                }
-                NotePaperStyle.TORN_FOLDED -> TornPaperCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    ruled = false,
-                    folded = true,
-                    paperColor = paperColor,
-                    contentPadding = paperContentPadding
+                    coffeeStains = paperStyle.coffee,
+                    folded = paperStyle.folded,
+                    redMargin = paperStyle.redMargin
                 ) {
                     fieldBlock()
                 }

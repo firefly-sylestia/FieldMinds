@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Paper makeover — clean per-card texture (no more big curvy lines, no more identical pattern), universal coffee/red-margin/folded decorations on both torn and ruled paper, sharp normal-paper edges**
+
+### What was asked
+
+“the paper texture those big curvy lines they look bad and also the patternt is same in every paper so fix it. and make the coffee red margin and folded a universal option for both torn and paper style. so remove multiple options and make it universal. and also give the normal paper sharp edges not rounded”
+
+### What was done
+
+- **Texture (PaperCard.kt `drawPaperTexture`)** — REMOVED the long curved fiber strands + the big S-curve crease lines (dark line + light bulge) that read as muddy streaks; the texture is now clean tonal patches + fine grain specks. Everything is seeded from a new `seed` param — `PaperCard` remembers a per-card seed and `TornPaperCard` passes its `effectiveSeed` — so every sheet wears its OWN pattern (the old layers used fixed constants → identical on all papers). The shared grain bitmap stays as a fixed 0.12 whisper (uniform paper grain, not a repeating pattern). Coffee stains also take the card seed now (reviewer catch) so coffee papers differ too.
+- **Universal decorations** — `NotePaperStyle` gained 4 values (TORN_RED_MARGIN, TORN_RULED_COFFEE, TORN_RULED_FOLDED, TORN_RULED_RED_MARGIN); new flag extensions on the enum (`torn/ruled/coffee/folded/redMargin`) + `notePaperStyleOf()` builder decode/encode any combo. `NotePaperCard`’s 8-branch `when` collapsed to flag-based dispatch; `TornPaperCard` gained `redMargin` (line + 30dp inset, shared `PaperMarginRed` const). `NotePaperStyleToggle` is now UNIVERSAL: Row 1 = base (Ruled/Torn), Row 2 = decorations (+ Rules torn-only, + Coffee, + Folded, + Red Margin single-select) that work on EITHER base and survive base switches. `RichTextEditor`’s exhaustive `when(paperStyle)` replaced with the same flag-based rendering (the new enum values would have broken it).
+- **Sharp edges** — `PaperCard` + `NotePaperCard` `corner` default 14dp → 0dp: normal paper is now a sharp cut sheet (the folded dog-ear keeps its diagonal; other corners square).
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on all 3 files; code-reviewer pass — flag tables verified round-trip against the full enum set, toggle transitions correct, no unused imports (cos/sin/floor/Path/Stroke all still used), exhaustive whens all replaced (only a doc-comment mention remains), sharp-corner default doesn’t break the folded shape. Reviewer’s catch applied: coffee stains seeded per card.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood board consistency — the small board, the full-screen expanded board and the watermark now show the SAME arrangement**
 
 ### What was asked

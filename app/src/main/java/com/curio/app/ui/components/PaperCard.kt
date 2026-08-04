@@ -90,7 +90,10 @@ fun PaperCard(
     modifier: Modifier = Modifier,
     ruled: Boolean = true,
     rotation: Float = 0f,
-    corner: Dp = 14.dp,
+    // v7.16 — normal paper is SHARP-edged (a real cut sheet), not rounded.
+    // The folded style keeps its diagonal dog-ear; the other corners stay
+    // square to match.
+    corner: Dp = 0.dp,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
     /** Minimum card height — a floor so a single-line field still reads as
@@ -166,16 +169,18 @@ fun PaperCard(
             val ruleStart = with(density) {
                 safePadding.calculateTopPadding().toPx()
             } + ruleSpacing
-            // Red margin color — a warm school-notebook red that reads on
-            // the cream sheet in both themes.
-            val marginColor = Color(0xFFC4524A)
             val paperSurface = notePaperSurface(paperColor)
             val paperEdge = notePaperBorder(paperColor)
             val paperInkColor = notePaperInk(paperColor)
+            // Every paper card rolls its OWN texture seed, so no two sheets
+            // on the page share the same grain pattern (the old fixed seeds
+            // drew the identical scatter on every card).
+            val paperSeed = remember { Random.nextInt(1, 1_000_000) }
             Canvas(modifier = Modifier.matchParentSize()) {
-                // Real paper texture — fine grain + soft creases (the
+                // Real paper texture — fine grain + soft tonal patches (the
                 // crumpled-then-flattened tooth) under the rules and ink.
-                drawPaperTexture(size, density, sharedGrainBrush, paperInkColor)
+                // Seeded per card so each sheet's pattern is its own.
+                drawPaperTexture(size, density, sharedGrainBrush, paperInkColor, paperSeed)
                 if (ruled) {
                     var y = ruleStart
                     while (y < size.height) {
@@ -190,13 +195,13 @@ fun PaperCard(
                 }
                 if (redMargin) {
                     drawLine(
-                        color = marginColor.copy(alpha = 0.55f),
+                        color = PaperMarginRed.copy(alpha = 0.55f),
                         start = Offset(marginInset, 0f),
                         end = Offset(marginInset, size.height),
                         strokeWidth = with(density) { 1.2.dp.toPx() }
                     )
                 }
-                if (coffeeStains) drawCoffeeStains(size, density)
+                if (coffeeStains) drawCoffeeStains(size, density, paperSeed)
             }
             Column(
                 modifier = Modifier
@@ -231,43 +236,108 @@ private fun rigidCardSheen(): Brush = Brush.verticalGradient(
     )
 )
 
+/** The classic school-notebook red margin rule — shared by the ruled page
+ *  and the torn slip (universal decoration), so both draw the identical
+ *  warm red line at the same inset. */
+private val PaperMarginRed = Color(0xFFC4524A)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Universal note-paper model (v7.16) — every decoration (rules / coffee /
+// folded / red margin) applies to EITHER base (ruled paper or torn slip),
+// instead of the old duplicated per-base options. The enum keeps its
+// flat names for persistence; these flag views decode it, and
+// [notePaperStyleOf] re-encodes any combination back into one value.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** True when the slip wears the ragged torn outline instead of the sharp ruled page. */
+val NotePaperStyle.torn: Boolean
+    get() = this == NotePaperStyle.TORN || this == NotePaperStyle.TORN_RULED ||
+        this == NotePaperStyle.TORN_COFFEE || this == NotePaperStyle.TORN_FOLDED ||
+        this == NotePaperStyle.TORN_RED_MARGIN || this == NotePaperStyle.TORN_RULED_COFFEE ||
+        this == NotePaperStyle.TORN_RULED_FOLDED || this == NotePaperStyle.TORN_RULED_RED_MARGIN
+
+/** True when the sheet draws the notebook ruled lines (paper always ruled; torn optional). */
+val NotePaperStyle.ruled: Boolean
+    get() = this == NotePaperStyle.RULED || this == NotePaperStyle.TORN_RULED ||
+        this == NotePaperStyle.COFFEE || this == NotePaperStyle.FOLDED ||
+        this == NotePaperStyle.RED_MARGIN || this == NotePaperStyle.TORN_RULED_COFFEE ||
+        this == NotePaperStyle.TORN_RULED_FOLDED || this == NotePaperStyle.TORN_RULED_RED_MARGIN
+
+/** True when the sheet wears the coffee-stain blotches along its edges. */
+val NotePaperStyle.coffee: Boolean
+    get() = this == NotePaperStyle.COFFEE || this == NotePaperStyle.TORN_COFFEE ||
+        this == NotePaperStyle.TORN_RULED_COFFEE
+
+/** True when the top-right corner is folded into a dog-ear. */
+val NotePaperStyle.folded: Boolean
+    get() = this == NotePaperStyle.FOLDED || this == NotePaperStyle.TORN_FOLDED ||
+        this == NotePaperStyle.TORN_RULED_FOLDED
+
+/** True when the sheet draws the red school-notebook margin line. */
+val NotePaperStyle.redMargin: Boolean
+    get() = this == NotePaperStyle.RED_MARGIN || this == NotePaperStyle.TORN_RED_MARGIN ||
+        this == NotePaperStyle.TORN_RULED_RED_MARGIN
+
 /**
- * The paper's own texture — rich, realistic layered tooth:
+ * Re-encodes a (base + decorations) combination into its [NotePaperStyle]
+ * value. The decorations are single-select — one of coffee / folded / red
+ * margin at a time — plus the optional rules lines on the torn base.
+ */
+fun notePaperStyleOf(
+    torn: Boolean,
+    ruled: Boolean,
+    coffee: Boolean = false,
+    folded: Boolean = false,
+    redMargin: Boolean = false
+): NotePaperStyle = when {
+    !torn && coffee -> NotePaperStyle.COFFEE
+    !torn && folded -> NotePaperStyle.FOLDED
+    !torn && redMargin -> NotePaperStyle.RED_MARGIN
+    !torn -> NotePaperStyle.RULED
+    torn && ruled && coffee -> NotePaperStyle.TORN_RULED_COFFEE
+    torn && ruled && folded -> NotePaperStyle.TORN_RULED_FOLDED
+    torn && ruled && redMargin -> NotePaperStyle.TORN_RULED_RED_MARGIN
+    torn && ruled -> NotePaperStyle.TORN_RULED
+    torn && coffee -> NotePaperStyle.TORN_COFFEE
+    torn && folded -> NotePaperStyle.TORN_FOLDED
+    torn && redMargin -> NotePaperStyle.TORN_RED_MARGIN
+    else -> NotePaperStyle.TORN
+}
+
+/**
+ * The paper's own texture — a clean, quiet tooth:
  *
  * Layer 1 — Soft tonal variation: large-scale cloudy patches of slightly
  *   darker/lighter tone, like uneven fiber density in real paper.
  * Layer 2 — Fine grain field: scattered micro-specks (the paper tooth)
  *   drawn as individual dots, denser than the old bitmap but still soft.
- * Layer 3 — Fiber strands: a few long, slightly curved cotton/wood-pulp
- *   filaments visible on close inspection, running in the paper grain.
- * Layer 4 — Crease lines: long gentle S-curves with a dark shadow line
- *   and a parallel light bulge (the paper fold catching light), scaled
- *   so each crease reads with real depth.
  *
- * All layers are deterministic (seeded per size), so recomposition never
- * re-rolls them. [grainBrush] is still used but at LOWER alpha — the real
- * detail now comes from the drawn layers. The shared bitmap becomes a
- * subtle base wash instead of the only texture.
+ * v7.16 — the old long curved fiber strands and big S-curve crease lines
+ * are GONE (they read as muddy streaks on every sheet), and everything is
+ * seeded from [seed] so every card wears its OWN pattern instead of the
+ * same one on all papers. [grainBrush] stays as a subtle shared whisper
+ * underneath (uniform grain, not a pattern) — the per-card seeded layers
+ * are what make each sheet unique.
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
     canvasSize: Size,
     density: Density,
     grainBrush: Brush,
     ink: Color,
-    grainAlpha: Float = 0.30f,
-    creaseCount: Int = 5,
-    creaseAlpha: Float = 0.05f
+    seed: Int,
+    grainAlpha: Float = 0.30f
 ) {
     val w = canvasSize.width
     val h = canvasSize.height
-    // Subtle base wash — the shared grain bitmap as a whisper underneath
-    // the richer hand-drawn layers. At lower alpha so it supports rather
-    // than dominates.
-    drawRect(brush = grainBrush, alpha = grainAlpha * 0.35f)
+    // Subtle base wash — the SHARED grain bitmap as a whisper underneath
+    // the per-card layers. Fixed low alpha so every sheet gets a uniform
+    // paper-grain feel without repeating a visible pattern (the per-card
+    // seeded specks below are what differ between sheets).
+    drawRect(brush = grainBrush, alpha = 0.12f)
     // Layer 1 — soft tonal variation: several large cloudy patches of
     // slightly altered tone, like uneven pulp density. Radial gradients
     // at random positions, very low alpha so they whisper.
-    val rndTone = Random(0xCAFE5EED)
+    val rndTone = Random(seed)
     repeat(4) {
         val cx = w * (0.1f + rndTone.nextFloat() * 0.8f)
         val cy = h * (0.1f + rndTone.nextFloat() * 0.8f)
@@ -287,8 +357,9 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
     }
     // Layer 2 — fine grain field: individual micro-specks scattered across
     // the page. More numerous and slightly larger than the old bitmap so
-    // the tooth actually reads instead of looking like dirt.
-    val rndGrain = Random(0xFEEDF00D)
+    // the tooth actually reads instead of looking like dirt. Seeded per
+    // card so no two sheets share the same speckle scatter.
+    val rndGrain = Random(seed + 0x1F3D5)
     val specCount = (w * h / (with(density) { 80.dp.toPx() * 80.dp.toPx() })).toInt().coerceIn(60, 300)
     repeat(specCount) {
         val sx = rndGrain.nextFloat() * w
@@ -296,57 +367,6 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
         val sr = with(density) { (0.4f + rndGrain.nextFloat() * 0.9f).dp.toPx() }
         val sa = (0.03f + rndGrain.nextFloat() * 0.05f) * grainAlpha
         drawCircle(color = ink.copy(alpha = sa), radius = sr, center = Offset(sx, sy))
-    }
-    // Layer 3 — fiber strands: a handful of long, slightly curved filaments
-    // running mostly horizontally (paper grain direction). Very faint.
-    val rndFiber = Random(0xFA5EED)
-    repeat(12) {
-        val fx = rndFiber.nextFloat() * w
-        val fy = rndFiber.nextFloat() * h
-        val len = with(density) { (18 + rndFiber.nextInt(24)).dp.toPx() }
-        val angle = (rndFiber.nextFloat() - 0.5f) * 0.4f // mostly horizontal ±0.2 rad
-        val bow = (rndFiber.nextFloat() - 0.5f) * len * 0.12f
-        val fiberAlpha = 0.04f + rndFiber.nextFloat() * 0.04f
-        val path = Path().apply {
-            moveTo(fx, fy)
-            val midX = fx + cos(angle) * len * 0.5f + bow
-            val midY = fy + sin(angle) * len * 0.5f - bow
-            quadraticBezierTo(midX, midY, fx + cos(angle) * len, fy + sin(angle) * len)
-        }
-        drawPath(
-            path,
-            color = ink.copy(alpha = fiberAlpha),
-            style = Stroke(width = with(density) { 0.7.dp.toPx() })
-        )
-    }
-    // Layer 4 — crease lines: long gentle S-curves with dark shadow + light
-    // bulge on a parallel offset line. The dark line is DEEPER, the light
-    // line brighter so each crease reads with real paper-fold depth.
-    val rnd = Random(0x6C0FFEE)
-    val strokeW = with(density) { 1.2.dp.toPx() }
-    repeat(creaseCount) {
-        val horizontal = rnd.nextBoolean()
-        val span = 0.35f + rnd.nextFloat() * 0.45f
-        val startFrac = rnd.nextFloat() * (1f - span)
-        val a = if (horizontal) {
-            Offset(w * startFrac, h * (0.18f + rnd.nextFloat() * 0.64f))
-        } else {
-            Offset(w * (0.18f + rnd.nextFloat() * 0.64f), h * startFrac)
-        }
-        val end = if (horizontal) Offset(w * (startFrac + span), a.y) else Offset(a.x, h * (startFrac + span))
-        val bowX = w * (0.03f + rnd.nextFloat() * 0.06f) * (if (rnd.nextBoolean()) 1 else -1)
-        val bowY = h * (0.03f + rnd.nextFloat() * 0.06f) * (if (rnd.nextBoolean()) 1 else -1)
-        val control = Offset((a.x + end.x) / 2f + bowX, (a.y + end.y) / 2f + bowY)
-        val path = Path().apply {
-            moveTo(a.x, a.y)
-            quadraticBezierTo(control.x, control.y, end.x, end.y)
-        }
-        // Dark crease — deeper than before so it reads as a fold, not a pencil line.
-        drawPath(path, color = ink.copy(alpha = creaseAlpha * 1.6f), style = Stroke(width = strokeW))
-        // Light bulge — offset further and brighter so the paper "catches light"
-        // on the low side of the crease, giving real 3D depth.
-        val bulge = Path().apply { addPath(path, Offset(strokeW * 2.5f, strokeW * 2.5f)) }
-        drawPath(bulge, color = Color.White.copy(alpha = creaseAlpha * 0.9f), style = Stroke(width = strokeW * 0.6f))
     }
 }
 
@@ -411,14 +431,17 @@ private class FoldedCornerShape(
  * look with proper ring-concentrated rims (the classic coffee-ring effect
  * where dissolved solids migrate to the edge and leave a dark, crisp ring
  * with a light translucent body), irregular organic pooling shapes, and
- * directional drip runs. Positions are deterministic per [size] so every
- * recomposition and every card renders the same stains.
+ * directional drip runs. v7.16 — seeded from [seed] (the card's own texture
+ * seed) so every coffee paper spills a DIFFERENT stain layout instead of
+ * the same blotches on every sheet; deterministic per card, so
+ * recomposition/typing never re-rolls them.
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCoffeeStains(
     canvasSize: Size,
-    density: Density
+    density: Density,
+    seed: Int
 ) {
-    val rnd = Random(0xCAFE5EED)
+    val rnd = Random(seed * 31 + 0xCAFE5EED)
     // Richer warm coffee brown — deeper than the old #6B4226 so the ring
     // reads clearly on cream and pastel sheets.
     val coffee = Color(0xFF5C3620)
@@ -858,10 +881,13 @@ private val sharedGrainBrush: Brush by lazy {
  * fix), and no drop shadow (rasterizing a shadow for a ~150-point outline
  * every frame was the other lag source). [ruled] adds the notebook ruled
  * lines inside the torn outline (the \"rules on torn\" toggle);
- * [coffeeStains] spills the same coffee blotches as the ruled page, and
+ * [coffeeStains] spills the same coffee blotches as the ruled page,
  * [folded] folds the top-right corner into a dog-ear (flap + crease drawn
  * OVER the torn outline — the fold covers the ragged corner, content is
- * inset past the flap). Theme-aware cream paper in both themes. [rotation]
+ * inset past the flap), and [redMargin] draws the red school-notebook
+ * margin line — the v7.16 universal decorations, all available on the torn
+ * slip exactly like the ruled page. Theme-aware cream paper in both
+ * themes. [rotation]
  * keeps the hand-placed notecard feel.
  */
 @Composable
@@ -872,6 +898,9 @@ fun TornPaperCard(
     ruled: Boolean = false,
     coffeeStains: Boolean = false,
     folded: Boolean = false,
+    // v7.16 — universal decoration: the red school-notebook margin line can
+    // now ride a torn slip too, exactly like the ruled paper.
+    redMargin: Boolean = false,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
     /** Same min-height floor as [PaperCard] — saved views pass it so short
@@ -903,10 +932,12 @@ fun TornPaperCard(
     // cards). Floor the inset so the ragged edge NEVER clips the field text
     // — especially the first characters near the top-left corner, where two
     // torn edges meet and their inward bites compound diagonally.
+    // The red margin needs the same left inset as [PaperCard] so the text
+    // never runs under the vertical rule.
     val safeContentPadding = PaddingValues(
         start = maxOf(
             contentPadding.calculateLeftPadding(LayoutDirection.Ltr),
-            16.dp
+            if (redMargin) 30.dp else 16.dp
         ),
         top = maxOf(
             contentPadding.calculateTopPadding(),
@@ -948,10 +979,14 @@ fun TornPaperCard(
             // while typing. The sheen is drawn LAST so it reads ON TOP of
             // the grain — under it, the texture flattens the vertical light
             // gradient and the torn slip looks flat.
+            // The torn edge can intrude up to ~3dp past the caller's inset;
+            // the margin line is drawn at the same 22dp position [PaperCard]
+            // uses, clear of the ragged left edge.
+            val marginInset = with(density) { 22.dp.toPx() }
             Canvas(modifier = Modifier.matchParentSize()) {
                 drawPaperTexture(
                     size, density, sharedGrainBrush, paperInkColor,
-                    grainAlpha = 1f, creaseCount = 4
+                    seed = effectiveSeed, grainAlpha = 1f
                 )
                 if (ruled) {
                     var y = ruleStartPx
@@ -965,7 +1000,15 @@ fun TornPaperCard(
                         y += ruleSpacingPx
                     }
                 }
-                if (coffeeStains) drawCoffeeStains(size, density)
+                if (redMargin) {
+                    drawLine(
+                        color = PaperMarginRed.copy(alpha = 0.55f),
+                        start = Offset(marginInset, 0f),
+                        end = Offset(marginInset, size.height),
+                        strokeWidth = with(density) { 1.2.dp.toPx() }
+                    )
+                }
+                if (coffeeStains) drawCoffeeStains(size, density, effectiveSeed)
                 drawRect(brush = sheen)
             }
             Column(
@@ -989,10 +1032,11 @@ fun TornPaperCard(
 
 /**
  * Dispatch helper — renders a capture's note-paper in the style it was
- * written in: torn styles → [TornPaperCard] (with ruled lines when the
- * torn page carries them), otherwise the classic ruled [PaperCard]. Used by
- * the saved EntryDetail views so a torn note stays torn and a ruled note
- * stays ruled.
+ * written in: torn styles → [TornPaperCard], otherwise the sharp ruled
+ * [PaperCard]. Every decoration (rules / coffee / folded / red margin) is
+ * decoded from the style's flags and passed to whichever base, so any
+ * combination renders correctly. Used by the saved EntryDetail views so a
+ * torn note stays torn and a ruled note stays ruled.
  */
 @Composable
 fun NotePaperCard(
@@ -1000,101 +1044,52 @@ fun NotePaperCard(
     modifier: Modifier = Modifier,
     ruled: Boolean = true,
     rotation: Float = 0f,
-    corner: Dp = 14.dp,
+    corner: Dp = 0.dp,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
     minHeight: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    when (style) {
-        NotePaperStyle.TORN -> TornPaperCard(
+    if (style.torn) {
+        TornPaperCard(
             modifier = modifier.heightIn(min = minHeight),
             rotation = rotation,
-            ruled = false,
+            ruled = style.ruled,
+            coffeeStains = style.coffee,
+            folded = style.folded,
+            redMargin = style.redMargin,
             paperColor = paperColor,
             contentPadding = contentPadding,
             content = content
         )
-        NotePaperStyle.TORN_RULED -> TornPaperCard(
+    } else {
+        // The ruled paper base is always ruled; [ruled] only relaxes the
+        // plain RULED style for callers that explicitly ask (none do today).
+        PaperCard(
             modifier = modifier.heightIn(min = minHeight),
-            rotation = rotation,
-            ruled = true,
-            paperColor = paperColor,
-            contentPadding = contentPadding,
-            content = content
-        )
-        NotePaperStyle.TORN_COFFEE -> TornPaperCard(
-            modifier = modifier.heightIn(min = minHeight),
-            rotation = rotation,
-            ruled = false,
-            coffeeStains = true,
-            paperColor = paperColor,
-            contentPadding = contentPadding,
-            content = content
-        )
-        NotePaperStyle.TORN_FOLDED -> TornPaperCard(
-            modifier = modifier.heightIn(min = minHeight),
-            rotation = rotation,
-            ruled = false,
-            folded = true,
-            paperColor = paperColor,
-            contentPadding = contentPadding,
-            content = content
-        )
-        NotePaperStyle.COFFEE -> PaperCard(
-            modifier = modifier.heightIn(min = minHeight),
-            ruled = true,
+            ruled = if (style == NotePaperStyle.RULED) ruled else true,
             rotation = rotation,
             corner = corner,
             paperColor = paperColor,
             contentPadding = contentPadding,
-            coffeeStains = true,
-            content = content
-        )
-        NotePaperStyle.FOLDED -> PaperCard(
-            modifier = modifier.heightIn(min = minHeight),
-            ruled = true,
-            rotation = rotation,
-            corner = corner,
-            paperColor = paperColor,
-            contentPadding = contentPadding,
-            folded = true,
-            content = content
-        )
-        NotePaperStyle.RED_MARGIN -> PaperCard(
-            modifier = modifier.heightIn(min = minHeight),
-            ruled = true,
-            rotation = rotation,
-            corner = corner,
-            paperColor = paperColor,
-            contentPadding = contentPadding,
-            redMargin = true,
-            content = content
-        )
-        NotePaperStyle.RULED -> PaperCard(
-            modifier = modifier.heightIn(min = minHeight),
-            ruled = ruled,
-            rotation = rotation,
-            corner = corner,
-            paperColor = paperColor,
-            contentPadding = contentPadding,
+            coffeeStains = style.coffee,
+            folded = style.folded,
+            redMargin = style.redMargin,
             content = content
         )
     }
 }
 
 /**
- * The per-text-box note-paper picker — a chip row for every style
- * (Ruled / Torn / Coffee / Folded / Red Margin). While a torn style is
- * selected, three sub-option chips appear — Rules / Coffee / Folded — each
- * toggling its twist onto the torn slip (plain [NotePaperStyle.TORN] is the
- * base; [NotePaperStyle.TORN_RULED] adds rules, [NotePaperStyle.TORN_COFFEE]
- * coffee stains, [NotePaperStyle.TORN_FOLDED] the folded dog-ear; tapping an
- * active chip returns to plain torn). The row is HORIZONTALLY SCROLLABLE —
- * the chips overflow a phone-width toolbar row (Rows don't wrap), so they
- * scroll instead of clipping. Lives in the field's own toolbar (alongside
- * the format toolbox), NOT in a section-level row — so each text box keeps
- * its own independent paper look.
+ * The per-text-box note-paper picker — v7.16 UNIVERSAL: a base row
+ * (Ruled / Torn) plus a decoration row whose chips work on EITHER base.
+ * Coffee / Folded / Red Margin are single-select universal decorations
+ * (one at a time, same as the old base styles) and, while the torn base is
+ * active, a "+ Rules" chip toggles the ruled lines onto the torn slip.
+ * Switching bases keeps the chosen decoration, so nothing is lost. Lives in
+ * the field's own toolbar (alongside the format toolbox), NOT in a
+ * section-level row — so each text box keeps its own independent paper
+ * look.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -1105,62 +1100,43 @@ fun NotePaperStyleToggle(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    val torn = style == NotePaperStyle.TORN || style == NotePaperStyle.TORN_RULED ||
-        style == NotePaperStyle.TORN_COFFEE || style == NotePaperStyle.TORN_FOLDED
-    // v7.12 — compact chip row: the five base styles in a wrapping FlowRow
-    // with smaller pills (no icons, tighter padding). Torn paper shows its
-    // three sub-option chips inline in the same row — Rules, Coffee, Folded
-    // — each toggling its twist on/off the torn slip. Tapping a sub-chip
-    // while the torn base isn't active switches to torn + that twist.
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        // Row 1 — base styles: Ruled · Torn · Coffee · Folded · Red Margin
+        // Row 1 — base: Ruled (sharp ruled page) · Torn (ragged slip).
+        // Switching keeps the current decoration via [notePaperStyleOf].
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            CompactPaperChip("Ruled", style == NotePaperStyle.RULED, accent, enabled) {
-                onStyleChange(NotePaperStyle.RULED)
+            CompactPaperChip("Ruled", !style.torn, accent, enabled) {
+                onStyleChange(notePaperStyleOf(false, true, style.coffee, style.folded, style.redMargin))
             }
-            CompactPaperChip("Torn", torn, accent, enabled) {
-                onStyleChange(NotePaperStyle.TORN)
-            }
-            CompactPaperChip("Coffee", style == NotePaperStyle.COFFEE, accent, enabled) {
-                onStyleChange(NotePaperStyle.COFFEE)
-            }
-            CompactPaperChip("Folded", style == NotePaperStyle.FOLDED, accent, enabled) {
-                onStyleChange(NotePaperStyle.FOLDED)
-            }
-            CompactPaperChip("Red Margin", style == NotePaperStyle.RED_MARGIN, accent, enabled) {
-                onStyleChange(NotePaperStyle.RED_MARGIN)
+            CompactPaperChip("Torn", style.torn, accent, enabled) {
+                onStyleChange(notePaperStyleOf(true, style.ruled, style.coffee, style.folded, style.redMargin))
             }
         }
-        // Row 2 — torn sub-options, only visible while a torn style is active.
-        if (torn) {
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                CompactPaperChip("+ Rules", style == NotePaperStyle.TORN_RULED, accent, enabled) {
-                    onStyleChange(
-                        if (style == NotePaperStyle.TORN_RULED) NotePaperStyle.TORN
-                        else NotePaperStyle.TORN_RULED
-                    )
+        // Row 2 — UNIVERSAL decorations: the same chips apply to both bases.
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            if (style.torn) {
+                // Rules only matter on the torn slip — the ruled page is
+                // always ruled by definition.
+                CompactPaperChip("+ Rules", style.ruled, accent, enabled) {
+                    onStyleChange(notePaperStyleOf(true, !style.ruled, style.coffee, style.folded, style.redMargin))
                 }
-                CompactPaperChip("+ Coffee", style == NotePaperStyle.TORN_COFFEE, accent, enabled) {
-                    onStyleChange(
-                        if (style == NotePaperStyle.TORN_COFFEE) NotePaperStyle.TORN
-                        else NotePaperStyle.TORN_COFFEE
-                    )
-                }
-                CompactPaperChip("+ Folded", style == NotePaperStyle.TORN_FOLDED, accent, enabled) {
-                    onStyleChange(
-                        if (style == NotePaperStyle.TORN_FOLDED) NotePaperStyle.TORN
-                        else NotePaperStyle.TORN_FOLDED
-                    )
-                }
+            }
+            CompactPaperChip("+ Coffee", style.coffee, accent, enabled) {
+                onStyleChange(notePaperStyleOf(style.torn, style.ruled, coffee = !style.coffee))
+            }
+            CompactPaperChip("+ Folded", style.folded, accent, enabled) {
+                onStyleChange(notePaperStyleOf(style.torn, style.ruled, folded = !style.folded))
+            }
+            CompactPaperChip("+ Red Margin", style.redMargin, accent, enabled) {
+                onStyleChange(notePaperStyleOf(style.torn, style.ruled, redMargin = !style.redMargin))
             }
         }
     }

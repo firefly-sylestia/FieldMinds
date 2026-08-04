@@ -7,3 +7,5 @@
 • Main card enhancements fully rebuilt (Settings → Appearance → Main card): a diagonal top-lit gradient, a gradient rim-light border with a bevel edge, layered accent-tinted soft shadows, and editorial display typography — each still a separate toggle, default look untouched
 • Spin deck now scales to fit any screen — the shuffle deck, cards and spacing compress together with the Category/Filter buttons on short or narrow screens instead of overflowing
 • Mood board fix: the small board and the full-screen expanded board now show the exact same tile arrangement (fit + centered), and the watermark pattern scales with the board so it looks identical when expanded
+• Paper makeover: every note gets its own unique grain pattern (no more identical texture), the heavy crease streaks are gone, and normal paper is now sharp-edged like a real sheet
+• Coffee, red margin and the folded corner are now universal decorations — the same options work on both torn and ruled paper (cleaner picker, no duplicated choices)
