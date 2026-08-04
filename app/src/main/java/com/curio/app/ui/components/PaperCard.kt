@@ -1069,7 +1069,7 @@ private fun buildSoftSheetPath(
     path.moveTo(0f, 0f)
     path.lineTo(w, 0f)
     path.lineTo(w, bottomAt(w))
-    x = w - step
+    var x = w - step
     while (x > 0f) {
         path.lineTo(x, bottomAt(x))
         x -= step

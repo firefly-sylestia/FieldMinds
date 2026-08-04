@@ -70,8 +70,11 @@ fun CurioEntryCard(
     // Cabinet cards are recomposed while the grid settles and while the
     // toolbar/search state changes. Keep the header brush stable per accent
     // so opening the Cabinet does not allocate a new gradient for every card.
-    val headerBrush = remember(accent) {
-        Brush.verticalGradient(CurioGradients.cardGradient(accent))
+    // cardGradient reads MaterialTheme, so resolve it in the composable
+    // scope before remembering the non-composable Brush allocation.
+    val headerGradient = CurioGradients.cardGradient(accent)
+    val headerBrush = remember(headerGradient) {
+        Brush.verticalGradient(headerGradient)
     }
 
     val pressScale by androidx.compose.animation.core.animateFloatAsState(
