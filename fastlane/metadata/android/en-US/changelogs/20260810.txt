@@ -32,3 +32,4 @@
 • Hero fix: frosted blur now lives on the date/mood/type card only (with a glassy topic title) — the backdrop stays crisp again
 • Mood-board zoom rework: double-tap zooms ONLY the tapped image (the board stays still) — it glides to the center along its arc, and pinch-to-zoom + one-finger pan now refine just that image
 • Fixed the mood-board PNG save/share compile errors
+• Double-tap the zoomed mood-board image to reset a pinch/pan back to the fit zoom (instead of closing)

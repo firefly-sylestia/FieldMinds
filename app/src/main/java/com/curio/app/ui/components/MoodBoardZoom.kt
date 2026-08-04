@@ -12,6 +12,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -62,6 +64,7 @@ import kotlin.math.PI
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlinx.coroutines.launch
 
 /**
  * Mutable zoom state for one mood-board canvas. Only a SINGLE tile image is
@@ -309,6 +312,48 @@ fun MoodBoardZoomOverlay(
     var pinchScale by remember { mutableFloatStateOf(1f) }
     var pinchX by remember { mutableFloatStateOf(0f) }
     var pinchY by remember { mutableFloatStateOf(0f) }
+    // Double-tap on the magnified image resets a pinch/pan back to the
+    // fit-based zoom — incremented each time, the counter drives a smooth
+    // spring back to the neutral resting state.
+    var resetTick by remember { mutableIntStateOf(0) }
+    // True while a pinch/pan refinement is actually active (scale > 1x or
+    // the image panned off-center) — a double-tap then resets instead of
+    // closing.
+    val isPinched = pinchScale > 1.01f || pinchX != 0f || pinchY != 0f
+
+    // Double-tap reset: animate the pinch/pan back to the fit zoom (scale
+    // 1x, centered) with a soft spring, then neutralize — a later double-tap
+    // while un-pinched falls through to the close path.
+    val resetScale = remember { Animatable(1f) }
+    val resetX = remember { Animatable(0f) }
+    val resetY = remember { Animatable(0f) }
+    LaunchedEffect(resetTick) {
+        if (resetTick == 0) return@LaunchedEffect
+        resetScale.snapTo(pinchScale)
+        resetX.snapTo(pinchX)
+        resetY.snapTo(pinchY)
+        // Run the three springs in parallel. Each lambda paints the plain
+        // float states from its Animatable every frame (Animatable.value is
+        // always current — no stale closures), so the graphicsLayer follows
+        // the reset smoothly; the effect ends when the springs settle.
+        kotlinx.coroutines.coroutineScope {
+            launch {
+                resetScale.animateTo(1f, spring(dampingRatio = 0.7f, stiffness = 260f)) {
+                    pinchScale = this.value
+                }
+            }
+            launch {
+                resetX.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = 260f)) {
+                    pinchX = this.value
+                }
+            }
+            launch {
+                resetY.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = 260f)) {
+                    pinchY = this.value
+                }
+            }
+        }
+    }
 
     LaunchedEffect(
         zoomState.scaleTarget, zoomState.offsetX, zoomState.offsetY,
@@ -358,40 +403,41 @@ fun MoodBoardZoomOverlay(
         }
     }
 
-    // ONE box owns the whole overlay and ALL of its gestures: a tap closes,
-    // while a drag (one finger) pans and a pinch zooms the image. The two are
-    // disambiguated in a single [awaitEachGesture] loop — a clean tap (no
-    // second pointer, no slop-crossing movement) closes; anything else is a
-    // pan/zoom applied to [pinchScale]/[pinchX]/[pinchY] ON TOP of the glide.
-    // One detector means a pan/zoom can never fall through to the tap-close
-    // handler (two separate detectors would let the parent's tap fire on
-    // release after every drag/pinch).
+    // The parent box owns the PAN/ZOOM gestures only: a drag (one finger)
+    // pans and a pinch zooms the image. Clean taps pass through untouched —
+    // the image's own detectTapGestures below handles tap-to-close and
+    // double-tap-to-reset. Keeping the two roles in separate detectors means
+    // a pan/zoom can never accidentally fire the tap-close (and vice versa).
     Box(
         modifier = modifier
             .fillMaxSize()
             .zIndex(1000f)
             .pointerInput(tileUri) {
                 awaitEachGesture {
-                    val down = awaitFirstDown()
-                    var isTap = true
+                    awaitFirstDown()
+                    var hasMovement = false
                     var gestureZoom = 1f
                     var gesturePan = Offset.Zero
                     while (true) {
                         val event = awaitPointerEvent()
-                        if (event.changes.size > 1) isTap = false
+                        if (event.changes.size > 1) hasMovement = true
                         val zoomChange = event.calculateZoom()
                         val panChange = event.calculatePan()
                         if (zoomChange != 1f || panChange != Offset.Zero) {
-                            isTap = false
+                            hasMovement = true
                             gestureZoom *= zoomChange
                             gesturePan += panChange
                         }
-                        event.changes.forEach { it.consume() }
+                        // Consume ONLY pan/zoom movement: a clean tap's up
+                        // must stay unconsumed so the image's own tap
+                        // detector can fire tap-to-close (it skips consumed
+                        // ups). Dragging/pinching consume here instead, which
+                        // is what keeps them from also triggering a tap.
+                        if (hasMovement) event.changes.forEach { it.consume() }
                         if (event.changes.none { it.pressed }) break
                     }
-                    if (isTap) {
-                        zoomState.zoomOut()
-                    } else {
+                    // No movement → a tap, which the image's detector owns.
+                    if (hasMovement) {
                         pinchScale = (pinchScale * gestureZoom).coerceIn(1f, 8f)
                         pinchX += gesturePan.x
                         pinchY += gesturePan.y
@@ -406,15 +452,37 @@ fun MoodBoardZoomOverlay(
         // image's top-left in viewport pixels, so at scale 1 with the
         // resting (tileX, tileY) it sits exactly on its tile.
         Box(
-            modifier = Modifier.graphicsLayer {
-                // The image scales around its own center, so a
-                // translation of (tileX, tileY) at scale 1 puts it
-                // exactly on its resting tile.
-                scaleX = glideScale * pinchScale
-                scaleY = glideScale * pinchScale
-                translationX = glideX + pinchX
-                translationY = glideY + pinchY
-            }
+            modifier = Modifier
+                .graphicsLayer {
+                    // The image scales around its own center, so a
+                    // translation of (tileX, tileY) at scale 1 puts it
+                    // exactly on its resting tile.
+                    scaleX = glideScale * pinchScale
+                    scaleY = glideScale * pinchScale
+                    translationX = glideX + pinchX
+                    translationY = glideY + pinchY
+                }
+                // Tap-to-close, double-tap-to-reset — only on the image.
+                // (The parent box owns pan/zoom; tapping the backdrop does
+                // nothing — the dismiss button always closes.) While the
+                // image is PINCHED, the FIRST tap of a double-tap must reset
+                // (not close), so the onTap path checks isPinched too — when
+                // pinched it cancels the close and bumps the reset instead.
+                .pointerInput(tileUri) {
+                    detectTapGestures(
+                        onTap = {
+                            if (isPinched) resetTick++ else zoomState.zoomOut()
+                        },
+                        onDoubleTap = {
+                            // Fast second tap while the reset spring is still
+                            // running: re-bump the reset (re-snaps from the
+                            // mid-animation values and keeps going) instead of
+                            // closing mid-reset. Only closes when actually
+                            // un-pinched (or the reset already settled).
+                            if (isPinched) resetTick++ else zoomState.zoomOut()
+                        }
+                    )
+                }
         ) {
             val imageModifier = Modifier
                 .size(

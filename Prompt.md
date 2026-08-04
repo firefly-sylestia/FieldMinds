@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**Double-tap on the zoomed mood-board image resets the pinch/pan back to the fit zoom (instead of closing)**
+
+### What was asked
+
+Follow-up suggestion clicked: “Add a double-tap on the zoomed image to reset it to the fit zoom level (like the old behavior), instead of only closing on tap.”
+
+### What was done
+
+- **MoodBoardZoomOverlay (MoodBoardZoom.kt)** — added `isPinched` (pinchScale > 1.01 || pan ≠ 0) + a `resetTick` counter. A tap/double-tap while pinched now bumps `resetTick` → a LaunchedEffect snaps three remember'd Animatables to the current pinch/pan and springs them back to the fit zoom (scale 1×, centered; 0.7/260 springs, each animateTo-lambda painting its plain float state — no stale closures, self-terminating). While un-pinched, tap/double-tap still closes.
+- **Gesture split refined** — the parent overlay Box's `awaitEachGesture` now handles ONLY pan/zoom (tracks movement from multi-pointer or calculateZoom/calculatePan deltas and consumes changes ONLY when moving, so a clean tap's up stays unconsumed); the IMAGE Box owns `detectTapGestures` (onTap + onDoubleTap both gate on `isPinched` — reviewer catch: a fast second tap re-bumps the reset instead of closing mid-reset). This resolved the earlier cross-detector close-after-drag bug while adding the reset path.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces BALANCED; code-reviewer pass — three-Animatable reset sound (no stale closures), gesture split correct (parent consumes only on movement), imports/APIs valid; applied the reviewer's onDoubleTap gating so a fast second tap continues the reset instead of closing. Note: single-tap-close now waits the standard ~300ms double-tap timeout (inherent to detectTapGestures).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board zoom rework — only the tapped IMAGE zooms (arc glide to center + pinch/pan), board stays still + PNG export compile fixes**
 
 ### What was asked
