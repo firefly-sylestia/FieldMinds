@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -115,7 +117,7 @@ fun PaperCard(
     // is built in Dp directly (no px round-trip); only the Canvas's
     // red-margin rule needs px.
     val marginInsetDp = 22.dp
-    val foldInsetDp = 22.dp
+    val foldInsetDp = 28.dp
     val marginInset = with(density) { marginInsetDp.toPx() }
     val safePadding = PaddingValues(
         // PaddingValues has no `left`/`right` parameters — the horizontal
@@ -134,7 +136,7 @@ fun PaperCard(
         bottom = contentPadding.calculateBottomPadding()
     )
     val shape = remember(corner, folded) {
-        if (folded) FoldedCornerShape(corner, 22.dp) else RoundedCornerShape(corner)
+        if (folded) FoldedCornerShape(corner, 26.dp) else RoundedCornerShape(corner)
     }
     Surface(
         shape = shape,
@@ -230,13 +232,22 @@ private fun rigidCardSheen(): Brush = Brush.verticalGradient(
 )
 
 /**
- * The paper's own texture — fine grain + soft crease lines, the
- * "crumpled then flattened" tooth of real paper. [grainBrush] is the shared
- * speckle/fiber bitmap tiled at [grainAlpha] (faint on ruled sheets, full
- * strength on torn slips); the creases are a few long, gentle S-curves like
- * a sheet that was scrunched and smoothed back out — drawn once per size
- * with a fixed seed, so recomposition never re-rolls them. Always rendered
- * UNDER the ruled lines and ink so the text stays clean.
+ * The paper's own texture — rich, realistic layered tooth:
+ *
+ * Layer 1 — Soft tonal variation: large-scale cloudy patches of slightly
+ *   darker/lighter tone, like uneven fiber density in real paper.
+ * Layer 2 — Fine grain field: scattered micro-specks (the paper tooth)
+ *   drawn as individual dots, denser than the old bitmap but still soft.
+ * Layer 3 — Fiber strands: a few long, slightly curved cotton/wood-pulp
+ *   filaments visible on close inspection, running in the paper grain.
+ * Layer 4 — Crease lines: long gentle S-curves with a dark shadow line
+ *   and a parallel light bulge (the paper fold catching light), scaled
+ *   so each crease reads with real depth.
+ *
+ * All layers are deterministic (seeded per size), so recomposition never
+ * re-rolls them. [grainBrush] is still used but at LOWER alpha — the real
+ * detail now comes from the drawn layers. The shared bitmap becomes a
+ * subtle base wash instead of the only texture.
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
     canvasSize: Size,
@@ -247,11 +258,72 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
     creaseCount: Int = 5,
     creaseAlpha: Float = 0.05f
 ) {
-    drawRect(brush = grainBrush, alpha = grainAlpha)
-    val rnd = Random(0x6C0FFEE)
     val w = canvasSize.width
     val h = canvasSize.height
-    val strokeW = with(density) { 1.4.dp.toPx() }
+    // Subtle base wash — the shared grain bitmap as a whisper underneath
+    // the richer hand-drawn layers. At lower alpha so it supports rather
+    // than dominates.
+    drawRect(brush = grainBrush, alpha = grainAlpha * 0.35f)
+    // Layer 1 — soft tonal variation: several large cloudy patches of
+    // slightly altered tone, like uneven pulp density. Radial gradients
+    // at random positions, very low alpha so they whisper.
+    val rndTone = Random(0xCAFE5EED)
+    repeat(4) {
+        val cx = w * (0.1f + rndTone.nextFloat() * 0.8f)
+        val cy = h * (0.1f + rndTone.nextFloat() * 0.8f)
+        val radius = (w.coerceAtMost(h)) * (0.25f + rndTone.nextFloat() * 0.45f)
+        val toneAlpha = 0.015f + rndTone.nextFloat() * 0.020f
+        val toneColor = if (it % 2 == 0) ink.copy(alpha = toneAlpha)
+                        else Color.White.copy(alpha = toneAlpha)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(toneColor, Color.Transparent),
+                center = Offset(cx, cy),
+                radius = radius
+            ),
+            radius = radius,
+            center = Offset(cx, cy)
+        )
+    }
+    // Layer 2 — fine grain field: individual micro-specks scattered across
+    // the page. More numerous and slightly larger than the old bitmap so
+    // the tooth actually reads instead of looking like dirt.
+    val rndGrain = Random(0xFEEDF00D)
+    val specCount = (w * h / (with(density) { 80.dp.toPx() * 80.dp.toPx() })).toInt().coerceIn(60, 300)
+    repeat(specCount) {
+        val sx = rndGrain.nextFloat() * w
+        val sy = rndGrain.nextFloat() * h
+        val sr = with(density) { (0.4f + rndGrain.nextFloat() * 0.9f).dp.toPx() }
+        val sa = (0.03f + rndGrain.nextFloat() * 0.05f) * grainAlpha
+        drawCircle(color = ink.copy(alpha = sa), radius = sr, center = Offset(sx, sy))
+    }
+    // Layer 3 — fiber strands: a handful of long, slightly curved filaments
+    // running mostly horizontally (paper grain direction). Very faint.
+    val rndFiber = Random(0xFA5EED)
+    repeat(12) {
+        val fx = rndFiber.nextFloat() * w
+        val fy = rndFiber.nextFloat() * h
+        val len = with(density) { (18 + rndFiber.nextInt(24)).dp.toPx() }
+        val angle = (rndFiber.nextFloat() - 0.5f) * 0.4f // mostly horizontal ±0.2 rad
+        val bow = (rndFiber.nextFloat() - 0.5f) * len * 0.12f
+        val fiberAlpha = 0.04f + rndFiber.nextFloat() * 0.04f
+        val path = Path().apply {
+            moveTo(fx, fy)
+            val midX = fx + cos(angle) * len * 0.5f + bow
+            val midY = fy + sin(angle) * len * 0.5f - bow
+            quadraticBezierTo(midX, midY, fx + cos(angle) * len, fy + sin(angle) * len)
+        }
+        drawPath(
+            path,
+            color = ink.copy(alpha = fiberAlpha),
+            style = Stroke(width = with(density) { 0.7.dp.toPx() })
+        )
+    }
+    // Layer 4 — crease lines: long gentle S-curves with dark shadow + light
+    // bulge on a parallel offset line. The dark line is DEEPER, the light
+    // line brighter so each crease reads with real paper-fold depth.
+    val rnd = Random(0x6C0FFEE)
+    val strokeW = with(density) { 1.2.dp.toPx() }
     repeat(creaseCount) {
         val horizontal = rnd.nextBoolean()
         val span = 0.35f + rnd.nextFloat() * 0.45f
@@ -269,13 +341,12 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
             moveTo(a.x, a.y)
             quadraticBezierTo(control.x, control.y, end.x, end.y)
         }
-        // Dark ink crease, plus a whisper of light on a PARALLEL line just
-        // below it — the paper bulge catching light on the low side of the
-        // fold. (On the same path the white would cancel the dark line and
-        // read as a smudge; offsetting keeps the crease crisp.)
-        drawPath(path, color = ink.copy(alpha = creaseAlpha), style = Stroke(width = strokeW))
-        val bulge = Path().apply { addPath(path, Offset(strokeW * 1.8f, strokeW * 1.8f)) }
-        drawPath(bulge, color = Color.White.copy(alpha = creaseAlpha * 0.6f), style = Stroke(width = strokeW * 0.7f))
+        // Dark crease — deeper than before so it reads as a fold, not a pencil line.
+        drawPath(path, color = ink.copy(alpha = creaseAlpha * 1.6f), style = Stroke(width = strokeW))
+        // Light bulge — offset further and brighter so the paper "catches light"
+        // on the low side of the crease, giving real 3D depth.
+        val bulge = Path().apply { addPath(path, Offset(strokeW * 2.5f, strokeW * 2.5f)) }
+        drawPath(bulge, color = Color.White.copy(alpha = creaseAlpha * 0.9f), style = Stroke(width = strokeW * 0.6f))
     }
 }
 
@@ -336,105 +407,148 @@ private class FoldedCornerShape(
 }
 
 /**
- * Coffee-stain blotches along the paper's edges — the dried-cup look done
- * properly: irregular wobbling rim rings (real coffee pools unevenly, so
- * the rim is sampled with radial jitter instead of a perfect circle), a
- * faint wet body inside, occasional double rings where the cup rocked, and
- * satellite splatter dots. A couple of very faint washed patches suggest
- * the cup's moist footprint. Positions are seeded and derived from [size]
- * FRACTIONS, so every recomposition and every card size renders the same
- * stains — never re-rolled while typing.
+ * Realistic coffee-stain blotches along the paper's edges — the dried-cup
+ * look with proper ring-concentrated rims (the classic coffee-ring effect
+ * where dissolved solids migrate to the edge and leave a dark, crisp ring
+ * with a light translucent body), irregular organic pooling shapes, and
+ * directional drip runs. Positions are deterministic per [size] so every
+ * recomposition and every card renders the same stains.
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCoffeeStains(
     canvasSize: Size,
     density: Density
 ) {
     val rnd = Random(0xCAFE5EED)
-    // Warm coffee brown — reads on cream AND every pastel sheet.
-    val coffee = Color(0xFF6B4226)
+    // Richer warm coffee brown — deeper than the old #6B4226 so the ring
+    // reads clearly on cream and pastel sheets.
+    val coffee = Color(0xFF5C3620)
     val w = canvasSize.width
     val h = canvasSize.height
-    // Main stains pinned to the edges/corners so the writing area stays
-    // clean. Positions are SIZE FRACTIONS + seeded jitter, so every
-    // recomposition and every card size renders the same stains.
+    // Main stains pinned to edges/corners; the writing area stays clean.
     val spots = listOf(
-        0.10f to 0.16f,
-        0.86f to 0.20f,
-        0.08f to 0.82f,
-        0.83f to 0.80f,
-        0.50f to 0.10f
+        0.11f to 0.14f,
+        0.85f to 0.19f,
+        0.07f to 0.81f,
+        0.84f to 0.82f,
+        0.48f to 0.09f
     )
     spots.forEachIndexed { i, (fx, fy) ->
         val center = Offset(
-            w * (fx + (rnd.nextFloat() - 0.5f) * 0.03f),
-            h * (fy + (rnd.nextFloat() - 0.5f) * 0.03f)
+            w * (fx + (rnd.nextFloat() - 0.5f) * 0.04f),
+            h * (fy + (rnd.nextFloat() - 0.5f) * 0.04f)
         )
-        val r = with(density) { (11 + rnd.nextInt(13)).dp.toPx() }
-        val ringAlpha = 0.10f + rnd.nextFloat() * 0.08f
-        // Irregular rim — sampled around the circle with radial wobble so
-        // the ring reads as a real dried coffee puddle, not a compass ring.
-        fun rimPath(radiusFrac: Float, points: Int, wobble: Float): Path = Path().apply {
+        val r = with(density) { (10 + rnd.nextInt(15)).dp.toPx() }
+        val ringAlpha = 0.12f + rnd.nextFloat() * 0.10f
+        // Create an organic pooling shape — sampled N points around the
+        // circle with radial wobble so the puddle reads as real dried
+        // coffee, not a compass-drawn circle.
+        fun poolPath(points: Int, wobble: Float, squashX: Float = 1f, squashY: Float = 1f): Path = Path().apply {
+            var first = true
             repeat(points) { k ->
                 val ang = (k.toFloat() / points) * (Math.PI * 2).toFloat()
-                val rr = r * radiusFrac * (1f + (rnd.nextFloat() - 0.5f) * wobble)
-                val px = center.x + cos(ang) * rr
-                val py = center.y + sin(ang) * rr
-                if (k == 0) moveTo(px, py) else lineTo(px, py)
+                val rr = r * (1f + (rnd.nextFloat() - 0.5f) * wobble)
+                val px = center.x + cos(ang) * rr * squashX
+                val py = center.y + sin(ang) * rr * squashY
+                if (first) { moveTo(px, py); first = false } else lineTo(px, py)
             }
             close()
         }
-        val rim = rimPath(1f, 16, 0.30f)
-        // Faint "wet" body inside the ring (the dried cup's shadow), fading
-        // out toward the rim so the ring reads as the concentrated edge.
+        // Slightly squashed pools — coffee never dries in a perfect circle.
+        val sqX = 0.85f + rnd.nextFloat() * 0.30f
+        val sqY = 0.85f + rnd.nextFloat() * 0.30f
+        val pool = poolPath(20, 0.32f, sqX, sqY)
+        // Light translucent body inside the ring — the dried liquid's
+        // faint stain, fading toward the rim where the ring concentrates.
         drawPath(
-            rim,
+            pool,
             brush = Brush.radialGradient(
                 colors = listOf(
-                    coffee.copy(alpha = ringAlpha * 0.30f),
-                    coffee.copy(alpha = ringAlpha * 0.10f),
+                    coffee.copy(alpha = ringAlpha * 0.22f),
+                    coffee.copy(alpha = ringAlpha * 0.08f),
                     Color.Transparent
                 ),
                 center = center,
-                radius = r * 1.1f
+                radius = r * 1.15f
             )
         )
+        // The concentrated ring — darker, slightly wider on the outside.
+        // Real coffee rings: dissolved solids migrate to the perimeter,
+        // leaving a crisp dark rim. Two passes: a soft wider stroke and a
+        // crisp thinner stroke on top for the concentrated edge.
         drawPath(
-            rim,
-            color = coffee.copy(alpha = ringAlpha),
-            style = Stroke(width = with(density) { 1.8.dp.toPx() })
+            pool,
+            color = coffee.copy(alpha = ringAlpha * 0.65f),
+            style = Stroke(width = with(density) { 2.6.dp.toPx() })
         )
-        // Some stains double-ring (a fainter inner ring) — real dried
-        // coffee does this when the cup rocked.
+        drawPath(
+            pool,
+            color = coffee.copy(alpha = ringAlpha * 0.45f),
+            style = Stroke(width = with(density) { 1.2.dp.toPx() })
+        )
+        // Inner ghost ring — some stains have a fainter inner ring where
+        // the cup was lifted and set back down (rocking cup effect).
         if (i % 2 == 1) {
+            val inner = poolPath(14, 0.18f, sqX * 0.85f, sqY * 0.85f)
             drawPath(
-                rimPath(0.66f, 12, 0.22f),
+                inner,
+                color = coffee.copy(alpha = ringAlpha * 0.55f),
+                style = Stroke(width = with(density) { 1.4.dp.toPx() })
+            )
+        }
+        // Directional drip runs — a couple of small streaks from the stain
+        // edge trailing downward, like a drip that ran down the page.
+        repeat(if (i % 3 == 0) 2 else 1) {
+            val angle = (-0.3f + rnd.nextFloat() * 0.6f) // roughly downward ±0.3 rad
+            val dripStart = Offset(
+                center.x + cos(angle) * r * 0.9f,
+                center.y + sin(angle) * r * 0.9f
+            )
+            val dripLen = with(density) { (5 + rnd.nextInt(9)).dp.toPx() }
+            val dripEnd = Offset(
+                dripStart.x + cos(angle) * dripLen * 0.5f,
+                dripStart.y + sin(angle) * dripLen
+            )
+            val dripMid = Offset(
+                (dripStart.x + dripEnd.x) / 2f + (rnd.nextFloat() - 0.5f) * dripLen * 0.25f,
+                (dripStart.y + dripEnd.y) / 2f
+            )
+            val dripPath = Path().apply {
+                moveTo(dripStart.x, dripStart.y)
+                quadraticBezierTo(dripMid.x, dripMid.y, dripEnd.x, dripEnd.y)
+            }
+            drawPath(
+                dripPath,
                 color = coffee.copy(alpha = ringAlpha * 0.5f),
                 style = Stroke(width = with(density) { 1.dp.toPx() })
             )
         }
-        // Satellite splatter dots around the stains — the cup's drip.
-        repeat(if (i % 2 == 0) 4 else 2) {
+        // Satellite splatter dots — tiny drops around the main stain.
+        repeat(if (i % 2 == 0) 5 else 3) {
             val a = rnd.nextFloat() * (Math.PI * 2).toFloat()
-            val d = r * (1.25f + rnd.nextFloat() * 0.55f)
+            val d = r * (1.15f + rnd.nextFloat() * 0.65f)
             val drop = Offset(center.x + cos(a) * d, center.y + sin(a) * d)
             if (drop.x in 0f..w && drop.y in 0f..h) {
                 drawCircle(
-                    color = coffee.copy(alpha = ringAlpha * 0.7f),
-                    radius = with(density) { (1.0 + rnd.nextFloat() * 1.3).dp.toPx() },
+                    color = coffee.copy(alpha = ringAlpha * 0.55f),
+                    radius = with(density) { (0.8 + rnd.nextFloat() * 1.5).dp.toPx() },
                     center = drop
                 )
             }
         }
     }
-    // A couple of very faint washed patches — the cup's moist footprint
-    // left behind, barely-there depth so the sheet isn't perfectly flat.
-    repeat(2) {
-        val px = w * (0.25f + rnd.nextFloat() * 0.5f)
-        val py = h * (0.35f + rnd.nextFloat() * 0.4f)
-        val pr = with(density) { (22 + rnd.nextInt(20)).dp.toPx() }
+    // Faint washed patches — the cup's moist footprint on the page,
+    // larger and softer than the ring stains.
+    repeat(3) {
+        val px = w * (0.18f + rnd.nextFloat() * 0.64f)
+        val py = h * (0.30f + rnd.nextFloat() * 0.45f)
+        val pr = with(density) { (20 + rnd.nextInt(28)).dp.toPx() }
         drawCircle(
             brush = Brush.radialGradient(
-                colors = listOf(coffee.copy(alpha = 0.05f), Color.Transparent),
+                colors = listOf(
+                    coffee.copy(alpha = 0.04f),
+                    coffee.copy(alpha = 0.015f),
+                    Color.Transparent
+                ),
                 center = Offset(px, py),
                 radius = pr
             ),
@@ -445,14 +559,13 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCoffeeStains(
 }
 
 /**
- * The folded flap + crease shadow for the dog-ear (v7.3 quality pass). The
- * flap is the reflected corner triangle (w - fold, 0) → (w, fold) →
- * (w - fold, fold), painted with a THREE-stop gradient — darkest along the
- * crease (the underside of the bend), lightening toward the tip with a
- * whisper of white where the corner catches light. A soft gradient drop
- * shadow mirrors the flap into the page, a thin specular highlight runs
- * just off the crease on the flap body, and the crease itself is a soft
- * halo plus a crisp hairline.
+ * The folded flap + crease shadow for the dog-ear (v7.12 quality pass).
+ * The flap is the reflected corner triangle with a rich THREE-stop gradient
+ * — dark along the crease (the underside of the bend), lightening toward
+ * the tip. A pronounced drop shadow casts onto the page underneath, a
+ * specular highlight catches the fold ridge, and the crease itself reads
+ * with a soft halo + crisp hairline. The fold size is bumped to 26dp so
+ * the dog-ear reads clearly instead of the old subtle 22dp whisper.
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     canvasSize: Size,
@@ -460,12 +573,12 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     paperSurface: Color,
     paperEdge: Color
 ) {
-    val f = with(density) { 22.dp.toPx() }
-    val s = with(density) { 3.dp.toPx() }
+    val f = with(density) { 26.dp.toPx() }
+    val s = with(density) { 4.dp.toPx() }
     val w = canvasSize.width
-    // Soft drop shadow — the flap sits slightly lifted off the page, so a
-    // dark wedge mirrors it toward the page interior (down-left of the
-    // crease), fading as it recedes. Drawn first, under the flap.
+    // Deeper drop shadow — the flap casts a wider, darker wedge onto the
+    // page below (down-left of the crease), fading as it recedes. Bigger
+    // and darker than before so the fold actually reads as lifted.
     drawPath(
         Path().apply {
             moveTo(w - f - s, s)
@@ -475,17 +588,16 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
         },
         brush = Brush.linearGradient(
             colors = listOf(
-                Color.Black.copy(alpha = 0.16f),
-                Color.Black.copy(alpha = 0.10f),
+                Color.Black.copy(alpha = 0.22f),
+                Color.Black.copy(alpha = 0.12f),
                 Color.Transparent
             ),
             start = Offset(w - f, s),
-            end = Offset(w - f - s, f)
+            end = Offset(w - f - s * 1.5f, f + s)
         )
     )
     // The flap itself — the paper's BACK side: darkest along the crease,
-    // lightening toward the tip, with a whisper of light at the very tip
-    // (the bend catching the light).
+    // lightening toward the tip with a light catch at the corner.
     val flap = Path().apply {
         moveTo(w - f, 0f)
         lineTo(w, f)
@@ -496,40 +608,41 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
         flap,
         brush = Brush.linearGradient(
             colors = listOf(
-                lerp(paperSurface, Color.Black, 0.26f),
-                lerp(paperSurface, Color.Black, 0.10f),
-                lerp(paperSurface, Color.White, 0.06f)
+                lerp(paperSurface, Color.Black, 0.30f),
+                lerp(paperSurface, Color.Black, 0.12f),
+                lerp(paperSurface, Color.White, 0.10f)
             ),
             start = Offset(w - f / 2f, f / 2f),
-            end = Offset(w - f * 0.15f, f * 1.05f)
+            end = Offset(w - f * 0.10f, f * 1.05f)
         )
     )
-    // Specular highlight — a thin light stroke just off the crease on the
-    // flap body, where the folded paper bulges and catches the light.
+    // Specular highlight — a thin light stroke just below the crease on
+    // the flap body, where the folded paper bulges and catches the light.
     drawLine(
-        color = Color.White.copy(alpha = 0.16f),
-        start = Offset(w - f + s, s * 0.4f),
-        end = Offset(w - s * 0.6f, f - s * 0.5f),
-        strokeWidth = with(density) { 1.2.dp.toPx() }
+        color = Color.White.copy(alpha = 0.20f),
+        start = Offset(w - f + s * 1.2f, s * 0.5f),
+        end = Offset(w - s * 0.5f, f - s * 0.6f),
+        strokeWidth = with(density) { 1.4.dp.toPx() }
     )
-    // Soft crease halo, then the crisp fold line along the diagonal.
+    // Soft crease halo — a wide, faint dark blur along the fold line.
     drawLine(
-        color = Color.Black.copy(alpha = 0.12f),
+        color = Color.Black.copy(alpha = 0.14f),
         start = Offset(w - f, 0f),
         end = Offset(w, f),
-        strokeWidth = with(density) { 3.dp.toPx() }
+        strokeWidth = with(density) { 3.5.dp.toPx() }
     )
+    // Crisp crease hairline — the actual fold edge, darker than before.
     drawLine(
-        color = lerp(paperEdge, Color.Black, 0.35f),
+        color = lerp(paperEdge, Color.Black, 0.45f),
         start = Offset(w - f, 0f),
         end = Offset(w, f),
-        strokeWidth = with(density) { 1.dp.toPx() }
+        strokeWidth = with(density) { 1.1.dp.toPx() }
     )
-    // Corner-tip lift — the outermost point of the fold catches a spot of
+    // Corner-tip lift — the outermost point catches a brighter spot of
     // light, selling the "peeled-up corner" read.
     drawCircle(
-        color = Color.White.copy(alpha = 0.10f),
-        radius = with(density) { 2.2.dp.toPx() },
+        color = Color.White.copy(alpha = 0.14f),
+        radius = with(density) { 2.8.dp.toPx() },
         center = Offset(w - f, 0f)
     )
 }
@@ -627,25 +740,25 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
         path.close()
         return path
     }
-    // Ragged bite amplitude + the slow deeper-tear layer, in px. The torn
+    // Ragged bite + slow deeper-tear + micro-detail layer, in px. The torn
     // edge must never reach far enough into the card to clip the field text:
     // TornPaperCard floors its content inset at 16dp horizontal / 14dp
     // vertical, and fractal noise is in [0,1] so (n - 0.5f) * 2 ∈ [-1,1] →
-    // worst-case inward ≈ bite + tear. The amplitudes were trimmed after the
-    // corner-clipping report (two edges meet at corners, compounding the
-    // inward bite diagonally), then raised again for a rougher rip — the
-    // current worst case (~4.6dp) still sits well inside the 16/14dp floor,
-    // so the rips read rough without ever reaching the text.
-    val bite = with(density) { 3.0.dp.toPx() }
-    val tear = with(density) { 1.6.dp.toPx() }
-    val step = with(density) { 6.dp.toPx() }
+    // worst-case inward ≈ bite + tear + micro. The amplitudes were raised
+    // for a rougher, more genuinely torn look — the current worst case
+    // (~5.8dp) still sits well inside the 16/14dp floor, so the rips read
+    // jagged and fibrous without ever reaching the text.
+    val bite = with(density) { 3.8.dp.toPx() }
+    val tear = with(density) { 2.0.dp.toPx() }
+    val step = with(density) { 5.dp.toPx() }
     // Base frequency ~0.06 (repo tornFrequency ≈ 0.05) + an offset per edge
-    // so each side tears independently. The finer step (6dp vs 8dp) puts more
-    // vertices on the perimeter, so the edge reads jagged and fibrous rather
-    // than softly undulating.
+    // so each side tears independently. The finer 5dp step + a third micro-
+    // octave layer puts denser, more varied vertices on the perimeter, so
+    // the edge reads genuinely torn and fibrous rather than softly wavy.
     fun jitter(coord: Float, edgePhase: Float): Float =
-        (fractalNoise(seed, coord * 0.06f, edgePhase) - 0.5f) * 2f * bite +
-            (fractalNoise(seed + 31, coord * 0.013f, edgePhase + 7f) - 0.5f) * 2f * tear
+        (fractalNoise(seed, coord * 0.07f, edgePhase) - 0.5f) * 2f * bite +
+            (fractalNoise(seed + 31, coord * 0.015f, edgePhase + 7f) - 0.5f) * 2f * tear +
+            (fractalNoise(seed + 47, coord * 0.035f, edgePhase + 13f) - 0.5f) * bite * 0.35f
 
     var first = true
     fun add(p: Offset) {
@@ -983,6 +1096,7 @@ fun NotePaperCard(
  * the format toolbox), NOT in a section-level row — so each text box keeps
  * its own independent paper look.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NotePaperStyleToggle(
     style: NotePaperStyle,
@@ -993,97 +1107,90 @@ fun NotePaperStyleToggle(
 ) {
     val torn = style == NotePaperStyle.TORN || style == NotePaperStyle.TORN_RULED ||
         style == NotePaperStyle.TORN_COFFEE || style == NotePaperStyle.TORN_FOLDED
-    Row(
-        modifier = modifier
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalAlignment = Alignment.CenterVertically
+    // v7.12 — compact chip row: the five base styles in a wrapping FlowRow
+    // with smaller pills (no icons, tighter padding). Torn paper shows its
+    // three sub-option chips inline in the same row — Rules, Coffee, Folded
+    // — each toggling its twist on/off the torn slip. Tapping a sub-chip
+    // while the torn base isn't active switches to torn + that twist.
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        NotePaperStyleChip(
-            icon = CurioIcons.MenuBook,
-            label = "Ruled",
-            active = style == NotePaperStyle.RULED,
-            accent = accent,
-            enabled = enabled,
-            onClick = { onStyleChange(NotePaperStyle.RULED) }
-        )
-        NotePaperStyleChip(
-            icon = CurioIcons.Palette,
-            label = "Torn",
-            active = torn,
-            accent = accent,
-            enabled = enabled,
-            onClick = { onStyleChange(NotePaperStyle.TORN) }
-        )
-        NotePaperStyleChip(
-            icon = CurioIcons.LocalCafe,
-            label = "Coffee",
-            active = style == NotePaperStyle.COFFEE,
-            accent = accent,
-            enabled = enabled,
-            onClick = { onStyleChange(NotePaperStyle.COFFEE) }
-        )
-        NotePaperStyleChip(
-            icon = CurioIcons.FoldedCorner,
-            label = "Folded",
-            active = style == NotePaperStyle.FOLDED,
-            accent = accent,
-            enabled = enabled,
-            onClick = { onStyleChange(NotePaperStyle.FOLDED) }
-        )
-        NotePaperStyleChip(
-            icon = CurioIcons.RedMarginLine,
-            label = "Red Margin",
-            active = style == NotePaperStyle.RED_MARGIN,
-            accent = accent,
-            enabled = enabled,
-            onClick = { onStyleChange(NotePaperStyle.RED_MARGIN) }
-        )
-        // Torn-slip sub-options — only meaningful while a torn style is on.
-        // Each chip toggles its twist onto the torn slip; tapping an active
-        // chip returns to plain torn. Options are exclusive by design (rules
-        // XOR coffee XOR fold) to keep the enum small and predictable.
+        // Row 1 — base styles: Ruled · Torn · Coffee · Folded · Red Margin
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            CompactPaperChip("Ruled", style == NotePaperStyle.RULED, accent, enabled) {
+                onStyleChange(NotePaperStyle.RULED)
+            }
+            CompactPaperChip("Torn", torn, accent, enabled) {
+                onStyleChange(NotePaperStyle.TORN)
+            }
+            CompactPaperChip("Coffee", style == NotePaperStyle.COFFEE, accent, enabled) {
+                onStyleChange(NotePaperStyle.COFFEE)
+            }
+            CompactPaperChip("Folded", style == NotePaperStyle.FOLDED, accent, enabled) {
+                onStyleChange(NotePaperStyle.FOLDED)
+            }
+            CompactPaperChip("Red Margin", style == NotePaperStyle.RED_MARGIN, accent, enabled) {
+                onStyleChange(NotePaperStyle.RED_MARGIN)
+            }
+        }
+        // Row 2 — torn sub-options, only visible while a torn style is active.
         if (torn) {
-            NotePaperStyleChip(
-                icon = CurioIcons.DragHandle,
-                label = "Rules",
-                active = style == NotePaperStyle.TORN_RULED,
-                accent = accent,
-                enabled = enabled,
-                onClick = {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                CompactPaperChip("+ Rules", style == NotePaperStyle.TORN_RULED, accent, enabled) {
                     onStyleChange(
                         if (style == NotePaperStyle.TORN_RULED) NotePaperStyle.TORN
                         else NotePaperStyle.TORN_RULED
                     )
                 }
-            )
-            NotePaperStyleChip(
-                icon = CurioIcons.LocalCafe,
-                label = "Coffee",
-                active = style == NotePaperStyle.TORN_COFFEE,
-                accent = accent,
-                enabled = enabled,
-                onClick = {
+                CompactPaperChip("+ Coffee", style == NotePaperStyle.TORN_COFFEE, accent, enabled) {
                     onStyleChange(
                         if (style == NotePaperStyle.TORN_COFFEE) NotePaperStyle.TORN
                         else NotePaperStyle.TORN_COFFEE
                     )
                 }
-            )
-            NotePaperStyleChip(
-                icon = CurioIcons.FoldedCorner,
-                label = "Folded",
-                active = style == NotePaperStyle.TORN_FOLDED,
-                accent = accent,
-                enabled = enabled,
-                onClick = {
+                CompactPaperChip("+ Folded", style == NotePaperStyle.TORN_FOLDED, accent, enabled) {
                     onStyleChange(
                         if (style == NotePaperStyle.TORN_FOLDED) NotePaperStyle.TORN
                         else NotePaperStyle.TORN_FOLDED
                     )
                 }
-            )
+            }
         }
+    }
+}
+
+/** Compact paper-style pill chip — label-only, tight padding, tiny font. */
+@Composable
+private fun CompactPaperChip(
+    label: String,
+    active: Boolean,
+    accent: Color,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        enabled = enabled,
+        shape = RoundedCornerShape(6.dp),
+        color = if (active) accent.copy(alpha = 0.20f) else Color.Transparent,
+        border = BorderStroke(
+            1.dp,
+            if (active) accent.copy(alpha = 0.55f) else accent.copy(alpha = 0.18f)
+        )
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = if (active) accent else paperInk().copy(alpha = 0.50f),
+            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+        )
     }
 }
 
@@ -1189,45 +1296,3 @@ fun NotePaperColorToggle(
     }
 }
 
-@Composable
-private fun NotePaperStyleChip(
-    icon: String,
-    label: String,
-    active: Boolean,
-    accent: Color,
-    enabled: Boolean,
-    onClick: () -> Unit
-) {
-    Surface(
-        onClick = onClick,
-        enabled = enabled,
-        shape = RoundedCornerShape(8.dp),
-        color = if (active) accent.copy(alpha = 0.18f) else Color.Transparent,
-        border = BorderStroke(
-            1.dp,
-            if (active) accent.copy(alpha = 0.6f) else accent.copy(alpha = 0.25f)
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Inactive chips wear the paper ink at low alpha (not the theme's
-            // onSurfaceVariant) — the paper controls sit on cream in BOTH
-            // themes, so a theme-aware grey reads wrong against the paper.
-            val inactive = paperInk().copy(alpha = 0.55f)
-            CurioIcon(
-                name = icon,
-                contentDescription = label,
-                tint = if (active) accent else inactive,
-                size = 14.dp
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = if (active) accent else inactive
-            )
-        }
-    }
-}
