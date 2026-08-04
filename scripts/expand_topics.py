@@ -58,24 +58,6 @@ ARTIST_NAMES = [
     "Caroline Polachek", "Charli XCX", "Rina Sawayama", "Shygirl", "PinkPantheress",
     "Fred again..", "Four Tet", "Jamie xx", "Floating Points", "Overmono",
     "Kelela", "Yves Tumor", "Blood Orange", "Moses Sumney", "Perfume Genius",
-    "David Bowie", "Prince", "Bob Dylan", "Leonard Cohen", "Joni Mitchell",
-    "The Beatles", "The Rolling Stones", "Fleetwood Mac", "Bruce Springsteen", "Stevie Wonder",
-    "Marvin Gaye", "Otis Redding", "Sam Cooke", "Ray Charles", "Nina Simone",
-    "Etta James", "Louis Armstrong", "Duke Ellington", "Miles Davis", "John Coltrane",
-    "Billie Holiday", "Frank Sinatra", "Elvis Presley", "Roy Orbison", "Buddy Holly",
-    "The Beach Boys", "ABBA", "Bee Gees", "James Brown", "Curtis Mayfield",
-    "Smokey Robinson", "The Temptations", "Diana Ross", "Earth Wind and Fire", "Al Green",
-    "Parliament", "Funkadelic", "The Isley Brothers", "Sly and the Family Stone", "The Jackson 5",
-    "Whitney Houston", "Celine Dion", "Shania Twain", "Tina Turner", "Cher",
-    "Bryan Adams", "Rush", "The Tragically Hip", "Nick Cave and the Bad Seeds", "Radiohead",
-    "Pixies", "Sonic Youth", "Pavement", "Neutral Milk Hotel", "Built to Spill",
-    "The Dismemberment Plan", "Modest Mouse", "Pinback", "Minus the Bear", "Explosions in the Sky",
-    "Godspeed You Black Emperor", "Sigur Rós", "Mogwai", "Boards of Canada", "Autechre",
-    "Oneohtrix Point Never", "Arca", "Sophie", "Iglooghost", "Mura Masa",
-    "Rina Sawayama", "PinkPantheress", "Shygirl", "COBRAH", "Eartheater",
-    "Fever Ray", "Robyn", "Lykke Li", "Tove Lo", "Zara Larsson",
-    "Aurora", "Sigrid", "Highasakite", "Dagny", "Astrid S",
-    "Kim Petras", "Slayyyter", "A.G. Cook", "Charli XCX", "Caroline Polachek",
 ]
 
 ALBUM_NAMES = [
@@ -131,22 +113,6 @@ ALBUM_NAMES = [
     "The Bends by Radiohead", "Pablo Honey by Radiohead", "Hail to the Thief by Radiohead",
     "A Moon Shaped Pool by Radiohead", "Amnesiac by Radiohead", "King of Limbs by Radiohead",
     "Whatever People Say by Arctic Monkeys", "AM by Arctic Monkeys", "Tranquility Base by Arctic Monkeys",
-    "Pet Sounds by The Beach Boys", "Abbey Road by The Beatles", "Revolver by The Beatles",
-    "Sgt. Pepper's by The Beatles", "The White Album by The Beatles", "Let It Bleed by The Rolling Stones",
-    "Sticky Fingers by The Rolling Stones", "Born to Run by Bruce Springsteen", "Darkness on the Edge of Town by Bruce Springsteen",
-    "The River by Bruce Springsteen", "Blood on the Tracks by Bob Dylan", "Blonde on Blonde by Bob Dylan",
-    "Highway 61 Revisited by Bob Dylan", "Blue by Joni Mitchell", "Court and Spark by Joni Mitchell",
-    "Rumours by Fleetwood Mac", "Tusk by Fleetwood Mac", "Songs in the Key of Life by Stevie Wonder",
-    "Innervisions by Stevie Wonder", "Talking Book by Stevie Wonder", "What's Going On by Marvin Gaye",
-    "Let's Get It On by Marvin Gaye", "Otis Blue by Otis Redding", "Live at the Apollo by James Brown",
-    "Stand by Sly and the Family Stone", "There's a Riot Goin' On by Sly and the Family Stone",
-    "A Love Supreme by John Coltrane", "Kind of Blue by Miles Davis", "Bitches Brew by Miles Davis",
-    "Giant Steps by John Coltrane", "Mingus Ah Um by Charles Mingus", "Time Out by Dave Brubeck",
-    "Lady in Satin by Billie Holiday", "Ella and Louis by Ella Fitzgerald", "In the Wee Small Hours by Frank Sinatra",
-    "Songs for Swingin' Lovers by Frank Sinatra", "Kind of Blue by Miles Davis", "Close to You by The Carpenters",
-    "Blue Sky by The Allman Brothers Band", "Eat a Peach by The Allman Brothers Band", "Pronounced by Lynyrd Skynyrd",
-    "Second Helping by Lynyrd Skynyrd", "Frampton Comes Alive by Peter Frampton", "Hotel California by The Eagles",
-    "Rumours by Fleetwood Mac", "Born in the U.S.A. by Bruce Springsteen", "Thriller by Michael Jackson",
 ]
 
 # More name pools for the other categories...
@@ -177,19 +143,6 @@ FILM_NAMES = [
     "The Power of the Dog (2021)", "Everything Everywhere All at Once (2022)", "Tár (2022)", "The Fabelmans (2022)",
     "Oppenheimer (2023)", "Barbie (2023)", "Killers of the Flower Moon (2023)", "Past Lives (2023)",
     "Poor Things (2023)", "The Zone of Interest (2023)", "Anatomy of a Fall (2023)", "The Holdovers (2023)",
-    "Metropolis (1927)", "Modern Times (1936)", "Gone with the Wind (1939)", "The Wizard of Oz (1939)",
-    "It's a Wonderful Life (1946)", "Bicycle Thieves (1948)", "Sunset Boulevard (1950)", "12 Angry Men (1957)",
-    "Some Like It Hot (1959)", "The Apartment (1960)", "To Kill a Mockingbird (1962)", "The Graduate (1967)",
-    "Bonnie and Clyde (1967)", "One Flew Over the Cuckoo's Nest (1975)", "Jaws (1975)", "Star Wars (1977)",
-    "Alien (1979)", "The Shining (1980)", "Raiders of the Lost Ark (1981)", "E.T. the Extra-Terrestrial (1982)",
-    "Back to the Future (1985)", "Aliens (1986)", "Die Hard (1988)", "When Harry Met Sally (1989)",
-    "Home Alone (1990)", "The Silence of the Lambs (1991)", "Terminator 2 (1991)", "Toy Story (1995)",
-    "Se7en (1995)", "Good Will Hunting (1997)", "Saving Private Ryan (1998)", "The Truman Show (1998)",
-    "Fight Club (1999)", "Gladiator (2000)", "Crouching Tiger Hidden Dragon (2000)", "Finding Nemo (2003)",
-    "Kill Bill Vol. 1 (2003)", "The Departed (2006)", "Ratatouille (2007)", "Up (2009)",
-    "Avatar (2009)", "Interstellar (2014)", "La La Land (2016)", "Dunkirk (2017)",
-    "Black Panther (2018)", "Joker (2019)", "1917 (2019)", "Nomadland (2020)",
-    "CODA (2021)", "Top Gun Maverick (2022)", "The Banshees of Inisherin (2022)", "Everything Everywhere All at Once (2022)",
 ]
 
 DIRECTOR_NAMES = [
@@ -214,20 +167,6 @@ DIRECTOR_NAMES = [
     "Naoko Ogigami", "Shunji Iwai", "Na Hong-jin", "Kim Jee-woon", "Johnnie To",
     "Sergio Leone", "Dario Argento", "Bernardo Bertolucci", "Nanni Moretti", "Paolo Sorrentino",
     "Fritz Lang", "F.W. Murnau", "Ernst Lubitsch", "Max Ophüls", "Douglas Sirk",
-    "Frank Capra", "Howard Hawks", "John Huston", "William Wyler", "George Cukor",
-    "Michael Curtiz", "Victor Fleming", "Carol Reed", "Elia Kazan", "Nicholas Ray",
-    "Anthony Mann", "Samuel Fuller", "Nicholas Roeg", "Ken Russell", "Michael Powell",
-    "Emeric Pressburger", "Sidney Lumet", "Arthur Penn", "Robert Wise", "William Friedkin",
-    "Hal Ashby", "Michael Cimino", "Oliver Stone", "Rob Reiner", "Cameron Crowe",
-    "Gus Van Sant", "Todd Haynes", "Spike Jonze", "Michel Gondry", "Edgar Wright",
-    "Taika Waititi", "James Gunn", "Patty Jenkins", "Ava DuVernay", "Ryan Coogler",
-    "Barry Jenkins", "Jordan Peele", "Nia DaCosta", "Shaka King", "Kasi Lemmons",
-    "Gina Prince-Bythewood", "Dee Rees", "Destin Daniel Cretton", "Daniel Kwan and Daniel Scheinert", "Celine Song",
-    "Charlotte Wells", "Luca Guadagnino", "Nicolas Winding Refn", "Park Chan-wook", "Bong Joon-ho",
-    "Lee Chang-dong", "Kim Jee-woon", "Na Hong-jin", "Yim Soon-rye", "Hirokazu Kore-eda",
-    "Shinji Aoyama", "Naomi Kawase", "Kiyoshi Kurosawa", "Sion Sono", "Takashi Miike",
-    "Wes Craven", "John Carpenter", "George A. Romero", "Tobe Hooper", "Sam Raimi",
-    "Peter Jackson", "Guillermo del Toro", "Alfonso Cuarón", "Alejandro González Iñárritu", "Denis Villeneuve",
 ]
 
 AUTHOR_NAMES = [
@@ -253,20 +192,6 @@ AUTHOR_NAMES = [
     "Hilary Mantel", "Ian McEwan", "Julian Barnes", "A.S. Byatt", "Kazuo Ishiguro",
     "Daphne du Maurier", "Patricia Highsmith", "Agatha Christie", "Raymond Chandler", "Dashiell Hammett",
     "Shirley Jackson", "Flannery O'Connor", "Eudora Welty", "Carson McCullers", "Willa Cather",
-    "Virginia Woolf", "James Joyce", "F. Scott Fitzgerald", "William Faulkner", "Ernest Hemingway",
-    "John Steinbeck", "Richard Wright", "Langston Hughes", "Nella Larsen", "Alice Walker",
-    "Zora Neale Hurston", "Toni Morrison", "Ralph Ellison", "Gwendolyn Brooks", "James Baldwin",
-    "Maya Angelou", "Octavia Butler", "N.K. Jemisin", "Colson Whitehead", "Jesmyn Ward",
-    "Ta-Nehisi Coates", "Ibram X. Kendi", "Bryan Stevenson", "Samuel Beckett", "Italo Calvino",
-    "Umberto Eco", "Primo Levi", "Natalia Ginzburg", "Dacia Maraini", "Ingeborg Bachmann",
-    "Elfriede Jelinek", "Herta Müller", "W.G. Sebald", "Thomas Mann", "Hermann Hesse",
-    "Franz Kafka", "Rainer Maria Rilke", "Bertolt Brecht", "Günter Grass", "Heinrich Böll",
-    "Anton Chekhov", "Fyodor Dostoevsky", "Leo Tolstoy", "Ivan Turgenev", "Alexander Pushkin",
-    "Mikhail Bulgakov", "Boris Pasternak", "Vladimir Nabokov", "Joseph Brodsky", "Svetlana Alexievich",
-    "Olga Tokarczuk", "Bruno Schulz", "Witold Gombrowicz", "Yasunari Kawabata", "Natsume Soseki",
-    "Osamu Dazai", "Kobo Abe", "Mo Yan", "Yu Hua", "Eileen Chang",
-    "Amitav Ghosh", "Vikram Seth", "R.K. Narayan", "Rabindranath Tagore", "Jhumpa Lahiri",
-    "Michael Ondaatje", "Miriam Toews", "Andre Alexis", "Hilary Mantel", "Ian McEwan",
 ]
 
 BOOK_NAMES = [
@@ -297,20 +222,6 @@ BOOK_NAMES = [
     "Western Lane (2023)", "This Other Eden (2023)", "Old God's Time (2023)", "In Memoriam (2023)",
     "The Guest (2023)", "Let Us Descend (2023)", "Tremor (2023)", "Roman Stories (2023)",
     "Everything's Fine (2023)", "Land of Milk and Honey (2023)", "The New Naturals (2023)", "Family Meal (2023)",
-    "The Odyssey (8th century BC)", "The Iliad (8th century BC)", "Hamlet (1603)", "Don Quixote (1605)",
-    "Paradise Lost (1667)", "Frankenstein (1818)", "Jane Eyre (1847)", "Wuthering Heights (1847)",
-    "Great Expectations (1861)", "War and Peace (1869)", "Middlemarch (1871)", "The Brothers Karamazov (1880)",
-    "The Adventures of Huckleberry Finn (1884)", "The Picture of Dorian Gray (1890)", "Dracula (1897)", "Mrs Dalloway (1925)",
-    "The Sound and the Fury (1929)", "A Room of One's Own (1929)", "Their Eyes Were Watching God (1937)", "The Stranger (1942)",
-    "Animal Farm (1945)", "The Old Man and the Sea (1952)", "The Lord of the Rings (1954)", "A Wrinkle in Time (1962)",
-    "Dune (1965)", "The Left Hand of Darkness (1969)", "Interview with the Vampire (1976)", "The Shining (1977)",
-    "The Name of the Rose (1980)", "The House of the Spirits (1982)", "White Noise (1985)", "Possession (1990)",
-    "The Secret History (1992)", "The Stone Diaries (1993)", "The Hours (1998)", "The Amazing Adventures of Kavalier and Clay (2000)",
-    "Gilead (2004)", "Half of a Yellow Sun (2006)", "A Little Life (2015)", "Homegoing (2016)",
-    "The Overstory (2018)", "There There (2018)", "The Vanishing Half (2020)", "Hamnet (2020)",
-    "Cloud Cuckoo Land (2021)", "Trust (2022)", "Lessons in Chemistry (2022)", "The Whalebone Theatre (2022)",
-    "Babel (2022)", "I'm Glad My Mom Died (2022)", "Strange Sally Diamond (2023)", "The Berry Pickers (2023)",
-    "Prophet Song (2023)", "North Woods (2023)", "The Heaven and Earth Grocery Store (2023)", "How to Say Babylon (2023)",
 ]
 
 PAINTER_NAMES = [
@@ -332,18 +243,6 @@ PAINTER_NAMES = [
     "Mickalene Thomas", "Wangechi Mutu", "Julie Mehretu", "Lynette Yiadom-Boakye", "Tschabalala Self",
     "Jadé Fadojutimi", "Flora Yukhnovich", "Salman Toor", "Shara Hughes", "Amoako Boafo",
     "Otis Kwame Kye Quaicoe", "Tunji Adeniyi-Jones", "Issy Wood", "Louise Giovanelli", "Caroline Walker",
-    "Leonardo da Vinci", "Michelangelo", "Raphael", "Titian", "Caravaggio",
-    "Rembrandt", "Johannes Vermeer", "Jan van Eyck", "Peter Paul Rubens", "Diego Velázquez",
-    "Sandro Botticelli", "Paolo Uccello", "Masaccio", "Fra Filippo Lippi", "Andrea Mantegna",
-    "Antonello da Messina", "Hans Holbein the Younger", "Nicolas Poussin", "Jacques-Louis David", "Jean-Auguste-Dominique Ingres",
-    "Théodore Géricault", "Eugène Delacroix", "Gustave Courbet", "Claude Monet", "Pierre-Auguste Renoir",
-    "Camille Pissarro", "Alfred Sisley", "Paul Signac", "Henri Matisse", "André Derain",
-    "Maurice de Vlaminck", "Raoul Dufy", "Amedeo Modigliani", "Chaim Soutine", "Pierre Bonnard",
-    "Édouard Vuillard", "Georges Braque", "Juan Gris", "Fernand Léger", "Robert Delaunay",
-    "Sonia Delaunay", "Hilma af Klint", "Theo van Doesburg", "Alexander Calder", "Henry Moore",
-    "Barbara Hepworth", "Louise Bourgeois", "Eva Hesse", "Anish Kapoor", "Banksy",
-    "Jean-Michel Basquiat", "Keith Haring", "Jenny Holzer", "Barbara Kruger", "Kara Walker",
-    "Cindy Sherman", "Marlene Dumas", "Jenny Saville", "Cecily Brown", "Elizabeth Peyton",
 ]
 
 ARTWORK_NAMES = [
@@ -376,32 +275,6 @@ ARTWORK_NAMES = [
     "Flag (1954) by Jasper Johns", "Whaam! (1963) by Roy Lichtenstein",
     "LOVE (1970) by Robert Indiana", "The Dinner Party (1979) by Judy Chicago",
     "Water Lilies (1919) by Claude Monet",
-    "The Birth of Venus (1486) by Sandro Botticelli", "Primavera (1482) by Sandro Botticelli",
-    "The Last Judgment (1541) by Michelangelo", "The Sistine Chapel Ceiling (1512) by Michelangelo",
-    "The School of Athens (1511) by Raphael", "The Transfiguration (1520) by Raphael",
-    "Bacchus and Ariadne (1523) by Titian", "Venus of Urbino (1538) by Titian",
-    "The Calling of Saint Matthew (1600) by Caravaggio", "Judith Slaying Holofernes (1612) by Artemisia Gentileschi",
-    "The Anatomy Lesson of Dr. Nicolaes Tulp (1632) by Rembrandt", "The Milkmaid (1660) by Johannes Vermeer",
-    "View of Delft (1661) by Johannes Vermeer", "The Astronomer (1668) by Johannes Vermeer",
-    "The Rokeby Venus (1647) by Diego Velázquez", "Rain Steam and Speed (1844) by J.M.W. Turner",
-    "The Hay Wain (1821) by John Constable", "Wanderer above the Sea of Fog (1818) by Caspar David Friedrich",
-    "The Oxbow (1836) by Thomas Cole", "Whistler's Mother (1871) by James McNeill Whistler",
-    "A Bar at the Folies-Bergère (1882) by Édouard Manet", "The Ballet Class (1874) by Edgar Degas",
-    "Bal du moulin de la Galette (1876) by Pierre-Auguste Renoir", "Luncheon of the Boating Party (1881) by Pierre-Auguste Renoir",
-    "The Bedroom (1889) by Vincent van Gogh", "Café Terrace at Night (1888) by Vincent van Gogh",
-    "Sunflowers (1888) by Vincent van Gogh", "Self-Portrait with Bandaged Ear (1889) by Vincent van Gogh",
-    "The Potato Eaters (1885) by Vincent van Gogh", "The Dance (1910) by Henri Matisse",
-    "Blue Nude (1907) by Henri Matisse", "Girl before a Mirror (1932) by Pablo Picasso",
-    "Weeping Woman (1937) by Pablo Picasso", "The Old Guitarist (1903) by Pablo Picasso",
-    "Composition VIII (1923) by Wassily Kandinsky", "Yellow Red Blue (1925) by Wassily Kandinsky",
-    "Broadway Boogie Woogie (1943) by Piet Mondrian", "The Treachery of Images (1929) by René Magritte",
-    "The Son of Man (1964) by René Magritte", "The Two Fridas (1939) by Frida Kahlo",
-    "The Broken Column (1944) by Frida Kahlo", "The Flower Carrier (1935) by Diego Rivera",
-    "Number 1 (1949) by Jackson Pollock", "Blue Poles (1952) by Jackson Pollock",
-    "Gold Marilyn Monroe (1962) by Andy Warhol", "Shot Marilyns (1964) by Andy Warhol",
-    "Triple Elvis (1963) by Andy Warhol", "Drowning Girl (1963) by Roy Lichtenstein",
-    "Ladder for Booker T. Washington (1996) by Martin Puryear", "For the Love of God (2007) by Damien Hirst",
-    "Spider (1996) by Louise Bourgeois", "Untitled (Rape Scene) (1973) by Ana Mendieta",
 ]
 
 SCIENTIST_NAMES = [
@@ -427,20 +300,6 @@ SCIENTIST_NAMES = [
     "Santiago Ramón y Cajal", "Eric Kandel", "Oliver Sacks", "V.S. Ramachandran", "Daniel Kahneman",
     "Amos Tversky", "Noam Chomsky", "B.F. Skinner", "Jean Piaget", "Lev Vygotsky",
     "Edward Witten", "Juan Maldacena", "Cumrun Vafa", "Brian Greene", "Lisa Randall",
-    "Archimedes", "Aristotle", "Pythagoras", "Euclid", "Hippocrates",
-    "Galen", "Al-Khwarizmi", "Ibn al-Haytham", "Avicenna", "Omar Khayyam",
-    "Blaise Pascal", "Robert Boyle", "Christiaan Huygens", "James Watt", "Joseph Priestley",
-    "Henry Cavendish", "John Dalton", "Amedeo Avogadro", "Jöns Jacob Berzelius", "Justus von Liebig",
-    "August Kekulé", "Robert Bunsen", "Gustav Kirchhoff", "Svante Arrhenius", "Ludwig Boltzmann",
-    "Josiah Willard Gibbs", "Hendrik Lorentz", "Henri Becquerel", "James Chadwick", "Carl Anderson",
-    "Hideki Yukawa", "C.N. Yang", "Tsung-Dao Lee", "Abdus Salam", "Steven Weinberg",
-    "Sheldon Glashow", "Peter Higgs", "François Englert", "Rainer Weiss", "Kip Thorne",
-    "Barry Barish", "Reinhard Genzel", "Brian Schmidt", "Saul Perlmutter", "Adam Riess",
-    "Fritz Zwicky", "Jan Oort", "Henrietta Swan Leavitt", "Annie Jump Cannon", "Cecilia Payne-Gaposchkin",
-    "Williamina Fleming", "Caroline Herschel", "William Herschel", "Rudolf Virchow", "Robert Koch",
-    "Paul Ehrlich", "Selman Waksman", "Ernst Chain", "Howard Florey", "Maurice Hilleman",
-    "Yoshinori Ohsumi", "Drew Weissman", "George Church", "Craig Venter", "Mary-Claire King",
-    "Erwin Chargaff", "Max Delbrück", "Salvador Luria", "Martha Chase", "Maurice Wilkins",
 ]
 
 DISCOVERY_NAMES = [
@@ -468,18 +327,6 @@ DISCOVERY_NAMES = [
     "The Printing Press (1440)", "The Steam Engine (1712)", "Electricity (1800)", "The Telephone (1876)",
     "The Light Bulb (1879)", "Radio (1895)", "Television (1927)", "The Computer (1940s)",
     "The Microprocessor (1971)", "The Internet (1983)", "The Search Engine (1996)", "Social Media (2004)",
-    "Heliocentrism (1543)", "The Law of Gravitation (1687)", "Calculus (1684)", "The Microscope (1590)",
-    "The Telescope (1608)", "Circulation of the Blood (1628)", "Oxygen (1774)", "Hydrogen (1766)",
-    "The Cell (1665)", "The Nucleus of the Cell (1831)", "Photosynthesis (1779)", "Electromagnetism (1820)",
-    "The Laws of Thermodynamics (1850s)", "Spectroscopy (1859)", "The Doppler Effect (1842)", "Blackbody Radiation (1900)",
-    "The Photoelectric Effect (1905)", "Special Relativity (1905)", "General Relativity (1915)", "The Expanding Universe (1929)",
-    "Cosmic Rays (1912)", "Dark Matter (1933)", "Neutrinos (1956)", "Quantum Entanglement (1935)",
-    "The Uncertainty Principle (1927)", "The Strong Nuclear Force (1935)", "The Weak Nuclear Force (1930s)", "Mesons (1935)",
-    "The Muon (1936)", "The Pion (1947)", "Quarks (1964)", "The W and Z Bosons (1983)",
-    "The Top Quark (1995)", "Gluons (1979)", "Superconductivity (1911)", "The Meissner Effect (1933)",
-    "High-Temperature Superconductors (1986)", "Holography (1947)", "The Maser (1954)", "Fiber Optics (1966)",
-    "The CCD (1969)", "The Integrated Circuit (1958)", "GPS (1973)", "Wi-Fi (1997)",
-    "Bluetooth (1994)", "The Scientific Method (17th century)", "Atmospheric Pressure (1643)", "The Speed of Light (1676)",
 ]
 
 WILDCARD_NAMES = [
@@ -514,30 +361,6 @@ WILDCARD_NAMES = [
     "Hygge", "Lagom", "Friluftsliv", "Sisu",
     "The KonMari Method", "The Pomodoro Technique", "The Bullet Journal", "The Getting Things Done Method",
     "The Slow Movement", "The Minimalism Movement", "The Tiny House Movement", "The Van Life Movement",
-    "The Pharos Lighthouse", "The Colossus of Rhodes", "The Mausoleum at Halicarnassus", "The Temple of Artemis",
-    "The Statue of Zeus at Olympia", "The Codex Seraphinianus", "The Rohonc Codex", "The Phaistos Disc",
-    "The Shugborough Inscription", "The Beale Ciphers", "The Copper Scroll", "The Baghdad Battery",
-    "The Saqqara Bird", "The Dendera Light", "Göbekli Tepe", "Çatalhöyük",
-    "Mohenjo-daro", "Harappa", "Teotihuacan", "Tikal",
-    "Palenque", "Sacsayhuamán", "Ollantaytambo", "Puma Punku",
-    "Tiwanaku", "Nan Madol", "Bagan", "Borobudur",
-    "Prambanan", "Banteay Srei", "Potala Palace", "Sigiriya",
-    "Palmyra", "Baalbek", "Carthage", "Leptis Magna",
-    "Volubilis", "Timgad", "Göreme", "Cappadocia",
-    "Derinkuyu", "Kaymakli Underground City", "Meteora", "Mount Athos",
-    "The Kensington Runestone", "The Vinland Map", "The Dighton Rock", "The Newport Tower",
-    "The Blythe Intaglios", "The Serpent Mound", "Cahokia", "Monks Mound",
-    "The Medicine Wheel", "Kennewick Man", "Ötzi the Iceman", "The Tollund Man",
-    "The Grauballe Man", "The Lindow Man", "The Yde Girl", "The Longmen Grottoes",
-    "The Yungang Grottoes", "The Mogao Caves", "The Ajanta Caves", "The Ellora Caves",
-    "The Elephanta Caves", "The Badami Caves", "The Brihadeeswarar Temple", "The Konark Sun Temple",
-    "The Khajuraho Temples", "The Hampi Ruins", "The Qutb Minar", "The Charminar",
-    "The Golconda Fort", "The Amber Fort", "The Mehrangarh Fort", "The Jaisalmer Fort",
-    "The Chittorgarh Fort", "The Rani ki Vav", "The Adalaj Stepwell", "The Chand Baori",
-    "The Agra Fort", "The Red Fort", "The Jama Masjid", "The Buland Darwaza",
-    "Fatehpur Sikri", "The Lotus Temple", "The Akshardham Temple", "The Golden Temple",
-    "The Meenakshi Temple", "The Jagannath Temple", "The Lingaraja Temple", "The Sun Temple Modhera",
-    "The Virupaksha Temple", "The Kali Bein", "The Magnetic Hill", "The Gravity Hills",
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -829,10 +652,10 @@ def validate(topics_by_slug):
                 for field in ["verb", "targetName", "durationMinutes", "instruction"]:
                     if field not in t["exploreAction"]:
                         errors.append(f"{slug}[{i}].exploreAction: missing {field}")
-                # Match the authoritative Gradle validateTopics task: instructions
-                # may be up to 450 chars; teaser length is NOT validated there.
-                if "instruction" in t["exploreAction"] and len(t["exploreAction"]["instruction"]) > 450:
+                if "instruction" in t["exploreAction"] and len(t["exploreAction"]["instruction"]) > 280:
                     errors.append(f"{slug}[{i}]: instruction too long ({len(t['exploreAction']['instruction'])} chars)")
+            if "teaser" in t and len(t["teaser"]) > 280:
+                errors.append(f"{slug}[{i}]: teaser too long ({len(t['teaser'])} chars)")
             if t.get("categoryId") != expected_cat:
                 errors.append(f"{slug}[{i}]: wrong cat ({t.get('categoryId')} != {expected_cat})")
             if not t.get("id"):

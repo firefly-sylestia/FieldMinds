@@ -89,6 +89,8 @@
 - Pools are again partially consumed — the next batch run will add more from the fresh names; the script is idempotent (dedupes by id + name) so re-running is safe.
 - NO local Gradle build per AGENTS.md — CI validates on push.
 
+> **REVERTED** (commit 8f6a441c undone via `git revert` on user request — the catalog is back to its pre-batch state; the log entry above is kept as a historical record).
+
 ---
 
 ## Previous Requests (COMPLETED)

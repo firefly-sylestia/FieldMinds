@@ -29,9 +29,7 @@ EXPECTED_CATEGORIES = {
 }
 REQUIRED_TOPIC_FIELDS = ("subtype", "name", "teaser", "imageUrl", "exploreAction")
 REQUIRED_ACTION_FIELDS = ("verb", "targetName", "durationMinutes", "instruction")
-# Matches the authoritative Gradle task (app/build.gradle.kts validateTopics):
-# instructions may be up to 450 chars; teaser length is NOT validated there.
-MAX_INSTRUCTION_LEN = 450
+MAX_INSTRUCTION_LEN = 280
 
 
 def validate_one(path: Path, seen_ids: dict[str, str]) -> tuple[int, int, list[str]]:
