@@ -1,2 +1,3 @@
+• Material card blends redesigned — gradients now wear the device's dynamic palette (90%) with a subtle category whisper (10%) instead of competing rainbow ribbons; device color ordering varies by accent hue so every category looks distinct
 • Smart density is now a 3-way picker — Off, Compact, or 2x (extra-small below 350 dpi) — so very low-density phones can shrink the Spin deck further (Settings → Experimental)
 • Categories/Filter now sit flush on the nav bar with no floating gap, and the category picker's Mix button stays visible on every screen

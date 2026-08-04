@@ -256,13 +256,19 @@ object CurioGradients {
      * always matches the app's background shade (the hero card must not
      * wash out to pure white on the cream surface).
      *
-     * v7.8 — Material style: when the "Material card blends" setting is on
-     * (default), the card wears a MIXED gradient of the category accent and
-     * the device's dynamic Material colors (primary / secondary / tertiary)
-     * in the same multi-stop style as the mixed deck, so the card reads as
-     * a category × device blend — the device palette leads (3 of 4 stops).
-     * Pastel mode pastel-izes the device stops so the whole glide stays
-     * pastel; dark mode uses the device's dynamic dark palette.
+     * v7.11 — Material style redesign: when "Material card blends" is on
+     * (default), the card wears a rich multi-stop gradient dominated by the
+     * device's dynamic Material You palette (90% device colors, 10% category
+     * accent whisper). The device's primary/secondary/tertiary form a smooth
+     * 5-stop gradient with midpoint blends; each stop is lightly tinted with
+     * the category accent at just 10% strength so the card reads as a
+     * device-colored surface with a gentle category whisper — never a
+     * competing rainbow ribbon. The ordering of device colors varies
+     * deterministically based on the accent's hue so different categories
+     * get visually distinct gradient arrangements (primary→secondary→tertiary,
+     * secondary→tertiary→primary, tertiary→primary→secondary). Pastel mode
+     * softens every stop so the whole glide stays pastel; dark mode uses the
+     * device's dynamic dark palette.
      *
      * v7.8 — light-mode fix: the standard fallback now ends on an ON-HUE
      * tint of the accent instead of the raw warm background, so cool accents
@@ -272,29 +278,53 @@ object CurioGradients {
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
-        // v7.8 — Material style + "Material card blends": mix the category
-        // accent with the device's dynamic colors (all three — primary,
-        // secondary, tertiary — so the device palette leads) through the
-        // same mixed-deck mechanism. Guarded: mixedDeckGradient recurses
-        // back into cardGradient for a single distinct accent, so only take
-        // this branch when the mix has at least two distinct colors.
+        // v7.11 — Material style + "Material card blends": a rich 5-stop
+        // gradient dominated by the device's dynamic palette (90%) with a
+        // whisper of the category accent (10%) tinted into every stop. The
+        // ordering of device colors varies by accent hue for visual variety.
+        // The old v7.8 approach routed through mixedDeckGradient which
+        // treated the accent and device colors as co-equal stops, producing
+        // a noisy rainbow ribbon where a red accent on a blue Material
+        // palette created blue→bluegreen→green→greenpurple→purple→red
+        // bands. The new approach keeps the card's identity firmly on the
+        // device palette while the category accent is barely visible.
         if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState
         ) {
             val scheme = MaterialTheme.colorScheme
             val pastel = AppPreferences.pastelColorsState
             val dark = isCurioDarkTheme()
-            // Pastel-ize the device stops AND the accent stop (mixedDeckGradient
-            // only softens its internal seams — it assumes stops already arrive
-            // pastel). Idempotent for themed pastel accents; keeps raw-accent
-            // callers (e.g. wildcard coral) on-pastel too.
-            val accentStop = if (pastel) pastelAccent(accent, dark) else accent
-            val deviceStops = listOf(scheme.primary, scheme.secondary, scheme.tertiary)
-                .map { if (pastel) pastelAccent(it, dark) else it }
-            val accents = (listOf(accentStop) + deviceStops).distinct()
-            if (accents.size >= 2) {
-                return CurioMixedDeck.mixedDeckGradient(accents)
+            val hint = if (pastel) pastelAccent(accent, dark) else accent
+            val p = if (pastel) pastelAccent(scheme.primary, dark) else scheme.primary
+            val s = if (pastel) pastelAccent(scheme.secondary, dark) else scheme.secondary
+            val t = if (pastel) pastelAccent(scheme.tertiary, dark) else scheme.tertiary
+            // Lightly tint each device color with the category accent (90%
+            // device, 10% category whisper) so the card reads as a device
+            // surface with a subtle category hint — not a competing band.
+            val pTinted = lerp(p, hint, 0.10f)
+            val sTinted = lerp(s, hint, 0.10f)
+            val tTinted = lerp(t, hint, 0.10f)
+            // Deterministic variety: the ordering of device colors depends
+            // on the accent's hue, so warm accents (red/amber) get one
+            // arrangement, cool accents (teal/sky/indigo) get another,
+            // and the middle band gets the third — every category wears a
+            // visibly different gradient while the same category always
+            // renders the same way.
+            val hue = toHsl(accent).h
+            val (first, second, third) = when {
+                hue < 120f -> Triple(pTinted, sTinted, tTinted)
+                hue < 240f -> Triple(sTinted, tTinted, pTinted)
+                else -> Triple(tTinted, pTinted, sTinted)
             }
+            // Rich 5-stop gradient: each pair of device colors is bridged
+            // through hslGradientStops (HSL-shortest-hue-path) so the
+            // glide stays saturated instead of passing through grey — the
+            // same HSL interpolation used by every other gradient in the
+            // codebase. Concatenate first→second and second→third, drop
+            // the duplicate second at the seam.
+            val a = hslGradientStops(first, second, 3)
+            val b = hslGradientStops(second, third, 3)
+            return a + b.drop(1)
         }
         // End on the ACTIVE theme's background so cards always echo the
         // surface behind them — cream in light, midnight in dark, pure
