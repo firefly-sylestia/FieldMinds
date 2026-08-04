@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**Fix Cabinet bulk-delete CI compilation error**
+
+### What was requested
+
+Fix CI errors reporting unresolved `launch` and a suspend `deleteByIds` call in `CabinetScreen.kt`.
+
+### What changed
+
+- Added the missing `kotlinx.coroutines.launch` import.
+- The existing `rememberCoroutineScope()` now correctly launches the suspend bulk-delete operation.
+- Confirmed the repository already provides `suspend deleteByIds(Collection<String>)` and media-storage imports are present.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `CabinetScreen.kt`.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Default-off experimental voice-to-text**
 
 ### What was requested
