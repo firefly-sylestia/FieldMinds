@@ -105,13 +105,20 @@ object MoodBoardExport {
         entryId: String,
         onDone: (String?) -> Unit
     ) {
-        exportBoard(context, data, category, boardSeed, topicName, entryId) { bitmap, fileName ->
-            withContext(Dispatchers.IO) {
-                val path = saveBitmapToGallery(context, bitmap, fileName)
-                bitmap.recycle()
-                path
+        // exportBoard is suspend (preloads bitmaps off-thread, renders on the
+        // main thread), so the save must run inside its own scope like the
+        // share path — plain callers just get [onDone] on the main thread.
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        scope.launch {
+            val path = exportBoard(context, data, category, boardSeed, topicName, entryId) { bitmap, fileName ->
+                withContext(Dispatchers.IO) {
+                    val p = saveBitmapToGallery(context, bitmap, fileName)
+                    bitmap.recycle()
+                    p
+                }
             }
-        }?.let(onDone) ?: onDone(null)
+            onDone(path)
+        }
     }
 
     /**
@@ -174,7 +181,9 @@ object MoodBoardExport {
         emit: suspend (Bitmap, String) -> String?
     ): String? {
         // Preload every collage image as a full-size software bitmap so the
-        // off-screen capture never races an async Coil load.
+        // off-screen capture never races an async Coil load. Always recycled
+        // when the export finishes — including on any failure/early-return
+        // path — so a bad render never leaks ARGB memory.
         val bitmaps = withContext(Dispatchers.IO) {
             data.tileLayouts.map { t ->
                 runCatching {
@@ -187,11 +196,15 @@ object MoodBoardExport {
             }
         }
 
-        return withContext(Dispatchers.Main) {
-            val fileName = "moodboard_${entryId.take(8)}.png"
-            val bitmap = renderBoardBitmap(context, data, category, boardSeed, topicName, bitmaps)
-                ?: return@withContext null
-            emit(bitmap, fileName)
+        return try {
+            withContext(Dispatchers.Main) {
+                val fileName = "moodboard_${entryId.take(8)}.png"
+                val bitmap = renderBoardBitmap(context, data, category, boardSeed, topicName, bitmaps)
+                    ?: return@withContext null
+                emit(bitmap, fileName)
+            }
+        } finally {
+            bitmaps.forEach { it?.recycle() }
         }
     }
 
@@ -246,13 +259,20 @@ object MoodBoardExport {
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
-            val result = kotlinx.coroutines.suspendCancellableCoroutine<Bitmap?> { cont ->
+            val result = kotlinx.coroutines.suspendCancellableCoroutine(
+                onCancellation = { /* no-op — see below */ }
+            ) { cont ->
                 composeView.post {
                     val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                     val canvas = android.graphics.Canvas(bmp)
                     canvas.drawColor(android.graphics.Color.WHITE)
                     composeView.draw(canvas)
                     lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+                    // kotlinx-coroutines 1.9+ requires onCancellation (the
+                    // default throws on resume-after-cancel). With the no-op
+                    // handler the post lambda still runs to completion, so the
+                    // capture always finishes even if the coroutine is
+                    // cancelled while waiting for the frame.
                     cont.resume(bmp)
                 }
             }

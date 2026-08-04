@@ -30,3 +30,5 @@
 • Mood-board editor preview now matches the saved card exactly, with a hint to use full-screen editing for precise placement
 • Save or share your mood board as a high-resolution PNG — the full board with its background, watermark, collage and quote boxes, crisp even zoomed in
 • Hero fix: frosted blur now lives on the date/mood/type card only (with a glassy topic title) — the backdrop stays crisp again
+• Mood-board zoom rework: double-tap zooms ONLY the tapped image (the board stays still) — it glides to the center along its arc, and pinch-to-zoom + one-finger pan now refine just that image
+• Fixed the mood-board PNG save/share compile errors

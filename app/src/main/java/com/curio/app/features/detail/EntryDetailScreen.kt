@@ -127,7 +127,6 @@ import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.components.MoodBoardExport
 import com.curio.app.ui.components.MoodBoardFloatingCards
 import com.curio.app.ui.components.MoodBoardTiles
-import com.curio.app.ui.components.MoodBoardZoomCanvas
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.formatGlyph
@@ -1758,14 +1757,31 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                 else with(density) { tileSize.toPx() }
                 val viewW = with(density) { boxMaxWidth.toPx() }
                 val viewH = with(density) { boxMaxHeight.toPx() }
+                val scrollState = rememberScrollState()
                 Row(
-                    modifier = Modifier.fillMaxSize().horizontalScroll(rememberScrollState()),
+                    modifier = Modifier.fillMaxSize().horizontalScroll(scrollState),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    attachedUris.forEach { uri ->
+                    attachedUris.forEachIndexed { idx, uri ->
                         Surface(
-                            onClick = { imageZoom.zoomIn(uri, tileW, tileH, viewW, viewH) },
+                            onClick = {
+                                // v7.24 — report the tile's VIEWPORT spot so
+                                // the image glides from exactly where it sits
+                                // (scroll offset applied) to the strip's
+                                // center. Single full-width images sit at 0.
+                                val viewportX = if (singleImage) 0f
+                                else idx * (tileW + with(density) { 8.dp.toPx() }) - scrollState.value
+                                imageZoom.zoomIn(
+                                    uri,
+                                    centerX = viewportX + tileW / 2f,
+                                    centerY = tileH / 2f,
+                                    tileW = tileW,
+                                    tileH = tileH,
+                                    viewW = viewW,
+                                    viewH = viewH
+                                )
+                            },
                             shape = RoundedCornerShape(16.dp),
                             shadowElevation = 0.dp,
                             modifier = Modifier.size(
@@ -1783,14 +1799,19 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                     }
                 }
                 // In-place zoom overlay — LAST child of the box (same as the
-                // saved mood board): springs the tapped image up centered +
-                // straight over the strip, pinch/pan refine, tap closes.
+                // saved mood board): glides the tapped image from its spot to
+                // the strip's center (arc), pinch/pan refine, tap closes.
                 attachedUris.firstOrNull { it == imageZoom.zoomedUri }?.let { uri ->
                     MoodBoardZoomOverlay(
                         zoomState = imageZoom,
                         tileUri = uri,
+                        tileX = if (singleImage) 0f
+                            else attachedUris.indexOf(uri) * (tileW + with(density) { 8.dp.toPx() }) - scrollState.value,
+                        tileY = 0f,
                         widthPx = tileW,
-                        heightPx = tileH
+                        heightPx = tileH,
+                        viewW = viewW,
+                        viewH = viewH
                     )
                 }
             }
@@ -2300,13 +2321,9 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
     var boardExpanded by remember { mutableStateOf(false) }
-    // In-place tile zoom: tap/pinch magnifies the image over the board — no
-    // Lightbox page. Animated values live here so the spring interpolates
-    // from 1x on open and back on close.
-    // v7.19 — scale + pan animate INSIDE [MoodBoardZoomCanvas] now (the
-    // call-site springs are gone), and double-tapping a tile calls
-    // [MoodBoardZoomState.zoomToTile] so the WHOLE board (background
-    // included) glides to the tile before its image pops.
+    // v7.24 — in-place SINGLE-IMAGE zoom: double-tapping a tile glides only
+    // that image from its spot on the collage to the card's center (arc),
+    // where pinch/pan refine it — the board around it never moves.
     val zoomState = rememberMoodBoardZoomState()
 
     val context = LocalContext.current
@@ -2455,15 +2472,19 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                             tiles = scaledTiles,
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            onTileZoom = { uri, w, h, vw, vh ->
-                                // Zoom the WHOLE board to the tapped tile:
-                                // center in VIEWPORT coords (the board is
-                                // offset within the card by the crop).
-                                val tile = scaledTiles.firstOrNull { it.uri == uri }
-                                zoomState.zoomToTile(
+                            onTileZoom = { uri, tx, ty, w, h, vw, vh ->
+                                // v7.24 — only the tapped IMAGE zooms; the
+                                // board stays still. The tile's resting spot
+                                // is its position in VIEWPORT coords (the
+                                // board is offset within the card by the
+                                // center-crop), and the image glides from
+                                // there to the card's center.
+                                val boardOffsetX = (canvasW - boardW) / 2f
+                                val boardOffsetY = (canvasH - boardH) / 2f
+                                zoomState.zoomIn(
                                     uri = uri,
-                                    centerX = (canvasW - boardW) / 2f + (tile?.offsetXPx ?: 0f) + w / 2f,
-                                    centerY = (canvasH - boardH) / 2f + (tile?.offsetYPx ?: 0f) + h / 2f,
+                                    centerX = boardOffsetX + tx + w / 2f,
+                                    centerY = boardOffsetY + ty + h / 2f,
                                     tileW = w,
                                     tileH = h,
                                     viewW = canvasW,
@@ -2510,23 +2531,25 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     }
                 }
 
-                // ── Whole-board magnifier (v7.19) — the board AND its
-                // watermark backdrop magnify together toward the tapped
-                // tile; the tile's image pops over the collage. Same
-                // fit-scaled geometry so what you magnify matches the card.
-                if (zoomState.boardZoomed) {
-                    MoodBoardZoomCanvas(
+                // ── Single-image zoom (v7.24) — only the tapped image
+                // glides up and zooms; the board around it stays still.
+                // Same fit-scaled geometry so what you magnify matches the
+                // card.
+                scaledTiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { zoomTile ->
+                    // Clip the gliding image to the card's rounded corners —
+                    // the board Surface doesn't clip children, so without
+                    // this a tile near the edge bleeds past the card onto
+                    // the page while it glides to the center.
+                    MoodBoardZoomOverlay(
                         zoomState = zoomState,
-                        tiles = scaledTiles,
-                        canvasWPx = boardW,
-                        canvasHPx = boardH,
-                        backdrop = {
-                            CurioMoodBoardBackdrop(
-                                seed = boardSeed,
-                                accent = category.themedAccent(),
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        tileUri = zoomTile.uri,
+                        tileX = (canvasW - boardW) / 2f + zoomTile.offsetXPx,
+                        tileY = (canvasH - boardH) / 2f + zoomTile.offsetYPx,
+                        widthPx = zoomTile.widthPx,
+                        heightPx = zoomTile.heightPx,
+                        viewW = canvasW,
+                        viewH = canvasH,
+                        modifier = Modifier.clip(RoundedCornerShape(28.dp))
                     )
                 }
             }
@@ -2681,13 +2704,17 @@ private fun ExpandedMoodBoardDialog(
                             tiles = scaledTiles,
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            onTileZoom = { uri, w, h, vw, vh ->
-                                // Glide the whole board to the tapped tile.
-                                val tile = scaledTiles.firstOrNull { it.uri == uri }
-                                zoomState.zoomToTile(
+                            onTileZoom = { uri, tx, ty, w, h, vw, vh ->
+                                // v7.24 — only the tapped IMAGE zooms; the
+                                // board stays still. Resting spot = the
+                                // tile's VIEWPORT position (board centered
+                                // in the dialog by the contain-fit).
+                                val boardOffsetX = (dialogW - boardW) / 2f
+                                val boardOffsetY = (dialogH - boardH) / 2f
+                                zoomState.zoomIn(
                                     uri = uri,
-                                    centerX = (dialogW - boardW) / 2f + (tile?.offsetXPx ?: 0f) + w / 2f,
-                                    centerY = (dialogH - boardH) / 2f + (tile?.offsetYPx ?: 0f) + h / 2f,
+                                    centerX = boardOffsetX + tx + w / 2f,
+                                    centerY = boardOffsetY + ty + h / 2f,
                                     tileW = w,
                                     tileH = h,
                                     viewW = dialogW,
@@ -2714,21 +2741,18 @@ private fun ExpandedMoodBoardDialog(
                         )
                     }
 
-                    // ── Whole-board magnifier (v7.19) — board + backdrop
-                    // glide to the tapped tile, then its image pops. ───────
-                    if (zoomState.boardZoomed) {
-                        MoodBoardZoomCanvas(
+                    // ── Single-image zoom (v7.24) — only the tapped image
+                    // glides up and zooms; the board stays still. ─────────
+                    scaledTiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { zoomTile ->
+                        MoodBoardZoomOverlay(
                             zoomState = zoomState,
-                            tiles = scaledTiles,
-                            canvasWPx = boardW,
-                            canvasHPx = boardH,
-                            backdrop = {
-                                CurioMoodBoardBackdrop(
-                                    seed = seed,
-                                    accent = accent,
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            }
+                            tileUri = zoomTile.uri,
+                            tileX = (dialogW - boardW) / 2f + zoomTile.offsetXPx,
+                            tileY = (dialogH - boardH) / 2f + zoomTile.offsetYPx,
+                            widthPx = zoomTile.widthPx,
+                            heightPx = zoomTile.heightPx,
+                            viewW = dialogW,
+                            viewH = dialogH
                         )
                     }
                 }

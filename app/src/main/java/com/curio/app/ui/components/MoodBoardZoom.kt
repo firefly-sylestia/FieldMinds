@@ -7,10 +7,12 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -36,6 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.consume
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.layout.ContentScale
@@ -61,45 +64,47 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * Mutable zoom state for one mood-board canvas: either a single tile URI is
- * magnified ([zoomedUri]) or the WHOLE board is magnified ([boardZoomed]).
- * [scaleTarget] (1..4) and the pan offsets in pixels are the animation
- * targets; the animated values live at the overlays so zoom opens and
- * closes smoothly.
+ * Mutable zoom state for one mood-board canvas. Only a SINGLE tile image is
+ * ever magnified ([zoomedUri]) — the board around it stays put. The overlay
+ * glides that one image from its resting spot on the collage to the center
+ * of the viewport along an ARC (v7.24), then keeps it there until the user
+ * taps (or double-taps) to close; pinch-to-zoom and one-finger pan refine
+ * the magnified image while it's open.
  *
- * v7.22 — one-shot zoom, no pinch/pan: double-tap magnifies (the board
- * glides to the tile, or a single tile springs up centered + straight) and
- * the magnified view STAYS at that fixed zoom until the user taps to close.
+ * [scaleTarget] and the pan offsets in pixels are the animation TARGETS
+ * (the image centered at that zoom); the animated values live inside
+ * [MoodBoardZoomOverlay] so the glide opens and closes smoothly.
  *
  * [closing] is a latch set by [zoomOut]: the overlay only removes itself
  * once the close animation has settled.
- *
- * Tile/board zoom never navigates — the magnified content is rendered in
- * place by [MoodBoardZoomOverlay] (single tile, centered + straight) and
- * [MoodBoardZoomCanvas] (the whole collage) over the canvas.
  */
 class MoodBoardZoomState {
     var zoomedUri by mutableStateOf<String?>(null)
-    var boardZoomed by mutableStateOf(false)
     var scaleTarget by mutableFloatStateOf(1f)
     var offsetX by mutableFloatStateOf(0f)
     var offsetY by mutableFloatStateOf(0f)
     var closing by mutableStateOf(false)
-    // The zoom level [zoomIn]/[zoomToTile] open at for the CURRENT tile —
-    // fit-based so a small tile opens large enough to read while a big tile
-    // doesn't blow past the screen.
+    // The zoom level [zoomIn] opens at for the CURRENT tile — fit-based so a
+    // small tile opens large enough to read while a big tile doesn't blow
+    // past the screen.
     var defaultScale by mutableFloatStateOf(2.4f)
 
     /**
-     * Double-tap a tile: spring it up, centered + straight. The target zoom
-     * is fit-based — the tile is scaled to fill ~90% of the board viewport's
-     * smaller dimension, clamped so a small tile really zooms in while a
-     * near-full-board tile only lifts slightly (instead of exploding past
-     * the screen at a flat 2.4x).
+     * Double-tap a tile: only that image zooms. The overlay glides it from
+     * its resting spot to the viewport CENTER ([centerX]/[centerY] = the
+     * tile's center in viewport coordinates) at the fit-based zoom level,
+     * so the screen visibly swoops to the image without moving the board.
      */
-    fun zoomIn(uri: String, tileW: Float = 0f, tileH: Float = 0f, viewW: Float = 0f, viewH: Float = 0f) {
+    fun zoomIn(
+        uri: String,
+        centerX: Float = 0f,
+        centerY: Float = 0f,
+        tileW: Float = 0f,
+        tileH: Float = 0f,
+        viewW: Float = 0f,
+        viewH: Float = 0f
+    ) {
         closing = false
-        boardZoomed = false
         if (zoomedUri != uri) {
             zoomedUri = uri
             scaleTarget = 1f
@@ -108,6 +113,11 @@ class MoodBoardZoomState {
         }
         defaultScale = fitZoomScale(tileW, tileH, viewW, viewH)
         scaleTarget = defaultScale
+        // Glide target: with the image scaled around its own center, the
+        // transform that places its center at the viewport center is
+        //   translation = scaleTarget · (viewportCenter − imageCenter)
+        offsetX = scaleTarget * (viewW / 2f - centerX)
+        offsetY = scaleTarget * (viewH / 2f - centerY)
     }
 
     /**
@@ -120,36 +130,6 @@ class MoodBoardZoomState {
         if (tileW <= 0f || tileH <= 0f || viewW <= 0f || viewH <= 0f) return 2.4f
         val fit = minOf(viewW / tileW, viewH / tileH)
         return (fit * 0.9f).coerceIn(1.1f, 5f)
-    }
-
-    /**
-     * Double-tap a tile (v7.19): the WHOLE board — background included —
-     * magnifies toward the tapped tile, centering it, and the tile's image
-     * pops up over the magnified collage. [centerX]/[centerY] are the
-     * tile's center in VIEWPORT coordinates (board offset already applied);
-     * the target offset places that point at the viewport center at the
-     * fit-based zoom level, so the screen visibly glides to the tile.
-     */
-    fun zoomToTile(
-        uri: String,
-        centerX: Float,
-        centerY: Float,
-        tileW: Float,
-        tileH: Float,
-        viewW: Float,
-        viewH: Float
-    ) {
-        closing = false
-        zoomedUri = uri
-        boardZoomed = true
-        defaultScale = fitZoomScale(tileW, tileH, viewW, viewH)
-        scaleTarget = defaultScale
-        // The magnified layer scales around its CENTER, so the on-screen
-        // position of a content point p is (p - c)·s + c + t. Solving for t
-        // so the tapped tile's center lands at the viewport center c:
-        //   t = s · (c - p)
-        offsetX = scaleTarget * (viewW / 2f - centerX)
-        offsetY = scaleTarget * (viewH / 2f - centerY)
     }
 
     /**
@@ -218,7 +198,7 @@ fun MoodBoardTiles(
     tiles: List<CaptureData.TileLayout>,
     canvasWPx: Float,
     canvasHPx: Float,
-    onTileZoom: ((String, Float, Float, Float, Float) -> Unit)? = null,
+    onTileZoom: ((String, Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     zoomed: Boolean = false
 ) {
     val density = LocalDensity.current
@@ -238,9 +218,23 @@ fun MoodBoardTiles(
                         // editor. A single tap on the saved board intentionally
                         // does nothing, so the double-tap timeout doesn't
                         // delay any action (there is no single-tap action).
+                        // v7.24 — the callback now reports the tile's
+                        // VIEWPORT position (x, y in this Box's space), so
+                        // the overlay can glide the image from its resting
+                        // spot on the collage to the viewport center.
                         Modifier.pointerInput(tile.uri) {
                             detectTapGestures(
-                                onDoubleTap = { onTileZoom(tile.uri, tile.widthPx, tile.heightPx, canvasWPx, canvasHPx) }
+                                onDoubleTap = {
+                                    onTileZoom(
+                                        tile.uri,
+                                        tile.offsetXPx,
+                                        tile.offsetYPx,
+                                        tile.widthPx,
+                                        tile.heightPx,
+                                        canvasWPx,
+                                        canvasHPx
+                                    )
+                                }
                             )
                         }
                     } else Modifier
@@ -274,72 +268,152 @@ fun MoodBoardTiles(
 }
 
 /**
- * In-place zoom overlay for ONE magnified tile. Drop it as the LAST child of
- * the board's Box scope: it springs the tapped/pinched image up CENTERED and
- * STRAIGHT (no rotation, no offset) — no navigation, no separate page. Tap
- * anywhere closes it; pinch/pan refine the zoom up to 8x; double-tap the
- * image resets to its fit-based default zoom; double-tap the board around it
- * closes.
+ * In-place zoom overlay for ONE magnified tile (v7.24). Drop it as the LAST
+ * child of the board's Box scope, sized to the viewport: the tapped image
+ * GLIDES from its resting spot on the collage to the CENTER of the viewport
+ * along an ARC (perpendicular bow, sin(π·t) — the same swoop the old
+ * whole-board zoom used), scaling up as it travels. The board around it
+ * stays completely still. Once landed, pinch-to-zoom (up to 8x) and
+ * one-finger pan refine the image; a tap or the dismiss button closes it
+ * (fast tween back to the resting spot, no laggy spring tail).
  *
- * v7.19 — scale AND pan are animated INTERNALLY (the call-site springs are
- * gone), and closing uses a fast tween instead of a long spring tail, so
- * the minimize animation snaps shut instead of lagging/delaying.
+ * [tileX]/[tileY] are the tile's top-left in VIEWPORT pixels (board offset
+ * already applied), [widthPx]/[heightPx] its size, [viewW]/[viewH] the
+ * viewport the image glides within.
  */
 @Composable
 fun MoodBoardZoomOverlay(
     zoomState: MoodBoardZoomState,
     tileUri: String,
+    tileX: Float,
+    tileY: Float,
     widthPx: Float,
     heightPx: Float,
+    viewW: Float,
+    viewH: Float,
     modifier: Modifier = Modifier
 ) {
     if (zoomState.zoomedUri == null) return
     val density = LocalDensity.current
 
-    // v7.22 — one-shot zoom, no pinch/pan. Animate scale + pan from the
-    // current value toward the targets — open springs to the fit zoom,
-    // close uses [moodBoardZoomSpec]'s quick tween so the shrink feels
-    // immediate, not delayed.
-    val overlayScale = remember { Animatable(1f) }
-    val panX = remember { Animatable(0f) }
-    val panY = remember { Animatable(0f) }
-    LaunchedEffect(zoomState.scaleTarget) {
-        overlayScale.animateTo(zoomState.scaleTarget, moodBoardZoomSpec(zoomState.closing))
-    }
-    LaunchedEffect(zoomState.offsetX) {
-        panX.animateTo(zoomState.offsetX, moodBoardZoomSpec(zoomState.closing))
-    }
-    LaunchedEffect(zoomState.offsetY) {
-        panY.animateTo(zoomState.offsetY, moodBoardZoomSpec(zoomState.closing))
+    // ── Arc glide clock — ONE shared clock drives scale + pan in phase so
+    // the image swoops from its resting spot to the centered target, and
+    // back on close. Plain float states (the arc writes them per-frame).
+    var glideScale by remember { mutableFloatStateOf(1f) }
+    var glideX by remember { mutableFloatStateOf(tileX) }
+    var glideY by remember { mutableFloatStateOf(tileY) }
+    val glideProgress = remember { Animatable(0f) }
+
+    // ── Pinch / pan refinement — applied ON TOP of the glide (neutral at
+    // rest; per-gesture deltas are consumed so no tap fires after a drag).
+    var pinchScale by remember { mutableFloatStateOf(1f) }
+    var pinchX by remember { mutableFloatStateOf(0f) }
+    var pinchY by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(
+        zoomState.scaleTarget, zoomState.offsetX, zoomState.offsetY,
+        zoomState.closing
+    ) {
+        // Resting spot: the tile's own position at scale 1. Target: the
+        // image centered at the fit zoom ([offsetX]/[offsetY] are the
+        // translation that centers it). The arc bows perpendicular to the
+        // travel direction, peaking mid-flight, straight on close.
+        val fromScale = glideScale
+        val fromX = glideX
+        val fromY = glideY
+        val toScale = zoomState.scaleTarget
+        val toX = zoomState.offsetX
+        val toY = zoomState.offsetY
+        val dx = toX - fromX
+        val dy = toY - fromY
+        val len = sqrt(dx * dx + dy * dy)
+        val perpX = if (len > 0.5f) dy / len else 0f
+        val perpY = if (len > 0.5f) -dx / len else 0f
+        val arcPeak = if (zoomState.closing) 0f else (len * 0.16f).coerceIn(32f, 150f)
+        glideProgress.snapTo(0f)
+        glideProgress.animateTo(1f, moodBoardZoomSpec(zoomState.closing)) {
+            val t = this.value
+            // Clamp the BULGE progress: a spring overshoots past 1.0, and
+            // sin(π·t) goes negative there — unclamped it would flip the
+            // arc the other way at the very end. The lerp stays unclamped
+            // so the spring's natural settle still lands softly.
+            val arcT = t.coerceIn(0f, 1f)
+            val bulge = arcPeak * sin(PI * arcT).toFloat()
+            glideScale = lerp(fromScale, toScale, t)
+            glideX = lerp(fromX, toX, t) + perpX * bulge
+            glideY = lerp(fromY, toY, t) + perpY * bulge
+        }
+        // The glide (open or close) finished — reset the pinch so the next
+        // open starts neutral.
+        pinchScale = 1f
+        pinchX = 0f
+        pinchY = 0f
     }
 
     // Remove the overlay once the close animation settles back at 1x.
-    LaunchedEffect(overlayScale.value) {
-        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale.value <= 1.01f) {
+    LaunchedEffect(glideScale) {
+        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && glideScale <= 1.01f) {
             zoomState.zoomedUri = null
             zoomState.closing = false
         }
     }
 
-    // ONE box owns the whole overlay: tap-to-close + the image as a CHILD,
-    // so every pointer event reaches the same handler. No dark scrim; a
-    // dismiss button sits at the top while the image is zoomed.
+    // ONE box owns the whole overlay and ALL of its gestures: a tap closes,
+    // while a drag (one finger) pans and a pinch zooms the image. The two are
+    // disambiguated in a single [awaitEachGesture] loop — a clean tap (no
+    // second pointer, no slop-crossing movement) closes; anything else is a
+    // pan/zoom applied to [pinchScale]/[pinchX]/[pinchY] ON TOP of the glide.
+    // One detector means a pan/zoom can never fall through to the tap-close
+    // handler (two separate detectors would let the parent's tap fire on
+    // release after every drag/pinch).
     Box(
         modifier = modifier
             .fillMaxSize()
             .zIndex(1000f)
             .pointerInput(tileUri) {
-                detectTapGestures(onTap = { zoomState.zoomOut() })
+                awaitEachGesture {
+                    val down = awaitFirstDown()
+                    var isTap = true
+                    var gestureZoom = 1f
+                    var gesturePan = Offset.Zero
+                    while (true) {
+                        val event = awaitPointerEvent()
+                        if (event.changes.size > 1) isTap = false
+                        val zoomChange = event.calculateZoom()
+                        val panChange = event.calculatePan()
+                        if (zoomChange != 1f || panChange != Offset.Zero) {
+                            isTap = false
+                            gestureZoom *= zoomChange
+                            gesturePan += panChange
+                        }
+                        event.changes.forEach { it.consume() }
+                        if (event.changes.none { it.pressed }) break
+                    }
+                    if (isTap) {
+                        zoomState.zoomOut()
+                    } else {
+                        pinchScale = (pinchScale * gestureZoom).coerceIn(1f, 8f)
+                        pinchX += gesturePan.x
+                        pinchY += gesturePan.y
+                    }
+                }
             },
         contentAlignment = Alignment.Center
     ) {
-        // The zoomed image — centered on the canvas and upright, animated.
+        // The zoomed image — glides from its board spot to center, then
+        // follows the user's pinch/pan. The whole transform lives in the
+        // graphicsLayer (no layout offset): translationX/Y directly ARE the
+        // image's top-left in viewport pixels, so at scale 1 with the
+        // resting (tileX, tileY) it sits exactly on its tile.
         Box(
             modifier = Modifier.graphicsLayer {
-                scaleX = overlayScale.value
-                scaleY = overlayScale.value
-                translationX = panX.value
-                translationY = panY.value
+                // The image scales around its own center, so a
+                // translation of (tileX, tileY) at scale 1 puts it
+                // exactly on its resting tile.
+                scaleX = glideScale * pinchScale
+                scaleY = glideScale * pinchScale
+                translationX = glideX + pinchX
+                translationY = glideY + pinchY
             }
         ) {
             val imageModifier = Modifier
@@ -350,7 +424,7 @@ fun MoodBoardZoomOverlay(
                 .clip(RoundedCornerShape(14.dp))
             // Frameless, like the editor tiles. The board-size painter renders
             // instantly (already cached from the collage) while the hi-res
-            // decode for the magnifier streams in — no blank flash mid-spring.
+            // decode for the magnifier streams in — no blank flash mid-glide.
             Image(
                 painter = moodBoardPainter(tileUri),
                 contentDescription = null,
@@ -366,215 +440,6 @@ fun MoodBoardZoomOverlay(
         }
 
         // ── Dismiss — closes the zoom ──────────────────────────────────
-        Surface(
-            onClick = { zoomState.zoomOut() },
-            shape = RoundedCornerShape(50),
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-            shadowElevation = 0.dp,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(12.dp)
-                .size(36.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                CurioIcon(
-                    name = CurioIcons.Close,
-                    contentDescription = "Close zoom",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    size = 18.dp
-                )
-            }
-        }
-    }
-}
-
-/**
- * Whole-board magnifier overlay — the entire board (background + collage)
- * magnifies. Two-finger pinch on the board itself springs it up centered;
- * double-tapping a tile ([MoodBoardZoomState.zoomToTile]) makes the whole
- * screen — background included — glide to that tile and center it, then the
- * tile's image pops up over the magnified collage. Pinch inside zooms
- * further up to 8x and drag pans; tap or double-tap (or pinch back to 1x)
- * closes it.
- *
- * v7.19 — scale + pan animate INTERNALLY (call-site springs removed) and
- * closing uses a fast tween so the minimize snaps shut instead of lagging.
- * [backdrop] renders INSIDE the magnified layer, so the background really
- * magnifies with the board instead of staying static behind it.
- */
-@Composable
-fun MoodBoardZoomCanvas(
-    zoomState: MoodBoardZoomState,
-    tiles: List<CaptureData.TileLayout>,
-    canvasWPx: Float,
-    canvasHPx: Float,
-    modifier: Modifier = Modifier,
-    backdrop: @Composable BoxScope.() -> Unit = {}
-) {
-    if (!zoomState.boardZoomed) return
-    val density = LocalDensity.current
-
-    // v7.22 — internal scale + pan animation runs on ONE shared clock so
-    // scale and pan land in phase, and the OPEN glide follows an ARC: the
-    // pan path bows perpendicular to the travel direction (a sin(π·t) hump,
-    // 0 at both ends) instead of a dead-straight line, so the board swoops
-    // to the tile. One-shot zoom — no pinch: the magnified view stays at
-    // the fixed zoom until tapped, and closing runs a fast straight tween
-    // so the minimize feels immediate.
-    // Plain float states (not Animatables) for scale + pan: the arc writes
-    // them per-frame, and Animatable.value isn't publicly writable from app
-    // code — only snapTo()/animateTo() are. glideProgress stays an
-    // Animatable because it's the shared clock (driven by animateTo, read
-    // via .value).
-    var overlayScale by remember { mutableFloatStateOf(1f) }
-    var panX by remember { mutableFloatStateOf(0f) }
-    var panY by remember { mutableFloatStateOf(0f) }
-    val glideProgress = remember { Animatable(0f) }
-    LaunchedEffect(
-        zoomState.scaleTarget, zoomState.offsetX, zoomState.offsetY,
-        zoomState.closing
-    ) {
-        val fromScale = overlayScale
-        val fromX = panX
-        val fromY = panY
-        val toScale = zoomState.scaleTarget
-        val toX = zoomState.offsetX
-        val toY = zoomState.offsetY
-        // Arc geometry: bow perpendicular to the travel direction, peaking
-        // mid-flight (sin(π·t) is 0 at both ends). Scaled to the glide
-        // distance but capped so short hops don't over-swoop.
-        val dx = toX - fromX
-        val dy = toY - fromY
-        val len = sqrt(dx * dx + dy * dy)
-        val perpX = if (len > 0.5f) dy / len else 0f
-        val perpY = if (len > 0.5f) -dx / len else 0f
-        val arcPeak = if (zoomState.closing) 0f else (len * 0.16f).coerceIn(32f, 150f)
-        glideProgress.snapTo(0f)
-        glideProgress.animateTo(1f, moodBoardZoomSpec(zoomState.closing)) {
-            val t = this.value
-            // Clamp the BULGE progress: a spring overshoots past 1.0, and
-            // sin(π·t) goes negative there — unclamped it would flip the
-            // arc the other way at the very end. The lerp below stays
-            // unclamped so the spring's natural settle still lands softly.
-            val arcT = t.coerceIn(0f, 1f)
-            val bulge = arcPeak * sin(PI * arcT).toFloat()
-            overlayScale = lerp(fromScale, toScale, t)
-            panX = lerp(fromX, toX, t) + perpX * bulge
-            panY = lerp(fromY, toY, t) + perpY * bulge
-        }
-    }
-
-    // Remove once the close animation settles back at 1x.
-    LaunchedEffect(overlayScale) {
-        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale <= 1.01f) {
-            zoomState.boardZoomed = false
-            zoomState.closing = false
-        }
-    }
-
-    // ONE box owns the whole overlay: tap-to-close + the collage as a
-    // CHILD. No dark scrim; a dismiss button sits at the top.
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .zIndex(1000f)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { zoomState.zoomOut() },
-                    onDoubleTap = { zoomState.zoomOut() }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        // The whole magnified layer — backdrop + collage, scaled and panned
-        // together so the SCREEN (not just the images) glides to the tile.
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    scaleX = overlayScale
-                    scaleY = overlayScale
-                    translationX = panX
-                    translationY = panY
-                }
-        ) {
-            // The board's own watermark backdrop — inside the transformed
-            // layer, so it magnifies with the collage (identical pattern to
-            // the resting card at scale 1: both fill the viewport).
-            backdrop()
-
-            // The collage + focus pop share ONE centered box, so the pop's
-            // board-space offsets stay aligned with the collage inside the
-            // (viewport-sized) magnified layer.
-            Box(modifier = Modifier.align(Alignment.Center)) {
-                // The whole collage — centered, straight, animated.
-                Box(
-                    modifier = Modifier.size(
-                        width = with(density) { canvasWPx.toDp() },
-                        height = with(density) { canvasHPx.toDp() }
-                    )
-                ) {
-                    MoodBoardTiles(
-                        tiles = tiles,
-                        canvasWPx = canvasWPx,
-                        canvasHPx = canvasHPx,
-                        zoomed = true
-                    )
-                }
-
-                // ── Focus-tile pop (v7.19) — after the board glides to the
-                // tapped tile, its hi-res image pops up over the magnified
-                // collage: a bouncy over-scale + soft shadow, at the tile's
-                // own board position (which the layer transform places
-                // exactly where the collage shows it).
-                val focusUri = zoomState.zoomedUri
-                if (focusUri != null) {
-                    tiles.firstOrNull { it.uri == focusUri }?.let { focus ->
-                        val popScale = remember(focus.uri) { Animatable(1f) }
-                        LaunchedEffect(focus.uri) {
-                            popScale.snapTo(1f)
-                            popScale.animateTo(1.14f, spring(dampingRatio = 0.55f, stiffness = 420f))
-                        }
-                        Box(
-                            modifier = Modifier
-                                .offset {
-                                    IntOffset(
-                                        focus.offsetXPx.roundToInt(),
-                                        focus.offsetYPx.roundToInt()
-                                    )
-                                }
-                                .zIndex(600f)
-                        ) {
-                        Surface(
-                            shape = RoundedCornerShape(18.dp),
-                            color = MaterialTheme.colorScheme.surface,
-                            shadowElevation = 14.dp,
-                            modifier = Modifier
-                                .size(
-                                    width = with(density) { focus.widthPx.toDp() },
-                                    height = with(density) { focus.heightPx.toDp() }
-                                )
-                                .graphicsLayer {
-                                    scaleX = popScale.value
-                                    scaleY = popScale.value
-                                }
-                        ) {
-                            Image(
-                                painter = moodBoardPainter(focus.uri, zoomed = true),
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(RoundedCornerShape(18.dp))
-                            )
-                        }
-                    }
-                }
-                }
-            }
-        }
-
-        // ── Dismiss — closes the board zoom ────────────────────────────
         Surface(
             onClick = { zoomState.zoomOut() },
             shape = RoundedCornerShape(50),

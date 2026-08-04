@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board zoom rework — only the tapped IMAGE zooms (arc glide to center + pinch/pan), board stays still + PNG export compile fixes**
+
+### What was asked
+
+“The moodboard zoom should not zoom the other things, it's looking bad — just zoom in that ONE image only, having the same animation it has, and also add pinch-to-zoom etc just for the image” + pasted CI failure (MoodBoardExport.kt suspend-call + onCancellation). ask_user confirmed: EVERYWHERE (saved view, full-screen, editor) with the arc GLIDE TO CENTER.
+
+### What was done
+
+- **Compile fixes (MoodBoardExport.kt)** — `saveMoodBoardPng` called the suspend `exportBoard` from a plain function → wrapped in `CoroutineScope(SupervisorJob() + Dispatchers.Main).launch` (same as the share path). `suspendCancellableCoroutine` gained the REQUIRED `onCancellation` param (kotlinx-coroutines 1.11.0; no-op handler so the post-capture still completes; no double-resume). Also hardened: preloaded tile bitmaps now recycled via try/finally on ALL exit paths (render failure / null emit no longer leak ARGB).
+- **Single-image zoom (MoodBoardZoom.kt)** — `MoodBoardZoomState` dropped `boardZoomed` + `zoomToTile` (whole-board zoom deleted). `zoomIn` now targets the image centered at the fit zoom (`offsetX/Y = scale · (viewportCenter − imageCenter)`). `MoodBoardZoomOverlay` rewritten: the tapped image GLIDES from its resting spot (`tileX/tileY` at scale 1) to the viewport center along the SAME sin(π·t) arc the old board-zoom used (one shared clock, close = fast tween), the board around it never moves. All transform lives in ONE graphicsLayer (translationX/Y ARE the image's top-left in viewport px — no layout offset, so no double-shift). Pinch (1–8x) + one-finger pan layer on top of the glide.
+- **Gesture disambiguation (reviewer catch)** — the original two-detector setup (parent `detectTapGestures` + child `detectTransformGestures`) let the parent's tap fire on release after every drag/pinch (the child never consumed the down). ONE `awaitEachGesture` loop now decides per gesture: a clean tap (no 2nd pointer, no slop-crossing movement) closes; anything else applies the accumulated pan/zoom.
+- **Whole-board magnifier deleted** — `MoodBoardZoomCanvas` removed; `MoodBoardTiles.onTileZoom` now reports the tile's viewport x/y; all call sites rewired: inline saved card (+clip(28dp) so the gliding image can't bleed past the card's rounded corners — reviewer catch), expanded dialog (contain-fit offsets), attached-images strip (scroll-state-aware x = idx·(tileW+8dp) − scrollState.value), editor canvas (raw coords).
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces BALANCED on all 4 files; code-reviewer pass — coordinate math verified (translation-only transform, centering formula correct), gesture conflict fixed (single detector), onCancellation syntax valid + no double-resume, pinch-reset effect safe (keys don't change mid-pinch), no stale `MoodBoardZoomCanvas`/`zoomToTile`/`boardZoomed` refs, imports clean.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Hero glassmorphism correction — frosted blur on the grid card only (not the whole backdrop), glassy topic title**
 
 ### What was asked

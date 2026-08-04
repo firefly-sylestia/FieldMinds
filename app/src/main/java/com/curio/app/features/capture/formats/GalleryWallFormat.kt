@@ -605,7 +605,17 @@ private fun MoodBoardCanvas(
                                 // a real image, so route through the dialog.
                                 pendingRemoveTileId = id
                             },
-                            onZoomIn = { uri, tw, th, vw, vh -> zoomState.zoomIn(uri, tw, th, vw, vh) },
+                            onZoomIn = { uri, tx, ty, tw, th, vw, vh ->
+                                zoomState.zoomIn(
+                                    uri,
+                                    centerX = tx + tw / 2f,
+                                    centerY = ty + th / 2f,
+                                    tileW = tw,
+                                    tileH = th,
+                                    viewW = vw,
+                                    viewH = vh
+                                )
+                            },
                             onDragStart = { draggingTileId = it },
                             onPinZoneChange = { if (it != inPinZone) inPinZone = it },
                             onCommit = { id, preview ->
@@ -845,12 +855,18 @@ private fun MoodBoardCanvas(
             }
 
             // ── In-place image zoom overlay (double-tap / search — no page) ──
+            // v7.24 — glides the tapped image from its spot on the editor
+            // canvas to the canvas center (arc), pinch/pan refine, tap closes.
             tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                 MoodBoardZoomOverlay(
                     zoomState = zoomState,
                     tileUri = tile.uri,
+                    tileX = tile.offsetXPx,
+                    tileY = tile.offsetYPx,
                     widthPx = tile.widthPx,
-                    heightPx = tile.heightPx
+                    heightPx = tile.heightPx,
+                    viewW = canvasWPx,
+                    viewH = canvasHPx
                 )
             }
         }
@@ -926,7 +942,9 @@ private fun MoodBoardEditorTile(
     minTilePx: Float,
     onBringToFront: (Int) -> Unit,
     onRemove: (Int) -> Unit,
-    onZoomIn: (String, Float, Float, Float, Float) -> Unit,
+    // v7.24 — (uri, tileX, tileY, widthPx, heightPx, viewW, viewH) in
+    // VIEWPORT px so the single-image zoom glides from the tile's spot.
+    onZoomIn: (String, Float, Float, Float, Float, Float, Float) -> Unit,
     onDragStart: (Int) -> Unit,
     onPinZoneChange: (Boolean) -> Unit,
     onCommit: (Int, TileDragPreview) -> Unit,
@@ -983,7 +1001,7 @@ private fun MoodBoardEditorTile(
                     // Double-tap zooms the image in place instead of opening
                     // a full-screen page.
                     onDoubleTap = {
-                        onZoomIn(currentTile.uri, currentTile.widthPx, currentTile.heightPx, canvasW, canvasH)
+                        onZoomIn(currentTile.uri, currentTile.offsetXPx, currentTile.offsetYPx, currentTile.widthPx, currentTile.heightPx, canvasW, canvasH)
                     }
                 )
             }
@@ -1064,7 +1082,7 @@ private fun MoodBoardEditorTile(
 
         // ── Zoom-in-place button (bottom-end) ─────────────────────────
         Surface(
-            onClick = { onZoomIn(tile.uri, tile.widthPx, tile.heightPx, canvasW, canvasH) },
+            onClick = { onZoomIn(tile.uri, tile.offsetXPx, tile.offsetYPx, tile.widthPx, tile.heightPx, canvasW, canvasH) },
             shape = CircleShape,
             color = Color.Black.copy(alpha = 0.48f),
             modifier = Modifier
