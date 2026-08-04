@@ -928,7 +928,7 @@ class SoftTornSheetShape(
  * through the bites) while dipping only a modest amount below the nominal
  * edge — so the white under-sheet stays small and clean.
  */
-private class SoftTearParams(seed: Int, density: Density) {
+private class SoftTearParams(private val seed: Int, density: Density) {
     private val rnd = Random(seed * 31 + 0x0BADC0DE)
     // 2.5–4.5 BIG undulations across the full width (see [disp]: the noise
     // is sampled against x/w, so the wave count is width-independent).
