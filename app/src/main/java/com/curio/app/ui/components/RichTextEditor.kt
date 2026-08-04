@@ -859,9 +859,9 @@ fun RichTextEditor(
                         val padLeft = with(density) { effectiveFieldPadding.calculateLeftPadding(LayoutDirection.Ltr).toPx() }
                         val padTop = with(density) { effectiveFieldPadding.calculateTopPadding().toPx() }
                         val barHeight = with(density) { 40.dp.toPx() }
-                        // 5 buttons (B / I / highlight / A+ / A−) are wider than
-                        // the old 3-button bar.
-                        val barWidth = with(density) { 180.dp.toPx() }
+                        // 4 buttons (B / I / highlight / text size) — narrower
+                        // than the old 5-button bar.
+                        val barWidth = with(density) { 150.dp.toPx() }
                         val gap = with(density) { 8.dp.toPx() }
                         // Float above the selection; drop below it when the
                         // selection is at the very top of the field.
@@ -1015,22 +1015,11 @@ private fun SelectionFormatBar(
                 activeFillAlpha = toolbarActiveFillAlpha,
                 onClick = onHighlight
             )
+            // One text-size button — the A+/A− pair both opened the same
+            // size-picker dropdown, so they collapsed into a single button.
             SizePickerButton(
                 icon = CurioIcons.TextIncrease,
-                label = "Bigger text",
-                active = sizeActive,
-                accent = accent,
-                enabled = enabled,
-                currentSp = currentSp,
-                borderAlpha = toolbarBorderAlpha,
-                iconAlpha = toolbarIconAlpha,
-                activeBorderAlpha = toolbarActiveBorderAlpha,
-                activeFillAlpha = toolbarActiveFillAlpha,
-                onPick = onSizePick
-            )
-            SizePickerButton(
-                icon = CurioIcons.TextDecrease,
-                label = "Smaller text",
+                label = "Text size",
                 active = sizeActive,
                 accent = accent,
                 enabled = enabled,
@@ -1105,28 +1094,16 @@ private fun FormatToolbar(
             activeFillAlpha = toolbarActiveFillAlpha,
             onClick = onHighlight
         )
-        // A+/A− — per-letter font size: tapping opens a dropdown of fixed
-        // sizes; picking one applies it to the selection (if any) and arms
-        // it as the sticky size so the next text typed carries it. The
-        // button stays lit while armed — the true "active" state (the old
-        // step buttons lit from whatever size sat under the caret, armed or
-        // not).
+        // Text size — tapping opens a dropdown of fixed sizes; picking one
+        // applies it to the selection (if any) and arms it as the sticky
+        // size so the next text typed carries it. The button stays lit
+        // while armed — the true "active" state (the old step buttons lit
+        // from whatever size sat under the caret, armed or not). The
+        // former A+/A− pair both opened this same dropdown, so there's a
+        // single button now.
         SizePickerButton(
             icon = CurioIcons.TextIncrease,
-            label = "Bigger text",
-            active = sizeActive,
-            accent = accent,
-            enabled = enabled,
-            currentSp = currentSp,
-            borderAlpha = toolbarBorderAlpha,
-            iconAlpha = toolbarIconAlpha,
-            activeBorderAlpha = toolbarActiveBorderAlpha,
-            activeFillAlpha = toolbarActiveFillAlpha,
-            onPick = onSizePick
-        )
-        SizePickerButton(
-            icon = CurioIcons.TextDecrease,
-            label = "Smaller text",
+            label = "Text size",
             active = sizeActive,
             accent = accent,
             enabled = enabled,

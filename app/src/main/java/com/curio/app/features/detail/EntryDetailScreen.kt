@@ -816,6 +816,7 @@ private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
     else -> null
 }
 
+@Composable
 private fun EntryMetaCard(entry: CurioEntry) {
     val mood = entry.moodOf()
     if (mood == null) return

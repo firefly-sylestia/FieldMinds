@@ -2,6 +2,27 @@
 
 ## Latest Request (COMPLETED)
 
+**One text-size button per toolbar + CI @Composable fix**
+
+### What was asked
+
+“Make the text size button just one as they both do the same thing”
+
+### What was done
+
+- **RichTextEditor.kt** — both the main toolbar and the floating selection bar rendered TWO size buttons (A+ / A−) that both opened the exact same size-picker dropdown (leftover step-button era). One size button remains in each bar (`SizePickerButton` at 1020 + 1104; the definition at 1198). `TextDecrease` fully removed. 15 insertions / 37 deletions total.
+- **CI fix (EntryDetailScreen.kt)** — during the hero glassmorphism refactor, `EntryMetaCard` lost its `@Composable` annotation (it was calling `moodOf()`/`Surface`/`Row`/`MetaSegment` from a plain function → compile errors at 819-825). Re-added `@Composable` above the function. A sweep confirmed no other private composable-invoking functions lack the annotation.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces balanced on both files; code-reviewer pass (annotation fix correct, `moodOf()` correctly stays non-composable, `EntryMetaCard` still referenced at line 628).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board zoom rebuilt as one-shot — all pinch/pan gestures removed**
 
 ### What was asked
