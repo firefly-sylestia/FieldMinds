@@ -2,6 +2,25 @@
 
 ## Latest Request (COMPLETED)
 
+**Fix: mood-board quote cards snapping while dragging**
+
+### What was asked
+
+“The quote inside the moodboard is snapping around when I move it, fix it”
+
+### What was done
+
+- **MoodBoardFloatingCard drag-delta reset (MoodBoardZoom.kt)** — the drag kept `dragDelta` forever: `onDragEnd` committed `currentX + dragDelta` to the entry, but never zeroed the delta, so after the parent recomposed with the new stored position the card rendered at `stored + staleDelta` (a double-offset snap) and later drags accumulated on top of it. `onDragEnd` now clears `dragDelta = Offset.Zero` after invoking the move (commit read first), and `onDragCancel` clears it too (no commit happens on cancel, so the card settles exactly on its stored position instead of floating mid-offset).
+
+### Validation
+
+- check_braces balanced; code-reviewer pass (commit-read-then-reset order safe, no other snap sources: stable parent lists mid-drag, stable composition slots, stable roundToInt, rememberUpdatedState freshness on the next drag).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Entry hero glassmorphism + mood in the frosted bar**
 
 ### What was asked

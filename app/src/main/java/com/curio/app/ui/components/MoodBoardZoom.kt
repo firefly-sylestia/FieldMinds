@@ -902,8 +902,20 @@ private fun MoodBoardFloatingCard(
                             val commitY = (currentY + dragDelta.y)
                                 .coerceIn(0f, (currentBoardH - currentH).coerceAtLeast(0f))
                             currentOnMove?.invoke(commitX, commitY)
+                            // CRITICAL: the commit stores the position as the
+                            // card's new x/y, so the visual delta must be
+                            // cleared — otherwise the card renders at
+                            // stored+delta (a double-offset SNAP) on the next
+                            // frame and keeps accumulating on later drags.
+                            dragDelta = Offset.Zero
                         },
-                        onDragCancel = { dragging = false },
+                        onDragCancel = {
+                            // No commit happens on cancel — clear the delta so
+                            // the card settles back exactly on its stored
+                            // position instead of floating mid-offset.
+                            dragging = false
+                            dragDelta = Offset.Zero
+                        },
                         onDrag = { change, amount ->
                             change.consume()
                             // Clamp the ACCUMULATED delta so the card sticks
