@@ -838,8 +838,9 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
  * multi-octave [TornPaperShape] (jagged rip), this edge is torn with broad,
  * ROUNDED waves: a continuous seeded wave field plus smooth value-noise
  * displacement sampled at a fine step, so the tear keeps moving across the
- * full width with 6–9 softened undulations instead of falling into a straight
- * plateau. The whole tear personality — wave count, depths, tilt and phase —
+ * full width with 2–3 broad undulations, each carrying several smaller,
+ * rounded bumps instead of falling into a straight plateau. The whole tear
+ * personality — wave count, depths, tilt and phase —
  * is drawn from the tear seed, so every entry tears differently but the
  * same entry always tears identically.
  *
@@ -881,10 +882,11 @@ class SoftTornBottomShape(seed: Int) : Shape {
  * bottom edge. Its top edge is the SAME seeded torn curve as the hero (the
  * two shapes derive their displacement from the same seed, so they align
  * pixel-perfect and the sheet's torn top hides behind the opaque hero — the
- * tear lives ONLY on the hero card). Its bottom edge is that same curve
- * pushed DOWN by a constant [lip], so the visible white is a uniform lip
- * below the tear everywhere, with the page wash starting right after it —
- * no interlocking halves, no wash showing through the teeth. [baseline]
+ * tear lives ONLY on the hero card). Its bottom edge follows the same
+ * broad-and-bumpy rhythm, pushed DOWN by a constant [lip], so the visible
+ * white is a deep continuous sheet below the tear everywhere, with the page
+ * wash starting right after it — no interlocking halves or gaps through the
+ * teeth. [baseline]
  * lifts the torn top above the box's own top edge (behind the hero) so the
  * hero's up-bites still read white.
  */
@@ -924,48 +926,49 @@ class SoftTornSheetShape(
  * seed, so their torn edges align pixel-perfect.
  *
  * The displacement is DOWN-BIASED (positive dips scaled to 55%): the tear
- * bites UP into the card in rounded waves (white shows behind the card
- * through the bites) while dipping only a modest amount below the nominal
- * edge — so the white under-sheet stays small and clean. The separate
- * under-sheet bottom receives only a restrained seeded bump layer, keeping
- * its white lip handmade without making it extend far below the hero.
+ * bites UP into the card in broad rounded waves with a finer bumpy ripple
+ * riding over them (white shows behind the card through the bites) while
+ * dipping only a modest amount below the nominal edge. The under-sheet uses
+ * the same broad-plus-small rhythm on its exposed lower edge and extends
+ * far enough below the hero to keep the page wash from peeking through.
  */
 private class SoftTearParams(private val seed: Int, density: Density) {
     private val rnd = Random(seed * 31 + 0x0BADC0DE)
-    // 6–9 rounded undulations across the full width (see [disp]: the noise
-    // is sampled against x/w, so the wave count is width-independent). The
-    // higher count prevents a long, visually straight span between only two
-    // or three broad waves while keeping each rise soft and paper-like.
-    val waves = 6f + rnd.nextFloat() * 3f
-    val tooth = with(density) { (6.5f + rnd.nextFloat() * 2.5f).dp.toPx() }
-    val deep = with(density) { (2.5f + rnd.nextFloat() * 1.5f).dp.toPx() }
-    val micro = with(density) { (1.3f + rnd.nextFloat() * 0.7f).dp.toPx() }
-    // Seeded tilt — the whole edge drifts from -tilt/2 at the left to
-    // +tilt/2 at the right, unique per entry but stable across reopens.
-    val tilt = (rnd.nextFloat() - 0.5f) * 2f * with(density) { (3f + rnd.nextFloat() * 3f).dp.toPx() }
+    // 2–3 broad rounded undulations across the full width. A separate
+    // smaller ripple rhythm rides over them, so the edge is visibly bumpy
+    // without becoming a string of oversized waves.
+    val waves = 2.2f + rnd.nextFloat() * 0.8f
+    val tooth = with(density) { (5.0f + rnd.nextFloat() * 1.8f).dp.toPx() }
+    val deep = with(density) { (1.8f + rnd.nextFloat() * 1.2f).dp.toPx() }
+    val micro = with(density) { (0.8f + rnd.nextFloat() * 0.6f).dp.toPx() }
+    val ripple = with(density) { (1.0f + rnd.nextFloat() * 0.7f).dp.toPx() }
+    val rippleWaves = 7f + rnd.nextFloat() * 4f
+    // Seeded tilt — the whole edge drifts only gently from left to right,
+    // so it never overwhelms the broad wave rhythm.
+    val tilt = (rnd.nextFloat() - 0.5f) * 2f * with(density) { (2f + rnd.nextFloat() * 2f).dp.toPx() }
     val phase = rnd.nextFloat() * 100f
 
     /** The torn-edge displacement at horizontal position [x] (px) across a
-     *  [w]-wide edge. Broad waves + a slower second wander + fine fiber
+     *  [w]-wide edge. Broad waves + smaller bumpy ripples + fine fiber
      *  tooth, down-biased (see the class kdoc). */
     fun disp(x: Float, w: Float): Float {
         val slant = tilt * (x / w - 0.5f)
-        // A signed sine keeps the edge continuously moving across the full
-        // width; seeded value-noise bends its peaks and troughs so it never
-        // reads like a repeated mechanical wave. This avoids long straight
-        // stretches that can appear when smooth noise sits on one lattice
-        // plateau.
+        // The low-frequency sine establishes 2–3 large waves. Seeded value
+        // noise bends their shoulders so they remain hand-torn rather than
+        // reading as a perfect mechanical sine.
         val normalizedX = x / w
         val waveAngle = normalizedX * waves * (Math.PI * 2.0).toFloat() + phase
         val rhythmic = sin(waveAngle) * tooth * 0.58f
-        val main = (valueNoise(seed, normalizedX * waves, phase) - 0.5f) * 2f * tooth * 0.68f
-        // A slower second wander makes neighboring waves rise and fall at
-        // different depths, like a hand-torn edge rather than a sine strip.
+        val main = (valueNoise(seed, normalizedX * waves, phase) - 0.5f) * 2f * tooth * 0.58f
         val deepWave = (valueNoise(seed + 101, normalizedX * (waves * 0.42f), phase + 17f) - 0.5f) * 2f * deep
-        // Fine fiber tooth — deliberately visible but restrained, so the
-        // broad waviness remains the primary silhouette.
-        val fiber = (valueNoise(seed + 71, x * 0.14f, 3.5f) - 0.5f) * 2f * micro
-        val raw = slant + rhythmic + main + deepWave + fiber
+        // Three-to-five small bumps per broad wave: enough texture to keep
+        // the silhouette continuously wavy, but shallow enough that the
+        // large waves remain the visual structure.
+        val rippleAngle = normalizedX * rippleWaves * (Math.PI * 2.0).toFloat() + phase * 1.7f
+        val smallRipple = sin(rippleAngle) * ripple * 0.45f +
+            (valueNoise(seed + 71, normalizedX * rippleWaves * 1.35f, phase + 29f) - 0.5f) * 2f * ripple * 0.55f
+        val fiber = (valueNoise(seed + 47, x * 0.14f, 3.5f) - 0.5f) * 2f * micro
+        val raw = slant + rhythmic + main + deepWave + smallRipple + fiber
         return if (raw > 0f) raw * 0.55f else raw
     }
 }
@@ -1012,9 +1015,9 @@ private fun buildSoftTornPath(
  * the TOP edge is the SAME torn curve as the hero (same seed → identical
  * displacement, so the two align pixel-perfect and the sheet's torn top is
  * hidden behind the opaque hero), and the BOTTOM edge is that same curve
- * pushed down by a constant [lipPx] — the visible white is a UNIFORM lip
- * below the tear everywhere (no page wash showing through the teeth, no
- * interlocking halves, nothing below the lip). [baselinePx] lifts the
+ * pushed down by a constant [lipPx] — the visible white is a DEEP continuous
+ * sheet below the tear everywhere (no page wash showing through the teeth,
+ * no interlocking halves, nothing below the lip). [baselinePx] lifts the
  * sheet's torn top above the box's own top edge so the hero's up-bites
  * behind the card still read white.
  */
@@ -1034,16 +1037,18 @@ private fun buildSoftSheetPath(
     }
     val p = SoftTearParams(seed, density)
     val step = with(density) { 4.dp.toPx() }
-    // The sheet's lower edge is not a rigid ruler line: keep the shared tear
-    // profile for alignment, then add a restrained independent paper-bump
-    // layer so the white lip also has a handmade, uneven silhouette.
+    // The sheet's lower edge carries the SAME 2–3 broad waves plus the
+    // smaller bumpy ripple rhythm as the hero. A restrained extra wobble
+    // keeps the exposed white edge from looking mechanically parallel while
+    // preserving a continuous sheet with no background gaps.
     fun bottomBump(x: Float): Float {
         val normalizedX = x / w
-        val broad = (valueNoise(seed + 211, normalizedX * (p.waves * 0.9f), p.phase + 41f) - 0.5f) *
-            2f * with(density) { 1.6.dp.toPx() }
-        val small = (valueNoise(seed + 257, x * 0.12f, 9.5f) - 0.5f) *
-            2f * with(density) { 0.8.dp.toPx() }
-        return broad + small
+        val sharedShape = p.disp(x, w) * 0.30f
+        val rippleAngle = normalizedX * (p.rippleWaves * 1.05f) * (Math.PI * 2.0).toFloat() + p.phase * 1.35f
+        val extraRipple = sin(rippleAngle) * with(density) { 0.8.dp.toPx() } +
+            (valueNoise(seed + 257, normalizedX * p.rippleWaves, p.phase + 53f) - 0.5f) *
+                2f * with(density) { 0.5.dp.toPx() }
+        return sharedShape + extraRipple
     }
     // Clockwise: torn top (left→right), right side down to the lip, torn
     // bottom running PARALLEL to the top with small seeded bumps, close up

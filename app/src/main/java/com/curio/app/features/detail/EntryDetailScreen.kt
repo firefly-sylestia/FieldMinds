@@ -246,13 +246,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         //
         // The banner runs edge-to-edge (square corners — no rounded card
         // look). Its bottom edge is clipped by a seeded SOFT torn shape with
-        // ONE SOLID white under-sheet behind it: the white lip peeks out a
-        // little below the torn edge (a uniform ~12dp, following its waves)
-        // and the page's wash starts right after — no interlocking halves,
-        // no wash showing through the teeth. The tear is seeded from the
-        // entry id, so every detail page gets its own broad, wavy rip (wave
-        // count, depths, tilt and phase are all drawn from the entry's seed)
-        // that never changes when the page is reopened.
+        // ONE SOLID white under-sheet behind it: the white sheet extends
+        // visibly below the seam with a deeper ~24dp lip, following the same
+        // 2–3 broad waves and smaller bumpy ripples. The page's wash starts
+        // only after the white sheet, so no background gaps show through the
+        // teeth. The tear is seeded from the entry id, so every detail page
+        // gets its own stable texture that never changes when reopened.
         val blendActive = AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState &&
             !(isCurioDarkTheme() && !AppPreferences.pastelColorsState)
@@ -273,7 +272,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(EntryDetailHeroHeight)
+                .height(EntryDetailHeroHeight + EntryDetailSheetExtent)
         ) {
             // ── White under-sheet — ONE SOLID white sheet layered BEHIND
             // the hero's torn bottom edge. The tear lives ONLY on the hero
@@ -281,27 +280,28 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             // the hero's bottom edge (same seed → pixel-perfect alignment,
             // so the sheet's torn top hides behind the opaque hero and the
             // wavy bite marks read white through the hero's up-bites), and
-            // the sheet's bottom edge is that same curve pushed down by a
-            // constant lip — the visible white is a uniform ~12dp lip below
-            // the tear EVERYWHERE, with the page's wash starting right
-            // after it. No interlocking halves, no wash showing through the
-            // deeper teeth, nothing below the lip.
+            // the sheet's bottom edge follows that same broad-plus-small
+            // rhythm, pushed down by a deeper constant lip — the visible
+            // white extends ~24dp below the tear EVERYWHERE, with the page's
+            // wash starting only after it. No interlocking halves, no wash
+            // showing through the deeper teeth, and no gap below the card.
             val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
             // Remembered Shape instances so their internal outline caches
             // survive recompositions (built fresh in the modifier chain, the
             // caches would never hit).
             val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
             val sheetShape = remember(tearSeed) {
-                SoftTornSheetShape(tearSeed, lip = 12.dp, baseline = 26.dp)
+                SoftTornSheetShape(tearSeed, lip = 24.dp, baseline = 30.dp)
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(78.dp)
                     // Baseline lifts the sheet's torn top above this box's
-                    // own top edge (behind the hero), so the hero's up-bites
-                    // still read white instead of the page wash.
-                    .offset(y = EntryDetailHeroHeight - 26.dp)
+                    // own top edge (behind the hero), while the deeper sheet
+                    // continues below the hero so its white body closes every
+                    // valley before the page wash begins.
+                    .offset(y = EntryDetailHeroHeight - 30.dp)
                     .clip(sheetShape)
                     .background(Color(0xFFFDFCF9))
             )
@@ -319,7 +319,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             // dissolve.
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .height(EntryDetailHeroHeight)
                     .clip(heroTornShape)
                     .background(heroStart)
             ) {
@@ -333,7 +334,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             }
 
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(EntryDetailHeroHeight),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
@@ -599,7 +602,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // ── Topic meta — the title now lives INSIDE the hero above, so
         // this block keeps the chips + captured-at + meta card only.
         // 28dp top padding keeps the chips clear of the white under-sheet
-        // lip (which reaches ~24dp past the hero's nominal bottom).
+        // lip (which now reaches roughly 36dp past the hero's nominal bottom).
         MorphEntrance {
             Column(modifier = Modifier.padding(28.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -738,10 +741,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
  * here and a hero-height change can't silently put glyphs back behind it.
  */
 private val EntryDetailHeroHeight = 380.dp
+/** Extra layout space reserved for the white sheet below the clipped hero. */
+private val EntryDetailSheetExtent = 48.dp
 
 /** Hero height + a small gap — the watermark's top clearance on this page
  *  (keeps the backdrop glyphs clear of the white under-sheet lip below the
- *  hero's torn edge, which can reach ~24dp past the nominal bottom). */
+ *  hero's torn edge, which reaches ~36–48dp past the nominal bottom). */
 private val EntryDetailHeroClearance = EntryDetailHeroHeight + 30.dp
 
 /**
