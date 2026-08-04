@@ -259,26 +259,26 @@ object MoodBoardExport {
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
             lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
-            val result = kotlinx.coroutines.suspendCancellableCoroutine<Bitmap?> { cont ->
+            // suspendCoroutine lives in the Kotlin STDLIB (kotlin.coroutines),
+            // so it is identical in every kotlinx-coroutines version — unlike
+            // suspendCancellableCoroutine whose onCancellation parameter
+            // flips between optional (<1.9) and required (1.9+) and broke the
+            // CI build on both forms.
+            val result = kotlin.coroutines.suspendCoroutine<Bitmap?> { cont ->
                 composeView.post {
                     val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                     val canvas = android.graphics.Canvas(bmp)
                     canvas.drawColor(android.graphics.Color.WHITE)
                     composeView.draw(canvas)
                     lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-                    // Resume WITHOUT the kotlinx-coroutines 1.9+ onCancellation
-                    // parameter so the source compiles against every resolved
-                    // coroutines version (the parameter is a named arg in the
-                    // function signature, so it can't be conditionally
-                    // supplied). A resume on an already-cancelled continuation
-                    // throws IllegalStateException, which we swallow — the
-                    // capture still finished, the caller just doesn't use the
-                    // bitmap.
-                    try {
-                        cont.resume(bmp)
-                    } catch (_: IllegalStateException) {
-                        // Cancelled while waiting for the frame — ignore.
-                    }
+                    // Plain suspendCoroutine: it has NO onCancellation parameter
+                    // in ANY coroutines version (unlike suspendCancellable-
+                    // Coroutine, whose onCancellation is optional in <1.9 but
+                    // REQUIRED in 1.9+ — which is why the CI build failed on
+                    // both forms). The capture always runs to completion in
+                    // the posted frame, so there is nothing to cancel; the
+                    // resume itself cannot throw here.
+                    cont.resume(bmp)
                 }
             }
             result

@@ -35,3 +35,4 @@
 • Double-tap the zoomed mood-board image to reset a pinch/pan back to the fit zoom (instead of closing)
 • Fix compile errors: frosted hero card layers now live in an explicit Box (matchParentSize + List gradient overload), restored the missing @Composable on the mood-board renderer
 • Build fix: PNG export no longer uses the coroutines 1.9-only onCancellation parameter (cancellation-safe resume) and the zoom gesture code relies on the built-in consume member — compiles on every resolved library version
+• Build fix: PNG export capture now uses the stdlib suspendCoroutine (no version-dependent onCancellation parameter) — compiles on every coroutines version
