@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Zoom-to-tile glide now arcs — the board swoops along a curved path instead of sliding in a straight line**
+
+### What was asked
+
+“Give the zoom-to-tile glide a smoother path animation so it arcs instead of gliding in a straight line”
+
+### What was done
+
+- **Single shared animation clock (MoodBoardZoom.kt, MoodBoardZoomCanvas)** — the three independent LaunchedEffects (overlayScale / panX / panY, each with its own spring) were replaced by ONE effect keyed on (scaleTarget, offsetX, offsetY, gestureActive, closing) driving a single `glideProgress: Animatable(0f)` clock. Scale + pan now land in phase (no desync).
+- **Arc path** — the open glide maps progress t to `pan = lerp(from, to, t) + perp * arcPeak * sin(π·t)`, where perp is the normalized perpendicular of the travel vector and arcPeak = (len·0.16).coerceIn(32..150px) — the board bows perpendicular to the travel direction, peaking mid-flight and returning to the exact endpoint. Closing still uses the fast tween(170) with arcPeak = 0 (straight snap-out).
+- **Live pinch unchanged** — gestureActive still snaps all values 1:1 to the fingers.
+- **Reviewer catch fixed** — the spring overshoots past t = 1.0, where sin(π·t) goes negative and would flip the arc the other way at the end; the bulge progress is clamped (`t.coerceIn(0f,1f)`) while the lerp stays unclamped so the spring's natural settle still lands softly.
+- Also fixed the accumulated CI compile errors from the draggable-cards work (separate commit `ccc00fe1`): missing `CaptureData` import in CaptureFormatComponents, missing `MoodBoardFloatingCards` import in GalleryWallFormat, and nullable-safe `onEditCard?.invoke(i)` in MoodBoardZoom.
+
+### Validation
+
+- check_braces balanced; code-reviewer pass (trailing-lambda binding, live Animatable writes, latch-restart invisibility, re-zoom from live values, float math, arc-flip fix).
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Draggable floating quote cards on the mood board — positions saved in the entry and rendered on the saved board**
 
 ### What was asked

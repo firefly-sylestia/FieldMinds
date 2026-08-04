@@ -59,7 +59,11 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.PatrickHandFontFamily
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.CurioIcons
+import androidx.compose.ui.util.lerp
+import kotlin.math.PI
 import kotlin.math.roundToInt
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
  * Mutable zoom state for one mood-board canvas: either a single tile URI is
@@ -552,24 +556,58 @@ fun MoodBoardZoomCanvas(
     if (!zoomState.boardZoomed) return
     val density = LocalDensity.current
 
-    // Internal scale + pan animation. While a pinch is live (gestureActive)
-    // SNAP 1:1 to the targets so the board tracks the fingers; otherwise
-    // animate toward them (open = spring glide to the tile, close = fast
-    // tween so the minimize feels immediate).
+    // v7.21 — internal scale + pan animation runs on ONE shared clock so
+    // scale and pan land in phase (the old three independent springs could
+    // desync), and the OPEN glide follows an ARC: the pan path bows
+    // perpendicular to the travel direction (a sin(π·t) hump, 0 at both
+    // ends) instead of a dead-straight line, so the board swoops to the
+    // tile. While a pinch is live (gestureActive) everything SNAPS 1:1 to
+    // the targets so the board tracks the fingers; closing stays a fast
+    // straight tween so the minimize feels immediate.
     val overlayScale = remember { Animatable(1f) }
     val panX = remember { Animatable(0f) }
     val panY = remember { Animatable(0f) }
-    LaunchedEffect(zoomState.scaleTarget, zoomState.gestureActive) {
-        if (zoomState.gestureActive) overlayScale.snapTo(zoomState.scaleTarget)
-        else overlayScale.animateTo(zoomState.scaleTarget, moodBoardZoomSpec(zoomState.closing))
-    }
-    LaunchedEffect(zoomState.offsetX, zoomState.gestureActive) {
-        if (zoomState.gestureActive) panX.snapTo(zoomState.offsetX)
-        else panX.animateTo(zoomState.offsetX, moodBoardZoomSpec(zoomState.closing))
-    }
-    LaunchedEffect(zoomState.offsetY, zoomState.gestureActive) {
-        if (zoomState.gestureActive) panY.snapTo(zoomState.offsetY)
-        else panY.animateTo(zoomState.offsetY, moodBoardZoomSpec(zoomState.closing))
+    val glideProgress = remember { Animatable(0f) }
+    LaunchedEffect(
+        zoomState.scaleTarget, zoomState.offsetX, zoomState.offsetY,
+        zoomState.gestureActive, zoomState.closing
+    ) {
+        if (zoomState.gestureActive) {
+            // Live pinch — track the fingers exactly, no animation.
+            glideProgress.snapTo(1f)
+            overlayScale.snapTo(zoomState.scaleTarget)
+            panX.snapTo(zoomState.offsetX)
+            panY.snapTo(zoomState.offsetY)
+            return@LaunchedEffect
+        }
+        val fromScale = overlayScale.value
+        val fromX = panX.value
+        val fromY = panY.value
+        val toScale = zoomState.scaleTarget
+        val toX = zoomState.offsetX
+        val toY = zoomState.offsetY
+        // Arc geometry: bow perpendicular to the travel direction, peaking
+        // mid-flight (sin(π·t) is 0 at both ends). Scaled to the glide
+        // distance but capped so short hops don't over-swoop.
+        val dx = toX - fromX
+        val dy = toY - fromY
+        val len = sqrt(dx * dx + dy * dy)
+        val perpX = if (len > 0.5f) dy / len else 0f
+        val perpY = if (len > 0.5f) -dx / len else 0f
+        val arcPeak = if (zoomState.closing) 0f else (len * 0.16f).coerceIn(32f, 150f)
+        glideProgress.snapTo(0f)
+        glideProgress.animateTo(1f, moodBoardZoomSpec(zoomState.closing)) {
+            val t = this.value
+            // Clamp the BULGE progress: a spring overshoots past 1.0, and
+            // sin(π·t) goes negative there — unclamped it would flip the
+            // arc the other way at the very end. The lerp below stays
+            // unclamped so the spring's natural settle still lands softly.
+            val arcT = t.coerceIn(0f, 1f)
+            val bulge = arcPeak * sin(PI * arcT).toFloat()
+            overlayScale.value = lerp(fromScale, toScale, t)
+            panX.value = lerp(fromX, toX, t) + perpX * bulge
+            panY.value = lerp(fromY, toY, t) + perpY * bulge
+        }
     }
 
     // Auto-close when the user pinches the board back down to 1x.
