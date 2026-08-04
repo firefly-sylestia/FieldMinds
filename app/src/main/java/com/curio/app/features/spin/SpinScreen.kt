@@ -1902,25 +1902,6 @@ private fun HeroTicketCard(
                             .padding(20.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        // Subtype badge + landed check
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Surface(
-                                shape = RoundedCornerShape(50),
-                                color = ink.copy(alpha = 0.18f)
-                            ) {
-                                Text(
-                                    text = topic?.subtype ?: "…",
-                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = ink,
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                                )
-                            }
-                        }
-
                         // Name + tags + teaser — v6.6: reels with the deck.
                         // Previously the hero content snapped instantly on
                         // every tick; now it glides like a card rising from
