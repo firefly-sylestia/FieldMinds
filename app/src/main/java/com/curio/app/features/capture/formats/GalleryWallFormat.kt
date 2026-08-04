@@ -69,6 +69,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.curio.app.data.AppPreferences
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardFloatingCards
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.components.moodBoardPainter

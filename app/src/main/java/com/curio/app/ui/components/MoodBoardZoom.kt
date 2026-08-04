@@ -786,7 +786,7 @@ fun MoodBoardFloatingCards(
             h = slot.h * scale,
             boardW = canvasWPx * scale,
             boardH = canvasHPx * scale,
-            onEdit = { onEditCard(i) },
+            onEdit = { onEditCard?.invoke(i) },
             onMove = onMoveCard?.let { move ->
                 { rx, ry -> move(i, (rx - offsetX) / scale, (ry - offsetY) / scale) }
             }
