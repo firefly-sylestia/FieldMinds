@@ -1,9 +1,5 @@
-• Cabinet polish — search and sorting are always discoverable, an explicit Select mode exposes bulk deletion, and database decoding stays off the UI thread for faster opening
-• Detail paper seam — the white backing now stays thin, softly uneven, and safely overlaps/clamps beneath the hero so straight-edge gaps cannot show through
-• Card rendering now reuses category header gradients to reduce scroll/recomposition work
-• 3D button gradient & shadow (toggleable, Settings → Experimental) — the Spin shuffle button now wears a sphere-like radial gradient with highlight and shadow, plus soft ambient elevation, so it pops instead of sitting flat; orbiting ring dots are now visible in pastel mode
-• Pastel card gradients are less washed out — the white-wash at the bottom of pastel card gradients is significantly reduced (lightness 90% → 80%) for richer, more visible pastel colors
-• Material card blends redesigned — gradients now wear the device's dynamic palette (90%) with a subtle category whisper (10%) instead of competing rainbow ribbons; device color ordering varies by accent hue so every category looks distinct
-• Smart density is now a 3-way picker — Off, Compact, or 2x (extra-small below 350 dpi) — so very low-density phones can shrink the Spin deck further (Settings → Experimental)
-• Categories/Filter now sit flush on the nav bar with no floating gap, and the category picker's Mix button stays visible on every screen
-• Explore overlay crash fixed — the service now supplies Compose's saved-state owner in the system overlay window, with notification-only fallback if an OEM rejects the bubble setup
+• Fixed Explore overlay crashes on Android 16 by attaching through an owner-propagating host before composing, with notification-only fallback to prevent restart loops.
+• Fixed CI compile errors in the topic card gradient and torn paper under-sheet path.
+• Smart Density 2x now reliably shrinks the Spin deck on every device.
+• Cabinet search, sorting, bulk selection/deletion, and faster loading are polished.
+• Detail paper seams are thinner, seeded, wavy, and gap-free.

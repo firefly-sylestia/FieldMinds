@@ -17,6 +17,9 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.view.WindowManager
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.toArgb
@@ -86,7 +89,8 @@ class ExploreSessionService : Service() {
     }
 
     // ── Overlay bubble window ─────────────────────────────────────────
-    private var bubbleView: ComposeView? = null
+    private var bubbleView: View? = null
+    private var bubbleComposeView: ComposeView? = null
     private var bubbleParams: WindowManager.LayoutParams? = null
     // Last bubble size seen by the expand/collapse position compensation
     // (the ComposeView's own width/height can lag the window relayout by a
@@ -403,15 +407,25 @@ class ExploreSessionService : Service() {
             return
         }
 
-        val view = ComposeView(this).apply {
-            // Overlay windows have no Activity to supply the ViewTree owners
-            // Compose requires — install the service-owned ones above so
-            // attaching this view doesn't throw (crash fix).
+        // WindowManager makes an overlay root its own ViewRootImpl. Keep the
+        // ComposeView one level below a plain host and put all ViewTree owners
+        // on that host (and the child) before attachment. This is important on
+        // Android 16: a ComposeView used as the direct overlay root can still
+        // resolve an empty tree during ViewRootImpl attachment even when its
+        // own tags were set.
+        val composeView = ComposeView(this).apply {
             setViewTreeLifecycleOwner(owner)
             setViewTreeViewModelStoreOwner(owner)
             setViewTreeSavedStateRegistryOwner(owner)
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
-            setContent {
+            bubbleComposeView = this
+            // Defer composition until the host is attached to the overlay
+            // window. ComposeView otherwise resolves its ViewTree owners while
+            // WindowManager is still installing the ViewRootImpl on Android 16.
+            post {
+                if (!isAttachedToWindow || bubbleUnavailable) return@post
+                runCatching {
+                    setContent {
                 // Reads the reactive session — pause/resume/hide from the
                 // notification or the bubble recompose this content live.
                 val session = ExploreSessionStore.activeSessionState
@@ -494,7 +508,23 @@ class ExploreSessionService : Service() {
                         )
                     }
                 }
+                    }
+                }.onFailure { error ->
+                    handleOverlayFailure(error)
+                }
             }
+        }
+        val view = FrameLayout(this).apply {
+            setViewTreeLifecycleOwner(owner)
+            setViewTreeViewModelStoreOwner(owner)
+            setViewTreeSavedStateRegistryOwner(owner)
+            addView(
+                composeView,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
         }
 
         val added = runCatching { windowManager.addView(view, params) }.isSuccess
@@ -505,9 +535,16 @@ class ExploreSessionService : Service() {
             // window on every service tick, because that can turn an OEM
             // rejection into a restart loop.
             bubbleUnavailable = true
+            composeView.disposeComposition()
+            bubbleComposeView = null
+            overlayOwner?.destroy()
+            overlayOwner = null
             return
         }
         bubbleParams = params
+        // Publish the host before the posted composition can run, so a
+        // composition failure can remove the actual attached overlay root.
+        bubbleView = view
         // Initial placement: bottom-center, clear of the nav-bar area.
         view.doOnLayout {
             val bounds = windowBounds()
@@ -521,20 +558,43 @@ class ExploreSessionService : Service() {
             bubbleLastW = view.width
             bubbleLastH = view.height
         }
-        bubbleView = view
+    }
+
+    /**
+     * Disables the bubble for this service instance if composition or owner
+     * resolution fails after the overlay has been attached. The failure can
+     * happen from the posted Compose setup rather than inside addView(), so
+     * the normal runCatching around WindowManager.addView cannot protect it.
+     * Notification mode remains available instead of allowing a restart loop.
+     */
+    private fun handleOverlayFailure(error: Throwable) {
+        if (bubbleUnavailable) return
+        bubbleUnavailable = true
+        Log.e(TAG, "Explore overlay composition failed; using notification only", error)
+        runCatching { bubbleView?.let { windowManager.removeView(it) } }
+        bubbleView = null
+        bubbleParams = null
+        bubbleLastW = 0
+        bubbleLastH = 0
+        bubbleComposeView?.disposeComposition()
+        bubbleComposeView = null
+        overlayOwner?.destroy()
+        overlayOwner = null
     }
 
     /** Removes the bubble window (no-op when it isn't showing). */
     private fun removeBubble() {
         bubbleView?.let { v ->
             runCatching { windowManager.removeView(v) }
-            bubbleView = null
-            bubbleParams = null
-            // Clear the size tracker too — the next showBubble's doOnLayout
-            // re-seeds it; leaving stale sizes would mislead the guard.
-            bubbleLastW = 0
-            bubbleLastH = 0
         }
+        bubbleView = null
+        bubbleComposeView?.disposeComposition()
+        bubbleComposeView = null
+        bubbleParams = null
+        // Clear the size tracker too — the next showBubble's doOnLayout
+        // re-seeds it; leaving stale sizes would mislead the guard.
+        bubbleLastW = 0
+        bubbleLastH = 0
     }
 
     /** Snaps the bubble to the nearest horizontal edge, clamped on-screen. */

@@ -153,7 +153,25 @@ FieldMind imports must be marked legacy at restore time, not inferred from categ
 - `git diff --check` passed.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
 
-## Latest Request (IN PROGRESS)
+## Latest Request (COMPLETED)
+
+**Fix CI compile errors and Android 16 Explore overlay crash**
+
+### What changed
+
+- Fixed `CurioTopicCard` by resolving the composable `CurioGradients.cardGradient()` call in the composable scope before remembering the `Brush`.
+- Fixed the `PaperCard` white under-sheet path by declaring its local `x` traversal variable.
+- Pushed those CI compile fixes in commit `a9357636`.
+- Hardened the Explore overlay: a `FrameLayout` host now carries lifecycle, ViewModel, and saved-state owners before attachment; the nested ComposeView is composed only after the overlay is attached.
+- Added guarded failure cleanup that removes the overlay, disposes the composition, destroys the service-owned owners, and disables the bubble for the service session so notification-only Explore mode prevents restart loops.
+
+### Validation
+
+- `scripts/check_braces.py` passed for all changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+## Previous Request (COMPLETED)
 
 **Refine detail hero torn seam**
 
