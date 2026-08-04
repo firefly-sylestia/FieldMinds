@@ -200,6 +200,25 @@ CI reported `rememberSaveable` as unresolved in `FieldMindObservationScreen.kt`,
 
 ## Latest Request (COMPLETED)
 
+**Make Smart density 2x actually shrink the Spin UI**
+
+The 2x picker was only setting `densityExtraCompact` when the device's physical `densityDpi` was below 350. On normal/high-density phones that condition stayed false, so selecting 2x had no visible effect.
+
+### What changed
+
+- Made `SmartDensityMode.EXTRA_COMPACT` an explicit user-selected tier on every device, rather than gating it behind physical DPI.
+- Ensured 2x selects the compact Spin layout, uses the smallest deck scale, and cannot be overridden by the roomy high-density branch.
+- Preserved the existing Off and Compact behavior.
+- Removed the obsolete extra-low-density threshold constant.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `SpinScreen.kt`.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Fix Explore overlay crash loop after clearing app data**
 
 The supplied log identified the exact crash when the overlay bubble was first attached:

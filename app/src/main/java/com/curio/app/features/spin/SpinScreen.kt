@@ -749,12 +749,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             .background(pageWash)
     ) {
         // ── Smart layout tiers (v7.3) ────────────────────────────────
-        // 1. DENSITY (two-way, toggleable via Settings → Smart density
-        //    layout) — devices under [SpinLowDensityDpi] get the compact
-        //    (scrollable-band) layout no matter the height, and devices at
-        //    or above [SpinHighDensityDpi] get a roomier deck (slightly
-        //    LARGER scale), so low-dpi screens feel smaller and high-dpi
-        //    screens feel bigger. The whole rule is gated by one switch.
+        // 1. DENSITY (three-way, toggleable via Settings → Smart density)
+        //    — Compact responds to device density, while 2x explicitly
+        //    forces the smaller deck on every device. High-density screens
+        //    get a roomier deck only in Compact mode. The whole rule is
+        //    gated by the picker.
         // 2. DIMENSION (toggleable via Settings → Smart Spin layout) —
         //    heights under [SpinCompactThresholdHeight] switch to the
         //    compact layout, and heights under
@@ -766,22 +765,22 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         val densityActive = densityMode != SmartDensityMode.OFF
         val lowDensity = densityActive && densityDpi < SpinLowDensityDpi
         val highDensity = densityActive && densityDpi >= SpinHighDensityDpi
-        // v7.4 — the 2x tier: EXTRA_COMPACT mode shrinks the deck a step
-        // further below [SpinExtraLowDensityDpi] so very low-dpi phones
-        // (≈350 dpi) fit the whole spin comfortably.
-        val densityExtraCompact =
-            densityMode == SmartDensityMode.EXTRA_COMPACT && densityDpi < SpinExtraLowDensityDpi
+        // v7.4 — the 2x tier: selecting EXTRA_COMPACT is itself the
+        // explicit request for the smallest deck. It must not be gated by
+        // the device's physical dpi; a high-density phone should also become
+        // smaller when the user chooses 2x.
+        val densityExtraCompact = densityMode == SmartDensityMode.EXTRA_COMPACT
         val smartLayout = AppPreferences.smartSpinLayoutState
         val heightCompact = maxHeight < SpinCompactThresholdHeight
         val extraCompact = smartLayout && maxHeight < SpinExtraCompactThresholdHeight
         // Extra-compact implies heightCompact (600 < 680), so this stays
         // true whenever the smaller tier is active.
-        val compactHeight = lowDensity || (smartLayout && heightCompact)
+        val compactHeight = densityExtraCompact || lowDensity || (smartLayout && heightCompact)
         // Roomy tier — high-density screens get a slightly LARGER deck so
         // the density rule works both ways. Keyed off the RAW height (not
         // the toggle-gated compactHeight) so a short high-density screen
         // never gets the bigger deck even when the dimension rule is off.
-        val roomy = highDensity && !heightCompact
+        val roomy = highDensity && !heightCompact && !densityExtraCompact
         // ── v7.15 — Continuous fit scale ──────────────────────────────
         // The deck now compresses to the space ACTUALLY available — the
         // height left between the pinned top bar and bottom bar, AND the
@@ -1588,13 +1587,6 @@ private val SpinExtraCompactThresholdHeight = 600.dp
  * layout" setting since v7.3).
  */
 private const val SpinLowDensityDpi = 440
-
-/**
- * Extra-low-density threshold (v7.4) — devices under this density get the
- * 2x density tier (an even smaller deck) when Settings → Experimental →
- * Smart density is set to Extra-compact ("2x").
- */
-private const val SpinExtraLowDensityDpi = 350
 
 /**
  * High-density threshold (v7.3) — devices at or above this density get the
