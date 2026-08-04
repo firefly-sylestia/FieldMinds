@@ -574,14 +574,16 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
                             )
                         }
-                        DropdownMenuItem(
-                            text = { Text("FieldMind observation session") },
-                            onClick = {
-                                menuExpanded = false
-                                navController.navigate(CurioRoutes.FIELDMIND_OBSERVATION) { launchSingleTop = true }
-                            },
-                            leadingIcon = { CurioIcon(name = CurioIcons.ScienceGlyph, contentDescription = null, size = 20.dp) }
-                        )
+                        if (resolvedEntry.isLegacy) {
+                            DropdownMenuItem(
+                                text = { Text("FieldMind observation session") },
+                                onClick = {
+                                    menuExpanded = false
+                                    navController.navigate(CurioRoutes.FIELDMIND_OBSERVATION) { launchSingleTop = true }
+                                },
+                                leadingIcon = { CurioIcon(name = CurioIcons.ScienceGlyph, contentDescription = null, size = 20.dp) }
+                            )
+                        }
                         DropdownMenuItem(
                             text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
                             onClick = {

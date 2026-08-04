@@ -2,6 +2,26 @@
 
 ## Latest Request (COMPLETED)
 
+**Restrict FieldMind observation session to legacy entries**
+
+### What was requested
+
+Remove the FieldMind observation-session action from native Curio detail menus and keep it available only in the Legacy Cabinet/detail entries.
+
+### What changed
+
+- Wrapped the detail overflow-menu action in `resolvedEntry.isLegacy`.
+- The condition uses persisted legacy provenance, not category, subtype, or display text.
+- Native Curio detail menus no longer show the FieldMind observation action; restored legacy entries retain it.
+
+### Validation
+
+- Static validation and review completed.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+
+## Latest Request (COMPLETED)
+
 **Thin shared-wave detail tear and Cabinet bulk delete**
 
 ### What was requested
