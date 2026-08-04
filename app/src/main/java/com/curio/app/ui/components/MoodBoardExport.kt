@@ -276,9 +276,10 @@ object MoodBoardExport {
                     // Coroutine, whose onCancellation is optional in <1.9 but
                     // REQUIRED in 1.9+ — which is why the CI build failed on
                     // both forms). The capture always runs to completion in
-                    // the posted frame, so there is nothing to cancel; the
-                    // resume itself cannot throw here.
-                    cont.resume(bmp)
+                    // the posted frame, so there is nothing to cancel.
+                    // resumeWith is the Continuation INTERFACE method (stdlib,
+                    // every version) — no kotlinx extension import needed.
+                    cont.resumeWith(Result.success(bmp))
                 }
             }
             result
