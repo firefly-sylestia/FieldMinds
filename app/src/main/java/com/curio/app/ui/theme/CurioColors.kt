@@ -89,8 +89,8 @@ object CurioColors {
 
 /**
  * HSL components of a color, computed from its RGBA channels. Internal
- * (shared by [CurioMixedDeck]'s premium blends, [CurioGradients.hslGradientStops],
- * and the pastel-mode ink helpers in CategoryInk.kt — [pastelFillInk], [deepHueInk]).
+ * (shared by [CurioMixedDeck]'s premium blends and the pastel-mode ink
+ * helpers in CategoryInk.kt — [pastelFillInk], [deepHueInk]).
  */
 internal data class Hsl(val h: Float, val s: Float, val l: Float)
 
@@ -219,122 +219,75 @@ object CurioGradients {
         if (AppPreferences.pastelColorsState) accent else lerp(accent, Color.Black, 0.10f)
 
     /**
-     * Interpolates [from] → [to] in HSL space (shortest hue path) and
-     * returns [steps] evenly-spaced colors INCLUDING both endpoints. Naive
-     * RGB lerp between a deep accent and a light/dark page wash passes
-     * through muddy grey midtones; HSL keeps the hue saturated along the
-     * whole path, so gradient blends glide through proper blended colors
-     * instead of a grey band.
-     */
-    fun hslGradientStops(from: Color, to: Color, steps: Int = 9): List<Color> {
-        require(steps >= 2)
-        val a = toHsl(from)
-        val b = toHsl(to)
-        // Achromatic endpoints (pure black/white/grey) carry no meaningful
-        // hue — anchor the path on the chromatic endpoint's hue so the
-        // blend simply darkens/lightens instead of swinging through foreign
-        // hues (e.g. a deep accent fading to AMOLED black stays on-hue).
-        val hueFrom = if (a.s <= 0.001f) b.h else a.h
-        val hueTo = if (b.s <= 0.001f) hueFrom else b.h
-        var dh = hueTo - hueFrom
-        if (dh > 180f) dh -= 360f
-        if (dh < -180f) dh += 360f
-        return List(steps) { i ->
-            val t = i / (steps - 1).toFloat()
-            fromHsl(
-                (hueFrom + dh * t + 360f) % 360f,
-                (a.s + (b.s - a.s) * t).coerceIn(0f, 1f),
-                (a.l + (b.l - a.l) * t).coerceIn(0f, 1f)
-            )
-        }
-    }
-
-    /**
      * Theme-aware category card gradient: opens on [categoryCardFill] (the
      * category card color) and softens toward the theme surface — the soft
      * cream background in light mode, black in dark — so the card background
      * always matches the app's background shade (the hero card must not
      * wash out to pure white on the cream surface).
      *
-     * v7.12 — Material style variety: when "Material card blends" is on
-     * (default), the card wears a gradient dominated by the device's dynamic
-     * Material You palette (90% device colors, 10% category accent whisper).
-     * The exact look varies deterministically per accent:
-     *   - **6 ordering arrangements** — the accent's hue sextant (60°
-     *     buckets) picks one of six permutations of primary/secondary/tertiary,
-     *     so EVERY category gets a distinct gradient order instead of just 3.
-     *   - **Variable stop count** — the accent's lightness determines the
-     *     gradient density: dark accents (amber, deep indigo) get a rich
-     *     7-stop HSL glide, light/mid accents get a clean 5-stop glide.
-     *     No category wears the same stop profile as its neighbor.
-     *   - **Variable tint strength** — the accent's saturation modulates
-     *     the category whisper: muted accents tint stronger (12-14%), vivid
-     *     accents stay at 10%, so the subtlety adapts to the accent's
-     *     personality instead of a one-size-fits-all blend.
-     * Pastel mode softens every stop so the whole glide stays pastel; dark
-     * mode uses the device's dynamic dark palette.
+     * v7.13 — Material card blend variety: when "Material card blends" is on
+     * (default), every category card wears a unique 3-stop gradient where the
+     * category accent takes ONE stop at a hue-determined position (top /
+     * middle / bottom) and the device's Material You palette fills the other
+     * two — so every category looks genuinely different instead of a uniform
+     * 90%-device wash. The category stop is pure (slightly deepened), and the
+     * material stops carry a 40-55% category tint so the whole card still
+     * reads in the category's color story.
      *
-     * v7.8 — light-mode fix: the standard fallback now ends on an ON-HUE
-     * tint of the accent instead of the raw warm background, so cool accents
-     * (rose / teal / sky) glide through proper blended colors instead of
-     * muddy grey-green / orange bands on the reveal hero (RGB-lerping toward
-     * warm cream pulled them off-family).
+     * The arrangement wheel (8 hue bands, 40° each):
+     *  - 0-40° (reds):    category TOP → secondary → tertiary
+     *  - 40-80° (orange): secondary → category MIDDLE → tertiary
+     *  - 80-120° (amber):  primary → secondary → category BOTTOM
+     *  - 120-200° (green): category TOP → primary → tertiary
+     *  - 200-260° (cyan):  secondary → category MIDDLE → primary
+     *  - 260-320° (blue):  primary → tertiary → category BOTTOM
+     *  - 320-360° (purple): category TOP → secondary → primary
+     *
+     * Pastel mode softens every stop; dark mode uses the device's dark
+     * dynamic palette. Off / non-Material style: falls through to the
+     * classic two-stop card gradient below.
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
-        // v7.12 — Material style + "Material card blends": a rich 5- or 7-
-        // stop gradient dominated by the device's dynamic palette (90%) with
-        // a whisper of the category accent (10-14%) tinted into every stop.
-        // The arrangement, stop count, and tint strength all vary by accent
-        // properties for genuine variety — every category renders differently.
+        // v7.13 — Material card blends: a 3-stop gradient where the
+        // category accent owns ONE stop (at a hue-determined position)
+        // and the device's Material You palette fills the other two,
+        // so every category card reads genuinely different instead of
+        // a uniform 90%-device, 10%-whisper wash. The material stops
+        // carry a 40-55% category tint so the whole card stays in the
+        // category's color story.
         if (AppPreferences.themeStyleState == AppPreferences.THEME_STYLE_MATERIAL &&
             AppPreferences.materialCardBlendsState
         ) {
             val scheme = MaterialTheme.colorScheme
             val pastel = AppPreferences.pastelColorsState
             val dark = isCurioDarkTheme()
-            val hint = if (pastel) pastelAccent(accent, dark) else accent
-            val hsl = toHsl(accent)
+            // Category stop — the accent, slightly deepened so it reads
+            // as a solid anchor in the gradient.
+            val catStop = if (pastel) pastelAccent(accent, dark) else lerp(accent, Color.Black, 0.08f)
+            // Material palette stops — pastel-softened when pastel mode
+            // is on, raw device colors otherwise.
             val p = if (pastel) pastelAccent(scheme.primary, dark) else scheme.primary
             val s = if (pastel) pastelAccent(scheme.secondary, dark) else scheme.secondary
             val t = if (pastel) pastelAccent(scheme.tertiary, dark) else scheme.tertiary
-            // Variable tint strength: muted accents get a slightly stronger
-            // category whisper so it still reads; vivid accents stay at 10%.
-            val tintStrength = (0.10f + (1f - hsl.s) * 0.04f).coerceIn(0.10f, 0.14f)
-            val pTinted = lerp(p, hint, tintStrength)
-            val sTinted = lerp(s, hint, tintStrength)
-            val tTinted = lerp(t, hint, tintStrength)
-            // 6-way ordering — the accent's hue sextant picks one of six
-            // permutations of device primary/secondary/tertiary, so every
-            // category (not just every 120° band) gets a distinct arrangement.
-            val (first, second, third) = when {
-                hsl.h < 60f  -> Triple(pTinted, sTinted, tTinted)
-                hsl.h < 120f -> Triple(pTinted, tTinted, sTinted)
-                hsl.h < 180f -> Triple(sTinted, pTinted, tTinted)
-                hsl.h < 240f -> Triple(sTinted, tTinted, pTinted)
-                hsl.h < 300f -> Triple(tTinted, pTinted, sTinted)
-                else         -> Triple(tTinted, sTinted, pTinted)
-            }
-            // Variable stop count: dark accents (amber, deep indigo at
-            // lightness < 0.25) get a rich 7-stop HSL glide; all others
-            // get the standard clean 5-stop gradient. Dark accents benefit
-            // from the extra detail; light/mid accents stay crisp.
-            val a = hslGradientStops(first, second, 3)
-            val b = hslGradientStops(second, third, 3)
-            val base = a + b.drop(1) // standard 5-stop
-            return if (hsl.l < 0.25f && hsl.s > 0.4f) {
-                // Rich 7-stop: insert an extra midpoint between each
-                // existing stop for a denser, more detailed glide.
-                val rich = mutableListOf<Color>()
-                for (i in 0 until base.size) {
-                    rich.add(base[i])
-                    if (i < base.size - 1) {
-                        rich.add(lerp(base[i], base[i + 1], 0.50f))
-                    }
-                }
-                rich
-            } else {
-                base
+            // Material stops carry a 40-55% category tint so the whole
+            // card wears the category's personality, not just one stop.
+            val hsl = toHsl(accent)
+            val tint = (0.40f + hsl.s * 0.15f).coerceIn(0.40f, 0.55f)
+            val pCat = lerp(p, catStop, tint)
+            val sCat = lerp(s, catStop, tint)
+            val tCat = lerp(t, catStop, tint)
+            // 8-way arrangement wheel — the accent's hue picks which
+            // material colors sit at which positions and where the
+            // category accent appears (top / middle / bottom).
+            return when {
+                hsl.h < 40f  -> listOf(catStop, sCat, tCat)       // reds: cat top
+                hsl.h < 80f  -> listOf(sCat, catStop, tCat)       // orange: cat mid
+                hsl.h < 120f -> listOf(pCat, sCat, catStop)       // amber: cat bottom
+                hsl.h < 200f -> listOf(catStop, pCat, tCat)       // greens: cat top
+                hsl.h < 260f -> listOf(sCat, catStop, pCat)       // cyan: cat mid
+                hsl.h < 320f -> listOf(pCat, tCat, catStop)       // blues: cat bottom
+                else          -> listOf(catStop, sCat, pCat)       // purples: cat top
             }
         }
         // End on the ACTIVE theme's background so cards always echo the
