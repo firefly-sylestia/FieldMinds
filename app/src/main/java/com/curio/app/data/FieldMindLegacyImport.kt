@@ -37,7 +37,7 @@ data class FieldMindRestoreSummary(
 
 /**
  * Imports a FieldMind V3 archive (a `.fieldmind` ZIP package — `archive.json`
- * + `media/observations/{id}/*` — or the plain `archive.json` JSON export)
+ * + `media/observations/{id}/<files>` — or the plain `archive.json` JSON export)
  * into Curio as LEGACY Cabinet entries.
  *
  * Every FieldMind **observation** becomes a `FieldNotes` Curio entry
@@ -242,8 +242,8 @@ object FieldMindLegacyImport {
 
     /**
      * Reads a `.fieldmind` ZIP package: `archive.json` + `media-manifest.json`
-     * (captions) in memory, and `media/observations/{id}/*` +
-     * `media/notes/{id}/*` extracted to a temp dir for the restore.
+     * (captions) in memory, and `media/observations/{id}/<files>` +
+     * `media/notes/{id}/<files>` extracted to a temp dir for the restore.
      */
     private fun readZipPackage(bytes: ByteArray, context: Context): ParsedArchive {
         val tempDir = File(context.cacheDir, "fieldmind_import_${System.currentTimeMillis()}")

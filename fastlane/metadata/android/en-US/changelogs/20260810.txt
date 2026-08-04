@@ -40,3 +40,4 @@
 • FieldMind legacy restore: import observations and notes from archive.json or .fieldmind backups into the Cabinet with timestamps, metadata, supported images and a Legacy badge; imports are additive and repeat-safe, and the species catalog travels with Curio backup/restore
 • Mood-board stability: dragging images in the centered inline crop no longer resizes or jumps the viewport, and malformed gesture geometry can no longer crash placement with a NaN roundToInt error
 • Explore overlay crash fix: service-owned Compose lifecycle cleanup no longer constructs an invalid saved-state restarter on newer AndroidX lifecycle versions
+• Build fix: corrected FieldMind archive documentation paths that accidentally opened a nested Kotlin block comment and hid the legacy importer from the compiler
