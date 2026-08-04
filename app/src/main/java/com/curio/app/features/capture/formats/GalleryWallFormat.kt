@@ -288,6 +288,28 @@ fun GalleryWallFormat(
             onAddQuote = { quoteCards.addCard(captionStyle, captionColor, onBoard = true) }
         )
 
+        // v7.23 — the inline editor renders the board exactly like the saved
+        // small card (same fit + center crop), so a quick nudge to use the
+        // full-screen canvas for precise placement.
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CurioIcon(
+                name = CurioIcons.Fullscreen,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                size = 13.dp
+            )
+            Spacer(Modifier.width(5.dp))
+            Text(
+                text = "Use full-screen editing for precise placement",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
         // ── Caption field — wears the note-paper slip like the other text
         //    boxes, with its own per-field paper-style toggle.
         PaperLineField(
@@ -413,6 +435,27 @@ private fun MoodBoardCanvas(
     // Smallest a tile can be pinched to — shared by the live drag preview
     // and the commit so what you see while dragging is exactly what saves.
     val minTilePx = with(density) { 60.dp.toPx() }
+    // v7.23 — the INLINE editor renders through the same width-fit the saved
+    // small card uses (scale to card width, centered; height-fit fallback
+    // for wide/short boards) so the edit preview matches the saved view
+    // exactly. Full-screen editing keeps the raw 1:1 board space for precise
+    // placement. boardScale/boardOffsetX/Y are threaded into the tiles and
+    // floating quote cards (display = raw * scale + offset; commits stay raw).
+    val (boardScale, boardOffsetX, boardOffsetY) = if (fullScreen || tiles.isEmpty()) {
+        Triple(1f, 0f, 0f)
+    } else {
+        val maxX = tiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+        val maxY = tiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+        val widthScale = if (maxX > 0f) canvasWPx / maxX else 1f
+        // Same height-fit fallback as the saved card: a width-fit board that
+        // would shrink to a sliver (<55% of the card height) fills the height
+        // instead, so wide/short collages stay presentable.
+        val scale = if (maxY * widthScale < canvasHPx * 0.55f && maxY > 0f)
+            canvasHPx / maxY else widthScale
+        val boardW = maxX * scale
+        val boardH = maxY * scale
+        Triple(scale, (canvasWPx - boardW) / 2f, (canvasHPx - boardH) / 2f)
+    }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
@@ -572,13 +615,15 @@ private fun MoodBoardCanvas(
                                     // Same clamps as the live preview (with the
                                     // same pre-measure fallback), so the tile
                                     // never snaps or collapses when released.
+                                    // Drag deltas are SCREEN px — divide by the
+                                    // board scale so commits land in raw space.
                                     val cw = if (canvasWPx > 0f) canvasWPx else t.widthPx
                                     val ch = if (canvasHPx > 0f) canvasHPx else t.heightPx
                                     val newW = (t.widthPx * preview.scale).coerceIn(minTilePx, cw)
                                     val newH = (t.heightPx * preview.scale).coerceIn(minTilePx, ch)
-                                    val newX = (t.offsetXPx + preview.dx)
+                                    val newX = (t.offsetXPx + preview.dx / boardScale)
                                         .coerceIn(0f, (cw - newW).coerceAtLeast(0f))
-                                    val newY = (t.offsetYPx + preview.dy)
+                                    val newY = (t.offsetYPx + preview.dy / boardScale)
                                         .coerceIn(0f, (ch - newH).coerceAtLeast(0f))
                                     tiles[idx] = t.copy(
                                         offsetXPx = newX,
@@ -590,12 +635,18 @@ private fun MoodBoardCanvas(
                                     // Pin-to-front drop zone: releasing near
                                     // the top pins the tile to the front —
                                     // single-finger drags only, not pinches.
-                                    if (preview.byDrag && newY < pinZoneHeightPx && idx != tiles.lastIndex) {
+                                    // The zone is at the top of the DISPLAYED
+                                    // board (scaled space).
+                                    val displayY = newY * boardScale + boardOffsetY
+                                    if (preview.byDrag && displayY < pinZoneHeightPx && idx != tiles.lastIndex) {
                                         tiles.add(tiles.removeAt(idx))
                                     }
                                 }
                             },
-                            onDragEnd = { draggingTileId = null }
+                            onDragEnd = { draggingTileId = null },
+                            boardScale = boardScale,
+                            boardOffsetX = boardOffsetX,
+                            boardOffsetY = boardOffsetY
                         )
                     }
                 }
@@ -623,6 +674,11 @@ private fun MoodBoardCanvas(
                         onBoard = quoteState.onBoard.toList(),
                         canvasWPx = canvasWPx,
                         canvasHPx = canvasHPx,
+                        // v7.23 — match the inline fit so cards sit on the
+                        // same scaled collage the tiles use.
+                        boardScale = boardScale,
+                        offsetX = boardOffsetX,
+                        offsetY = boardOffsetY,
                         onEditCard = onEditQuote,
                         onMoveCard = { i, x, y -> quoteState.setPosition(i, x, y) }
                     )
@@ -638,7 +694,11 @@ private fun MoodBoardCanvas(
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .align(Alignment.BottomStart)
-                            .padding(16.dp)
+                            // v7.23 — the full-screen editor's Clear-board button
+                            // also lives at BottomStart; keep the Quote chip
+                            // above it so both stay reachable (inline: 16dp).
+                            .then(if (fullScreen) Modifier.navigationBarsPadding() else Modifier)
+                            .padding(start = 16.dp, end = 16.dp, bottom = if (fullScreen) 88.dp else 16.dp)
                             .zIndex(60f)
                     ) {
                         Row(
@@ -870,7 +930,15 @@ private fun MoodBoardEditorTile(
     onDragStart: (Int) -> Unit,
     onPinZoneChange: (Boolean) -> Unit,
     onCommit: (Int, TileDragPreview) -> Unit,
-    onDragEnd: () -> Unit
+    onDragEnd: () -> Unit,
+    // v7.23 — the inline editor renders through the SAME width-fit + center
+    // the saved small card uses (boardScale/boardOffset), so the edit
+    // preview matches the saved view exactly. Tiles stay stored in RAW
+    // editor px; only the DISPLAY is scaled — drag deltas are divided back
+    // by the scale so commits land in raw space (1.0 = full-screen editor).
+    boardScale: Float = 1f,
+    boardOffsetX: Float = 0f,
+    boardOffsetY: Float = 0f
 ) {
     val density = LocalDensity.current
     // Preview lives INSIDE the tile so per-frame writes recompose only this
@@ -886,12 +954,21 @@ private fun MoodBoardEditorTile(
     val canvasH = if (canvasHPx > 0f) canvasHPx else tile.heightPx
     val preview = dragPreview.value
     val scale = preview?.scale ?: 1f
-    val renderW = (tile.widthPx * scale).coerceIn(minTilePx, canvasW)
-    val renderH = (tile.heightPx * scale).coerceIn(minTilePx, canvasH)
-    val renderX = (tile.offsetXPx + (preview?.dx ?: 0f))
-        .coerceIn(0f, (canvasW - renderW).coerceAtLeast(0f))
-    val renderY = (tile.offsetYPx + (preview?.dy ?: 0f))
-        .coerceIn(0f, (canvasH - renderH).coerceAtLeast(0f))
+    // Drag deltas arrive in SCREEN px; the display is scaled by boardScale,
+    // so the raw-space delta is screenDelta / boardScale.
+    val rawDx = (preview?.dx ?: 0f) / boardScale
+    val rawDy = (preview?.dy ?: 0f) / boardScale
+    // RAW-space tile geometry (the stored/committed space, clamped to the
+    // raw board bounds).
+    val rawW = (tile.widthPx * scale).coerceIn(minTilePx, canvasW)
+    val rawH = (tile.heightPx * scale).coerceIn(minTilePx, canvasH)
+    val rawX = (tile.offsetXPx + rawDx).coerceIn(0f, (canvasW - rawW).coerceAtLeast(0f))
+    val rawY = (tile.offsetYPx + rawDy).coerceIn(0f, (canvasH - rawH).coerceAtLeast(0f))
+    // SCALED display geometry — what the user sees (matches the saved card).
+    val renderW = rawW * boardScale
+    val renderH = rawH * boardScale
+    val renderX = rawX * boardScale + boardOffsetX
+    val renderY = rawY * boardScale + boardOffsetY
     val renderRotation = tile.rotationDeg + (preview?.rotation ?: 0f)
 
     Box(

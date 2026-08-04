@@ -27,3 +27,5 @@
 • Mood-board zoom is now one-shot and clean: double-tap a photo and the whole board swoops to it, centered with the image popping over it — it stays at that zoom until you tap to close. No pinch/pan gestures anywhere
 • Text-size controls simplified — one size button per toolbar (they both did the same thing)
 • Mood-board quotes split: the board's Quote chip adds cards floating on the collage, while the Add-quote button below adds separate quote boxes under the board
+• Mood-board editor preview now matches the saved card exactly, with a hint to use full-screen editing for precise placement
+• Save or share your mood board as a high-resolution PNG — the full board with its background, watermark, collage and quote boxes, crisp even zoomed in

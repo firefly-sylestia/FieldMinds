@@ -124,6 +124,7 @@ import com.curio.app.data.shortName
 import com.curio.app.features.capture.formats.FilledStar
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
+import com.curio.app.ui.components.MoodBoardExport
 import com.curio.app.ui.components.MoodBoardFloatingCards
 import com.curio.app.ui.components.MoodBoardTiles
 import com.curio.app.ui.components.MoodBoardZoomCanvas
@@ -2160,6 +2161,112 @@ private fun fitTileLayout(
 }
 
 @Composable
+/**
+ * v7.23 — Save / Share the full mood board as a high-res PNG. Both actions
+ * render the complete board off-screen (see [MoodBoardExport]) so the image
+ * is sharp at any zoom. Shows a short toast confirming where it went.
+ */
+@Composable
+private fun MoodBoardExportActions(
+    data: CaptureData.GalleryWall,
+    category: CurioCategory,
+    boardSeed: Int,
+    authority: String,
+    entryId: String
+) {
+    val context = LocalContext.current
+    var busy by remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Surface(
+            onClick = {
+                if (busy) return@Surface
+                busy = true
+                MoodBoardExport.saveMoodBoardPng(
+                    context = context,
+                    authority = authority,
+                    data = data,
+                    category = category,
+                    boardSeed = boardSeed,
+                    topicName = "Mood board",
+                    entryId = entryId
+                ) { path ->
+                    busy = false
+                    android.widget.Toast.makeText(
+                        context,
+                        if (path != null) "Mood board saved to Gallery"
+                        else "Couldn't save the mood board",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.weight(1f)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                horizontalArrangement = Arrangement.spacedBy(7.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Image,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    size = 16.dp
+                )
+                Text(
+                    text = if (busy) "Rendering…" else "Save PNG",
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+        Surface(
+            onClick = {
+                if (busy) return@Surface
+                busy = true
+                MoodBoardExport.shareMoodBoardPng(
+                    context = context,
+                    authority = authority,
+                    data = data,
+                    category = category,
+                    boardSeed = boardSeed,
+                    topicName = "Mood board",
+                    entryId = entryId
+                ) {
+                    busy = false
+                }
+            },
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.weight(1f)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                horizontalArrangement = Arrangement.spacedBy(7.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CurioIcon(
+                    name = CurioIcons.Share,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    size = 16.dp
+                )
+                Text(
+                    text = if (busy) "Rendering…" else "Share PNG",
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
+}
+
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     val density = androidx.compose.ui.platform.LocalDensity.current
@@ -2173,6 +2280,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
     // included) glides to the tile before its image pops.
     val zoomState = rememberMoodBoardZoomState()
 
+    val context = LocalContext.current
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Mood board canvas with tile positions ──────────────────────
         // The board's watermark pattern is seeded from the entry id so each
@@ -2394,6 +2502,22 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 }
             }
         }
+
+        // v7.23 — export the FULL board as a high-res PNG: save to the
+        // gallery or share via the system sheet. Both render the same
+        // complete picture (surface + watermark + collage + floating quotes
+        // + caption + below-board quotes) off-screen at export resolution,
+        // so the saved image stays sharp even zoomed in.
+        val exportAuthority = remember(entry.id) {
+            "${context.packageName}.fileprovider"
+        }
+        MoodBoardExportActions(
+            data = data,
+            category = category,
+            boardSeed = boardSeed,
+            authority = exportAuthority,
+            entryId = entry.id
+        )
 
         if (!data.caption.isNullOrBlank()) {
             // Caption wears the same note-paper slip as the editor's field.

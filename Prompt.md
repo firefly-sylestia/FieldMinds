@@ -2,6 +2,29 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board editor matches the saved card + high-res PNG save/share export**
+
+### What was asked
+
+“Use the same rendering you do in saved entry of the moodboard in small view to show in editing too so it looks more accurate, and below in small text say use full screen editing for better arrangement … also check if the quote button is available in full screen … now the big one: add a save system or share system for the moodboard to be able to share as a high-quality PNG without any quality loss even when i zoom in … save it in full screen with the background and all with proper color accuracy”
+
+### What was done
+
+- **Editor inline canvas = saved small card (GalleryWallFormat.kt)** — `MoodBoardCanvas` (inline, non-fullScreen) now computes the SAME width-fit as the saved small view (widthScale, height-fit fallback when a width-fit board would be <55% of the card height) and threads `boardScale`/`boardOffsetX/Y` into `MoodBoardEditorTile` (drag deltas arrive in screen px → `rawDx = preview.dx / boardScale`, raw-space geometry + clamps, render = raw × scale + offset; commit divides deltas back; pin-zone check uses `displayY = newY*boardScale + boardOffsetY`) and `MoodBoardFloatingCards` (boardScale + offsetX/Y), so the edit preview is pixel-consistent with the saved card. A hint row below the inline canvas reads “Use full-screen editing for precise placement”.
+- **Fullscreen Quote chip reachable (GalleryWallFormat.kt)** — the full-screen editor’s Clear-board button and the Quote chip both sat at BottomStart; the chip gained `navigationBarsPadding()` + `bottom = 88.dp` (inline: 16.dp) so the two no longer overlap. Verified the quote chip IS available in full screen (same `MoodBoardCanvas` used by both).
+- **High-res PNG export (new `MoodBoardExport.kt`)** — `MoodBoardExport` preloads every collage tile as a full-size software bitmap off-thread (Coil `allowHardware=false` — never races an async load), then renders the FULL saved board (category surface + seeded `CurioMoodBoardBackdrop` + contain-fit collage from the preloaded bitmaps + floating on-board quote cards at their saved spots + caption slip + below-board quote boxes) into an off-screen `ComposeView` (synthetic lifecycle, same technique as `shareComposableCard`) at 2400×3192 ARGB with a FIXED export density (1dp = 4px) so proportions are identical on every device. `saveMoodBoardPng` writes via MediaStore (`Pictures/Curio`, IS_PENDING→0, delete-on-failure so no ghost rows; app-external Pictures + MediaScanner on API 26–28); `shareMoodBoardPng` hands the PNG to the system share sheet via FileProvider.
+- **Save / Share PNG buttons (EntryDetailScreen.kt)** — `GalleryWallRender` gained a `MoodBoardExportActions` row under the board: Save PNG + Share PNG with a shared busy state (“Rendering…”) and a confirmation toast (“Mood board saved to Gallery”). Uses the real entry id for the file name.
+- **Docs:** fastlane changelog `20260810.txt` appended; Prompt.md.
+
+### Validation
+
+- check_braces BALANCED on all 3 files; code-reviewer pass — division-safe boardScale (≥1f always; fullScreen/empty → 1f), MediaStore IS_PENDING try/finally + delete-on-failure, bitmap recycled in both save and share paths, dead imports removed (BitmapFactory, pastelFillInk), fixed export density, empty/legacy guards verified, `return@Surface` lambdas valid.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board quotes split — the bottom Add-quote button now creates separate quote boxes BELOW the board (chip stays on-board)**
 
 ### What was asked
