@@ -179,13 +179,14 @@ internal fun lightAccentTint(
 internal fun pastelAccent(accent: Color, dark: Boolean): Color {
     val a = toHsl(accent)
     return if (dark) {
-        // v7.8.1 — a touch more saturation + lightness so the muted deep
-        // pastels read as color over midnight instead of dimmed dusk tones.
-        fromHsl(a.h, (a.s * 0.65f).coerceIn(0f, 0.62f), 0.44f)
+        // v7.5 — muted deep pastel: desaturated, gently deepened so the
+        // soft look stays understated over midnight while light ink reads.
+        fromHsl(a.h, (a.s * 0.55f).coerceIn(0f, 0.55f), 0.42f)
     } else {
-        // v7.8.1 — saturation raised 0.80→0.90 (cap 0.72→0.78) so light-mode
-        // pastels stay airy but stop looking washed/dimmed.
-        fromHsl(a.h, (a.s * 0.90f).coerceIn(0f, 0.78f), 0.80f)
+        // v7.5 — airy pastel: the accent's own hue at high lightness with
+        // lightly-held saturation, so indigo becomes periwinkle, rose soft
+        // pink, teal mint, sky azure — never washed or dimmed.
+        fromHsl(a.h, (a.s * 0.80f).coerceIn(0f, 0.72f), 0.80f)
     }
 }
 
