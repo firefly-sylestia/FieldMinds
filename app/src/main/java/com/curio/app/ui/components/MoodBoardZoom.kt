@@ -1,8 +1,9 @@
 package com.curio.app.ui.components
 
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -116,6 +117,37 @@ class MoodBoardZoomState {
         return (fit * 0.9f).coerceIn(1.1f, 5f)
     }
 
+    /**
+     * Double-tap a tile (v7.19): the WHOLE board — background included —
+     * magnifies toward the tapped tile, centering it, and the tile's image
+     * pops up over the magnified collage. [centerX]/[centerY] are the
+     * tile's center in VIEWPORT coordinates (board offset already applied);
+     * the target offset places that point at the viewport center at the
+     * fit-based zoom level, so the screen visibly glides to the tile.
+     */
+    fun zoomToTile(
+        uri: String,
+        centerX: Float,
+        centerY: Float,
+        tileW: Float,
+        tileH: Float,
+        viewW: Float,
+        viewH: Float
+    ) {
+        closing = false
+        gestureActive = false
+        zoomedUri = uri
+        boardZoomed = true
+        defaultScale = fitZoomScale(tileW, tileH, viewW, viewH)
+        scaleTarget = defaultScale
+        // The magnified layer scales around its CENTER, so the on-screen
+        // position of a content point p is (p - c)·s + c + t. Solving for t
+        // so the tapped tile's center lands at the viewport center c:
+        //   t = s · (c - p)
+        offsetX = scaleTarget * (viewW / 2f - centerX)
+        offsetY = scaleTarget * (viewH / 2f - centerY)
+    }
+
     /** Two-finger pinch on the board itself: magnify the whole collage. */
     fun zoomBoard() {
         closing = false
@@ -194,6 +226,17 @@ fun rememberMoodBoardZoomState(): MoodBoardZoomState = remember { MoodBoardZoomS
 // (~160dp), so magnifying a tile to 2.4-4x upscaled a tiny bitmap and looked
 // awful. Decode larger instead: board tiles get a ~3-4x headroom cap and the
 // magnified overlays a higher cap, so zoomed-in detail stays pixel-sharp.
+
+/**
+ * v7.19 — zoom animation spec: opening uses a deliberate spring so the
+ * magnify reads as a physical glide, but CLOSING uses a fast tween so the
+ * minimize snaps shut instead of lagging/delaying behind a long spring
+ * tail (the old 280-stiffness spring took ~half a second to settle and
+ * the overlay only removed itself after that).
+ */
+private fun moodBoardZoomSpec(closing: Boolean) =
+    if (closing) tween(durationMillis = 170, easing = FastOutSlowInEasing)
+    else spring(dampingRatio = 0.8f, stiffness = 320f)
 
 /** Decode cap for board tiles (~3-4x their on-screen size). */
 private const val MoodBoardTileDecodePx = 1024
@@ -328,15 +371,13 @@ fun MoodBoardTiles(
  * image resets to its fit-based default zoom; double-tap the board around it
  * closes.
  *
- * [animatedOffsetX] / [animatedOffsetY] come from `animateFloatAsState` at
- * the board level; the SCALE is animated internally from 1x so the overlay
- * springs up on open instead of popping in at the target zoom.
+ * v7.19 — scale AND pan are animated INTERNALLY (the call-site springs are
+ * gone), and closing uses a fast tween instead of a long spring tail, so
+ * the minimize animation snaps shut instead of lagging/delaying.
  */
 @Composable
 fun MoodBoardZoomOverlay(
     zoomState: MoodBoardZoomState,
-    animatedOffsetX: Float,
-    animatedOffsetY: Float,
     tileUri: String,
     widthPx: Float,
     heightPx: Float,
@@ -345,31 +386,33 @@ fun MoodBoardZoomOverlay(
     if (zoomState.zoomedUri == null) return
     val density = LocalDensity.current
 
-    // The call-site springs initialize to their target on first composition,
-    // so an overlay that composes already at 2.4x would POP in instead of
-    // springing. Animate our own scale from the initial 1x toward the live
-    // target so open AND close spring smoothly. While a pinch is actively
-    // feeding deltas (gestureActive) SNAP 1:1 to the target instead, so the
-    // image tracks the fingers live — the old spring-chase on every event
-    // lagged behind and only caught up after the gesture stopped.
-    var overlayScale by remember { mutableFloatStateOf(1f) }
+    // Animate scale + pan from the current value toward the live targets.
+    // While a pinch is actively feeding deltas (gestureActive) SNAP 1:1 to
+    // the targets instead, so the image tracks the fingers live — the old
+    // spring-chase on every event lagged behind and only caught up after
+    // the gesture stopped. On close, [moodBoardZoomSpec] uses a quick tween
+    // so the shrink feels immediate, not delayed.
+    val overlayScale = remember { Animatable(1f) }
+    val panX = remember { Animatable(0f) }
+    val panY = remember { Animatable(0f) }
     LaunchedEffect(zoomState.scaleTarget, zoomState.gestureActive) {
-        if (zoomState.gestureActive) {
-            overlayScale = zoomState.scaleTarget
-        } else {
-            animate(
-                initialValue = overlayScale,
-                targetValue = zoomState.scaleTarget,
-                animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f)
-            ) { value, _ -> overlayScale = value }
-        }
+        if (zoomState.gestureActive) overlayScale.snapTo(zoomState.scaleTarget)
+        else overlayScale.animateTo(zoomState.scaleTarget, moodBoardZoomSpec(zoomState.closing))
+    }
+    LaunchedEffect(zoomState.offsetX, zoomState.gestureActive) {
+        if (zoomState.gestureActive) panX.snapTo(zoomState.offsetX)
+        else panX.animateTo(zoomState.offsetX, moodBoardZoomSpec(zoomState.closing))
+    }
+    LaunchedEffect(zoomState.offsetY, zoomState.gestureActive) {
+        if (zoomState.gestureActive) panY.snapTo(zoomState.offsetY)
+        else panY.animateTo(zoomState.offsetY, moodBoardZoomSpec(zoomState.closing))
     }
 
-    // Remove the overlay once the close spring settles back at 1x. The
+    // Remove the overlay once the close animation settles back at 1x. The
     // `closing` latch prevents a fresh pinch (which starts at zoom 1.0)
     // from popping the overlay open and instantly closing it.
-    LaunchedEffect(overlayScale) {
-        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale <= 1.01f) {
+    LaunchedEffect(overlayScale.value) {
+        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale.value <= 1.01f) {
             zoomState.zoomedUri = null
             zoomState.closing = false
         }
@@ -378,9 +421,9 @@ fun MoodBoardZoomOverlay(
     // Live animated values for the double-tap hit-test — the gesture
     // coroutine must read the CURRENT scale/pan without restarting on every
     // animation frame (keying pointerInput on them would cancel gestures).
-    val liveScale by rememberUpdatedState(overlayScale)
-    val liveOffsetX by rememberUpdatedState(animatedOffsetX)
-    val liveOffsetY by rememberUpdatedState(animatedOffsetY)
+    val liveScale by rememberUpdatedState(overlayScale.value)
+    val liveOffsetX by rememberUpdatedState(panX.value)
+    val liveOffsetY by rememberUpdatedState(panY.value)
 
     // ONE box owns the whole overlay: gestures + the image as a CHILD, so
     // every pointer event — on the image or around it — reaches the same
@@ -403,7 +446,7 @@ fun MoodBoardZoomOverlay(
                     onTap = { zoomState.zoomOut() },
                     onDoubleTap = { tap ->
                         // Double-tap the zoomed image → spring back to the
-                        // default 2.4x. Double-tap the board around it → close.
+                        // default zoom. Double-tap the board around it → close.
                         val halfW = widthPx / 2f * liveScale
                         val halfH = heightPx / 2f * liveScale
                         val cx = size.width / 2f + liveOffsetX
@@ -416,13 +459,13 @@ fun MoodBoardZoomOverlay(
             },
         contentAlignment = Alignment.Center
     ) {
-        // The zoomed image — centered on the canvas and upright, spring-scaled.
+        // The zoomed image — centered on the canvas and upright, animated.
         Box(
             modifier = Modifier.graphicsLayer {
-                scaleX = overlayScale
-                scaleY = overlayScale
-                translationX = animatedOffsetX
-                translationY = animatedOffsetY
+                scaleX = overlayScale.value
+                scaleY = overlayScale.value
+                translationX = panX.value
+                translationY = panY.value
             }
         ) {
             val imageModifier = Modifier
@@ -472,40 +515,49 @@ fun MoodBoardZoomOverlay(
 }
 
 /**
- * Whole-board magnifier overlay — two-finger pinch on the mood board itself
- * (not just the images) springs the entire collage up, centered and straight.
- * Pinch inside it zooms further up to 8x and drag pans; tap or double-tap
- * (or pinch back to 1x) closes it. The scale is animated internally from 1x
- * so the board springs up on open instead of popping in.
+ * Whole-board magnifier overlay — the entire board (background + collage)
+ * magnifies. Two-finger pinch on the board itself springs it up centered;
+ * double-tapping a tile ([MoodBoardZoomState.zoomToTile]) makes the whole
+ * screen — background included — glide to that tile and center it, then the
+ * tile's image pops up over the magnified collage. Pinch inside zooms
+ * further up to 8x and drag pans; tap or double-tap (or pinch back to 1x)
+ * closes it.
+ *
+ * v7.19 — scale + pan animate INTERNALLY (call-site springs removed) and
+ * closing uses a fast tween so the minimize snaps shut instead of lagging.
+ * [backdrop] renders INSIDE the magnified layer, so the background really
+ * magnifies with the board instead of staying static behind it.
  */
 @Composable
 fun MoodBoardZoomCanvas(
     zoomState: MoodBoardZoomState,
-    animatedOffsetX: Float,
-    animatedOffsetY: Float,
     tiles: List<CaptureData.TileLayout>,
     canvasWPx: Float,
     canvasHPx: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backdrop: @Composable BoxScope.() -> Unit = {}
 ) {
     if (!zoomState.boardZoomed) return
     val density = LocalDensity.current
 
-    // Same in-place spring as the tile overlay: compose at 1x and animate
-    // toward the live target so open and close both spring smoothly. While
-    // a pinch is live (gestureActive) SNAP 1:1 to the target so the board
-    // tracks the fingers instead of chasing a lagging spring.
-    var overlayScale by remember { mutableFloatStateOf(1f) }
+    // Internal scale + pan animation. While a pinch is live (gestureActive)
+    // SNAP 1:1 to the targets so the board tracks the fingers; otherwise
+    // animate toward them (open = spring glide to the tile, close = fast
+    // tween so the minimize feels immediate).
+    val overlayScale = remember { Animatable(1f) }
+    val panX = remember { Animatable(0f) }
+    val panY = remember { Animatable(0f) }
     LaunchedEffect(zoomState.scaleTarget, zoomState.gestureActive) {
-        if (zoomState.gestureActive) {
-            overlayScale = zoomState.scaleTarget
-        } else {
-            animate(
-                initialValue = overlayScale,
-                targetValue = zoomState.scaleTarget,
-                animationSpec = spring(dampingRatio = 0.8f, stiffness = 280f)
-            ) { value, _ -> overlayScale = value }
-        }
+        if (zoomState.gestureActive) overlayScale.snapTo(zoomState.scaleTarget)
+        else overlayScale.animateTo(zoomState.scaleTarget, moodBoardZoomSpec(zoomState.closing))
+    }
+    LaunchedEffect(zoomState.offsetX, zoomState.gestureActive) {
+        if (zoomState.gestureActive) panX.snapTo(zoomState.offsetX)
+        else panX.animateTo(zoomState.offsetX, moodBoardZoomSpec(zoomState.closing))
+    }
+    LaunchedEffect(zoomState.offsetY, zoomState.gestureActive) {
+        if (zoomState.gestureActive) panY.snapTo(zoomState.offsetY)
+        else panY.animateTo(zoomState.offsetY, moodBoardZoomSpec(zoomState.closing))
     }
 
     // Auto-close when the user pinches the board back down to 1x.
@@ -514,9 +566,9 @@ fun MoodBoardZoomCanvas(
             zoomState.boardZoomed = false
         }
     }
-    // Remove once the close spring settles back at 1x.
-    LaunchedEffect(overlayScale) {
-        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale <= 1.01f) {
+    // Remove once the close animation settles back at 1x.
+    LaunchedEffect(overlayScale.value) {
+        if (zoomState.closing && zoomState.scaleTarget <= 1.01f && overlayScale.value <= 1.01f) {
             zoomState.boardZoomed = false
             zoomState.closing = false
         }
@@ -524,7 +576,7 @@ fun MoodBoardZoomCanvas(
 
     // Live visual scale for the pinch handler — lets a pinch that starts
     // mid-open-spring continue from where the board actually is (no jump).
-    val liveScale by rememberUpdatedState(overlayScale)
+    val liveScale by rememberUpdatedState(overlayScale.value)
 
     // ONE box owns the whole overlay: gestures + the collage as a CHILD, so
     // a pinch anywhere over the board magnifier reaches the same transform
@@ -546,27 +598,91 @@ fun MoodBoardZoomCanvas(
             },
         contentAlignment = Alignment.Center
     ) {
-        // The whole collage — centered, straight, spring-scaled.
+        // The whole magnified layer — backdrop + collage, scaled and panned
+        // together so the SCREEN (not just the images) glides to the tile.
         Box(
-            modifier = Modifier.graphicsLayer {
-                scaleX = overlayScale
-                scaleY = overlayScale
-                translationX = animatedOffsetX
-                translationY = animatedOffsetY
-            }
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    scaleX = overlayScale.value
+                    scaleY = overlayScale.value
+                    translationX = panX.value
+                    translationY = panY.value
+                }
         ) {
-            Box(
-                modifier = Modifier.size(
-                    width = with(density) { canvasWPx.toDp() },
-                    height = with(density) { canvasHPx.toDp() }
-                )
-            ) {
-                MoodBoardTiles(
-                    tiles = tiles,
-                    canvasWPx = canvasWPx,
-                    canvasHPx = canvasHPx,
-                    zoomed = true
-                )
+            // The board's own watermark backdrop — inside the transformed
+            // layer, so it magnifies with the collage (identical pattern to
+            // the resting card at scale 1: both fill the viewport).
+            backdrop()
+
+            // The collage + focus pop share ONE centered box, so the pop's
+            // board-space offsets stay aligned with the collage inside the
+            // (viewport-sized) magnified layer.
+            Box(modifier = Modifier.align(Alignment.Center)) {
+                // The whole collage — centered, straight, animated.
+                Box(
+                    modifier = Modifier.size(
+                        width = with(density) { canvasWPx.toDp() },
+                        height = with(density) { canvasHPx.toDp() }
+                    )
+                ) {
+                    MoodBoardTiles(
+                        tiles = tiles,
+                        canvasWPx = canvasWPx,
+                        canvasHPx = canvasHPx,
+                        zoomed = true
+                    )
+                }
+
+                // ── Focus-tile pop (v7.19) — after the board glides to the
+                // tapped tile, its hi-res image pops up over the magnified
+                // collage: a bouncy over-scale + soft shadow, at the tile's
+                // own board position (which the layer transform places
+                // exactly where the collage shows it).
+                val focusUri = zoomState.zoomedUri
+                if (focusUri != null) {
+                    tiles.firstOrNull { it.uri == focusUri }?.let { focus ->
+                        val popScale = remember(focus.uri) { Animatable(1f) }
+                        LaunchedEffect(focus.uri) {
+                            popScale.snapTo(1f)
+                            popScale.animateTo(1.14f, spring(dampingRatio = 0.55f, stiffness = 420f))
+                        }
+                        Box(
+                            modifier = Modifier
+                                .offset {
+                                    IntOffset(
+                                        focus.offsetXPx.roundToInt(),
+                                        focus.offsetYPx.roundToInt()
+                                    )
+                                }
+                                .zIndex(600f)
+                        ) {
+                        Surface(
+                            shape = RoundedCornerShape(18.dp),
+                            color = MaterialTheme.colorScheme.surface,
+                            shadowElevation = 14.dp,
+                            modifier = Modifier
+                                .size(
+                                    width = with(density) { focus.widthPx.toDp() },
+                                    height = with(density) { focus.heightPx.toDp() }
+                                )
+                                .graphicsLayer {
+                                    scaleX = popScale.value
+                                    scaleY = popScale.value
+                                }
+                        ) {
+                            Image(
+                                painter = moodBoardPainter(focus.uri, zoomed = true),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(18.dp))
+                            )
+                        }
+                    }
+                }
+                }
             }
         }
 

@@ -397,7 +397,11 @@ fun RichTextEditor(
     paperContentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
     /** Optional trailing action (e.g. a small dictation button) rendered at
      *  the END of the field's own toolbar row, opposite the format toggle. */
-    trailingAction: (@Composable () -> Unit)? = null
+    trailingAction: (@Composable () -> Unit)? = null,
+    /** v7.19 — hides the note-paper COLOR swatch picker behind the paper
+     *  style toggle (the mood board's quote boxes keep the color tool
+     *  hidden while text formatting + paper style stay available). */
+    showColorTool: Boolean = true
 ) {
     // NOTE: NOT keyed on [text] — the parent echoes our edits back, so a
     // keyed remember would rebuild the field (and drop the cursor) on every
@@ -712,13 +716,15 @@ fun RichTextEditor(
                     enabled = enabled,
                     modifier = Modifier.fillMaxWidth()
                 )
-                NotePaperColorToggle(
-                    color = paperColor,
-                    onColorChange = onPaperColorChange,
-                    accent = effectiveAccent,
-                    enabled = enabled,
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
+                if (showColorTool) {
+                    NotePaperColorToggle(
+                        color = paperColor,
+                        onColorChange = onPaperColorChange,
+                        accent = effectiveAccent,
+                        enabled = enabled,
+                        modifier = Modifier.padding(bottom = 6.dp)
+                    )
+                }
             }
         } else {
             Row(
@@ -763,13 +769,15 @@ fun RichTextEditor(
                     enabled = enabled,
                     modifier = Modifier.fillMaxWidth()
                 )
-                NotePaperColorToggle(
-                    color = paperColor,
-                    onColorChange = onPaperColorChange,
-                    accent = effectiveAccent,
-                    enabled = enabled,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
+                if (showColorTool) {
+                    NotePaperColorToggle(
+                        color = paperColor,
+                        onColorChange = onPaperColorChange,
+                        accent = effectiveAccent,
+                        enabled = enabled,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
             }
             AnimatedVisibility(
                 visible = toolbarExpanded,

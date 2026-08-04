@@ -2,20 +2,20 @@ package com.curio.app.features.capture.formats
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateRotation
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.media.ExifInterface
@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,9 +72,12 @@ import androidx.compose.ui.zIndex
 import com.curio.app.data.AppPreferences
 import com.curio.app.ui.components.CurioMoodBoardBackdrop
 import com.curio.app.ui.components.MoodBoardZoomOverlay
+import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.components.moodBoardPainter
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.PatrickHandFontFamily
+import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.pastelFillInk
 import kotlin.math.roundToInt
@@ -183,6 +188,10 @@ fun GalleryWallFormat(
         defaultColor = initialData?.captionColor ?: NotePaperColor.CREAM
     )
     var boardExpanded by remember { mutableStateOf(false) }
+    // v7.19 — the quote card currently open in the floating edit dialog.
+    // The cards themselves float INSIDE the board (see MoodBoardCanvas);
+    // tapping one opens this dialog with the full rich-text editor.
+    var editingQuoteIndex by remember { mutableStateOf<Int?>(null) }
     // Mood — the shared "How did it make you feel?" row. The board carries
     // its own mood field now (CaptureData.GalleryWall.mood); legacy entries
     // have none (Gson → null).
@@ -263,7 +272,11 @@ fun GalleryWallFormat(
             seed = seed,
             fullScreen = false,
             onExpand = { boardExpanded = true },
-            onCollapse = {}
+            onCollapse = {},
+            // v7.19 — floating quote boxes live ON the board.
+            quoteState = quoteCards,
+            onEditQuote = { editingQuoteIndex = it },
+            onAddQuote = { quoteCards.addCard(captionStyle, captionColor) }
         )
 
         // ── Caption field — wears the note-paper slip like the other text
@@ -278,12 +291,29 @@ fun GalleryWallFormat(
             onPaperColorChange = { captionColor = it }
         )
 
-        // ── Quote cards — the SHARED hand-placed paper notecard section ──
-        // New cards inherit the caption's current paper style + color.
+        // ── Quote boxes — the cards themselves FLOAT on the board above
+        // (tap one to edit); this row keeps the Add button + count. The
+        // note-paper COLOR tool stays hidden for mood-board quotes (v7.19)
+        // while text formatting + paper style remain fully available.
         QuoteCardsSection(
             state = quoteCards,
+            header = "Quote boxes",
             newCardStyle = { captionStyle },
-            newCardColor = { captionColor }
+            newCardColor = { captionColor },
+            showColorTool = false,
+            cardsInline = false
+        )
+    }
+
+    // ── Floating quote edit dialog (v7.19) — full rich-text editor for
+    // one floating card, color tool hidden. The card's own Remove button
+    // in the header removes it; the dialog's Remove closes after removing.
+    editingQuoteIndex?.let { idx ->
+        FloatingQuoteEditDialog(
+            state = quoteCards,
+            index = idx,
+            accent = accent,
+            onClose = { editingQuoteIndex = null }
         )
     }
 
@@ -311,7 +341,12 @@ fun GalleryWallFormat(
                     seed = seed,
                     fullScreen = true,
                     onExpand = {},
-                    onCollapse = { boardExpanded = false }
+                    onCollapse = { boardExpanded = false },
+                    // v7.19 — floating quote boxes also render in the
+                    // full-screen editor.
+                    quoteState = quoteCards,
+                    onEditQuote = { editingQuoteIndex = it },
+                    onAddQuote = { quoteCards.addCard(captionStyle, captionColor) }
                 )
             }
         }
@@ -333,7 +368,13 @@ private fun MoodBoardCanvas(
     seed: Int,
     fullScreen: Boolean,
     onExpand: () -> Unit,
-    onCollapse: () -> Unit
+    onCollapse: () -> Unit,
+    // v7.19 — floating quote boxes rendered INSIDE the board, over the
+    // collage. Tapping a card calls [onEditQuote]; [onAddQuote] adds a new
+    // card (which then appears on the board).
+    quoteState: QuoteCardsState? = null,
+    onEditQuote: (Int) -> Unit = {},
+    onAddQuote: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val density = LocalDensity.current
@@ -348,22 +389,10 @@ private fun MoodBoardCanvas(
     var pendingRemoveTileId by remember { mutableStateOf<Int?>(null) }
     // In-place tile zoom: double-tap springs the image up over the canvas —
     // no separate dialog page. Pinch/pan continue on the zoom overlay.
+    // v7.19 — scale + pan animate inside [MoodBoardZoomOverlay] now
+    // (call-site springs removed; close uses a fast tween so the minimize
+    // animation snaps shut instead of lagging).
     val zoomState = rememberMoodBoardZoomState()
-    // v6.7 — offsets snap 1:1 while a pinch is live so panning tracks the
-    // fingers; the spring only runs for open/close/reset (avoids the old
-    // delayed-pan feel where the image caught up only after the gesture).
-    val animatedOffsetX by animateFloatAsState(
-        targetValue = zoomState.offsetX,
-        animationSpec = if (zoomState.gestureActive) snap()
-        else spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "editorMoodZoomOffsetX"
-    )
-    val animatedOffsetY by animateFloatAsState(
-        targetValue = zoomState.offsetY,
-        animationSpec = if (zoomState.gestureActive) snap()
-        else spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "editorMoodZoomOffsetY"
-    )
     val pinZoneHeightPx = with(density) { 52.dp.toPx() }
     // Smallest a tile can be pinched to — shared by the live drag preview
     // and the commit so what you see while dragging is exactly what saves.
@@ -555,6 +584,64 @@ private fun MoodBoardCanvas(
                     }
                 }
 
+                // ── Floating quote boxes (v7.19) — hand-placed paper notes
+                // floating INSIDE the board over the collage, in stable
+                // deterministic slots. Tap one to edit it (full rich-text
+                // editor, color tool hidden). Gated on the measured canvas
+                // size so the first layout frame (canvasWPx=0) can't stack
+                // the cards at the top-left corner.
+                if (quoteState != null && quoteState.quotes.isNotEmpty() &&
+                    canvasWPx > 0f && canvasHPx > 0f
+                ) {
+                    quoteState.quotes.forEachIndexed { i, quote ->
+                        val slot = moodBoardQuoteSlot(i, canvasWPx, canvasHPx)
+                        FloatingQuoteCard(
+                            text = quote,
+                            style = quoteState.styles.getOrElse(i) { NotePaperStyle.RULED },
+                            color = quoteState.colors.getOrElse(i) { NotePaperColor.CREAM },
+                            rotation = quoteState.tilts.getOrElse(i) { (i * 4.2f % 8f) - 4f },
+                            x = slot.x,
+                            y = slot.y,
+                            w = slot.w,
+                            h = slot.h,
+                            onClick = { onEditQuote(i) }
+                        )
+                    }
+                }
+
+                // ── Floating "Add quote" chip — bottom-left, mirroring
+                // the Add-images button on the right. ────────────────────
+                if (quoteState != null) {
+                    Surface(
+                        onClick = onAddQuote,
+                        shape = RoundedCornerShape(28.dp),
+                        color = accent.copy(alpha = 0.92f),
+                        shadowElevation = 0.dp,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                            .zIndex(60f)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 9.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.FormatQuote,
+                                contentDescription = null,
+                                tint = pastelFillInk(accent),
+                                size = 16.dp
+                            )
+                            Text(
+                                text = "Quote",
+                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                                color = pastelFillInk(accent)
+                            )
+                        }
+                    }
+                }
+
                 // ── Floating "+" add button ──────────────────────────
                 Surface(
                     onClick = { imagePicker.launch(arrayOf("image/*")) },
@@ -682,8 +769,6 @@ private fun MoodBoardCanvas(
             tiles.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
                 MoodBoardZoomOverlay(
                     zoomState = zoomState,
-                    animatedOffsetX = animatedOffsetX,
-                    animatedOffsetY = animatedOffsetY,
                     tileUri = tile.uri,
                     widthPx = tile.widthPx,
                     heightPx = tile.heightPx
@@ -961,4 +1046,148 @@ private fun decodeImageBounds(context: Context, uri: Uri): Pair<Int, Int>? = run
     }
     width to height
 }.getOrNull()
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Floating quote boxes (v7.19) — hand-placed paper notes that float INSIDE
+// the mood board over the collage. Slots are deterministic from the card
+// index (a stable bottom rail), so revisits and the saved view look stable.
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** One deterministic floating-card slot on a [boardW]×[boardH] board. */
+private data class MoodQuoteSlot(val x: Float, val y: Float, val w: Float, val h: Float)
+
+private fun moodBoardQuoteSlot(index: Int, boardW: Float, boardH: Float): MoodQuoteSlot {
+    val cols = 2
+    val col = index % cols
+    val row = index / cols
+    val slotW = boardW * 0.5f
+    val cardW = (slotW * 0.82f).coerceIn(120f, 240f)
+    val cardH = cardW * 0.62f
+    val x = col * slotW + (slotW - cardW) / 2f
+    val y = boardH * 0.56f + row * (cardH * 1.02f) + (if (col == 1) cardH * 0.45f else 0f)
+    return MoodQuoteSlot(x, y, cardW, cardH)
+}
+
+/** One floating paper quote card on the board — tilt + paper look, tappable. */
+@Composable
+private fun FloatingQuoteCard(
+    text: String,
+    style: NotePaperStyle,
+    color: NotePaperColor,
+    rotation: Float,
+    x: Float,
+    y: Float,
+    w: Float,
+    h: Float,
+    onClick: () -> Unit
+) {
+    val density = LocalDensity.current
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(x.roundToInt(), y.roundToInt()) }
+            .zIndex(50f)
+            .size(
+                width = with(density) { w.toDp() },
+                height = with(density) { h.toDp() }
+            )
+            .rotate(rotation)
+            .clickable(onClick = onClick)
+    ) {
+        NotePaperCard(
+            style = style,
+            paperColor = color,
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = text.ifBlank { "Quote…" },
+                style = MaterialTheme.typography.bodySmall.copy(fontFamily = PatrickHandFontFamily),
+                color = notePaperInk(color),
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+/**
+ * Full edit dialog for one floating mood-board quote box — reuses the
+ * shared [QuoteCardEditor] (rich text toolbar + paper style) with the
+ * note-paper COLOR tool hidden (v7.19).
+ */
+@Composable
+private fun FloatingQuoteEditDialog(
+    state: QuoteCardsState,
+    index: Int,
+    accent: Color,
+    onClose: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onClose,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
+        )
+    ) {
+        Surface(
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.FormatQuote,
+                        contentDescription = null,
+                        tint = accent,
+                        size = 18.dp
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "Edit quote ${index + 1}",
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = onClose) {
+                        Text("Done", color = accent)
+                    }
+                }
+
+                QuoteCardEditor(
+                    index = index,
+                    state = state,
+                    enabled = true,
+                    accent = accent,
+                    placeholder = "\u201C...\u201D",
+                    // Color tool hidden — text + paper style stay fully
+                    // functional (the mood-board ask); the header Remove is
+                    // hidden too because the dialog must close after removal
+                    // (a bare remove would leave a stale index open).
+                    showColorTool = false,
+                    showRemove = false
+                )
+
+                TextButton(
+                    onClick = {
+                        state.removeCard(index)
+                        onClose()
+                    },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Remove quote", color = MaterialTheme.colorScheme.error)
+                }
+            }
+        }
+    }
+}
 

@@ -19,3 +19,5 @@
 • Mood boards: the small board view is now a true center crop — same arrangement as the full-screen view, with art pinned to the top or bottom of the expanded board hidden until you expand
 • Dictation that doesn't quit on you — longer silence tolerance and auto re-listen, plus a small mic button on the title and note fields to dictate into either
 • Voice notes and text together — add a transcription to a saved voice note anytime from its detail page
+• Mood boards get floating quote boxes — hand-placed paper notes inside the board, tap to edit with full text tools (color picker tucked away)
+• Double-tap a mood-board image and the whole board — background included — glides to it, centers it, then the image pops; zooming back out snaps shut instead of lagging

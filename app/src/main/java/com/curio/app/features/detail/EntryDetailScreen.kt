@@ -10,9 +10,6 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -1639,22 +1636,9 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         // absent (missing Kotlin-default fields decode to null, not default).
         val attachedUris = data.imageUris.orEmpty()
         if (attachedUris.isNotEmpty()) {
+            // v7.19 — scale + pan animate inside [MoodBoardZoomOverlay] now
+            // (call-site springs removed; close uses a fast tween).
             val imageZoom = rememberMoodBoardZoomState()
-            // Spring-animated pan offsets — same pattern as the mood board:
-            // the values live here so the zoom springs from 1x on open and
-            // back on close.
-            val animatedImageX by animateFloatAsState(
-                targetValue = imageZoom.offsetX,
-                animationSpec = if (imageZoom.gestureActive) snap()
-                else spring(dampingRatio = 0.8f, stiffness = 280f),
-                label = "reviewImageZoomX"
-            )
-            val animatedImageY by animateFloatAsState(
-                targetValue = imageZoom.offsetY,
-                animationSpec = if (imageZoom.gestureActive) snap()
-                else spring(dampingRatio = 0.8f, stiffness = 280f),
-                label = "reviewImageZoomY"
-            )
             BoxWithConstraints(
                 modifier = Modifier.fillMaxWidth().height(if (attachedUris.size == 1) 280.dp else 240.dp)
             ) {
@@ -1706,8 +1690,6 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                 attachedUris.firstOrNull { it == imageZoom.zoomedUri }?.let { uri ->
                     MoodBoardZoomOverlay(
                         zoomState = imageZoom,
-                        animatedOffsetX = animatedImageX,
-                        animatedOffsetY = animatedImageY,
                         tileUri = uri,
                         widthPx = tileW,
                         heightPx = tileH
@@ -2111,22 +2093,11 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
     // In-place tile zoom: tap/pinch magnifies the image over the board — no
     // Lightbox page. Animated values live here so the spring interpolates
     // from 1x on open and back on close.
+    // v7.19 — scale + pan animate INSIDE [MoodBoardZoomCanvas] now (the
+    // call-site springs are gone), and double-tapping a tile calls
+    // [MoodBoardZoomState.zoomToTile] so the WHOLE board (background
+    // included) glides to the tile before its image pops.
     val zoomState = rememberMoodBoardZoomState()
-    // v6.7 — offsets snap 1:1 while a pinch is live so panning tracks the
-    // fingers; the spring only runs for open/close/reset (avoids the old
-    // delayed-pan feel where the image caught up only after the gesture).
-    val animatedOffsetX by animateFloatAsState(
-        targetValue = zoomState.offsetX,
-        animationSpec = if (zoomState.gestureActive) snap()
-        else spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "moodBoardZoomOffsetX"
-    )
-    val animatedOffsetY by animateFloatAsState(
-        targetValue = zoomState.offsetY,
-        animationSpec = if (zoomState.gestureActive) snap()
-        else spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "moodBoardZoomOffsetY"
-    )
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Mood board canvas with tile positions ──────────────────────
@@ -2201,7 +2172,6 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 }
                 val boardW = maxX * boardScale
                 val boardH = maxY * boardScale
-                val tileScale = boardScale
 
                 if (data.tileLayouts.isNotEmpty()) {
                     // ── Edit button — reopen this board in the editor ──────
@@ -2274,7 +2244,21 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                             tiles = scaledTiles,
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            onTileZoom = { uri, w, h, vw, vh -> zoomState.zoomIn(uri, w, h, vw, vh) }
+                            onTileZoom = { uri, w, h, vw, vh ->
+                                // Zoom the WHOLE board to the tapped tile:
+                                // center in VIEWPORT coords (the board is
+                                // offset within the card by the crop).
+                                val tile = scaledTiles.firstOrNull { it.uri == uri }
+                                zoomState.zoomToTile(
+                                    uri = uri,
+                                    centerX = (canvasW - boardW) / 2f + (tile?.offsetXPx ?: 0f) + w / 2f,
+                                    centerY = (canvasH - boardH) / 2f + (tile?.offsetYPx ?: 0f) + h / 2f,
+                                    tileW = w,
+                                    tileH = h,
+                                    viewW = canvasW,
+                                    viewH = canvasH
+                                )
+                            }
                         )
                     }
                 } else {
@@ -2294,27 +2278,23 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                     }
                 }
 
-                // ── In-place zoom overlays (no separate page) — use the
-                // same fit-scaled geometry so the magnified board/tile
-                // matches what the collage shows. ─────────────────────────
+                // ── Whole-board magnifier (v7.19) — the board AND its
+                // watermark backdrop magnify together toward the tapped
+                // tile; the tile's image pops over the collage. Same
+                // fit-scaled geometry so what you magnify matches the card.
                 if (zoomState.boardZoomed) {
                     MoodBoardZoomCanvas(
                         zoomState = zoomState,
-                        animatedOffsetX = animatedOffsetX,
-                        animatedOffsetY = animatedOffsetY,
                         tiles = scaledTiles,
                         canvasWPx = boardW,
-                        canvasHPx = boardH
-                    )
-                }
-                data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
-                    MoodBoardZoomOverlay(
-                        zoomState = zoomState,
-                        animatedOffsetX = animatedOffsetX,
-                        animatedOffsetY = animatedOffsetY,
-                        tileUri = tile.uri,
-                        widthPx = tile.widthPx * tileScale,
-                        heightPx = tile.heightPx * tileScale
+                        canvasHPx = boardH,
+                        backdrop = {
+                            CurioMoodBoardBackdrop(
+                                seed = boardSeed,
+                                accent = category.themedAccent(),
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     )
                 }
             }
@@ -2392,21 +2372,9 @@ private fun ExpandedMoodBoardDialog(
 ) {
     val density = LocalDensity.current
     // In-place tile zoom inside the expanded board — pinch/tap, no Lightbox.
+    // v7.19 — offsets animate inside the canvas; double-tap glides the
+    // whole board (with its backdrop) to the tile, then the image pops.
     val zoomState = rememberMoodBoardZoomState()
-    // v6.7 — offsets snap 1:1 while a pinch is live so panning tracks the
-    // fingers; the spring only runs for open/close/reset.
-    val animatedOffsetX by animateFloatAsState(
-        targetValue = zoomState.offsetX,
-        animationSpec = if (zoomState.gestureActive) snap()
-        else spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "expandedMoodZoomOffsetX"
-    )
-    val animatedOffsetY by animateFloatAsState(
-        targetValue = zoomState.offsetY,
-        animationSpec = if (zoomState.gestureActive) snap()
-        else spring(dampingRatio = 0.8f, stiffness = 280f),
-        label = "expandedMoodZoomOffsetY"
-    )
     Dialog(
         onDismissRequest = onDismiss,
         // True full screen: the dialog draws behind the system bars so the
@@ -2443,7 +2411,6 @@ private fun ExpandedMoodBoardDialog(
                     val scaledTiles = fit.scaledTiles
                     val boardW = fit.boardW
                     val boardH = fit.boardH
-                    val scale = fit.scale
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -2459,29 +2426,37 @@ private fun ExpandedMoodBoardDialog(
                             tiles = scaledTiles,
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            onTileZoom = { uri, w, h, vw, vh -> zoomState.zoomIn(uri, w, h, vw, vh) }
+                            onTileZoom = { uri, w, h, vw, vh ->
+                                // Glide the whole board to the tapped tile.
+                                val tile = scaledTiles.firstOrNull { it.uri == uri }
+                                zoomState.zoomToTile(
+                                    uri = uri,
+                                    centerX = (dialogW - boardW) / 2f + (tile?.offsetXPx ?: 0f) + w / 2f,
+                                    centerY = (dialogH - boardH) / 2f + (tile?.offsetYPx ?: 0f) + h / 2f,
+                                    tileW = w,
+                                    tileH = h,
+                                    viewW = dialogW,
+                                    viewH = dialogH
+                                )
+                            }
                         )
                     }
 
-                    // ── In-place zoom overlays (no Lightbox) ─────────────
+                    // ── Whole-board magnifier (v7.19) — board + backdrop
+                    // glide to the tapped tile, then its image pops. ───────
                     if (zoomState.boardZoomed) {
                         MoodBoardZoomCanvas(
                             zoomState = zoomState,
-                            animatedOffsetX = animatedOffsetX,
-                            animatedOffsetY = animatedOffsetY,
                             tiles = scaledTiles,
                             canvasWPx = boardW,
-                            canvasHPx = boardH
-                        )
-                    }
-                    data.tileLayouts.firstOrNull { it.uri == zoomState.zoomedUri }?.let { tile ->
-                        MoodBoardZoomOverlay(
-                            zoomState = zoomState,
-                            animatedOffsetX = animatedOffsetX,
-                            animatedOffsetY = animatedOffsetY,
-                            tileUri = tile.uri,
-                            widthPx = tile.widthPx * scale,
-                            heightPx = tile.heightPx * scale
+                            canvasHPx = boardH,
+                            backdrop = {
+                                CurioMoodBoardBackdrop(
+                                    seed = seed,
+                                    accent = accent,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
                         )
                     }
                 }

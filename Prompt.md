@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating quote boxes INSIDE the mood board (color tool hidden) + zoom redesign (whole screen magnifies to the tapped tile, then the image pops) + snappy minimize animation**
+
+### What was asked
+
+“add an ability to add floating quote box in moodboard inside it with all functionality. but the color tool etc should stay hidden, and also the minimise animation of the moodboard images are little bit laggy and delayed so fix that and the zoom in animation … the screen magnifies to that place and centers it then the image pops up … the actual screen along with the background magnifies at that position”
+
+### What was done
+
+- **Floating quote boxes on the board (GalleryWallFormat.kt)** — the mood-board editor now renders hand-placed paper quote notes INSIDE the board over the collage: deterministic bottom-rail slots (`moodBoardQuoteSlot`, 2 columns), each card wearing its saved paper style/tilt with ellipsized text; tapping one opens `FloatingQuoteEditDialog` (full rich-text editor via the shared `QuoteCardEditor`, `showColorTool=false` — the note-paper COLOR swatches are hidden while text formatting + paper style stay fully functional, and the header Remove is hidden so the dialog closes cleanly after removal). An “Add quote” chip floats on the board (and the below-board section became add-only via `cardsInline=false`). Quotes persist through the EXISTING GalleryWall quotes fields (no schema change).
+- **Color tool truly hidden (RichTextEditor.kt + CaptureFormatComponents.kt)** — reviewer catch: `NotePaperColorToggle` rendered unconditionally inside `if (paper && styleExpanded)`, so passing `onPaperColorChange = {}` did NOT hide it. Added `showColorTool: Boolean = true` to `RichTextEditor` (gates both toggle sites) and threaded it through `QuoteCardEditor`/`QuoteCardsSection`.
+- **Zoom-in redesign (MoodBoardZoom.kt + EntryDetailScreen.kt)** — double-tapping a tile now calls the new `MoodBoardZoomState.zoomToTile(uri, centerX, centerY, …)`: the WHOLE board — watermark backdrop included — magnifies and glides so the tapped tile centers on screen, then the tile's hi-res image pops up over the collage (bouncy 1.14x over-scale + shadow at its board position). `MoodBoardZoomCanvas` gained a `backdrop` slot rendered INSIDE the transformed layer (so the background really magnifies) and the collage + pop share a centered box. Zoom math derived for the center-origin `graphicsLayer` transform: `offset = s·(c − p)`.
+- **Minimize no longer laggy (MoodBoardZoom.kt)** — both overlays used to run a 280-stiffness spring for close (plus a removal latch), which dragged ~half a second. Scale + pan now animate INTERNALLY via 3 `Animatable`s and `moodBoardZoomSpec`: spring(0.8, 320) on open, tween(170, FastOutSlowIn) on close — the zoom snaps shut immediately. All call-site `animateFloatAsState` springs removed (EntryDetailScreen ×2, GalleryWallFormat, ReelNotes).
+
+### Validation
+
+- check_braces balanced on all 5 files; code-reviewer pass — caught and fixed: color tool not actually hidden (RichTextEditor gating), dialog Remove leaving a stale index (showRemove=false in the dialog), first-frame card flash at (0,0) (gate on measured canvas size), dead `tileScale`/`scale` locals removed, unused animation imports cleaned.
+- NO local Gradle build per AGENTS.md — CI validates compilation on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Mood-board center-crop fix + dictation reliability + per-field mic buttons + transcribe-on-saved-voice-note + floating-bubble expand animation lag fix**
 
 ### What was asked

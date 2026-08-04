@@ -569,6 +569,11 @@ fun rememberQuoteCardsState(
  * "Add quote" button. [newCardStyle]/[newCardColor] supply the paper look
  * NEW cards inherit (e.g. the format's primary field), and [enabled] lets
  * recording formats freeze the cards mid-capture.
+ *
+ * v7.19 — [showColorTool] hides each card's note-paper COLOR swatches (the
+ * mood board keeps the picker hidden while keeping full text editing), and
+ * [cardsInline] = false renders ONLY the header + Add button (the cards
+ * themselves float on the caller's own canvas instead — the mood board).
  */
 @Composable
 fun QuoteCardsSection(
@@ -579,7 +584,9 @@ fun QuoteCardsSection(
     enabled: Boolean = true,
     accent: Color = paperAccent(),
     newCardStyle: () -> NotePaperStyle = { NotePaperStyle.RULED },
-    newCardColor: () -> NotePaperColor = { NotePaperColor.CREAM }
+    newCardColor: () -> NotePaperColor = { NotePaperColor.CREAM },
+    showColorTool: Boolean = true,
+    cardsInline: Boolean = true
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(
@@ -601,14 +608,17 @@ fun QuoteCardsSection(
             }
         }
 
-        state.quotes.forEachIndexed { i, _ ->
-            QuoteCard(
-                index = i,
-                state = state,
-                enabled = enabled,
-                accent = accent,
-                placeholder = placeholder
-            )
+        if (cardsInline) {
+            state.quotes.forEachIndexed { i, _ ->
+                QuoteCardEditor(
+                    index = i,
+                    state = state,
+                    enabled = enabled,
+                    accent = accent,
+                    placeholder = placeholder,
+                    showColorTool = showColorTool
+                )
+            }
         }
 
         // Add-quote button (dashed-outline placeholder style)
@@ -645,18 +655,27 @@ fun QuoteCardsSection(
 }
 
 /**
- * One quote card — a hand-placed paper notecard (rotated a few degrees)
- * with its own rich-text toolbar + paper-style/color toggles. The header
- * row + toolbar render ABOVE the paper slip so the ruled lines line up
- * under the text while typing.
+ * One quote card editor — a hand-placed paper notecard (rotated a few
+ * degrees) with its own rich-text toolbar + paper-style/color toggles. The
+ * header row + toolbar render ABOVE the paper slip so the ruled lines line
+ * up under the text while typing.
+ *
+ * v7.19 — [showColorTool] = false hides the note-paper color swatches
+ * (full text formatting + paper style still available); used by the mood
+ * board's floating quote boxes. [showRemove] = false hides the header's
+ * Remove button (the mood board's dialog owns removal and must close
+ * after it — a bare remove would leave a stale card index open). Public
+ * so canvases (the mood board) can open a card in their own dialog.
  */
 @Composable
-private fun QuoteCard(
+fun QuoteCardEditor(
     index: Int,
     state: QuoteCardsState,
     enabled: Boolean,
     accent: Color,
-    placeholder: String
+    placeholder: String,
+    showColorTool: Boolean = true,
+    showRemove: Boolean = true
 ) {
     // The tilt SAVED with this card — generated at creation, never re-rolled
     // by recomposition, typing, or section switches.
@@ -690,18 +709,20 @@ private fun QuoteCard(
                 color = paperInk().copy(alpha = 0.7f),
                 modifier = Modifier.weight(1f)
             )
-            Surface(
-                onClick = { state.removeCard(index) },
-                enabled = enabled,
-                shape = RoundedCornerShape(8.dp),
-                color = Color.Transparent
-            ) {
-                Text(
-                    text = "Remove",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                )
+            if (showRemove) {
+                Surface(
+                    onClick = { state.removeCard(index) },
+                    enabled = enabled,
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color.Transparent
+                ) {
+                    Text(
+                        text = "Remove",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                    )
+                }
             }
         }
         RichTextEditor(
@@ -720,6 +741,9 @@ private fun QuoteCard(
             onPaperStyleChange = { state.setStyle(index, it) },
             paperColor = color,
             onPaperColorChange = { state.setColor(index, it) },
+            // v7.19 — the color swatch picker is gated inside
+            // [RichTextEditor] by [showColorTool] (the mood board hides it).
+            showColorTool = showColorTool,
             paperContentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
         )
     }
