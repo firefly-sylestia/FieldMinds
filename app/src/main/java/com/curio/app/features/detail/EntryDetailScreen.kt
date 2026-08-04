@@ -281,14 +281,17 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             // the hero reads as torn paper against the page, not a hard
             // clip. It protrudes below the hero's bottom edge so the torn
             // edge is actually visible (the Topic-meta block below starts
-            // 20dp lower, so the protrusion sits inside that buffer).
+            // 20dp lower, so the protrusion sits inside that buffer). Same
+            // seed as the hero's bottom tear — the sheet's torn top is the
+            // INVERSE of the hero's torn bottom, so the two edges interlock
+            // like the two halves of a single torn sheet.
             val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(15.dp)
+                    .height(14.dp)
                     .offset(y = EntryDetailHeroHeight)
-                    .clip(SoftTornTopShape(tearSeed + 29))
+                    .clip(SoftTornTopShape(tearSeed))
                     .background(Color(0xFFFDFCF9).copy(alpha = 0.95f))
             )
 

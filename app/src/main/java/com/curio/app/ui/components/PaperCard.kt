@@ -836,16 +836,16 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
 /**
  * A SOFT torn-paper edge — the hero's gradient blend. Unlike the sharp
  * multi-octave [TornPaperShape] (jagged rip), this edge is torn with small,
- * ROUNDED textures: single-octave smooth noise sampled at a fine step, so
- * each tooth is a gentle rounded bump (a real torn-fiber feel) rather than
- * a sharp zigzag. Amplitudes are tiny (≤ ~3dp) so the tear reads as fine
- * torn paper grain, not a shredded edge.
+ * ROUNDED textures: smooth value-noise displacement sampled at a fine step,
+ * so each tooth is a gentle rounded bump (a real torn-fiber feel) rather than
+ * a sharp zigzag. The main wave (~8dp, ~2–3 broad undulations across the
+ * width) makes the tear visibly wavy and unique per entry, while the deep
+ * and micro layers add uneven slopes and fiber tooth.
  *
  * Only ONE side is torn — the opposite long side stays straight — because
  * the hero clip tears just the lower edge where the gradient dissolves into
- * the page; the two white under-sheets layered behind it each carry their
- * OWN seed, so the seam reads as layered paper sheets with slightly
- * different tears.
+ * the page; the white sheet layered behind it carries the SAME seed so the
+ * two edges interlock like the two halves of a single torn sheet.
  */
 private class SoftTornEdgeShape(
     private val seed: Int,
@@ -907,24 +907,24 @@ private fun buildSoftTornPath(
         path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
         return path
     }
-    // More UNEVEN rounded teeth than the first pass: a main tooth ~3.4dp, a
-    // slow deep-tear octave ~2dp (longer, wandering slopes) and a fine fiber
-    // micro-layer ~1dp. Sampling step ~4dp keeps every bump smooth (rounded,
-    // not sharp) while the multi-scale displacement makes the slopes uneven.
-    val tooth = with(density) { 3.4.dp.toPx() }
-    val deep = with(density) { 2.0.dp.toPx() }
+    // Visible wavy tear — the main tooth (~8dp) carries ~2–3 broad waves
+    // across the width (frequency 0.012 = ~520px period), so the edge reads
+    // as a genuinely uneven hand-torn sheet instead of a near-straight line
+    // with tiny grain. A slower deep-tear octave (~5dp) adds longer wandering
+    // slopes, and the fine fiber micro-layer (~1dp) keeps the rounded paper
+    // tooth. Sampling step ~4dp keeps every bump smooth (rounded, not sharp).
+    val tooth = with(density) { 8.dp.toPx() }
+    val deep = with(density) { 5.dp.toPx() }
     val micro = with(density) { 1.0.dp.toPx() }
     val step = with(density) { 4.dp.toPx() }
-    // Seeded TILT — the whole torn edge slants slightly (a real rip rarely
-    // comes off perfectly straight). The baseline drifts from -tilt/2 at the
-    // left edge to +tilt/2 at the right (~±3dp total across the width),
-    // unique per entry (derived from the tear seed) but stable across
-    // reopens, so each detail page's tear is its own and never changes.
-    val tilt = (Random(seed + 977).nextFloat() - 0.5f) * 2f * with(density) { 3.dp.toPx() }
+    // Seeded TILT — the whole torn edge drifts from -tilt/2 at the left to
+    // +tilt/2 at the right (~±5dp total across the width), unique per entry
+    // (derived from the tear seed) but stable across reopens.
+    val tilt = (Random(seed + 977).nextFloat() - 0.5f) * 2f * with(density) { 5.dp.toPx() }
     fun disp(x: Float): Float {
         val slant = tilt * (x / w - 0.5f)
-        val main = (valueNoise(seed, x * 0.045f, 0.5f) - 0.5f) * 2f * tooth
-        val deepWave = (valueNoise(seed + 101, x * 0.017f, 4.2f) - 0.5f) * 2f * deep
+        val main = (valueNoise(seed, x * 0.012f, 0.5f) - 0.5f) * 2f * tooth
+        val deepWave = (valueNoise(seed + 101, x * 0.006f, 4.2f) - 0.5f) * 2f * deep
         val fiber = (valueNoise(seed + 71, x * 0.16f, 3.5f) - 0.5f) * 2f * micro
         return slant + main + deepWave + fiber
     }
