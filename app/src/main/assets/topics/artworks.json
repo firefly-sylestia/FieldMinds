@@ -1118,5 +1118,955 @@
       "Contemporary"
     ],
     "tier": 2
+  },
+  {
+    "id": "artw-primavera-1482-by-sandro-57",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Primavera (1482) by Sandro Botticelli",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Primavera (1482) by Sandro Botticelli",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-sistine-chapel-ceiling-58",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Sistine Chapel Ceiling (1512) by Michelangelo",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Sistine Chapel Ceiling (1512) by Michelangelo",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-transfiguration-1520-by-59",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Transfiguration (1520) by Raphael",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Transfiguration (1520) by Raphael",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-venus-of-urbino-1538-60",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Venus of Urbino (1538) by Titian",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Venus of Urbino (1538) by Titian",
+      "durationMinutes": 5,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-judith-slaying-holofernes-1612-61",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Judith Slaying Holofernes (1612) by Artemisia Gentileschi",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Judith Slaying Holofernes (1612) by Artemisia Gentileschi",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-milkmaid-1660-by-62",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Milkmaid (1660) by Johannes Vermeer",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Milkmaid (1660) by Johannes Vermeer",
+      "durationMinutes": 4,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-astronomer-1668-by-63",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Astronomer (1668) by Johannes Vermeer",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Astronomer (1668) by Johannes Vermeer",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-rain-steam-and-speed-64",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Rain Steam and Speed (1844) by J.M.W. Turner",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rain Steam and Speed (1844) by J.M.W. Turner",
+      "durationMinutes": 10,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-wanderer-above-the-sea-65",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Wanderer above the Sea of Fog (1818) by Caspar David Friedrich",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Wanderer above the Sea of Fog (1818) by Caspar David Friedrich",
+      "durationMinutes": 4,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-whistlers-mother-1871-by-66",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Whistler's Mother (1871) by James McNeill Whistler",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Whistler's Mother (1871) by James McNeill Whistler",
+      "durationMinutes": 3,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-ballet-class-1874-67",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Ballet Class (1874) by Edgar Degas",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Ballet Class (1874) by Edgar Degas",
+      "durationMinutes": 4,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-luncheon-of-the-boating-68",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Luncheon of the Boating Party (1881) by Pierre-Auguste Renoir",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Luncheon of the Boating Party (1881) by Pierre-Auguste Renoir",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-café-terrace-at-night-69",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Café Terrace at Night (1888) by Vincent van Gogh",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Café Terrace at Night (1888) by Vincent van Gogh",
+      "durationMinutes": 5,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-self-portrait-with-bandaged-ear-70",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Self-Portrait with Bandaged Ear (1889) by Vincent van Gogh",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Self-Portrait with Bandaged Ear (1889) by Vincent van Gogh",
+      "durationMinutes": 6,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-dance-1910-by-71",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Dance (1910) by Henri Matisse",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Dance (1910) by Henri Matisse",
+      "durationMinutes": 8,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-girl-before-a-mirror-72",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Girl before a Mirror (1932) by Pablo Picasso",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Girl before a Mirror (1932) by Pablo Picasso",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-old-guitarist-1903-73",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Old Guitarist (1903) by Pablo Picasso",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Old Guitarist (1903) by Pablo Picasso",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-yellow-red-blue-1925-74",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Yellow Red Blue (1925) by Wassily Kandinsky",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Yellow Red Blue (1925) by Wassily Kandinsky",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-treachery-of-images-75",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Treachery of Images (1929) by René Magritte",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Treachery of Images (1929) by René Magritte",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-two-fridas-1939-76",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Two Fridas (1939) by Frida Kahlo",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Two Fridas (1939) by Frida Kahlo",
+      "durationMinutes": 3,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-flower-carrier-1935-77",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Flower Carrier (1935) by Diego Rivera",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Flower Carrier (1935) by Diego Rivera",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-blue-poles-1952-by-78",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Blue Poles (1952) by Jackson Pollock",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Blue Poles (1952) by Jackson Pollock",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-shot-marilyns-1964-by-79",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Shot Marilyns (1964) by Andy Warhol",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Shot Marilyns (1964) by Andy Warhol",
+      "durationMinutes": 10,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-drowning-girl-1963-by-80",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Drowning Girl (1963) by Roy Lichtenstein",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Drowning Girl (1963) by Roy Lichtenstein",
+      "durationMinutes": 3,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-for-the-love-of-81",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "For the Love of God (2007) by Damien Hirst",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "For the Love of God (2007) by Damien Hirst",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-untitled-rape-scene-1973-82",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Untitled (Rape Scene) (1973) by Ana Mendieta",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Untitled (Rape Scene) (1973) by Ana Mendieta",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-birth-of-venus-83",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Birth of Venus (1486) by Sandro Botticelli",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Birth of Venus (1486) by Sandro Botticelli",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-last-judgment-1541-84",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Last Judgment (1541) by Michelangelo",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Last Judgment (1541) by Michelangelo",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-bacchus-and-ariadne-1523-85",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Bacchus and Ariadne (1523) by Titian",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Bacchus and Ariadne (1523) by Titian",
+      "durationMinutes": 8,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-calling-of-saint-86",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Calling of Saint Matthew (1600) by Caravaggio",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Calling of Saint Matthew (1600) by Caravaggio",
+      "durationMinutes": 7,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-anatomy-lesson-of-87",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Anatomy Lesson of Dr. Nicolaes Tulp (1632) by Rembrandt",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Anatomy Lesson of Dr. Nicolaes Tulp (1632) by Rembrandt",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-view-of-delft-1661-88",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "View of Delft (1661) by Johannes Vermeer",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "View of Delft (1661) by Johannes Vermeer",
+      "durationMinutes": 6,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-rokeby-venus-1647-89",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Rokeby Venus (1647) by Diego Velázquez",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Rokeby Venus (1647) by Diego Velázquez",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-hay-wain-1821-90",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Hay Wain (1821) by John Constable",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Hay Wain (1821) by John Constable",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-oxbow-1836-by-91",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Oxbow (1836) by Thomas Cole",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Oxbow (1836) by Thomas Cole",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-a-bar-at-the-92",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "A Bar at the Folies-Bergère (1882) by Édouard Manet",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "A Bar at the Folies-Bergère (1882) by Édouard Manet",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-bal-du-moulin-de-93",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Bal du moulin de la Galette (1876) by Pierre-Auguste Renoir",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Bal du moulin de la Galette (1876) by Pierre-Auguste Renoir",
+      "durationMinutes": 4,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-bedroom-1889-by-94",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Bedroom (1889) by Vincent van Gogh",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Bedroom (1889) by Vincent van Gogh",
+      "durationMinutes": 5,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-sunflowers-1888-by-vincent-95",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Sunflowers (1888) by Vincent van Gogh",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Sunflowers (1888) by Vincent van Gogh",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-potato-eaters-1885-96",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Potato Eaters (1885) by Vincent van Gogh",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Potato Eaters (1885) by Vincent van Gogh",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-blue-nude-1907-by-97",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Blue Nude (1907) by Henri Matisse",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Blue Nude (1907) by Henri Matisse",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-weeping-woman-1937-by-98",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Weeping Woman (1937) by Pablo Picasso",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Weeping Woman (1937) by Pablo Picasso",
+      "durationMinutes": 6,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-composition-viii-1923-by-99",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Composition VIII (1923) by Wassily Kandinsky",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Composition VIII (1923) by Wassily Kandinsky",
+      "durationMinutes": 4,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-broadway-boogie-woogie-1943-100",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Broadway Boogie Woogie (1943) by Piet Mondrian",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Broadway Boogie Woogie (1943) by Piet Mondrian",
+      "durationMinutes": 4,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-son-of-man-101",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Son of Man (1964) by René Magritte",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Son of Man (1964) by René Magritte",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-broken-column-1944-102",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "The Broken Column (1944) by Frida Kahlo",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Broken Column (1944) by Frida Kahlo",
+      "durationMinutes": 3,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-number-1-1949-by-103",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Number 1 (1949) by Jackson Pollock",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Number 1 (1949) by Jackson Pollock",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-gold-marilyn-monroe-1962-104",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Gold Marilyn Monroe (1962) by Andy Warhol",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Gold Marilyn Monroe (1962) by Andy Warhol",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-triple-elvis-1963-by-105",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Triple Elvis (1963) by Andy Warhol",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Triple Elvis (1963) by Andy Warhol",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-ladder-for-booker-t-106",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Ladder for Booker T. Washington (1996) by Martin Puryear",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Ladder for Booker T. Washington (1996) by Martin Puryear",
+      "durationMinutes": 4,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
   }
 ]

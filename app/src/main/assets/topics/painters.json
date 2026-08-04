@@ -2261,5 +2261,765 @@
       "17th Century"
     ],
     "tier": 2
+  },
+  {
+    "id": "pain-andré-derain-118",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "André Derain",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "André Derain",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-raoul-dufy-119",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Raoul Dufy",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Raoul Dufy",
+      "durationMinutes": 9,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-chaim-soutine-120",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Chaim Soutine",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Chaim Soutine",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-édouard-vuillard-121",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Édouard Vuillard",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Édouard Vuillard",
+      "durationMinutes": 4,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-juan-gris-122",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Juan Gris",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Juan Gris",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-robert-delaunay-123",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Robert Delaunay",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Robert Delaunay",
+      "durationMinutes": 3,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-hilma-af-klint-124",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Hilma af Klint",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Hilma af Klint",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-alexander-calder-125",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Alexander Calder",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Alexander Calder",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-barbara-hepworth-126",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Barbara Hepworth",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Barbara Hepworth",
+      "durationMinutes": 10,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-eva-hesse-127",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Eva Hesse",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Eva Hesse",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jean-michel-basquiat-128",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jean-Michel Basquiat",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jean-Michel Basquiat",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jenny-holzer-129",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jenny Holzer",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jenny Holzer",
+      "durationMinutes": 5,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-kara-walker-130",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Kara Walker",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Kara Walker",
+      "durationMinutes": 5,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-marlene-dumas-131",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Marlene Dumas",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Marlene Dumas",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-cecily-brown-132",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Cecily Brown",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Cecily Brown",
+      "durationMinutes": 10,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-michelangelo-133",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Michelangelo",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Michelangelo",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-titian-134",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Titian",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Titian",
+      "durationMinutes": 3,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-rembrandt-135",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Rembrandt",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rembrandt",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jan-van-eyck-136",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jan van Eyck",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jan van Eyck",
+      "durationMinutes": 7,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-diego-velázquez-137",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Diego Velázquez",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Diego Velázquez",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-paolo-uccello-138",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Paolo Uccello",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Paolo Uccello",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-fra-filippo-lippi-139",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Fra Filippo Lippi",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Fra Filippo Lippi",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-antonello-da-messina-140",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Antonello da Messina",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Antonello da Messina",
+      "durationMinutes": 3,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-nicolas-poussin-141",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Nicolas Poussin",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Nicolas Poussin",
+      "durationMinutes": 3,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jean-auguste-dominique-ingres-142",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jean-Auguste-Dominique Ingres",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jean-Auguste-Dominique Ingres",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-pierre-auguste-renoir-143",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Pierre-Auguste Renoir",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Pierre-Auguste Renoir",
+      "durationMinutes": 6,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-alfred-sisley-144",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Alfred Sisley",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Alfred Sisley",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-maurice-de-vlaminck-145",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Maurice de Vlaminck",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Maurice de Vlaminck",
+      "durationMinutes": 7,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-amedeo-modigliani-146",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Amedeo Modigliani",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Amedeo Modigliani",
+      "durationMinutes": 8,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-pierre-bonnard-147",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Pierre Bonnard",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Pierre Bonnard",
+      "durationMinutes": 8,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-georges-braque-148",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Georges Braque",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Georges Braque",
+      "durationMinutes": 5,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-fernand-léger-149",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Fernand Léger",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Fernand Léger",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-sonia-delaunay-150",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Sonia Delaunay",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Sonia Delaunay",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-theo-van-doesburg-151",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Theo van Doesburg",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Theo van Doesburg",
+      "durationMinutes": 4,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-henry-moore-152",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Henry Moore",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Henry Moore",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-anish-kapoor-153",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Anish Kapoor",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Anish Kapoor",
+      "durationMinutes": 7,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-keith-haring-154",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Keith Haring",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Keith Haring",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-barbara-kruger-155",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Barbara Kruger",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Barbara Kruger",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jenny-saville-156",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jenny Saville",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jenny Saville",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-elizabeth-peyton-157",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Elizabeth Peyton",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Elizabeth Peyton",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
   }
 ]

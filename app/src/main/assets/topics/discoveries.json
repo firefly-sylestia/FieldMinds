@@ -2390,5 +2390,632 @@
       "19th Century"
     ],
     "tier": 2
+  },
+  {
+    "id": "disc-the-w-and-z-125",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The W and Z Bosons (1983)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The W and Z Bosons (1983)",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-gluons-1979-126",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Gluons (1979)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Gluons (1979)",
+      "durationMinutes": 14,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-meissner-effect-1933-127",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Meissner Effect (1933)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Meissner Effect (1933)",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-holography-1947-128",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Holography (1947)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Holography (1947)",
+      "durationMinutes": 7,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-fiber-optics-1966-129",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Fiber Optics (1966)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Fiber Optics (1966)",
+      "durationMinutes": 10,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-integrated-circuit-1958-130",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Integrated Circuit (1958)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Integrated Circuit (1958)",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-wi-fi-1997-131",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Wi-Fi (1997)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wi-Fi (1997)",
+      "durationMinutes": 8,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-scientific-method-17th-132",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Scientific Method (17th century)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Scientific Method (17th century)",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-speed-of-light-133",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Speed of Light (1676)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Speed of Light (1676)",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-heliocentrism-1543-134",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Heliocentrism (1543)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Heliocentrism (1543)",
+      "durationMinutes": 11,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-calculus-1684-135",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Calculus (1684)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Calculus (1684)",
+      "durationMinutes": 7,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-telescope-1608-136",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Telescope (1608)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Telescope (1608)",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-oxygen-1774-137",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Oxygen (1774)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Oxygen (1774)",
+      "durationMinutes": 6,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-cell-1665-138",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Cell (1665)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Cell (1665)",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-photosynthesis-1779-139",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Photosynthesis (1779)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Photosynthesis (1779)",
+      "durationMinutes": 11,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-laws-of-thermodynamics-140",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Laws of Thermodynamics (1850s)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Laws of Thermodynamics (1850s)",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-doppler-effect-1842-141",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Doppler Effect (1842)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Doppler Effect (1842)",
+      "durationMinutes": 11,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-photoelectric-effect-1905-142",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Photoelectric Effect (1905)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Photoelectric Effect (1905)",
+      "durationMinutes": 11,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-general-relativity-1915-143",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "General Relativity (1915)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "General Relativity (1915)",
+      "durationMinutes": 5,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-cosmic-rays-1912-144",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Cosmic Rays (1912)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Cosmic Rays (1912)",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-neutrinos-1956-145",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Neutrinos (1956)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Neutrinos (1956)",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-uncertainty-principle-1927-146",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Uncertainty Principle (1927)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Uncertainty Principle (1927)",
+      "durationMinutes": 14,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-weak-nuclear-force-147",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Weak Nuclear Force (1930s)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Weak Nuclear Force (1930s)",
+      "durationMinutes": 9,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-muon-1936-148",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Muon (1936)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Muon (1936)",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-quarks-1964-149",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Quarks (1964)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Quarks (1964)",
+      "durationMinutes": 9,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-top-quark-1995-150",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Top Quark (1995)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Top Quark (1995)",
+      "durationMinutes": 5,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-superconductivity-1911-151",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Superconductivity (1911)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Superconductivity (1911)",
+      "durationMinutes": 12,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-high-temperature-superconductors-1986-152",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "High-Temperature Superconductors (1986)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "High-Temperature Superconductors (1986)",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-maser-1954-153",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Maser (1954)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Maser (1954)",
+      "durationMinutes": 14,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-ccd-1969-154",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The CCD (1969)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The CCD (1969)",
+      "durationMinutes": 11,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-gps-1973-155",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "GPS (1973)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "GPS (1973)",
+      "durationMinutes": 8,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-bluetooth-1994-156",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Bluetooth (1994)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Bluetooth (1994)",
+      "durationMinutes": 15,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-atmospheric-pressure-1643-157",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Atmospheric Pressure (1643)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Atmospheric Pressure (1643)",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
   }
 ]

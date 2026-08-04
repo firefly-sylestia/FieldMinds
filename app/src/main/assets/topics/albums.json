@@ -10997,5 +10997,955 @@
       "2020s"
     ],
     "tier": 1
+  },
+  {
+    "id": "albu-getzgilberto-by-stan-getz-499",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Getz/Gilberto by Stan Getz",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Getz/Gilberto by Stan Getz",
+      "durationMinutes": 27,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-talking-timbuktu-by-ali-500",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Talking Timbuktu by Ali Farka Touré",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Talking Timbuktu by Ali Farka Touré",
+      "durationMinutes": 40,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-pauls-boutique-by-beastie-501",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Paul's Boutique by Beastie Boys",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Paul's Boutique by Beastie Boys",
+      "durationMinutes": 59,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-low-end-theory-502",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Low End Theory by A Tribe Called Quest",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Low End Theory by A Tribe Called Quest",
+      "durationMinutes": 75,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-ready-to-die-by-503",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Ready to Die by Biggie",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Ready to Die by Biggie",
+      "durationMinutes": 31,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-things-fall-apart-by-504",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Things Fall Apart by The Roots",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Things Fall Apart by The Roots",
+      "durationMinutes": 52,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-madvillainy-by-madvillain-505",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Madvillainy by Madvillain",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Madvillainy by Madvillain",
+      "durationMinutes": 68,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-endtroducing-by-dj-shadow-506",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Endtroducing by DJ Shadow",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Endtroducing by DJ Shadow",
+      "durationMinutes": 71,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-remain-in-light-by-507",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Remain in Light by Talking Heads",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Remain in Light by Talking Heads",
+      "durationMinutes": 37,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-parallel-lines-by-blondie-508",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Parallel Lines by Blondie",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Parallel Lines by Blondie",
+      "durationMinutes": 52,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-entertainment-by-gang-of-509",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Entertainment by Gang of Four",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Entertainment by Gang of Four",
+      "durationMinutes": 40,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-transformer-by-lou-reed-510",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Transformer by Lou Reed",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Transformer by Lou Reed",
+      "durationMinutes": 31,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-raw-power-by-the-511",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Raw Power by The Stooges",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Raw Power by The Stooges",
+      "durationMinutes": 73,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-marquee-moon-by-television-512",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Marquee Moon by Television",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Marquee Moon by Television",
+      "durationMinutes": 56,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-doolittle-by-pixies-513",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Doolittle by Pixies",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Doolittle by Pixies",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-daydream-nation-by-sonic-514",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Daydream Nation by Sonic Youth",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Daydream Nation by Sonic Youth",
+      "durationMinutes": 49,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-slanted-and-enchanted-by-515",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Slanted and Enchanted by Pavement",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Slanted and Enchanted by Pavement",
+      "durationMinutes": 52,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-spiderland-by-slint-516",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Spiderland by Slint",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Spiderland by Slint",
+      "durationMinutes": 37,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-moon-and-antarctica-517",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Moon and Antarctica by Modest Mouse",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Moon and Antarctica by Modest Mouse",
+      "durationMinutes": 62,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-xo-by-elliott-smith-518",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "XO by Elliott Smith",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "XO by Elliott Smith",
+      "durationMinutes": 28,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-grace-by-jeff-buckley-519",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Grace by Jeff Buckley",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Grace by Jeff Buckley",
+      "durationMinutes": 79,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-o-by-damien-rice-520",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "O by Damien Rice",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "O by Damien Rice",
+      "durationMinutes": 57,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-pablo-honey-by-radiohead-521",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Pablo Honey by Radiohead",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pablo Honey by Radiohead",
+      "durationMinutes": 63,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-a-moon-shaped-pool-522",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "A Moon Shaped Pool by Radiohead",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Moon Shaped Pool by Radiohead",
+      "durationMinutes": 32,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-king-of-limbs-by-523",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "King of Limbs by Radiohead",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "King of Limbs by Radiohead",
+      "durationMinutes": 63,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-am-by-arctic-monkeys-524",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "AM by Arctic Monkeys",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "AM by Arctic Monkeys",
+      "durationMinutes": 67,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-pet-sounds-by-the-525",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Pet Sounds by The Beach Boys",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pet Sounds by The Beach Boys",
+      "durationMinutes": 38,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-revolver-by-the-beatles-526",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Revolver by The Beatles",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Revolver by The Beatles",
+      "durationMinutes": 50,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-white-album-by-527",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The White Album by The Beatles",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The White Album by The Beatles",
+      "durationMinutes": 45,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-sticky-fingers-by-the-528",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Sticky Fingers by The Rolling Stones",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sticky Fingers by The Rolling Stones",
+      "durationMinutes": 64,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-darkness-on-the-edge-529",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Darkness on the Edge of Town by Bruce Springsteen",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Darkness on the Edge of Town by Bruce Springsteen",
+      "durationMinutes": 59,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-blood-on-the-tracks-530",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Blood on the Tracks by Bob Dylan",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blood on the Tracks by Bob Dylan",
+      "durationMinutes": 47,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-highway-61-revisited-by-531",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Highway 61 Revisited by Bob Dylan",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Highway 61 Revisited by Bob Dylan",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-court-and-spark-by-532",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Court and Spark by Joni Mitchell",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Court and Spark by Joni Mitchell",
+      "durationMinutes": 70,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-tusk-by-fleetwood-mac-533",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tusk by Fleetwood Mac",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tusk by Fleetwood Mac",
+      "durationMinutes": 44,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-innervisions-by-stevie-wonder-534",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Innervisions by Stevie Wonder",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Innervisions by Stevie Wonder",
+      "durationMinutes": 32,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-whats-going-on-by-535",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "What's Going On by Marvin Gaye",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "What's Going On by Marvin Gaye",
+      "durationMinutes": 43,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-otis-blue-by-otis-536",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Otis Blue by Otis Redding",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Otis Blue by Otis Redding",
+      "durationMinutes": 38,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-stand-by-sly-and-537",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Stand by Sly and the Family Stone",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Stand by Sly and the Family Stone",
+      "durationMinutes": 79,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-a-love-supreme-by-538",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "A Love Supreme by John Coltrane",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Love Supreme by John Coltrane",
+      "durationMinutes": 78,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-bitches-brew-by-miles-539",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Bitches Brew by Miles Davis",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bitches Brew by Miles Davis",
+      "durationMinutes": 46,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-mingus-ah-um-by-540",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Mingus Ah Um by Charles Mingus",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mingus Ah Um by Charles Mingus",
+      "durationMinutes": 72,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-lady-in-satin-by-541",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Lady in Satin by Billie Holiday",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lady in Satin by Billie Holiday",
+      "durationMinutes": 25,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-in-the-wee-small-542",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "In the Wee Small Hours by Frank Sinatra",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "In the Wee Small Hours by Frank Sinatra",
+      "durationMinutes": 59,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-kind-of-blue-by-543",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Kind of Blue by Miles Davis",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kind of Blue by Miles Davis",
+      "durationMinutes": 60,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-blue-sky-by-the-544",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Blue Sky by The Allman Brothers Band",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blue Sky by The Allman Brothers Band",
+      "durationMinutes": 27,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-pronounced-by-lynyrd-skynyrd-545",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Pronounced by Lynyrd Skynyrd",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pronounced by Lynyrd Skynyrd",
+      "durationMinutes": 47,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-frampton-comes-alive-by-546",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Frampton Comes Alive by Peter Frampton",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Frampton Comes Alive by Peter Frampton",
+      "durationMinutes": 47,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-rumours-by-fleetwood-mac-547",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Rumours by Fleetwood Mac",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Rumours by Fleetwood Mac",
+      "durationMinutes": 72,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-thriller-by-michael-jackson-548",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Thriller by Michael Jackson",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Thriller by Michael Jackson",
+      "durationMinutes": 76,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
   }
 ]

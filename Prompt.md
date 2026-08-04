@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Topic catalog batch expansion — all 11 categories grown in one batch (+521 topics), name pools replenished**
+
+### What was asked
+
+“do on your own start batches and increase the author artworks etc etc on eby one” — grow the Curio topic catalogs, category by category, in batches.
+
+### What was done
+
+- **Blocked pipeline found first** — `expand_topics.py`’s internal `validate()` still enforced the OLD 280-char limit on `instruction` (and checked `teaser` length), while the authoritative Gradle `validateTopics` task allows **450** and does NOT check teaser → the script refused to write and the mirror validator reported 470 phantom errors on current data. Fixed: `expand_topics.py` validate now mirrors Gradle (450, no teaser check). The mirror `scripts/validate_topics.py` had already been aligned to 450 in a prior pass (docstring + MAX_INSTRUCTION_LEN).
+- **Exhausted name pools replenished (expand_topics.py)** — every pool was used up (the script makes only ONE pass per pool, so 0 additions were possible). Appended real-world name batches: ARTIST_NAMES (+95), ALBUM_NAMES (+45), FILM_NAMES (+50), DIRECTOR_NAMES (+75), AUTHOR_NAMES (+75), BOOK_NAMES (+52), PAINTER_NAMES (+54), ARTWORK_NAMES (+54), SCIENTIST_NAMES (+75), DISCOVERY_NAMES (+48), WILDCARD_NAMES (+80).
+- **Batch run** — `python3 scripts/expand_topics.py` grew every category one by one (existing + new, all tier-2, real names, generated teasers/instructions/tags/durations): artists 354→404, albums 498→548, directors 118→166, films 130→165, authors 130→177, books 149→181, painters 117→157, artworks 56→106, scientists 132→188, discoveries 124→157, wildcard 154→234. Total 1962 → **2483 topics**.
+- **Validation** — script-internal validate passed (2483 OK); mirror `validate_topics.py` reports 0 errors, 2483 unique ids across 11 files; spot-checked new entries (authors/artworks/wildcard/scientists) — real names, sensible teasers/instructions/tags/durations. `repair_bad_names` reported 0 bad names (no “Topic #N” residue).
+
+### Notes
+
+- Pools are again partially consumed — the next batch run will add more from the fresh names; the script is idempotent (dedupes by id + name) so re-running is safe.
+- NO local Gradle build per AGENTS.md — CI validates on push.
+
+---
+
+## Previous Requests (COMPLETED)
+
 **Speech-to-text fixes (no text lands) + mood-board inline editor coordinate fixes (broken/inaccurate/glitchy in the small view)**
 
 ### What was asked
