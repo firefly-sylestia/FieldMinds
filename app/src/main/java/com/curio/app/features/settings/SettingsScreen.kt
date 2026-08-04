@@ -688,6 +688,51 @@ fun SettingsScreen(navController: NavController) {
                             onCheckedChange = { AppPreferences.setPeekTitlesEnabled(context, it) }
                         )
                         CurioSettingsDivider()
+                        // ── Main card (v7.13, EXPERIMENTAL) — the Spin
+                        //    deck's front hero card wears four independent
+                        //    toggles mirroring the peek-card experiment:
+                        //    enhanced gradient fill, accent-tinted border,
+                        //    soft ambient shadow, and enhanced typography.
+                        //    Each OFF by default — the current hero card
+                        //    stays exactly as-is until enabled.
+                        Text(
+                            "Main card",
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
+                        )
+                        DeckCardToggleRow(
+                            icon = CurioIcons.Layers,
+                            title = "Enhanced gradient",
+                            subtitle = "Hero card catches richer top-lit depth",
+                            checked = AppPreferences.heroGradientState,
+                            onCheckedChange = { AppPreferences.setHeroGradientEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
+                        DeckCardToggleRow(
+                            icon = CurioIcons.Colorize,
+                            title = "Accent border",
+                            subtitle = "Category-tinted border on the front card",
+                            checked = AppPreferences.heroBorderState,
+                            onCheckedChange = { AppPreferences.setHeroBorderEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
+                        DeckCardToggleRow(
+                            icon = CurioIcons.AutoAwesome,
+                            title = "Soft shadow",
+                            subtitle = "Ambient depth shadow under the hero card",
+                            checked = AppPreferences.heroShadowState,
+                            onCheckedChange = { AppPreferences.setHeroShadowEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
+                        DeckCardToggleRow(
+                            icon = CurioIcons.FormatText,
+                            title = "Enhanced typography",
+                            subtitle = "Bolder title, bigger subtitle on the front card",
+                            checked = AppPreferences.heroTitlesState,
+                            onCheckedChange = { AppPreferences.setHeroTitlesEnabled(context, it) }
+                        )
+                        CurioSettingsDivider()
                         // ── Entry date & mood — the meta card (date / time /
                         //    mood / type) on saved entries + the journal's mood
                         //    and attachment sections. Default ON.

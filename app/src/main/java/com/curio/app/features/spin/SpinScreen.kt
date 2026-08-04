@@ -1746,8 +1746,21 @@ private fun HeroTicketCard(
     val density = LocalDensity.current
     val wPx = with(density) { w.toPx() }
     val hPx = with(density) { h.toPx() }
+    // v7.13 — Main card toggles read directly from reactive state so
+    // flipping any toggle recomposes the hero card instantly.
+    val heroGradientOn = AppPreferences.heroGradientState
+    val heroBorderOn = AppPreferences.heroBorderState
+    val heroShadowOn = AppPreferences.heroShadowState
+    val heroTitlesOn = AppPreferences.heroTitlesState
     val ticketBrush = if (isMixed) {
         CurioMixedDeck.mixedDeckHeroBrush(gradient, wPx, hPx, mixSeed)
+    } else if (heroGradientOn) {
+        // Enhanced top-lit gradient: a brighter crown at the top stop
+        // catches light and deepens toward the base, giving the hero
+        // card richer depth than the flat vertical gradient.
+        val crown = lerp(gradient.first(), Color.White, 0.12f)
+        val base = gradient.last()
+        Brush.verticalGradient(listOf(crown, base))
     } else {
         Brush.verticalGradient(gradient)
     }
@@ -1852,12 +1865,14 @@ private fun HeroTicketCard(
             Surface(
                 shape = RoundedCornerShape(30.dp),
                 color = Color.Transparent,
-                shadowElevation = 0.dp,
-                // Subtle outline — a slim edge that traces the ticket
-                // silhouette so the hero card reads as a distinct surface
-                // above the dimmer peek cards behind it (ink-colored in
-                // pastel mode so it doesn't vanish on the pastel fill).
-                border = BorderStroke(1.5.dp, ink.copy(alpha = 0.35f)),
+                shadowElevation = if (heroShadowOn) 6.dp else 0.dp,
+                // Hero card border: OFF = subtle ink outline, ON = accent-
+                // tinted hairline that visibly frames the hero against the
+                // dimmer peek cards behind it.
+                border = if (heroBorderOn)
+                    BorderStroke(1.5.dp, accent.copy(alpha = 0.55f))
+                else
+                    BorderStroke(1.5.dp, ink.copy(alpha = 0.35f)),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
@@ -1957,10 +1972,16 @@ private fun HeroTicketCard(
                         Column {
                             Text(
                                 text = currentTopic?.name ?: "Ready when you are",
-                                style = MaterialTheme.typography.headlineMedium.copy(
-                                    fontWeight = FontWeight.ExtraBold,
-                                    lineHeight = 34.sp
-                                ),
+                                style = if (heroTitlesOn)
+                                    MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.ExtraBold,
+                                        lineHeight = 36.sp
+                                    )
+                                else
+                                    MaterialTheme.typography.headlineMedium.copy(
+                                        fontWeight = FontWeight.ExtraBold,
+                                        lineHeight = 34.sp
+                                    ),
                                 color = ink,
 
                                 maxLines = 3,
@@ -1988,7 +2009,10 @@ private fun HeroTicketCard(
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = currentTopic.teaser,
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = if (heroTitlesOn)
+                                        MaterialTheme.typography.bodyMedium
+                                    else
+                                        MaterialTheme.typography.bodySmall,
                                     color = ink.copy(alpha = 0.88f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
