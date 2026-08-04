@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Mood-board NaN crash, inline editor stability, and Explore overlay crash**
+
+### What was requested
+
+Fix the mood-board crash reported from the device log (`Cannot round NaN value` in `GalleryWallFormat.kt`), and make the small inline mood-board editor stay centered and keep its existing cropped-preview behavior while images are moved. Also fix the Explore overlay service lifecycle crash seen in the supplied logs.
+
+### What was done
+
+- Sanitized mood-board tile positions, sizes, gesture deltas, scale, rotation, board bounds, offsets, and zoom geometry before arithmetic and layout conversion.
+- Guarded the `IntOffset` `roundToInt()` inputs so malformed or pre-measure geometry cannot pass `NaN` into Compose placement.
+- Kept the inline board's centered crop and stopped movement from recalculating the crop extent: the inline board extent is captured/grown on tile-count changes, not on drag coordinates, so the viewport does not shrink or jump while images move.
+- Kept tile movement clamped to the visible raw board bounds and preserved full-screen editing as the raw 1:1 placement view.
+- Removed the invalid saved-state owner construction from the overlay service, which caused `Restarter must be created only during owner's initialization stage`; the overlay now supplies only lifecycle and ViewModelStore owners required by Compose and clears the store on teardown.
+
+### Validation
+
+- `scripts/check_braces.py` balanced both changed Kotlin files; `git diff --check` passed.
+- Final code review found no release-blocking compile, NaN, viewport, or service-lifecycle issues.
+- Local Gradle compile/build/test commands were not run because the repository's AGENTS.md explicitly forbids them; CI remains the compilation gate.
+
+---
+
+## Previous Request (COMPLETED)
+
 **FieldMind legacy restore into Curio Cabinet + Curio backup preservation**
 
 ### What was requested

@@ -32,10 +32,6 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
-import androidx.savedstate.SavedStateRegistry
-import androidx.savedstate.SavedStateRegistryController
-import androidx.savedstate.SavedStateRegistryOwner
-import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.curio.app.MainActivity
 import com.curio.app.R
 import com.curio.app.data.AppPreferences
@@ -115,10 +111,12 @@ class ExploreSessionService : Service() {
     // bubble's ComposeView inherits no ViewTree owners. Without them,
     // attaching the view throws "ViewTreeLifecycleOwner not found" — the
     // crash when tapping Explore now. One service-owned owner implements
-    // all three ViewTree contracts (newer androidx.savedstate makes
-    // SavedStateRegistryOwner extend LifecycleOwner, so the owner must
-    // supply lifecycle + viewModelStore + savedStateRegistry) and keeps
-    // its lifecycle RESUMED for the window's lifetime.
+    // the lifecycle + ViewModelStore contracts Compose needs and keeps its
+    // lifecycle RESUMED for the window's lifetime. Saved-state restoration is
+    // intentionally not installed: an overlay service has no saved-state
+    // owner, and constructing SavedStateRegistryController during Service
+    // creation can throw "Restarter must be created only during owner's
+    // initialization stage" on newer lifecycle versions.
     // Lazy: the owner is only needed while the bubble window lives, and a
     // throw here must never take down service CREATION — a constructor
     // crash kills the whole process (the "app won't open" crash loop).
@@ -129,29 +127,23 @@ class ExploreSessionService : Service() {
      * A plain (static) nested class — no outer-service reference — so the
      * bubble window never keeps the service alive through this object.
      */
-    private class OverlayOwner :
-        LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
-        // Field-initializer order matters: SavedStateRegistryController's
-        // performRestore requires the owner's lifecycle to STILL be
-        // INITIALIZED, so restore must run before the registry advances to
-        // RESUMED. Setting RESUMED first threw "Restarter must be created
-        // only during owner's initialization stage" from the service
-        // constructor — the FATAL crash on tapping Explore.
+    private class OverlayOwner : LifecycleOwner, ViewModelStoreOwner {
         private val store = ViewModelStore()
         // Non-private (the class itself is private): onDestroy() moves the
         // registry to DESTROYED via overlayOwner.registry.
         val registry: LifecycleRegistry = LifecycleRegistry.createUnsafe(this)
-        private val controller = SavedStateRegistryController.create(this).apply {
-            performRestore(null)
-        }
+
         init {
-            // Advance to RESUMED only after performRestore has attached.
+            // Compose only needs lifecycle + ViewModelStore for this
+            // service-owned overlay. Do not create a SavedStateRegistry here:
+            // its Recreator must be registered during owner initialization,
+            // and AndroidX lifecycle 2.10 throws when a Service-created
+            // overlay tries to attach it after construction has begun.
             registry.currentState = Lifecycle.State.RESUMED
         }
+
         override val lifecycle: Lifecycle get() = registry
         override val viewModelStore: ViewModelStore get() = store
-        override val savedStateRegistry: SavedStateRegistry
-            get() = controller.savedStateRegistry
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -398,7 +390,6 @@ class ExploreSessionService : Service() {
             // attaching this view doesn't throw (crash fix).
             setViewTreeLifecycleOwner(overlayOwner)
             setViewTreeViewModelStoreOwner(overlayOwner)
-            setViewTreeSavedStateRegistryOwner(overlayOwner)
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
             setContent {
                 // Reads the reactive session — pause/resume/hide from the
@@ -556,6 +547,7 @@ class ExploreSessionService : Service() {
         mainHandler.removeCallbacks(notificationTick)
         removeBubble()
         overlayOwner.registry.currentState = Lifecycle.State.DESTROYED
+        overlayOwner.viewModelStore.clear()
         super.onDestroy()
     }
 
