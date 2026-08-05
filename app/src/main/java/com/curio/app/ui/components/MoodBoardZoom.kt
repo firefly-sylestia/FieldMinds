@@ -54,6 +54,7 @@ import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.PatrickHandFontFamily
 import com.curio.app.ui.theme.notePaperInk
 import androidx.compose.ui.util.lerp

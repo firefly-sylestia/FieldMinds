@@ -632,7 +632,7 @@ fun SettingsScreen(navController: NavController) {
                         //    light mode, muted deep pastels with light ink in
                         //    dark. Independent of the theme style (Curio /
                         //    AMOLED / Material) and the Light/Dark pick.
-                        //    Default OFF.
+                        //    Default ON — the app's shipped look.
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,

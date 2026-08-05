@@ -785,3 +785,24 @@ User: (1) disliked the title's gradient font style — change it; (2) doesn't wa
 - `scripts/check_braces.py` passed (HomeScreen.kt + CurioColors.kt); `git diff --check` passed; no leftover StatPill references; all icon constants and in-scope values verified.
 - Reviewer spawn hit transient tool errors; change is small and locally validated.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+---
+
+## Pastel default ON + rose-wood home hero + CI compile fixes
+
+### CI fixes (from prior commit)
+
+- `HomeScreen.kt` — `FireOrange` → `CurioColors.FireOrange` (object member qualification; bare reference broke compile).
+- `MoodBoardZoom.kt` — re-added `import com.curio.app.ui.theme.CurioIcons` (used by `CurioIcons.Close`; import had been dropped in the zoom cleanup).
+
+### Changes
+
+- **Pastel mode default flipped OFF → ON** in `AppPreferences.kt` (both the reactive `pastelColorsState` seed and the prefs read default `getBoolean(KEY_PASTEL_COLORS_ENABLED, true)`); Settings toggle comment updated to "Default ON". Existing users who explicitly turned it off keep their stored choice.
+- **New `CurioColors.HomeRosewood` (#B4635A)** — muted rose-wood, softer/less saturated than the hot brand coral, still white-ink readable (~4.3:1) in non-pastel mode.
+- **Home hero + decorative touches now rose-wood**: the hero banner fill resolves `if (pastelColorsState) pastelAccent(accent, isCurioDarkTheme()) else accent` (airy pastel twin in the new default), ink stays `pastelFillInk(accent)`; a shared `homeRoseAccent()` composable helper applies the same resolution to the empty-state icon/pill and drawer header icon/surface/divider so the whole home wears ONE rose-wood in pastel mode. New imports: `isCurioDarkTheme`, `pastelAccent`.
+
+### Validation
+
+- `scripts/check_braces.py` passed on all 5 touched files; `git diff --check` clean; no remaining CoralBlush/CategoryCoral refs in Home; `themedAccent()` still used 6× (no dead import).
+- Reviewer confirmed fixes; its consistency note (decorative elements resolving the pastel twin too) was applied via `homeRoseAccent()`.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

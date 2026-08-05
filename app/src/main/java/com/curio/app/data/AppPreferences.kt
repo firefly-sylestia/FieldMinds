@@ -128,8 +128,9 @@ object AppPreferences {
     // muted deep pastels in dark) and pastel-izes the mixed-deck blends and
     // every blended/tinted color derived from the accents. Independent of
     // theme STYLE (combines with Curio, AMOLED and Material) and theme MODE.
-    // Default OFF. Seeded from prefs in [initThemeMode].
-    var pastelColorsState by mutableStateOf(false)
+    // Default ON (v7.x — the soft look is the app's shipped default now).
+    // Seeded from prefs in [initThemeMode].
+    var pastelColorsState by mutableStateOf(true)
         private set
 
     // Pastel crown depth (v7.12, EXPERIMENTAL) — when pastel mode is ON
@@ -320,9 +321,9 @@ object AppPreferences {
     }
 
     // ── Pastel color mode ─────────────────────────────────────────────
-    /** Whether the pastel color mode is on (default off). */
+    /** Whether the pastel color mode is on (default on). */
     fun isPastelColorsEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_PASTEL_COLORS_ENABLED, false)
+        prefs(context).getBoolean(KEY_PASTEL_COLORS_ENABLED, true)
 
     fun setPastelColorsEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_PASTEL_COLORS_ENABLED, enabled).apply()

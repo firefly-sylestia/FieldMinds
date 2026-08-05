@@ -82,6 +82,8 @@ import com.curio.app.ui.components.SoftTornSheetShape
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.isCurioDarkTheme
+import com.curio.app.ui.theme.pastelAccent
 import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
@@ -209,8 +211,15 @@ fun HomeScreen(navController: NavController) {
                 SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp)
             }
             // The quest is always the wildcard Surprise now (the category
-            // chip row is gone) — brand coral, with pastel-aware ink.
-            val accent = CurioColors.CategoryCoral
+            // chip row is gone). The banner wears the muted rose-wood hero
+            // accent — in pastel mode (the shipped default) it resolves to
+            // the airy rose-wood pastel twin, otherwise the calm base.
+            val accent = CurioColors.HomeRosewood
+            val heroFill = if (AppPreferences.pastelColorsState) {
+                pastelAccent(accent, isCurioDarkTheme())
+            } else {
+                accent
+            }
             val questInk = pastelFillInk(accent)
             Box(
                 modifier = Modifier
@@ -229,11 +238,11 @@ fun HomeScreen(navController: NavController) {
                         .clip(sheetShape)
                         .background(Color(0xFFFDFCF9))
                 )
-                // ── Solid coral banner, torn bottom edge — tappable quest.
+                // ── Solid rose-wood banner, torn bottom edge — tappable quest.
                 Surface(
                     onClick = { navController.navigateToTab(CurioRoutes.SPIN) },
                     shape = heroTornShape,
-                    color = accent,
+                    color = heroFill,
                     shadowElevation = 0.dp,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -291,7 +300,7 @@ fun HomeScreen(navController: NavController) {
                                         glyph = "local_fire_department",
                                         value = "$streakDays",
                                         label = "Streak",
-                                        tint = FireOrange,
+                                        tint = CurioColors.FireOrange,
                                         ink = questInk,
                                         modifier = Modifier.weight(1f)
                                     )
@@ -885,12 +894,26 @@ private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = captured
 // First-time empty state
 // ═══════════════════════════════════════════════════════════════════════
 
+/**
+ * The Home accent, resolved like the hero banner: the muted rose-wood base
+ * normally, its airy pastel twin when pastel mode (the shipped default) is
+ * on — so the hero, empty state and drawer all wear the SAME rose-wood.
+ */
+@Composable
+private fun homeRoseAccent(): Color =
+    if (AppPreferences.pastelColorsState) {
+        pastelAccent(CurioColors.HomeRosewood, isCurioDarkTheme())
+    } else {
+        CurioColors.HomeRosewood
+    }
+
 @Composable
 private fun FirstTimeEmpty(
     onPickCategory: () -> Unit,
     onShuffleSurprise: () -> Unit,
     surface: Color = MaterialTheme.colorScheme.surfaceContainerLow
 ) {
+    val roseAccent = homeRoseAccent()
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = surface,
@@ -906,7 +929,7 @@ private fun FirstTimeEmpty(
         ) {
             CurioIcon(
                 CurioIcons.AutoAwesome, null,
-                tint = CurioColors.CoralBlush,
+                tint = roseAccent,
                 size = 36.dp
             )
             Text(
@@ -928,7 +951,7 @@ private fun FirstTimeEmpty(
                 Surface(
                     onClick = onShuffleSurprise,
                     shape = RoundedCornerShape(50),
-                    color = CurioColors.CoralBlush
+                    color = roseAccent
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
@@ -1031,6 +1054,7 @@ private fun ReminderNudgeCard(onTap: () -> Unit, surface: Color = MaterialTheme.
 private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
     val context = LocalContext.current
     val displayName = AppPreferences.getDisplayName(context)
+    val roseAccent = homeRoseAccent()
     ModalDrawerSheet(
         modifier = Modifier.width(320.dp),
         drawerContainerColor = MaterialTheme.colorScheme.surface,
@@ -1050,13 +1074,13 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
                 ) {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = CurioColors.CoralBlush.copy(alpha = 0.18f),
+                        color = roseAccent.copy(alpha = 0.18f),
                         modifier = Modifier.size(48.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                             CurioIcon(
                                 CurioIcons.AutoAwesome, null,
-                                tint = CurioColors.CoralBlush,
+                                tint = roseAccent,
                                 size = 28.dp
                             )
                         }
@@ -1080,7 +1104,7 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp)
-                .background(CurioColors.CoralBlush)
+                .background(roseAccent)
         )
         
         Spacer(Modifier.height(16.dp))

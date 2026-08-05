@@ -74,6 +74,16 @@ object CurioColors {
     /** Vivid fire orange — the streak accent (flame icon) on coral heroes. */
     val FireOrange       = Color(0xFFFF8A00)
 
+    /**
+     * Muted rose-wood — the Home quest hero's banner accent. Warmer and
+     * softer than the brand coral (less saturated, gently deepened) so the
+     * hero reads calm and earthy instead of hot pink, while white ink
+     * stays readable on it in non-pastel mode. Pastel mode (default)
+     * resolves its airy rose-wood pastel twin via [pastelAccent] — see
+     * HomeScreen's hero fill.
+     */
+    val HomeRosewood     = Color(0xFFB4635A)
+
     /** Tinted (20% alpha) versions of the legacy accents for backgrounds. */
     val LilacTint     = Lilac.copy(alpha = 0.20f)
     val DustyBlueTint = DustyBlue.copy(alpha = 0.20f)
