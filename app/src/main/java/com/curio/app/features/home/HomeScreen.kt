@@ -929,37 +929,23 @@ private fun QuestShuffleCard(
     // light against the page, so the eyebrow wears the darker ink instead
     // (the button keeps the solid accent fill).
     val ink = homeReadableInk(accent)
-    // Match the newer Saved shelf language: a clean, spacious row with a
-    // confident leading glyph, larger editorial hierarchy, and one generous
-    // trailing action target instead of a cramped inline chip.
+    // v7.32 — the quest is backgroundless: bare text + the shuffle button
+    // sitting on the page (no card fill, no leading icon). The whole row
+    // stays tappable so a tap on the copy shuffles too.
     Surface(
         onClick = onShuffle,
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = Color.Transparent,
         shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Surface(
-                shape = RoundedCornerShape(18.dp),
-                color = accent.copy(alpha = 0.18f),
-                modifier = Modifier.size(54.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(
-                        CurioIcons.Casino,
-                        "Shuffle a random deck",
-                        tint = ink,
-                        size = 29.dp
-                    )
-                }
-            }
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "TODAY'S QUEST",
@@ -1027,7 +1013,7 @@ private fun SavedQuoteRow(
         CurioIcon(
             name = CurioIcons.FormatQuote,
             contentDescription = null,
-            tint = cat.themedAccent(),
+            tint = cat.categoryInk(),
             size = 22.dp
         )
         Spacer(Modifier.size(12.dp))
@@ -1079,7 +1065,7 @@ private fun PinnedTopicRow(
         CurioIcon(
             name = CurioIcons.Bookmark,
             contentDescription = null,
-            tint = cat.themedAccent(),
+            tint = cat.categoryInk(),
             size = 22.dp
         )
         Spacer(Modifier.size(12.dp))
@@ -1134,7 +1120,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             CurioIcon(
-                cat.iconGlyph, null, tint = cat.themedAccent(), size = 24.dp
+                cat.iconGlyph, null, tint = cat.categoryInk(), size = 24.dp
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -1557,7 +1543,7 @@ private fun ExploreTopicRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            CurioIcon(category.iconGlyph, null, tint = accent, size = 24.dp)
+            CurioIcon(category.iconGlyph, null, tint = category.categoryInk(), size = 24.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -1576,12 +1562,16 @@ private fun ExploreTopicRow(
                         // unexplored earlier and came back to (resumed).
                         Surface(
                             shape = RoundedCornerShape(50),
-                            color = accent.copy(alpha = 0.14f)
+                            color = accent.copy(alpha = 0.14f),
+                            // Same hairline rim as the detail page's #tag
+                            // chips — the deep ink text + pastel fill alone
+                            // read muddy on the tinted card (v7.32).
+                            border = BorderStroke(1.dp, accent.copy(alpha = 0.4f))
                         ) {
                             Text(
                                 text = tag,
                                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-                                color = accent,
+                                color = category.categoryInk(),
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
@@ -1597,7 +1587,7 @@ private fun ExploreTopicRow(
             }
             CurioForwardArrow(
                 contentDescription = subtitle,
-                tint = accent,
+                tint = category.categoryInk(),
                 modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
             )
         }
@@ -1751,7 +1741,9 @@ private fun QueuedExploreRow(
     onResume: () -> Unit,
     onDiscard: () -> Unit
 ) {
-    val accent = CurioCategories.byId(session.categoryId).themedAccent()
+    // Deep category ink for the icon — the pastel accent reads washed out
+    // on the plain page (v7.32).
+    val ink = CurioCategories.byId(session.categoryId).categoryInk()
     // Plain backgroundless row, matching the Recents / Saved list style —
     // the frozen elapsed readout comes from the session's banked pause.
     Row(
@@ -1763,7 +1755,7 @@ private fun QueuedExploreRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        CurioIcon(CurioIcons.Schedule, null, tint = accent, size = 22.dp)
+        CurioIcon(CurioIcons.Schedule, null, tint = ink, size = 22.dp)
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 session.topicName,
