@@ -1065,18 +1065,10 @@ private fun formatCapturedDate(millis: Long): String =
     SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(millis))
 
 /**
- * Theme-aware entry meta card — sits right below the "Captured today ·
- * 3:42 PM" line and above the format body. The date and type segments now
- * live in the hero's frosted bar, so this card keeps ONLY the mood (with
- * its icon) and hides entirely when there's no mood. Plain theme surface
- * (no category tint), so it stays neutral in every theme style.
- */
-@Composable
-/**
  * The entry's mood — every format carries the shared mood row, and
  * OpenNotebook wildcard takes keep theirs inside
  * [CaptureData.OpenNotebook.subData], so unwrap those before reporting.
- * Shared by the hero's frosted bar and the meta card.
+ * Used by the hero's frosted bar.
  */
 private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
     is CaptureData.Marginalia -> d.mood
@@ -1095,14 +1087,6 @@ private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
     else -> null
 }
 
-
-/**
- * One half of the hero's frosted date/type bar — icon over value over a
- * "Date"/"Type" label, in the card's ink ([ink], deep slate, defined with
- * the hero's inks) so it reads on the frosted white glass in every theme
- * and pastel mode.
- */
-@Composable
 /**
  * v7.40 — the hero's tiny date line: entries captured TODAY show the
  * capture time, older entries a short relative label ("yesterday" / "3d
@@ -1114,6 +1098,13 @@ private fun heroDateTinyLabel(entry: CurioEntry): String = when (val days = entr
     else -> "${days}d ago"
 }
 
+/**
+ * One half of the hero's frosted date/type bar — icon over value over a
+ * "Date"/"Type" label, in the card's ink ([ink], deep slate, defined with
+ * the hero's inks) so it reads on the frosted white glass in every theme
+ * and pastel mode.
+ */
+@Composable
 private fun FrostedSegment(
     icon: String,
     title: String,
