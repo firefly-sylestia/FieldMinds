@@ -252,5 +252,6 @@ User: remove fake descriptions from the artwork data, add real info in batches o
 
 ### Validation
 
+- Batch 2 (20 artworks, entries 16-35) real descriptions committed via `scripts/batch_artworks_2.py`: La Grande Jatte, Irises, The Kiss, Guernica, Black Square, American Gothic, Nighthawks, Soup Cans, Dinner Party, Cloud Gate, Weather Project, Maman, Spiral Jetty, Rain Room, Gonzalez-Torres Untitled (1991), Basquiat Boxer, Whaam!, Arnolfini, Mona Lisa, Garden of Earthly Delights. Tags corrected to real movements (Post-Impressionism, Cubism, Suprematism, Regionalism, Art Nouveau, Land Art...). Realism audit of all 56 artworks: every remaining entry is genuine — the only fabricated one was batch 1's "Shark (1988)" Basquiat (already replaced). Spiral Jetty tag de-duplicated to ['Land Art'].
 - `scripts/check_braces.py` passed; `git diff --check` clean; JSON valid; validate_topics.py artworks passes.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
