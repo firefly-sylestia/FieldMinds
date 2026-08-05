@@ -821,7 +821,13 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
+                // Keep the deck, its peek cards, and the Spin button centered
+                // horizontally and anchored just above Categories/Filter. A
+                // centered vertical arrangement was creating a large empty
+                // pocket between the button and the bottom controls.
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
             ) {
                 SpinDeckSection(
                     compact = true,
@@ -844,33 +850,48 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     onCardTap = onDeckCardTap,
                     onSpinClick = onSpinClick
                 )
-                // Breathing room under the spin button before the CTA.
-                Spacer(Modifier.height(10.dp))
             }
         } else {
-            // ── Normal layout — the exact pre-compact stack ──────────
-            SpinDeckSection(
-                compact = false,
-                densityExtraCompact = densityExtraCompact,
-                roomy = roomy,
-                cat = deckCat,
-                deckAccent = deckAccent,
-                deckGradient = deckGradient,
-                isMixed = isMixedDeck,
-                mixSeed = mixSeed,
-                displayPool = hand,
-                cycleIndex = cycleIndex,
-                shuffling = shuffling,
-                landedTopic = landedTopic,
-                opening = isOpening,
-                enabled = filteredPool.isNotEmpty() && !shuffling,
-                buttonPulse = buttonPulse,
-                onCardTap = onDeckCardTap,
-                onSpinClick = onSpinClick
-            )
-            // ── 4. Breathing room — keeps the bottom bar pinned to the
-            //    screen edge instead of leaving dead space below it ─────
-            Spacer(Modifier.weight(1f))
+            // ── Normal layout — center the complete deck stage in the
+            //    available space, then keep Categories/Filter directly below
+            //    it. The old weighted spacer lived AFTER the Spin button and
+            //    created the oversized gap the user saw above the filters.
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                // The stage owns the remaining height, but its content should
+                // sit at the bottom of that stage so the Spin button stays
+                // close to Categories/Filter instead of floating midway above
+                // an unused gap.
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    SpinDeckSection(
+                        compact = false,
+                        densityExtraCompact = densityExtraCompact,
+                        roomy = roomy,
+                        cat = deckCat,
+                        deckAccent = deckAccent,
+                        deckGradient = deckGradient,
+                        isMixed = isMixedDeck,
+                        mixSeed = mixSeed,
+                        displayPool = hand,
+                        cycleIndex = cycleIndex,
+                        shuffling = shuffling,
+                        landedTopic = landedTopic,
+                        opening = isOpening,
+                        enabled = filteredPool.isNotEmpty() && !shuffling,
+                        buttonPulse = buttonPulse,
+                        fitScale = fitScale,
+                        onCardTap = onDeckCardTap,
+                        onSpinClick = onSpinClick
+                    )
+                }
+            }
         }
 
         // ── 5. Bottom bar — Categories · Filter (controls only) ────
@@ -1030,8 +1051,8 @@ private fun ColumnScope.SpinDeckSection(
                     densityExtraCompact -> 8.dp
                     compact && extraCompact -> 8.dp
                     compact -> 10.dp
-                    roomy -> 26.dp
-                    else -> 20.dp
+                    roomy -> 18.dp
+                    else -> 12.dp
                 }
             ),
         contentAlignment = Alignment.Center
