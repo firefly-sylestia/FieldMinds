@@ -301,6 +301,17 @@ import kotlin.random.Random
  *     shuffle main card no longer reads dimmed in either mode; pastel peek
  *     cards sit a step darker than the hero again (near 0.16 / far 0.28
  *     black-lerp in light) instead of glowing brighter than it.
+ *
+ * v7.17 changes:
+ * 34. **Calm peeks in every palette** — the background peek cards behind
+ *     the hero were too bright and vibrant in ALL modes. The fills now
+ *     recede instead of glow: non-pastel peeks deepen (near 0.40 / far
+ *     0.52 black-lerp, was 0.28/0.42) and desaturate (~0.80x, capped), and
+ *     pastel peeks drop lightness harder (light 0.12/0.18, dark 0.11/0.16
+ *     — was 0.06/0.10, 0.09/0.14) with a gentle saturation pull, so the
+ *     airy pastels stay in family. The top-lit gradient crown softens to a
+ *     whisper (0.04-0.06 white-lerp, was 0.10-0.14) — the gradient family
+ *     stays, it just reads calm and quiet.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -2229,24 +2240,46 @@ private fun PeekCard(
     // rebuilding a flat single-accent cardGradient from the blend — so a
     // mixed deck's peeks read mixed, not one flat hue.
     val blendStops = gradient
+    // v7.17 — CALM peeks in every palette: the deck-gradient family read
+    // bright & vibrant on the slim background cards in ALL modes (default
+    // Curio, Material's device-primary blend, pastel). The peeks now step
+    // clearly deeper AND desaturate so they recede behind the hero ticket:
+    //  - non-pastel: black-lerp deepened (near 0.40 / far 0.52, was
+    //    0.28/0.42) plus an HSL saturation pull (~0.80x, capped at 0.50)
+    //    to kill the vividness of the saturated device/category stops.
+    //  - pastel: a heavier lightness drop (light near 0.12 / far 0.18,
+    //    dark 0.11/0.16 — was 0.06/0.10 and 0.09/0.14) with the same
+    //    gentle saturation pull, so pale peeks stay in family but read a
+    //    clear step below the hero instead of glowing beside it.
     val cardStops = remember(blendStops, far, pastelMode, darkMode) {
         if (pastelMode) {
             // Pastel peeks stay IN FAMILY: step the depth by dropping
             // LIGHTNESS (HSL) instead of black-lerping, which greyed the
-            // airy pastels into muddy mids. Hue + saturation are held, so
-            // the peeks read as deeper pastels — never murky.
+            // airy pastels into muddy mids. Hue is held; saturation is
+            // pulled down slightly so the peeks read calm, not glowing.
             blendStops.map { stop ->
                 val h = toHsl(stop)
                 val drop = if (far) {
-                    if (darkMode) 0.14f else 0.10f
+                    if (darkMode) 0.16f else 0.18f
                 } else {
-                    if (darkMode) 0.09f else 0.06f
+                    if (darkMode) 0.11f else 0.12f
                 }
-                fromHsl(h.h, h.s, (h.l - drop).coerceIn(0f, 1f))
+                fromHsl(
+                    h.h,
+                    (h.s * 0.85f).coerceAtMost(0.45f),
+                    (h.l - drop).coerceIn(0f, 1f)
+                )
             }
         } else {
-            val level = if (far) 0.42f else 0.28f
-            blendStops.map { lerp(it, Color.Black, level) }
+            // Non-pastel peeks deepen MORE and pull saturation down so the
+            // vivid device/category stops recede quietly behind the hero
+            // instead of shining.
+            val level = if (far) 0.52f else 0.40f
+            blendStops.map { stop ->
+                val c = lerp(stop, Color.Black, level)
+                val h = toHsl(c)
+                fromHsl(h.h, (h.s * 0.80f).coerceAtMost(0.50f), h.l)
+            }
         }
     }
     // v7.5 — pastel mode lightens the peek fill, so content flips to a deep
@@ -2271,8 +2304,11 @@ private fun PeekCard(
     val fillBrush = remember(cardStops, far, pastelMode, darkMode, gradientOn) {
         val base = Brush.verticalGradient(cardStops)
         if (!gradientOn) return@remember base
-        val crown = if (pastelMode && !darkMode) lerp(cardStops.first(), Color.White, 0.12f)
-                    else lerp(cardStops.first(), Color.White, if (far) 0.10f else 0.14f)
+        // v7.17 — the top-lit crown is now a WHISPER (was 0.10-0.14
+        // white-lerp) so the gradient keeps its light feel without adding
+        // brightness to the already-deepened, desaturated peek fills.
+        val crown = if (pastelMode && !darkMode) lerp(cardStops.first(), Color.White, 0.05f)
+                    else lerp(cardStops.first(), Color.White, if (far) 0.04f else 0.06f)
         Brush.verticalGradient(listOf(crown) + cardStops.drop(1))
     }
     // 1b — category-tinted hairline so each deck layer whispers its
