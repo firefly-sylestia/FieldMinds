@@ -124,3 +124,9 @@ collapsed a doubled /** + double blank line. Fixed, review clean, pushed.
    box). QuickFactCard was already backgroundless.
 Reviewer caught that the transparent Surface still clipped to RoundedCornerShape(20.dp),
 which would have shaved the torn paper corners — set to 0dp. Pushed.
+
+## chore — GitHub Actions Node 20 deprecation
+Bumped the workflow actions to Node-24 majors: actions/checkout@v4→v5 (3x),
+actions/setup-java@v4→v5 (3x), actions/upload-artifact@v4→v5 (2x) in
+android.yml + release.yml. softprops/action-gh-release@v2 left as-is (3rd-party,
+not flagged).
