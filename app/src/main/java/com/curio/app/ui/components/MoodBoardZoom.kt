@@ -30,6 +30,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -319,6 +320,12 @@ fun MoodBoardZoomOverlay(
 ) {
     if (zoomState.zoomedUri == null) return
     val density = LocalDensity.current
+    // Composition-scoped coroutine for the delayed single-tap action. In the
+    // current Compose the pointerInput block's PointerInputScope is no longer
+    // a CoroutineScope, so a bare launch inside awaitEachGesture can't
+    // resolve — this scope (cancelled when the overlay leaves composition)
+    // is the reliable place to schedule it.
+    val overlayScope = rememberCoroutineScope()
 
     // ── Arc glide clock — ONE shared clock drives scale + pan in phase so
     // the image swoops from its resting spot to the centered target, and
@@ -480,12 +487,10 @@ fun MoodBoardZoomOverlay(
             .zIndex(1000f)
             .pointerInput(tileUri) {
                 // The gesture code runs inside awaitEachGesture's block,
-                // whose receiver is NOT a CoroutineScope — and kotlinx.coroutines
-                // 1.10+/Kotlin 2.3 no longer lets launch resolve through the
-                // outer implicit scope ("launch can not be called without the
-                // corresponding coroutine scope"). Capture the pointerInput
-                // scope explicitly for the delayed single-tap action.
-                val gestureScope = this
+                // whose receiver is NOT a CoroutineScope (and in this Compose
+                // PointerInputScope isn't one either), so the delayed
+                // single-tap action is scheduled on the composition-scoped
+                // [overlayScope] captured above instead of a bare launch.
                 // Per-pointerInput locals (survive across gestures, reset on
                 // tile change): the last tap's down time for the double-tap
                 // window, and the pending single-tap action.
@@ -546,7 +551,7 @@ fun MoodBoardZoomOverlay(
                         if (isDouble) {
                             if (refined) resetTick++ else zoomStepTick++
                         } else {
-                            pendingTap = gestureScope.launch {
+                            pendingTap = overlayScope.launch {
                                 delay(DoubleTapTimeoutMs)
                                 // Re-read the LIVE refinement state — the
                                 // image may have been pinched while waiting.
