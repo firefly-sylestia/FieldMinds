@@ -1,11 +1,14 @@
 package com.curio.app.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -45,16 +48,16 @@ fun CurioBackButton(
     // Optional floating shadow — the entry-detail hero's scroll-reactive
     // sticky bar grows this with scroll progress so the popped pills visibly
     // float off the page; every other screen keeps the flat 0dp default.
-    shadowElevation: Dp = 0.dp
+    shadowElevation: Dp = 0.dp,
+    // v7.34 — rippleless press for frosted-glass pills: on the detail
+    // hero's small circular frosted buttons the default Material ripple
+    // expands past the plate and reads as a circular visual glitch, so the
+    // detail screen passes true and the press is conveyed by the frost and
+    // shadow alone (the same fix Home's sticky pills use — clickable with
+    // indication = null). Every other screen keeps the standard ripple.
+    disableRipple: Boolean = false
 ) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(50),
-        color = containerColor,
-        border = border,
-        shadowElevation = shadowElevation,
-        modifier = modifier
-    ) {
+    val icon: @Composable () -> Unit = {
         CurioIcon(
             name = CurioIcons.ChevronLeft,
             contentDescription = contentDescription,
@@ -62,6 +65,29 @@ fun CurioBackButton(
             size = 24.dp,
             modifier = Modifier.padding(8.dp)
         )
+    }
+    if (disableRipple) {
+        val interactionSource = remember { MutableInteractionSource() }
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = containerColor,
+            border = border,
+            shadowElevation = shadowElevation,
+            modifier = modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
+        ) { icon() }
+    } else {
+        Surface(
+            onClick = onClick,
+            shape = RoundedCornerShape(50),
+            color = containerColor,
+            border = border,
+            shadowElevation = shadowElevation,
+            modifier = modifier
+        ) { icon() }
     }
 }
 

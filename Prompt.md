@@ -1,39 +1,49 @@
 # Prompt.md — Request Log
 
-## Latest Request (COMPLETED)
+## Latest Request (IN PROGRESS)
 
-**Shuffle page: creator tag pills on the hero card + drop "by …" from artwork names**
+**Home + detail tear shadows, hero name height, detail pop-up pill ripple glitch**
 
 ### Requested
 
-- Add the tag-pill style to the shuffle page category (hero ticket) card,
-  with the creator name shown as a top-corner tag.
-- Films → "Director", books → "Author", artworks → "Painter", albums →
-  "Artist", each as a `Label · Name` pill.
-- Remove the trailing " by [painter]" from artwork names.
-- ("add 1 in the top corner" clarified by user = the creator-name pill,
-  not a numeric badge.)
+1. Home hero tear AND detail hero tear: add a thin (~0.1 mm) dark shadow
+   right at the torn edge so the tear looks more realistic.
+2. Home hero: increase the name height where it says "Curious Explorer"
+   (the display name under the greeting) — there was a dead space below it;
+   scale it up to fill most of the space. User picked "Fill most of the
+   space" (~30sp name, gap shrinks).
+3. Detail screen: the popped-up back/more icons had a weird circular
+   ripple glitch behind them — fix by reusing the Home sticky-pill logic
+   (clickable with `indication = null`).
 
 ### Plan
 
-1. `SpinScreen.kt` — `HeroTicketCard`: new creator byline pill pinned
-   `Alignment.TopStart` (padding 20dp) in the band the old subtype badge
-   owned (content column's 28dp spacer keeps the title clear). Label comes
-   from the TOPIC's own `categoryId` so mixed decks stay correct. Text-only
-   pill, `ink@18%`, `labelMedium` bold, maxLines 1 ellipsis. Matches the
-   Topic Reveal byline-pill language.
-2. `artworks.json` — strip the trailing `" by <byline>"` suffix from all
-   56 artwork names (byline field kept; two-pass byte-safe replacement for
-   escaped vs literal UTF-8 names).
+1. `HomeScreen.kt` — hero tear: new `Box` between the white under-sheet
+   and the banner, `height(HomeQuestHeroHeight).offset(y = 1.dp)
+   .clip(heroTornShape).background(Color.Black.copy(alpha = 0.20f))` — a
+   hairline dark rim hugging the seeded torn seam (hidden behind the
+   opaque banner; reads as the paper edge casting a thin shadow onto the
+   sheet; in the up-bites the rim hugs the bite bottom while white still
+   reads above).
+2. `EntryDetailScreen.kt` — identical shadow `Box` (`height
+   (EntryDetailHeroHeight)`, same offset/clip/color) between the sheet
+   and the hero backdrop.
+3. `HomeScreen.kt` — hero name: `titleMedium` (16sp) →
+   `headlineMedium.copy(fontWeight = Medium, fontSize = 30.sp,
+   lineHeight = 46.sp)`; the tall leading makes the name block itself
+   fill the dead space above the stat bar (weight spacer shrinks).
+4. `EntryDetailScreen.kt` — more button: `Surface(onClick = …)` →
+   plain `Surface` + `clickable(interactionSource, indication = null)`
+   (mirrors Home's `TopBarPill`); back button: pass the new
+   `disableRipple = true` to `CurioBackButton`. Added
+   `foundation.clickable` + `foundation.interaction.MutableInteractionSource`
+   imports.
+5. `CurioTopBar.kt` — `CurioBackButton` gains `disableRipple: Boolean =
+   false`; when true it uses the rippleless clickable pattern; all other
+   screens keep the standard ripple.
+6. Changelog + Prompt.md.
 
 ### Outcome
 
-- Pushed `16740d4a` ("feat: creator byline tag pill on shuffle hero card,
-  strip painter suffix from artwork names"). Braces balanced, JSON valid,
-  `CategoryId` import present, no code parses the " by " suffix.
-- code-reviewer-glm approved: pill/title clearance exactly flush, null-safe
-  for byline-less topics. Minor note: the Artist/Author/Director/Painter
-  mapping is duplicated in `TopicRevealScreen.kt` — acceptable at 4 lines.
-- Note: earlier in this cycle the paper batch was pushed as `8e66f19e`
-  (realistic dog-ear, soft all-sides torn paper, watermark paper style,
-  refined coffee, roomier saved notes, detail-style home hero scatter).
+- Changes applied to all four files; markers verified via code search.
+- Awaiting code review + commit/push.

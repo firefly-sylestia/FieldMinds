@@ -282,6 +282,21 @@ fun HomeScreen(navController: NavController) {
                         .clip(sheetShape)
                         .background(Color(0xFFFDFCF9))
                 )
+                // ── Torn-edge shadow — a hairline dark rim just below the
+                // hero's torn seam (the SAME seeded torn shape, nudged down
+                // ~1dp) so the tear reads as a real paper edge casting a
+                // thin ~0.1 mm shadow onto the white sheet. Hidden behind
+                // the opaque banner everywhere except the sliver under the
+                // tear; through the up-bites the rim hugs the bite's bottom
+                // edge while the white still reads above it.
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(HomeQuestHeroHeight)
+                        .offset(y = 1.dp)
+                        .clip(heroTornShape)
+                        .background(Color.Black.copy(alpha = 0.20f))
+                )
                 // ── Solid rose-wood banner, torn bottom edge. The banner is
                 // NOT tappable — only the Shuffle button below the hero
                 // drives the deck.
@@ -337,10 +352,22 @@ fun HomeScreen(navController: NavController) {
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(Modifier.height(4.dp))
+                            // v7.34 — the hero name reads BIG now: same size
+                            // as the greeting (hierarchy via weight + alpha),
+                            // with tall leading so the name block itself
+                            // fills the dead space below it instead of a
+                            // small caption floating above the stat bar. The
+                            // leading is held to a FIXED ~44dp box (glyphs
+                            // still scale with the system font), so the fill
+                            // works at the default scale while the stat bar
+                            // keeps fitting when fonts are enlarged.
+                            val nameFontScale = LocalDensity.current.fontScale
                             Text(
                                 text = displayName,
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Medium
+                                style = MaterialTheme.typography.headlineMedium.copy(
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 30.sp,
+                                    lineHeight = (44.sp / nameFontScale.coerceAtLeast(1f)).coerceAtLeast(30.sp)
                                 ),
                                 color = questInk.copy(alpha = 0.85f),
                                 textAlign = TextAlign.Start,

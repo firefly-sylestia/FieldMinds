@@ -1,3 +1,6 @@
+• Home and detail heroes now cast a hairline dark shadow right under their torn paper seams — the tear reads as a real paper edge lifted off the white sheet, in both light and dark themes.
+• Home's hero name now fills its space — the name reads at greeting size with tall leading, closing the gap above the Streak · Cabinet · Recent bar.
+• Fixed the detail page's popped-up back and more buttons showing a circular ripple glitch — they now use the same rippleless frost-and-shadow press as Home's sticky pills.
 • Restored the Shuffle hero to its focused single-category watermark and moved the scattered detail-style glyph pattern to the Home hero, with one larger spark as its only focal symbol.
 • Tuned Home's color balance: pastel mode is a touch more vibrant, while the default rosewood treatment is slightly calmer without changing its hue or readability.
 • Spin's hero card now echoes the page's muted glyph pattern with one oversized spark as its only focal symbol.
