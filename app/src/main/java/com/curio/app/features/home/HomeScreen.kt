@@ -1,13 +1,11 @@
 package com.curio.app.features.home
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,13 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,14 +45,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
@@ -83,11 +76,11 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioForwardArrow
 import com.curio.app.ui.components.CurioWatermarkBackdrop
+import com.curio.app.ui.components.SoftTornBottomShape
+import com.curio.app.ui.components.SoftTornSheetShape
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
-import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
 import kotlinx.coroutines.delay
@@ -102,23 +95,23 @@ import java.util.Calendar
  * Layout (top to bottom), tuned for 360×800 dp:
  *   1. **Minimal top bar** — only the avatar pill on the right; tapping
  *      it opens the Profile drawer menu.
- *   2. **Greeting hero** — large personalized greeting using the user's
- *      display name (e.g. "Good afternoon, Alex"). Subtitle row with a
- *      small streak badge if active.
- *   3. **Quest card** — a flatter, more legible hero card. When a category
- *      is selected it shows the chosen category's accent + CTA "Shuffle for
- *      $name". Otherwise it shows the wildcard + a "Shuffle" CTA. Re-uses
- *   4. **Stats strip** — four compact stat pills: Streak · Saved · Recent
- *      · Categories.
- *   5. **Categories chip row** — horizontally-scrollable color chips.
- *      Each chip shows the family color, category glyph, and label.
- *      Tapping sets the active category.
- *   6. **Saved** — bookmarked quotes + pinned topics (hidden when empty),
+ *   2. **Quest hero** — the detail screen's torn-banner language: a solid
+ *      brand-coral banner clipped by the same seeded soft tear with a
+ *      white under-sheet (the identical construction the EntryDetail hero
+ *      uses, so the tear style stays UNIFORM across the app — no blur).
+ *      The greeting sits inside the banner as its title (with the streak
+ *      badge), and the whole banner is the quest — tap it to shuffle the
+ *      wildcard deck.
+ *   3. **Stats strip** — three compact stat pills: Streak · Saved ·
+ *      Recent.
+ *   4. **Currently exploring / Queued** — the live session card and any
+ *      paused sessions set aside for later.
+ *   5. **Saved** — bookmarked quotes + pinned topics (hidden when empty),
  *      each row tappable through to its entry / topic.
- *   7. **Recents** — explored topics, unexplored topics (tagged
+ *   6. **Recents** — explored topics, unexplored topics (tagged
  *      "Unexplored"), and the latest saved entries in one list, or a
  *      beautiful empty-state card prompting the first spin.
- *   8. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
+ *   7. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
  *      card suggesting the user try a daily shuffle reminder, navigating to
  *      Settings.
  *
@@ -129,25 +122,19 @@ import java.util.Calendar
  *  bar, `vertical = 6dp` between sections — keeps the "no empty top"
  *  guarantee we established in Shuffle/TopicReveal.
  */
-/**
- * Saves Home's selected category chip by enum name. The wildcard "Surprise"
- * state is `null` and round-trips through an empty-string sentinel, so
- * rotating the device or navigating away/back keeps the chip selection.
- */
-private val CategorySaver = Saver<CurioCategory?, String>(
-    save = { it?.id?.name ?: "" },
-    restore = { name ->
-        name.takeIf { it.isNotEmpty() }
-            ?.let { n -> CategoryId.values().firstOrNull { it.name == n } }
-            ?.let { CurioCategories.byId(it) }
-    }
-)
+/** The quest hero's solid body height — the torn banner. Generous enough
+ *  that a two-line greeting + the quest CTA never clip at large font scales. */
+private val HomeQuestHeroHeight = 248.dp
+/** Extra layout space reserved for the white sheet below the torn banner. */
+private val HomeQuestSheetExtent = 24.dp
+/** Fixed tear seed — Home's tear never re-rolls and matches the detail
+ *  hero's SoftTorn construction exactly (uniform tear style). */
+private const val HOME_TEAR_SEED = 0x5EED
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
     val displayName = remember { AppPreferences.getDisplayName(context) }
-    var selectedCategory by rememberSaveable(stateSaver = CategorySaver) { mutableStateOf<CurioCategory?>(null) }
     // Saved-shelf unsave confirmation — set when the user taps the remove
     // bookmark on a saved quote row; the dialog confirms before removal.
     var pendingUnsave by remember { mutableStateOf<SavedQuote?>(null) }
@@ -194,11 +181,11 @@ fun HomeScreen(navController: NavController) {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             // ── Watermark backdrop — muted category glyphs behind all ──
-            //    content (same treatment as the Spin page). The selected
-            //    category's glyph gets a faint accent tint; "Surprise"
-            //    highlights the wildcard die.
+            //    content (same treatment as the Spin page). The quest is
+            //    always the wildcard Surprise now (no category chips), so
+            //    the wildcard die stays highlighted.
             CurioWatermarkBackdrop(
-                activeCat = selectedCategory ?: CurioCategories.byId(CategoryId.WILDCARD)
+                activeCat = CurioCategories.byId(CategoryId.WILDCARD)
             )
             Column(
                 modifier = Modifier
@@ -247,126 +234,125 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            // ── 2. Greeting hero ────────────────────────────────────────
-            Column(
+            // ── 2. Quest hero — the detail screen's torn-banner language:
+            // a SOLID brand-coral banner clipped by the same seeded SOFT
+            // tear (SoftTornBottomShape) with the same white under-sheet
+            // (SoftTornSheetShape — same seed, so the two torn edges align
+            // pixel-perfect), the identical construction the EntryDetail
+            // hero uses, so the tear style stays UNIFORM across the app.
+            // No blur, no gradient: flat color + a real torn seam, exactly
+            // like the detail hero. The seed is fixed, so Home's tear never
+            // re-rolls and reads the same on every visit. The greeting is
+            // the banner's title, and the whole banner is the quest — tap
+            // it to shuffle the wildcard deck.
+            val heroTornShape = remember(HOME_TEAR_SEED) { SoftTornBottomShape(HOME_TEAR_SEED) }
+            val sheetShape = remember(HOME_TEAR_SEED) {
+                SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp)
+            }
+            // The quest is always the wildcard Surprise now (the category
+            // chip row is gone) — brand coral, with pastel-aware ink.
+            val accent = CurioColors.CategoryCoral
+            val questInk = pastelFillInk(accent)
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 4.dp)
+                    .height(HomeQuestHeroHeight + HomeQuestSheetExtent)
             ) {
-                Text(
-                    text = greetingForNow(displayName),
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        lineHeight = 36.sp
-                    ),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                // ── White under-sheet — same as the detail hero's: the
+                // sheet's torn top hides behind the opaque banner while its
+                // uneven lip reads white below the tear, and the page wash
+                // starts right after it.
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(42.dp)
+                        .offset(y = HomeQuestHeroHeight - 18.dp)
+                        .clip(sheetShape)
+                        .background(Color(0xFFFDFCF9))
                 )
-                if (streakDays > 0) {
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text = "$streakDays-day streak",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = CurioColors.CoralBlush
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(12.dp))
-
-            // ── 3. Quest card ───────────────────────────────────────────
-            val chosen = selectedCategory
-            val isWildcard = chosen == null || chosen.id == CategoryId.WILDCARD
-            // Wildcard reuses the brand-primary coral, so a single elvis
-            // covers both the Surprise and named-category cases.
-            val accent = chosen?.themedAccent() ?: CurioColors.CategoryCoral
-            val questGradient = CurioGradients.cardGradient(accent)
-            // v7.5 — pastel mode lightens the gradient, so the quest content
-            // flips from white to a deep ink of the accent (or the brand
-            // maroon on the coral wildcard). White when pastel mode is off.
-            val questInk = pastelFillInk(accent)
-            Surface(
-                    onClick = {
-                        // Both quest branches go through the tab switch helper
-                        // (anchor = HOME, the persistent root): plain pushes
-                        // here used to pile up duplicate back-stack entries
-                        // when the same quest card was opened repeatedly.
-                        if (chosen == null || chosen.id == CategoryId.WILDCARD) {
-                            navController.navigateToTab(CurioRoutes.SPIN)
-                        } else {
-                            navController.navigateToTab(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
-                        }
-                    },
-                    shape = RoundedCornerShape(28.dp),
-                    color = Color.Transparent,
+                // ── Solid coral banner, torn bottom edge — tappable quest.
+                Surface(
+                    onClick = { navController.navigateToTab(CurioRoutes.SPIN) },
+                    shape = heroTornShape,
+                    color = accent,
                     shadowElevation = 0.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(168.dp)
+                        .height(HomeQuestHeroHeight)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // Solid gradient background
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    Brush.verticalGradient(questGradient),
-                                    RoundedCornerShape(28.dp)
-                                )
-                        )
-                        // Watermark glyph
+                        // Watermark glyph — the wildcard die, clipped by the tear.
                         CurioIcon(
-                            name = if (chosen != null) chosen.iconGlyph else CurioIcons.Casino,
+                            name = CurioIcons.Casino,
                             contentDescription = null,
-                            tint = questInk.copy(alpha = 0.20f),
+                            tint = questInk.copy(alpha = 0.18f),
                             size = 140.dp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
                                 .padding(end = 8.dp)
                         )
-                        // Content
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(20.dp),
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .width(3.dp)
-                                        .height(16.dp)
-                                        .background(questInk.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
-                                )
-                                Text(
-                                    text = "TODAY'S QUEST",
-                                    style = MaterialTheme.typography.labelSmall.copy(
-                                        fontWeight = FontWeight.ExtraBold,
-                                        letterSpacing = 1.2.sp
-                                    ),
-                                    color = questInk.copy(alpha = 0.88f)
-                                )
-                            }
+                            // Greeting — the banner's title, like the detail
+                            // hero's topic title.
                             Column {
-                                Spacer(Modifier.height(6.dp))
                                 Text(
-                                    text = chosen?.displayName ?: "Shuffle the deck",
-                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                                    text = greetingForNow(displayName),
+                                    style = MaterialTheme.typography.headlineMedium.copy(
+                                        fontWeight = FontWeight.ExtraBold
+                                    ),
                                     color = questInk,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
-
+                                if (streakDays > 0) {
+                                    Spacer(Modifier.height(2.dp))
+                                    Text(
+                                        text = "$streakDays-day streak",
+                                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                                        color = questInk.copy(alpha = 0.85f)
+                                    )
+                                }
                             }
+                            // Quest CTA — eyebrow + deck title + shuffle pill.
                             Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
+                                Column {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .width(3.dp)
+                                                .height(16.dp)
+                                                .background(questInk.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
+                                        )
+                                        Text(
+                                            text = "TODAY'S QUEST",
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontWeight = FontWeight.ExtraBold,
+                                                letterSpacing = 1.2.sp
+                                            ),
+                                            color = questInk.copy(alpha = 0.88f)
+                                        )
+                                    }
+                                    Spacer(Modifier.height(6.dp))
+                                    Text(
+                                        text = "Shuffle the deck",
+                                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                                        color = questInk,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                                 Surface(
                                     shape = RoundedCornerShape(50),
                                     color = questInk.copy(alpha = 0.18f)
@@ -382,21 +368,21 @@ fun HomeScreen(navController: NavController) {
                                             size = 16.dp
                                         )
                                         Text(
-                                            text = if (isWildcard) "Shuffle" else "Shuffle",
+                                            text = "Shuffle",
                                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                                             color = questInk
                                         )
                                     }
                                 }
-                                Spacer(Modifier.weight(1f))
                             }
                         }
                     }
                 }
+            }
 
             Spacer(Modifier.height(14.dp))
 
-            // ── 4. Stats strip — 3 compact pills ────────────────────────
+            // ── 3. Stats strip — 3 compact pills ────────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -428,7 +414,7 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(Modifier.height(20.dp))
 
-            // ── 4b. Currently exploring — live session card ────────────
+            // ── 4. Currently exploring — live session card ──────────────
             val activeSession = ExploreSessionStore.activeSessionState
             if (activeSession != null) {
                 CurrentlyExploringCard(
@@ -452,7 +438,7 @@ fun HomeScreen(navController: NavController) {
                 Spacer(Modifier.height(20.dp))
             }
 
-            // ── 4c. Queued explores — sessions set aside for later ────
+            // ── 5. Queued explores — sessions set aside for later ──────
             // When a new explore replaced the running one, the old session is
             // paused (time banked) and queued here. Tap a row to swap it back
             // into the active slot; the ✕ discards it.
@@ -494,80 +480,6 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
                 Spacer(Modifier.height(20.dp))
-            }
-
-            // ── 5. Categories chip row ──────────────────────────────────
-            Column {
-                Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        "Categories",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Surface(
-                        onClick = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
-                        shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
-                        shadowElevation = 0.dp
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Text(
-                                "All",
-                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)) {
-                                CurioForwardArrow(
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    size = 14.dp,
-                                    modifier = Modifier.padding(3.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-                Spacer(Modifier.height(10.dp))
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    // Surprise wildcard pinned first
-                    item(key = "wildcard") {
-                        CategoryChip(
-                            name = "Surprise",
-                            accent = CurioColors.CategoryCoral,
-                            selected = selectedCategory == null,
-                            surface = MaterialTheme.colorScheme.surfaceContainerLow,
-                            iconGlyph = CurioIcons.Casino,
-                            onClick = { selectedCategory = null }
-                        )
-                    }
-                    items(items = CurioCategories.visible, key = { it.id.name }) { cat ->
-                        if (cat.id != CategoryId.WILDCARD) {
-                            CategoryChip(
-                                name = cat.displayName,
-                                accent = cat.themedAccent(),
-                                selected = selectedCategory?.id == cat.id,
-                                surface = MaterialTheme.colorScheme.surfaceContainerLow,
-                                iconGlyph = cat.iconGlyph,
-                                onClick = {
-                                    selectedCategory =
-                                        if (selectedCategory?.id == cat.id) null else cat
-                                }
-                            )
-                        }
-                    }
-                }
             }
 
             Spacer(Modifier.height(20.dp))
@@ -786,65 +698,6 @@ private fun StatPill(
                 )
             }
         }
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// Category chip — text-only pill (matches the picker cards: no boxed icon)
-// ═══════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun CategoryChip(
-    name: String,
-    accent: Color,
-    selected: Boolean,
-    onClick: () -> Unit,
-    surface: Color = MaterialTheme.colorScheme.surfaceContainerLow,
-    // Optional Material-Symbols glyph rendered next to the label — a bare
-    // icon, NO boxed background behind it (just the glyph).
-    iconGlyph: String? = null
-) {
-    val scale by animateFloatAsState(
-        targetValue = if (selected) 1.06f else 1f,
-        animationSpec = CurioMotion.Springs.Snappy,
-        label = "catChipScale"
-    )
-    val inactiveContainer = lerp(surface, accent, 0.10f)
-    // Muted selected fill — same treatment as the picker cards: the raw
-    // accent is deepened just a touch toward black so it stays rich.
-    val selectedContainer = lerp(accent, Color.Black, 0.10f)
-    // v7.5 — pastel mode lightens the selected fill, so the chip content
-    // flips to a deep ink of the accent instead of white.
-    val selectedInk = pastelFillInk(accent)
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(22.dp),
-        color = if (selected) selectedContainer else inactiveContainer,
-        border = if (selected) null else BorderStroke(1.dp, accent.copy(alpha = 0.24f)),
-        shadowElevation = 0.dp,
-        modifier = Modifier.scale(scale)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (iconGlyph != null) {
-                CurioIcon(
-                    name = iconGlyph,
-                    contentDescription = null,
-                    modifier = Modifier.padding(end = 6.dp),
-                    tint = if (selected) selectedInk else MaterialTheme.colorScheme.onSurface,
-                    size = 18.dp
-                )
-            }
-            Text(
-                text = name,
-                style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.SemiBold
-                ),
-                color = if (selected) selectedInk else MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════

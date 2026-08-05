@@ -1,3 +1,5 @@
+• Home got the detail screen's torn-paper hero — the greeting and the quest now live on one solid brand-coral banner with the same seeded soft tear and white under-sheet as every entry's detail page (uniform tear style, no blur), and the whole banner shuffles the wildcard deck when you tap it
+• The category chip row is gone from Home — no more category picker clutter; the quest always shuffles the surprise deck (categories still live in Spin and the picker)
 • The detail hero's torn banner now visibly tilts on its own — every entry cants its paper at a stable per-entry angle while the title, the Date · Mood · Type card and the back / more controls stay level
 • The detail hero's Date · Mood · Type card is frostier — the banner's color now blooms through the glass in a gradient, bright white frost at the top fading to a soft color glow at the bottom
 • The detail hero's topic title is now proper frosty-glass lettering — ExtraBold geom with an icy gradient that catches light at the top of each glyph and deepens to the card's slate, lifted off the plate by a soft shadow

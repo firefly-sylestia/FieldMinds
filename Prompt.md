@@ -746,28 +746,18 @@ The 2x picker was only setting `densityExtraCompact` when the device's physical 
 
 ## Latest Request (COMPLETED)
 
-**Hero tear tilt (tear only) + frostier Date/Mood/Type card + CI compile fix**
+**Home redesign — detail-screen torn hero + remove category chips**
 
-User reported three things: (1) the tear should tilt but didn't visibly, and the tilt must NOT apply to the Date/Mood/Type card or the title; (2) make the Date/Mood/Type card "a little more frosty with the background color like gradient style beautiful"; (3) fix a CI compile failure.
+User wants Home to look like the detail screen (the tear style), remove the "multiple category option" (the category chip row) from Home, NO blur for now, and the tearing style must be UNIFORM with the detail hero.
 
-### CI failure root cause
+### What changed (HomeScreen.kt)
 
-`heroFrostPlate` was declared as a PLAIN top-level function (`private fun heroFrostPlate(ink, shape): Modifier = Modifier.clip(...)`) but called with extension syntax (`Modifier.heroFrostPlate(...)`) at 3 call sites → `Unresolved reference 'heroFrostPlate'`. Landed in the unify commit, carried into the lettering one. Fixed by declaring it a real extension: `private fun Modifier.heroFrostPlate(ink: Color, shape: Shape): Modifier = clip(shape).background(heroFrostGradient).border(...)`. All 3 call sites resolve.
-
-### Tear-only tilt
-
-- `heroTilt` widened from ±1.2° to ±2.5° (seeded per entry id, still stable across reopens) so the cant actually reads.
-- The banner was restructured: the outer banner Box no longer rotates. A new "tilted tear layer" Box wraps ONLY the white under-sheet + the torn hero backdrop (with HeroSymbolScatter), sized `height(hero + sheet + 36dp).offset(y = -18.dp).rotate(heroTilt)` and centered on the band. The content Box (glyph + title + frosted card) and the back/more buttons Row stay as LEVEL siblings on top, so only the torn paper cants while the title and card stay straight.
-- Geometry: top of the tilted layer is clipped by the scroll container at y=0 (top edge renders flat, no visual loss); the torn bottom edge cants visibly; sheet lip max ~395 stays clear of meta chips (~432) and watermark clearance (410).
-
-### Frostier Date/Mood/Type card
-
-- Blurred color pane raised 0.08 → 0.24 alpha (heroStart, blur 18dp) — the card visibly glows with its banner color.
-- White overlay is now a 3-stop vertical gradient: 0.95 → 0.84 → 0.68 alpha, so bright frosted glass at the top lets the category color bloom through toward the bottom (reviewer tuning: bottom softened from 0.62 to 0.68 to stay "a little more frosty"). Deep-slate content stays legible on the blended bottom.
-- `heroFrostGradient` KDoc updated: title plate + buttons stay near-opaque white for control legibility; the card is the colored showpiece of the family.
+- **Quest hero = torn banner**: merged the separate greeting hero + rounded quest card into ONE banner using the EXACT EntryDetail construction for uniform tear style: `remember(HOME_TEAR_SEED) { SoftTornBottomShape(HOME_TEAR_SEED) }` + `remember(HOME_TEAR_SEED) { SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp) }`, the same white under-sheet (42dp, `offset(y = HomeQuestHeroHeight - 18.dp)`, `Color(0xFFFDFCF9)`), and a tappable `Surface(shape = heroTornShape, color = CurioColors.CategoryCoral)` → `navigateToTab(SPIN)`. No blur, no gradient — flat coral + real torn seam, like the detail hero. Greeting (headlineMedium ExtraBold, questInk) + streak line sit inside as the banner title; TODAY'S QUEST eyebrow + "Shuffle the deck" + shuffle pill at the bottom. `HOME_TEAR_SEED = 0x5EED` fixed → never re-rolls. `HomeQuestHeroHeight = 248.dp` (generous for 2-line greeting at large font scales), `HomeQuestSheetExtent = 24.dp`.
+- **Category option removed**: the Categories header + All button + LazyRow of Surprise/category chips, the `CategoryChip` composable, `selectedCategory` state + `CategorySaver` all deleted. The quest is now always the wildcard (coral); watermark backdrop fixed to WILDCARD. Categories still live in Spin and the Picker — only Home's chip row is gone.
+- Imports: removed animateFloatAsState, LazyRow, foundation.lazy.items, PaddingValues, Saver, rememberSaveable, scale, Brush, CurioGradients, CurioMotion; added foundation.layout.offset + SoftTornBottomShape + SoftTornSheetShape. Updated the file KDoc + section numbering (1-8).
 
 ### Validation
 
-- `scripts/check_braces.py` passed; `git diff --check` passed.
-- Reviewer confirmed the extension fix resolves all call sites, brace structure is correct, and the visible outcome (flat top, canted tear, level content) matches the ask.
+- `scripts/check_braces.py` passed; `git diff --check` passed; no leftover references to any removed symbol.
+- Reviewer confirmed: tear construction mirrors the detail hero exactly, imports all still used, Surface(onClick, torn generic shape) ripple is valid, content fits 248dp, and all four user requirements are met. Optional future: extract a shared TornBanner composable — deferred (minimal-change).
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
