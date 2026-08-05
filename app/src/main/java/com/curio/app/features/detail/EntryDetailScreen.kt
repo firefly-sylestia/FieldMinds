@@ -12,6 +12,9 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -218,6 +221,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
     // v5.8 — saveable so rotation doesn't close the menu/dialog unexpectedly.
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
     var deleteDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var heroControlsVisible by remember(resolvedEntry.id) { mutableStateOf(false) }
+    LaunchedEffect(resolvedEntry.id) {
+        heroControlsVisible = true
+    }
+    val heroControlsProgress by animateFloatAsState(
+        targetValue = if (heroControlsVisible) 1f else 0f,
+        animationSpec = tween(320, delayMillis = 70, easing = FastOutSlowInEasing),
+        label = "heroControlsEntrance"
+    )
 
     Box(
         modifier = Modifier
@@ -530,7 +542,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, top = 72.dp),
+                    .padding(start = 16.dp, end = 16.dp, top = 72.dp)
+                    .graphicsLayer {
+                        val eased = heroControlsProgress
+                        alpha = eased
+                        scaleX = 0.96f + (0.04f * eased)
+                        scaleY = 0.96f + (0.04f * eased)
+                        translationY = 6.dp.toPx() * (1f - eased)
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

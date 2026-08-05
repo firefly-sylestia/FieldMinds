@@ -1,10 +1,6 @@
 package com.curio.app.features.home
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -666,49 +661,18 @@ fun HomeScreen(navController: NavController) {
             // ── Sticky top bar — menu + profile pills ─────────────────
             // Pinned OUTSIDE the scroll content so they stay on screen.
             // Resting on the hero they read as translucent hero-ink pills;
-            // as the hero scrolls away they POP out into floating frosted
-            // pills (spring scale + frost morph + shadow), and they glide
-            // back into the hero smoothly when you scroll up.
+            // as the hero scrolls away they continuously fade into floating
+            // frosted pills. The scale is tied directly to the same eased
+            // progress, so there is no post-pop bounce or rotation wobble.
             val stickyThresholdPx = with(LocalDensity.current) { StickyBarThreshold.toPx() }
             val stickyProgress by remember {
                 derivedStateOf { (homeScroll.value / stickyThresholdPx).coerceIn(0f, 1f) }
             }
-            // Hysteresis — the pop engages once past the threshold and only
-            // releases after scrolling well back, so a fling that oscillates
-            // around the boundary can't re-trigger the pop repeatedly. The
-            // engaged flag is derived state (not a scroll-keyed effect), so
-            // the pop only fires on actual crossings.
-            var stickyEngaged by remember { mutableStateOf(false) }
-            LaunchedEffect(Unit) {
-                snapshotFlow { stickyProgress }.collect { p ->
-                    if (p >= 1f) stickyEngaged = true
-                    else if (p <= 0.6f) stickyEngaged = false
-                }
-            }
-            // Sweet pop — a quick anticipation dip, then a springy overshoot
-            // that settles at rest (never a hard snap); a gentle rotation
-            // wobble rides the pop so the pills flick into place. On the way
-            // back everything eases to the hero state.
-            val popScale = remember { Animatable(1f) }
-            val popRotate = remember { Animatable(0f) }
-            LaunchedEffect(stickyEngaged) {
-                if (stickyEngaged) {
-                    // Anticipation dip → lively overshoot → settle.
-                    popScale.animateTo(0.90f, tween(90, easing = FastOutSlowInEasing))
-                    popScale.animateTo(1.08f, spring(dampingRatio = 0.45f, stiffness = Spring.StiffnessMedium))
-                    popScale.animateTo(1f, spring(dampingRatio = 0.60f, stiffness = Spring.StiffnessLow))
-                    // Wobble — tilts out, overshoots back, rights itself.
-                    popRotate.animateTo(-3.5f, tween(110, easing = FastOutSlowInEasing))
-                    popRotate.animateTo(2.2f, tween(150, easing = FastOutSlowInEasing))
-                    popRotate.animateTo(0f, spring(dampingRatio = 0.55f, stiffness = Spring.StiffnessMediumLow))
-                } else {
-                    popScale.animateTo(1f, spring(dampingRatio = 0.80f, stiffness = Spring.StiffnessLow))
-                    popRotate.animateTo(0f, spring(dampingRatio = 0.80f, stiffness = Spring.StiffnessLow))
-                }
-            }
-            // Eased frost shift — smoothstep so the glass morph accelerates
-            // in and decelerates out instead of sliding linearly with scroll.
-            val frostShift = stickyProgress * stickyProgress * (3f - 2f * stickyProgress)
+            // One scroll-linked clock drives color, scale, lift and shadow.
+            // FastOutSlowIn gives the fade a gentle start and finish while
+            // keeping it perfectly scrubable with the user's finger.
+            val frostShift = FastOutSlowInEasing.transform(stickyProgress)
+            val pillScale = androidx.compose.ui.util.lerp(0.97f, 1f, frostShift)
             val stickyDark = isCurioDarkTheme()
             // Re-resolve the hero ink here — the original questInk lives in
             // the scroll Column's scope; the sticky bar is OUTSIDE it.
@@ -726,9 +690,8 @@ fun HomeScreen(navController: NavController) {
                     .statusBarsPadding()
                     .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                     .graphicsLayer {
-                        scaleX = popScale.value
-                        scaleY = popScale.value
-                        rotationZ = popRotate.value
+                        scaleX = pillScale
+                        scaleY = pillScale
                         // Lifts off the hero as the frost deepens (eased).
                         translationY = -2.dp.toPx() * frostShift
                     },
