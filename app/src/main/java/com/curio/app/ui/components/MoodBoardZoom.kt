@@ -30,7 +30,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,8 +62,6 @@ import kotlin.math.PI
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -178,9 +175,6 @@ fun rememberMoodBoardZoomState(): MoodBoardZoomState = remember { MoodBoardZoomS
 private fun moodBoardZoomSpec(closing: Boolean): FiniteAnimationSpec<Float> =
     if (closing) tween(durationMillis = 170, easing = FastOutSlowInEasing)
     else spring(dampingRatio = 0.8f, stiffness = 320f)
-
-/** Double-tap window for the magnified image's tap classification (ms). */
-private const val DoubleTapTimeoutMs = 300L
 
 /** Decode cap for board tiles (~3-4x their on-screen size). */
 private const val MoodBoardTileDecodePx = 1024
@@ -298,9 +292,14 @@ fun MoodBoardTiles(
  * v7.36 — a SINGLE gesture detector owns the overlay: pinch/pan refine the
  * image and taps are classified on the same stream, so a pinch begun right
  * after a double-tap is never eaten (the old two-detector design desynced
- * once the image's tap detector consumed events). A double-tap on the
- * magnified image adds ONE MORE zoom step when un-refined (so you never
- * need to pinch), or resets the refinement when pinched.
+ * once the image's tap detector consumed events).
+ *
+ * v7.38 — SIMPLE, IMMEDIATE TAP SEMANTICS: a clean tap closes the overlay
+ * (gliding back to the tile) when the image is at its base zoom, or springs
+ * the pinch/pan back to base and stays open when refined. Double-tap closes
+ * too — the first tap already starts the close, so there is no timing
+ * window and nothing waits: no 300ms pending action, no "double-tap zooms
+ * in instead of closing" surprise, no spring racing a follow-up pinch.
  *
  * [tileX]/[tileY] are the tile's top-left in VIEWPORT pixels (board offset
  * already applied), [widthPx]/[heightPx] its size, [viewW]/[viewH] the
@@ -320,13 +319,6 @@ fun MoodBoardZoomOverlay(
 ) {
     if (zoomState.zoomedUri == null) return
     val density = LocalDensity.current
-    // Composition-scoped coroutine for the delayed single-tap action. In the
-    // current Compose the pointerInput block's PointerInputScope is no longer
-    // a CoroutineScope, so a bare launch inside awaitEachGesture can't
-    // resolve — this scope (cancelled when the overlay leaves composition)
-    // is the reliable place to schedule it.
-    val overlayScope = rememberCoroutineScope()
-
     // ── Arc glide clock — ONE shared clock drives scale + pan in phase so
     // the image swoops from its resting spot to the centered target, and
     // back on close. Plain float states (the arc writes them per-frame).
@@ -377,25 +369,6 @@ fun MoodBoardZoomOverlay(
                 resetY.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = 260f)) {
                     pinchY = this.value
                 }
-            }
-        }
-    }
-
-    // v7.36 — double-tap on the magnified image adds ONE MORE zoom step
-    // (when un-refined) instead of closing: the pinch scale springs up ×1.5,
-    // capped so the total magnification never exceeds the 8x pinch limit.
-    // A later double-tap while refined resets, exactly like the pinch's own
-    // reset above.
-    var zoomStepTick by remember { mutableIntStateOf(0) }
-    val stepScale = remember { Animatable(1f) }
-    LaunchedEffect(zoomStepTick) {
-        if (zoomStepTick == 0) return@LaunchedEffect
-        stepScale.snapTo(pinchScale)
-        val maxPinch = (8f / glideScale.coerceAtLeast(1f)).coerceAtLeast(1f)
-        val target = (pinchScale * 1.5f).coerceAtMost(maxPinch)
-        if (target > pinchScale + 0.01f) {
-            stepScale.animateTo(target, spring(dampingRatio = 0.7f, stiffness = 260f)) {
-                pinchScale = this.value
             }
         }
     }
@@ -476,45 +449,48 @@ fun MoodBoardZoomOverlay(
     // skipped consumed downs, so a pinch/drag begun right after a double-tap
     // could be eaten and never refine the image.) With a single detector
     // every down is seen regardless of consumption:
-    //  - movement / multi-touch → pinch-to-zoom + one-finger pan,
-    //  - clean taps → a single tap resets a refinement or closes; a
-    //    double-tap adds one more zoom step when un-refined (you never NEED
-    //    to pinch), or resets when refined.
+    //  - movement / multi-touch → pinch-to-zoom + one-finger pan (a small
+    //    tolerance keeps micro-movements from being misread as taps),
+    //  - clean taps → close when at the base zoom; spring back to base and
+    //    stay open when pinched/panned. Double-tap closes too (instantly,
+    //    no timing window).
     // Tapping anywhere on the overlay closes — no dark scrim, no page.
     Box(
         modifier = modifier
             .fillMaxSize()
             .zIndex(1000f)
             .pointerInput(tileUri) {
-                // The gesture code runs inside awaitEachGesture's block,
-                // whose receiver is NOT a CoroutineScope (and in this Compose
-                // PointerInputScope isn't one either), so the delayed
-                // single-tap action is scheduled on the composition-scoped
-                // [overlayScope] captured above instead of a bare launch.
-                // Per-pointerInput locals (survive across gestures, reset on
-                // tile change): the last tap's down time for the double-tap
-                // window, and the pending single-tap action.
-                var lastTapDownUptime = 0L
-                var pendingTap: Job? = null
                 awaitEachGesture {
-                    val down = awaitFirstDown(requireUnconsumed = false)
-                    // A new gesture starts: cancel any pending single-tap
-                    // action so a drag/pinch begun right after a tap never
-                    // fires the delayed close.
-                    pendingTap?.cancel()
-                    pendingTap = null
+                    awaitFirstDown(requireUnconsumed = false)
                     var hasMovement = false
                     var gestureZoom = 1f
                     var gesturePan = Offset.Zero
+                    // Cumulative pan since the down — a SLOW one-finger drag
+                    // moves only a fraction of a pixel per event, so a
+                    // per-event threshold would never trip and the drag would
+                    // read as a tap (and close the image on release). Every
+                    // delta is accumulated; the tolerance gates only the
+                    // tap-vs-movement classification, never the pan itself.
+                    var totalPan = Offset.Zero
                     while (true) {
                         val event = awaitPointerEvent()
                         if (event.changes.size > 1) hasMovement = true
                         val zoomChange = event.calculateZoom()
                         val panChange = event.calculatePan()
-                        if (zoomChange != 1f || panChange != Offset.Zero) {
+                        gestureZoom *= zoomChange
+                        gesturePan += panChange
+                        totalPan += panChange
+                        // Tolerance instead of exact-float equality: a gentle
+                        // pinch/drag can move sub-pixel per event, and exact
+                        // equality let those micro-movements read as taps
+                        // (the image then "didn't zoom" — a close fired
+                        // while the user was pinching). Cumulative pan of a
+                        // few px (or any real zoom change / second finger)
+                        // marks the gesture as movement.
+                        if (kotlin.math.abs(zoomChange - 1f) > 0.02f ||
+                            totalPan.getDistance() > 4f
+                        ) {
                             hasMovement = true
-                            gestureZoom *= zoomChange
-                            gesturePan += panChange
                         }
                         // Consume ONLY pan/zoom movement; clean taps stay
                         // unconsumed (nothing else needs them anymore — this
@@ -536,31 +512,21 @@ fun MoodBoardZoomOverlay(
                         pinchX = (pinchX + gesturePan.x).coerceIn(-maxPanX, maxPanX)
                         pinchY = (pinchY + gesturePan.y).coerceIn(-maxPanY, maxPanY)
                     } else {
-                        // A clean tap. Within the double-tap window of the
-                        // previous tap → double-tap: one more zoom step when
-                        // un-refined, else reset. Otherwise schedule the
-                        // single-tap action (reset refinement or close) AFTER
-                        // the window so a quick second tap can upgrade it to
-                        // a double-tap first.
-                        pendingTap?.cancel()
-                        pendingTap = null
-                        val now = down.uptimeMillis
-                        val isDouble = now - lastTapDownUptime < DoubleTapTimeoutMs
-                        lastTapDownUptime = now
-                        val refined = pinchScale > 1.01f || pinchX != 0f || pinchY != 0f
-                        if (isDouble) {
-                            if (refined) resetTick++ else zoomStepTick++
+                        // A clean tap (no movement). When the image is
+                        // pinched/panned, spring back to the base zoom and
+                        // STAY open; otherwise close, gliding back to the
+                        // tile. Double-tap closes too — the first tap already
+                        // starts the close, so there is no timing window to
+                        // wait out and no delayed action (the old 300ms
+                        // pending-tap felt laggy, and its "double-tap zooms
+                        // in" spring raced the user's next pinch).
+                        if (zoomState.closing) {
+                            // Second tap of a double-tap-close: the close
+                            // glide is already folding the pinch back — do
+                            // nothing (never start a reset spring mid-close).
                         } else {
-                            pendingTap = overlayScope.launch {
-                                delay(DoubleTapTimeoutMs)
-                                // Re-read the LIVE refinement state — the
-                                // image may have been pinched while waiting.
-                                if (pinchScale > 1.01f || pinchX != 0f || pinchY != 0f) {
-                                    resetTick++
-                                } else {
-                                    zoomState.zoomOut()
-                                }
-                            }
+                            val refined = pinchScale > 1.01f || pinchX != 0f || pinchY != 0f
+                            if (refined) resetTick++ else zoomState.zoomOut()
                         }
                     }
                 }
@@ -577,10 +543,10 @@ fun MoodBoardZoomOverlay(
         // graphicsLayer (no layout offset): translationX/Y directly ARE the
         // image's top-left in viewport pixels, so at scale 1 with the
         // resting (tileX, tileY) it sits exactly on its tile. Taps are
-        // classified by the ROOT detector above (single tap closes/resets,
-        // double-tap zooms in a step) — the image itself carries NO gesture
-        // handler, so a pinch begun right after a double-tap is never eaten
-        // by a competing detector.
+        // classified by the ROOT detector above (single tap closes / springs
+        // back when refined; double-tap closes instantly) — the image itself
+        // carries NO gesture handler, so a pinch begun right after a
+        // double-tap is never eaten by a competing detector.
         Box(
             modifier = Modifier
                 .graphicsLayer {
