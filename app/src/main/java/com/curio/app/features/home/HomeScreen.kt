@@ -480,7 +480,12 @@ fun HomeScreen(navController: NavController) {
                                         ExploreReminderScheduler.schedule(
                                             context, resumed.startMillis, resumed.durationMinutes
                                         )
-                                        ExploreSessionService.start(context, resumed)
+                                        // Same gate as every other re-arm: the
+                                        // service only runs when a notification
+                                        // or the bubble wants it.
+                                        if (AppPreferences.exploreServiceShouldRun(context)) {
+                                            ExploreSessionService.start(context, resumed)
+                                        }
                                     }
                                 },
                                 onDiscard = { ExploreSessionStore.removeQueued(context, index) }

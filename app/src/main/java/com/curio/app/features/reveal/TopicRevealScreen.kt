@@ -742,8 +742,16 @@ fun TopicRevealScreen(
             AlertDialog(
                 onDismissRequest = {
                     showConflictDialog = false
+                    val s = pendingConflictSession
                     pendingConflictSession = null
                     conflictActiveSession = null
+                    if (s != null) {
+                        // Backed out of the new explore without starting it —
+                        // record it as recently-unexplored (like any other
+                        // back-out) and drop the premature explored record.
+                        ExploreSessionStore.recordUnexplored(context, s.categoryId, s.topicName)
+                        ExploreSessionStore.removeExplored(context, s.categoryId, s.topicName)
+                    }
                 },
                 title = { Text("Already exploring ${old.topicName}?") },
                 text = {
@@ -774,7 +782,7 @@ fun TopicRevealScreen(
                             ExploreSessionStore.queueActiveSession(context)
                             beginExploreSession(s)
                         }
-                    }) { Text("Explore now") }
+                    }) { Text("Start new explore") }
                 },
                 dismissButton = {
                     TextButton(onClick = {

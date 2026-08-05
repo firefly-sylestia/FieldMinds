@@ -169,7 +169,12 @@ object ExploreSessionStore {
     // paused (time banked) and queued here instead of silently discarded.
     // Home lists them so the user can swap back anytime.
 
-    /** Pauses the active session (time banked) and queues it for later. */
+    /**
+     * Pauses the active session (time banked), queues it for later, and
+     * vacates the active slot — the caller starts the replacement session
+     * immediately. (Without the clear, the session would live BOTH active
+     * and queued until the caller's startSession overwrote it.)
+     */
     fun queueActiveSession(context: Context) {
         val current = activeSessionState ?: return
         val paused = current.copy(
@@ -177,6 +182,7 @@ object ExploreSessionStore {
             pausedAtMillis = current.pausedAtMillis ?: System.currentTimeMillis()
         )
         saveQueued(context, (listOf(paused) + readQueued(context)).take(MAX_QUEUED))
+        clearSession(context)
     }
 
     /** Removes one queued session (discarded — its banked time is lost). */

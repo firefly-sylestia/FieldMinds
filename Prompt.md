@@ -2,6 +2,42 @@
 
 ## Latest Request (COMPLETED)
 
+**Conflict dialog when starting a new explore mid-session + queued sessions**
+
+### What was requested
+
+Starting a new explore while another session is running silently discarded
+the old one. Add a dialog: "Save for later" pins the new topic (current
+session keeps running); "Explore now"/"Start new explore" queues the
+current session and starts the new one.
+
+### What changed
+
+- `ExploreSessionStore` gained a persisted queued-sessions list (cap 3,
+  JSON in prefs, reactive `queuedSessionsState` seeded at startup):
+  `queueActiveSession` (pauses + banks time + vacates the active slot),
+  `removeQueued`, `clearQueued`, `resumeQueuedSession` (removes target
+  FIRST, pause-banks the current session into the queue, activates the
+  resumed one and banks its paused span).
+- `TopicRevealScreen.startExploreSession` now checks for an active session
+  (different topic) and shows the conflict dialog before starting. Decline
+  records the new topic as recently-unexplored; Save-for-later pins it;
+  confirm queues the running session (reminder cancelled) and starts the
+  new one via the extracted `beginExploreSession`.
+- `HomeScreen` gained a "Queued explores" section (tap to resume — swap,
+  cancel reminder, re-arm reminder + service gated on
+  `exploreServiceShouldRun`; ✕ discards).
+- `AppPreferences.setExploreSessionsEnabled(false)` clears the queue too.
+
+### Validation
+
+- `scripts/check_braces.py` passed for all changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Cabinet Legacy chip ordering/visibility + bottom nav category tint**
 
 ### What was requested

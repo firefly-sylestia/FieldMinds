@@ -1,3 +1,4 @@
+• Starting a new explore while another session is running now asks first — save the new topic for later, or queue the running session (paused, resumable from Home) and start the new one
 • Cabinet polish: the Legacy chip now sits last in the filter row and only appears when there are restored FieldMind records, and the bottom nav bar now blends with the active category's page background
 • Fixed the floating explore bubble vanishing after clearing app data — it now retries its overlay window on every new explore session instead of staying silently disabled after one failed attach
 • FieldMind restores now carry an explicit persisted legacy marker, so restored records stay separated from native Curio captures even if display metadata changes
