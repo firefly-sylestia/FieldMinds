@@ -768,3 +768,20 @@ User: (1) disliked the title's gradient font style — change it; (2) doesn't wa
 - `scripts/check_braces.py` passed (both files); `git diff --check` passed; import-usage audit clean; no leftover references to expandedUri/expanded/FullScreenImageViewer/Shadow(/Stroke(.
 - Reviewer confirmed all four requirements met; its pan-clamp suggestion was applied.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+---
+
+## Home hero redesign (streak stat bar)
+
+### Changes
+
+- The coral quest banner now runs to the very top BEHIND the status bar: the outer banner Box lost its top padding and the content Column uses `.statusBarsPadding()` + `padding(top = 64.dp)`. The menu + profile pills were moved INSIDE the banner as a translucent top-bar overlay Row (align TopCenter, statusBarsPadding, 42dp circular pills), sitting on the coral.
+- Removed the greeting's "N-day streak" badge (duplicate) — the streak now lives only in the hero stat bar. Removed the old 3-pill stats strip below the hero and the dead `StatPill` composable.
+- New Streak · Cabinet · Recent bar inside the hero: a translucent surface (questInk 14%) with hairline rim, three `HeroStatSegment`s (icon/value/label, mirroring EntryDetail's FrostedSegment) split by 34dp VerticalDividers. Streak icon is `local_fire_department` tinted the new `CurioColors.FireOrange` (0xFFFF8A00, vivid fire orange) to pop on coral; Cabinet = Inventory2/Sage; Recent = History/Lilac.
+- Added `HeroStatSegment(glyph, value, label, tint, ink, modifier)` to HomeScreen.kt; added `FireOrange` to CurioColors.kt.
+
+### Validation
+
+- `scripts/check_braces.py` passed (HomeScreen.kt + CurioColors.kt); `git diff --check` passed; no leftover StatPill references; all icon constants and in-scope values verified.
+- Reviewer spawn hit transient tool errors; change is small and locally validated.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

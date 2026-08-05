@@ -71,6 +71,9 @@ object CurioColors {
     val Peach            = Color(0xFFFFB585)  // legacy soft orange
     val Teal             = Color(0xFF6FC7BE)  // legacy soft teal
 
+    /** Vivid fire orange — the streak accent (flame icon) on coral heroes. */
+    val FireOrange       = Color(0xFFFF8A00)
+
     /** Tinted (20% alpha) versions of the legacy accents for backgrounds. */
     val LilacTint     = Lilac.copy(alpha = 0.20f)
     val DustyBlueTint = DustyBlue.copy(alpha = 0.20f)
