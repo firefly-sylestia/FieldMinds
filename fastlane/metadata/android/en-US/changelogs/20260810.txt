@@ -1,3 +1,4 @@
+• Restored the Shuffle hero to its focused single-category watermark and moved the scattered detail-style glyph pattern to the Home hero, with one larger spark as its only focal symbol.
 • Tuned Home's color balance: pastel mode is a touch more vibrant, while the default rosewood treatment is slightly calmer without changing its hue or readability.
 • Spin's hero card now echoes the page's muted glyph pattern with one oversized spark as its only focal symbol.
 • Slightly shortened the detail-page hero card while keeping its torn seam, under-sheet, content alignment, and backdrop clearance synchronized.

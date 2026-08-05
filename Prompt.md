@@ -2,23 +2,21 @@
 
 ## Latest Request (COMPLETED)
 
-**Tune the Home screen color balance**
+**Restore the Spin hero icon and move the glyph-pattern treatment to the Home hero**
 
-### What was requested
+### Corrected scope
 
-Make the Home screen's pastel color a little more vibrant, while making the default/non-pastel Home color a little less vibrant.
-
-### Changes made
-
-- `HomeScreen.kt`: kept the Home palette centralized in `homeRoseAccent()` so the hero, Today's Quest shuffle card, sticky pills, empty state, and drawer stay consistent.
-- Pastel light mode now uses a modest saturation lift (`base.s * 0.90`, capped at `0.80`) while keeping the existing pink hue shift and lightness.
-- Pastel dark mode remains unchanged so the muted deep treatment stays readable on midnight surfaces.
-- Non-pastel mode now reduces saturation to `base.s * 0.85` while preserving the rosewood hue and lightness, making the default treatment calmer rather than brown-heavy.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the Home color balance polish.
+- Material palette and card gradients were intentionally left unchanged.
+- The Spin/Shuffle hero returned to its previous single category-icon watermark.
+- The top Home hero now uses a detail-style scattered glyph watermark pattern with one larger `AutoAwesome` spark as the only focal symbol.
+- The Home stat pane's extra sparkle watermark was removed so the hero does not have competing focal symbols.
+- Home pattern glyphs use their category ink where the glyph maps to a known category and the Home hero ink as a fallback.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `HomeScreen.kt`.
+- `scripts/check_braces.py` passed for `HomeScreen.kt` and `SpinScreen.kt`.
 - `git diff --check` passed.
-- Code review found no actionable issues; the adjustment is scoped to Home and preserves dark-mode pastel behavior and existing ink contrast.
+- Confirmed the Spin pattern helper and pattern list are removed and only the single `cat.iconGlyph` watermark remains.
+- Code review confirmed the requested screen ownership and found no remaining actionable issues.
 - Gradle/build/lint/test commands were not run locally because the repository explicitly forbids Android compilation in this environment; CI remains the compilation gate.
+- Updated `fastlane/metadata/android/en-US/changelogs/20260810.txt`.

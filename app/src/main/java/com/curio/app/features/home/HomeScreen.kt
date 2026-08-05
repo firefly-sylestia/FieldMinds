@@ -156,6 +156,14 @@ private val StickyBarThreshold = 90.dp
  *  hero's SoftTorn construction exactly (uniform tear style). */
 private const val HOME_TEAR_SEED = 0x5EED
 
+private data class HomeHeroGlyph(
+    val glyph: String,
+    val alignment: Alignment,
+    val size: Dp,
+    val rotation: Float,
+    val alpha: Float
+)
+
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
@@ -281,16 +289,40 @@ fun HomeScreen(navController: NavController) {
                         .height(HomeQuestHeroHeight)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // Watermark glyph — sparkles, clipped by the tear
-                        // (a different glyph from the wildcard die).
+                        // Detail-style watermark collage: quiet category glyphs
+                        // sit around the hero edges while the copy stays clear.
+                        // Keep one larger spark as the only focal watermark.
+                        val heroPattern = listOf(
+                            HomeHeroGlyph(CurioIcons.Person, Alignment.TopStart, 54.dp, -12f, 0.095f),
+                            HomeHeroGlyph(CurioIcons.Album, Alignment.TopEnd, 44.dp, 10f, 0.070f),
+                            HomeHeroGlyph(CurioIcons.MenuBook, Alignment.CenterStart, 46.dp, 8f, 0.070f),
+                            HomeHeroGlyph("brush", Alignment.BottomStart, 56.dp, -6f, 0.085f),
+                            HomeHeroGlyph(CurioIcons.Science, Alignment.BottomEnd, 58.dp, -12f, 0.080f)
+                        )
+                        heroPattern.forEach { pattern ->
+                            val patternInk = CurioCategories.all
+                                .firstOrNull { it.iconGlyph == pattern.glyph }
+                                ?.categoryInk()
+                                ?: questInk
+                            CurioIcon(
+                                name = pattern.glyph,
+                                contentDescription = null,
+                                tint = patternInk.copy(alpha = pattern.alpha),
+                                size = pattern.size,
+                                modifier = Modifier
+                                    .align(pattern.alignment)
+                                    .padding(10.dp)
+                                    .graphicsLayer { rotationZ = pattern.rotation }
+                            )
+                        }
                         CurioIcon(
                             name = CurioIcons.AutoAwesome,
                             contentDescription = null,
-                            tint = questInk.copy(alpha = 0.16f),
-                            size = 140.dp,
+                            tint = questInk.copy(alpha = 0.14f),
+                            size = 176.dp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
-                                .padding(end = 8.dp)
+                                .padding(end = 2.dp)
                         )
                         Column(
                             modifier = Modifier
@@ -354,25 +386,6 @@ fun HomeScreen(navController: NavController) {
                                         RoundedCornerShape(20.dp)
                                     )
                                 ) {
-                                    // Watermark sparkle — echoes the hero's
-                                    // glyph, a faint ink ghost on the right.
-                                    // The wrapper Box uses matchParentSize() so
-                                    // the glyph can never inflate the pane: a
-                                    // wrap-content Box would otherwise size to
-                                    // its tallest child and grow the stat card
-                                    // away from the tear.
-                                    Box(
-                                        modifier = Modifier.matchParentSize(),
-                                        contentAlignment = Alignment.CenterEnd
-                                    ) {
-                                        CurioIcon(
-                                            name = CurioIcons.AutoAwesome,
-                                            contentDescription = null,
-                                            tint = questInk.copy(alpha = 0.08f),
-                                            size = 76.dp,
-                                            modifier = Modifier.padding(end = 6.dp)
-                                        )
-                                    }
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
