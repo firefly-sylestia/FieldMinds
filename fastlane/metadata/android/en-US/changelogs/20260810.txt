@@ -1,3 +1,5 @@
+• The detail hero's torn banner now visibly tilts on its own — every entry cants its paper at a stable per-entry angle while the title, the Date · Mood · Type card and the back / more controls stay level
+• The detail hero's Date · Mood · Type card is frostier — the banner's color now blooms through the glass in a gradient, bright white frost at the top fading to a soft color glow at the bottom
 • The detail hero's topic title is now proper frosty-glass lettering — ExtraBold geom with an icy gradient that catches light at the top of each glyph and deepens to the card's slate, lifted off the plate by a soft shadow
 • Paper-style chips (Coffee / Folded / Red Margin / Color) no longer vanish in dark mode — inactive options keep a readable warm label and hairline outline on midnight surfaces
 • The done-exploring prompt gains an in-app Cancel session button behind a double confirmation — first tap asks "Cancel this explore?", second tap ends it quietly without writing it down

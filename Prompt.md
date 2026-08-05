@@ -746,19 +746,28 @@ The 2x picker was only setting `densityExtraCompact` when the device's physical 
 
 ## Latest Request (COMPLETED)
 
-**Frosty-glass font for the entry-detail hero title**
+**Hero tear tilt (tear only) + frostier Date/Mood/Type card + CI compile fix**
 
-User asked for a "proper frosty glass font" for the detail screen title (add a new font or use a graphic treatment). The title already sat on the frosted plate in the app's geom display face — so the treatment combined both levers: push geom to its heaviest ExtraBold weight (same family as Spin's hero titles) and carve the letterforms like glass.
+User reported three things: (1) the tear should tilt but didn't visibly, and the tilt must NOT apply to the Date/Mood/Type card or the title; (2) make the Date/Mood/Type card "a little more frosty with the background color like gradient style beautiful"; (3) fix a CI compile failure.
 
-### What changed
+### CI failure root cause
 
-- `EntryDetailScreen.kt` — the hero title style is now `headlineMedium` (geom) copied with `fontWeight = ExtraBold` and a carved-glass fill: `brush = Brush.verticalGradient(0xFFF4F7FA → 0xFFCBD3DC → heroCardInk)`, so each glyph melts from pale frost at its top into the card's deep slate at its base, plus `shadow = Shadow(black 0.30, Offset(0,3f), 8f)` to lift the letters off the plate. Text keeps `color = heroCardInk` as the accessibility fallback (used when the brush is swapped out).
-- Re-added `import androidx.compose.ui.graphics.Shadow`; removed the now-unused `androidx.compose.ui.semantics.clearAndSetSemantics` import.
-- Text-with-brush is an established pattern in the codebase (SpinScreen.kt:1973, CaptureFormatComponents.kt:131).
-- Updated the store changelog.
+`heroFrostPlate` was declared as a PLAIN top-level function (`private fun heroFrostPlate(ink, shape): Modifier = Modifier.clip(...)`) but called with extension syntax (`Modifier.heroFrostPlate(...)`) at 3 call sites → `Unresolved reference 'heroFrostPlate'`. Landed in the unify commit, carried into the lettering one. Fixed by declaring it a real extension: `private fun Modifier.heroFrostPlate(ink: Color, shape: Shape): Modifier = clip(shape).background(heroFrostGradient).border(...)`. All 3 call sites resolve.
+
+### Tear-only tilt
+
+- `heroTilt` widened from ±1.2° to ±2.5° (seeded per entry id, still stable across reopens) so the cant actually reads.
+- The banner was restructured: the outer banner Box no longer rotates. A new "tilted tear layer" Box wraps ONLY the white under-sheet + the torn hero backdrop (with HeroSymbolScatter), sized `height(hero + sheet + 36dp).offset(y = -18.dp).rotate(heroTilt)` and centered on the band. The content Box (glyph + title + frosted card) and the back/more buttons Row stay as LEVEL siblings on top, so only the torn paper cants while the title and card stay straight.
+- Geometry: top of the tilted layer is clipped by the scroll container at y=0 (top edge renders flat, no visual loss); the torn bottom edge cants visibly; sheet lip max ~395 stays clear of meta chips (~432) and watermark clearance (410).
+
+### Frostier Date/Mood/Type card
+
+- Blurred color pane raised 0.08 → 0.24 alpha (heroStart, blur 18dp) — the card visibly glows with its banner color.
+- White overlay is now a 3-stop vertical gradient: 0.95 → 0.84 → 0.68 alpha, so bright frosted glass at the top lets the category color bloom through toward the bottom (reviewer tuning: bottom softened from 0.62 to 0.68 to stay "a little more frosty"). Deep-slate content stays legible on the blended bottom.
+- `heroFrostGradient` KDoc updated: title plate + buttons stay near-opaque white for control legibility; the card is the colored showpiece of the family.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for the changed Kotlin file.
-- `git diff --check` passed.
+- `scripts/check_braces.py` passed; `git diff --check` passed.
+- Reviewer confirmed the extension fix resolves all call sites, brace structure is correct, and the visible outcome (flat top, canted tear, level content) matches the ask.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

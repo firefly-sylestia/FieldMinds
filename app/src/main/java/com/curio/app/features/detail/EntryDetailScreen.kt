@@ -275,75 +275,91 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // seeded soft tear, ONE white sheet sits just behind it, and the
         // page's wash starts right after the sheet's lip.
         val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
-        // v7.29 — a tiny hand-placed tilt for the whole torn banner, seeded
-        // from the entry id so every detail page sits at its own stable
-        // angle (reopens identically, never re-rolls). Subtle enough that
-        // the back / more buttons stay perfectly tappable. Declared before
-        // the banner Box that applies it.
+        // v7.29 — a hand-placed tilt for the torn banner, seeded from the
+        // entry id so every detail page sits at its own stable angle
+        // (reopens identically, never re-rolls). Wide enough to read as a
+        // canted slip of paper, but applied ONLY to the tear layer — the
+        // title, the frosted Date · Mood · Type card and the back / more
+        // controls stay level on top of it. Declared before the banner Box.
         val heroTilt = remember(tearSeed) {
-            kotlin.random.Random(tearSeed * 31 + 0x0CAFE11E).nextFloat() * 2.4f - 1.2f
+            kotlin.random.Random(tearSeed * 31 + 0x0CAFE11E).nextFloat() * 5.0f - 2.5f
         }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight + EntryDetailSheetExtent)
-                .rotate(heroTilt)
         ) {
-            // ── White under-sheet — ONE SOLID white sheet layered BEHIND
-            // the hero's torn bottom edge. The tear lives ONLY on the hero
-            // card: the sheet's top edge is the SAME seeded torn curve as
-            // the hero's bottom edge (same seed → pixel-perfect alignment,
-            // so the sheet's torn top hides behind the opaque hero and the
-            // wavy bite marks read white through the hero's up-bites), and
-            // the sheet's lower edge follows the same broad waves with a
-            // thin uneven lip. Its small tooth is independent, creating a
-            // believable layered-paper tear without a rigid parallel line or
-            // visible gaps. (tearSeed is declared above, with the tilt.)
-            // Remembered Shape instances so their internal outline caches
-            // survive recompositions (built fresh in the modifier chain, the
-            // caches would never hit).
-            val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
-            val sheetShape = remember(tearSeed) {
-                SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
-            }
+            // ── Tilted tear layer — ONLY the torn banner (the solid hero +
+            // its white under-sheet) sits at the per-entry angle, so the
+            // tear visibly cants on its own. The centered content (glyph,
+            // title, frosted Date · Mood · Type card) and the back / more
+            // controls stay LEVEL on top of the tilted paper — the tilt
+            // reads as a hand-torn slip, not a crooked page. The layer is
+            // a little taller than the banner band and centered on it, so
+            // the rotation never pokes into the content or the page below.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(42.dp)
-                    // Baseline lifts the sheet's torn top above this box's
-                    // own top edge (behind the hero), while the sheet extends
-                    // far enough below the hero that anti-aliased wave edges
-                    // cannot reveal a page-wash gap.
-                    .offset(y = EntryDetailHeroHeight - 18.dp)
-                    .clip(sheetShape)
-                    .background(Color(0xFFFDFCF9))
-            )
-
-            // ── Hero backdrop — the SOLID category color + symbol scatter.
-            // No gradient: the depth comes from the torn seam below. The
-            // banner itself is NOT blurred (the frosted look belongs to the
-            // date / mood / type grid card below, which carries its own
-            // blurred glass pane); the glyph scatter stays sharp so it reads
-            // as a deliberate patterned backdrop. The bottom edge is torn
-            // with the SOFT rounded shape (small rounded textures, tilted a
-            // touch, NOT the sharp jagged [TornPaperShape] of the note
-            // cards) — the solid hero ends in a real torn-paper seam into
-            // the white sheet + page wash below instead of a gradient
-            // dissolve.
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(EntryDetailHeroHeight)
-                    .clip(heroTornShape)
-                    .background(heroStart)
+                    .height(EntryDetailHeroHeight + EntryDetailSheetExtent + 36.dp)
+                    .offset(y = -18.dp)
+                    .rotate(heroTilt)
             ) {
-                // ── Hero watermark — a scatter of the entry's category-family
-                //     symbols (instruments for Music, camera kit for Movies,
-                //     books for Books, art tools for Visual Art, lab symbols
-                //     for Science, curiosities for Wildcard) pinned around the
-                //     banner's perimeter. Only in the hero — the page backdrop
-                //     keeps its own muted glyph wash.
-                HeroSymbolScatter(cat = cat)
+                // ── White under-sheet — ONE SOLID white sheet layered BEHIND
+                // the hero's torn bottom edge. The tear lives ONLY on the hero
+                // card: the sheet's top edge is the SAME seeded torn curve as
+                // the hero's bottom edge (same seed → pixel-perfect alignment,
+                // so the sheet's torn top hides behind the opaque hero and the
+                // wavy bite marks read white through the hero's up-bites), and
+                // the sheet's lower edge follows the same broad waves with a
+                // thin uneven lip. Its small tooth is independent, creating a
+                // believable layered-paper tear without a rigid parallel line or
+                // visible gaps. (tearSeed is declared above, with the tilt.)
+                // Remembered Shape instances so their internal outline caches
+                // survive recompositions (built fresh in the modifier chain, the
+                // caches would never hit).
+                val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
+                val sheetShape = remember(tearSeed) {
+                    SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(42.dp)
+                        // Baseline lifts the sheet's torn top above this box's
+                        // own top edge (behind the hero), while the sheet extends
+                        // far enough below the hero that anti-aliased wave edges
+                        // cannot reveal a page-wash gap.
+                        .offset(y = EntryDetailHeroHeight - 18.dp)
+                        .clip(sheetShape)
+                        .background(Color(0xFFFDFCF9))
+                )
+
+                // ── Hero backdrop — the SOLID category color + symbol scatter.
+                // No gradient: the depth comes from the torn seam below. The
+                // banner itself is NOT blurred (the frosted look belongs to the
+                // date / mood / type grid card below, which carries its own
+                // blurred glass pane); the glyph scatter stays sharp so it reads
+                // as a deliberate patterned backdrop. The bottom edge is torn
+                // with the SOFT rounded shape (small rounded textures, tilted a
+                // touch, NOT the sharp jagged [TornPaperShape] of the note
+                // cards) — the solid hero ends in a real torn-paper seam into
+                // the white sheet + page wash below instead of a gradient
+                // dissolve.
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(EntryDetailHeroHeight)
+                        .clip(heroTornShape)
+                        .background(heroStart)
+                ) {
+                    // ── Hero watermark — a scatter of the entry's category-family
+                    //     symbols (instruments for Music, camera kit for Movies,
+                    //     books for Books, art tools for Visual Art, lab symbols
+                    //     for Science, curiosities for Wildcard) pinned around the
+                    //     banner's perimeter. Only in the hero — the page backdrop
+                    //     keeps its own muted glyph wash.
+                    HeroSymbolScatter(cat = cat)
+                }
             }
 
             Box(
@@ -436,33 +452,33 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         // BoxScope, so matchParentSize must live in an
                         // explicit Box).
                         Box(Modifier.fillMaxWidth()) {
-                            // ── Frosted pane: just a WHISPER of the hero's
-                            // color — a ~1% blurred bloom of the backdrop
-                            // behind this card (the solid heroStart), clipped
-                            // to the card and sitting BEHIND the crisp
-                            // segments. Strong enough to tie the card to its
-                            // banner, faint enough that the card reads as
-                            // frosty white. (RenderEffect on API 31+;
-                            // software blur below.)
+                            // ── Frosted pane — a blurred bloom of the hero's
+                            // color behind the glass, clipped to the card and
+                            // sitting BEHIND the crisp segments. Strong
+                            // enough that the card visibly glows with its
+                            // banner's color (RenderEffect on API 31+;
+                            // software blur below).
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
-                                    .background(heroStart.copy(alpha = 0.08f))
+                                    .background(heroStart.copy(alpha = 0.24f))
                                     .blur(18.dp)
                                     .clip(RoundedCornerShape(18.dp))
                             )
-                            // Frosty white gradient — brighter, cleaner white
-                            // at the top, letting a bare hint (~1% toward the
-                            // bottom edge) of the background color breathe
-                            // through the glass (light passing through real
+                            // Frosty white gradient — bright frosted glass at
+                            // the top that lets the banner's color bloom
+                            // through more and more toward the bottom edge,
+                            // so the card reads as lit, colored frost rather
+                            // than flat white (light passing through real
                             // frosted glass), with deep-slate content on top.
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
                                     .background(
                                         Brush.verticalGradient(
-                                            0f to Color.White.copy(alpha = 0.99f),
-                                            1f to Color.White.copy(alpha = 0.94f)
+                                            0f to Color.White.copy(alpha = 0.95f),
+                                            0.55f to Color.White.copy(alpha = 0.84f),
+                                            1f to Color.White.copy(alpha = 0.68f)
                                         )
                                     )
                             )
@@ -769,11 +785,13 @@ private val EntryDetailSheetExtent = 24.dp
 private val EntryDetailHeroClearance = EntryDetailHeroHeight + 30.dp
 
 /**
- * The hero's frosted-glass language — the same bright frosted WHITE as the
- * Date · Mood · Type card (near-opaque, brighter at the top), with a
- * hairline rim and deep-slate content. Shared by the title plate and the
- * banner's back / more buttons so every glass element in the hero reads as
- * one family (v7.31 — unified to the card's look).
+ * The hero's frosted-glass language for small controls — bright frosted
+ * WHITE (near-opaque, brighter at the top) with a hairline rim and
+ * deep-slate content. Shared by the title plate and the banner's back /
+ * more buttons so the title stays crisp and the controls stay legible in
+ * every theme; the big Date · Mood · Type card below wears the same rim
+ * and slate but a more translucent frost that lets the banner color bloom
+ * through — it is the showpiece of the family.
  */
 private val heroFrostGradient = Brush.verticalGradient(
     0f to Color.White.copy(alpha = 0.99f),
@@ -781,9 +799,8 @@ private val heroFrostGradient = Brush.verticalGradient(
 )
 
 /** [heroFrostGradient] clipped to [shape] with a hairline rim in [ink]. */
-private fun heroFrostPlate(ink: Color, shape: Shape): Modifier =
-    Modifier
-        .clip(shape)
+private fun Modifier.heroFrostPlate(ink: Color, shape: Shape): Modifier =
+    clip(shape)
         .background(heroFrostGradient)
         .border(1.dp, ink.copy(alpha = 0.32f), shape)
 
