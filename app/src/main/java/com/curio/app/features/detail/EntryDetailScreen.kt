@@ -524,6 +524,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 title = formatCapturedDate(resolvedEntry.capturedAtMillis),
                                 subtitle = "Date",
                                 ink = heroCardInk,
+                                // v7.39 — the capture time rides tiny under
+                                // the hero's date (the old "Captured today ·
+                                // time" meta line is gone).
+                                tiny = formatCapturedTime(resolvedEntry.capturedAtMillis),
                                 modifier = Modifier.weight(1f)
                             )
                             VerticalDivider(
@@ -559,21 +563,20 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
 
         // ── Topic meta — the title lives INSIDE the hero above, so this
-        // block keeps the category label + quick fact + captured-at + tags.
-        // v7.38 — the category label rides UP to the torn seam: 6dp top pad
-        // + a -14dp lift puts the label's top tip ~8dp up inside the white
-        // paper lip (drawn over the sheet, so the torn wave reads around its
-        // top and the label looks like it's coming out of the tear — only
-        // the tip tucks, never the whole line). The category is the PRIMARY
-        // line (titleLarge ExtraBold — big enough that the tucked tip reads
-        // clearly), the Quick fact sits directly under it as SECONDARY
-        // (smaller), then captured-at, then tags. Gutters stay aligned to
-        // the format body's 20dp side padding; bottom 16dp hands off to the
-        // body wrapper's 16dp.
+        // block keeps the category label + quick fact + tags. The captured
+        // date/time now lives on the hero's Date segment (v7.39).
+        // v7.39 — the category label rides UP to the torn seam: 6dp top pad
+        // + a -32dp lift puts the label's top tip right AT the torn edge
+        // (just above the hero's tear baseline, so its tip tucks into the
+        // wave and the line visibly comes OUT of the tear). The category is
+        // the PRIMARY line (titleLarge ExtraBold), the Quick fact sits
+        // directly under it as SECONDARY (smaller), then tags. Gutters stay
+        // aligned to the format body's 20dp side padding; the smaller
+        // bottom pads keep the tags-to-body gap unchanged despite the lift.
         Column(
             modifier = Modifier
-                .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 16.dp)
-                .offset(y = (-14).dp),
+                .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 8.dp)
+                .offset(y = (-32).dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // v7.38 — the category is plain TEXT, not a pill: glyph + name in
@@ -649,22 +652,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
             MorphEntrance {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(
-                        text = if (AppPreferences.entryMetaEnabledState) {
-                            capturedAtLabel(resolvedEntry) + " · " +
-                                formatCapturedTime(resolvedEntry.capturedAtMillis)
-                        } else capturedAtLabel(resolvedEntry),
-                        style = MaterialTheme.typography.bodySmall,
-                        // v7.35 — muted secondary ink: the captured-at line
-                        // reads one step below the category and the Quick
-                        // fact heading, so the meta block has a clear
-                        // hierarchy in every theme.
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
                     // ── Custom tags (v7.17) — the labels added on the save
-                    // page, rendered as small #chips under the captured-at
-                    // line.
+                    // page, rendered as small #chips (the captured-at line
+                    // moved onto the hero's Date segment in v7.39).
                     if (resolvedEntry.tags.isNotEmpty()) {
                         FlowRow(
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -693,10 +683,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
 
         // ── Format body ────────────────────────────────────────────────
-        // v7.35 — 16dp vertical padding (was 8) so the body breathes away
-        // from the meta / quick-fact block above; horizontal stays 20dp to
-        // match the meta column gutter.
-        Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+        // v7.39 — 8dp vertical padding: the lifted meta block (-32dp tuck)
+        // already carries the breathing room at the tear, so the body only
+        // needs a small hand-off; horizontal stays 20dp to match the meta
+        // column gutter.
+        Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
             FormatBody(entry = resolvedEntry, category = cat, navController = navController)
         }
 
@@ -1065,13 +1056,6 @@ private fun isMoodBoardEntry(entry: CurioEntry): Boolean =
     entry.format == CaptureFormat.GalleryWall ||
         (entry.captureData as? CaptureData.OpenNotebook)?.subFormat == CaptureFormat.GalleryWall
 
-/** "Captured today" / "Captured yesterday" / "Captured Nd ago" label. */
-private fun capturedAtLabel(entry: CurioEntry): String = when (entry.capturedAtDaysAgo) {
-    0 -> "Captured today"
-    1 -> "Captured yesterday"
-    else -> "Captured ${entry.capturedAtDaysAgo}d ago"
-}
-
 /** Wall-clock time of a capture, e.g. "3:42 PM". */
 private fun formatCapturedTime(millis: Long): String =
     SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(millis))
@@ -1124,7 +1108,10 @@ private fun FrostedSegment(
     title: String,
     subtitle: String,
     ink: Color = Color.White,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    /** v7.39 — a whisper-small third line (e.g. the capture TIME under the
+     *  hero's date), rendered tiny so it never competes with the title. */
+    tiny: String? = null
 ) {
     Column(
         modifier = modifier,
@@ -1150,6 +1137,13 @@ private fun FrostedSegment(
             style = MaterialTheme.typography.labelSmall,
             color = ink.copy(alpha = 0.85f)
         )
+        if (tiny != null) {
+            Text(
+                text = tiny,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                color = ink.copy(alpha = 0.78f)
+            )
+        }
     }
 }
 
@@ -1444,33 +1438,21 @@ private fun SoundBiteRender(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Surface(
-                    shape = RoundedCornerShape(50),
-                    color = category.themedAccent()
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.PlayArrow,
-                        contentDescription = "Play",
-                        tint = category.onAccent(),
-                        size = 32.dp,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        buildString {
-                            append("Voice note · ${data.durationSeconds}s")
-                            if (data.fileSizeBytes > 0) {
-                                append(" · ${formatFileSize(data.fileSizeBytes)}")
-                            }
-                        },
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+            // v7.39 — the dead circular play icon is gone (it never played;
+            // the real audio player sits below it); the voice-note label
+            // grows to titleMedium so it reads as the primary line instead
+            // of a dim subtitle.
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    buildString {
+                        append("Voice note · ${data.durationSeconds}s")
+                        if (data.fileSizeBytes > 0) {
+                            append(" · ${formatFileSize(data.fileSizeBytes)}")
+                        }
+                    },
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (!data.title.isNullOrBlank()) {
                             Text(
@@ -1495,7 +1477,6 @@ private fun SoundBiteRender(
                         }
                     }
                 }
-            }
 
             // ── Real audio player (when file path is available) ─────────
             if (!data.audioFilePath.isNullOrBlank()) {

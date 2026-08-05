@@ -463,8 +463,6 @@ fun MoodBoardZoomOverlay(
                 awaitEachGesture {
                     awaitFirstDown(requireUnconsumed = false)
                     var hasMovement = false
-                    var gestureZoom = 1f
-                    var gesturePan = Offset.Zero
                     // Cumulative pan since the down — a SLOW one-finger drag
                     // moves only a fraction of a pixel per event, so a
                     // per-event threshold would never trip and the drag would
@@ -477,8 +475,6 @@ fun MoodBoardZoomOverlay(
                         if (event.changes.size > 1) hasMovement = true
                         val zoomChange = event.calculateZoom()
                         val panChange = event.calculatePan()
-                        gestureZoom *= zoomChange
-                        gesturePan += panChange
                         totalPan += panChange
                         // Tolerance instead of exact-float equality: a gentle
                         // pinch/drag can move sub-pixel per event, and exact
@@ -492,26 +488,31 @@ fun MoodBoardZoomOverlay(
                         ) {
                             hasMovement = true
                         }
-                        // Consume ONLY pan/zoom movement; clean taps stay
-                        // unconsumed (nothing else needs them anymore — this
-                        // detector classifies them below).
-                        if (hasMovement) event.changes.forEach { it.consume() }
+                        // Apply the deltas PER EVENT while the fingers are
+                        // down so the image tracks them live — accumulating
+                        // and applying once at the end made pinch/pan feel
+                        // delayed (the image only moved on finger-lift).
+                        // Multiplying the cumulative zoom per event is
+                        // equivalent to applying it once at the end.
+                        if (hasMovement) {
+                            pinchScale = (pinchScale * zoomChange).coerceIn(1f, 8f)
+                            // Clamp the pan to the viewport (same rule the
+                            // old full-screen viewer used): the image can
+                            // travel just far enough to bring its edges to
+                            // the viewport edges at the current zoom, and
+                            // ZERO at rest — a tiny tile can never be
+                            // dragged fully off-screen, and pinching back
+                            // out recenters it automatically.
+                            val s = glideScale * pinchScale
+                            val maxPanX = ((widthPx * s - viewW) / 2f).coerceAtLeast(0f)
+                            val maxPanY = ((heightPx * s - viewH) / 2f).coerceAtLeast(0f)
+                            pinchX = (pinchX + panChange.x).coerceIn(-maxPanX, maxPanX)
+                            pinchY = (pinchY + panChange.y).coerceIn(-maxPanY, maxPanY)
+                            event.changes.forEach { it.consume() }
+                        }
                         if (event.changes.none { it.pressed }) break
                     }
-                    if (hasMovement) {
-                        pinchScale = (pinchScale * gestureZoom).coerceIn(1f, 8f)
-                        // Clamp the pan to the viewport (same rule the old
-                        // full-screen viewer used): the image can travel just
-                        // far enough to bring its edges to the viewport edges
-                        // at the current zoom, and ZERO at rest — a tiny tile
-                        // can never be dragged fully off-screen, and pinching
-                        // back out recenters it automatically.
-                        val s = glideScale * pinchScale
-                        val maxPanX = ((widthPx * s - viewW) / 2f).coerceAtLeast(0f)
-                        val maxPanY = ((heightPx * s - viewH) / 2f).coerceAtLeast(0f)
-                        pinchX = (pinchX + gesturePan.x).coerceIn(-maxPanX, maxPanX)
-                        pinchY = (pinchY + gesturePan.y).coerceIn(-maxPanY, maxPanY)
-                    } else {
+                    if (!hasMovement) {
                         // A clean tap (no movement). When the image is
                         // pinched/panned, spring back to the base zoom and
                         // STAY open; otherwise close, gliding back to the

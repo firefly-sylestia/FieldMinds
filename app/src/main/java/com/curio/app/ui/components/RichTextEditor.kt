@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -90,10 +89,10 @@ private val SIZE_OPTIONS: List<Float> =
 
 /** How the formatting toolbar is presented. */
 enum class RichTextToolbarMode {
-    /** Always visible — the Marginalia journal + quote cards (main option). */
+    /** The Marginalia journal + quote cards (main option). */
     MAIN,
 
-    /** Behind a small format button that expands the row (other fields). */
+    /** Other text fields (Field Notes sections, Reel Notes review, …). */
     TOGGLE
 }
 
@@ -346,9 +345,11 @@ private fun clearSpanSize(spans: List<TextSpan>, s: Int, e: Int): List<TextSpan>
 
 /**
  * Rich-text editor shared by the capture formats — bold / italic / highlight
- * over the current selection, with an always-visible toolbar ([RichTextToolbarMode.MAIN],
- * the Marginalia journal + quotes) or a small format button that expands the
- * row ([RichTextToolbarMode.TOGGLE], other text fields).
+ * over the current selection. Since v7.39 BOTH toolbar modes present the
+ * tools behind compact text buttons ("Paper" for the note-paper style +
+ * color pickers, "Format" for the B / I / highlight / size tools), and
+ * opening one collapses the other — the mode enum is kept for callers but
+ * the tool rows no longer stay visible all the time.
  *
  * Edits flow through `BasicTextField`'s AnnotatedString value, so span styles
  * are preserved while typing; a small common-prefix/suffix diff re-applies an
@@ -669,139 +670,93 @@ fun RichTextEditor(
 
     Column(modifier = modifier) {
         // ── Toolbar ─────────────────────────────────────────────────────
-        if (toolbarMode == RichTextToolbarMode.MAIN) {
-            // The paper STYLE + COLOR controls sit behind their own small
-            // toggle button (like the format button) — right-aligned after
-            // the always-visible format tools.
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                FormatToolbar(
-                    boldActive = hasFlagAt(RichFlag.BOLD),
-                    italicActive = hasFlagAt(RichFlag.ITALIC),
-                    highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                    sizeActive = pendingSizeSp != null,
-                    accent = effectiveAccent,
-                    enabled = enabled,
-                    currentSp = currentSizeSp(),
-                    toolbarBorderAlpha = toolbarBorderAlpha,
-                    toolbarIconAlpha = toolbarIconAlpha,
-                    toolbarActiveBorderAlpha = toolbarActiveBorderAlpha,
-                    toolbarActiveFillAlpha = toolbarActiveFillAlpha,
-                    onBold = { applyFlag(RichFlag.BOLD) },
-                    onItalic = { applyFlag(RichFlag.ITALIC) },
-                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
-                    onSizePick = { applyExactSize(it) }
-                )
+        // v7.39 — one compact row; every tool sits behind a TEXT button so
+        // the page stays uncluttered. "Paper" reveals the style + color
+        // pickers, "Format" reveals the B / I / highlight / size tools, and
+        // opening one closes the other (mutual exclusion) — no more stacked
+        // rows of tools. Both toolbar modes now collapse the same way, so
+        // the format tools no longer stay visible all the time.
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 if (paper) {
-                    Spacer(Modifier.weight(1f))
-                    StyleToggleButton(
+                    ToolToggleButton(
+                        icon = CurioIcons.Palette,
+                        label = "Paper",
                         expanded = styleExpanded,
                         accent = effectiveAccent,
                         borderAlpha = toolbarBorderAlpha,
                         fillAlpha = toolbarActiveFillAlpha,
                         enabled = enabled,
-                        onToggle = { styleExpanded = !styleExpanded },
+                        onToggle = {
+                            val next = !styleExpanded
+                            if (next) toolbarExpanded = false
+                            styleExpanded = next
+                        },
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
                 }
-            }
-            if (paper && styleExpanded) {
-                NotePaperStyleToggle(
-                    style = paperStyle,
-                    onStyleChange = onPaperStyleChange,
+                ToolToggleButton(
+                    icon = CurioIcons.FormatText,
+                    label = "Format",
+                    expanded = toolbarExpanded,
                     accent = effectiveAccent,
+                    borderAlpha = toolbarBorderAlpha,
+                    fillAlpha = toolbarActiveFillAlpha,
                     enabled = enabled,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                if (showColorTool) {
-                    NotePaperColorToggle(
-                        color = paperColor,
-                        onColorChange = onPaperColorChange,
-                        accent = effectiveAccent,
-                        enabled = enabled,
-                        modifier = Modifier.padding(bottom = 6.dp)
-                    )
-                }
-            }
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = if (paper) Arrangement.SpaceBetween else Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (paper) {
-                    StyleToggleButton(
-                        expanded = styleExpanded,
-                        accent = effectiveAccent,
-                        borderAlpha = toolbarBorderAlpha,
-                        fillAlpha = toolbarActiveFillAlpha,
-                        enabled = enabled,
-                        onToggle = { styleExpanded = !styleExpanded },
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
-                Surface(
-                    onClick = { toolbarExpanded = !toolbarExpanded },
-                    shape = RoundedCornerShape(8.dp),
-                    color = if (toolbarExpanded) effectiveAccent.copy(alpha = 0.15f)
-                            else Color.Transparent,
-                    border = BorderStroke(1.dp, effectiveAccent.copy(alpha = 0.35f)),
-                    modifier = Modifier.padding(bottom = 4.dp)
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.FormatText,
-                        contentDescription = if (toolbarExpanded) "Hide formatting" else "Show formatting",
-                        tint = effectiveAccent,
-                        size = 18.dp,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-                trailingAction?.invoke()
-            }
-            if (paper && styleExpanded) {
-                NotePaperStyleToggle(
-                    style = paperStyle,
-                    onStyleChange = onPaperStyleChange,
-                    accent = effectiveAccent,
-                    enabled = enabled,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                if (showColorTool) {
-                    NotePaperColorToggle(
-                        color = paperColor,
-                        onColorChange = onPaperColorChange,
-                        accent = effectiveAccent,
-                        enabled = enabled,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
-            }
-            AnimatedVisibility(
-                visible = toolbarExpanded,
-                enter = expandVertically() + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                FormatToolbar(
-                    boldActive = hasFlagAt(RichFlag.BOLD),
-                    italicActive = hasFlagAt(RichFlag.ITALIC),
-                    highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
-                    sizeActive = pendingSizeSp != null,
-                    accent = effectiveAccent,
-                    enabled = enabled,
-                    currentSp = currentSizeSp(),
-                    toolbarBorderAlpha = toolbarBorderAlpha,
-                    toolbarIconAlpha = toolbarIconAlpha,
-                    toolbarActiveBorderAlpha = toolbarActiveBorderAlpha,
-                    toolbarActiveFillAlpha = toolbarActiveFillAlpha,
-                    onBold = { applyFlag(RichFlag.BOLD) },
-                    onItalic = { applyFlag(RichFlag.ITALIC) },
-                    onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
-                    onSizePick = { applyExactSize(it) }
+                    onToggle = {
+                        val next = !toolbarExpanded
+                        if (next) styleExpanded = false
+                        toolbarExpanded = next
+                    },
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
+            trailingAction?.invoke()
+        }
+        if (paper && styleExpanded) {
+            NotePaperStyleToggle(
+                style = paperStyle,
+                onStyleChange = onPaperStyleChange,
+                accent = effectiveAccent,
+                enabled = enabled,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (showColorTool) {
+                NotePaperColorToggle(
+                    color = paperColor,
+                    onColorChange = onPaperColorChange,
+                    accent = effectiveAccent,
+                    enabled = enabled,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
+        }
+        AnimatedVisibility(
+            visible = toolbarExpanded,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            FormatToolbar(
+                boldActive = hasFlagAt(RichFlag.BOLD),
+                italicActive = hasFlagAt(RichFlag.ITALIC),
+                highlightActive = hasFlagAt(RichFlag.HIGHLIGHT),
+                sizeActive = pendingSizeSp != null,
+                accent = effectiveAccent,
+                enabled = enabled,
+                currentSp = currentSizeSp(),
+                toolbarBorderAlpha = toolbarBorderAlpha,
+                toolbarIconAlpha = toolbarIconAlpha,
+                toolbarActiveBorderAlpha = toolbarActiveBorderAlpha,
+                toolbarActiveFillAlpha = toolbarActiveFillAlpha,
+                onBold = { applyFlag(RichFlag.BOLD) },
+                onItalic = { applyFlag(RichFlag.ITALIC) },
+                onHighlight = { applyFlag(RichFlag.HIGHLIGHT) },
+                onSizePick = { applyExactSize(it) }
+            )
         }
 
         // ── The field ───────────────────────────────────────────────────
@@ -920,6 +875,10 @@ fun RichTextEditor(
                     coffeeStains = paperStyle.coffee,
                     folded = paperStyle.folded,
                     redMargin = paperStyle.redMargin,
+                    // v7.39 — forward the style's WATERMARK so every paper
+                    // box (not just the single-line title fields that route
+                    // through [NotePaperCard]) wears the faint glyph scatter.
+                    watermark = paperStyle.watermark,
                     paperColor = paperColor,
                     contentPadding = paperContentPadding
                 ) {
@@ -929,6 +888,11 @@ fun RichTextEditor(
                 PaperCard(
                     modifier = Modifier.fillMaxWidth(),
                     ruled = true,
+                    // v7.39 — the rounded-top + watermark options of the
+                    // style apply here too (previously only [NotePaperCard]
+                    // callers got them).
+                    roundedTop = paperStyle.roundedTop,
+                    watermark = paperStyle.watermark,
                     paperColor = paperColor,
                     contentPadding = paperContentPadding,
                     coffeeStains = paperStyle.coffee,
@@ -1118,7 +1082,9 @@ private fun FormatToolbar(
 }
 
 @Composable
-private fun StyleToggleButton(
+private fun ToolToggleButton(
+    icon: String,
+    label: String,
     expanded: Boolean,
     accent: Color,
     enabled: Boolean,
@@ -1135,13 +1101,23 @@ private fun StyleToggleButton(
         border = BorderStroke(1.dp, accent.copy(alpha = borderAlpha)),
         modifier = modifier
     ) {
-        CurioIcon(
-            name = CurioIcons.Palette,
-            contentDescription = if (expanded) "Hide paper style" else "Paper style",
-            tint = accent,
-            size = 18.dp,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CurioIcon(
+                name = icon,
+                contentDescription = if (expanded) "Hide $label" else "Show $label",
+                tint = accent,
+                size = 16.dp
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = accent
+            )
+        }
     }
 }
 
