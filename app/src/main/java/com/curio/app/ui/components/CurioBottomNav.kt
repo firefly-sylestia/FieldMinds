@@ -45,16 +45,27 @@ import com.curio.app.ui.theme.CurioIcons
  * lives outside the NavHost content and can't read SpinScreen's state
  * directly). Mirrors the [com.curio.app.navigation.LightboxTarget] pattern.
  *
- * Only the Spin routes are tinted (the nav bar's own route check gates it)
- * — Home and Cabinet stay on the plain theme surface, matching their plain
- * pages.
+ * Spin publishes its deck wash; Cabinet publishes its active-filter wash
+ * (null when showing "All" — a plain page). Home stays plain and the bar
+ * falls back to the theme surface whenever the active route publishes no
+ * wash.
  */
 object CurioNavTint {
     var spinWash by mutableStateOf<Color?>(null)
         private set
+    // Cabinet's active-filter category wash — published by CabinetScreen so
+    // the nav bar blends with the tinted Cabinet page while a category filter
+    // is active. Null when the Cabinet shows "All" (plain page) or isn't
+    // composed.
+    var cabinetWash by mutableStateOf<Color?>(null)
+        private set
 
     fun publishSpinWash(color: Color?) {
         spinWash = color
+    }
+
+    fun publishCabinetWash(color: Color?) {
+        cabinetWash = color
     }
 }
 
@@ -110,14 +121,15 @@ fun CurioBottomBar(
     val currentRoute = navBackStackEntry?.destination?.route
     val routePrefix = currentRoute?.substringBefore("/")
 
-    // The nav bar wears the Spin page's category tint wash ONLY on the Spin
-    // routes (tab + spin/{categorySlug}) — the screen that actually has a
-    // tinted page. Home and Cabinet stay on the plain theme surface (their
-    // pages are plain), so the bar never tints where the page doesn't.
-    val containerColor = if (routePrefix == CurioRoutes.SPIN) {
-        CurioNavTint.spinWash ?: MaterialTheme.colorScheme.surface
-    } else {
-        MaterialTheme.colorScheme.surface
+    // The nav bar wears each tab's category-tinted page wash: Spin's deck
+    // wash and the Cabinet's active-filter wash — matching the page
+    // background the user is looking at. Home stays on the plain theme
+    // surface (its page is plain), and any route that publishes no wash
+    // falls back to the surface too.
+    val containerColor = when (routePrefix) {
+        CurioRoutes.SPIN -> CurioNavTint.spinWash ?: MaterialTheme.colorScheme.surface
+        CurioRoutes.CABINET -> CurioNavTint.cabinetWash ?: MaterialTheme.colorScheme.surface
+        else -> MaterialTheme.colorScheme.surface
     }
 
     NavigationBar(

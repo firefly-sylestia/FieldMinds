@@ -30,6 +30,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +60,7 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioEmptyState
+import com.curio.app.ui.components.CurioNavTint
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.components.CurioEntryCard
 import com.curio.app.ui.components.MorphEntrance
@@ -189,6 +191,19 @@ fun CabinetScreen(navController: NavController) {
     // active. The "All" page stays on the plain theme background (like Home),
     // and the search button keeps its neutral look in every state.
     val filterCat = selectedFilter?.let { CurioCategories.byId(it) }
+    // Publish the active filter's wash so the Scaffold-level bottom bar can
+    // blend with the tinted Cabinet page (mirrors Spin's CurioNavTint
+    // handoff — the bar lives outside the NavHost and can't read this
+    // screen's state directly). Null on "All" so the bar stays plain.
+    val cabinetWash = filterCat?.categoryBackgroundWash()
+    LaunchedEffect(cabinetWash) {
+        CurioNavTint.publishCabinetWash(cabinetWash)
+    }
+    // Hygiene: clear the handoff when the Cabinet leaves composition so a
+    // stale wash never lingers for another tab.
+    DisposableEffect(Unit) {
+        onDispose { CurioNavTint.publishCabinetWash(null) }
+    }
 
     Box(
         modifier = Modifier
@@ -420,6 +435,10 @@ fun CabinetScreen(navController: NavController) {
         // carries the color. In dark mode the idle fill is desaturated
         // (less muddy) and the hairline picks up the light twin for
         // contrast. "All" keeps its plain neutral treatment.
+        // The Legacy chip is a synthetic filter (restored FieldMind records)
+        // — it always sits LAST in the row and only appears when there's
+        // actually something to show (or the legacy view is currently open).
+        val hasLegacyEntries = entries.any { it.isLegacy }
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -435,18 +454,6 @@ fun CabinetScreen(navController: NavController) {
                     chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     selected = selectedFilter == null && !showLegacyOnly,
                     onClick = { selectedFilter = null; showLegacyOnly = false }
-                )
-            }
-            item("legacy") {
-                FilterChipLite(
-                    label = "Legacy",
-                    accent = MaterialTheme.colorScheme.tertiary,
-                    tint = MaterialTheme.colorScheme.tertiaryContainer,
-                    ink = MaterialTheme.colorScheme.onTertiaryContainer,
-                    chipSurface = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-                    chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                    selected = showLegacyOnly,
-                    onClick = { selectedFilter = null; showLegacyOnly = !showLegacyOnly }
                 )
             }
             items(CurioCategories.visible) { cat ->
@@ -465,6 +472,23 @@ fun CabinetScreen(navController: NavController) {
                     selected = selectedFilter == cat.id && !showLegacyOnly,
                     onClick = { selectedFilter = cat.id; showLegacyOnly = false }
                 )
+            }
+            // Legacy sits LAST, after every native category — and only when
+            // there's something to show (or the legacy view is currently
+            // open, so the active chip stays visible/deselectable).
+            if (hasLegacyEntries || showLegacyOnly) {
+                item("legacy") {
+                    FilterChipLite(
+                        label = "Legacy",
+                        accent = MaterialTheme.colorScheme.tertiary,
+                        tint = MaterialTheme.colorScheme.tertiaryContainer,
+                        ink = MaterialTheme.colorScheme.onTertiaryContainer,
+                        chipSurface = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                        chipBorder = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                        selected = showLegacyOnly,
+                        onClick = { selectedFilter = null; showLegacyOnly = !showLegacyOnly }
+                    )
+                }
             }
         }
 

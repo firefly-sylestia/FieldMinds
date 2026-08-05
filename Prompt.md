@@ -2,6 +2,42 @@
 
 ## Latest Request (COMPLETED)
 
+**Cabinet Legacy chip ordering/visibility + bottom nav category tint**
+
+### What was requested
+
+In the Cabinet: (1) the Legacy category/filter should go last in the chip
+row, (2) the Legacy chip should be hidden when there are no legacy entries,
+and (3) the bottom nav color should match the category background color.
+
+### What changed
+
+- `CabinetScreen.kt` — moved the Legacy chip to the END of the filter row
+  (after all native categories) and gated it behind
+  `entries.any { it.isLegacy } || showLegacyOnly`, so it only appears when
+  restored FieldMind records exist (or the legacy view is currently open).
+- `CabinetScreen.kt` — publishes the active filter's `categoryBackgroundWash`
+  via `CurioNavTint.publishCabinetWash(...)` (LaunchedEffect keyed on the
+  wash, cleared on dispose), mirroring SpinScreen's existing handoff.
+- `CurioBottomNav.kt` — `CurioNavTint` gained a `cabinetWash` state; the nav
+  bar's `containerColor` now uses it on the CABINET route (Spin already used
+  its wash; Home stays on the plain surface).
+
+### Notes
+
+- With the chip hidden when empty, the "No legacy captures yet" empty state
+  (and its Open-settings CTA) is no longer reachable from the chip — the
+  intended consequence of hiding it when nothing exists.
+
+### Validation
+
+- `scripts/check_braces.py` passed for both changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Floating explore bubble disappears after clearing app data**
 
 ### What was requested
