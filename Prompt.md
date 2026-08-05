@@ -2,46 +2,48 @@
 
 ## Latest Request (IN PROGRESS)
 
-**Home default color too brownish + pastel/mixed colors too bright (esp. green)**
+**Redesign the Material palette card gradients — 2 colors only**
 
 ### Requested
 
-1. The default Home color is "browish a lot" — make it a beautiful soft
-   color instead.
-2. Fix the mixed colors' pastel treatment: some pastels are too bright,
-   especially colors mixed with green — they look too bright in the palette.
+Redesign the Material color palette and the gradients: card gradients
+should use only TWO colors — ~90% the device's Material You gradient color
+(the less-pastel M3 color) with 10% (or 5%) category color as a sprinkle.
 
 ### Analysis
 
-- Home's banner accent is `CurioColors.HomeRosewood = 0xFFB4635A` — a muted
-  brownish terracotta (HSL ≈ hue 6°, sat 0.42, light 0.53). The non-pastel
-  `homeRoseAccent()` branch kept that same brownish hue (only a slight
-  desaturate), so the "default" Home hero reads brown. The pastel twin
-  (hue −15°, light 0.82) is an airy pink — fine — but the base is brown.
-- `pastelAccent()` light mode held saturation up to 0.72 at lightness 0.80,
-  which makes high-saturation hues neon: teal (~0.79 sat), sky (~0.97 sat),
-  coral, and green-heavy mixed-deck blends (jade/teal mixes). The
-  mixed-deck page wash also laid the blend at 80% strength over cream →
-  bright mint floods the Spin page.
+The Material branch of `CurioGradients.cardGradient()` previously built a
+THREE-stop gradient mixing `scheme.primary/secondary/tertiary` through a
+6-band arrangement wheel, with 12–20% (light) / 42–52% (dark) category
+tint pulled into every stop — a loud multi-color blend where the device
+palette barely read. The user wants the device palette to dominate.
 
 ### Plan
 
-1. `CurioColors.HomeRosewood` → `0xFFCF8B94` (soft dusty rose, HSL ≈ 352° /
-   0.42 / 0.68) — beautiful rose, not brown; dark maroon ink still clears
-   contrast on it.
-2. `HomeScreen.homeRoseAccent()` non-pastel branch → lift lightness
-   (×1.06, cap 0.70) and hold saturation (×0.80, cap 0.40) so the default
-   banner reads as a calm soft rose. Pastel branch unchanged (derives the
-   airy pink twin from the new rose base automatically).
-3. `pastelAccent()` light mode → saturation multiplier 0.80 → 0.70, cap
-   0.72 → 0.60 (lightness stays 0.80): teal/mint/sky and green-heavy mixes
-   soften to gentle pastels instead of neon.
-4. `CurioMixedDeck.mixedDeckWash()` pastel-light strength 0.80 → 0.72 so
-   mixed pages no longer flood with bright mint.
+1. `CurioColors.cardGradient()` Material branch → clean TWO-color gradient:
+   - Anchor: the device M3 PRIMARY (the least-pastel of the M3 trio;
+     secondary/tertiary are the muted pastel ones). Pastel mode softens it
+     via `pastelAccent`; otherwise the raw device color is floored for
+     white ink (`floorForWhiteInk` — no-op in light where dynamic primary
+     is already dark, pulls the pastel-pale dark-mode primary down, hue
+     untouched).
+   - Sprinkle: the category accent (deepened 8%, or pastel twin in pastel
+     mode) lerped at 5% top → 10% bottom.
+   - Dark non-pastel only: sprinkle raised to 10% → 18% so categories stay
+     distinguishable on the floored muted device color (the old wheel had
+     42-52% there; 5-10% would make every deck card read the same).
+2. `SettingsScreen` — "Material card blends" copy: "Cards wear your
+   device's palette with just a sprinkle of category color".
+3. Removed the now-dead 6-band wheel + secondary/tertiary mixing (locals
+   `p/s/t/hsl/tint/pCat/…` gone; `toHsl` still used elsewhere, so no
+   unused-import issue).
+4. Changelog + Prompt.md.
 
 ### Status
 
-- Edits applied: CurioColors.kt (HomeRosewood + pastelAccent +
-  mixedDeckWash), HomeScreen.kt (homeRoseAccent non-pastel branch).
-- Old brown value `0xFFB4635A` fully replaced (verified via search).
+- Edits applied: CurioColors.kt (cardGradient Material branch + docs +
+  floorForWhiteInk doc), SettingsScreen.kt (copy).
+- Reviewer verified: compile-safe (`toHsl` still used by pastelAccent /
+  lightAccentTint / hslBlend / hslCentroid; `.first()` callers like
+  EntryDetailScreen work with 2 stops; contrast guard intact).
 - Changelog + Prompt.md updated. Awaiting review + commit/push.

@@ -715,7 +715,7 @@ fun SettingsScreen(navController: NavController) {
                                 Text(
                                     when (themeStyle) {
                                         AppPreferences.THEME_STYLE_MATERIAL ->
-                                            "Cards mix your category colors with your device's palette"
+                                            "Cards wear your device's palette with just a sprinkle of category color"
                                         else -> "Only takes effect in the Material theme style"
                                     },
                                     style = MaterialTheme.typography.bodySmall,

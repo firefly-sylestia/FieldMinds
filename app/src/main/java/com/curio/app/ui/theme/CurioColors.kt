@@ -235,19 +235,20 @@ object CurioGradients {
         if (AppPreferences.pastelColorsState) accent else lerp(accent, Color.Black, 0.10f)
 
     /**
-     * Lightness floor for light-mode material stops — see [floorForWhiteInk].
+     * Lightness floor for material stops — see [floorForWhiteInk].
      * 0.30 luminance keeps white large/bold card titles ≥ ~3:1 (WCAG large
      * text AA); the small teaser copy sits near the card's darker base.
      */
     private const val WhiteInkLightnessFloor = 0.30f
 
     /**
-     * Floors a light-mode material stop's luminance to
-     * [WhiteInkLightnessFloor] so white card content stays readable on it.
-     * Dynamic Material You light palettes are already dark enough for white
-     * by design (white-on-primary ≥ 4.5:1), so this is a no-op there — it
-     * only deepens the pale non-dynamic fallback palette (API < 31 Material
-     * style). The material HUE is untouched; only lightness is pulled down.
+     * Floors a material stop's luminance to [WhiteInkLightnessFloor] so
+     * white card content stays readable on it. v7.37 — used on the device
+     * M3 primary in the redesigned Material card gradient: dark-mode
+     * dynamic primaries are pastel-pale and would wash out white text, so
+     * they're pulled down here (light dynamic primaries are already dark
+     * enough — a no-op there). The material HUE is untouched; only
+     * lightness is pulled down.
      */
     private fun floorForWhiteInk(c: Color): Color {
         val lum = 0.2126f * c.red + 0.7152f * c.green + 0.0722f * c.blue
@@ -293,35 +294,23 @@ object CurioGradients {
      * always matches the app's background shade (the hero card must not
      * wash out to pure white on the cream surface).
      *
-     * v7.14 — Material card blend rework: when "Material card blends" is on
-     * (default), every category card wears a 3-stop gradient with ONE stop
-     * carrying the category color (the "little" category presence) and the
-     * other two being the device's Material You colors — so the material
-     * palette DOMINATES and each category reads as a distinct arrangement
-     * of the same device family.
+     * v7.37 — Material card blend redesign: when "Material card blends" is on
+     * (default), every category card wears a clean TWO-color gradient — the
+     * device's M3 PRIMARY (the least-pastel of the Material You trio) at
+     * ~90-95%, with only a 5-10% "sprinkle" of the category accent. The old
+     * 6-band wheel that mixed all three M3 colors with 12-52% category tints
+     * read as a loud blend; this reads as the device's own color with just a
+     * whisper of the category so the palette stays true to the device.
      *
-     * The 6-band arrangement wheel (60° each) gives every shipped category a
-     * distinct combination of WHICH material colors appear and WHERE the
-     * category stop sits (top / middle / bottom):
-     *  - 0-60°    (amber):   category TOP    → [cat, secondary, tertiary]
-     *  - 60-120°  (yellow):  category MID    → [secondary, cat, primary]
-     *  - 120-180° (green):   category TOP    → [cat, primary, tertiary]
-     *  - 180-240° (cyan):    category MID    → [tertiary, cat, primary]
-     *  - 240-300° (blue):    category BOTTOM → [primary, secondary, cat]
-     *  - 300-360° (pink):    category BOTTOM → [secondary, primary, cat]
-     *
-     * The old v7.13 wheel collided (amber 26°, rose 345° and coral 349° all
-     * landed under 40° → the SAME arrangement) and its 40-55% category tint
-     * pulled every stop toward the accent, so cards read as one samey deep
-     * blob. The material stops now carry only a WHISPER of category tint in
-     * light mode (~12-20%) so the material colors show through; dark mode
-     * pulls harder toward the accent (~42-52%) because the device's dark
-     * palette is pastel-pale and would wash out the white card content —
-     * the fixed wheel still keeps categories distinct there.
-     *
-     * Pastel mode softens every stop; dark mode uses the device's dark
-     * dynamic palette. Off / non-Material style: falls through to the
-     * classic two-stop card gradient below.
+     * The sprinkle eases from 5% at the top of the card to 10% at the
+     * bottom, so the category presence is subtle but present. In dark mode
+     * the device's pale dynamic primary is floored for white card content
+     * (hue untouched) instead of being drowned in category tint, and the
+     * sprinkle strengthens a little (10% → 18%) so categories stay
+     * distinguishable on the muted mid-tone device color. Pastel mode
+     * softens both the device color and the sprinkle to their pastel
+     * twins. Off / non-Material style: falls through to the classic
+     * two-stop card gradient below.
      */
     @Composable
     fun cardGradient(accent: Color): List<Color> {
@@ -331,50 +320,36 @@ object CurioGradients {
             val scheme = MaterialTheme.colorScheme
             val pastel = AppPreferences.pastelColorsState
             val dark = isCurioDarkTheme()
-            // Category stop — the ONE accent presence on the card, slightly
-            // deepened so it reads as a solid anchor in the gradient.
+            // The device anchor — the M3 PRIMARY, the least-pastel of the
+            // Material You trio (secondary/tertiary are the muted pastel
+            // ones). Pastel mode softens it to its pastel twin; otherwise the
+            // raw device color is kept so the card reads as the device's own.
+            val deviceRaw = scheme.primary
+            // v7.37 — floor the device color's lightness for WHITE card
+            // content when it's too pale (dark-mode dynamic palettes are
+            // pastel-pale and would wash out white text; light dynamic
+            // primaries are already dark enough, so floorForWhiteInk is a
+            // no-op there). Only lightness moves — the device hue stays.
+            val device = if (pastel) pastelAccent(deviceRaw, dark) else floorForWhiteInk(deviceRaw)
+            // The category "sprinkle" — the single accent presence on the
+            // card, slightly deepened (or pastel twin in pastel mode) so it
+            // reads as a solid whisper rather than a flat wash.
             val catStop = if (pastel) pastelAccent(accent, dark) else lerp(accent, Color.Black, 0.08f)
-            // Material palette stops — pastel-softened when pastel mode
-            // is on, raw device colors otherwise.
-            val p = if (pastel) pastelAccent(scheme.primary, dark) else scheme.primary
-            val s = if (pastel) pastelAccent(scheme.secondary, dark) else scheme.secondary
-            val t = if (pastel) pastelAccent(scheme.tertiary, dark) else scheme.tertiary
-            // Category presence on the material stops: a whisper in light
-            // mode (the material palette dominates — the category shows via
-            // its own stop + the arrangement), but a stronger pull in dark
-            // mode where the device's pale pastel palette would wash out the
-            // white card content — pulling toward the deep accent keeps the
-            // fill readable while the fixed wheel keeps categories distinct.
-            val hsl = toHsl(accent)
-            val tint = if (dark && !pastel) {
-                (0.42f + hsl.s * 0.10f).coerceIn(0.42f, 0.52f)
-            } else {
-                (0.12f + hsl.s * 0.08f).coerceIn(0.12f, 0.20f)
-            }
-            val pCat = lerp(p, catStop, tint)
-            val sCat = lerp(s, catStop, tint)
-            val tCat = lerp(t, catStop, tint)
-            // v7.14 — light mode floors the material stops' lightness so the
-            // white card content stays readable even when the active palette
-            // is pale (the API<31 Material fallback reuses the Curio pastels).
-            // Dynamic Material You light palettes are already dark enough for
-            // white by design, so real devices are unaffected — only the hue
-            // stays, lightness is pulled down.
-            val light = !dark && !pastel
-            val pF = if (light) floorForWhiteInk(pCat) else pCat
-            val sF = if (light) floorForWhiteInk(sCat) else sCat
-            val tF = if (light) floorForWhiteInk(tCat) else tCat
-            // 6-band arrangement wheel — the accent's hue picks which
-            // material colors sit at which positions and where the
-            // category accent appears (top / middle / bottom).
-            return when {
-                hsl.h < 60f   -> listOf(catStop, sF, tF)           // amber: cat top
-                hsl.h < 120f  -> listOf(sF, catStop, pF)           // yellow: cat mid
-                hsl.h < 180f  -> listOf(catStop, pF, tF)           // green: cat top
-                hsl.h < 240f  -> listOf(tF, catStop, pF)           // cyan: cat mid
-                hsl.h < 300f  -> listOf(pF, sF, catStop)           // blue: cat bottom
-                else          -> listOf(sF, pF, catStop)           // pink: cat bottom
-            }
+            // TWO-color gradient: ~90-95% device color with a category
+            // sprinkle easing down the card. Light mode (and pastel mode)
+            // hold the pure 5% → 10% requested sprinkle — the device palette
+            // dominates and the category is a subtle accent. Dark mode
+            // (non-pastel) raises it to 10% → 18% because the floored device
+            // primary is a muted mid-tone there: at the light 5/10 ratios
+            // every category would read as the same device color and the
+            // deck/picker would lose its color-coding. The device color
+            // still owns ~82-90% of the card.
+            val sprinkleTop = if (dark && !pastel) 0.10f else 0.05f
+            val sprinkleBottom = if (dark && !pastel) 0.18f else 0.10f
+            return listOf(
+                lerp(device, catStop, sprinkleTop),
+                lerp(device, catStop, sprinkleBottom)
+            )
         }
         // End on the ACTIVE theme's background so cards always echo the
         // surface behind them — cream in light, midnight in dark, pure
