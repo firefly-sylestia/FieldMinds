@@ -2066,9 +2066,6 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
  * card can find its saved tilt (quoteTilts parallels quotes 1:1), and
  * renders the section header + a rotated paper card per non-blank quote.
  */
-private fun safeQuoteRotation(rotation: Float): Float =
-    if (rotation.isFinite()) rotation.coerceIn(-6f, 6f) else 0f
-
 @Composable
 private fun RenderQuoteCards(
     quotes: List<String>,
@@ -2111,23 +2108,24 @@ private fun RenderQuoteCards(
             // with — never re-rolled). Legacy entries lack the field → fall
             // back to a stable random tilt keyed by the original index so
             // viewing never re-rolls it either.
-            val rotation = safeQuoteRotation(
-                tilts.getOrNull(origIndex)
-                    ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
-            )
+            val rotation = tilts.getOrNull(origIndex)
+                ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
             val quoteSheet = colors.getOrNull(origIndex) ?: NotePaperColor.CREAM
             NotePaperCard(
                 style = styles.getOrNull(origIndex) ?: fallbackStyle,
                 paperColor = quoteSheet,
                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
                 corner = 12.dp,
-                rotation = rotation,
-                // Keep the quote's layout footprint stable before applying
-                // the visual tilt. The finite, clamped angle prevents bad
-                // legacy values from making the card flicker or vanish.
+                // Hoist the 72dp floor INTO the modifier chain BEFORE the tilt
+                // rotate: passing it as NotePaperCard's minHeight param appends
+                // heightIn AFTER the call-site rotate (the card layer grew to
+                // 72dp and the rotation pivot shifted for single-line quotes).
+                // With heightIn first, the tilt pivots around the CONTENT's
+                // center and stays put whether the quote is one line or five.
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 72.dp)
+                    .rotate(rotation)
             ) {
                 Row(
                     verticalAlignment = Alignment.Top,

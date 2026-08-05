@@ -577,10 +577,6 @@ fun MoodBoardZoomOverlay(
     }
 }
 
-/** Keep persisted/fallback quote angles finite and intentionally subtle. */
-private fun safeQuoteRotation(rotation: Float): Float =
-    if (rotation.isFinite()) rotation.coerceIn(-6f, 6f) else 0f
-
 /** One deterministic floating-card slot on a [boardW]×[boardH] board. */
 private data class MoodQuoteSlot(val x: Float, val y: Float, val w: Float, val h: Float)
 
@@ -646,9 +642,7 @@ fun MoodBoardFloatingCards(
             text = quote,
             style = styles.getOrElse(i) { NotePaperStyle.RULED },
             color = colors.getOrElse(i) { NotePaperColor.CREAM },
-            rotation = safeQuoteRotation(
-                tilts.getOrElse(i) { (i * 4.2f % 8f) - 4f }
-            ),
+            rotation = tilts.getOrElse(i) { (i * 4.2f % 8f) - 4f },
             x = placed.x * scale + offsetX,
             y = placed.y * scale + offsetY,
             w = slot.w * scale,
@@ -696,24 +690,11 @@ private fun MoodBoardFloatingCard(
     val currentH by rememberUpdatedState(h)
     val currentBoardW by rememberUpdatedState(boardW)
     val currentBoardH by rememberUpdatedState(boardH)
-    val currentRotation by rememberUpdatedState(safeQuoteRotation(rotation))
     val currentOnEdit by rememberUpdatedState(onEdit)
     val currentOnMove by rememberUpdatedState(onMove)
 
-    // A rotated rectangle extends beyond its unrotated bounds. Keep a small
-    // angle-aware inset so the paper corners and shadow stay on the board
-    // instead of clipping at the edge.
-    val rotationInset = with(density) {
-        if (safeQuoteRotation(rotation) == 0f) 0.dp.toPx() else 10.dp.toPx()
-    }
-    val renderX = (x + dragDelta.x).coerceIn(
-        rotationInset,
-        (boardW - w - rotationInset).coerceAtLeast(rotationInset)
-    )
-    val renderY = (y + dragDelta.y).coerceIn(
-        rotationInset,
-        (boardH - h - rotationInset).coerceAtLeast(rotationInset)
-    )
+    val renderX = (x + dragDelta.x).coerceIn(0f, (boardW - w).coerceAtLeast(0f))
+    val renderY = (y + dragDelta.y).coerceIn(0f, (boardH - h).coerceAtLeast(0f))
 
     Box(
         modifier = Modifier
@@ -723,12 +704,7 @@ private fun MoodBoardFloatingCard(
                 width = with(density) { w.toDp() },
                 height = with(density) { h.toDp() }
             )
-            .graphicsLayer {
-                // Persisted quote tilts can be absent or malformed in older
-                // entries; sanitize before the layer receives the angle so a
-                // NaN/Infinity cannot make the card flicker or disappear.
-                rotationZ = safeQuoteRotation(rotation)
-            }
+            .rotate(rotation)
             .then(
                 if (currentOnMove != null) Modifier.pointerInput(Unit) {
                     detectDragGestures(
@@ -741,17 +717,10 @@ private fun MoodBoardFloatingCard(
                             // FIRST frame's (pre-drag) values and every drop
                             // would snap the card back. dragDelta is snapshot-
                             // state-backed, so reading it here is current.
-                            val commitInset = if (currentRotation == 0f) 0f else with(density) { 10.dp.toPx() }
                             val commitX = (currentX + dragDelta.x)
-                                .coerceIn(
-                                    commitInset,
-                                    (currentBoardW - currentW - commitInset).coerceAtLeast(commitInset)
-                                )
+                                .coerceIn(0f, (currentBoardW - currentW).coerceAtLeast(0f))
                             val commitY = (currentY + dragDelta.y)
-                                .coerceIn(
-                                    commitInset,
-                                    (currentBoardH - currentH - commitInset).coerceAtLeast(commitInset)
-                                )
+                                .coerceIn(0f, (currentBoardH - currentH).coerceAtLeast(0f))
                             currentOnMove?.invoke(commitX, commitY)
                             // CRITICAL: the commit stores the position as the
                             // card's new x/y, so the visual delta must be
@@ -772,17 +741,10 @@ private fun MoodBoardFloatingCard(
                             // Clamp the ACCUMULATED delta so the card sticks
                             // at the edges (clamping only the visual position
                             // would let the delta run away and snap back).
-                            val dragInset = if (currentRotation == 0f) 0f else with(density) { 10.dp.toPx() }
                             val nx = (currentX + dragDelta.x + amount.x)
-                                .coerceIn(
-                                    dragInset,
-                                    (currentBoardW - currentW - dragInset).coerceAtLeast(dragInset)
-                                )
+                                .coerceIn(0f, (currentBoardW - currentW).coerceAtLeast(0f))
                             val ny = (currentY + dragDelta.y + amount.y)
-                                .coerceIn(
-                                    dragInset,
-                                    (currentBoardH - currentH - dragInset).coerceAtLeast(dragInset)
-                                )
+                                .coerceIn(0f, (currentBoardH - currentH).coerceAtLeast(0f))
                             dragDelta = Offset(nx - currentX, ny - currentY)
                         }
                     )
@@ -800,9 +762,6 @@ private fun MoodBoardFloatingCard(
         NotePaperCard(
             style = style,
             paperColor = color,
-            // Keep quote slips visibly rounded in the normal-paper variant;
-            // torn styles continue to use their own custom outline.
-            corner = 12.dp,
             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
             modifier = Modifier.fillMaxSize()
         ) {

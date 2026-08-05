@@ -35,7 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -90,9 +90,6 @@ import kotlin.random.Random
  * [contentPadding] defaults to a COMPACT inset (12dp) so quote cards stay
  * tight; pass a larger value for the journal page.
  */
-private val NormalPaperTopInset = 8.dp
-private val NormalPaperBottomReveal = 48.dp
-
 @Composable
 fun PaperCard(
     modifier: Modifier = Modifier,
@@ -156,50 +153,33 @@ fun PaperCard(
         NormalPaperShape(tearSeed, topCorner, folded)
     }
     val backingShape = remember(tearSeed) {
-        // The backing must expose a genuinely deep lower sheet, not just a
-        // thin 10dp lip. Its path is positioned so the visible paper reaches
-        // the parent's bottom edge instead of ending above it.
-        SoftTornSheetShape(tearSeed, lip = 48.dp, baseline = 12.dp)
+        SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
     }
     Box(
-        modifier = modifier
-            // Reserve real layout space for both the small top breathing room
-            // and the much taller layered paper lip below the sheet. Without
-            // this floor the backing edge was laid out behind the next field,
-            // so only a thin, glitchy strip could ever be seen.
-            .heightIn(min = minHeight + NormalPaperTopInset + NormalPaperBottomReveal)
-            .graphicsLayer { rotationZ = rotation }
+        modifier = modifier.heightIn(min = minHeight).rotate(rotation)
     ) {
-        // Paint the backing first and anchor it to the BOTTOM. Its extra
-        // overlap disappears behind the front sheet, leaving a deep, stable
-        // lower paper layer rather than a floating line near the top.
+        // Paint the backing first so the front page covers its upper edge.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(NormalPaperBottomReveal + 14.dp)
-                .align(Alignment.BottomCenter)
-                // The overlap keeps the backing attached to the front sheet;
-                // the taller lower portion then remains visible below it.
+                .height(42.dp)
+                .offset(y = 8.dp)
                 .clip(backingShape)
                 .background(notePaperSurface(paperColor))
         )
-        // Keep the front sheet inset from the parent edges so the top has a
-        // little air and the taller bottom sheet remains visibly exposed.
-        Box(
+        Surface(
+            shape = shape,
+            color = notePaperSurface(paperColor),
+            shadowElevation = 1.dp,
+            border = BorderStroke(1.dp, notePaperBorder(paperColor)),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = NormalPaperTopInset, bottom = NormalPaperBottomReveal)
+                .heightIn(min = minHeight)
+                // Reserve the soft torn seam's small lower extent inside
+                // the measured surface so it cannot collide with the next
+                // field in a stacked editor.
+                .padding(bottom = 18.dp)
         ) {
-            Surface(
-                shape = shape,
-                color = notePaperSurface(paperColor),
-                shadowElevation = 1.dp,
-                border = BorderStroke(1.dp, notePaperBorder(paperColor)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = minHeight)
-                    .clip(shape)
-            ) {
         Box(
             // Subtle rigid-card sheen — a whisper of top light + bottom
             // depth so the slip reads as stiff paper stock, not a flat fill.
@@ -270,7 +250,6 @@ fun PaperCard(
                 }
             }
         }
-            }
         }
     }
 }
@@ -496,7 +475,7 @@ private fun buildNormalPaperPath(
     // right side, then the hero-style soft tear from right to left.
     if (corner > 0f) {
         path.moveTo(corner, 0f)
-        path.quadraticBezierTo(0f, 0f, 0f, corner)
+        path.cubicTo(0f, 0f, 0f, corner, 0f, corner)
     } else {
         path.moveTo(0f, 0f)
     }
@@ -507,7 +486,7 @@ private fun buildNormalPaperPath(
     } else {
         path.lineTo(w - corner, 0f)
         if (corner > 0f) {
-            path.quadraticBezierTo(w, 0f, w, corner)
+            path.cubicTo(w, 0f, w, corner, w, corner)
         } else {
             path.lineTo(w, 0f)
         }
@@ -1334,8 +1313,7 @@ fun TornPaperCard(
         color = surface,
         shadowElevation = 0.dp,
         border = BorderStroke(1.dp, edge),
-        modifier = modifier.heightIn(min = minHeight)
-            .graphicsLayer { rotationZ = rotation }
+        modifier = modifier.heightIn(min = minHeight).rotate(rotation)
     ) {
         Box {
             // One Canvas: the grain texture + soft creases + (optionally)

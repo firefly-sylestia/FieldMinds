@@ -259,7 +259,7 @@ fun HomeScreen(navController: NavController) {
             // Use the actual pastel fill as the ink source too, so the
             // cleaner pink-rose hue carries through the greeting, stat icons
             // and hero watermark instead of falling back to a brown raw accent.
-            val questInk = pastelFillInk(heroFill)
+            val questInk = homeReadableInk(heroFill)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -718,14 +718,18 @@ fun HomeScreen(navController: NavController) {
             // Re-resolve the hero ink here — the original questInk lives in
             // the scroll Column's scope; the sticky bar is OUTSIDE it.
             val heroPillBg = homeRoseAccent()
-            val heroPillIcon = pastelFillInk(heroPillBg)
+            // In default light mode the old shared pastel helper returned
+            // white, which made the menu/profile glyphs disappear into the
+            // pale floating pill. Keep pastel and dark behavior intact, but
+            // use the theme's readable dark ink for the default light state.
+            val heroPillIcon = homeReadableInk(heroPillBg)
             val heroPillRim = lerp(heroPillBg, heroPillIcon, 0.42f)
             // Both morph endpoints are fully opaque. The old hero endpoint
             // used a translucent ink wash, which let the banner show through
             // the pills and made them read like circular visual artifacts.
             val frostBg = if (stickyDark) Color(0xFF23242C) else Color.White
             val frostRim = if (stickyDark) Color.White else Color(0xFFD9DEE6)
-            val frostIcon = if (stickyDark) Color.White else pastelFillInk(frostBg)
+            val frostIcon = if (stickyDark) Color.White else homeReadableInk(frostBg)
             // Resolve solid target colors from scroll, then animate the paint
             // itself. The short tween gives a true color fade without adding
             // another geometric transition or ripple-like flash.
@@ -924,7 +928,7 @@ private fun QuestShuffleCard(
     // Deep ink twin for the eyebrow — the airy pastel accent reads too
     // light against the page, so the eyebrow wears the darker ink instead
     // (the button keeps the solid accent fill).
-    val ink = pastelFillInk(accent)
+    val ink = homeReadableInk(accent)
     // Match the newer Saved shelf language: a clean, spacious row with a
     // confident leading glyph, larger editorial hierarchy, and one generous
     // trailing action target instead of a cramped inline chip.
@@ -1170,6 +1174,15 @@ private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = captured
  * normally, its airy pastel twin when pastel mode (the shipped default) is
  * on — so the hero, empty state and drawer all wear the SAME rose-wood.
  */
+@Composable
+private fun homeReadableInk(fill: Color): Color = if (
+    !AppPreferences.pastelColorsState && !isCurioDarkTheme()
+) {
+    MaterialTheme.colorScheme.onSurface
+} else {
+    pastelFillInk(fill)
+}
+
 @Composable
 private fun homeRoseAccent(): Color {
     val base = toHsl(CurioColors.HomeRosewood)

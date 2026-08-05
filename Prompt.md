@@ -1,22 +1,19 @@
 # Prompt.md — Request Log
 
-## Latest Request (COMPLETED)
+## Latest Request (IN PROGRESS)
 
-**Restore the Spin hero icon and move the glyph-pattern treatment to the Home hero**
+**Correct Home colors and fully revert the torn-paper/quote-tilt commit**
 
-### Corrected scope
+### Requested
 
-- Material palette and card gradients were intentionally left unchanged.
-- The Spin/Shuffle hero returned to its previous single category-icon watermark.
-- The top Home hero now uses a detail-style scattered glyph watermark pattern with one larger `AutoAwesome` spark as the only focal symbol.
-- The Home stat pane's extra sparkle watermark was removed so the hero does not have competing focal symbols.
-- Home pattern glyphs use their category ink where the glyph maps to a known category and the Home hero ink as a fallback.
+- Today's Quest should use a readable, better-balanced color.
+- In default light mode, the Home menu and profile icons must not turn white.
+- Fully revert commit `c8bb0dc784a712ad520440b4ba582d58765308c`, which introduced the deeper torn-paper layer and quote-tilt stabilization changes.
+- Do not change the Material palette or gradients.
 
-### Validation
+### Plan
 
-- `scripts/check_braces.py` passed for `HomeScreen.kt` and `SpinScreen.kt`.
-- `git diff --check` passed.
-- Confirmed the Spin pattern helper and pattern list are removed and only the single `cat.iconGlyph` watermark remains.
-- Code review confirmed the requested screen ownership and found no remaining actionable issues.
-- Gradle/build/lint/test commands were not run locally because the repository explicitly forbids Android compilation in this environment; CI remains the compilation gate.
-- Updated `fastlane/metadata/android/en-US/changelogs/20260810.txt`.
+1. Resolve the in-progress revert of `c8bb0dc7` while preserving the current request log.
+2. Use a Home-only dark ink resolver for default light mode; keep pastel and dark behavior readable.
+3. Apply that resolver to Today's Quest and the sticky menu/profile controls.
+4. Run safe static checks, review, update the changelog, and commit/push.
