@@ -2,6 +2,35 @@
 
 ## Latest Request (COMPLETED)
 
+**Fix CI lint failure — NonObservableLocale in EntryDetailScreen**
+
+### What was requested
+
+CI `:app:lintDebug` failed the build with one error: reading
+`Locale.getDefault()` in a non-observable way inside the @Composable
+`formatMetadataTimestamp` helper in `EntryDetailScreen.kt`.
+
+### What changed
+
+- Added `import androidx.compose.ui.platform.LocalLocale`.
+- `formatMetadataTimestamp` now reads the locale via Compose's observable
+  `LocalLocale.current.platformLocale` (imported `java.util.Locale`, safe
+  for `SimpleDateFormat`) instead of `Locale.getDefault()`, so the
+  timestamp re-formats when the user changes the system locale.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
+- `git diff --check` passed.
+- Compose BOM 2026.05.01 includes `LocalLocale`/`platformLocale` (available
+  since Compose UI 1.1.0). Lint reported exactly one error and it is the
+  one fixed; remaining `Locale.getDefault()` uses in `app/` live in
+  non-composable helpers/lambdas that lint does not flag.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Detail hero tear more uneven + subtle seeded tilt**
 
 ### What was requested

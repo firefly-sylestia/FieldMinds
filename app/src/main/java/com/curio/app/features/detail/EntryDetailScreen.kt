@@ -84,6 +84,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -2988,8 +2989,12 @@ private fun structuredDetailRows(raw: String): List<Pair<String, String>> {
 }
 
 @Composable
-private fun formatMetadataTimestamp(millis: Long): String =
-    SimpleDateFormat("MMM d, yyyy · h:mm a", Locale.getDefault()).format(Date(millis))
+private fun formatMetadataTimestamp(millis: Long): String {
+    // Lint (NonObservableLocale): read the locale through Compose's observable
+    // state so the timestamp re-formats when the user changes the system locale.
+    val locale = LocalLocale.current.platformLocale
+    return SimpleDateFormat("MMM d, yyyy · h:mm a", locale).format(Date(millis))
+}
 
 @Composable
 private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCategory) {
