@@ -107,3 +107,20 @@ FrostedSegment (uses Column/Text/CurioIcon) lost its @Composable entirely.
 Also removed the orphaned "Theme-aware entry meta card" KDoc (that card was
 removed in the v7.39 batch) whose @Composable had strayed onto moodOf, and
 collapsed a doubled /** + double blank line. Fixed, review clean, pushed.
+
+## v7.42 — detail view: boxless notes, tighter paper-card gaps, artwork shows behind
+1. **Paper-card gaps** — the detail body's paper boxes (journal + hand-placed
+   quote notecards of mixed styles/colors) stacked at 16dp; reduced to 12dp in
+   SoundBiteRender, ReelNotesRender, MarginaliaRender, FieldNotesRender
+   (PortfolioRender's 14dp untouched).
+2. **Voice note box gone** — SoundBiteRender's tinted Surface ("the white
+   layer") is now transparent with a 0dp shape (no clip on torn edges); the
+   "Voice note · 12s · 1.2MB" label + title row + encodingFormat quality chip
+   deleted; the capsule AudioPlayerBar + transcribe chip + note + quote cards
+   now sit directly on the page wash. Dead formatFileSize() helper removed.
+3. **Category artwork behind** — with the opaque box gone, the root-level
+   CurioWatermarkBackdrop glyphs read through behind the voice note + quotes
+   ("place the artwork behind the white layer" — that layer is the removed
+   box). QuickFactCard was already backgroundless.
+Reviewer caught that the transparent Surface still clipped to RoundedCornerShape(20.dp),
+which would have shaved the torn paper corners — set to 0dp. Pushed.

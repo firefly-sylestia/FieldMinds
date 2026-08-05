@@ -1430,55 +1430,25 @@ private fun SoundBiteRender(
         onDispose { noteRecognizer?.destroy() }
     }
 
+    // v7.42 — no box: the voice note, note, and quotes sit directly on the
+    // page wash (the main background), so the category artwork behind them
+    // reads through — the old tinted Surface ("the white layer") is gone.
+    // The shape is 0dp so the Surface never clips the paper cards' torn
+    // edges (a 20dp round clip would shave the corners now that the cards
+    // run to the full bounds instead of sitting behind a padded box).
     Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = if (AppPreferences.tintWashEffective()) category.tint
-                else MaterialTheme.colorScheme.surfaceContainerHigh,
+        shape = RoundedCornerShape(0.dp),
+        color = Color.Transparent,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // v7.39 — the dead circular play icon is gone (it never played;
-            // the real audio player sits below it); the voice-note label
-            // grows to titleMedium so it reads as the primary line instead
-            // of a dim subtitle.
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    buildString {
-                        append("Voice note · ${data.durationSeconds}s")
-                        if (data.fileSizeBytes > 0) {
-                            append(" · ${formatFileSize(data.fileSizeBytes)}")
-                        }
-                    },
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (!data.title.isNullOrBlank()) {
-                            Text(
-                                data.title,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = if (AppPreferences.tintWashEffective()) category.categoryInk()
-                                        else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        if (data.fileSizeBytes > 0) {
-                            Surface(
-                                shape = RoundedCornerShape(8.dp),
-                                color = category.themedAccent().copy(alpha = 0.12f)
-                            ) {
-                                Text(
-                                    text = data.encodingFormat,
-                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                                    color = category.categoryInk(),
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                                )
-                            }
-                        }
-                    }
-                }
+            // v7.42 — the voice-note label ("Voice note · 12s · 1.2MB" + the
+            // format-quality chip) is gone: the capsule player below is
+            // self-explanatory, so the extra text just competed with the
+            // notes on the bare page.
 
             // ── Real audio player (when file path is available) ─────────
             if (!data.audioFilePath.isNullOrBlank()) {
@@ -1914,15 +1884,6 @@ private fun formatMs(ms: Long): String {
     return "%d:%02d".format(mins, secs)
 }
 
-/** Format bytes to a human-readable size string (e.g. "1.2 MB"). */
-private fun formatFileSize(bytes: Long): String {
-    return when {
-        bytes < 1024 -> "$bytes B"
-        bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-        else -> "%.1f MB".format(bytes.toDouble() / (1024 * 1024))
-    }
-}
-
 /** WCAG contrast ratio of [a] against [b] — used to keep the hero's frosted
  *  glass legible when the blend's first stop comes from the pale non-dynamic
  *  fallback palette. */
@@ -1970,7 +1931,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         return
     }
     
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // ── Rating — Canvas stars (the Material Symbols Outlined font renders
         // even `star` as a hollow outline, so filled stars are solid paths
         // and the remainder ghost at low alpha as a 5-slot scale) ─────────
@@ -2122,7 +2083,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
 @Composable
 private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.Marginalia ?: return
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         data.fieldMindMetadata?.let { metadata ->
             FieldMindMetadataCard(metadata = metadata, category = category)
         }
@@ -3092,7 +3053,7 @@ private fun ExpandedMoodBoardDialog(
 @Composable
 private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.FieldNotes ?: return
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         data.fieldMindMetadata?.let { metadata ->
             FieldMindMetadataCard(metadata = metadata, category = category)
         }
