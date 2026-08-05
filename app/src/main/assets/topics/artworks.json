@@ -701,18 +701,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Night Watch (1642)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Rembrandt's largest painting - four metres of a militia company striding out of shadow. It only became the 'night watch' after centuries of grimy varnish darkened the daylight scene, and in 1715 it was trimmed on every side to fit a wall, amputating two whole figures.",
     "imageUrl": "",
     "byline": "Rembrandt",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Night Watch (1642) by Rembrandt",
       "durationMinutes": 7,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Find the little girl in gold near the centre - she carries a dead chicken with claws, the badge of the militia's 'klauweniers'. The dramatic light is actually daytime, darkened by varnish. Then look for the gaps: the canvas was cut down on all four sides in 1715, and two full figures were lost forever."
     },
     "tags": [
-      "Sculpture",
-      "Modern"
+      "Dutch Golden Age",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -721,18 +721,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Las Meninas (1656)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The painting is a mirror trick: we stand exactly where the king and queen stood, while Velázquez paints us from inside the canvas. The infanta, her maids, a dwarf, a dog - and the royal couple who exist only as a smudge in the mirror on the far wall.",
     "imageUrl": "",
     "byline": "Diego Velázquez",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Las Meninas (1656) by Diego Velázquez",
-      "durationMinutes": 4,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "durationMinutes": 6,
+      "instruction": "You are the subject. Velázquez looks past the Infanta Margarita - at you, or at the royal couple whose reflections sit blurred in the back-wall mirror. Trace every gaze in the room: each one points somewhere different, and the whole picture is built around the space where the viewer stands."
     },
     "tags": [
-      "Photography",
-      "20th Century"
+      "Baroque",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -741,18 +741,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Death of Marat (1793)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Painted in the months after the assassin's knife found Marat in his bath, David turned a murder into a martyrdom - a secular Pieta for the Revolution. The 'A MARAT, David' written on the crate is signed like a tombstone.",
     "imageUrl": "",
     "byline": "Jacques-Louis David",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Death of Marat (1793) by Jacques-Louis David",
       "durationMinutes": 4,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Read it as an altar: the pale body in the tub, the wound barely a slit, the quill still in his hand. Charlotte Corday's letter lies on the crate - she came asking for help, then struck. Notice how clean everything is: no blood, no struggle. That serenity is the point."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Classical",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -761,18 +761,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Raft of the Medusa (1819)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "After the frigate Meduse ran aground in 1816, some 147 people were set adrift on a raft built from its timbers - thirteen days later, fifteen survived. Géricault interviewed the survivors and studied corpses in the morgue to paint this seven-metre-wide epic.",
     "imageUrl": "",
     "byline": "Théodore Géricault",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Raft of the Medusa (1819) by Théodore Géricault",
-      "durationMinutes": 10,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "durationMinutes": 8,
+      "instruction": "Climb the human pyramid with your eyes: the dead and dying at the bottom, the desperate straining at the top toward a sail no bigger than a thumbnail on the horizon. Géricault lived the real story - the wreck, the raft, the fifteen who came back - then chose this one impossible moment of hope."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Romanticism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -781,18 +781,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Great Wave off Kanagawa (1831)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "A woodblock print barely larger than a sheet of paper - yet the clawed wave swallows the horizon while tiny fishing boats brace beneath it. Hokusai used Prussian blue, a pigment newly imported from Europe, to paint the water that made him famous.",
     "imageUrl": "",
     "byline": "Hokusai",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Great Wave off Kanagawa (1831) by Hokusai",
       "durationMinutes": 5,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Notice the wave's fingers - each curl ends in a claw, and the boats are tiny beneath it. In the hollow of the wave sits Mount Fuji, calm and small, the fixed point of the whole series. Remember this is a print: inked woodblocks pulled by hand, thousands of copies, each one a little different."
     },
     "tags": [
-      "Photography",
-      "20th Century"
+      "Ukiyo-e",
+      "Woodblock Print"
     ],
     "tier": 2
   },
@@ -801,18 +801,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Olympia (1863)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "When it hung at the 1865 Salon, guards had to protect it from the crowd. Manet's reclining nude - modeled by Victorine Meurent - stares straight out with no goddess and no myth, just a black cat and a servant's bouquet: a real woman rendered with Renaissance composition and zero apology.",
     "imageUrl": "",
     "byline": "Édouard Manet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Olympia (1863) by Édouard Manet",
-      "durationMinutes": 9,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "durationMinutes": 5,
+      "instruction": "Compare her to Titian's Venus of Urbino and the joke is everywhere: same pose, different woman - this one looks you in the eye, with a cat arching its back at her feet. She wears an orchid, a ribbon and one slipper. The maid brings flowers from an admirer; Olympia's hand answers for her."
     },
     "tags": [
-      "Photography",
-      "20th Century"
+      "Realism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -820,19 +820,19 @@
     "id": "artw-impression-sunrise-1872-by-90",
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
-    "name": "Impression Sunrise (1872)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "name": "Impression, Sunrise (1872)",
+    "teaser": "Painted from a hotel window over Le Havre's harbour, this hazy dawn gave a movement its name: in 1874 a critic sneered that it was only an 'impression' - and the Impressionists adopted the word as a badge of honour.",
     "imageUrl": "",
     "byline": "Claude Monet",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Impression Sunrise (1872) by Claude Monet",
+      "targetName": "Impression, Sunrise (1872) by Claude Monet",
       "durationMinutes": 4,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at the sun: a bare orange disc with no halo, dropped straight into blue-grey water, its reflection broken into strokes of orange. The ships are ghosts of black dabs, the cranes barely sketched. Count how little detail exists - the whole harbour is a feeling at one moment of dawn."
     },
     "tags": [
-      "Sculpture",
-      "Modern"
+      "Impressionism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -840,19 +840,19 @@
     "id": "artw-nocturne-in-black-and-91",
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
-    "name": "Nocturne in Black and Gold (1875)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "name": "Nocturne in Black and Gold: The Falling Rocket (1875)",
+    "teaser": "Fireworks over a London pleasure garden reduced to falling gold sparks on black. When Ruskin called it 'flinging a pot of paint in the public's face,' Whistler sued for libel - and won a single farthing, the smallest coin in the realm, after a trial that left him bankrupt.",
     "imageUrl": "",
     "byline": "Whistler",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Nocturne in Black and Gold (1875) by Whistler",
+      "targetName": "Nocturne in Black and Gold: The Falling Rocket (1875) by Whistler",
       "durationMinutes": 4,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Follow the trail of the rocket - gold drops falling through black before they reach the water's glow. Whistler called his paintings 'nocturnes,' like music, and meant the title literally: this is a mood arranged in colour, not a picture of fireworks. That thrown pot of paint cost him his fortune."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Aestheticism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -861,18 +861,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Starry Night (1889)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Painted from the window of his asylum room at Saint-Remy, with the village below invented from memory, this is the night sky as a churning river: the moon, the stars, and one dark cypress reaching up like a flame into the swirl.",
     "imageUrl": "",
     "byline": "Vincent van Gogh",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Starry Night (1889) by Vincent van Gogh",
-      "durationMinutes": 5,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 6,
+      "instruction": "Find the cypress first - Van Gogh called it a flame, and it anchors the whole composition on the left. Above, the sky is one continuous movement: the moon glows, the stars spiral, and the village below was imagined, not painted from sight. He made it all in a single long day."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Post-Impressionism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -881,18 +881,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Scream (1893)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Munch wrote down what inspired it: walking at sunset with two friends, the sky turned blood-red and 'I sensed an infinite scream passing through nature.' The figure's hands cover its ears - the scream belongs to the landscape, not to the person.",
     "imageUrl": "",
     "byline": "Edvard Munch",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Scream (1893) by Edvard Munch",
-      "durationMinutes": 7,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "durationMinutes": 5,
+      "instruction": "Look at the face - hands over ears, mouth open, but the horror is in the sky: the blood-red clouds, the sick blue fjord, the wavy lines that carry the scream through the air. Two figures walk calmly in the background, unhearing. Munch made four versions; this one is painted on cardboard."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Expressionism",
+      "Mixed Media"
     ],
     "tier": 2
   },
@@ -901,18 +901,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Les Demoiselles d'Avignon (1907)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Five women in a Barcelona brothel, their faces a mix of Iberian sculpture and African masks - Picasso made hundreds of studies over months, then kept the painting rolled up in his studio for nine years before anyone saw it. It detonated modern art.",
     "imageUrl": "",
     "byline": "Picasso",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Les Demoiselles d'Avignon (1907) by Picasso",
-      "durationMinutes": 9,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 7,
+      "instruction": "Look at the two figures on the right - their faces are painted like carved masks, their bodies bent into angles no human could hold. The fruit bowl at the bottom is a still life that never resolves. Every 'wrong' thing here is deliberate: space is crushed, and the viewer is the one being looked at."
     },
     "tags": [
-      "Sculpture",
-      "Modern"
+      "Cubism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -921,18 +921,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Composition VII (1913)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Kandinsky called it his most complex painting, and it shows: a two-by-three-metre storm of colour and line that took three days to paint after months of studies. It is music made visible - he heard colours and saw sounds.",
     "imageUrl": "",
     "byline": "Wassily Kandinsky",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Composition VII (1913) by Wassily Kandinsky",
-      "durationMinutes": 8,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 6,
+      "instruction": "Don't hunt for objects - let the colour move you: the yellow surge, the black scribbles, the floating circles. Kandinsky had synesthesia and composed like a musician; he made dozens of studies before letting this one out in three days. Find the boat hull near the lower centre - one of the few shapes that almost resolves."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Abstract Art",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -941,18 +941,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Fountain (1917)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "A factory-made urinal, turned upside down, signed 'R. Mutt,' submitted to an exhibition that promised to accept everything - then rejected anyway. The original was lost, and the joke keeps being remade, still asking the question that won't go away: what makes art art?",
     "imageUrl": "",
     "byline": "Marcel Duchamp",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Fountain (1917) by Marcel Duchamp",
       "durationMinutes": 4,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "The joke runs deep: the exhibition's rules promised to show everything, and Fountain was rejected for being a plumbing fixture - proof the rules were never about art. Look at the photograph Stieglitz took: the upturned urinal glows like a madonna. Duchamp chose it, so it is art. Why?"
     },
     "tags": [
-      "Photography",
-      "20th Century"
+      "Dada",
+      "Sculpture"
     ],
     "tier": 2
   },
@@ -961,18 +961,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Persistence of Memory (1931)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Dali said the melting watches came to him while eating camembert cheese in the sun. This tiny painting - smaller than a sheet of printer paper - turned soft clocks into the image of time dissolving, with ants swarming the one hard watch.",
     "imageUrl": "",
     "byline": "Salvador Dalí",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Persistence of Memory (1931) by Salvador Dalí",
-      "durationMinutes": 3,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 4,
+      "instruction": "Look at the watches: they droop over branches and a cube like cloth, their faces melting. One watch stays solid - the one crawling with ants, Dali's symbol of decay. The creature in the middle is a self-portrait. And it's tiny: under 33 centimetres wide, a pocket-sized earthquake."
     },
     "tags": [
-      "Sculpture",
-      "Modern"
+      "Surrealism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -980,19 +980,19 @@
     "id": "artw-autumn-rhythm-number-30-98",
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
-    "name": "Autumn Rhythm Number 30 (1950)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "name": "Autumn Rhythm (Number 30) (1950)",
+    "teaser": "Pollock laid this five-metre canvas flat on his studio floor and poured industrial enamel straight from sticks and cans - no brush, no easel, no image planned. 'I am nature,' he said, and the result reads like wind made into a web of paint.",
     "imageUrl": "",
     "byline": "Jackson Pollock",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Autumn Rhythm Number 30 (1950) by Jackson Pollock",
-      "durationMinutes": 4,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "targetName": "Autumn Rhythm (Number 30) (1950) by Jackson Pollock",
+      "durationMinutes": 5,
+      "instruction": "Stand back and the whole thing is one continuous skein; come close and it breaks into drips, pools and splashes of black, silver and rust. Pollock worked from all four sides, pouring from sticks - the paint records his whole body's movement. There is no centre and no top: it's all rhythm."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Abstract Expressionism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -1001,18 +1001,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Marilyn Diptych (1962)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Fifty silk-screened Marilyns from a single publicity still: twenty-five in hot colour, twenty-five fading into newsprint black-and-white. Made the month she died, the diptych is a death portrait that never shows the death.",
     "imageUrl": "",
     "byline": "Andy Warhol",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Marilyn Diptych (1962) by Andy Warhol",
-      "durationMinutes": 3,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 4,
+      "instruction": "Read it left to right: the colour side is fame - lipstick, gold hair, glamour. Then the screen starts to slip: the black-and-white side is an image running out of ink, like a newspaper photo of someone gone. Same face, same smile, fifty times - the repetition is the point. She died the month he made it."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Pop Art",
+      "Silkscreen"
     ],
     "tier": 2
   },
@@ -1020,19 +1020,19 @@
     "id": "artw-balloon-dog-orange-2000-100",
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
-    "name": "Balloon Dog Orange (2000)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "name": "Balloon Dog (Orange) (1994-2000)",
+    "teaser": "Ten feet of mirror-polished stainless steel welded into the shape of a party trick, coated in transparent orange so it reads as pure balloon. One of an edition of five; a sister cast sold for $58.4 million, then a record for a living artist.",
     "imageUrl": "",
     "byline": "Jeff Koons",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Balloon Dog Orange (2000) by Jeff Koons",
-      "durationMinutes": 10,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "targetName": "Balloon Dog (Orange) (1994-2000) by Jeff Koons",
+      "durationMinutes": 4,
+      "instruction": "The whole trick is surface: the steel is polished to a mirror, then sprayed with a transparent colour so it glows like inflated latex. Walk around it - the seams where the balloon knots are welded steel pretending to be a twist. It looks weightless; it weighs roughly a tonne."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Contemporary",
+      "Sculpture"
     ],
     "tier": 2
   },
@@ -1041,18 +1041,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Sunflower Seeds (2010)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "A hundred million porcelain sunflower seeds, each one painted by hand in Jingdezhen. It took 1,600 craftspeople more than two years to make a floor that looked exactly like a heap of seeds - and an invitation to walk on it.",
     "imageUrl": "",
     "byline": "Ai Weiwei",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Sunflower Seeds (2010) by Ai Weiwei",
-      "durationMinutes": 3,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 5,
+      "instruction": "The first impression is dumb abundance: a floor of seeds. Then take in the scale. Every single seed was individually moulded, fired and painted by hand; the pile weighs tonnes and the work took 1,600 people over two years. And you were meant to walk on it, hearing the porcelain crack underfoot."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Contemporary",
+      "Installation"
     ],
     "tier": 2
   },
@@ -1060,15 +1060,15 @@
     "id": "artw-infinity-mirror-room-1965-102",
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
-    "name": "Infinity Mirror Room (1965)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "name": "Infinity Mirror Room - Phalli's Field (1965)",
+    "teaser": "Kusama's first infinity mirror room: a small mirrored box packed with hundreds of red-polka-dotted phallic forms glowing under ultraviolet light, repeated without end in every direction. One visitor steps inside; the self disappears into the pattern.",
     "imageUrl": "",
     "byline": "Yayoi Kusama",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Infinity Mirror Room (1965) by Yayoi Kusama",
-      "durationMinutes": 6,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "targetName": "Infinity Mirror Room - Phalli's Field (1965) by Yayoi Kusama",
+      "durationMinutes": 5,
+      "instruction": "Step inside and the walls disappear - every surface is mirror, and the polka-dotted forms repeat to infinity in all directions. There is room for one viewer: yourself, dissolving into the pattern. It was the first of the mirror rooms Kusama has built for sixty years."
     },
     "tags": [
       "Installation",
@@ -1081,18 +1081,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "My Bed (1998)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Emin exhibited her actual bed - the one she retreated to for days, sheets stained, surrounded by condoms, underwear, vodka bottles and cigarette butts. It earned her a Turner Prize nomination, national outrage, and a 150,000-pound sale that became 2.5 million at auction.",
     "imageUrl": "",
     "byline": "Tracey Emin",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "My Bed (1998) by Tracey Emin",
-      "durationMinutes": 8,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "durationMinutes": 5,
+      "instruction": "Read it as an archaeological dig of one bad week: the stained pillow, the empty vodka, the tights on the floor, the cigarette butts lined up on the bedside table. Everything is real and untouched - she didn't arrange it, she stopped living in it. The question is whether that truth makes it art."
     },
     "tags": [
       "Installation",
-      "Contemporary"
+      "Feminist"
     ],
     "tier": 2
   },
@@ -1101,18 +1101,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Gates (2005)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "For sixteen days in February 2005, 7,503 saffron-orange fabric gates lined 23 miles of Central Park walkways - a project first dreamed up in 1979 and paid for entirely by the artists at $21 million. When it came down, the fabric was recycled.",
     "imageUrl": "",
     "byline": "Christo and Jeanne-Claude",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Gates (2005) by Christo and Jeanne-Claude",
       "durationMinutes": 6,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Walk it: the gates are identical, each with a saffron panel that caught the winter light differently every hour - in sun, in snow, in dusk. The colour is the work: orange against grey February. It lasted 16 days, cost its makers 21 million dollars, and was always meant to vanish."
     },
     "tags": [
       "Installation",
-      "Contemporary"
+      "Land Art"
     ],
     "tier": 2
   }

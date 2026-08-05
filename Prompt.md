@@ -130,3 +130,21 @@ Bumped the workflow actions to Node-24 majors: actions/checkout@v4→v5 (3x),
 actions/setup-java@v4→v5 (3x), actions/upload-artifact@v4→v5 (2x) in
 android.yml + release.yml. softprops/action-gh-release@v2 left as-is (3rd-party,
 not flagged).
+
+## feat — artworks batch 3: last 21 fake descriptions replaced with real facts
+New scripts/batch_artworks_3.py replaced the 21 remaining boilerplate artwork
+teasers ("The kind of work that rewards patience…") with real, verified
+art-history facts — teaser + exploreAction.instruction + accurate tags for each
+(Night Watch, Las Meninas, Death of Marat, Raft of the Medusa, Great Wave,
+Olympia, Impression Sunrise, Nocturne/Falling Rocket, Starry Night, Scream,
+Demoiselles d'Avignon, Composition VII, Fountain, Persistence of Memory,
+Autumn Rhythm, Marilyn Diptych, Balloon Dog, Sunflower Seeds, Infinity Mirror
+Room, My Bed, The Gates). Corrected 5 display names to official titles
+(Impression, Sunrise; Nocturne in Black and Gold: The Falling Rocket; Autumn
+Rhythm (Number 30); Balloon Dog (Orange) (1994-2000); Infinity Mirror Room -
+Phalli's Field). Script is id-guarded (expectName, SKIP on mismatch; the
+olympia id is artw-olympia-1863-by-édouard-89 — ids never renamed). Also
+synced the 5 titles in scripts/expand_topics.py ARTWORK_NAMES seed list.
+Review pass fixed two fact nits: Marat "within days" → "in the months after"
+(finished Oct 1793), and Balloon Dog "more than a car" → "roughly a tonne".
+All 56 artworks now have real descriptions; 0 boilerplate left. Pushed.
