@@ -1,5 +1,6 @@
 package com.curio.app.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -34,18 +35,25 @@ import com.curio.app.ui.theme.CurioIcons
 fun CurioBackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentDescription: String = "Back"
+    contentDescription: String = "Back",
+    // Optional overrides — the entry-detail hero's frosted-glass controls
+    // pass a transparent container with a frosted-plate modifier and the
+    // hero ink; every other screen keeps the default surfaceVariant circle.
+    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface,
+    border: BorderStroke? = null
 ) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = containerColor,
+        border = border,
         modifier = modifier
     ) {
         CurioIcon(
             name = CurioIcons.ChevronLeft,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = contentColor,
             size = 24.dp,
             modifier = Modifier.padding(8.dp)
         )

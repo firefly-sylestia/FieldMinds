@@ -2,6 +2,43 @@
 
 ## Latest Request (COMPLETED)
 
+**Unify the hero's glass elements into one frosted-plate family**
+
+### What was requested
+
+Apply the same frosted-plate treatment to the hero's other glass elements
+so the frost language is consistent. On the ask about whether the Date card
+should change, the user chose: "unify with the card style, not the other
+way" — the card keeps its bright frosted-white look and everything else
+adopts it.
+
+### What changed
+
+- `EntryDetailScreen.kt` — added a shared frosted-glass helper: `heroFrostGradient`
+  (now the card's near-opaque white: `Brush.verticalGradient` 0.99 → 0.94)
+  and `heroFrostPlate(ink, shape)` = clip + background + 1dp hairline rim
+  at ink@0.32. The title plate now uses it and the title text switched from
+  `heroInk` to the card's deep-slate `heroCardInk`. The banner's back and
+  more buttons dropped their solid category-surface fills for the same
+  frosted plate with `heroCardInk` icons, so title + both controls + the
+  Date card read as one bright-white/dark-slate glass family. Date card
+  rim bumped 0.20 → 0.32 to match.
+- `CurioTopBar.kt` — `CurioBackButton` gained optional `containerColor` /
+  `contentColor` / `border` params (defaults unchanged — every other
+  screen keeps the surfaceVariant circle); the hero passes the frosted
+  plate through them.
+
+### Validation
+
+- `scripts/check_braces.py` passed for both changed Kotlin files.
+- `git diff --check` passed.
+- Code review approved both rounds; KDoc nit fixed.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Latest Request (COMPLETED)
+
 **Hero title glass effect broken + ghost overlay behind title**
 
 ### What was requested

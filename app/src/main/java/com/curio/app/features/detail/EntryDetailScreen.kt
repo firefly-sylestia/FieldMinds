@@ -76,6 +76,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
@@ -381,25 +382,16 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(
-                                Brush.verticalGradient(
-                                    0f to Color.White.copy(alpha = 0.28f),
-                                    1f to Color.White.copy(alpha = 0.16f)
-                                )
-                            )
-                            .border(
-                                1.dp,
-                                heroInk.copy(alpha = 0.32f),
-                                RoundedCornerShape(20.dp)
-                            )
+                            .heroFrostPlate(heroCardInk, RoundedCornerShape(20.dp))
                             .padding(horizontal = 20.dp, vertical = 10.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = resolvedEntry.topic.name,
                             style = heroTitleStyle,
-                            color = heroInk.copy(alpha = 0.97f),
+                            // The plate is the card's bright frosted white, so
+                            // the title wears the card's deep-slate ink too.
+                            color = heroCardInk,
                             textAlign = TextAlign.Center,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
@@ -424,7 +416,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     Surface(
                         shape = RoundedCornerShape(18.dp),
                         color = Color.Transparent,
-                        border = BorderStroke(1.dp, heroCardInk.copy(alpha = 0.20f)),
+                        border = BorderStroke(1.dp, heroCardInk.copy(alpha = 0.32f)),
                         shadowElevation = 0.dp
                     ) {
                         // The card's content Box: the Row below defines the
@@ -518,18 +510,25 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CurioBackButton(onClick = { navController.popBackStack() })
+                // Frosted-glass controls — the same bright-white plate + deep
+                // slate ink as the title and the Date · Mood · Type card.
+                CurioBackButton(
+                    onClick = { navController.popBackStack() },
+                    containerColor = Color.Transparent,
+                    contentColor = heroCardInk,
+                    modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
+                )
                 Box {
                     Surface(
                         onClick = { menuExpanded = true },
                         shape = RoundedCornerShape(50),
-                        color = cat.categorySurface(MaterialTheme.colorScheme.surface).copy(alpha = 0.92f),
-                        border = cat.categoryBorder()
+                        color = Color.Transparent,
+                        modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
                     ) {
                         CurioIcon(
                             name = CurioIcons.MoreVert,
                             contentDescription = "More",
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = heroCardInk,
                             size = 24.dp,
                             modifier = Modifier.padding(8.dp)
                         )
@@ -757,6 +756,25 @@ private val EntryDetailSheetExtent = 24.dp
  *  (keeps the backdrop glyphs clear of the thin white under-sheet lip below
  *  the hero's torn edge). */
 private val EntryDetailHeroClearance = EntryDetailHeroHeight + 30.dp
+
+/**
+ * The hero's frosted-glass language — the same bright frosted WHITE as the
+ * Date · Mood · Type card (near-opaque, brighter at the top), with a
+ * hairline rim and deep-slate content. Shared by the title plate and the
+ * banner's back / more buttons so every glass element in the hero reads as
+ * one family (v7.31 — unified to the card's look).
+ */
+private val heroFrostGradient = Brush.verticalGradient(
+    0f to Color.White.copy(alpha = 0.99f),
+    1f to Color.White.copy(alpha = 0.94f)
+)
+
+/** [heroFrostGradient] clipped to [shape] with a hairline rim in [ink]. */
+private fun heroFrostPlate(ink: Color, shape: Shape): Modifier =
+    Modifier
+        .clip(shape)
+        .background(heroFrostGradient)
+        .border(1.dp, ink.copy(alpha = 0.32f), shape)
 
 /**
  * Decorative watermark for the saved-entry hero — a scatter of the entry's
