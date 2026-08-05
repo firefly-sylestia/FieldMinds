@@ -87,6 +87,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -1628,7 +1629,6 @@ private fun Carousel(
                         isMixed = isMixed,
                         mixSeed = mixSeed,
                         scale = deckScale,
-                        glyph = cat.iconGlyph,
                         topic = topic,
                         cat = cat,
                         landed = landedTopic != null,
@@ -1696,6 +1696,14 @@ private fun EmptyPoolHint(cat: CurioCategory) {
     }
 }
 
+private data class HeroPatternGlyph(
+    val glyph: String,
+    val alignment: Alignment,
+    val size: Dp,
+    val rotation: Float,
+    val alpha: Float
+)
+
 @Composable
 private fun HeroTicketCard(
     accent: Color,
@@ -1703,7 +1711,6 @@ private fun HeroTicketCard(
     isMixed: Boolean,
     mixSeed: Int,
     scale: Float = 1f,
-    glyph: String,
     topic: CurioTopic?,
     cat: CurioCategory,
     landed: Boolean,
@@ -1950,16 +1957,41 @@ private fun HeroTicketCard(
                             } else Modifier
                         )
                 ) {
-                    // Gradient card — no side rule needed
-                    // ── Watermark glyph — large, decorative ────────────
+                    // Backdrop-like glyph pattern — the hero echoes the
+                    // page's scattered edge collage, with the center kept
+                    // quiet for the topic copy. The placements, rotations and
+                    // subdued alpha follow CurioWatermarkBackdrop's language.
+                    val patternGlyphs = listOf(
+                        HeroPatternGlyph(CurioIcons.Person, Alignment.TopStart, 54.dp, -12f, 0.095f),
+                        HeroPatternGlyph(CurioIcons.Album, Alignment.TopEnd, 44.dp, 10f, 0.070f),
+                        HeroPatternGlyph("videocam", Alignment.CenterEnd, 58.dp, -8f, 0.080f),
+                        HeroPatternGlyph(CurioIcons.MenuBook, Alignment.CenterStart, 46.dp, 8f, 0.070f),
+                        HeroPatternGlyph("brush", Alignment.BottomStart, 56.dp, -6f, 0.085f),
+                        HeroPatternGlyph(CurioIcons.Science, Alignment.BottomEnd, 58.dp, -12f, 0.080f)
+                    )
+                    patternGlyphs.forEach { pattern ->
+                        CurioIcon(
+                            name = pattern.glyph,
+                            contentDescription = null,
+                            tint = ink.copy(alpha = pattern.alpha),
+                            size = pattern.size,
+                            modifier = Modifier
+                                .align(pattern.alignment)
+                                .padding(10.dp)
+                                .graphicsLayer { rotationZ = pattern.rotation }
+                        )
+                    }
+                    // One oversized spark is the sole focal watermark. It is
+                    // deliberately larger than the surrounding pattern, but
+                    // remains translucent so the topic stays in front.
                     CurioIcon(
-                        name = glyph,
+                        name = CurioIcons.AutoAwesome,
                         contentDescription = null,
-                        tint = ink.copy(alpha = 0.16f),
-                        size = 150.dp,
+                        tint = ink.copy(alpha = 0.14f),
+                        size = 176.dp,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
-                            .padding(end = 6.dp)
+                            .padding(end = 2.dp)
                     )
 
                     // ── Content column ─────────────────────────────────
