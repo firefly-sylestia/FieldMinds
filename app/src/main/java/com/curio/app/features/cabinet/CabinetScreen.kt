@@ -80,8 +80,17 @@ import com.curio.app.ui.theme.themedAccent
  *  - MorphEntrance for empty state content
  */
 /**
+ * Process-local identity for Cabinet filter state. The object remains stable
+ * through recomposition, rotation and in-session tab restoration, but a fresh
+ * app process receives a new identity so rememberSaveable intentionally
+ * discards the previous filter and opens on "All".
+ */
+private object CabinetSessionToken
+
+/**
  * Saves the active Cabinet filter chip by enum name; "All" (null) stays
- * null through an empty-string sentinel, surviving rotation and navigation.
+ * null through an empty-string sentinel, surviving rotation and navigation
+ * within the current app process.
  */
 private val CategoryIdSaver = Saver<CategoryId?, String>(
     save = { it?.name ?: "" },
@@ -93,8 +102,10 @@ private val CategoryIdSaver = Saver<CategoryId?, String>(
 
 @Composable
 fun CabinetScreen(navController: NavController) {
-    var selectedFilter by rememberSaveable(stateSaver = CategoryIdSaver) { mutableStateOf<CategoryId?>(null) }
-    var showLegacyOnly by rememberSaveable { mutableStateOf(false) }
+    var selectedFilter by rememberSaveable(CabinetSessionToken, stateSaver = CategoryIdSaver) {
+        mutableStateOf<CategoryId?>(null)
+    }
+    var showLegacyOnly by rememberSaveable(CabinetSessionToken) { mutableStateOf(false) }
     // Saveable-backed scroll state — the grid keeps its position on rotation.
     val gridState = rememberLazyGridState()
 
