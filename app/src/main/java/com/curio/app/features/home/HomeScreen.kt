@@ -83,6 +83,7 @@ import com.curio.app.ui.components.SoftTornSheetShape
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.pastelAccent
 import com.curio.app.ui.theme.pastelFillInk
