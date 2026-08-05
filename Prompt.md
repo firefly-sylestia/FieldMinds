@@ -94,3 +94,16 @@ stays as an OEM-rejection safety net.
   names the replacement; same signature).
 
 Review: clean. Committed + pushed.
+
+## Follow-up (v7.41b) — CI compile fix: EntryDetailScreen @Composable placement
+CI failed: "Functions which invoke @Composable functions must be marked with
+the @Composable annotation" (EntryDetailScreen.kt:1117) + "@Composable
+invocations can only happen from the context of a @Composable function"
+(1127). The v7.40 hero-date edit had stranded the @Composable annotation
+between two KDocs: it landed on the PLAIN helpers heroDateTinyLabel and
+moodOf() (both String/JournalMood? formatters that compiled as
+@Composable-returning-values, masking the issue) while the real composable
+FrostedSegment (uses Column/Text/CurioIcon) lost its @Composable entirely.
+Also removed the orphaned "Theme-aware entry meta card" KDoc (that card was
+removed in the v7.39 batch) whose @Composable had strayed onto moodOf, and
+collapsed a doubled /** + double blank line. Fixed, review clean, pushed.
