@@ -312,6 +312,11 @@ import kotlin.random.Random
  *     airy pastels stay in family. The top-lit gradient crown softens to a
  *     whisper (0.04-0.06 white-lerp, was 0.10-0.14) — the gradient family
  *     stays, it just reads calm and quiet.
+ *
+ * v7.18 changes:
+ * 35. **5% less saturated peeks** — the peek fills' saturation pull eases
+ *     further (non-pastel 0.80x → 0.75x, pastel 0.85x → 0.80x) so the
+ *     background cards read a touch calmer in every palette.
  */
 // ════════��══════════════════════════════════════════════════════════════════
 // Saveable-state savers — category persisted by enum name, filter sets as
@@ -2266,7 +2271,8 @@ private fun PeekCard(
                 }
                 fromHsl(
                     h.h,
-                    (h.s * 0.85f).coerceAtMost(0.45f),
+                    // v7.18 — 5% less saturated: pull eased 0.85x → 0.80x.
+                    (h.s * 0.80f).coerceAtMost(0.45f),
                     (h.l - drop).coerceIn(0f, 1f)
                 )
             }
@@ -2278,7 +2284,8 @@ private fun PeekCard(
             blendStops.map { stop ->
                 val c = lerp(stop, Color.Black, level)
                 val h = toHsl(c)
-                fromHsl(h.h, (h.s * 0.80f).coerceAtMost(0.50f), h.l)
+                // v7.18 — 5% less saturated: pull eased 0.80x → 0.75x.
+                fromHsl(h.h, (h.s * 0.75f).coerceAtMost(0.50f), h.l)
             }
         }
     }
