@@ -431,7 +431,13 @@ fun HomeScreen(navController: NavController) {
                             if (pickMix) all.shuffled().take(2 + Random.nextInt(2))
                             else listOf(all.random())
                         AppPreferences.setLastSpinCategories(context, chosen.map { it.id })
-                        navController.navigateToTab(CurioRoutes.SPIN)
+                        // Use the existing parameterized Spin route for this
+                        // fresh deck. A plain tab route restores its saved
+                        // composition, which can leave an already-open Spin
+                        // screen showing the previous deck after this tap.
+                        navController.navigateToTab(
+                            CurioRoutes.spinWithCategories(chosen.map { it.id.routeSlug })
+                        )
                     }
                 )
             }
@@ -906,9 +912,9 @@ private fun QuestShuffleCard(
             )
         }
         // Solid inline CTA — sits on the SAME level as the title, not
-        // stacked below it. Compact (44dp, snug 12dp side padding) so the
-        // eyebrow + title column never gets squeezed or cut on narrow
-        // screens.
+        // stacked below it. Its content is intrinsically sized (rather than
+        // fillMaxSize) so the button cannot claim the title column's width and
+        // overlap it on narrow screens.
         Surface(
             onClick = onShuffle,
             shape = RoundedCornerShape(16.dp),
@@ -917,9 +923,7 @@ private fun QuestShuffleCard(
             modifier = Modifier.height(44.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 12.dp),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {

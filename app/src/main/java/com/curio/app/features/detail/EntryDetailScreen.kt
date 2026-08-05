@@ -76,6 +76,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -367,29 +368,34 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Title — the topic name in WHITE on a clean blue
-                    // glass band. The letters are crisp ExtraBold geom in pure
-                    // white (the classic hero title, in every theme — pastel
-                    // mode used to flip them to the accent ink). The pane
-                    // behind them is a BRIGHT blue vertical gradient (see
-                    // below), so the title sits on a clean vivid band instead
-                    // of a flat tint, with NO blur.
-                    // A clean, BRIGHT blue glass pane — light ice blue at the
-                    // top catching the light, melting into a vivid clean blue
-                    // at the bottom. Deliberately NOT derived from (or
-                    // darkened toward) the banner color: the old banner-toned
-                    // gradient read as a dark moody band. White letters pop
-                    // on this blue in every theme.
+                    // ── Title — white ExtraBold geom on a quieter version of
+                    // the SAME color used by the hero/card behind it. Pulling
+                    // the card color toward its surface/ink keeps the title
+                    // tied to the entry's category instead of introducing a
+                    // fixed electric-blue band, while the small deepen between
+                    // stops gives the pill enough shape without extra vibrancy.
+                    val titleCardColor = when {
+                        isCurioDarkTheme() -> lerp(heroStart, Color.Black, 0.12f)
+                        AppPreferences.pastelColorsState -> {
+                            // Pastel cards need more of their deep same-hue ink
+                            // mixed back in so white stays readable without
+                            // turning the title band into a new blue accent.
+                            val muted = lerp(heroStart, pastelFillInk(heroStart), 0.52f)
+                            if (contrastRatio(muted, Color.White) >= 3.0f) muted
+                            else lerp(heroStart, pastelFillInk(heroStart), 0.68f)
+                        }
+                        else -> lerp(heroStart, MaterialTheme.colorScheme.background, 0.16f)
+                    }
                     val titlePaneGradient = Brush.verticalGradient(
                         listOf(
-                            Color(0xFF7CA6EF).copy(alpha = 0.96f),
-                            Color(0xFF3B82F6).copy(alpha = 0.96f)
+                            titleCardColor,
+                            lerp(titleCardColor, Color.Black, 0.14f)
                         )
                     )
                     Surface(
                         shape = RoundedCornerShape(20.dp),
                         color = Color.Transparent,
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.45f)),
+                        border = BorderStroke(1.dp, heroStart.copy(alpha = 0.42f)),
                         shadowElevation = 0.dp
                     ) {
                         // The gradient must wear the pill's rounded shape
