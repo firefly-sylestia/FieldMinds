@@ -8,8 +8,8 @@ import com.curio.app.data.NotePaperStyle
 import com.curio.app.data.TextSpan
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -98,7 +97,7 @@ fun ReelNotesFormat(
                 )
             }
         }
-        imageUris = (imageUris + uris.map { it.toString() }).take(3)
+        imageUris = (imageUris + uris.map { it.toString() }).take(MaxAttachedImages)
     }
 
     val canSave = reviewText.isNotBlank() || quoteCards.hasContent ||
@@ -202,13 +201,16 @@ fun ReelNotesFormat(
         // ── Image attach row ───────────────────────────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
-                text = "Attach images (optional, up to 3)",
+                text = "Attach images (optional, up to $MaxAttachedImages)",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Row(
+            // Many attachments wrap into a tidy grid of thumbs instead of
+            // overflowing one long row.
+            FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 imageUris.forEachIndexed { i, uri ->
                     ImageThumb(
@@ -220,7 +222,7 @@ fun ReelNotesFormat(
                         onRemove = { imageUris = imageUris.filterIndexed { idx, _ -> idx != i } }
                     )
                 }
-                if (imageUris.size < 3) {
+                if (imageUris.size < MaxAttachedImages) {
                     AddImageButton(
                         accent = accent,
                         tint = tint,

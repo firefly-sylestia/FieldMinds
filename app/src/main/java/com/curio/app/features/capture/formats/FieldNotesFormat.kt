@@ -13,8 +13,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -112,7 +112,7 @@ fun FieldNotesFormat(
                 )
             }
         }
-        imageUris = (imageUris + uris.map { it.toString() }).take(6)
+        imageUris = (imageUris + uris.map { it.toString() }).take(MaxAttachedImages)
     }
 
     var observedExpanded by remember { mutableStateOf(true) }
@@ -277,11 +277,17 @@ fun FieldNotesFormat(
         // ── Optional photo attach (CURIO_SPEC §8.5) ────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
-                text = "Attach a photo (optional)",
+                text = "Attach photos (optional, up to $MaxAttachedImages)",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Many attachments wrap into a tidy grid of thumbs instead of
+            // overflowing one long row.
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 imageUris.forEachIndexed { index, uri ->
                     ImageThumb(
                         index = index + 1,
@@ -292,12 +298,14 @@ fun FieldNotesFormat(
                         onRemove = { imageUris = imageUris.filterIndexed { i, _ -> i != index } }
                     )
                 }
-                AddImageButton(
-                    accent = accent,
-                    tint = tint,
-                    label = "Add",
-                    onClick = { imagePicker.launch(arrayOf("image/*")) }
-                )
+                if (imageUris.size < MaxAttachedImages) {
+                    AddImageButton(
+                        accent = accent,
+                        tint = tint,
+                        label = "Add",
+                        onClick = { imagePicker.launch(arrayOf("image/*")) }
+                    )
+                }
             }
         }
     }

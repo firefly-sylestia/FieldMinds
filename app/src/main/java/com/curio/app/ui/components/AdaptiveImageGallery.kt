@@ -33,14 +33,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * v7.36 — adaptive, aspect-ratio-true gallery for saved-entry attachments.
+ * v7.38 — adaptive, aspect-ratio-true gallery for saved-entry attachments.
  *
- * Instead of the old fixed square tiles, every image keeps its real shape
- * and packs into JUSTIFIED rows (Google-Photos style): a wide landscape
- * takes a full slot, a portrait a narrow one, so the user's example — one
- * horizontal + one vertical, then three verticals on the next line — falls
- * out naturally. Each row stretches to exactly fill the container width
- * (heights scale with it, so nothing distorts).
+ * Every image keeps its real shape and packs into a 4-CELL grid: a
+ * portrait takes ONE cell, a landscape / square takes TWO, and a row
+ * never exceeds FOUR cells — so you get at most 4 verticals per row and
+ * at most 2 horizontals (mixed rows pack the same way: one horizontal +
+ * one vertical fills three cells, then three verticals fill the next).
+ * Full rows stretch to exactly fill the container width (heights scale
+ * with it, so nothing distorts); a lone leftover image renders at its
+ * natural size capped at two cells and centered — it never stretches
+ * to fill the row.
  *
  * Tapping an image zooms it IN PLACE over the page — the same no-dark-scrim
  * [MoodBoardZoomOverlay] the mood boards use: the image glides from its
@@ -94,7 +97,9 @@ fun AdaptiveImageGallery(
                 layout.rows.forEach { row ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = if (layout.single) Arrangement.Center
+                        // Lone leftover rows (a single image) center at their
+                        // natural capped size; multi-image rows justify.
+                        horizontalArrangement = if (row.tiles.size == 1) Arrangement.Center
                         else Arrangement.spacedBy(gap)
                     ) {
                         row.tiles.forEach { tile ->
@@ -173,16 +178,18 @@ private data class GalleryRow(
 /** The full gallery layout: rows + total height (px). */
 private data class GalleryLayout(
     val rows: List<GalleryRow>,
-    val heightPx: Float,
-    val single: Boolean
+    val heightPx: Float
 )
 
 /**
- * Packs [uris] into justified rows. Each image's base width = rowHeight ×
- * aspect, so portraits are narrow and landscapes wide; rows wrap when the
- * next image would overflow the container, then stretch to fill it exactly
- * (heights scale with the stretch so aspect ratios hold). A lone image is
- * shown at natural aspect, capped so an extreme portrait doesn't tower.
+ * Packs [uris] into the adaptive gallery. A 4-column grid where each
+ * portrait (aspect < 1) occupies ONE cell and each landscape / square
+ * (aspect >= 1) occupies TWO — a row never exceeds FOUR cells, so at most
+ * 4 verticals or 2 horizontals fit per row. Full rows justify to the
+ * container width (heights scale with the stretch so aspect ratios hold);
+ * a lone leftover image renders at natural size capped at two cells and
+ * centered, never stretched. A single image overall is shown at natural
+ * aspect, capped so an extreme portrait doesn't tower.
  */
 private fun computeGalleryLayout(
     uris: List<String>,
@@ -202,47 +209,72 @@ private fun computeGalleryLayout(
             w = h * a
         }
         val tile = GalleryTile(uris[0], (containerW - w) / 2f, 0f, w, h)
-        return GalleryLayout(listOf(GalleryRow(listOf(tile), h)), h, single = true)
+        return GalleryLayout(listOf(GalleryRow(listOf(tile), h)), h)
     }
 
-    // Pack base widths into rows (uri → base width).
-    val rawRows = mutableListOf<MutableList<Pair<String, Float>>>()
-    var cur = mutableListOf<Pair<String, Float>>()
-    var curW = 0f
-    uris.forEach { uri ->
+    // Cell geometry of the 4-column grid (a landscape spans two cells).
+    val cellW = (containerW - 3f * gapPx) / 4f
+    val twoCellW = 2f * cellW + gapPx
+
+    // One attachment: its aspect + how many grid cells it occupies.
+    data class Item(val uri: String, val aspect: Float, val cells: Int)
+    val items = uris.map { uri ->
         val a = (aspects[uri] ?: 1f).coerceIn(0.25f, 4f)
-        val w = rowHPx * a
-        if (cur.isNotEmpty() && curW + w + gapPx > containerW) {
+        Item(uri, a, if (a >= 1f) 2 else 1)
+    }
+
+    // Pack greedily — a row holds at most 4 cells.
+    val rawRows = mutableListOf<MutableList<Item>>()
+    var cur = mutableListOf<Item>()
+    var curCells = 0
+    items.forEach { item ->
+        if (cur.isNotEmpty() && curCells + item.cells > 4) {
             rawRows.add(cur)
             cur = mutableListOf()
-            curW = 0f
+            curCells = 0
         }
-        cur.add(uri to w)
-        curW += w + gapPx
+        cur.add(item)
+        curCells += item.cells
     }
     if (cur.isNotEmpty()) rawRows.add(cur)
 
-    // Justify every row to the container width; heights follow the stretch.
+    // Lay each row out.
     var y = 0f
     val rows = rawRows.map { row ->
-        val avail = (containerW - (row.size - 1) * gapPx).coerceAtLeast(0f)
-        // sumOf has no Float overload — fold the widths in Float instead of
-        // triggering an Int/UInt overload ambiguity on the compiler.
-        val sum = row.fold(0f) { acc, pair -> acc + pair.second }
-        val s = if (sum > 0f) avail / sum else 1f
-        val h = rowHPx * s
-        var x = 0f
-        val tiles = row.map { (uri, baseW) ->
-            val w = baseW * s
-            val tile = GalleryTile(uri, x, y, w, h)
-            x += w + gapPx
-            tile
+        if (row.size == 1) {
+            // Leftover image — natural size capped at two cells, centered;
+            // it never stretches to fill the row.
+            val item = row[0]
+            var w = (rowHPx * item.aspect).coerceAtMost(twoCellW)
+            var h = w / item.aspect
+            if (h > rowHPx * 2.2f) {
+                h = rowHPx * 2.2f
+                w = h * item.aspect
+            }
+            val tile = GalleryTile(item.uri, (containerW - w) / 2f, y, w, h)
+            y += h + gapPx
+            GalleryRow(listOf(tile), h)
+        } else {
+            // Multi-image row — justify to the container width; heights
+            // scale with the stretch so every aspect ratio holds.
+            val avail = (containerW - (row.size - 1) * gapPx).coerceAtLeast(0f)
+            // sumOf has no Float overload — fold the aspects in Float.
+            val sum = row.fold(0f) { acc, item -> acc + item.aspect }
+            val s = if (sum > 0f) avail / sum else 1f
+            val h = rowHPx * s
+            var x = 0f
+            val tiles = row.map { item ->
+                val w = rowHPx * item.aspect * s
+                val tile = GalleryTile(item.uri, x, y, w, h)
+                x += w + gapPx
+                tile
+            }
+            y += h + gapPx
+            GalleryRow(tiles, h)
         }
-        y += h + gapPx
-        GalleryRow(tiles, h)
     }
     val totalH = (y - gapPx).coerceAtLeast(0f)
-    return GalleryLayout(rows, totalH, single = false)
+    return GalleryLayout(rows, totalH)
 }
 
 /**

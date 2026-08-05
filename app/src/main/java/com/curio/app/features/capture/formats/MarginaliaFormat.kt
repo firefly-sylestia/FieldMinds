@@ -7,8 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,8 +87,8 @@ fun MarginaliaFormat(
     // Mood — the "How did it make you feel?" row. Optional; legacy entries
     // have none (Gson → null).
     var mood by remember(initialData) { mutableStateOf(initialData?.mood) }
-    // Attached gallery images (up to 6, same as Field Notes) — legacy
-    // entries omit them (Gson → null, guard with orEmpty()).
+    // Attached gallery images (up to [MaxAttachedImages], same as Field
+    // Notes) — legacy entries omit them (Gson → null, guard with orEmpty()).
     var imageUris by remember(initialData) { mutableStateOf(initialData?.imageUris.orEmpty()) }
     val context = LocalContext.current
     val imagePicker = rememberLauncherForActivityResult(
@@ -102,7 +102,7 @@ fun MarginaliaFormat(
                 )
             }
         }
-        imageUris = (imageUris + uris.map { it.toString() }).take(6)
+        imageUris = (imageUris + uris.map { it.toString() }).take(MaxAttachedImages)
     }
 
     // ── Voice-note attachment — the shared AudioRecorder (MediaRecorder)
@@ -248,16 +248,20 @@ fun MarginaliaFormat(
 
         // ── Attachments — behind the "Entry date & mood" setting ─────────
         if (AppPreferences.entryMetaEnabledState) {
-            // Attach gallery images (up to 6) — same row as Reel Notes.
+            // Attach gallery images (up to [MaxAttachedImages]) — same row
+            // as Reel Notes.
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "Attach images (optional, up to 6)",
+                    text = "Attach images (optional, up to $MaxAttachedImages)",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Row(
+                // Many attachments wrap into a tidy grid of thumbs instead
+                // of overflowing one long row.
+                FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     imageUris.forEachIndexed { i, uri ->
                         ImageThumb(
@@ -271,7 +275,7 @@ fun MarginaliaFormat(
                             }
                         )
                     }
-                    if (imageUris.size < 6) {
+                    if (imageUris.size < MaxAttachedImages) {
                         AddImageButton(
                             accent = accent,
                             tint = tint,

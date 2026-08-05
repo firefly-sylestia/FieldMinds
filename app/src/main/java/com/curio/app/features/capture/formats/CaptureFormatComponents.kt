@@ -85,6 +85,13 @@ import kotlin.math.sin
  */
 
 /**
+ * How many images a take may attach — every capture format caps its picker
+ * results at this. Generous on purpose (v7.38): the saved-entry gallery
+ * adapts to any count, so there's no reason to keep the old 3/6 limits.
+ */
+const val MaxAttachedImages = 30
+
+/**
  * A FILLED 5-pointed star with a crisp outline — drawn as a Canvas path
  * with a dimensional crown-to-base gradient.
  *
