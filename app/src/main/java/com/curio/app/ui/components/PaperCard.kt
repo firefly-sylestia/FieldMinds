@@ -947,9 +947,14 @@ private class SoftTearParams(private val seed: Int, density: Density) {
     val micro = with(density) { (1.0f + rnd.nextFloat() * 0.8f).dp.toPx() }
     val ripple = with(density) { (1.3f + rnd.nextFloat() * 0.9f).dp.toPx() }
     val rippleWaves = 7f + rnd.nextFloat() * 4f
-    // Seeded tilt — the whole edge drifts only gently from left to right,
-    // so it never overwhelms the broad wave rhythm.
-    val tilt = (rnd.nextFloat() - 0.5f) * 2f * with(density) { (2f + rnd.nextFloat() * 2f).dp.toPx() }
+    // Seeded tilt — the whole edge drifts from left to right so the torn
+    // SEAM visibly cants while the card rectangle stays level (the tilt
+    // lives inside the tear path, never a rotation of the card). It's a
+    // gentle hand-torn slant — large enough to read (v7.x — raised from
+    // the old ±2dp whisper which was invisible once the card itself was
+    // no longer rotated), small enough not to overwhelm the broad wave
+    // rhythm.
+    val tilt = (rnd.nextFloat() - 0.5f) * 2f * with(density) { (6f + rnd.nextFloat() * 4f).dp.toPx() }
     val phase = rnd.nextFloat() * 100f
 
     /** The torn-edge displacement at horizontal position [x] (px) across a

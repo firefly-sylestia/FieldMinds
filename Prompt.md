@@ -821,3 +821,20 @@ User: (1) disliked the title's gradient font style — change it; (2) doesn't wa
 - `scripts/check_braces.py` passed; `git diff --check` clean; import audit clean (Shadow 2 hits = import + 1 use; Offset/Brush pre-existing).
 - Reviewer confirmed both changes match the established text-brush pattern and M3 1.5.0-alpha20 DropdownMenu params; its two nits (frost top stop, pane alpha) were applied.
 - Note: the same carved-glass title was applied+reverted earlier per user preference; this is a fresh explicit request for glass lettering — CI remains the compile gate.
+
+---
+
+## Tear-only tilt (card stays level)
+
+### Changes
+
+- **Problem**: the per-entry "remember tilt" was a `rotate(heroTilt)` on the whole tear layer (white sheet + hero backdrop), so the entire card rectangle canted — user: "the tilt is suppose to be the tear tilt not the actual card tilting... dont make the card backgroud itself tilt."
+- **Fix (EntryDetailScreen.kt)**: removed the `heroTilt` remember block and the inner rotated Box wrapper entirely; the white under-sheet + hero backdrop are now direct level children of the outer banner Box (backdrop `HeroHeight`, sheet `HeroHeight-18`/42dp, outer `HeroHeight+SheetExtent` — the pre-tilt geometry).
+- **Fix (PaperCard.kt)**: the cant now lives INSIDE the seeded tear path — `SoftTearParams.tilt` raised from ±(2-4)dp to ±(6-10)dp (`6f + rnd*4f`), applied as the seam slant `tilt*(normalizedX-0.5)` in `broadDisp`. Hero torn bottom + white under-sheet both build `SoftTearParams` from the SAME seed, so they share the slant and stay pixel-aligned (sheet bottom rides ~6dp+ below the seam even at the ±(3-5)dp edge slant — no page-wash gaps).
+- Note: HomeScreen uses the same shapes, so its tear cants identically — intended (user asked for uniform tear style earlier).
+
+### Validation
+
+- `scripts/check_braces.py` passed (both files); `git diff --check` clean; no heroTilt leftovers; `rotate` import stays (still used at ~line 2111 for a different element).
+- Reviewer confirmed geometry/coverage; noted Home's tear now cants too (intended) and the knob is `SoftTearParams.tilt` if the user wants it more/less pronounced.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

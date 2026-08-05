@@ -274,91 +274,74 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // seeded soft tear, ONE white sheet sits just behind it, and the
         // page's wash starts right after the sheet's lip.
         val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
-        // v7.29 — a hand-placed tilt for the torn banner, seeded from the
-        // entry id so every detail page sits at its own stable angle
-        // (reopens identically, never re-rolls). Wide enough to read as a
-        // canted slip of paper, but applied ONLY to the tear layer — the
-        // title, the frosted Date · Mood · Type card and the back / more
-        // controls stay level on top of it. Declared before the banner Box.
-        val heroTilt = remember(tearSeed) {
-            kotlin.random.Random(tearSeed * 31 + 0x0CAFE11E).nextFloat() * 5.0f - 2.5f
-        }
+        // v7.29 — the torn SEAM cants, not the card. The per-entry slant
+        // lives INSIDE the seeded tear path itself (SoftTearParams.tilt —
+        // seeded from the same tearSeed, shared by the hero and its white
+        // under-sheet so the two edges stay pixel-aligned), so every detail
+        // page wears its own stable hand-torn angle (reopens identically,
+        // never re-rolls) while the card rectangle — the title, the frosted
+        // Date · Mood · Type card and the back / more controls — stays
+        // perfectly LEVEL.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight + EntryDetailSheetExtent)
         ) {
-            // ── Tilted tear layer — ONLY the torn banner (the solid hero +
-            // its white under-sheet) sits at the per-entry angle, so the
-            // tear visibly cants on its own. The centered content (glyph,
-            // title, frosted Date · Mood · Type card) and the back / more
-            // controls stay LEVEL on top of the tilted paper — the tilt
-            // reads as a hand-torn slip, not a crooked page. The layer is
-            // a little taller than the banner band and centered on it, so
-            // the rotation never pokes into the content or the page below.
+            // ── White under-sheet — ONE SOLID white sheet layered BEHIND
+            // the hero's torn bottom edge. The tear lives ONLY on the hero
+            // card: the sheet's top edge is the SAME seeded torn curve as
+            // the hero's bottom edge (same seed → pixel-perfect alignment,
+            // so the sheet's torn top hides behind the opaque hero and the
+            // wavy bite marks read white through the hero's up-bites), and
+            // the sheet's lower edge follows the same broad waves with a
+            // thin uneven lip. Its small tooth is independent, creating a
+            // believable layered-paper tear without a rigid parallel line or
+            // visible gaps. (tearSeed is declared above, with the tilt.)
+            // Remembered Shape instances so their internal outline caches
+            // survive recompositions (built fresh in the modifier chain, the
+            // caches would never hit).
+            val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
+            val sheetShape = remember(tearSeed) {
+                SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(EntryDetailHeroHeight + EntryDetailSheetExtent + 36.dp)
-                    .offset(y = -18.dp)
-                    .rotate(heroTilt)
-            ) {
-                // ── White under-sheet — ONE SOLID white sheet layered BEHIND
-                // the hero's torn bottom edge. The tear lives ONLY on the hero
-                // card: the sheet's top edge is the SAME seeded torn curve as
-                // the hero's bottom edge (same seed → pixel-perfect alignment,
-                // so the sheet's torn top hides behind the opaque hero and the
-                // wavy bite marks read white through the hero's up-bites), and
-                // the sheet's lower edge follows the same broad waves with a
-                // thin uneven lip. Its small tooth is independent, creating a
-                // believable layered-paper tear without a rigid parallel line or
-                // visible gaps. (tearSeed is declared above, with the tilt.)
-                // Remembered Shape instances so their internal outline caches
-                // survive recompositions (built fresh in the modifier chain, the
-                // caches would never hit).
-                val heroTornShape = remember(tearSeed) { SoftTornBottomShape(tearSeed) }
-                val sheetShape = remember(tearSeed) {
-                    SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(42.dp)
-                        // Baseline lifts the sheet's torn top above this box's
-                        // own top edge (behind the hero), while the sheet extends
-                        // far enough below the hero that anti-aliased wave edges
-                        // cannot reveal a page-wash gap.
-                        .offset(y = EntryDetailHeroHeight - 18.dp)
-                        .clip(sheetShape)
-                        .background(Color(0xFFFDFCF9))
-                )
+                    .height(42.dp)
+                    // Baseline lifts the sheet's torn top above this box's
+                    // own top edge (behind the hero), while the sheet extends
+                    // far enough below the hero that anti-aliased wave edges
+                    // cannot reveal a page-wash gap.
+                    .offset(y = EntryDetailHeroHeight - 18.dp)
+                    .clip(sheetShape)
+                    .background(Color(0xFFFDFCF9))
+            )
 
-                // ── Hero backdrop — the SOLID category color + symbol scatter.
-                // No gradient: the depth comes from the torn seam below. The
-                // banner itself is NOT blurred (the frosted look belongs to the
-                // date / mood / type grid card below, which carries its own
-                // blurred glass pane); the glyph scatter stays sharp so it reads
-                // as a deliberate patterned backdrop. The bottom edge is torn
-                // with the SOFT rounded shape (small rounded textures, tilted a
-                // touch, NOT the sharp jagged [TornPaperShape] of the note
-                // cards) — the solid hero ends in a real torn-paper seam into
-                // the white sheet + page wash below instead of a gradient
-                // dissolve.
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(EntryDetailHeroHeight)
-                        .clip(heroTornShape)
-                        .background(heroStart)
-                ) {
-                    // ── Hero watermark — a scatter of the entry's category-family
-                    //     symbols (instruments for Music, camera kit for Movies,
-                    //     books for Books, art tools for Visual Art, lab symbols
-                    //     for Science, curiosities for Wildcard) pinned around the
-                    //     banner's perimeter. Only in the hero — the page backdrop
-                    //     keeps its own muted glyph wash.
-                    HeroSymbolScatter(cat = cat)
-                }
+            // ── Hero backdrop — the SOLID category color + symbol scatter.
+            // No gradient: the depth comes from the torn seam below. The
+            // banner itself is NOT blurred (the frosted look belongs to the
+            // date / mood / type grid card below, which carries its own
+            // blurred glass pane); the glyph scatter stays sharp so it reads
+            // as a deliberate patterned backdrop. The bottom edge is torn
+            // with the SOFT rounded shape (small rounded textures, canted a
+            // touch, NOT the sharp jagged [TornPaperShape] of the note
+            // cards) — the solid hero ends in a real torn-paper seam into
+            // the white sheet + page wash below instead of a gradient
+            // dissolve.
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(EntryDetailHeroHeight)
+                    .clip(heroTornShape)
+                    .background(heroStart)
+            ) {
+                // ── Hero watermark — a scatter of the entry's category-family
+                //     symbols (instruments for Music, camera kit for Movies,
+                //     books for Books, art tools for Visual Art, lab symbols
+                //     for Science, curiosities for Wildcard) pinned around the
+                //     banner's perimeter. Only in the hero — the page backdrop
+                //     keeps its own muted glyph wash.
+                HeroSymbolScatter(cat = cat)
             }
 
             Box(
