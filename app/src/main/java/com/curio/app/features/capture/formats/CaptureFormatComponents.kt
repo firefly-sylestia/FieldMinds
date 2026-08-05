@@ -34,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -42,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
@@ -465,6 +465,10 @@ fun PaperLineField(
 /** Hand-placed tilt in degrees (−2.5°..2.5°) for a quote card. */
 private fun randomQuoteTilt(): Float = kotlin.random.Random.nextFloat() * 5f - 2.5f
 
+/** Keep editor quote angles finite and intentionally subtle. */
+private fun safeEditorQuoteRotation(rotation: Float): Float =
+    if (rotation.isFinite()) rotation.coerceIn(-6f, 6f) else 0f
+
 /**
  * State holder for the reusable "Favorite quotes" section — owns the five
  * PARALLEL lists that describe every card (text, rich-text spans, hand-
@@ -729,9 +733,7 @@ fun QuoteCardEditor(
     val style = state.styles.getOrElse(index) { NotePaperStyle.RULED }
     val color = state.colors.getOrElse(index) { NotePaperColor.CREAM }
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .rotate(rotation)
+        modifier = Modifier.fillMaxWidth()
     ) {
         // ── Card header — quote mark + number, Remove on the right ──
         Row(
@@ -772,7 +774,12 @@ fun QuoteCardEditor(
             }
         }
         RichTextEditor(
-            modifier = Modifier.fillMaxWidth(),
+            // Tilt only the paper surface, not its header and formatting
+            // toolbar. Rotating the entire editor column made the controls
+            // wobble and changed the visual pivot as the text grew.
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer { rotationZ = safeEditorQuoteRotation(rotation) },
             text = state.quotes.getOrElse(index) { "" },
             spans = state.spans.getOrElse(index) { emptyList() },
             onRichTextChange = { newText, newSpans -> state.setText(index, newText, newSpans) },

@@ -1,5 +1,6 @@
 • Spin's hero card now echoes the page's muted glyph pattern with one oversized spark as its only focal symbol.
 • Slightly shortened the detail-page hero card while keeping its torn seam, under-sheet, content alignment, and backdrop clearance synchronized.
+• Paper cards now have a much deeper layered bottom sheet with a small top breathing inset; quote tilts are sanitized and rounded normal-paper corners use a corrected curved path instead of glitchy geometry.
 • Improved detail-screen readability: small metadata, captions, counts, subtitles, review/image states, and restored FieldMind labels now use stronger theme-aware or category-aware ink instead of faint colors.
 • Simplified the detail and Spin screens: detail titles are now plain white text with no title plate, while Spin opens directly without the Wildcard/category header, count, or back button.
 • Fixed the Home menu/profile pills' circular ripple glitch: their shapes stay stable, use solid opaque fills, and the hero-to-frost background, rim and icon colors now fade smoothly instead of flashing through a circular transition.
