@@ -199,8 +199,17 @@ User: "the title background looks darker, make it brighter instead of the dark v
 - Removed the now-unused `androidx.compose.ui.graphics.lerp` import; stale comment above the pill updated.
 - Reviewer: white-on-blue contrast strong in all themes; its top-stop note applied (deepened `#9DC0F7 → #7CA6EF` so a two-line title's first line doesn't wash out).
 
+### Completed: Home polish pass (greeting, quest block, currently exploring, stat card)
+
+User asks: right-align greeting + name; darker TODAY'S QUEST; shuffle button on the same level as the title; redesign Currently exploring to match; stat-card icons visible (same hero color, darker) + glyph pattern on the hero background.
+
+- Greeting + name: `textAlign` Center → End (hug the right edge, banner Column still centers the stat card).
+- QuestShuffleCard: eyebrow wears the deep `ink` twin instead of the airy pastel accent; the full-width 56dp button became a compact inline 52dp solid button (icon + "Shuffle") in a Row on the SAME level as the "Shuffle the deck" title (title Column weight(1f) + ellipsis).
+- CurrentlyExploringCard: neutral surfaceContainerLow → solid `cat.categorySurface()` (matches recents rows), wrapped in Box with a faint category glyph watermark (96dp, accent 10%, CenterEnd) and the header restyled to the quest-eyebrow treatment (labelSmall ExtraBold + 1.4.sp letterSpacing).
+- Stat card: Streak · Cabinet · Recent icons now wear `questInk` (the deep hero ink) instead of pastel FireOrange/Sage/Lilac; added a sparkle (AutoAwesome) watermark inside the gradient pane. FireOrange is now unused in HomeScreen (only Sage/Lilac remain for empty-state icons).
+
 ### Validation
 
-- `scripts/check_braces.py` passed; `git diff --check` clean; Shadow verified 0 uses; Brush 4×, Offset 2× still used.
-- Reviewer confirmed readability in all theme modes; its tint bump + comment fixes applied.
+- `scripts/check_braces.py` passed; `git diff --check` clean.
+- Reviewer approved after one fix: the 76dp watermark would have inflated the stat-card pane (wrap-content Box sizes to tallest child) — now wrapped in a `matchParentSize()` Box so it can't grow the card.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

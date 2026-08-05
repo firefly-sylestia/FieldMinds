@@ -271,13 +271,15 @@ fun HomeScreen(navController: NavController) {
                         ) {
                             // Greeting — one line, with the name beneath it
                             // (the quest CTA moved below the hero).
+                            // Greeting — one line on the right, name beneath it
+                            // (the quest CTA moved below the hero).
                             Text(
                                 text = greetingWordForNow(),
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.ExtraBold
                                 ),
                                 color = questInk,
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.End,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.fillMaxWidth()
@@ -289,7 +291,7 @@ fun HomeScreen(navController: NavController) {
                                     fontWeight = FontWeight.Bold
                                 ),
                                 color = questInk.copy(alpha = 0.92f),
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.End,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.fillMaxWidth()
@@ -322,17 +324,40 @@ fun HomeScreen(navController: NavController) {
                                         RoundedCornerShape(20.dp)
                                     )
                                 ) {
+                                    // Watermark sparkle — echoes the hero's
+                                    // glyph, a faint ink ghost on the right.
+                                    // The wrapper Box uses matchParentSize() so
+                                    // the glyph can never inflate the pane: a
+                                    // wrap-content Box would otherwise size to
+                                    // its tallest child and grow the stat card
+                                    // away from the tear.
+                                    Box(
+                                        modifier = Modifier.matchParentSize(),
+                                        contentAlignment = Alignment.CenterEnd
+                                    ) {
+                                        CurioIcon(
+                                            name = CurioIcons.AutoAwesome,
+                                            contentDescription = null,
+                                            tint = questInk.copy(alpha = 0.08f),
+                                            size = 76.dp,
+                                            modifier = Modifier.padding(end = 6.dp)
+                                        )
+                                    }
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(horizontal = 6.dp, vertical = 10.dp),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
+                                        // Icons wear the HERO ink (not the
+                                        // pastel tints) so they stay visible
+                                        // on the rose pane — deeper, same
+                                        // family as the banner text.
                                         HeroStatSegment(
                                             glyph = "local_fire_department",
                                             value = "$streakDays",
                                             label = "Streak",
-                                            tint = CurioColors.FireOrange,
+                                            tint = questInk,
                                             ink = questInk,
                                             modifier = Modifier.weight(1f)
                                         )
@@ -344,7 +369,7 @@ fun HomeScreen(navController: NavController) {
                                             glyph = CurioIcons.Inventory2,
                                             value = "$totalSaved",
                                             label = "Cabinet",
-                                            tint = CurioColors.Sage,
+                                            tint = questInk,
                                             ink = questInk,
                                             modifier = Modifier.weight(1f)
                                         )
@@ -356,7 +381,7 @@ fun HomeScreen(navController: NavController) {
                                             glyph = CurioIcons.History,
                                             value = "${recentEntries.size}",
                                             label = "Recent",
-                                            tint = CurioColors.Lilac,
+                                            tint = questInk,
                                             ink = questInk,
                                             modifier = Modifier.weight(1f)
                                         )
@@ -749,36 +774,46 @@ private fun QuestShuffleCard(
     accent: Color,
     onShuffle: () -> Unit
 ) {
+    // Deep ink twin for the eyebrow — the airy pastel accent reads too
+    // light against the page, so the eyebrow wears the darker ink instead
+    // (the button keeps the solid accent fill).
     val ink = pastelFillInk(accent)
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = "TODAY'S QUEST",
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 1.4.sp
-            ),
-            color = accent
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            text = "Shuffle the deck",
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-            color = MaterialTheme.colorScheme.onBackground,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Spacer(Modifier.height(14.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "TODAY'S QUEST",
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 1.4.sp
+                ),
+                color = ink
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = "Shuffle the deck",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        // Solid inline CTA — sits on the SAME level as the title, not
+        // stacked below it.
         Surface(
             onClick = onShuffle,
             shape = RoundedCornerShape(18.dp),
             color = accent,
             shadowElevation = 0.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
+            modifier = Modifier.height(52.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 18.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -787,9 +822,9 @@ private fun QuestShuffleCard(
                     tint = ink,
                     size = 22.dp
                 )
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(8.dp))
                 Text(
-                    "Shuffle a random deck",
+                    "Shuffle",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = ink
                 )
@@ -1402,88 +1437,107 @@ private fun CurrentlyExploringCard(
         }
     }
 
+    val cat = CurioCategories.byId(session.categoryId)
+    // Same design language as the rest of Home: a solid category-tinted
+    // card (matching the recents rows) with a faint category glyph
+    // watermark echoing the hero, and a quest-style eyebrow.
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = cat.categorySurface(),
         shadowElevation = 0.dp,
         border = BorderStroke(1.dp, accent.copy(alpha = 0.35f)),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .clip(RoundedCornerShape(13.dp))
-                        .background(accent.copy(alpha = 0.16f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CurioIcon(
-                        CurioIcons.Timer, null,
-                        tint = accent,
-                        size = 22.dp
-                    )
-                }
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        "Currently exploring",
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = accent
-                    )
-                    Text(
-                        session.topicName,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-            Spacer(Modifier.height(8.dp))
-            val overRecommended = elapsedMillis >= session.durationMinutes * 60_000L
-            Text(
-                when {
-                    session.paused ->
-                        "Paused at ${formatElapsed(elapsedMillis)} — ${session.verb.lowercase()} ${session.targetName}"
-                    overRecommended ->
-                        "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far — past the ~${session.durationMinutes} min mark"
-                    else ->
-                        "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far · ~${session.durationMinutes} min recommended"
-                },
-                style = MaterialTheme.typography.bodySmall,
-                color = if (session.paused) accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+        Box {
+            // Watermark glyph — the session's category, like the hero's.
+            CurioIcon(
+                name = cat.iconGlyph,
+                contentDescription = null,
+                tint = accent.copy(alpha = 0.10f),
+                size = 96.dp,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 10.dp)
             )
-            Spacer(Modifier.height(12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Button(
-                    onClick = onDone,
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = accent,
-                        contentColor = pastelFillInk(accent)
-                    ),
-                    modifier = Modifier.weight(1f)
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text("Done — write about it", style = MaterialTheme.typography.labelLarge)
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .clip(RoundedCornerShape(13.dp))
+                            .background(accent.copy(alpha = 0.16f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CurioIcon(
+                            CurioIcons.Timer, null,
+                            tint = accent,
+                            size = 22.dp
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            "CURRENTLY EXPLORING",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 1.4.sp
+                            ),
+                            color = accent
+                        )
+                        Text(
+                            session.topicName,
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
-                OutlinedButton(
-                    onClick = onKeepExploring,
-                    shape = RoundedCornerShape(50),
-                    border = BorderStroke(1.dp, accent.copy(alpha = 0.5f)),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = accent),
-                    modifier = Modifier.weight(1f)
+                Spacer(Modifier.height(8.dp))
+                val overRecommended = elapsedMillis >= session.durationMinutes * 60_000L
+                Text(
+                    when {
+                        session.paused ->
+                            "Paused at ${formatElapsed(elapsedMillis)} — ${session.verb.lowercase()} ${session.targetName}"
+                        overRecommended ->
+                            "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far — past the ~${session.durationMinutes} min mark"
+                        else ->
+                            "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far · ~${session.durationMinutes} min recommended"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (session.paused) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text("Keep exploring", style = MaterialTheme.typography.labelLarge)
+                    Button(
+                        onClick = onDone,
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = accent,
+                            contentColor = pastelFillInk(accent)
+                        ),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Done — write about it", style = MaterialTheme.typography.labelLarge)
+                    }
+                    OutlinedButton(
+                        onClick = onKeepExploring,
+                        shape = RoundedCornerShape(50),
+                        border = BorderStroke(1.dp, accent.copy(alpha = 0.5f)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = accent),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Keep exploring", style = MaterialTheme.typography.labelLarge)
+                    }
                 }
             }
         }
