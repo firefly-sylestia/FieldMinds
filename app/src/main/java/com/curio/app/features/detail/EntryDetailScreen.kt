@@ -1257,6 +1257,7 @@ private fun SoundBiteRender(
                     // deep accent would be darker than the unplayed pastel and
                     // invert the readout on dark surfaces.
                     playedAccent = if (isCurioDarkTheme()) category.categoryInk() else category.themedAccent(),
+                    ink = category.categoryInk(),
                     // Unplayed waveform bars: the 20% tint wash is a light-
                     // mode-only color (murky, near-invisible on dark); in dark
                     // mode use the pastel ink twin so the capsule bars read.
@@ -1406,6 +1407,7 @@ private fun AudioPlayerBar(
     audioFilePath: String,
     accent: Color,
     playedAccent: Color,
+    ink: Color,
     tint: Color,
     surface: Color,
     border: BorderStroke?
@@ -1587,7 +1589,10 @@ private fun AudioPlayerBar(
             Text(
                 text = "${formatMs(currentPosition)} / ${formatMs(duration)}",
                 style = MaterialTheme.typography.labelSmall,
-                color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                // The player receives a dedicated readable ink because its
+                // waveform colors and its elapsed-label color serve different
+                // contrast roles.
+                color = if (AppPreferences.tintWashEffective()) ink
                         else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -2040,6 +2045,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
                 // Same theme-aware played/unplayed split as the SoundBite
                 // section (pastel pair in dark, deep-accent pair in light).
                 playedAccent = if (isCurioDarkTheme()) category.categoryInk() else category.themedAccent(),
+                ink = category.categoryInk(),
                 tint = if (isCurioDarkTheme()) category.categoryInk() else category.tint,
                 surface = category.categorySurface(MaterialTheme.colorScheme.surfaceContainerHigh),
                 border = category.categoryBorder()

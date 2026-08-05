@@ -1,22 +1,21 @@
 # Prompt.md — Request Log
 
-## Latest Request (COMPLETED)
+## Latest Request (IN PROGRESS)
 
-**Add proper top padding above the Home shuffle deck**
+**Fix the CI compile error and make Home menu/profile colors solid**
 
 ### What was requested
 
-The Home shuffle deck/Today's Quest block should not sit too close to the top hero; add proper breathing room above it.
+CI failed in `EntryDetailScreen.kt:1590` because `AudioPlayerBar` referenced an out-of-scope `category`. The Home menu and profile buttons also need solid fills with a smooth fade during the hero-to-sticky morph.
 
-### What changed
+### Changes made
 
-- `HomeScreen.kt`: increased the spacer between the hero's white sheet and `QuestShuffleCard` from 14dp to 26dp. Shuffle behavior and navigation were unchanged.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: added the user-visible spacing polish entry.
+- `EntryDetailScreen.kt`: replaced the invalid `category` reference with an explicit `ink` parameter passed by every `AudioPlayerBar` caller; the elapsed-time label keeps the intended readable category ink.
+- `HomeScreen.kt`: changed both sticky pill morph endpoints to opaque fills and retained `animateColorAsState` for smooth background, rim, and icon color fades. The ripple-free interaction remains unchanged.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `HomeScreen.kt`.
+- `scripts/check_braces.py` passed for both changed Kotlin files.
 - `git diff --check` passed.
-- Code review found no actionable issues.
-- Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
-- Ready to commit and push.
+- Code review found no remaining actionable issues after the explicit audio-player ink follow-up.
+- Gradle/build/lint/test commands were not run locally because the repository explicitly forbids Android compilation in this environment; CI remains the compilation gate.

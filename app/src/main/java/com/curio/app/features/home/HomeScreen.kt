@@ -679,8 +679,8 @@ fun HomeScreen(navController: NavController) {
 
             // ── Sticky top bar — menu + profile pills ─────────────────
             // Pinned OUTSIDE the scroll content so they stay on screen.
-            // Resting on the hero they read as translucent hero-ink pills;
-            // as the hero scrolls away they continuously fade into floating
+            // Resting on the hero they use a solid accent fill; as the hero
+            // scrolls away they continuously fade into solid floating
             // frosted pills. The scale is tied directly to the same eased
             // progress, so there is no post-pop bounce or rotation wobble.
             val stickyThresholdPx = with(LocalDensity.current) { StickyBarThreshold.toPx() }
@@ -695,17 +695,21 @@ fun HomeScreen(navController: NavController) {
             val stickyDark = isCurioDarkTheme()
             // Re-resolve the hero ink here — the original questInk lives in
             // the scroll Column's scope; the sticky bar is OUTSIDE it.
-            val stickyInk = pastelFillInk(homeRoseAccent())
-            val frostBg = if (stickyDark) Color(0xE623242C) else Color.White.copy(alpha = 0.80f)
-            val frostRim = if (stickyDark) Color.White.copy(alpha = 0.28f) else Color.White.copy(alpha = 0.75f)
-            val frostIcon = if (stickyDark) Color.White.copy(alpha = 0.92f) else stickyInk
-            // Resolve the target colors from scroll, then animate the paint
-            // itself. The old direct lerp was visually abrupt when the sticky
-            // bar crossed the hero boundary; a short tween gives a true color
-            // fade without introducing a second geometric transition.
-            val targetPillBg = lerp(stickyInk.copy(alpha = 0.14f), frostBg, frostShift)
-            val targetPillRim = lerp(stickyInk.copy(alpha = 0.26f), frostRim, frostShift)
-            val targetPillIcon = lerp(stickyInk, frostIcon, frostShift)
+            val heroPillBg = homeRoseAccent()
+            val heroPillIcon = pastelFillInk(heroPillBg)
+            val heroPillRim = lerp(heroPillBg, heroPillIcon, 0.42f)
+            // Both morph endpoints are fully opaque. The old hero endpoint
+            // used a translucent ink wash, which let the banner show through
+            // the pills and made them read like circular visual artifacts.
+            val frostBg = if (stickyDark) Color(0xFF23242C) else Color.White
+            val frostRim = if (stickyDark) Color.White else Color(0xFFD9DEE6)
+            val frostIcon = if (stickyDark) Color.White else pastelFillInk(frostBg)
+            // Resolve solid target colors from scroll, then animate the paint
+            // itself. The short tween gives a true color fade without adding
+            // another geometric transition or ripple-like flash.
+            val targetPillBg = lerp(heroPillBg, frostBg, frostShift)
+            val targetPillRim = lerp(heroPillRim, frostRim, frostShift)
+            val targetPillIcon = lerp(heroPillIcon, frostIcon, frostShift)
             val pillBg by animateColorAsState(
                 targetValue = targetPillBg,
                 animationSpec = tween(CurioMotion.Durations.Quick),
