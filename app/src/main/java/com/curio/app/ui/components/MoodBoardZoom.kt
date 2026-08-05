@@ -6,7 +6,6 @@ import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -14,17 +13,12 @@ import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -43,19 +37,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -66,7 +56,6 @@ import com.curio.app.ui.components.NotePaperCard
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.PatrickHandFontFamily
 import com.curio.app.ui.theme.notePaperInk
-import com.curio.app.ui.theme.CurioIcons
 import androidx.compose.ui.util.lerp
 import kotlin.math.PI
 import kotlin.math.roundToInt
@@ -223,11 +212,6 @@ fun MoodBoardTiles(
     zoomed: Boolean = false
 ) {
     val density = LocalDensity.current
-    // v7.30 — one-tap full-screen expand for saved tiles. Tiny collage tiles
-    // are hard to double-tap into the in-place zoom, so each tile (when
-    // zoomable) also carries a small expand button that lifts the image to
-    // the full-window pinch viewer directly.
-    var expandedUri by remember { mutableStateOf<String?>(null) }
     tiles.forEachIndexed { i, tile ->
         Box(
             modifier = Modifier
@@ -290,39 +274,7 @@ fun MoodBoardTiles(
                 )
             }
 
-            // v7.30 — one-tap full-screen expand (only on zoomable tiles).
-            // Small dark chip at the tile's bottom end, mirroring the
-            // editor's zoom button language.
-            if (onTileZoom != null) {
-                Surface(
-                    onClick = { expandedUri = tile.uri },
-                    shape = RoundedCornerShape(50),
-                    color = Color.Black.copy(alpha = 0.48f),
-                    shadowElevation = 0.dp,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(5.dp)
-                        .size(26.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        CurioIcon(
-                            name = CurioIcons.Fullscreen,
-                            contentDescription = "Expand image",
-                            tint = Color.White,
-                            size = 14.dp
-                        )
-                    }
-                }
-            }
         }
-    }
-
-    // Full-screen pinch viewer for the one-tap expand path.
-    expandedUri?.let { uri ->
-        FullScreenImageViewer(
-            uri = uri,
-            onClose = { expandedUri = null }
-        )
     }
 }
 
@@ -379,11 +331,6 @@ fun MoodBoardZoomOverlay(
     // the image panned off-center) — a double-tap then resets instead of
     // closing.
     val isPinched = pinchScale > 1.01f || pinchX != 0f || pinchY != 0f
-    // v7.30 — full-screen expand: lifts the tile out of the small card into
-    // a black full-window viewer where pinch/pan feel natural even for
-    // tiles that are tiny on the collage. The overlay stays composed behind
-    // it; closing the expander returns to the in-place zoom.
-    var expanded by remember(tileUri) { mutableStateOf(false) }
 
     // Double-tap reset: animate the pinch/pan back to the fit zoom (scale
     // 1x, centered) with a soft spring, then neutralize — a later double-tap
@@ -524,8 +471,17 @@ fun MoodBoardZoomOverlay(
                     // No movement → a tap, which the image's detector owns.
                     if (hasMovement) {
                         pinchScale = (pinchScale * gestureZoom).coerceIn(1f, 8f)
-                        pinchX += gesturePan.x
-                        pinchY += gesturePan.y
+                        // Clamp the pan to the viewport (same rule the old
+                        // full-screen viewer used): the image can travel just
+                        // far enough to bring its edges to the viewport edges
+                        // at the current zoom, and ZERO at rest — a tiny tile
+                        // can never be dragged fully off-screen, and pinching
+                        // back out recenters it automatically.
+                        val s = glideScale * pinchScale
+                        val maxPanX = ((widthPx * s - viewW) / 2f).coerceAtLeast(0f)
+                        val maxPanY = ((heightPx * s - viewH) / 2f).coerceAtLeast(0f)
+                        pinchX = (pinchX + gesturePan.x).coerceIn(-maxPanX, maxPanX)
+                        pinchY = (pinchY + gesturePan.y).coerceIn(-maxPanY, maxPanY)
                     }
                 }
             }
@@ -597,165 +553,25 @@ fun MoodBoardZoomOverlay(
             )
         }
 
-        // ── Top-end controls — expand to full screen, then dismiss ────
-        Row(
+        // ── Top-end control — dismiss ──────────────────────────────────
+        Surface(
+            onClick = { zoomState.zoomOut() },
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+            shadowElevation = 0.dp,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(12.dp)
+                .size(36.dp)
         ) {
-            // v7.30 — full-screen expand. Small collage tiles are hard to
-            // pinch inside the card-sized overlay; this lifts the image to
-            // the whole window where every gesture target is large.
-            Surface(
-                onClick = { expanded = true },
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-                shadowElevation = 0.dp,
-                modifier = Modifier.size(36.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(
-                        name = CurioIcons.Fullscreen,
-                        contentDescription = "Expand image",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 18.dp
-                    )
-                }
-            }
-            Surface(
-                onClick = { zoomState.zoomOut() },
-                shape = RoundedCornerShape(50),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-                shadowElevation = 0.dp,
-                modifier = Modifier.size(36.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(
-                        name = CurioIcons.Close,
-                        contentDescription = "Close zoom",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        size = 18.dp
-                    )
-                }
-            }
-        }
-    }
-
-    // ── Full-screen expand (v7.30) — renders in its own window above the
-    // card, so the pinch canvas is the whole display.
-    if (expanded) {
-        FullScreenImageViewer(
-            uri = tileUri,
-            onClose = { expanded = false }
-        )
-    }
-}
-
-/**
- * v7.30 — full-screen image viewer for the mood-board zoom. Same hi-res
- * painter as the in-place magnifier, but on a BLACK full-window canvas:
- * the image opens fit-to-screen, and pinch-to-zoom (1–8x) + one-finger
- * pan refine it on a big stage — so even tiles that are tiny on the
- * collage can be inspected comfortably. Close via the ✕ or the system
- * back gesture (Dialog dismiss).
- */
-@Composable
-private fun FullScreenImageViewer(
-    uri: String,
-    onClose: () -> Unit
-) {
-    var scale by remember { mutableFloatStateOf(1f) }
-    var offsetX by remember { mutableFloatStateOf(0f) }
-    var offsetY by remember { mutableFloatStateOf(0f) }
-    // Window size — the pan clamp is derived from it × (scale − 1), so the
-    // pan range always matches the screen (and collapses to 0 at 1x).
-    var winW by remember { mutableFloatStateOf(0f) }
-    var winH by remember { mutableFloatStateOf(0f) }
-
-    Dialog(
-        onDismissRequest = onClose,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .onSizeChanged { winW = it.width.toFloat(); winH = it.height.toFloat() }
-                .pointerInput(uri) {
-                    detectTransformGestures { _, pan, zoom, _ ->
-                        scale = (scale * zoom).coerceIn(1f, 8f)
-                        // Pan range = window size × (scale − 1): exactly
-                        // enough travel to bring the image's edges to the
-                        // window's edges at the current zoom, and ZERO at
-                        // 1x — the image can't be dragged off-center at
-                        // rest, and pinching back out recenters it
-                        // automatically (the clamp tightens as scale drops).
-                        val maxPanX = ((scale - 1f) * winW / 2f).coerceAtLeast(0f)
-                        val maxPanY = ((scale - 1f) * winH / 2f).coerceAtLeast(0f)
-                        offsetX = (offsetX + pan.x).coerceIn(-maxPanX, maxPanX)
-                        offsetY = (offsetY + pan.y).coerceIn(-maxPanY, maxPanY)
-                    }
-                }
-        ) {
-            // ── The image — centered, fit-to-screen, pinch/pan on top ──
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        scaleX = scale
-                        scaleY = scale
-                        translationX = offsetX
-                        translationY = offsetY
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = moodBoardPainter(uri, zoomed = true),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                CurioIcon(
+                    name = CurioIcons.Close,
+                    contentDescription = "Close zoom",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    size = 18.dp
                 )
             }
-
-            // ── Close ──────────────────────────────────────────────────
-            Surface(
-                onClick = onClose,
-                shape = RoundedCornerShape(50),
-                color = Color.White.copy(alpha = 0.18f),
-                shadowElevation = 0.dp,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(12.dp)
-                    .size(40.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(
-                        name = CurioIcons.Close,
-                        contentDescription = "Close full-screen image",
-                        tint = Color.White,
-                        size = 20.dp
-                    )
-                }
-            }
-
-            // ── Gesture hint ───────────────────────────────────────────
-            Text(
-                text = "Pinch to zoom · drag to pan",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.45f),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(20.dp)
-            )
         }
     }
 }

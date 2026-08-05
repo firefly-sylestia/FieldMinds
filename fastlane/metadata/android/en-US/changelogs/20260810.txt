@@ -1,3 +1,5 @@
+• The detail hero's title is back to clean and simple — crisp ExtraBold display text straight on the banner, no gradient fill and no frosted card behind it
+• Mood-board zoom is now all gestures: double-tap any photo and pinch-to-zoom + pan work right inside it (with a pan clamp so a small tile can never get lost off-screen) — the extra full-screen expand button and the little expand chips on tiles are gone
 • Home got the detail screen's torn-paper hero — the greeting and the quest now live on one solid brand-coral banner with the same seeded soft tear and white under-sheet as every entry's detail page (uniform tear style, no blur), and the whole banner shuffles the wildcard deck when you tap it
 • The category chip row is gone from Home — no more category picker clutter; the quest always shuffles the surprise deck (categories still live in Spin and the picker)
 • The detail hero's torn banner now visibly tilts on its own — every entry cants its paper at a stable per-entry angle while the title, the Date · Mood · Type card and the back / more controls stay level

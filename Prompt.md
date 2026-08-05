@@ -746,18 +746,25 @@ The 2x picker was only setting `densityExtraCompact` when the device's physical 
 
 ## Latest Request (COMPLETED)
 
-**Home redesign — detail-screen torn hero + remove category chips**
+**Revert title gradient/plate + mood-board double-tap zoom without expand button**
 
-User wants Home to look like the detail screen (the tear style), remove the "multiple category option" (the category chip row) from Home, NO blur for now, and the tearing style must be UNIFORM with the detail hero.
+User: (1) disliked the title's gradient font style — change it; (2) doesn't want the background card (frosted plate) behind the title; (3) apply pinch-to-zoom etc. in the mood board's double-tap zoom; (4) don't add another expand button.
 
-### What changed (HomeScreen.kt)
+### Title (EntryDetailScreen.kt)
 
-- **Quest hero = torn banner**: merged the separate greeting hero + rounded quest card into ONE banner using the EXACT EntryDetail construction for uniform tear style: `remember(HOME_TEAR_SEED) { SoftTornBottomShape(HOME_TEAR_SEED) }` + `remember(HOME_TEAR_SEED) { SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp) }`, the same white under-sheet (42dp, `offset(y = HomeQuestHeroHeight - 18.dp)`, `Color(0xFFFDFCF9)`), and a tappable `Surface(shape = heroTornShape, color = CurioColors.CategoryCoral)` → `navigateToTab(SPIN)`. No blur, no gradient — flat coral + real torn seam, like the detail hero. Greeting (headlineMedium ExtraBold, questInk) + streak line sit inside as the banner title; TODAY'S QUEST eyebrow + "Shuffle the deck" + shuffle pill at the bottom. `HOME_TEAR_SEED = 0x5EED` fixed → never re-rolls. `HomeQuestHeroHeight = 248.dp` (generous for 2-line greeting at large font scales), `HomeQuestSheetExtent = 24.dp`.
-- **Category option removed**: the Categories header + All button + LazyRow of Surprise/category chips, the `CategoryChip` composable, `selectedCategory` state + `CategorySaver` all deleted. The quest is now always the wildcard (coral); watermark backdrop fixed to WILDCARD. Categories still live in Spin and the Picker — only Home's chip row is gone.
-- Imports: removed animateFloatAsState, LazyRow, foundation.lazy.items, PaddingValues, Saver, rememberSaveable, scale, Brush, CurioGradients, CurioMotion; added foundation.layout.offset + SoftTornBottomShape + SoftTornSheetShape. Updated the file KDoc + section numbering (1-8).
+- Removed the carved-glass treatment: the icy vertical-gradient brush + TextStyle shadow on the title, AND the frosted-white plate Box behind it (heroFrostPlate). The title is now a plain Text — `headlineMedium.copy(fontWeight = ExtraBold)`, `color = heroInk` (the banner's onAccent ink: white normally, deep in pastel), centered, directly on the banner.
+- Removed now-unused imports `androidx.compose.ui.graphics.Shadow` and `androidx.compose.ui.graphics.drawscope.Stroke` (both only lived in the old title treatment; import-usage audit confirmed zero remaining references). `heroFrostPlate`/`heroFrostGradient`/`Brush` stay (back/more buttons + the frosted Date card).
+
+### Mood board (MoodBoardZoom.kt)
+
+- Removed the v7.30 full-screen expand path: the one-tap expand chip on `MoodBoardTiles` tiles (+ its `expandedUri` state + trailing viewer call), the expand button in `MoodBoardZoomOverlay`'s top-end controls (+ `expanded` state + trailing call; top-end is now just the single ✕ Surface), and the entire dead `private fun FullScreenImageViewer`.
+- The overlay's built-in pinch-to-zoom (1-8x on top of the fit zoom, up to ~40x total) + one-finger pan + double-tap reset remain — the double-tap zoom is now the sole zoom experience, no extra button.
+- Polish per reviewer: the overlay's pan is now CLAMPED to the viewport (same rule the removed viewer used: `maxPan = (tileSize × scale − viewport)/2`, zero at rest) so a tiny tile can never be dragged off-screen and pinching back out recenters.
+- Imports cleaned: removed background, detectTransformGestures, navigationBarsPadding, statusBarsPadding, onSizeChanged, Dialog, DialogProperties, TextOverflow (was genuinely unused pre-change), CurioIcons, Arrangement, Row, Color; RE-ADDED TextOverflow because MoodBoardFloatingCards uses `TextOverflow.Ellipsis` (caught by the audit).
+- Kept: EntryDetailScreen's pre-existing full-collage expand button (CurioIcons.Fullscreen, opens the whole-board dialog) — a separate feature from the per-image expand the user rejected.
 
 ### Validation
 
-- `scripts/check_braces.py` passed; `git diff --check` passed; no leftover references to any removed symbol.
-- Reviewer confirmed: tear construction mirrors the detail hero exactly, imports all still used, Surface(onClick, torn generic shape) ripple is valid, content fits 248dp, and all four user requirements are met. Optional future: extract a shared TornBanner composable — deferred (minimal-change).
+- `scripts/check_braces.py` passed (both files); `git diff --check` passed; import-usage audit clean; no leftover references to expandedUri/expanded/FullScreenImageViewer/Shadow(/Stroke(.
+- Reviewer confirmed all four requirements met; its pan-clamp suggestion was applied.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
