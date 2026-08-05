@@ -2,24 +2,23 @@
 
 ## Latest Request (COMPLETED)
 
-**Restore Home random/mixed shuffle and reduce the brown cast in Home pastel color**
+**Restore the floating explore bubble after overlay permission is granted and darken the Currently Exploring controls**
 
 ### What was requested
 
-Restore the Home shuffle button's ability to open either a random single category or a random multi-category mix. Tune the Home pastel hero color so it no longer reads too brownish. The user also requested a durable workflow preference: ask before removing any existing behavior or UI in future changes.
+The floating bubble should appear when the user has granted all required permissions, including after returning from the system overlay-settings page. On Home, the Currently Exploring label, timer icon, supporting timer text, and Keep exploring action should use darker, more readable colors.
 
 ### What changed
 
-- `HomeScreen.kt`: preserved the existing `Random.nextBoolean()` choice between one random category and a 2–3 category shuffled mix.
-- `HomeScreen.kt`: changed the Home shuffle navigation to a fresh parameterized Spin destination with state restoration disabled for this explicit action, so the selected deck is visible even when a previous Spin screen exists. Deduplication is disabled so repeated identical random results still start a fresh shuffle.
-- `HomeScreen.kt`: tuned only Home's pastel resolver by shifting the rosewood hue 15° toward pink and lifting light-mode lightness slightly. Home greeting/stat/sticky ink now resolves from that same tuned fill. Other category pastels remain unchanged.
-- `AGENTS.md`: recorded the user's durable preference that existing features, behavior, UI, or code paths must not be removed without asking first.
+- `TopicRevealScreen.kt`: added an explicit `awaitingOverlaySettings` handoff flag. The pending explore session is now consumed only after the app actually launched the overlay settings page, preventing an incidental `ON_RESUME` from clearing the pending session before the user grants permission. When permission is granted, the foreground service is re-armed while the Activity is foreground, before opening the browser/Home flow. Not now and settings-intent failure still continue without leaving the flow stuck.
+- `HomeScreen.kt`: reused the existing theme-aware `categoryInk()` helper for the Currently Exploring eyebrow, timer icon, paused/elapsed supporting text, and Keep exploring outline button/text. This gives light mode a darker category ink and preserves readable light twin ink in dark mode without changing unrelated controls.
+- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: added the user-visible fix summary.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `HomeScreen.kt`.
+- `scripts/check_braces.py` passed for `HomeScreen.kt` and `TopicRevealScreen.kt`.
 - `git diff --check` passed.
-- Static assertions confirmed the random single/mix algorithm remains, fresh route behavior is active, and Home-only hue tuning is present.
-- Reviewer found no issue after the repeated-result navigation edge case was addressed.
+- Static assertions confirmed the overlay handoff gate, foreground-service re-arm, and darker card ink calls.
+- Code review found no actionable issues.
 - Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
-- Store changelog `fastlane/metadata/android/en-US/changelogs/20260810.txt` updated.
+- Ready to commit and push.

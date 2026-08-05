@@ -234,6 +234,12 @@ fun TopicRevealScreen(
     var pendingOverlaySession by remember { mutableStateOf<ExploreSession?>(null) }
     var overlayNeedsNotification by remember { mutableStateOf(false) }
     var showOverlayPermissionDialog by rememberSaveable { mutableStateOf(false) }
+    // Only consume the pending session after the app has actually launched
+    // the system overlay-settings page. A dialog dismissal can produce an
+    // ON_RESUME callback while permission is still missing; consuming here
+    // would open the browser and clear the pending handoff before the user
+    // grants the permission, leaving the service never started.
+    var awaitingOverlaySettings by remember { mutableStateOf(false) }
 
     // ── Active-session conflict — starting a new explore while another is
     //    running must ASK first (Save for later / Explore now) instead of
@@ -270,11 +276,15 @@ fun TopicRevealScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
+            if (event == Lifecycle.Event.ON_RESUME && awaitingOverlaySettings) {
+                awaitingOverlaySettings = false
                 val pending = pendingOverlaySession
+                pendingOverlaySession = null
                 if (pending != null) {
-                    pendingOverlaySession = null
                     if (Settings.canDrawOverlays(context)) {
+                        // Re-arm while this Activity is foreground, then let
+                        // the normal flow move to the browser/Home. This is
+                        // the reliable handoff after special-access settings.
                         ExploreSessionService.start(context, pending)
                     }
                     continueExploreFlow(pending)
@@ -676,6 +686,10 @@ fun TopicRevealScreen(
                     val s = pendingOverlaySession
                     if (s != null) {
                         val launched = runCatching {
+                            // Mark this before launching Settings so the next
+                            // ON_RESUME is known to be the settings return,
+                            // not a dialog/composition resume.
+                            awaitingOverlaySettings = true
                             context.startActivity(
                                 Intent(
                                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -684,6 +698,7 @@ fun TopicRevealScreen(
                             )
                         }.isSuccess
                         if (!launched) {
+                            awaitingOverlaySettings = false
                             // No handler for the settings intent — don't
                             // leave the flow stuck; continue without it.
                             pendingOverlaySession = null

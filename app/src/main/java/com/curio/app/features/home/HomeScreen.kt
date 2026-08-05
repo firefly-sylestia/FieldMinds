@@ -90,6 +90,7 @@ import com.curio.app.ui.components.SoftTornSheetShape
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.fromHsl
@@ -1515,6 +1516,11 @@ private fun CurrentlyExploringCard(
     onKeepExploring: () -> Unit
 ) {
     val accent = CurioCategories.byId(session.categoryId).themedAccent()
+    val cat = CurioCategories.byId(session.categoryId)
+    // Use the category's resolved deep ink for the active-session controls.
+    // The pastel fill is intentionally soft; the label, timer glyph and
+    // secondary action should read with a firm, darker edge against it.
+    val exploreInk = cat.categoryInk()
     // Live elapsed time — pause-aware (session.elapsedMillis banks paused
     // time, so a paused session shows a frozen reading) and recomputed from
     // the persisted session start so it survives process restarts; the tick
@@ -1530,7 +1536,6 @@ private fun CurrentlyExploringCard(
         }
     }
 
-    val cat = CurioCategories.byId(session.categoryId)
     // Same design language as the rest of Home: a solid category-tinted
     // card (matching the recents rows) with a faint category glyph
     // watermark echoing the hero, and a quest-style eyebrow.
@@ -1568,7 +1573,7 @@ private fun CurrentlyExploringCard(
                     ) {
                         CurioIcon(
                             CurioIcons.Timer, null,
-                            tint = accent,
+                            tint = exploreInk,
                             size = 22.dp
                         )
                     }
@@ -1579,7 +1584,7 @@ private fun CurrentlyExploringCard(
                                 fontWeight = FontWeight.ExtraBold,
                                 letterSpacing = 1.4.sp
                             ),
-                            color = accent
+                            color = exploreInk
                         )
                         Text(
                             session.topicName,
@@ -1602,7 +1607,7 @@ private fun CurrentlyExploringCard(
                             "${session.verb.lowercase()} ${session.targetName} · ${formatElapsed(elapsedMillis)} so far · ~${session.durationMinutes} min recommended"
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (session.paused) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (session.paused) exploreInk else MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -1625,8 +1630,8 @@ private fun CurrentlyExploringCard(
                     OutlinedButton(
                         onClick = onKeepExploring,
                         shape = RoundedCornerShape(50),
-                        border = BorderStroke(1.dp, accent.copy(alpha = 0.5f)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = accent),
+                        border = BorderStroke(1.dp, exploreInk.copy(alpha = 0.55f)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = exploreInk),
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Keep exploring", style = MaterialTheme.typography.labelLarge)
