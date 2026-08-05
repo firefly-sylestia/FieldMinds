@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -27,6 +26,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnAttach
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -220,8 +220,14 @@ class ExploreSessionService : Service() {
     private fun render(): Int {
         val session = ExploreSessionStore.getActiveSession(this) ?: return stopQuietly()
         val liveNotif = AppPreferences.isLiveNotificationsEnabled(this)
+        // v7.35 — [AppPreferences.overlayActuallyUsable] instead of raw
+        // canDrawOverlays: on Android 15+ a first-time grant (or one right
+        // after clearing app data) can sit in the system's PENDING state,
+        // where canDrawOverlays() returns true but the overlay is silently
+        // never shown. Treating that as not granted keeps the notification
+        // path honest and lets the permission prompts re-ask.
         val bubbleWanted = AppPreferences.isOverlayBubbleEnabled(this) &&
-            Settings.canDrawOverlays(this) &&
+            AppPreferences.overlayActuallyUsable(this) &&
             !session.pillHidden
         if (!liveNotif && !bubbleWanted) return stopQuietly()
 
@@ -452,9 +458,14 @@ class ExploreSessionService : Service() {
             bubbleComposeView = this
             // Defer composition until the host is attached to the overlay
             // window. ComposeView otherwise resolves its ViewTree owners while
-            // WindowManager is still installing the ViewRootImpl on Android 16.
-            post {
-                if (!isAttachedToWindow || bubbleUnavailable) return@post
+            // WindowManager is still installing the ViewRootImpl on Android 16
+            // — and a plain post() can run BEFORE that attach and skip the
+            // composition forever (the "attached but empty" bubble, then a
+            // rebuild loop). doOnAttach runs exactly when the window is up
+            // (immediately when already attached), so the content always
+            // composes on a fully-attached host.
+            doOnAttach {
+                if (bubbleUnavailable) return@doOnAttach
                 runCatching {
                     setContent {
                 // Reads the reactive session — pause/resume/hide from the
@@ -752,13 +763,15 @@ class ExploreSessionService : Service() {
         // Self-heal tuning: how long to wait before retrying a transient
         // overlay failure, and how long to wait before verifying the attached
         // bubble window actually has content.
-        const val BUBBLE_RETRY_DELAY_MS = 1_200L
+        const val BUBBLE_RETRY_DELAY_MS = 1_500L
         // Long enough that a briefly-busy main thread (browser launch + Home
         // navigation right after start) can't false-positive the check.
-        const val BUBBLE_VERIFY_DELAY_MS = 2_000L
+        const val BUBBLE_VERIFY_DELAY_MS = 3_000L
         // Hard cap on in-session overlay self-heal attempts (restart-loop
-        // guard for persistent device rejections).
-        const val MAX_BUBBLE_RETRIES = 2
+        // guard for persistent device rejections). v7.35 — raised from 2 so
+        // a single attach/composition hiccup plus its verify can't exhaust
+        // the budget and latch the bubble off for the whole session.
+        const val MAX_BUBBLE_RETRIES = 3
 
         /** Starts the explore foreground service for [session]. */
         fun start(context: Context, session: ExploreSession) {

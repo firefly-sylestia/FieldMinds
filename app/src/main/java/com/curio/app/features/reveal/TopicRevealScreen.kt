@@ -257,8 +257,12 @@ fun TopicRevealScreen(
         // prompt is skipped — the bubble carries the timer. Only ask when
         // the bubble can't show and a live notification is actually wanted
         // (the shade notification is then the only timer controller).
+        // v7.35 — [AppPreferences.overlayActuallyUsable] (not raw
+        // canDrawOverlays): an Android 15+ pending grant reports true but
+        // never shows the overlay, so the bubble must not be "expected"
+        // until the AppOps state settles.
         val bubbleWillShow = AppPreferences.isOverlayBubbleEnabled(context) &&
-            Settings.canDrawOverlays(context)
+            AppPreferences.overlayActuallyUsable(context)
         if (overlayNeedsNotification &&
             AppPreferences.isLiveNotificationsEnabled(context) &&
             !hasNotificationPermission(context) && !bubbleWillShow
@@ -281,7 +285,7 @@ fun TopicRevealScreen(
                 val pending = pendingOverlaySession
                 pendingOverlaySession = null
                 if (pending != null) {
-                    if (Settings.canDrawOverlays(context)) {
+                    if (AppPreferences.overlayActuallyUsable(context)) {
                         // Re-arm while this Activity is foreground, then let
                         // the normal flow move to the browser/Home. This is
                         // the reliable handoff after special-access settings.
@@ -309,7 +313,7 @@ fun TopicRevealScreen(
             ExploreReminderScheduler.schedule(context, session.startMillis, session.durationMinutes)
         }
         val needsOverlay = AppPreferences.isOverlayBubbleEnabled(context) &&
-            !Settings.canDrawOverlays(context)
+            !AppPreferences.overlayActuallyUsable(context)
         // The floating bubble shows the same live timer over other apps and
         // needs ONLY the "Display over other apps" permission. When it's
         // going to show, skip the POST_NOTIFICATIONS prompt — a live shade
@@ -318,7 +322,7 @@ fun TopicRevealScreen(
         // asking for when the bubble is off or its permission is missing
         // (the shade notification is then the only timer controller).
         val bubbleWillShow = AppPreferences.isOverlayBubbleEnabled(context) &&
-            Settings.canDrawOverlays(context)
+            AppPreferences.overlayActuallyUsable(context)
         val needsNotification = AppPreferences.isLiveNotificationsEnabled(context) &&
             !hasNotificationPermission(context) && !bubbleWillShow
 
@@ -675,6 +679,13 @@ fun TopicRevealScreen(
                     )
                     Text(
                         "You can also manage it anytime in Settings → Notifications.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        "Tip: if you've granted this before and the bubble still " +
+                        "doesn't appear, toggle \"Display over other apps\" off " +
+                        "and on once in system settings.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -1,6 +1,9 @@
 package com.curio.app.data
 
+import android.app.AppOpsManager
 import android.content.Context
+import android.os.Build
+import android.os.Process
 import android.provider.Settings
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
@@ -212,15 +215,18 @@ object AppPreferences {
     var entryMetaEnabledState by mutableStateOf(true)
     // Smart Spin layout — the DIMENSION rule of the Spin page's smart
     // compact system: short screens get the compact (or extra-compact)
-    // layout. Default ON. Seeded from prefs in [initThemeMode].
-    var smartSpinLayoutState by mutableStateOf(true)
+    // layout. v7.35 — Default OFF: the roomy Spin layout ships by default
+    // and compact is opt-in (still toggleable in Settings). Seeded from
+    // prefs in [initThemeMode].
+    var smartSpinLayoutState by mutableStateOf(false)
     // Smart density mode — the DENSITY rule of the Spin page's smart
     // sizing, now a 3-way strength picker (v7.4): OFF disables density
     // sizing, COMPACT keeps the classic rule (under 440 dpi → smaller,
     // 440+ dpi → roomier), EXTRA_COMPACT adds a 2x tier for very low dpi
-    // (under 350 dpi → even smaller deck). Default COMPACT (preserves the
-    // pre-v7.4 always-on behavior). Seeded from prefs in [initThemeMode].
-    var smartDensityModeState by mutableStateOf(SmartDensityMode.COMPACT)
+    // (under 350 dpi → even smaller deck). v7.35 — Default OFF: the deck
+    // ships at its natural size; compact sizing is opt-in. Seeded from
+    // prefs in [initThemeMode].
+    var smartDensityModeState by mutableStateOf(SmartDensityMode.OFF)
     // Explore sessions — the explore-now timer/reminder/done flow. Default
     // ON; off disables the timer notification + reminder + done prompt while
     // Explore-now still opens the browser and records recently-explored.
@@ -463,7 +469,7 @@ object AppPreferences {
     }
 
     fun isSmartSpinLayoutEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_SMART_SPIN_LAYOUT, true)
+        prefs(context).getBoolean(KEY_SMART_SPIN_LAYOUT, false)
 
     fun setSmartSpinLayoutEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_SMART_SPIN_LAYOUT, enabled).apply()
@@ -482,9 +488,13 @@ object AppPreferences {
         val stored = prefs.getString(KEY_SMART_DENSITY_MODE, null)
         if (stored != null) {
             return runCatching { SmartDensityMode.valueOf(stored) }
-                .getOrDefault(SmartDensityMode.COMPACT)
+                .getOrDefault(SmartDensityMode.OFF)
         }
-        val legacy = prefs.getBoolean(KEY_LEGACY_SMART_DENSITY_LAYOUT, true)
+        // v7.35 — the pre-picker legacy key defaults to OFF now, so a fresh
+        // install (no stored mode) ships with density sizing off instead of
+        // the old always-compact COMPACT. Users who explicitly picked a
+        // mode keep their stored choice.
+        val legacy = prefs.getBoolean(KEY_LEGACY_SMART_DENSITY_LAYOUT, false)
         val migrated = if (legacy) SmartDensityMode.COMPACT else SmartDensityMode.OFF
         prefs.edit()
             .putString(KEY_SMART_DENSITY_MODE, migrated.name)
@@ -535,7 +545,7 @@ object AppPreferences {
             // Keep the service alive when the floating bubble still wants it
             // (it swaps to the minimal bubble-active notification); otherwise
             // stop it — the session + reminder survive either way.
-            if (isOverlayBubbleEnabled(context) && Settings.canDrawOverlays(context)) {
+            if (isOverlayBubbleEnabled(context) && overlayActuallyUsable(context)) {
                 com.curio.app.infrastructure.ExploreSessionService.sync(context)
             } else {
                 com.curio.app.infrastructure.ExploreSessionService.stop(context)
@@ -557,7 +567,7 @@ object AppPreferences {
         if (enabled) {
             // Flipped ON mid-session: bring the bubble back (permission must
             // be granted — callers gate on it; the render decides).
-            if (Settings.canDrawOverlays(context)) {
+            if (overlayActuallyUsable(context)) {
                 com.curio.app.infrastructure.ExploreSessionService.start(context, session)
             }
         } else {
@@ -583,14 +593,40 @@ object AppPreferences {
     /**
      * Whether the explore foreground service should run: live notifications
      * ON, OR the floating bubble is enabled AND the "Display over other
-     * apps" permission is granted (the overlay is what needs the service
-     * when live notifications are off).
+     * apps" permission is actually usable (the overlay is what needs the
+     * service when live notifications are off). [overlayActuallyUsable]
+     * — not raw [Settings.canDrawOverlays] — so an Android 15+ pending
+     * grant never starts a service that has nothing it can show.
      */
     fun exploreServiceShouldRun(context: Context): Boolean =
         isExploreSessionsEnabled(context) && (
             isLiveNotificationsEnabled(context) ||
-                (isOverlayBubbleEnabled(context) && Settings.canDrawOverlays(context))
+                (isOverlayBubbleEnabled(context) && overlayActuallyUsable(context))
             )
+
+    /**
+     * Whether the "Display over other apps" overlay is ACTUALLY usable right
+     * now. [Settings.canDrawOverlays] alone can lie on Android 15+ (v7.35):
+     * a FIRST-TIME grant — which includes a grant right after clearing app
+     * data or reinstalling — can sit in the system's PENDING state, where
+     * canDrawOverlays() returns true but overlay windows are silently not
+     * shown. The AppOps mode is the source of truth in that state (it stays
+     * MODE_IGNORED until the permission settles), so treat it as not
+     * granted and let the permission prompts re-ask — toggling the special
+     * access off/on in the system page resolves the pending state.
+     */
+    fun overlayActuallyUsable(context: Context): Boolean {
+        if (!Settings.canDrawOverlays(context)) return false
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return true
+        val appOps = context.getSystemService(AppOpsManager::class.java) ?: return true
+        return runCatching {
+            appOps.unsafeCheckOpNoThrow(
+                AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW,
+                Process.myUid(),
+                context.packageName
+            ) == AppOpsManager.MODE_ALLOWED
+        }.getOrDefault(true)
+    }
 
 
     // ── Pinned topics (Topic Reveal → "Pin for later") ─────────────────

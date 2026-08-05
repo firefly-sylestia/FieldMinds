@@ -182,7 +182,11 @@ fun SettingsScreen(navController: NavController) {
     val requestOverlaySettings = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { _ ->
-        if (Settings.canDrawOverlays(context)) {
+        // v7.35 — [AppPreferences.overlayActuallyUsable] (not raw
+        // canDrawOverlays): an Android 15+ pending grant reports true but
+        // never shows the overlay, so the bubble toggle only turns on once
+        // the AppOps state has actually settled (toggle off/on resolves it).
+        if (AppPreferences.overlayActuallyUsable(context)) {
             AppPreferences.setOverlayBubbleEnabled(context, true)
         }
     }
@@ -199,7 +203,7 @@ fun SettingsScreen(navController: NavController) {
     }
 
     fun setOverlayBubble(enabled: Boolean) {
-        if (enabled && !Settings.canDrawOverlays(context)) {
+        if (enabled && !AppPreferences.overlayActuallyUsable(context)) {
             // Granting the permission first (the toggle applies on return).
             openOverlaySettings()
         } else {
@@ -961,7 +965,7 @@ fun SettingsScreen(navController: NavController) {
                         Surface(
                             onClick = {
                                 if (AppPreferences.overlayBubbleEnabledState) {
-                                    if (!Settings.canDrawOverlays(context)) {
+                                    if (!AppPreferences.overlayActuallyUsable(context)) {
                                         openOverlaySettings()
                                     }
                                 } else {
@@ -984,8 +988,10 @@ fun SettingsScreen(navController: NavController) {
                                         when {
                                             !AppPreferences.overlayBubbleEnabledState ->
                                                 "Off · timer lives in the notification only"
-                                            Settings.canDrawOverlays(context) ->
+                                            AppPreferences.overlayActuallyUsable(context) ->
                                                 "Floats over other apps while exploring"
+                                            Settings.canDrawOverlays(context) ->
+                                                "Granted but not showing yet — tap, then toggle the access off and on once"
                                             else ->
                                                 "Needs \"Display over other apps\" — tap to allow"
                                         },
@@ -1178,7 +1184,14 @@ fun SettingsScreen(navController: NavController) {
                             }
                         }
                         Text(
-                            "Smaller deck below 440 dpi · 2x shrinks it further below 350 dpi · roomier deck at 440+ dpi",
+                            when (AppPreferences.smartDensityModeState) {
+                                SmartDensityMode.OFF ->
+                                    "Off — the deck stays at its natural size"
+                                SmartDensityMode.COMPACT ->
+                                    "Smaller deck below 440 dpi · roomier deck at 440+ dpi"
+                                SmartDensityMode.EXTRA_COMPACT ->
+                                    "2x — smaller below 440 dpi · even smaller below 350 dpi · roomier at 440+"
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 6.dp, bottom = 2.dp)

@@ -90,7 +90,12 @@ fun OnboardingScreen(navController: NavController) {
     // "Display over other apps" — special access for the floating explore
     // bubble. No runtime dialog on Android 10+, so "Allow" opens the system
     // settings page; the ON_RESUME observer picks up the grant on return.
-    var overlayGranted by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
+    // v7.35 — [AppPreferences.overlayActuallyUsable] (not raw canDrawOverlays):
+    // an Android 15+ first-time grant can sit in the system's PENDING state
+    // where canDrawOverlays() lies and no overlay ever shows — the card
+    // stays "Allow" until the AppOps state actually settles (toggle off/on
+    // in the system page resolves it).
+    var overlayGranted by remember { mutableStateOf(AppPreferences.overlayActuallyUsable(context)) }
     // "Want the daily shuffle reminder on?" — only reachable once
     // notifications are granted; applied to prefs the moment it flips.
     var reminderWanted by rememberSaveable { mutableStateOf(false) }
@@ -134,7 +139,7 @@ fun OnboardingScreen(navController: NavController) {
             if (event == Lifecycle.Event.ON_RESUME) {
                 notificationGranted = hasNotificationPermission(context)
                 micGranted = hasMicPermission(context)
-                overlayGranted = Settings.canDrawOverlays(context)
+                overlayGranted = AppPreferences.overlayActuallyUsable(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)

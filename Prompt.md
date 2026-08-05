@@ -2,48 +2,65 @@
 
 ## Latest Request (IN PROGRESS)
 
-**Home + detail tear shadows, hero name height, detail pop-up pill ripple glitch**
+**Floating explore bubble not appearing over other apps + compact layout default OFF**
 
 ### Requested
 
-1. Home hero tear AND detail hero tear: add a thin (~0.1 mm) dark shadow
-   right at the torn edge so the tear looks more realistic.
-2. Home hero: increase the name height where it says "Curious Explorer"
-   (the display name under the greeting) — there was a dead space below it;
-   scale it up to fill most of the space. User picked "Fill most of the
-   space" (~30sp name, gap shrinks).
-3. Detail screen: the popped-up back/more icons had a weird circular
-   ripple glitch behind them — fix by reusing the Home sticky-pill logic
-   (clickable with `indication = null`).
+1. The floating pill overlay above other apps stopped appearing — even after
+   clearing app data and re-granting the permission. Fix it.
+2. Turn off the compact layout by default (the Spin page's smart compact
+   system should ship roomy; compact becomes opt-in).
+
+### Root cause (researched)
+
+Android 15+ introduced a FIRST-TIME overlay pending state: when "Display
+over other apps" is granted for the first time — which includes a grant made
+right after clearing app data or reinstalling — the system can hold the
+grant in a PENDING state. In that state:
+
+- `Settings.canDrawOverlays()` returns **true** (so every gate in the app
+  believed the overlay was usable and never re-prompted), but
+- overlay windows are silently **never shown**, and
+- the AppOps state (`OPSTR_SYSTEM_ALERT_WINDOW`) stays `MODE_IGNORED` until
+  the permission settles (the user toggling the special access off/on
+  resolves it).
+
+That exactly matches the report: the bubble was "enabled" and the permission
+looked granted, but nothing ever floated — and clearing data re-enters the
+pending state, so it survived a data clear.
 
 ### Plan
 
-1. `HomeScreen.kt` — hero tear: new `Box` between the white under-sheet
-   and the banner, `height(HomeQuestHeroHeight).offset(y = 1.dp)
-   .clip(heroTornShape).background(Color.Black.copy(alpha = 0.20f))` — a
-   hairline dark rim hugging the seeded torn seam (hidden behind the
-   opaque banner; reads as the paper edge casting a thin shadow onto the
-   sheet; in the up-bites the rim hugs the bite bottom while white still
-   reads above).
-2. `EntryDetailScreen.kt` — identical shadow `Box` (`height
-   (EntryDetailHeroHeight)`, same offset/clip/color) between the sheet
-   and the hero backdrop.
-3. `HomeScreen.kt` — hero name: `titleMedium` (16sp) →
-   `headlineMedium.copy(fontWeight = Medium, fontSize = 30.sp,
-   lineHeight = 46.sp)`; the tall leading makes the name block itself
-   fill the dead space above the stat bar (weight spacer shrinks).
-4. `EntryDetailScreen.kt` — more button: `Surface(onClick = …)` →
-   plain `Surface` + `clickable(interactionSource, indication = null)`
-   (mirrors Home's `TopBarPill`); back button: pass the new
-   `disableRipple = true` to `CurioBackButton`. Added
-   `foundation.clickable` + `foundation.interaction.MutableInteractionSource`
-   imports.
-5. `CurioTopBar.kt` — `CurioBackButton` gains `disableRipple: Boolean =
-   false`; when true it uses the rippleless clickable pattern; all other
-   screens keep the standard ripple.
-6. Changelog + Prompt.md.
+1. `AppPreferences.kt` — add `overlayActuallyUsable(context)`: true only when
+   `canDrawOverlays()` AND (on Q+) the AppOps mode is `MODE_ALLOWED`
+   (guarded by runCatching → default true on error). Use it in
+   `exploreServiceShouldRun()` and in the live-notification/overlay toggle
+   paths that decided whether the service should keep running.
+2. `ExploreSessionService.kt` — `render()` gates the bubble on
+   `overlayActuallyUsable` instead of raw `canDrawOverlays`; bubble
+   composition deferred to `doOnAttach` (Android 16 attach race — a plain
+   post() could run before the window was installed and skip composition
+   forever); self-heal budget raised (max 3) with a verify-after-attach that
+   rebuilds once if the window attached but composed empty.
+3. Gate every permission prompt on `overlayActuallyUsable` so the app
+   RE-ASKS instead of silently no-op'ing during the pending state:
+   - `TopicRevealScreen.kt` — bubbleWillShow / needsOverlay / ON_RESUME
+     handoff all use `overlayActuallyUsable`.
+   - `OnboardingScreen.kt` — the overlay card's granted state + ON_RESUME
+     refresh use `overlayActuallyUsable` (card stays "Allow" until it
+     truly settles).
+   - `SettingsScreen.kt` — the bubble row, the toggle-on path and the
+     settings-return callback use `overlayActuallyUsable`.
+4. Compact layout defaults OFF (`AppPreferences.kt`): `smartSpinLayoutState`
+   false, `smartDensityModeState` OFF, `isSmartSpinLayoutEnabled` default
+   false, legacy smart-density key default false (fresh install ships roomy;
+   users who explicitly picked a mode keep it).
+5. Changelog + Prompt.md.
 
-### Outcome
+### Status
 
-- Changes applied to all four files; markers verified via code search.
-- Awaiting code review + commit/push.
+- All code edits applied: AppPreferences, ExploreSessionService,
+  TopicRevealScreen, OnboardingScreen, SettingsScreen.
+- Only remaining `Settings.canDrawOverlays` reference is inside
+  `overlayActuallyUsable()` itself (verified via code search).
+- Changelog + Prompt.md updated. Awaiting review + commit/push.
