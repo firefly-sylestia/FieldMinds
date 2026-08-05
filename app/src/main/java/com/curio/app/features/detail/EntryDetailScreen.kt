@@ -77,7 +77,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -368,29 +367,29 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Title — the topic name in WHITE on a soft glass band.
-                    // The letters are crisp ExtraBold geom in pure white (the
-                    // classic hero title, in every theme — pastel mode used to
-                    // flip them to the accent ink). The pane behind them is a
-                    // gentle vertical gradient: a light frost at the top that
-                    // deepens into the banner's own color at the bottom — a
-                    // little gradient with the background color, so the title
-                    // sits on a subtle color band instead of a flat tint, with
-                    // NO blur.
-                    // Both stops carry the banner color (top: a soft tinted
-                    // frost, bottom: the deepened band) so white letters stay
-                    // readable across the WHOLE pill — a two-line title's
-                    // first line sits on the tinted top, not bare banner.
+                    // ── Title — the topic name in WHITE on a clean blue
+                    // glass band. The letters are crisp ExtraBold geom in pure
+                    // white (the classic hero title, in every theme — pastel
+                    // mode used to flip them to the accent ink). The pane
+                    // behind them is a BRIGHT blue vertical gradient (see
+                    // below), so the title sits on a clean vivid band instead
+                    // of a flat tint, with NO blur.
+                    // A clean, BRIGHT blue glass pane — light ice blue at the
+                    // top catching the light, melting into a vivid clean blue
+                    // at the bottom. Deliberately NOT derived from (or
+                    // darkened toward) the banner color: the old banner-toned
+                    // gradient read as a dark moody band. White letters pop
+                    // on this blue in every theme.
                     val titlePaneGradient = Brush.verticalGradient(
                         listOf(
-                            lerp(heroStart, Color.Black, 0.10f).copy(alpha = 0.30f),
-                            lerp(heroStart, Color.Black, 0.30f).copy(alpha = 0.60f)
+                            Color(0xFF7CA6EF).copy(alpha = 0.96f),
+                            Color(0xFF3B82F6).copy(alpha = 0.96f)
                         )
                     )
                     Surface(
                         shape = RoundedCornerShape(20.dp),
                         color = Color.Transparent,
-                        border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.45f)),
                         shadowElevation = 0.dp
                     ) {
                         // The gradient must wear the pill's rounded shape

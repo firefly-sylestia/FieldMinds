@@ -191,6 +191,14 @@ comment updated to explain why the backdrop must not follow the filter.
 - Removed now-unused `androidx.compose.ui.graphics.Shadow` import (Brush/Offset still used).
 - Fixed two stale comments referencing the title as a heroFrostPlate user.
 
+### Completed: detail title pill → bright clean blue
+
+User: "the title background looks darker, make it brighter instead of the dark vibe, and make it clean blue."
+
+- `titlePaneGradient` now a vertical gradient `#7CA6EF → #3B82F6` (~0.96 alpha) — an ice-to-vivid clean blue band, category-agnostic, white rim 0.45, title stays `Color.White`.
+- Removed the now-unused `androidx.compose.ui.graphics.lerp` import; stale comment above the pill updated.
+- Reviewer: white-on-blue contrast strong in all themes; its top-stop note applied (deepened `#9DC0F7 → #7CA6EF` so a two-line title's first line doesn't wash out).
+
 ### Validation
 
 - `scripts/check_braces.py` passed; `git diff --check` clean; Shadow verified 0 uses; Brush 4×, Offset 2× still used.

@@ -1,3 +1,4 @@
+• The detail topic title now sits on a bright clean-blue glass band with white lettering — brighter and clearer than the old darkened pill, in every theme
 • The floating explore bubble now self-heals — if the overlay window fails to attach or composes empty on the first try, it retries itself once instead of silently staying invisible for the whole session (still capped so a real device rejection can't loop)
 • The Cabinet's watermark no longer shifts between filter pages — the glyph scatter stays pinned at the same level whether you're on All, a category or Legacy (the page still tints the background and chips per category)
 • Home's hero got a cleaner hierarchy — the greeting sits on one line with your name beneath it, and the Streak · Cabinet · Recent bar now glows just above the tear on a soft rose gradient pane (the banner's own color, not white)
