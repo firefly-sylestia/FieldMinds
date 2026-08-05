@@ -71,14 +71,13 @@ object AppPreferences {
     private const val KEY_PEEK_HAIRLINE = "peek_hairline"
     private const val KEY_PEEK_SHADOWS = "peek_shadows"
     private const val KEY_PEEK_TITLES = "peek_titles"
-    // v7.13 — Main card (hero ticket) redesign, four independent toggles
-    // mirroring the peek-card experiment: enhanced gradient fill, accent
-    // border, soft shadow, and enhanced typography. All OFF by default so
-    // the current hero card stays exactly as-is until enabled.
+    // v7.13 — Main card (hero ticket) redesign toggles: enhanced gradient
+    // fill, accent border, soft shadow. All OFF by default so the current
+    // hero card stays exactly as-is until enabled. (Enhanced typography was
+    // promoted to the shipped default in v7.16 — no longer toggleable.)
     private const val KEY_HERO_GRADIENT = "hero_gradient"
     private const val KEY_HERO_BORDER = "hero_border"
     private const val KEY_HERO_SHADOW = "hero_shadow"
-    private const val KEY_HERO_TITLES = "hero_titles"
     private const val KEY_MATERIAL_CARD_BLENDS = "material_card_blends"
     private const val KEY_3D_BUTTON_GRADIENT = "3d_button_gradient"
     private const val KEY_REMINDER_ENABLED = "reminder_enabled"
@@ -170,8 +169,6 @@ object AppPreferences {
     var heroBorderState by mutableStateOf(false)
         private set
     var heroShadowState by mutableStateOf(false)
-        private set
-    var heroTitlesState by mutableStateOf(false)
         private set
 
     // Material card blends (v7.8, EXPERIMENTAL) — when ON, cards in the
@@ -291,7 +288,6 @@ object AppPreferences {
         heroGradientState = isHeroGradientEnabled(context)
         heroBorderState = isHeroBorderEnabled(context)
         heroShadowState = isHeroShadowEnabled(context)
-        heroTitlesState = isHeroTitlesEnabled(context)
         materialCardBlendsState = isMaterialCardBlendsEnabled(context)
         threeDButtonState = is3DButtonGradientEnabled(context)
         reminderEnabledState = isReminderEnabled(context)
@@ -409,15 +405,6 @@ object AppPreferences {
     fun setHeroShadowEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_HERO_SHADOW, enabled).apply()
         heroShadowState = enabled
-    }
-
-    /** Whether enhanced hero-card typography is on (default off). */
-    fun isHeroTitlesEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_HERO_TITLES, false)
-
-    fun setHeroTitlesEnabled(context: Context, enabled: Boolean) {
-        prefs(context).edit().putBoolean(KEY_HERO_TITLES, enabled).apply()
-        heroTitlesState = enabled
     }
 
     // ── Material card blends (v7.8 experimental) ───────────────────────

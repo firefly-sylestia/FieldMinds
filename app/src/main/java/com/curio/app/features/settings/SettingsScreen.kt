@@ -840,14 +840,6 @@ fun SettingsScreen(navController: NavController) {
                             onCheckedChange = { AppPreferences.setHeroShadowEnabled(context, it) }
                         )
                         CurioSettingsDivider()
-                        DeckCardToggleRow(
-                            icon = CurioIcons.FormatText,
-                            title = "Enhanced typography",
-                            subtitle = "Bolder title, bigger subtitle on the front card",
-                            checked = AppPreferences.heroTitlesState,
-                            onCheckedChange = { AppPreferences.setHeroTitlesEnabled(context, it) }
-                        )
-                        CurioSettingsDivider()
                         // ── Entry date & mood — the meta card (date / time /
                         //    mood / type) on saved entries + the journal's mood
                         //    and attachment sections. Default ON.

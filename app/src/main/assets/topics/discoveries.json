@@ -6,6 +6,7 @@
     "name": "Penicillin (1928)",
     "teaser": "Alexander Fleming left a window open over a Petri dish on vacation. By the time he came back, a mold had killed every bacterium in the dish — the most consequential accident of the 20th century.",
     "imageUrl": "",
+    "byline": "Alexander Fleming",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Howard Florey & Ernst Chain's 1940 paper on penicillin",
@@ -27,6 +28,7 @@
     "name": "DNA Double Helix (1953)",
     "teaser": "Watson and Crick solved the structure of life from a card table without doing an experiment. The data came from Rosalind Franklin's X-ray photograph, taken in a King's College hallway by a student who did not get the credit.",
     "imageUrl": "",
+    "byline": "James Watson & Francis Crick",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Watson & Crick's 1953 Nature paper, \"A Structure for Deoxyribose Nucleic Acid\" (one page)",
@@ -47,6 +49,7 @@
     "name": "Gravitational Waves (2015)",
     "teaser": "Einstein predicted them in 1916 and wrote that he'd bet a year of his life we'd never detect them. 99 years and $1B later, an instrument in Louisiana heard two black holes collide.",
     "imageUrl": "",
+    "byline": "Weiss, Thorne & the LIGO Team",
     "exploreAction": {
       "verb": "Read",
       "targetName": "LIGO's 2016 detection paper (Phys. Rev. Lett.)",
@@ -67,6 +70,7 @@
     "name": "Higgs Boson (2012)",
     "teaser": "A theoretical particle proposed in 1964 to explain why matter has mass, then sought by 30,000 physicists for 48 years and finally confirmed at the LHC on July 4, 2012.",
     "imageUrl": "",
+    "byline": "Peter Higgs & the CERN teams",
     "exploreAction": {
       "verb": "Read",
       "targetName": "CMS + ATLAS simultaneous 2012 announcement papers",
@@ -88,6 +92,7 @@
     "name": "Special and General Relativity (1905, 1915)",
     "teaser": "Einstein at 26 wrote four papers in 1905 that broke time, mass, and energy apart and patched them back together. Ten years later he added gravity as geometry.",
     "imageUrl": "",
+    "byline": "Albert Einstein",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Einstein's 1905 paper \"On the Electrodynamics of Moving Bodies\" — first 4 pages",
@@ -108,6 +113,7 @@
     "name": "Quantum Mechanics (1925–27)",
     "teaser": "Six European physicists in three years invented a new kind of physics where particles are also waves and measurements change the thing being measured. None of them finished the work, all of them were right.",
     "imageUrl": "",
+    "byline": "Heisenberg & Schrodinger",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Heisenberg's 1927 paper \"Über den anschaulichen Inhalt der quantentheoretischen Kinematik und Mechanik\"",
@@ -128,6 +134,7 @@
     "name": "Evolution by Natural Selection (1858)",
     "teaser": "Two Englishmen and a Malay archipelago letter exchange published the same idea on the same day — Darwin and Wallace — and Darwin got the credit because he'd been working on it longer.",
     "imageUrl": "",
+    "byline": "Charles Darwin & Alfred Wallace",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Darwin & Wallace, 1858 Linnean Society joint presentation (transcript)",
@@ -148,6 +155,7 @@
     "name": "Periodic Table (1869)",
     "teaser": "Mendeleev arranged the known elements on a card table in two weeks, then realized the gaps he'd left unfilled predicted eight elements that hadn't been discovered yet.",
     "imageUrl": "",
+    "byline": "Dmitri Mendeleev",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Mendeleev's 1869 paper \"On the Relation between the Properties and Atomic Weights of the Elements\"",
@@ -168,6 +176,7 @@
     "name": "Photosynthesis (1770s–1800s)",
     "teaser": "Joseph Priestley burned a candle in a sealed jar, then put mint in; the mint resurrected the air. He had no idea he'd found the only thing keeping animals alive.",
     "imageUrl": "",
+    "byline": "Joseph Priestley",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Jan Ingenhousz's 1779 paper \"Experiments upon Vegetables\"",
@@ -188,6 +197,7 @@
     "name": "Radioactivity (1896)",
     "teaser": "Becquerel put uranium salts in a drawer next to photographic plates. When he developed the plates he found fog — and that fog was energy that no chemistry of the time could explain.",
     "imageUrl": "",
+    "byline": "Henri Becquerel",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Marie Curie's 1898 paper \"Rays emitted by uranium and thorium compounds\"",
@@ -208,6 +218,7 @@
     "name": "Germ Theory of Disease (1860s–80s)",
     "teaser": "Pasteur, Koch and Lister transformed medicine by proving most disease came from microorganisms — and that washing your hands with soap was a cure.",
     "imageUrl": "",
+    "byline": "Louis Pasteur",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Pasteur's 1861 paper \"On the organized bodies which exist in the atmosphere\"",
@@ -228,6 +239,7 @@
     "name": "Big Bang Cosmology (1927)",
     "teaser": "Lemaître reasoned backward from Einstein's equations to a single point of origin — and Einstein told him his math was wrong before relenting 12 years later.",
     "imageUrl": "",
+    "byline": "Georges Lemaître",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Lemaître's 1927 paper \"A homogeneous universe of constant mass and increasing radius\" (English translation)",
@@ -248,6 +260,7 @@
     "name": "Cosmic Microwave Background (1964)",
     "teaser": "Two Bell Labs engineers trying to calibrate a radio antenna heard a low hiss that wouldn't go away. They spent a year ruling out pigeon droppings before publishing.",
     "imageUrl": "",
+    "byline": "Arno Penzias & Robert Wilson",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Penzias and Wilson's 1965 paper \"A Measurement of Excess Antenna Temperature at 4080 Mc/s\"",
@@ -268,6 +281,7 @@
     "name": "Plate Tectonics (1960s)",
     "teaser": "A handful of oceanographers and geophysicists noticed mid-ocean ridges and matching coastlines in the 1950s, refused to give up on a ridiculed theory for a decade, then reshaped geology.",
     "imageUrl": "",
+    "byline": "Alfred Wegener",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Tuzo Wilson's 1965 paper \"A new class of faults and their bearing on continental drift\"",
@@ -288,6 +302,7 @@
     "name": "Calculus (1665–1676)",
     "teaser": "Newton invented it during the plague years in his Lincolnshire home. Leibniz published it first. The two became Europe's longest-running scientific argument.",
     "imageUrl": "",
+    "byline": "Isaac Newton & Gottfried Leibniz",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Leibniz's 1684 paper \"Nova Methodus pro Maximis et Minimis\" (Latin translated)",
@@ -307,6 +322,7 @@
     "name": "Gödel's Incompleteness Theorems (1931)",
     "teaser": "Austrian mathematician working alone in Vienna proved that any arithmetic system rich enough to be useful is also rich enough to be inconsistent. Hilbert said it couldn't be done.",
     "imageUrl": "",
+    "byline": "Kurt Gödel",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Gödel's 1931 paper \"Über formal unentscheidbare Sätze der Principia Mathematica\"",
@@ -327,6 +343,7 @@
     "name": "Transistor (1947)",
     "teaser": "Bell Labs physicists trying to make a better amplifier accidentally invented the device that gave us every computer since, then won the Nobel six years later.",
     "imageUrl": "",
+    "byline": "Bardeen, Brattain & Shockley",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Bardeen, Brattain, and Shockley's 1948 papers in Phys. Rev.",
@@ -347,6 +364,7 @@
     "name": "Integrated Circuit (1959)",
     "teaser": "Kilby at Texas Instruments put two transistors on one germanium sliver by hand, then filed a patent six months before Noyce at Fairchild did the same thing with silicon.",
     "imageUrl": "",
+    "byline": "Jack Kilby",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Kilby's 1959 patent (US 3,138,743)",
@@ -367,6 +385,7 @@
     "name": "Laser (1960)",
     "teaser": "Theoretically predicted by Einstein in 1917, the first working laser was built by Maiman in 1960 from a ruby rod, a flashlamp, and the insight that pink rubies could amplify light.",
     "imageUrl": "",
+    "byline": "Theodore Maiman",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Maiman's 1960 paper \"Stimulated Optical Radiation in Ruby\" (Nature)",
@@ -387,6 +406,7 @@
     "name": "Internet (ARPANET, 1969)",
     "teaser": "Four US university computers sent the first packet on October 29, 1969. The intended message was \"LOGIN.\" The first two letters got through before the system crashed.",
     "imageUrl": "",
+    "byline": "Vint Cerf & Bob Kahn",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Cerf's 1974 paper \"A Protocol for Packet Network Intercommunication\"",
@@ -407,6 +427,7 @@
     "name": "World Wide Web (1989)",
     "teaser": "CERN physicist Tim Berners-Lee proposed a global hypertext system on a notepad in March 1989. He built the first browser and server by Christmas.",
     "imageUrl": "",
+    "byline": "Tim Berners-Lee",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Berners-Lee's 1989 proposal, \"Information Management: A Proposal\"",
@@ -427,6 +448,7 @@
     "name": "CRISPR Gene Editing (2012)",
     "teaser": "Doudna and Charpentier figured out that bacteria were using a piece of viral RNA as a programmable knife. Five years later it won the Nobel.",
     "imageUrl": "",
+    "byline": "Doudna & Charpentier",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Jinek et al., 2012 paper \"A programmable dual-RNA-guided DNA endonuclease in adaptive bacterial immunity\" (Science)",
@@ -447,6 +469,7 @@
     "name": "Magnetic Resonance Imaging (1977)",
     "teaser": "Lauterbur took a snapshot of two test tubes of water inside a magnet by varying the magnetic field, and got the first MRI image. The hospital where he worked then refused to file the patent.",
     "imageUrl": "",
+    "byline": "Paul Lauterbur",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Lauterbur's 1973 paper \"Image Formation by Induced Local Interactions: Examples Employing Nuclear Magnetic Resonance\" (Nature)",
@@ -467,6 +490,7 @@
     "name": "Helicobacter pylori (1982)",
     "teaser": "Australian pathologist Barry Marshall drank a flask of bacteria to prove ulcers were caused by infection, not stress. He and his partner won the 2005 Nobel.",
     "imageUrl": "",
+    "byline": "Barry Marshall & Robin Warren",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Marshall & Warren's 1984 paper \"Unidentified curved bacilli in the stomach of patients with gastritis and peptic ulceration\" (Lancet)",
@@ -527,6 +551,7 @@
     "name": "Printing Press (c. 1440)",
     "teaser": "Johannes Gutenberg invented the movable-type printing press in Mainz, and within 50 years there were 20M books in Europe — more than all the scribes of the previous millennium combined.",
     "imageUrl": "",
+    "byline": "Johannes Gutenberg",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Gutenberg Museum, Mainz",
@@ -547,6 +572,7 @@
     "name": "Lightning is Electricity (1752)",
     "teaser": "Benjamin Franklin flew a kite in a thunderstorm, with a metal key tied to the string. The key sparked. The entire scientific community decided not to repeat the experiment.",
     "imageUrl": "",
+    "byline": "Benjamin Franklin",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Franklin's 1751 letter to Peter Collinson on electrical experiments",
@@ -567,6 +593,7 @@
     "name": "Streptomycin (1943)",
     "teaser": "Waksman's graduate student Albert Schatz isolated streptomycin from a soil sample in 1943. Waksman took the patent credit. Schatz sued and eventually won a settlement.",
     "imageUrl": "",
+    "byline": "Albert Schatz & Selman Waksman",
     "exploreAction": {
       "verb": "Read",
       "instruction": "Two-page paper. The first author is Schatz — the graduate student. The third is Waksman, who took the patent credit. The medical import is in the last paragraph: it works against the tuberculosis bacillus.",
@@ -587,6 +614,7 @@
     "name": "Antiseptic Surgery (1867)",
     "teaser": "Joseph Lister read Pasteur's germ theory papers and decided that the secret to saving surgical patients was washing everything in carbolic acid — including the surgeons' hands.",
     "imageUrl": "",
+    "byline": "Joseph Lister",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Lister's 1867 paper \"On the Antiseptic Principle in the Practice of Surgery\" (Lancet)",
@@ -607,6 +635,7 @@
     "name": "Mendel's Laws of Inheritance (1865)",
     "teaser": "An Austrian monk bred 29,000 pea plants in his monastery garden, articulated the math of inherited traits in 1865, then died before anyone in the scientific community paid attention.",
     "imageUrl": "",
+    "byline": "Gregor Mendel",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Mendel's 1865 paper \"Versuche über Pflanzenhybriden\" (trans. Experiments on Plant Hybrids)",
@@ -627,6 +656,7 @@
     "name": "Oxygen and Combustion Chemistry (1770s)",
     "teaser": "Lavoisier weighed everything. He weighed water before and after burning it through a gun barrel, and showed it gained mass — and weighed the air that lost it — and chemistry was born.",
     "imageUrl": "",
+    "byline": "Antoine Lavoisier",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Lavoisier, 1789 \"Traité Élémentaire de Chimie\" — first chapter",
@@ -647,6 +677,7 @@
     "name": "Viviani's Theorem (1659)",
     "teaser": "Italian mathematician who computed the area of a partial sphere's surface by balancing a cube against the curve of a half-circle.",
     "imageUrl": "",
+    "byline": "Vincenzo Viviani",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Viviani's letters to Leibniz and Michelangelo Ricci (1659)",
@@ -667,6 +698,7 @@
     "name": "Fibonacci / Hindu-Arabic Numerals in Europe (1202)",
     "teaser": "Leonardo of Pisa spent his childhood in North African markets, brought Hindu-Arabic numerals back to Europe in 1202, and changed how the world does arithmetic.",
     "imageUrl": "",
+    "byline": "Leonardo of Pisa",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Fibonacci's \"Liber Abaci\" — opening chapter",
@@ -687,6 +719,7 @@
     "name": "Atomic Nucleus / Proton (1911)",
     "teaser": "Rutherford fired alpha particles at gold foil in his Manchester lab. He expected them to pass through. A few bounced back. His assistant Marsden reportedly said it was like firing a 15-inch shell at tissue paper and having it come back.",
     "imageUrl": "",
+    "byline": "Ernest Rutherford",
     "exploreAction": {
       "verb": "Read",
       "targetName": "Rutherford, 1911 paper \"The Scattering of α and β Particles by Matter and the Structure of the Atom\" (Phil. Mag.)",
@@ -707,6 +740,7 @@
     "name": "The Cosmic Microwave Background (1965)",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
+    "byline": "Arno Penzias & Robert Wilson",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Cosmic Microwave Background (1965)",
@@ -726,6 +760,7 @@
     "name": "Exoplanets (1995)",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
+    "byline": "Michel Mayor & Didier Queloz",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Exoplanets (1995)",
@@ -745,6 +780,7 @@
     "name": "Evolution by Natural Selection (1859)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Charles Darwin & Alfred Wallace",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Evolution by Natural Selection (1859)",
@@ -764,6 +800,7 @@
     "name": "The Periodic Table (1869)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Dmitri Mendeleev",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Periodic Table (1869)",
@@ -783,6 +820,7 @@
     "name": "Radiocarbon Dating (1949)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Willard Libby",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Radiocarbon Dating (1949)",
@@ -802,6 +840,7 @@
     "name": "The Polio Vaccine (1955)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Jonas Salk",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Polio Vaccine (1955)",
@@ -821,6 +860,7 @@
     "name": "The First Organ Transplant (1954)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Joseph Murray",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The First Organ Transplant (1954)",
@@ -840,6 +880,7 @@
     "name": "CT Scanning (1971)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Godfrey Hounsfield",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "CT Scanning (1971)",
@@ -859,6 +900,7 @@
     "name": "Stem Cells (1998)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "James Thomson",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Stem Cells (1998)",
@@ -878,6 +920,7 @@
     "name": "Induced Pluripotent Stem Cells (2006)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Shinya Yamanaka",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Induced Pluripotent Stem Cells (2006)",
@@ -897,6 +940,7 @@
     "name": "The First Exoplanet (1992)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Aleksander Wolszczan & Dale Frail",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The First Exoplanet (1992)",
@@ -916,6 +960,7 @@
     "name": "The Accelerating Universe (1998)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Perlmutter, Schmidt & Riess",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Accelerating Universe (1998)",
@@ -935,6 +980,7 @@
     "name": "The God Particle (2012)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Peter Higgs & the CERN teams",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The God Particle (2012)",
@@ -954,6 +1000,7 @@
     "name": "Graphene (2004)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Andre Geim & Konstantin Novoselov",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Graphene (2004)",
@@ -973,6 +1020,7 @@
     "name": "The First Black Hole Image (2019)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "EHT Collaboration",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The First Black Hole Image (2019)",
@@ -992,6 +1040,7 @@
     "name": "Chaos Theory (1960s)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Edward Lorenz",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Chaos Theory (1960s)",
@@ -1011,6 +1060,7 @@
     "name": "The World Wide Web (1989)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Tim Berners-Lee",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The World Wide Web (1989)",
@@ -1030,6 +1080,7 @@
     "name": "Public Key Cryptography (1976)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Diffie & Hellman",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Public Key Cryptography (1976)",
@@ -1049,6 +1100,7 @@
     "name": "Deep Learning Neural Networks (2012)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Krizhevsky, Sutskever & Hinton",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Deep Learning Neural Networks (2012)",
@@ -1068,6 +1120,7 @@
     "name": "Self-Driving Cars (2010s)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Sebastian Thrun",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Self-Driving Cars (2010s)",
@@ -1087,6 +1140,7 @@
     "name": "The Structure of the Ribosome (2000)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Ramakrishnan, Steitz & Yonath",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Structure of the Ribosome (2000)",
@@ -1106,6 +1160,7 @@
     "name": "Apoptosis (1972)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Kerr, Wyllie & Currie",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Apoptosis (1972)",
@@ -1125,6 +1180,7 @@
     "name": "The First Clone (Dolly 1996)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Ian Wilmut",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The First Clone (Dolly 1996)",
@@ -1144,6 +1200,7 @@
     "name": "The Microbiome (2010s)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Joshua Lederberg",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Microbiome (2010s)",
@@ -1163,6 +1220,7 @@
     "name": "The Ozone Layer Recovery (ongoing)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Molina & Rowland",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Ozone Layer Recovery (ongoing)",
@@ -1182,6 +1240,7 @@
     "name": "The Keeling Curve (1958)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Charles David Keeling",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Keeling Curve (1958)",
@@ -1201,6 +1260,7 @@
     "name": "The Extinction of the Dinosaurs (1980)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Luis & Walter Alvarez",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Extinction of the Dinosaurs (1980)",
@@ -1220,6 +1280,7 @@
     "name": "Homo Naledi (2013)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Lee Berger",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Homo Naledi (2013)",
@@ -1277,6 +1338,7 @@
     "name": "The Printing Press (1440)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Johannes Gutenberg",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Printing Press (1440)",
@@ -1296,6 +1358,7 @@
     "name": "Electricity (1800)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Alessandro Volta",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Electricity (1800)",
@@ -1315,6 +1378,7 @@
     "name": "The Light Bulb (1879)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Thomas Edison",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Light Bulb (1879)",
@@ -1334,6 +1398,7 @@
     "name": "Television (1927)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Philo Farnsworth",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Television (1927)",
@@ -1353,6 +1418,7 @@
     "name": "The Microprocessor (1971)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Hoff, Faggin & Mazor",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Microprocessor (1971)",
@@ -1372,6 +1438,7 @@
     "name": "The Search Engine (1996)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Larry Page & Sergey Brin",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Search Engine (1996)",
@@ -1391,6 +1458,7 @@
     "name": "The Structure of DNA (1953)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "James Watson & Francis Crick",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Structure of DNA (1953)",
@@ -1410,6 +1478,7 @@
     "name": "Anesthesia (1846)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "William Morton",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Anesthesia (1846)",
@@ -1429,6 +1498,7 @@
     "name": "Pasteurization (1864)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Louis Pasteur",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Pasteurization (1864)",
@@ -1448,6 +1518,7 @@
     "name": "X-Rays (1895)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Wilhelm Röntgen",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "X-Rays (1895)",
@@ -1467,6 +1538,7 @@
     "name": "The Electron (1897)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "J.J. Thomson",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Electron (1897)",
@@ -1486,6 +1558,7 @@
     "name": "Relativity (1905)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Albert Einstein",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Relativity (1905)",
@@ -1505,6 +1578,7 @@
     "name": "The Proton (1919)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Ernest Rutherford",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Proton (1919)",
@@ -1524,6 +1598,7 @@
     "name": "Nuclear Fission (1938)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Otto Hahn & Lise Meitner",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Nuclear Fission (1938)",
@@ -1543,6 +1618,7 @@
     "name": "The Laser (1960)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Theodore Maiman",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Laser (1960)",
@@ -1562,6 +1638,7 @@
     "name": "Pulsars (1967)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Jocelyn Bell Burnell",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Pulsars (1967)",
@@ -1581,6 +1658,7 @@
     "name": "The Ozone Hole (1985)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Joseph Farman",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Ozone Hole (1985)",
@@ -1600,6 +1678,7 @@
     "name": "The Higgs Boson (2012)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Peter Higgs & the CERN teams",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Higgs Boson (2012)",
@@ -1619,6 +1698,7 @@
     "name": "The Big Bang Theory",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Georges Lemaître",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Big Bang Theory",
@@ -1638,6 +1718,7 @@
     "name": "Mendelian Genetics (1866)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Gregor Mendel",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Mendelian Genetics (1866)",
@@ -1657,6 +1738,7 @@
     "name": "The Electron Microscope (1931)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Ernst Ruska",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Electron Microscope (1931)",
@@ -1676,6 +1758,7 @@
     "name": "The First Antibiotic (1932)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Gerhard Domagk",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The First Antibiotic (1932)",
@@ -1695,6 +1778,7 @@
     "name": "The Structure of Insulin (1969)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Frederick Sanger",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Structure of Insulin (1969)",
@@ -1714,6 +1798,7 @@
     "name": "MRI Imaging (1973)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Paul Lauterbur",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "MRI Imaging (1973)",
@@ -1733,6 +1818,7 @@
     "name": "The Human Genome Project (2003)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Human Genome Project Consortium",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Human Genome Project (2003)",
@@ -1752,6 +1838,7 @@
     "name": "RNA Interference (1998)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Andrew Fire & Craig Mello",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "RNA Interference (1998)",
@@ -1771,6 +1858,7 @@
     "name": "mRNA Vaccines (2020)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Katalin Karikó & Drew Weissman",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "mRNA Vaccines (2020)",
@@ -1790,6 +1878,7 @@
     "name": "Dark Energy (1998)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Perlmutter, Schmidt & Riess",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Dark Energy (1998)",
@@ -1809,6 +1898,7 @@
     "name": "Neutrino Oscillations (1998)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Takaaki Kajita & Arthur McDonald",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Neutrino Oscillations (1998)",
@@ -1828,6 +1918,7 @@
     "name": "Topological Insulators (2007)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Charles Kane & Eugene Mele",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Topological Insulators (2007)",
@@ -1847,6 +1938,7 @@
     "name": "Fullerenes (1985)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Kroto, Smalley & Curl",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Fullerenes (1985)",
@@ -1885,6 +1977,7 @@
     "name": "Fractals (1975)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Benoit Mandelbrot",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Fractals (1975)",
@@ -1904,6 +1997,7 @@
     "name": "The Internet Protocol (1974)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Vint Cerf & Bob Kahn",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Internet Protocol (1974)",
@@ -1942,6 +2036,7 @@
     "name": "AlphaFold Protein Folding (2020)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Demis Hassabis & John Jumper",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "AlphaFold Protein Folding (2020)",
@@ -1961,6 +2056,7 @@
     "name": "Reusable Rockets (2015)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Elon Musk & SpaceX",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Reusable Rockets (2015)",
@@ -1980,6 +2076,7 @@
     "name": "Telomerase (1984)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Blackburn & Greider",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Telomerase (1984)",
@@ -1999,6 +2096,7 @@
     "name": "The Cell Cycle (2001)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "Hartwell, Hunt & Nurse",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Cell Cycle (2001)",
@@ -2018,6 +2116,7 @@
     "name": "Optogenetics (2005)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Karl Deisseroth",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Optogenetics (2005)",
@@ -2037,6 +2136,7 @@
     "name": "The First Gene Therapy (1990)",
     "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
     "imageUrl": "",
+    "byline": "W. French Anderson",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The First Gene Therapy (1990)",
@@ -2056,6 +2156,7 @@
     "name": "Climate Change Science (1988)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "James Hansen",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Climate Change Science (1988)",
@@ -2094,6 +2195,7 @@
     "name": "Lucy the Australopithecus (1974)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Donald Johanson",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Lucy the Australopithecus (1974)",
@@ -2113,6 +2215,7 @@
     "name": "Homo Floresiensis (2003)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Peter Brown & Michael Morwood",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Homo Floresiensis (2003)",
@@ -2170,6 +2273,7 @@
     "name": "The Steam Engine (1712)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Thomas Newcomen",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Steam Engine (1712)",
@@ -2189,6 +2293,7 @@
     "name": "The Telephone (1876)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Alexander Graham Bell",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Telephone (1876)",
@@ -2208,6 +2313,7 @@
     "name": "Radio (1895)",
     "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
     "imageUrl": "",
+    "byline": "Guglielmo Marconi",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Radio (1895)",
@@ -2227,6 +2333,7 @@
     "name": "The Computer (1940s)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Eckert & Mauchly",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Computer (1940s)",
@@ -2246,6 +2353,7 @@
     "name": "The Internet (1983)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Vint Cerf & Bob Kahn",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Internet (1983)",
@@ -2284,6 +2392,7 @@
     "name": "Vaccination (1796)",
     "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
     "imageUrl": "",
+    "byline": "Edward Jenner",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Vaccination (1796)",
@@ -2303,6 +2412,7 @@
     "name": "Germ Theory of Disease (1860s)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Louis Pasteur",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Germ Theory of Disease (1860s)",
@@ -2322,6 +2432,7 @@
     "name": "Quantum Theory (1900)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Max Planck",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Quantum Theory (1900)",
@@ -2341,6 +2452,7 @@
     "name": "The Atomic Nucleus (1911)",
     "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
     "imageUrl": "",
+    "byline": "Ernest Rutherford",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Atomic Nucleus (1911)",
@@ -2360,6 +2472,7 @@
     "name": "The Neutron (1932)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "James Chadwick",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Neutron (1932)",
@@ -2379,6 +2492,7 @@
     "name": "The Transistor (1947)",
     "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
     "imageUrl": "",
+    "byline": "Bardeen, Brattain & Shockley",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "The Transistor (1947)",

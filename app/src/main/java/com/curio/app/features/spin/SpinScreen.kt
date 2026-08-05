@@ -1730,7 +1730,6 @@ private fun HeroTicketCard(
     val heroGradientOn = AppPreferences.heroGradientState
     val heroBorderOn = AppPreferences.heroBorderState
     val heroShadowOn = AppPreferences.heroShadowState
-    val heroTitlesOn = AppPreferences.heroTitlesState
     // v7.14 — the enhanced gradient is a top-left-lit DIAGONAL multi-stop
     // sweep: a bright crown at the top-left catches light, the card's own
     // stops run through the middle (the Material blend keeps its identity),
@@ -1761,7 +1760,12 @@ private fun HeroTicketCard(
     // v7.5 — pastel mode lightens the ticket gradient, so the content ink
     // flips from white to a deep ink of the deck color (light mode) / a
     // light tint (dark). White when pastel mode is off.
-    val ink = if (isMixed) pastelFillInk(accent) else cat.onAccent()
+    // v7.16 — pastel ink refined: ALWAYS derived from the deck accent via
+    // pastelFillInk in pastel mode (single + mixed decks alike), so every
+    // card reads with the same calm deep-hue ink instead of the raw 700
+    // accent or the fixed DeepPlum special-case for pale accents — no hue
+    // surprises on the card, and it matches every other pastel surface.
+    val ink = if (AppPreferences.pastelColorsState) pastelFillInk(accent) else cat.onAccent()
 
     // ── Per-tick shuffle pulse — the front card bounces in sync with the
     //    wheel: every time the displayed topic switches, the card kicks
@@ -1890,12 +1894,14 @@ private fun HeroTicketCard(
                 // v7.14 — elevation shadow moved to the layered
                 // Modifier.shadow chain above; the Surface stays flat.
                 shadowElevation = 0.dp,
-                // Hero card border: OFF keeps the subtle ink outline. ON
-                // drops to a whisper hairline and the accent is drawn as a
-                // gradient rim-light inside (the drawBehind below).
+                // v7.16 — refined border: OFF is a whisper 1dp hairline at
+                // 18% ink — seats the card on the page without a harsh
+                // accent outline (the accent rim-light stays OFF by default).
+                // ON drops the hairline lower and the accent is drawn as a
+                // soft gradient rim-light inside (the drawBehind below).
                 border = BorderStroke(
-                    1.5.dp,
-                    ink.copy(alpha = if (heroBorderOn) 0.22f else 0.35f)
+                    1.dp,
+                    ink.copy(alpha = if (heroBorderOn) 0.14f else 0.18f)
                 ),
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -1908,20 +1914,21 @@ private fun HeroTicketCard(
                         )
                         .then(
                             if (heroBorderOn) {
-                                // v7.14 — gradient rim-light border: the edge
-                                // catches light at the top (brightened ink) and
-                                // deepens to the accent at the bottom, drawn as
-                                // a 2dp stroke inside the clip; a 1dp black
-                                // bevel hairline just inside gives the card a
-                                // machined, premium edge.
+                                // v7.16 — refined gradient rim-light: a slim
+                                // 1.5dp stroke that catches light at the top
+                                // (barely brightened ink) and eases a whisper
+                                // of the accent at the bottom, plus a fainter
+                                // 1dp bevel hairline just inside — a soft
+                                // machined edge instead of the old harsh 2dp
+                                // white-to-accent ring.
                                 Modifier.drawBehind {
-                                    val borderW = 2.dp.toPx()
+                                    val borderW = 1.5.dp.toPx()
                                     val radius = 30.dp.toPx() - borderW / 2f
                                     drawRoundRect(
                                         brush = Brush.verticalGradient(
                                             listOf(
-                                                lerp(ink, Color.White, if (dark) 0.30f else 0.45f),
-                                                lerp(ink, accent, 0.30f)
+                                                lerp(ink, Color.White, if (dark) 0.20f else 0.30f),
+                                                lerp(ink, accent, 0.14f)
                                             )
                                         ),
                                         topLeft = Offset(borderW / 2f, borderW / 2f),
@@ -1937,9 +1944,9 @@ private fun HeroTicketCard(
                                         // vanish on the dark fill, so it flips
                                         // to a faint light stroke instead.
                                         color = if (dark)
-                                            lerp(ink, Color.White, 0.60f).copy(alpha = 0.10f)
+                                            lerp(ink, Color.White, 0.60f).copy(alpha = 0.06f)
                                         else
-                                            Color.Black.copy(alpha = 0.07f),
+                                            Color.Black.copy(alpha = 0.04f),
                                         topLeft = Offset(inset, inset),
                                         size = Size(size.width - 2f * inset, size.height - 2f * inset),
                                         cornerRadius = CornerRadius(radius - innerW, radius - innerW),
@@ -1973,13 +1980,15 @@ private fun HeroTicketCard(
                     //    from the TOPIC's own category so mixed decks stay
                     //    correct (a book in a films+books mix says "Author",
                     //    not "Director"). Artworks = painter (their names no
-                    //    longer carry the trailing "by …"), albums = artist.
+                    //    longer carry the trailing "by …"), albums = artist,
+                    //    discoveries = discoverer ("Discovered by · Fleming").
                     val byline = topic?.byline?.takeIf { it.isNotBlank() }
                     val bylineLabel = when (topic?.categoryId) {
                         CategoryId.ALBUMS -> "Artist"
                         CategoryId.BOOKS -> "Author"
                         CategoryId.FILMS -> "Director"
                         CategoryId.ARTWORKS -> "Painter"
+                        CategoryId.DISCOVERIES -> "Discovered by"
                         else -> null
                     }
                     if (byline != null && bylineLabel != null) {
@@ -2058,23 +2067,18 @@ private fun HeroTicketCard(
                         Column {
                             Text(
                                 text = currentTopic?.name ?: "Ready when you are",
-                                // v7.14 — enhanced typography: a true display
-                                // treatment — ExtraBold geom at 34sp with
-                                // negative tracking and a tight line height,
-                                // so the topic reads as an editorial headline
+                                // v7.16 — enhanced typography is now the
+                                // shipped default: a true display treatment —
+                                // ExtraBold geom at 34sp with negative
+                                // tracking and a tight line height, so the
+                                // topic reads as an editorial headline
                                 // instead of a stock M3 headline.
-                                style = if (heroTitlesOn)
-                                    MaterialTheme.typography.displaySmall.copy(
-                                        fontSize = 34.sp,
-                                        fontWeight = FontWeight.ExtraBold,
-                                        lineHeight = 38.sp,
-                                        letterSpacing = (-0.5).sp
-                                    )
-                                else
-                                    MaterialTheme.typography.headlineMedium.copy(
-                                        fontWeight = FontWeight.ExtraBold,
-                                        lineHeight = 34.sp
-                                    ),
+                                style = MaterialTheme.typography.displaySmall.copy(
+                                    fontSize = 34.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    lineHeight = 38.sp,
+                                    letterSpacing = (-0.5).sp
+                                ),
                                 color = ink,
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
@@ -2083,30 +2087,25 @@ private fun HeroTicketCard(
                                 Spacer(Modifier.height(10.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                     currentTopic.tags.take(2).forEach { tag ->
-                                        // v7.14 — enhanced tags: accent-tinted
-                                        // pills with tracked bold labels, so the
-                                        // genre/era chips read as designed
-                                        // details rather than flat text plates.
+                                        // v7.16 — enhanced tags are the shipped
+                                        // default: accent-tinted pills with
+                                        // tracked bold labels, so the genre/era
+                                        // chips read as designed details rather
+                                        // than flat text plates.
                                         Surface(
                                             shape = RoundedCornerShape(50),
-                                            color = if (heroTitlesOn)
-                                                lerp(ink, accent, 0.30f).copy(alpha = 0.22f)
-                                            else
-                                                ink.copy(alpha = 0.18f)
+                                            color = lerp(ink, accent, 0.30f).copy(alpha = 0.22f)
                                         ) {
                                             Text(
                                                 text = tag,
-                                                style = if (heroTitlesOn)
-                                                    MaterialTheme.typography.labelMedium.copy(
-                                                        fontWeight = FontWeight.Bold,
-                                                        letterSpacing = 0.3.sp
-                                                    )
-                                                else
-                                                    MaterialTheme.typography.labelSmall,
+                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                    fontWeight = FontWeight.Bold,
+                                                    letterSpacing = 0.3.sp
+                                                ),
                                                 color = ink,
                                                 modifier = Modifier.padding(
-                                                    horizontal = if (heroTitlesOn) 12.dp else 10.dp,
-                                                    vertical = if (heroTitlesOn) 5.dp else 4.dp
+                                                    horizontal = 12.dp,
+                                                    vertical = 5.dp
                                                 )
                                             )
                                         }
@@ -2117,16 +2116,14 @@ private fun HeroTicketCard(
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = currentTopic.teaser,
-                                    // v7.14 — enhanced teaser: one step up in
-                                    // size and line height with a brighter ink.
-                                    style = if (heroTitlesOn)
-                                        MaterialTheme.typography.bodyMedium.copy(
-                                            fontSize = 15.sp,
-                                            lineHeight = 22.sp
-                                        )
-                                    else
-                                        MaterialTheme.typography.bodySmall,
-                                    color = ink.copy(alpha = if (heroTitlesOn) 0.92f else 0.88f),
+                                    // v7.16 — enhanced teaser is the shipped
+                                    // default: one step up in size and line
+                                    // height with a brighter ink.
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontSize = 15.sp,
+                                        lineHeight = 22.sp
+                                    ),
+                                    color = ink.copy(alpha = 0.92f),
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )

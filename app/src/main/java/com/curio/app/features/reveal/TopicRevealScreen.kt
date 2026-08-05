@@ -935,15 +935,17 @@ private fun HeroCard(
                     }
                 }
             }
-            // ── Byline pill (artist / author / director / painter) —
-            //    "Artist · The Beatles" — mirrors the subtype pill on the
-            //    opposite corner so the work's creator reads at a glance.
+            // ── Byline pill (artist / author / director / painter /
+            //    discoverer) — "Artist · The Beatles" — mirrors the subtype
+            //    pill on the opposite corner so the work's creator reads at
+            //    a glance.
             val byline = resolved?.byline?.takeIf { it.isNotBlank() }
             val bylineLabel = when (cat.id) {
                 CategoryId.ALBUMS -> "Artist"
                 CategoryId.BOOKS -> "Author"
                 CategoryId.FILMS -> "Director"
                 CategoryId.ARTWORKS -> "Painter"
+                CategoryId.DISCOVERIES -> "Discovered by"
                 else -> null
             }
             if (byline != null && bylineLabel != null) {
