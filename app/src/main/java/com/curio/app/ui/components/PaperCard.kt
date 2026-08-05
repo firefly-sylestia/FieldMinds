@@ -161,8 +161,9 @@ fun PaperCard(
         // Paint the backing first so the front page covers its upper edge.
         Box(
             modifier = Modifier
-                .matchParentSize()
-                .offset(y = 4.dp)
+                .fillMaxWidth()
+                .height(42.dp)
+                .offset(y = 8.dp)
                 .clip(backingShape)
                 .background(notePaperSurface(paperColor))
         )
@@ -174,6 +175,10 @@ fun PaperCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = minHeight)
+                // Reserve the soft torn seam's small lower extent inside
+                // the measured surface so it cannot collide with the next
+                // field in a stacked editor.
+                .padding(bottom = 18.dp)
         ) {
         Box(
             // Subtle rigid-card sheen — a whisper of top light + bottom
@@ -245,18 +250,7 @@ fun PaperCard(
                 }
             }
         }
-        // Keep the lip as a separate measured layer below the sheet. It is
-        // composed after the sheet in source order only because its negative
-        // offset tucks it under the front surface visually; the front page
-        // remains opaque over the shared tear seam.
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(18.dp)
-                .offset(y = (-8).dp)
-                .clip(backingShape)
-                .background(notePaperSurface(paperColor))
-        )
+        }
     }
 }
 
