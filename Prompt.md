@@ -1,19 +1,32 @@
 # Prompt.md — Request Log
 
-## Latest Request (IN PROGRESS)
+## Latest Request (COMPLETED)
 
-**Correct Home colors and fully revert the torn-paper/quote-tilt commit**
+**Add Home-style pop-up + sticky top bar to the Entry Detail screen**
 
 ### Requested
 
-- Today's Quest should use a readable, better-balanced color.
-- In default light mode, the Home menu and profile icons must not turn white.
-- Fully revert commit `c8bb0dc784a712ad520440b4ba582d58765308c`, which introduced the deeper torn-paper layer and quote-tilt stabilization changes.
-- Do not change the Material palette or gradients.
+- Mirror the Home screen's menu / profile pill pop animation and sticky
+  style on the detail screen page (its back / more controls).
 
 ### Plan
 
-1. Resolve the in-progress revert of `c8bb0dc7` while preserving the current request log.
-2. Use a Home-only dark ink resolver for default light mode; keep pastel and dark behavior readable.
-3. Apply that resolver to Today's Quest and the sticky menu/profile controls.
-4. Run safe static checks, review, update the changelog, and commit/push.
+1. Hoist the detail screen's scroll state so a pinned bar can read it.
+2. Move the in-hero back / more controls out of the scroll content into a
+   sticky top bar pinned in the root Box.
+3. Drive the pop from the same scroll-linked clock Home uses
+   (`FastOutSlowInEasing` over a 90dp threshold): scale 0.97→1, ride-up
+   from the glyph band (72dp) to the top edge (12dp), shadow 0→6dp.
+4. Give `CurioBackButton` an optional `shadowElevation` param (default 0).
+
+### Outcome
+
+- `EntryDetailScreen.kt`: hoisted `detailScroll`; controls moved to a
+  sticky Row outside the scroll content; scroll-scrubbed pop with layout-
+  space `Modifier.offset` ride-up (critical: a draw-time graphicsLayer
+  translation would leave the more-menu's DropdownMenu anchored 60dp below
+  the popped pill, since popups anchor to layout position).
+- `CurioTopBar.kt`: `CurioBackButton` gained `shadowElevation: Dp = 0.dp`
+  (backwards compatible; 11 other callers unaffected).
+- Braces balanced; code-reviewer-glm approved (flagged popup-anchor concern
+  as correctly handled).

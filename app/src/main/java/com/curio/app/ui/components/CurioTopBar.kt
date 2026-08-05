@@ -41,13 +41,18 @@ fun CurioBackButton(
     // hero ink; every other screen keeps the default surfaceVariant circle.
     containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
-    border: BorderStroke? = null
+    border: BorderStroke? = null,
+    // Optional floating shadow — the entry-detail hero's scroll-reactive
+    // sticky bar grows this with scroll progress so the popped pills visibly
+    // float off the page; every other screen keeps the flat 0dp default.
+    shadowElevation: Dp = 0.dp
 ) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = containerColor,
         border = border,
+        shadowElevation = shadowElevation,
         modifier = modifier
     ) {
         CurioIcon(

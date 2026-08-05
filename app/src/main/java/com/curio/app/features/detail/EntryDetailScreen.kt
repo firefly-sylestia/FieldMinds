@@ -56,6 +56,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -248,10 +249,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             topClearance = EntryDetailHeroClearance,
             modifier = Modifier.fillMaxSize()
         )
+        // Hoisted scroll state — the sticky top bar (back + more controls)
+        // reads it to pop out of the hero into frosted floating pills, the
+        // same scroll-linked clock Home uses for its menu / profile pills.
+        val detailScroll = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(detailScroll)
         ) {
         // ── Expressive hero banner — one composed card: the category glyph
         // watermark with the topic title UNDER it, both on a SOLID category
@@ -493,138 +498,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    // Buttons anchored in the icon's band — previously they
-                    // floated mid-card (Box contentAlignment centers every
-                    // child), sitting at the title's level. Now they sit at
-                    // the top corners, dropped down far enough (72dp below
-                    // the status bar) to sit level with the centered glyph.
-                    .align(Alignment.TopCenter)
-                    .fillMaxWidth()
-                    .statusBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, top = 72.dp)
-                    .graphicsLayer {
-                        val eased = heroControlsProgress
-                        // Match Home's finalized sticky-control pop: begin
-                        // just under full size, then settle with a tiny upward
-                        // lift. Unlike the old 6dp drop, this cannot read as
-                        // a bounce or overshoot.
-                        alpha = eased
-                        scaleX = 0.97f + (0.03f * eased)
-                        scaleY = 0.97f + (0.03f * eased)
-                        translationY = -2.dp.toPx() * eased
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Frosted-glass controls — the same bright-white plate + deep
-                // slate ink as the Date · Mood · Type card.
-                CurioBackButton(
-                    onClick = { navController.popBackStack() },
-                    containerColor = Color.Transparent,
-                    contentColor = heroCardInk,
-                    modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
-                )
-                Box {
-                    Surface(
-                        onClick = { menuExpanded = true },
-                        shape = RoundedCornerShape(50),
-                        color = Color.Transparent,
-                        modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
-                    ) {
-                        CurioIcon(
-                            name = CurioIcons.MoreVert,
-                            contentDescription = "More",
-                            tint = heroCardInk,
-                            size = 24.dp,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = menuExpanded,
-                        onDismissRequest = { menuExpanded = false },
-                        // Frosted-glass pane — bright white glass, rounded,
-                        // with the hero's slate hairline rim: the same frost
-                        // language as the back / more buttons and the
-                        // Date · Mood · Type card, so the menu reads as a
-                        // glass panel over the banner (no blur needed — the
-                        // translucent white lets the banner's color wash
-                        // through the pane).
-                        containerColor = Color(0xFFF2F5F8).copy(alpha = 0.92f),
-                        shape = RoundedCornerShape(18.dp),
-                        tonalElevation = 0.dp,
-                        shadowElevation = 10.dp,
-                        border = BorderStroke(1.dp, heroCardInk.copy(alpha = 0.22f))
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Share", color = heroCardInk) },
-                            onClick = {
-                                menuExpanded = false
-                                shareComposableCard(
-                                    context = context,
-                                    cardSize = DpSize(400.dp, 400.dp),
-                                    authority = authority,
-                                    card = { CurioShareCard(entry = resolvedEntry, category = cat) }
-                                )
-                            },
-                            leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, tint = heroCardInk, size = 20.dp) }
-                        )
-                        if (isMultiSectionEntry(resolvedEntry)) {
-                            // Multi-section (Portfolio): reopen EVERY take in
-                            // the universal editor — not just the mood board.
-                            DropdownMenuItem(
-                                text = { Text("Edit entry", color = heroCardInk) },
-                                onClick = {
-                                    menuExpanded = false
-                                    navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
-                            )
-                        } else if (isMoodBoardEntry(resolvedEntry)) {
-                            DropdownMenuItem(
-                                text = { Text("Edit mood board", color = heroCardInk) },
-                                onClick = {
-                                    menuExpanded = false
-                                    navController.navigate(CurioRoutes.editMoodBoard(resolvedEntry.id)) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
-                            )
-                        } else {
-                            // Every other saved format (SoundBite, ReelNotes,
-                            // Marginalia, FieldNotes, non-moodboard OpenNotebook)
-                            // reopens in the universal editor preloaded with its
-                            // saved data — the editEntry route already dispatches
-                            // on the entry's own format.
-                            DropdownMenuItem(
-                                text = { Text("Edit entry", color = heroCardInk) },
-                                onClick = {
-                                    menuExpanded = false
-                                    navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
-                            )
-                        }
-                        DropdownMenuItem(
-                            text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
-                            onClick = {
-                                menuExpanded = false
-                                deleteDialogVisible = true
-                            },
-                            leadingIcon = {
-                                CurioIcon(name = CurioIcons.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error, size = 20.dp)
-                            }
-                        )
-                    }
-                }
-            }
-
         }
 
         // ── Topic meta — the title now lives INSIDE the hero above, so
@@ -730,6 +603,160 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
         Spacer(Modifier.height(32.dp))
         }
+
+        // ── Sticky top bar — back + more controls ──────────────────────
+        // Pinned OUTSIDE the scroll content so they stay on screen, with
+        // the same scroll-reactive pop as Home's menu / profile pills.
+        // Resting they sit level with the hero's glyph band; as the hero
+        // scrolls away they ride up to the top edge, ease to full size and
+        // gain a floating shadow — ending as solid frosted floating pills.
+        // One scroll-linked clock (FastOutSlowIn) drives scale, lift and
+        // shadow, so the pop is perfectly scrubable with the user's finger
+        // and has no post-pop bounce or rotation wobble.
+        val stickyThresholdPx = with(LocalDensity.current) { DetailStickyBarThreshold.toPx() }
+        val stickyProgress by remember {
+            derivedStateOf { (detailScroll.value / stickyThresholdPx).coerceIn(0f, 1f) }
+        }
+        val frostShift = FastOutSlowInEasing.transform(stickyProgress)
+        val pillScale = androidx.compose.ui.util.lerp(0.97f, 1f, frostShift)
+        // The ride-up must be LAYOUT-space (Modifier.offset), not a draw-time
+        // graphicsLayer translation — the more-menu's popup anchors to the
+        // button's layout position, so a draw-time translate would leave the
+        // menu hanging below the popped pill.
+        val stickyLift = (DetailStickyBarRestTop - DetailStickyBarPoppedTop) * frostShift
+        Row(
+            modifier = Modifier
+                // Anchored in the icon's band — level with the centered
+                // glyph while the hero is at rest, riding up to the top
+                // edge as it scrolls away (the pop lift below).
+                .align(Alignment.TopCenter)
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .padding(start = 16.dp, end = 16.dp, top = DetailStickyBarRestTop)
+                .offset(y = -stickyLift)
+                .graphicsLayer {
+                    val eased = heroControlsProgress
+                    // Match Home's finalized sticky-control pop: begin just
+                    // under full size, then settle with a tiny upward lift —
+                    // the scroll-driven pillScale stacks on top, so the
+                    // controls visibly pop out of the hero as it leaves.
+                    alpha = eased
+                    scaleX = (0.97f + (0.03f * eased)) * pillScale
+                    scaleY = (0.97f + (0.03f * eased)) * pillScale
+                    translationY = -2.dp.toPx() * eased
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Frosted-glass controls — the same bright-white plate + deep
+            // slate ink as the Date · Mood · Type card. The shadow grows
+            // with the scroll pop so the pills visibly float off the page.
+            CurioBackButton(
+                onClick = { navController.popBackStack() },
+                containerColor = Color.Transparent,
+                contentColor = heroCardInk,
+                shadowElevation = 6.dp * frostShift,
+                modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
+            )
+            Box {
+                Surface(
+                    onClick = { menuExpanded = true },
+                    shape = RoundedCornerShape(50),
+                    color = Color.Transparent,
+                    shadowElevation = 6.dp * frostShift,
+                    modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.MoreVert,
+                        contentDescription = "More",
+                        tint = heroCardInk,
+                        size = 24.dp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+                DropdownMenu(
+                    expanded = menuExpanded,
+                    onDismissRequest = { menuExpanded = false },
+                    // Frosted-glass pane — bright white glass, rounded,
+                    // with the hero's slate hairline rim: the same frost
+                    // language as the back / more buttons and the
+                    // Date · Mood · Type card, so the menu reads as a
+                    // glass panel over the banner (no blur needed — the
+                    // translucent white lets the banner's color wash
+                    // through the pane).
+                    containerColor = Color(0xFFF2F5F8).copy(alpha = 0.92f),
+                    shape = RoundedCornerShape(18.dp),
+                    tonalElevation = 0.dp,
+                    shadowElevation = 10.dp,
+                    border = BorderStroke(1.dp, heroCardInk.copy(alpha = 0.22f))
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Share", color = heroCardInk) },
+                        onClick = {
+                            menuExpanded = false
+                            shareComposableCard(
+                                context = context,
+                                cardSize = DpSize(400.dp, 400.dp),
+                                authority = authority,
+                                card = { CurioShareCard(entry = resolvedEntry, category = cat) }
+                            )
+                        },
+                        leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, tint = heroCardInk, size = 20.dp) }
+                    )
+                    if (isMultiSectionEntry(resolvedEntry)) {
+                        // Multi-section (Portfolio): reopen EVERY take in
+                        // the universal editor — not just the mood board.
+                        DropdownMenuItem(
+                            text = { Text("Edit entry", color = heroCardInk) },
+                            onClick = {
+                                menuExpanded = false
+                                navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
+                        )
+                    } else if (isMoodBoardEntry(resolvedEntry)) {
+                        DropdownMenuItem(
+                            text = { Text("Edit mood board", color = heroCardInk) },
+                            onClick = {
+                                menuExpanded = false
+                                navController.navigate(CurioRoutes.editMoodBoard(resolvedEntry.id)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
+                        )
+                    } else {
+                        // Every other saved format (SoundBite, ReelNotes,
+                        // Marginalia, FieldNotes, non-moodboard OpenNotebook)
+                        // reopens in the universal editor preloaded with its
+                        // saved data — the editEntry route already dispatches
+                        // on the entry's own format.
+                        DropdownMenuItem(
+                            text = { Text("Edit entry", color = heroCardInk) },
+                            onClick = {
+                                menuExpanded = false
+                                navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
+                        )
+                    }
+                    DropdownMenuItem(
+                        text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
+                        onClick = {
+                            menuExpanded = false
+                            deleteDialogVisible = true
+                        },
+                        leadingIcon = {
+                            CurioIcon(name = CurioIcons.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error, size = 20.dp)
+                        }
+                    )
+                }
+            }
+        }
     }
 
     if (deleteDialogVisible) {
@@ -776,6 +803,16 @@ private val EntryDetailSheetExtent = 24.dp
  *  (keeps the backdrop glyphs clear of the thin white under-sheet lip below
  *  the hero's torn edge). */
 private val EntryDetailHeroClearance = EntryDetailHeroHeight + 30.dp
+
+/** Scroll distance (dp) before the back / more pills fully pin as frosted
+ *  floating pills — mirrors Home's sticky menu/profile bar threshold. */
+private val DetailStickyBarThreshold = 90.dp
+/** The controls' resting top offset below the status bar — level with the
+ *  hero's glyph band, where they were anchored inside the hero. */
+private val DetailStickyBarRestTop = 72.dp
+/** The controls' fully-popped top offset below the status bar — the pills
+ *  ride up here as the hero scrolls away (Home pins its pills at 12dp). */
+private val DetailStickyBarPoppedTop = 12.dp
 
 /**
  * The hero's frosted-glass language for small controls — bright frosted
