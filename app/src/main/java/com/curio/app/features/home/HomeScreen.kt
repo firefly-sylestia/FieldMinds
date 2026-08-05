@@ -1229,9 +1229,10 @@ private fun homeRoseAccent(): Color {
             fromHsl(pinkHue, (base.s * 0.90f).coerceIn(0f, 0.80f), 0.82f)
         }
     } else {
-        // Calm the default rosewood slightly while preserving its hue and
-        // lightness, so the Home banner feels less brown/saturated.
-        fromHsl(base.h, base.s * 0.85f, base.l)
+        // v7.36 — the base is a soft dusty rose now; lift it a touch and
+        // hold saturation modestly so the non-pastel Home banner reads as a
+        // beautiful calm rose instead of brownish terracotta.
+        fromHsl(base.h, (base.s * 0.80f).coerceAtMost(0.40f), (base.l * 1.06f).coerceAtMost(0.70f))
     }
 }
 

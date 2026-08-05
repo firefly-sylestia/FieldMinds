@@ -75,14 +75,15 @@ object CurioColors {
     val FireOrange       = Color(0xFFFF8A00)
 
     /**
-     * Muted rose-wood — the Home quest hero's banner accent. Warmer and
-     * softer than the brand coral (less saturated, gently deepened) so the
-     * hero reads calm and earthy instead of hot pink, while white ink
-     * stays readable on it in non-pastel mode. Pastel mode (default)
-     * resolves its airy rose-wood pastel twin via [pastelAccent] — see
-     * HomeScreen's hero fill.
+     * Soft dusty rose — the Home quest hero's banner accent. A calm,
+     * beautiful rose (v7.36 — moved off the brownish terracotta): a gentle
+     * rose hue lifted to an airy lightness, so the hero reads soft and
+     * pretty instead of earthy brown, while the dark maroon ink stays
+     * readable on it in non-pastel mode. Pastel mode (default) resolves
+     * its airy pink pastel twin via [pastelAccent] — see HomeScreen's
+     * hero fill.
      */
-    val HomeRosewood     = Color(0xFFB4635A)
+    val HomeRosewood     = Color(0xFFCF8B94)
 
     /** Tinted (20% alpha) versions of the legacy accents for backgrounds. */
     val LilacTint     = Lilac.copy(alpha = 0.20f)
@@ -196,10 +197,12 @@ internal fun pastelAccent(accent: Color, dark: Boolean): Color {
         // soft look stays understated over midnight while light ink reads.
         fromHsl(a.h, (a.s * 0.55f).coerceIn(0f, 0.55f), 0.42f)
     } else {
-        // v7.5 — airy pastel: the accent's own hue at high lightness with
-        // lightly-held saturation, so indigo becomes periwinkle, rose soft
-        // pink, teal mint, sky azure — never washed or dimmed.
-        fromHsl(a.h, (a.s * 0.80f).coerceIn(0f, 0.72f), 0.80f)
+        // v7.36 — airy pastel, softened: the accent's own hue at high
+        // lightness with a LOWER saturation hold so the brightest families
+        // (teal, mint, sky — and the green-heavy mixed-deck blends) read
+        // calm and pretty instead of neon-bright. Indigo still becomes
+        // periwinkle, rose soft pink, teal a gentle mint, sky soft azure.
+        fromHsl(a.h, (a.s * 0.70f).coerceIn(0f, 0.60f), 0.80f)
     }
 }
 
@@ -574,10 +577,11 @@ object CurioMixedDeck {
             }
         } else {
             if (AppPreferences.pastelColorsState) {
-                // Pastel mode: the blend is already an airy pastel — a strong
-                // wash over cream keeps the pastel hue unmistakably on the
-                // page (the cream end would otherwise read as a plain page).
-                lerp(background, blend, 0.80f)
+                // Pastel mode: the blend is already an airy pastel — a
+                // moderate wash over cream keeps the pastel hue clearly on
+                // the page without glowing (v7.36 — 72% instead of 80% so
+                // green-heavy mixes don't flood the screen with bright mint).
+                lerp(background, blend, 0.72f)
             } else {
                 // A pastel twin of the blend over cream at high strength — the
                 // hue is unmistakable per mix while staying light enough for the
