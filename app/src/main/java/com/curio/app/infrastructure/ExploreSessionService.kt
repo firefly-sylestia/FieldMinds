@@ -103,6 +103,13 @@ class ExploreSessionService : Service() {
     // available; the latch is cleared again on the next explicit start so a
     // fresh session always retries the overlay (see onStartCommand).
     private var bubbleUnavailable = false
+    // Self-heal budget: ONE transient overlay attach/composition failure
+    // (a window-install race, an Android 16 attach hiccup, an OEM rejection)
+    // retries the bubble shortly after instead of latching it off for the
+    // whole session — but the budget is hard-capped so a persistent
+    // device-level rejection can never turn into a restart loop. Reset on
+    // every explicit start (see onStartCommand).
+    private var bubbleRetryCount = 0
 
     // ── Periodic live-notification refresh ─────────────────────────────
     // The shade chronometer ticks live, but the progress bar and expanded
@@ -201,6 +208,7 @@ class ExploreSessionService : Service() {
         // the overlay once.
         if (intent?.hasExtra(EXTRA_SESSION) == true) {
             bubbleUnavailable = false
+            bubbleRetryCount = 0
         }
         return render()
     }
@@ -571,6 +579,10 @@ class ExploreSessionService : Service() {
             bubbleComposeView = null
             overlayOwner?.destroy()
             overlayOwner = null
+            // One bounded retry — a transient attach failure (a window-install
+            // race, a system animation, an Android 16 attach hiccup) must not
+            // kill the bubble for the rest of the session.
+            scheduleBubbleRetry()
             return
         }
         bubbleParams = params
@@ -579,17 +591,25 @@ class ExploreSessionService : Service() {
         bubbleView = view
         // Initial placement: bottom-center, clear of the nav-bar area.
         view.doOnLayout {
-            val bounds = windowBounds()
-            val density = resources.displayMetrics.density
-            val margin = (12 * density).toInt()
-            params.x = ((bounds.width() - view.width) / 2).coerceAtLeast(margin)
-            params.y = (bounds.height() - view.height - (96 * density).toInt()).coerceAtLeast(margin)
-            windowManager.updateViewLayout(view, params)
-            // Seed the size-compensation tracker with the pill's size so the
-            // first expand transition measures against it (not 0).
-            bubbleLastW = view.width
-            bubbleLastH = view.height
+            runCatching {
+                val bounds = windowBounds()
+                val density = resources.displayMetrics.density
+                val margin = (12 * density).toInt()
+                params.x = ((bounds.width() - view.width) / 2).coerceAtLeast(margin)
+                params.y = (bounds.height() - view.height - (96 * density).toInt()).coerceAtLeast(margin)
+                windowManager.updateViewLayout(view, params)
+                // Seed the size-compensation tracker with the pill's size so
+                // the first expand transition measures against it (not 0).
+                bubbleLastW = view.width
+                bubbleLastH = view.height
+            }
         }
+        // Self-heal check: the window must actually contain the composed
+        // pill. A window that attached but never composed (the posted
+        // composition raced attachment and bailed, or rendered nothing) is
+        // zero-size and INVISIBLE — verify shortly after attach and rebuild
+        // once instead of leaving the user with no bubble.
+        verifyBubbleVisibleOnce()
     }
 
     /**
@@ -603,15 +623,62 @@ class ExploreSessionService : Service() {
         if (bubbleUnavailable) return
         bubbleUnavailable = true
         Log.e(TAG, "Explore overlay composition failed; using notification only", error)
-        runCatching { bubbleView?.let { windowManager.removeView(it) } }
-        bubbleView = null
-        bubbleParams = null
-        bubbleLastW = 0
-        bubbleLastH = 0
-        bubbleComposeView?.disposeComposition()
-        bubbleComposeView = null
-        overlayOwner?.destroy()
-        overlayOwner = null
+        // Whole cleanup wrapped: this handler runs from the posted
+        // composition's onFailure — a throw in the teardown itself (e.g. a
+        // removeView race) would escape runCatching and crash the main
+        // looper. Wrapped, it also always reaches the bounded retry below.
+        runCatching {
+            runCatching { bubbleView?.let { windowManager.removeView(it) } }
+            bubbleView = null
+            bubbleParams = null
+            bubbleLastW = 0
+            bubbleLastH = 0
+            bubbleComposeView?.disposeComposition()
+            bubbleComposeView = null
+            overlayOwner?.destroy()
+            overlayOwner = null
+        }
+        // Same bounded retry as the addView path — a composition that threw
+        // during attach shouldn't latch the bubble off for the session.
+        scheduleBubbleRetry()
+    }
+
+    /**
+     * Schedules ONE bounded retry of the overlay after a transient
+     * attach/composition failure. [bubbleUnavailable] latches the failed
+     * attempt (so the per-tick render never loops); this clears it once,
+     * shortly after, and re-attempts — capped by [bubbleRetryCount] so a
+     * persistent device-level rejection can't restart-loop.
+     */
+    private fun scheduleBubbleRetry() {
+        if (bubbleRetryCount >= MAX_BUBBLE_RETRIES) return
+        bubbleRetryCount++
+        mainHandler.postDelayed({
+            // Only retry when a bubble is still wanted — a later render()
+            // may have torn it down or the session may have ended.
+            if (bubbleUnavailable) {
+                bubbleUnavailable = false
+                showBubble()
+            }
+        }, BUBBLE_RETRY_DELAY_MS)
+    }
+
+    /**
+     * Verifies the attached overlay window actually has content. If it is
+     * still zero-size shortly after attach (the posted composition raced
+     * attachment and bailed, or rendered nothing), tear it down and rebuild
+     * once — a silently empty overlay is exactly the "no bubble" report.
+     */
+    private fun verifyBubbleVisibleOnce() {
+        if (bubbleRetryCount >= MAX_BUBBLE_RETRIES) return
+        mainHandler.postDelayed({
+            val view = bubbleView ?: return@postDelayed
+            if (view.width > 0 && view.height > 0) return@postDelayed
+            bubbleRetryCount++
+            Log.w(TAG, "Explore bubble attached but empty — rebuilding once")
+            removeBubble()
+            showBubble()
+        }, BUBBLE_VERIFY_DELAY_MS)
     }
 
     /** Removes the bubble window (no-op when it isn't showing). */
@@ -669,6 +736,7 @@ class ExploreSessionService : Service() {
         overlayOwner?.destroy()
         overlayOwner = null
         bubbleUnavailable = false
+        bubbleRetryCount = 0
         super.onDestroy()
     }
 
@@ -681,6 +749,16 @@ class ExploreSessionService : Service() {
         const val NOTIFICATION_ID = 4211
         // How often the live notification re-renders (progress bar + text).
         const val NOTIFICATION_REFRESH_MS = 60_000L
+        // Self-heal tuning: how long to wait before retrying a transient
+        // overlay failure, and how long to wait before verifying the attached
+        // bubble window actually has content.
+        const val BUBBLE_RETRY_DELAY_MS = 1_200L
+        // Long enough that a briefly-busy main thread (browser launch + Home
+        // navigation right after start) can't false-positive the check.
+        const val BUBBLE_VERIFY_DELAY_MS = 2_000L
+        // Hard cap on in-session overlay self-heal attempts (restart-loop
+        // guard for persistent device rejections).
+        const val MAX_BUBBLE_RETRIES = 2
 
         /** Starts the explore foreground service for [session]. */
         fun start(context: Context, session: ExploreSession) {

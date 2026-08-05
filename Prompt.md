@@ -2,6 +2,70 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating explore bubble still doesn't appear at all**
+
+### What was requested
+
+"The floating pill still doesn't appear at all." — the recurring bubble
+issue, after earlier fixes (per-start overlay retry, notification-gate
+removal, reactive-store seed, Android 16 owner/FrameLayout hardening).
+
+### Audit (what was verified correct)
+
+- Manifest: `SYSTEM_ALERT_WINDOW`, `FOREGROUND_SERVICE`,
+  `FOREGROUND_SERVICE_SPECIAL_USE` all present.
+- Start flow (`TopicRevealScreen.beginExploreSession`): the service starts
+  via `exploreServiceShouldRun` BEFORE the browser opens (activity still
+  foreground — no Android 12+ background-FGS throw); permission paths defer
+  their start to foreground callbacks.
+- Gates: bubble toggle defaults ON (survives data clear); `pillHidden`
+  resets with each fresh session; the deferred composition post runs after
+  window attach on the main looper (HandlerActionQueue flush), so the
+  `isAttachedToWindow` guard is sound.
+
+### Root cause of the remaining silent-invisible failures
+
+Two holes in `ExploreSessionService.showBubble()`:
+1. A window that attached but never composed is zero-size and INVISIBLE
+   (the posted composition could bail or render nothing) — no error, no
+   retry, `bubbleView != null` blocks re-adds: the user sees nothing.
+2. ANY single transient attach/composition failure set `bubbleUnavailable`
+   permanently for the session (cleared only on the next explicit start).
+
+### What changed (`ExploreSessionService.kt`)
+
+- `bubbleRetryCount` (cap `MAX_BUBBLE_RETRIES = 2` per explicit start;
+  reset on EXTRA_SESSION starts and onDestroy).
+- `scheduleBubbleRetry()` — after an addView OR composition failure, a
+  1.2s delayed retry clears the latch and re-attempts `showBubble()` once
+  (count-capped → a persistent device rejection can't restart-loop).
+- `verifyBubbleVisibleOnce()` — 2s after a successful addView, checks the
+  attached window actually has size > 0; if still empty it logs, tears down
+  and rebuilds once (count-capped). Heals the silent empty-window case.
+- `doOnLayout` positioning wrapped in `runCatching` (a throw there would
+  have crashed); `handleOverlayFailure`'s whole cleanup wrapped so a
+  teardown throw can't escape the posted onFailure and skip the retry.
+- Android 16 owner/FrameLayout/deferred-composition hardening untouched.
+
+### Notes
+
+- Self-heal only covers POST-start failures. If the user still sees no
+  bubble, the next diagnostic is logcat for "Failed to start explore
+  service" — a background FGS-start throw (e.g. the ExploreBootReceiver
+  BOOT_COMPLETED path) is a separate failure class.
+
+### Validation
+
+- `scripts/check_braces.py` passed; `git diff --check` clean; audit of the
+  new symbols/constants clean.
+- Reviewer approved; its two catches applied (cleanup runCatching + verify
+  delay 1.5s → 2s).
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Previous Request (COMPLETED)
+
 **Detail hero title white + gradient pill with the background color**
 
 ### What was requested
