@@ -430,15 +430,19 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // Plain white title — no colored plate, gradient, rim or
-                    // other title background. The hero color remains the
-                    // backdrop, while the title itself stays crisp and simple.
+                    // v7.35 — title ink follows the hero's theme-aware
+                    // [heroInk] (deep accent in pastel light, light twin in
+                    // pastel dark, white otherwise) instead of a hardcoded
+                    // white: on the airy pastel-light hero fill a white title
+                    // washed out in every pastel mode. No colored plate,
+                    // gradient, rim or other title background — the hero
+                    // color remains the backdrop, the title stays crisp.
                     Text(
                         text = resolvedEntry.topic.name,
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.ExtraBold
                         ),
-                        color = Color.White,
+                        color = heroInk,
                         textAlign = TextAlign.Center,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -550,7 +554,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // 28dp top padding keeps the chips clear of the white under-sheet
         // lip (which now reaches roughly 36dp past the hero's nominal bottom).
         MorphEntrance {
-            Column(modifier = Modifier.padding(28.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            // v7.35 — gutters aligned to the format body's 20dp side
+            // padding (the old 28dp column sat inset from the body below,
+            // a ragged left edge under the hero); vertical rhythm opens to
+            // 12dp. Top stays 28dp so the chips clear the white under-sheet
+            // lip; bottom 16dp hands off to the body wrapper's 16dp.
+            Column(
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 28.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Surface(
                         shape = RoundedCornerShape(12.dp),
@@ -606,7 +618,11 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             formatCapturedTime(resolvedEntry.capturedAtMillis)
                     } else capturedAtLabel(resolvedEntry),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    // v7.35 — muted secondary ink: the captured-at line reads
+                    // one step below the category chips and the Quick fact
+                    // heading, so the meta block has a clear hierarchy in
+                    // every theme.
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 // ── Custom tags (v7.17) — the labels added on the save page,
@@ -638,11 +654,24 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 // ── Mood meta ───────────────────────────────────────────────
                 // The mood is shown once, in the hero's frosted bar above — the
                 // standalone mood card below was removed to avoid a duplicate.
+
+                // ── Quick fact (v7.35) — the topic's one-line teaser, the
+                // same "get you curious" language the Spin reveal shows, so a
+                // saved entry always carries a spark of why it was worth
+                // capturing — sits above the format body, below the meta.
+                QuickFactCard(
+                    cat = cat,
+                    teaser = resolvedEntry.topic.teaser,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
             }
         }
 
         // ── Format body ────────────────────────────────────────────────
-        Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+        // v7.35 — 16dp vertical padding (was 8) so the body breathes away
+        // from the meta / quick-fact block above; horizontal stays 20dp to
+        // match the meta column gutter.
+        Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
             FormatBody(entry = resolvedEntry, category = cat, navController = navController)
         }
 
@@ -1099,6 +1128,59 @@ private fun FormatBody(
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category, navController)
         CaptureFormat.FieldNotes -> FieldNotesRender(entry, category, navController)
         CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category, navController)
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Quick fact card ("Quick fact" — the topic's one-line teaser)
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * v7.35 — the saved-entry detail page's "quick fact" card: the topic's
+ * one-line teaser under a small "Quick fact" heading, mirroring the Spin
+ * reveal's TeaserCard language so a capture keeps the curiosity that
+ * introduced it. Theme-aware in every color mode (category surface + border,
+ * onSurface text, category ink glyph).
+ */
+@Composable
+private fun QuickFactCard(
+    cat: CurioCategory,
+    teaser: String?,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = cat.categorySurface(MaterialTheme.colorScheme.surface),
+        shadowElevation = 0.dp,
+        border = cat.categoryBorder(),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CurioIcon(
+                    name = CurioIcons.AutoAwesome,
+                    contentDescription = null,
+                    tint = cat.categoryInk(),
+                    size = 16.dp
+                )
+                Text(
+                    text = "Quick fact",
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = teaser ?: "Loading topic…",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                softWrap = true,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
