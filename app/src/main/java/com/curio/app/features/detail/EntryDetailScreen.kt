@@ -75,8 +75,9 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -384,14 +385,30 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Title — the topic name straight on the banner. No
-                    // plate behind it and no gradient in the letters: crisp
-                    // ExtraBold geom in the hero's own ink (white / accent),
-                    // the same clean display treatment the Spin hero uses.
+                    // ── Title — the topic name CARVED in frosted glass. No
+                    // plate behind it: the letterforms themselves are filled
+                    // with an icy vertical gradient (pale frost catching the
+                    // light at the top of each glyph, melting into the hero
+                    // ink at the base) and lifted by a soft shadow, so the
+                    // type reads as etched frosted glass sitting on the
+                    // banner — crisp ExtraBold geom, the display face.
                     Text(
                         text = resolvedEntry.topic.name,
                         style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.ExtraBold
+                            fontWeight = FontWeight.ExtraBold,
+                            brush = Brush.verticalGradient(
+                                // Frost top slightly deepened (not pure white)
+                                // so the glyphs keep a hair of definition on
+                                // the airy pastel banner in pastel mode.
+                                0f to Color(0xFFE8EDF3),
+                                0.45f to Color(0xFFCBD3DC),
+                                1f to heroInk
+                            ),
+                            shadow = Shadow(
+                                color = Color.Black.copy(alpha = 0.30f),
+                                offset = Offset(0f, 3f),
+                                blurRadius = 8f
+                            )
                         ),
                         color = heroInk,
                         textAlign = TextAlign.Center,
@@ -536,10 +553,22 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     }
                     DropdownMenu(
                         expanded = menuExpanded,
-                        onDismissRequest = { menuExpanded = false }
+                        onDismissRequest = { menuExpanded = false },
+                        // Frosted-glass pane — bright white glass, rounded,
+                        // with the hero's slate hairline rim: the same frost
+                        // language as the back / more buttons and the
+                        // Date · Mood · Type card, so the menu reads as a
+                        // glass panel over the banner (no blur needed — the
+                        // translucent white lets the banner's color wash
+                        // through the pane).
+                        containerColor = Color(0xFFF2F5F8).copy(alpha = 0.92f),
+                        shape = RoundedCornerShape(18.dp),
+                        tonalElevation = 0.dp,
+                        shadowElevation = 10.dp,
+                        border = BorderStroke(1.dp, heroCardInk.copy(alpha = 0.22f))
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Share") },
+                            text = { Text("Share", color = heroCardInk) },
                             onClick = {
                                 menuExpanded = false
                                 shareComposableCard(
@@ -549,31 +578,31 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                     card = { CurioShareCard(entry = resolvedEntry, category = cat) }
                                 )
                             },
-                            leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
+                            leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, tint = heroCardInk, size = 20.dp) }
                         )
                         if (isMultiSectionEntry(resolvedEntry)) {
                             // Multi-section (Portfolio): reopen EVERY take in
                             // the universal editor — not just the mood board.
                             DropdownMenuItem(
-                                text = { Text("Edit entry") },
+                                text = { Text("Edit entry", color = heroCardInk) },
                                 onClick = {
                                     menuExpanded = false
                                     navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
                                         launchSingleTop = true
                                     }
                                 },
-                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
+                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
                             )
                         } else if (isMoodBoardEntry(resolvedEntry)) {
                             DropdownMenuItem(
-                                text = { Text("Edit mood board") },
+                                text = { Text("Edit mood board", color = heroCardInk) },
                                 onClick = {
                                     menuExpanded = false
                                     navController.navigate(CurioRoutes.editMoodBoard(resolvedEntry.id)) {
                                         launchSingleTop = true
                                     }
                                 },
-                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
+                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
                             )
                         } else {
                             // Every other saved format (SoundBite, ReelNotes,
@@ -582,14 +611,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             // saved data — the editEntry route already dispatches
                             // on the entry's own format.
                             DropdownMenuItem(
-                                text = { Text("Edit entry") },
+                                text = { Text("Edit entry", color = heroCardInk) },
                                 onClick = {
                                     menuExpanded = false
                                     navController.navigate(CurioRoutes.editEntry(resolvedEntry.id)) {
                                         launchSingleTop = true
                                     }
                                 },
-                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
+                                leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, tint = heroCardInk, size = 20.dp) }
                             )
                         }
                         DropdownMenuItem(

@@ -806,3 +806,18 @@ User: (1) disliked the title's gradient font style — change it; (2) doesn't wa
 - `scripts/check_braces.py` passed on all 5 touched files; `git diff --check` clean; no remaining CoralBlush/CategoryCoral refs in Home; `themedAccent()` still used 6× (no dead import).
 - Reviewer confirmed fixes; its consistency note (decorative elements resolving the pastel twin too) was applied via `homeRoseAccent()`.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+---
+
+## Detail title carved in glass + frosted more-menu
+
+### Changes (EntryDetailScreen.kt)
+
+- **Title**: the topic name is now CARVED frosted-glass lettering — no plate behind it; the glyphs themselves wear an icy vertical gradient (`0xFFE8EDF3` frost top → `0xFFCBD3DC` → heroInk base; top stop deepened per reviewer so it holds definition on the airy pastel banner) plus a soft lift shadow (`Shadow(Black 30%, Offset(0,3), 8)`). `color = heroInk` remains the accessibility fallback. Re-added the `androidx.compose.ui.graphics.Shadow` import (between Color and Shape).
+- **3-dot menu**: `DropdownMenu` restyled as a frosted-glass pane — `containerColor = Color(0xFFF2F5F8).copy(alpha = 0.92f)` (now genuinely translucent so the banner washes through), `shape = RoundedCornerShape(18.dp)`, `tonalElevation = 0.dp`, `shadowElevation = 10.dp`, hairline `border` in heroCardInk 22%; Share / Edit entry / Edit mood board texts + leading icons tinted `heroCardInk`; Delete stays error color.
+
+### Validation
+
+- `scripts/check_braces.py` passed; `git diff --check` clean; import audit clean (Shadow 2 hits = import + 1 use; Offset/Brush pre-existing).
+- Reviewer confirmed both changes match the established text-brush pattern and M3 1.5.0-alpha20 DropdownMenu params; its two nits (frost top stop, pane alpha) were applied.
+- Note: the same carved-glass title was applied+reverted earlier per user preference; this is a fresh explicit request for glass lettering — CI remains the compile gate.
