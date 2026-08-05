@@ -479,6 +479,13 @@ fun MoodBoardZoomOverlay(
             .fillMaxSize()
             .zIndex(1000f)
             .pointerInput(tileUri) {
+                // The gesture code runs inside awaitEachGesture's block,
+                // whose receiver is NOT a CoroutineScope — and kotlinx.coroutines
+                // 1.10+/Kotlin 2.3 no longer lets launch resolve through the
+                // outer implicit scope ("launch can not be called without the
+                // corresponding coroutine scope"). Capture the pointerInput
+                // scope explicitly for the delayed single-tap action.
+                val gestureScope = this
                 // Per-pointerInput locals (survive across gestures, reset on
                 // tile change): the last tap's down time for the double-tap
                 // window, and the pending single-tap action.
@@ -539,7 +546,7 @@ fun MoodBoardZoomOverlay(
                         if (isDouble) {
                             if (refined) resetTick++ else zoomStepTick++
                         } else {
-                            pendingTap = launch {
+                            pendingTap = gestureScope.launch {
                                 delay(DoubleTapTimeoutMs)
                                 // Re-read the LIVE refinement state — the
                                 // image may have been pinched while waiting.

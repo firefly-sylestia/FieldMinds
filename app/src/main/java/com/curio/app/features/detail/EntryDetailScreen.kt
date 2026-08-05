@@ -563,13 +563,13 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // 28dp top padding keeps the chips clear of the white under-sheet
         // lip (which now reaches roughly 36dp past the hero's nominal bottom).
         MorphEntrance {
-            // v7.38 — the chips row rides UP to the torn seam: 6dp top pad +
-            // a -14dp lift puts the category pill's top tip ~8dp up inside
-            // the white paper lip (drawn over the sheet, so the torn wave
-            // reads around its top corners and the pill looks like it's
-            // coming out of the tear — only the tip tucks, never the whole
-            // chip). The category pill itself reads larger (labelLarge + 16dp
-            // glyph). The Quick fact sits directly under the chips, then
+            // v7.38 — the category label rides UP to the torn seam: 6dp top
+            // pad + a -14dp lift puts the label's top tip ~8dp up inside the
+            // white paper lip (drawn over the sheet, so the torn wave reads
+            // around its top and the label looks like it's coming out of the
+            // tear — only the tip tucks, never the whole line). The category
+            // is plain text (glyph + name, labelLarge semibold, theme-aware
+            // ink — no pill). The Quick fact sits directly under it, then
             // captured-at, then tags. Gutters stay aligned to the format
             // body's 20dp side padding; bottom 16dp hands off to the body
             // wrapper's 16dp.
@@ -579,52 +579,56 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     .offset(y = (-14).dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = if (AppPreferences.tintWashEffective()) cat.tint
-                                else MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(5.dp)
-                        ) {
-                            CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.categoryInk(), size = 16.dp)
-                            Text(text = cat.displayName, style = MaterialTheme.typography.labelLarge, color = cat.categoryInk())
-                        }
-                    }
+                // v7.38 — the category is plain TEXT, not a pill: glyph + name
+                // in the category's theme-aware ink, then the entry title and
+                // the Legacy marker as plain text too — the row reads as a
+                // clean label line at the tear instead of a chip bar.
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    CurioIcon(
+                        name = cat.iconGlyph,
+                        contentDescription = null,
+                        tint = cat.categoryInk(),
+                        size = 16.dp
+                    )
+                    Text(
+                        text = cat.displayName,
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                        color = cat.categoryInk()
+                    )
                     if (resolvedEntry.title != null) {
-                        Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
-                            Text(
-                                text = resolvedEntry.title,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                            )
-                        }
+                        Text(
+                            text = resolvedEntry.title,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .weight(1f, fill = false)
+                                .padding(start = 2.dp)
+                        )
                     }
-                    // Legacy chip — entries imported from a FieldMind archive
-                    // wear this so they stay recognizable on the detail page.
+                    // Legacy marker — entries imported from a FieldMind
+                    // archive wear this so they stay recognizable.
                     if (resolvedEntry.isLegacy) {
-                        Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                CurioIcon(
-                                    name = CurioIcons.History,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    size = 14.dp
-                                )
-                                Text(
-                                    text = "Legacy",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            modifier = Modifier.padding(start = 2.dp)
+                        ) {
+                            CurioIcon(
+                                name = CurioIcons.History,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 14.dp
+                            )
+                            Text(
+                                text = "Legacy",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 }
@@ -3010,8 +3014,12 @@ private fun ExpandedMoodBoardDialog(
                             canvasHPx = boardH,
                             boardScale = fit.scale,
                             // v7.37 — stable per-entry seed so the on-board
-                            // paper slips never re-roll their tears.
-                            seed = noteSeed(entry.id, 60)
+                            // paper slips never re-roll their tears. The
+                            // dialog carries its entry-derived [seed] (no
+                            // CurioEntry is in scope here) — salt it (60) so
+                            // the slips stay distinct from the board's own
+                            // tear, matching the inline card's split.
+                            seed = noteSeed(seed.toString(), 60)
                         )
                     }
 

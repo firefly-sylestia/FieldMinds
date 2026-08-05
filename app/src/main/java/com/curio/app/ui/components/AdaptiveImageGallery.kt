@@ -226,7 +226,9 @@ private fun computeGalleryLayout(
     var y = 0f
     val rows = rawRows.map { row ->
         val avail = (containerW - (row.size - 1) * gapPx).coerceAtLeast(0f)
-        val sum = row.sumOf { it.second }
+        // sumOf has no Float overload — fold the widths in Float instead of
+        // triggering an Int/UInt overload ambiguity on the compiler.
+        val sum = row.fold(0f) { acc, pair -> acc + pair.second }
         val s = if (sum > 0f) avail / sum else 1f
         val h = rowHPx * s
         var x = 0f
@@ -277,10 +279,14 @@ private suspend fun imageAspectOf(context: Context, uriString: String): Float {
                             ExifInterface.ORIENTATION_NORMAL
                         )
                     }
-                    "file" -> ExifInterface(uri.path).getAttributeInt(
-                        ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_NORMAL
-                    )
+                    // uri.path is nullable — resolve through let so the
+                    // decode falls back to the normal-orientation default.
+                    "file" -> uri.path?.let { path ->
+                        ExifInterface(path).getAttributeInt(
+                            ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_NORMAL
+                        )
+                    }
                     else -> null
                 }
             }.getOrNull() ?: ExifInterface.ORIENTATION_NORMAL
