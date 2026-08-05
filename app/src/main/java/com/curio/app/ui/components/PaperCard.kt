@@ -117,6 +117,11 @@ fun PaperCard(
     /** Folded (dog-ear) top-right corner — the corner is cut by a diagonal
      *  and the folded flap + crease shadow drawn over it. */
     folded: Boolean = false,
+    /** Explicit ruled-line cadence (Dp) — defaults to the bodyLarge line
+     *  height. Saved views pass the same value as their note text's
+     *  lineHeight so the drawn rules align with the actual text lines
+     *  (v7.31 reading bump: bigger text + roomier rules). */
+    ruleSpacing: Dp? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val density = LocalDensity.current
@@ -195,12 +200,14 @@ fun PaperCard(
             // Guard against an Unspecified lineHeight (custom typography
             // that omits it) — fall back to the classic 24dp cadence.
             val bodyLineHeight = MaterialTheme.typography.bodyLarge.lineHeight
-            val ruleSpacing = with(density) {
-                if (bodyLineHeight == TextUnit.Unspecified) 24.dp.toPx() else bodyLineHeight.toPx()
+            val ruleSpacingPx = with(density) {
+                if (ruleSpacing != null) ruleSpacing.toPx()
+                else if (bodyLineHeight == TextUnit.Unspecified) 24.dp.toPx()
+                else bodyLineHeight.toPx()
             }
             val ruleStart = with(density) {
                 safePadding.calculateTopPadding().toPx()
-            } + ruleSpacing
+            } + ruleSpacingPx
             val paperSurface = notePaperSurface(paperColor)
             val paperEdge = notePaperBorder(paperColor)
             val paperInkColor = notePaperInk(paperColor)
@@ -222,7 +229,7 @@ fun PaperCard(
                             end = Offset(size.width, y),
                             strokeWidth = 1f
                         )
-                        y += ruleSpacing
+                        y += ruleSpacingPx
                     }
                 }
                 if (redMargin) {
@@ -474,8 +481,14 @@ private fun buildNormalPaperPath(
     // Top-left rounded corner, straight top, optional dog-ear, straight
     // right side, then the hero-style soft tear from right to left.
     if (corner > 0f) {
-        path.moveTo(corner, 0f)
-        path.cubicTo(0f, 0f, 0f, corner, 0f, corner)
+        // v7.31 — the top-left arc is the path's FIRST segment: start at
+        // the bottom of the corner and round UP to the top edge, so the
+        // final close() lands exactly on the start point. The old order
+        // (arc first, then close() from the left edge) slammed a straight
+        // chord back across the arc, chamfering the corner into a flat
+        // diagonal instead of a rounded corner.
+        path.moveTo(0f, corner)
+        path.cubicTo(0f, corner, 0f, 0f, corner, 0f)
     } else {
         path.moveTo(0f, 0f)
     }
@@ -1249,6 +1262,9 @@ fun TornPaperCard(
     /** Same min-height floor as [PaperCard] — saved views pass it so short
      *  torn notes keep a proper slip shape. */
     minHeight: Dp = 0.dp,
+    /** Explicit ruled-line cadence (Dp) — defaults to the bodyLarge line
+     *  height; see [PaperCard.ruleSpacing]. */
+    ruleSpacing: Dp? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     // Each card remembers its own seed so every torn note gets a distinct
@@ -1301,8 +1317,11 @@ fun TornPaperCard(
     val density = LocalDensity.current
     val ruleColor = if (ruled) notePaperRule(paperColor) else Color.Unspecified
     val ruleSpacingPx = if (ruled) with(density) {
-        val lh = MaterialTheme.typography.bodyLarge.lineHeight
-        if (lh == TextUnit.Unspecified) 24.dp.toPx() else lh.toPx()
+        if (ruleSpacing != null) ruleSpacing.toPx()
+        else {
+            val lh = MaterialTheme.typography.bodyLarge.lineHeight
+            if (lh == TextUnit.Unspecified) 24.dp.toPx() else lh.toPx()
+        }
     } else 0f
     val ruleStartPx = if (ruled) with(density) {
         safeContentPadding.calculateTopPadding().toPx()
@@ -1393,6 +1412,9 @@ fun NotePaperCard(
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
     minHeight: Dp = 0.dp,
+    /** Explicit ruled-line cadence (Dp) — forwarded to the paper base; see
+     *  [PaperCard.ruleSpacing]. */
+    ruleSpacing: Dp? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     if (style.torn) {
@@ -1405,6 +1427,7 @@ fun NotePaperCard(
             redMargin = style.redMargin,
             paperColor = paperColor,
             contentPadding = contentPadding,
+            ruleSpacing = ruleSpacing,
             content = content
         )
     } else {
@@ -1421,6 +1444,7 @@ fun NotePaperCard(
             coffeeStains = style.coffee,
             folded = style.folded,
             redMargin = style.redMargin,
+            ruleSpacing = ruleSpacing,
             content = content
         )
     }

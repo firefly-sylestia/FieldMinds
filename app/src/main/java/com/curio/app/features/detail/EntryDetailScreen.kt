@@ -89,6 +89,7 @@ import androidx.compose.ui.zIndex
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -97,6 +98,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
@@ -178,6 +180,26 @@ import kotlinx.coroutines.launch
  *  - MorphEntrance for hero image; topic meta + format body render at once
  *  - Delete functionality with Room
  */
+
+/**
+ * v7.31 — the saved-entry reading bump: note text renders at 18sp on 28dp
+ * ruled lines, so captured writing is easier to read on the detail page.
+ * Every saved-view paper card passes [SavedNoteRuleSpacing] so the drawn
+ * rules align with the actual text line height (the paper's default cadence
+ * is the bodyLarge line height, which no longer matches once the text
+ * grows).
+ */
+@Composable
+private fun savedNoteStyle(): TextStyle =
+    MaterialTheme.typography.bodyLarge.copy(
+        fontSize = 18.sp,
+        lineHeight = 28.sp,
+        fontFamily = PatrickHandFontFamily
+    )
+
+/** The ruled-line cadence matching [savedNoteStyle]'s line height. */
+private val SavedNoteRuleSpacing = 28.dp
+
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
     val scope = rememberCoroutineScope()
@@ -1405,13 +1427,14 @@ private fun SoundBiteRender(
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
                     paperColor = noteSheet,
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                    minHeight = 96.dp,
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                    ruleSpacing = SavedNoteRuleSpacing,
+                    minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         buildRichAnnotated(data.note, data.noteSpans.orEmpty(), notePaperHighlight(noteSheet)),
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                        style = savedNoteStyle(),
                         color = notePaperInk(noteSheet)
                     )
                 }
@@ -1950,13 +1973,14 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                minHeight = 96.dp,
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                ruleSpacing = SavedNoteRuleSpacing,
+                minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     buildRichAnnotated(data.reviewText, data.reviewSpans.orEmpty(), notePaperHighlight(reviewSheet)),
-                    style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                    style = savedNoteStyle(),
                     color = notePaperInk(reviewSheet)
                 )
             }
@@ -1965,8 +1989,9 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
                 paperColor = reviewSheet,
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                minHeight = 96.dp,
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                ruleSpacing = SavedNoteRuleSpacing,
+                minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -2009,8 +2034,9 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
             NotePaperCard(
                 style = data.journalStyle ?: data.notePaperStyle(),
                 paperColor = journalSheet,
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                minHeight = 96.dp,
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                ruleSpacing = SavedNoteRuleSpacing,
+                minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -2019,7 +2045,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
                         data.journalSpans.orEmpty(),
                         notePaperHighlight(journalSheet)
                     ),
-                    style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                    style = savedNoteStyle(),
                     color = notePaperInk(journalSheet)
                 )
             }
@@ -2151,7 +2177,8 @@ private fun RenderQuoteCards(
             NotePaperCard(
                 style = styles.getOrNull(origIndex) ?: fallbackStyle,
                 paperColor = quoteSheet,
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                ruleSpacing = SavedNoteRuleSpacing,
                 corner = 12.dp,
                 // Hoist the 72dp floor INTO the modifier chain BEFORE the tilt
                 // rotate: passing it as NotePaperCard's minHeight param appends
@@ -2161,7 +2188,7 @@ private fun RenderQuoteCards(
                 // center and stays put whether the quote is one line or five.
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 72.dp)
+                    .heightIn(min = 84.dp)
                     .rotate(rotation)
             ) {
                 Row(
@@ -2183,7 +2210,7 @@ private fun RenderQuoteCards(
                             notePaperHighlight(quoteSheet)
                         ),
                         modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                        style = savedNoteStyle(),
                         color = notePaperInk(quoteSheet)
                     )
                     // ── Bookmark — saves the quote to the Home "Saved" shelf ──
@@ -2720,13 +2747,14 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             NotePaperCard(
                 style = data.captionStyle ?: data.notePaperStyle(),
                 paperColor = captionSheet,
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                minHeight = 72.dp,
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                ruleSpacing = SavedNoteRuleSpacing,
+                minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     data.caption,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                    style = savedNoteStyle(),
                     color = notePaperInk(captionSheet)
                 )
             }
@@ -2971,13 +2999,14 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.observedStyle ?: data.notePaperStyle(),
                     paperColor = observedSheet,
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                    minHeight = 96.dp,
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                    ruleSpacing = SavedNoteRuleSpacing,
+                    minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         buildRichAnnotated(text, data.observedSpans.orEmpty(), notePaperHighlight(observedSheet)),
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                        style = savedNoteStyle(),
                         color = notePaperInk(observedSheet)
                     )
                 }
@@ -2990,13 +3019,14 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.surprisedStyle ?: data.notePaperStyle(),
                     paperColor = surprisedSheet,
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                    minHeight = 96.dp,
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                    ruleSpacing = SavedNoteRuleSpacing,
+                    minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         buildRichAnnotated(text, data.surprisedSpans.orEmpty(), notePaperHighlight(surprisedSheet)),
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                        style = savedNoteStyle(),
                         color = notePaperInk(surprisedSheet)
                     )
                 }
@@ -3009,13 +3039,14 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 NotePaperCard(
                     style = data.learnNextStyle ?: data.notePaperStyle(),
                     paperColor = learnNextSheet,
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 18.dp),
-                    minHeight = 96.dp,
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
+                    ruleSpacing = SavedNoteRuleSpacing,
+                    minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         buildRichAnnotated(text, data.learnNextSpans.orEmpty(), notePaperHighlight(learnNextSheet)),
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = PatrickHandFontFamily),
+                        style = savedNoteStyle(),
                         color = notePaperInk(learnNextSheet)
                     )
                 }

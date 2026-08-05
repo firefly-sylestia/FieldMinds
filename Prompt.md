@@ -2,31 +2,39 @@
 
 ## Latest Request (COMPLETED)
 
-**Add Home-style pop-up + sticky top bar to the Entry Detail screen**
+**Fix quote-card rounded corners + bigger saved-entry reading view**
 
 ### Requested
 
-- Mirror the Home screen's menu / profile pill pop animation and sticky
-  style on the detail screen page (its back / more controls).
+- The tilted quote notecards look bad: the rounded corner doesn't apply.
+- The saved entry's note paper should be bigger for reading — wider ruled
+  lines, more text breaking room, bigger text and paper view.
+- User asked to confirm details before implementing (ask_user used).
+
+### Confirmed decisions (ask_user)
+
+1. **Quote corner**: fix the rounded corner only (keep the ±2.5° tilt).
+2. **Size**: moderate bump — 18sp text, 28dp rule spacing, roomier padding
+   (24/22dp), 120dp min height.
+3. **Scope**: all note cards AND the tilted quote notecards on the saved
+   entry grow together.
 
 ### Plan
 
-1. Hoist the detail screen's scroll state so a pinned bar can read it.
-2. Move the in-hero back / more controls out of the scroll content into a
-   sticky top bar pinned in the root Box.
-3. Drive the pop from the same scroll-linked clock Home uses
-   (`FastOutSlowInEasing` over a 90dp threshold): scale 0.97→1, ride-up
-   from the glyph band (72dp) to the top edge (12dp), shadow 0→6dp.
-4. Give `CurioBackButton` an optional `shadowElevation` param (default 0).
+1. Repair `buildNormalPaperPath` so the top-left corner actually rounds
+   (the path's closing segment was chamfering it into a flat diagonal).
+2. Add an optional `ruleSpacing` param to PaperCard / TornPaperCard /
+   NotePaperCard so the ruled-line cadence can scale with the text.
+3. In EntryDetailScreen, add `savedNoteStyle()` (18sp/28sp line, Patrick
+   Hand) + `SavedNoteRuleSpacing` (28dp) and apply the bump to all 9
+   saved-view paper cards (SoundBite note, ReelNotes review + fallback,
+   Marginalia journal, quote cards 16/16 + 84dp floor, GalleryWall caption,
+   FieldNotes Observed/Surprised/Learn-next).
 
 ### Outcome
 
-- `EntryDetailScreen.kt`: hoisted `detailScroll`; controls moved to a
-  sticky Row outside the scroll content; scroll-scrubbed pop with layout-
-  space `Modifier.offset` ride-up (critical: a draw-time graphicsLayer
-  translation would leave the more-menu's DropdownMenu anchored 60dp below
-  the popped pill, since popups anchor to layout position).
-- `CurioTopBar.kt`: `CurioBackButton` gained `shadowElevation: Dp = 0.dp`
-  (backwards compatible; 11 other callers unaffected).
-- Braces balanced; code-reviewer-glm approved (flagged popup-anchor concern
-  as correctly handled).
+- `PaperCard.kt`: corner path fixed; `ruleSpacing` param threaded through
+  all three paper components (default = bodyLarge line height, unchanged
+  behavior for every other caller).
+- `EntryDetailScreen.kt`: 9 saved-view cards bumped; braces balanced;
+  code-reviewer-glm approved.
