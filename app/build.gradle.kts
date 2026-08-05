@@ -147,6 +147,23 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
+// ── Kotlin stdlib alignment ───────────────────────────────────────────────
+// Maven Central has begun returning 403 for the LEGACY kotlin-stdlib-jdk8
+// redirect artifacts that transitive deps pin on the androidTest/lint
+// classpath (kotlin-stdlib-jdk8:1.8.21). Since Kotlin 1.8.20 those artifacts
+// are EMPTY POM redirects — every class lives in kotlin-stdlib — so forcing
+// them to the project's Kotlin version resolves identically while skipping
+// the now-blocked legacy files.
+configurations.configureEach {
+    resolutionStrategy {
+        force(
+            "org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.get()}",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${libs.versions.kotlin.get()}",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${libs.versions.kotlin.get()}"
+        )
+    }
+}
+
 // ── Topic data validation (CURIO_DATA_PLAN.md §5.2 step 3) ─────────────────
 //
 // Validates every JSON file under app/src/main/assets/topics/*.json against
