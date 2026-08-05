@@ -2,6 +2,30 @@
 
 ## Latest Request (COMPLETED)
 
+**Improve readability of small text on the detail screen**
+
+### What was requested
+
+Some of the smaller labels and secondary text on the detail screen were hard to read. Improve their colors without changing the screen structure or removing any existing behavior.
+
+### What changed
+
+- `EntryDetailScreen.kt`: strengthened small neutral metadata and captions to full theme-aware `onSurface` where appropriate.
+- `EntryDetailScreen.kt`: switched small text on category-tinted surfaces to `categoryInk()` so it remains readable in light, dark, and pastel modes. This covers entry chips, voice-note subtitles/actions, playback time, review/image states, restored FieldMind metadata, tags, species text, and OpenNotebook format labels.
+- Preserved dedicated hero-card ink, category fills, and paper-note ink rather than applying a blanket color replacement.
+- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: added the user-visible readability fix.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
+- `git diff --check` passed.
+- Static searches confirmed no reduced-alpha `onSurfaceVariant` text remains in the detail screen and the remaining category fills/icons are intentional.
+- Code review found no actionable issues.
+- Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
+- Ready to commit and push.
+
+## Previous Request (COMPLETED)
+
 **Remove the detail title background and simplify the Spin header**
 
 ### What was requested

@@ -649,7 +649,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             Text(
                                 text = resolvedEntry.title,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                             )
                         }
@@ -666,13 +666,13 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 CurioIcon(
                                     name = CurioIcons.History,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    tint = MaterialTheme.colorScheme.onSurface,
                                     size = 14.dp
                                 )
                                 Text(
                                     text = "Legacy",
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
@@ -684,7 +684,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             formatCapturedTime(resolvedEntry.capturedAtMillis)
                     } else capturedAtLabel(resolvedEntry),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 // ── Custom tags (v7.17) — the labels added on the save page,
@@ -705,7 +705,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 Text(
                                     text = "#$tag",
                                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                                    color = if (AppPreferences.tintWashEffective()) cat.categoryInk() else cat.themedAccent(),
+                                    color = cat.categoryInk(),
                                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                 )
                             }
@@ -1225,7 +1225,8 @@ private fun SoundBiteRender(
                             Text(
                                 data.title,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                         if (data.fileSizeBytes > 0) {
@@ -1292,7 +1293,7 @@ private fun SoundBiteRender(
                                     text = noteError ?: "Listening… speak now",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                                     color = if (noteError != null) MaterialTheme.colorScheme.error
-                                            else category.themedAccent()
+                                            else category.categoryInk()
                                 )
                                 if (notePartial.isNotBlank()) {
                                     Text(
@@ -1342,13 +1343,13 @@ private fun SoundBiteRender(
                                 CurioIcon(
                                     name = CurioIcons.Mic,
                                     contentDescription = null,
-                                    tint = category.themedAccent(),
+                                    tint = category.categoryInk(),
                                     size = 16.dp
                                 )
                                 Text(
                                     text = "Transcribe note",
                                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                                    color = category.themedAccent()
+                                    color = category.categoryInk()
                                 )
                             }
                         }
@@ -1586,7 +1587,8 @@ private fun AudioPlayerBar(
             Text(
                 text = "${formatMs(currentPosition)} / ${formatMs(duration)}",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                        else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -1717,7 +1719,8 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                 Text(
                     "No review data available",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             }
@@ -1768,7 +1771,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                     Text(
                         text = "Rate quality",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -2206,7 +2209,7 @@ private fun MarginaliaSectionHeader(
             Text(
                 text = "$count",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -2618,7 +2621,8 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                         Text(
                             "${data.imageCount} image${if (data.imageCount != 1) "s" else ""}",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                                    else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -3051,7 +3055,12 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                 CurioIcon(CurioIcons.ScienceGlyph, null, tint = category.themedAccent(), size = 22.dp)
                 Column(modifier = Modifier.weight(1f)) {
                     Text("FieldMind metadata", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
-                    Text(metadata.recordType.orEmpty().replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        metadata.recordType.orEmpty().replaceFirstChar { it.uppercase() },
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                                else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
             val rows = buildList {
@@ -3099,7 +3108,12 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     metadata.tags.orEmpty().forEach { tag ->
                         Surface(shape = RoundedCornerShape(50), color = category.themedAccent().copy(alpha = 0.12f)) {
-                            Text("#$tag", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                            Text(
+                                "#$tag",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = category.categoryInk(),
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
                         }
                     }
                 }
@@ -3147,7 +3161,14 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
                             Text("Species", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
                         }
                         Text(item.commonName.orEmpty().ifBlank { item.scientificName.orEmpty().ifBlank { "Unknown species" } }, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-                        if (!item.scientificName.isNullOrBlank()) Text(item.scientificName.orEmpty(), style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (!item.scientificName.isNullOrBlank()) {
+                            Text(
+                                item.scientificName.orEmpty(),
+                                style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                                color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                         val taxonomy = listOf(
                             "Kingdom" to item.kingdom,
                             "Phylum" to item.phylum,
@@ -3188,7 +3209,12 @@ private fun FieldMindMetadataCard(metadata: FieldMindMetadata, category: CurioCa
 private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory, navController: NavController) {
     val data = entry.captureData as? CaptureData.OpenNotebook ?: return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Format: ${data.subFormat.name}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            "Format: ${data.subFormat.name}",
+            style = MaterialTheme.typography.labelMedium,
+            color = if (AppPreferences.tintWashEffective()) category.categoryInk()
+                    else MaterialTheme.colorScheme.onSurfaceVariant
+        )
         // Recursively render the sub-data
         val subEntry = CurioEntry(
             id = entry.id,
