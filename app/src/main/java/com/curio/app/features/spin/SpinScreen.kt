@@ -2336,6 +2336,34 @@ private fun PeekCard(
     Box(
         modifier = Modifier
             .size(w, h)
+            // v7.38 — LAYERED soft shadow (the same recipe as the hero
+            // ticket): a broad ambient glow tinted with the card's accent
+            // plus a tight dark contact shadow, both drawn OUTSIDE the
+            // clip. The old single Surface shadowElevation read as a hard
+            // dark halo hugging every fanned card — heavy black rings on
+            // the deck that muddied the layers. The two-depth recipe reads
+            // as a gentle lift: a soft wash of the card's own hue + a
+            // whisper of grounding shadow. Far cards sit lower (smaller,
+            // fainter) than near cards so the deck keeps its depth order.
+            .then(
+                if (shadowsOn) {
+                    Modifier
+                        .shadow(
+                            elevation = if (far) 10.dp else 14.dp,
+                            shape = RoundedCornerShape(corner),
+                            ambientColor = accent.copy(alpha = if (far) 0.10f else 0.14f),
+                            spotColor = accent.copy(alpha = if (far) 0.12f else 0.16f),
+                            clip = false
+                        )
+                        .shadow(
+                            elevation = if (far) 3.dp else 5.dp,
+                            shape = RoundedCornerShape(corner),
+                            ambientColor = Color.Black.copy(alpha = if (far) 0.12f else 0.18f),
+                            spotColor = Color.Black.copy(alpha = if (far) 0.16f else 0.24f),
+                            clip = false
+                        )
+                } else Modifier
+            )
             .graphicsLayer {
                 translationY = yOff.dp.toPx()
                 rotationZ = when (slot) { -2 -> -3.5f; -1 -> -1.4f; 1 -> 1.4f; else -> 3.5f }
@@ -2392,16 +2420,11 @@ private fun PeekCard(
                 // so the Surface stays transparent and the brush (applied
                 // below) is what the eye sees.
                 color = Color.Transparent,
-                // 2 — soft ambient shadows lift the deck off the tinted page
-                // (near cards sit higher than the far pair).
-                // v7.11 — proper peek-card shadows: a layered depth system
-                // where near cards cast a broader, dimmer shadow and far
-                // cards a tighter, deeper one — a believable paper fan
-                // instead of the old barely-visible 1dp/3dp whisper. Near
-                // cards sit at 5dp (medium depth, soft circular blur),
-                // far cards at 4dp (slightly tighter) so every layer reads
-                // as a distinct card lifting off the one behind it.
-                shadowElevation = if (shadowsOn) (if (far) 4.dp else 5.dp) else 0.dp,
+                // v7.38 — the layered shadow now lives on the outer Box
+                // modifier (above, before the clip); the Surface stays flat
+                // so the two-depth glow is the ONLY shadow and never stacks
+                // with an elevation halo.
+                shadowElevation = 0.dp,
                 tonalElevation = 0.dp,
                 // Subtle hairline outline — kept very light so the rotated
                 // stroke stays crisp instead of aliasing into pixel noise —

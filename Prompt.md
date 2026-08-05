@@ -1,26 +1,19 @@
-# Prompt — Calm pastel Material style (v7.38)
+# Prompt — Peek shadow fix + detail hierarchy (v7.38)
 
-## Request
-User: "fix the material theme make it use proper material color given by the device and use light color not too dark and make it calm pastel and unique" + "i meant non vibrant color too".
-
-Clarified via ask_user:
-- Dark mode: **Light + softened dark** (light cream in light; a softened pastel-tinted dark, lighter/calmer than the Curio midnight).
-- Device presence: **Full device scheme, calmed** (surfaces/backgrounds also carry a light airy tint of the device hue — classic Material You, softened).
-
-## What was wrong
-The Material style returned the RAW device dynamic scheme (`dynamicLightColorScheme`/`dynamicDarkColorScheme`) — vivid primaries, grey containers, dark-ish muddy look; nothing calm/pastel/unique about it.
+## Request (two parts)
+1. "the experiment of the peek card shadow well they are bad so fix that shadow look" — the Settings "Deck cards → Soft shadows" experiment's peek-card shadows look bad.
+2. "the category doesnt have a differnt hierarcy that the quik fact make the quick fact more smaller and its still doesnt look like its behind the tear incrase its size. and dont give it the entrace animation"
 
 ## Changes
-1. **app/src/main/java/com/curio/app/ui/theme/CurioTheme.kt** — new `calmMaterialColorScheme(dynamic, dark)`: keeps the device's Material You hues (the "proper material color given by the device") but mutes EVERYTHING through HSL — saturation held low (0.08–0.36, non-vibrant), surfaces light:
-   - Light: near-white airy pages tinted with the device hue (l 0.95 / s 0.10), muted pastel accents (l 0.80 / s 0.30) with deep same-hue ink (l 0.24).
-   - Dark: soft pastel-tinted night (background l 0.17 — lighter than the 0xFF111722 midnight), pastel mid accents (l 0.62) with deep ink; containers step 0.14→0.31.
-   - `curioColorScheme()` MATERIAL branch now builds the dynamic scheme then calms it (API 31+; older devices unchanged).
-2. **app/src/main/java/com/curio/app/features/settings/SettingsScreen.kt** — Material style blurb → "Your device's Material hues, calmed into soft pastels over light airy surfaces."
+### SpinScreen.kt (PeekCard)
+- Replaced the single `Surface.shadowElevation` (near 5dp / far 4dp — read as a hard dark halo hugging every fanned card, muddy black rings on the deck) with the hero's proven LAYERED soft shadow on the outer Box modifier (before graphicsLayer, clip=false): a broad ambient glow tinted with the card's accent (14/10dp, alpha 0.14/0.10) + a tight dark contact shadow (5/3dp, black 0.18-0.24/0.12-0.16). Far cards sit lower/fainter; Surface stays flat. `shadowsOn` toggle still controls it.
 
-Downstream (pre-existing, unchanged): `CurioGradients.cardGradient` anchors on `colorScheme.primary` → in pastel mode (default) it runs pastelAccent on the already-calmed primary (airier); in non-pastel mode floorForWhiteInk darkens the pale primary for white-text cards (existing pattern).
+### EntryDetailScreen.kt (meta column)
+- Hierarchy: category is now the PRIMARY line — titleLarge ExtraBold + 22dp glyph (was labelLarge + 16dp), so it clearly outranks the quick fact AND its bigger tip reads tucked behind the tear. Quick fact shrunk to SECONDARY: labelMedium semibold heading + 14dp icon + bodyMedium teaser (was titleSmall/16dp/bodyLarge), "…more/…less" labelMedium.
+- Entrance animation: the category and the quick fact are both STATIC (no MorphEntrance — a scale-in pop fights the tucked-behind-the-tear look and the user asked to drop it); only the captured-at + tags block keeps MorphEntrance. Outer meta Column keeps the -14dp lift so the category tip tucks under the paper lip.
 
 ## Review
-Code-reviewer clean — valid Kotlin, correct scheme slots, contrast sane in both modes. Flagged (acceptable): non-pastel card gradients will be floored to lum 0.30 for white text.
+Reviewer clean; flagged the "it" ambiguity (category vs quick fact) — resolved by making BOTH static and keeping the entrance only on captured-at/tags.
 
 ## Status
 DONE — implemented, reviewed, Prompt.md updated, committed + pushed.

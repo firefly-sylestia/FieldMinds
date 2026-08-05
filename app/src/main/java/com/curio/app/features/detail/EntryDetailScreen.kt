@@ -558,132 +558,137 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 
         }
 
-        // ── Topic meta — the title now lives INSIDE the hero above, so
-        // this block keeps the chips + captured-at + meta card only.
-        // 28dp top padding keeps the chips clear of the white under-sheet
-        // lip (which now reaches roughly 36dp past the hero's nominal bottom).
-        MorphEntrance {
-            // v7.38 — the category label rides UP to the torn seam: 6dp top
-            // pad + a -14dp lift puts the label's top tip ~8dp up inside the
-            // white paper lip (drawn over the sheet, so the torn wave reads
-            // around its top and the label looks like it's coming out of the
-            // tear — only the tip tucks, never the whole line). The category
-            // is plain text (glyph + name, labelLarge semibold, theme-aware
-            // ink — no pill). The Quick fact sits directly under it, then
-            // captured-at, then tags. Gutters stay aligned to the format
-            // body's 20dp side padding; bottom 16dp hands off to the body
-            // wrapper's 16dp.
-            Column(
-                modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 16.dp)
-                    .offset(y = (-14).dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+        // ── Topic meta — the title lives INSIDE the hero above, so this
+        // block keeps the category label + quick fact + captured-at + tags.
+        // v7.38 — the category label rides UP to the torn seam: 6dp top pad
+        // + a -14dp lift puts the label's top tip ~8dp up inside the white
+        // paper lip (drawn over the sheet, so the torn wave reads around its
+        // top and the label looks like it's coming out of the tear — only
+        // the tip tucks, never the whole line). The category is the PRIMARY
+        // line (titleLarge ExtraBold — big enough that the tucked tip reads
+        // clearly), the Quick fact sits directly under it as SECONDARY
+        // (smaller), then captured-at, then tags. Gutters stay aligned to
+        // the format body's 20dp side padding; bottom 16dp hands off to the
+        // body wrapper's 16dp.
+        Column(
+            modifier = Modifier
+                .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 16.dp)
+                .offset(y = (-14).dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // v7.38 — the category is plain TEXT, not a pill: glyph + name in
+            // the category's theme-aware ink, LARGE (titleLarge ExtraBold + a
+            // 22dp glyph) so it clearly outranks the quick fact below and its
+            // tip visibly tucks behind the tear. The entry title and the
+            // Legacy marker stay as smaller text on the same line. The
+            // category and the quick fact are BOTH static (no entrance
+            // animation — a scale-in pop would fight the tucked-behind-the-
+            // tear look); only the captured-at + tags keep the entrance.
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // v7.38 — the category is plain TEXT, not a pill: glyph + name
-                // in the category's theme-aware ink, then the entry title and
-                // the Legacy marker as plain text too — the row reads as a
-                // clean label line at the tear instead of a chip bar.
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    CurioIcon(
-                        name = cat.iconGlyph,
-                        contentDescription = null,
-                        tint = cat.categoryInk(),
-                        size = 16.dp
-                    )
-                    Text(
-                        text = cat.displayName,
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = cat.categoryInk()
-                    )
-                    if (resolvedEntry.title != null) {
-                        Text(
-                            text = resolvedEntry.title,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .weight(1f, fill = false)
-                                .padding(start = 2.dp)
-                        )
-                    }
-                    // Legacy marker — entries imported from a FieldMind
-                    // archive wear this so they stay recognizable.
-                    if (resolvedEntry.isLegacy) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            modifier = Modifier.padding(start = 2.dp)
-                        ) {
-                            CurioIcon(
-                                name = CurioIcons.History,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 14.dp
-                            )
-                            Text(
-                                text = "Legacy",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-
-                // ── Quick fact (v7.38) — the topic's teaser directly under
-                // the chips at the tear: backgroundless (the page wash IS the
-                // background — no card fill or border), collapsed to 2 lines
-                // with a "…more" that expands, and tapping "…less" folds it
-                // back to compact.
-                QuickFactCard(
-                    cat = cat,
-                    teaser = resolvedEntry.topic.teaser
+                CurioIcon(
+                    name = cat.iconGlyph,
+                    contentDescription = null,
+                    tint = cat.categoryInk(),
+                    size = 22.dp
                 )
                 Text(
-                    text = if (AppPreferences.entryMetaEnabledState) {
-                        capturedAtLabel(resolvedEntry) + " · " +
-                            formatCapturedTime(resolvedEntry.capturedAtMillis)
-                    } else capturedAtLabel(resolvedEntry),
-                    style = MaterialTheme.typography.bodySmall,
-                    // v7.35 — muted secondary ink: the captured-at line reads
-                    // one step below the category chips and the Quick fact
-                    // heading, so the meta block has a clear hierarchy in
-                    // every theme.
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = cat.displayName,
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                    color = cat.categoryInk()
                 )
-
-                // ── Custom tags (v7.17) — the labels added on the save page,
-                // rendered as small #chips under the captured-at line.
-                if (resolvedEntry.tags.isNotEmpty()) {
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.fillMaxWidth()
+                if (resolvedEntry.title != null) {
+                    Text(
+                        text = resolvedEntry.title,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .weight(1f, fill = false)
+                            .padding(start = 4.dp)
+                    )
+                }
+                // Legacy marker — entries imported from a FieldMind
+                // archive wear this so they stay recognizable.
+                if (resolvedEntry.isLegacy) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.padding(start = 2.dp)
                     ) {
-                        resolvedEntry.tags.forEach { tag ->
-                            Surface(
-                                shape = RoundedCornerShape(50),
-                                color = if (AppPreferences.tintWashEffective()) cat.tint.copy(alpha = 0.14f)
-                                        else MaterialTheme.colorScheme.surfaceVariant,
-                                border = BorderStroke(1.dp, cat.themedAccent().copy(alpha = 0.4f))
-                            ) {
-                                Text(
-                                    text = "#$tag",
-                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                                    color = cat.categoryInk(),
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                                )
+                        CurioIcon(
+                            name = CurioIcons.History,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            size = 14.dp
+                        )
+                        Text(
+                            text = "Legacy",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            // ── Quick fact (v7.38) — the topic's teaser directly under the
+            // category at the tear: backgroundless (the page wash IS the
+            // background — no card fill or border), collapsed to 2 lines with
+            // a "…more" that expands, and tapping "…less" folds it back to
+            // compact. Deliberately SMALLER than the category (labelMedium
+            // heading + bodyMedium teaser) so the hierarchy reads: category
+            // first, spark second, notes third. NO entrance animation — it
+            // sits static on the page.
+            QuickFactCard(
+                cat = cat,
+                teaser = resolvedEntry.topic.teaser
+            )
+
+            MorphEntrance {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = if (AppPreferences.entryMetaEnabledState) {
+                            capturedAtLabel(resolvedEntry) + " · " +
+                                formatCapturedTime(resolvedEntry.capturedAtMillis)
+                        } else capturedAtLabel(resolvedEntry),
+                        style = MaterialTheme.typography.bodySmall,
+                        // v7.35 — muted secondary ink: the captured-at line
+                        // reads one step below the category and the Quick
+                        // fact heading, so the meta block has a clear
+                        // hierarchy in every theme.
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    // ── Custom tags (v7.17) — the labels added on the save
+                    // page, rendered as small #chips under the captured-at
+                    // line.
+                    if (resolvedEntry.tags.isNotEmpty()) {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            resolvedEntry.tags.forEach { tag ->
+                                Surface(
+                                    shape = RoundedCornerShape(50),
+                                    color = if (AppPreferences.tintWashEffective()) cat.tint.copy(alpha = 0.14f)
+                                            else MaterialTheme.colorScheme.surfaceVariant,
+                                    border = BorderStroke(1.dp, cat.themedAccent().copy(alpha = 0.4f))
+                                ) {
+                                    Text(
+                                        text = "#$tag",
+                                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                                        color = cat.categoryInk(),
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                    )
+                                }
                             }
                         }
                     }
                 }
-
-                // ── Mood meta ───────────────────────────────────────────────
-                // The mood is shown once, in the hero's frosted bar above — the
-                // standalone mood card below was removed to avoid a duplicate.
             }
         }
 
@@ -1193,6 +1198,11 @@ private fun FormatBody(
  * category accent keeps its researched hue — so the text stays readable in
  * every color mode. Collapsed to 2 lines with a "…more" toggle (only shown
  * when the teaser actually overflows); tapping "…less" folds it back.
+ *
+ * v7.38 — SECONDARY HIERARCHY: the whole block is deliberately SMALLER
+ * than the category label above it — a labelMedium caption heading + a
+ * bodyMedium teaser — so the category owns the top of the page and the
+ * quick fact reads as a spark beneath it, not a peer.
  */
 @Composable
 private fun QuickFactCard(
@@ -1206,24 +1216,24 @@ private fun QuickFactCard(
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             CurioIcon(
                 name = CurioIcons.AutoAwesome,
                 contentDescription = null,
                 tint = ink,
-                size = 16.dp
+                size = 14.dp
             )
             Text(
                 text = "Quick fact",
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                 color = ink
             )
         }
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(6.dp))
         Text(
             text = teaser ?: "Loading topic…",
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = ink,
             softWrap = true,
             maxLines = if (expanded) Int.MAX_VALUE else 2,
@@ -1233,11 +1243,11 @@ private fun QuickFactCard(
         if (expanded || hasOverflow) {
             Text(
                 text = if (expanded) "…less" else "…more",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                 color = ink.copy(alpha = 0.85f),
                 modifier = Modifier
                     .clickable { expanded = !expanded }
-                    .padding(top = 4.dp)
+                    .padding(top = 3.dp)
             )
         }
     }
