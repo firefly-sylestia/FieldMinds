@@ -246,9 +246,16 @@ fun TopicRevealScreen(
 
     /** Continues the explore flow after the overlay-permission step resolves. */
     fun continueExploreFlow(session: ExploreSession) {
+        // Same gate as beginExploreSession: once the overlay permission is
+        // granted the floating bubble will show, so the POST_NOTIFICATIONS
+        // prompt is skipped — the bubble carries the timer. Only ask when
+        // the bubble can't show and a live notification is actually wanted
+        // (the shade notification is then the only timer controller).
+        val bubbleWillShow = AppPreferences.isOverlayBubbleEnabled(context) &&
+            Settings.canDrawOverlays(context)
         if (overlayNeedsNotification &&
             AppPreferences.isLiveNotificationsEnabled(context) &&
-            !hasNotificationPermission(context)
+            !hasNotificationPermission(context) && !bubbleWillShow
         ) {
             pendingNotificationSession = session
             requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -293,8 +300,17 @@ fun TopicRevealScreen(
         }
         val needsOverlay = AppPreferences.isOverlayBubbleEnabled(context) &&
             !Settings.canDrawOverlays(context)
+        // The floating bubble shows the same live timer over other apps and
+        // needs ONLY the "Display over other apps" permission. When it's
+        // going to show, skip the POST_NOTIFICATIONS prompt — a live shade
+        // notification would be redundant while the bubble is up, and
+        // re-asking after a denial is a nag. The notification is only worth
+        // asking for when the bubble is off or its permission is missing
+        // (the shade notification is then the only timer controller).
+        val bubbleWillShow = AppPreferences.isOverlayBubbleEnabled(context) &&
+            Settings.canDrawOverlays(context)
         val needsNotification = AppPreferences.isLiveNotificationsEnabled(context) &&
-            !hasNotificationPermission(context)
+            !hasNotificationPermission(context) && !bubbleWillShow
 
         if (needsOverlay) {
             // The bubble floats over other apps and needs the "Display over

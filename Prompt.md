@@ -2,6 +2,47 @@
 
 ## Latest Request (COMPLETED)
 
+**Skip the notification-permission dialog when the bubble shows the timer**
+
+### What was requested
+
+Don't show the POST_NOTIFICATIONS dialog when the floating bubble is on and
+notifications are off — the extra prompt is redundant.
+
+### What changed
+
+`TopicRevealScreen.kt` — the notification prompt is now skipped whenever
+the floating bubble will show the timer (bubble enabled AND "Display over
+other apps" granted), because the bubble needs only the overlay permission
+and a shade notification would be redundant:
+
+- `beginExploreSession` computes `bubbleWillShow = isOverlayBubbleEnabled &&
+  Settings.canDrawOverlays(context)` and gates `needsNotification` on
+  `!bubbleWillShow`.
+- `continueExploreFlow` re-checks the same gate after the overlay-permission
+  step resolves, so returning from the overlay settings page with the grant
+  lands straight in the browser instead of popping a second permission
+  dialog.
+
+Flow behavior: bubble-on + overlay-granted → no notification dialog even
+when POST_NOTIFICATIONS is denied; overlay-missing → overlay prompt first,
+and the notification dialog fires only if the user declines the overlay
+(the shade notification is then the only timer controller); bubble-off →
+unchanged. The Settings toggle's own user-initiated request and the
+onboarding startup request are untouched.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `TopicRevealScreen.kt`.
+- `git diff --check` passed.
+- Code review approved (all flow cases traced; minor optional note about
+  2-line `bubbleWillShow` duplication, left as-is for minimality).
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Latest Request (COMPLETED)
+
 **Floating explore bubble not appearing even with permissions granted**
 
 ### What was requested
