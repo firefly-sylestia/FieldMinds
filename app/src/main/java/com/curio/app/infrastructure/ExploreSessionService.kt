@@ -169,6 +169,15 @@ class ExploreSessionService : Service() {
     override fun onCreate() {
         super.onCreate()
         createChannel()
+        // Seed the reactive session store from persisted prefs. A system
+        // re-arm (boot receiver, START_STICKY after process death) can start
+        // this service in a process where MainActivity never ran, leaving
+        // activeSessionState null — the bubble's composition falls back to
+        // the persisted session (see setContent), but seeding here keeps the
+        // whole reactive flow (pause/resume/hide recomposition) working in
+        // fresh processes too. Idempotent — re-reading the same prefs after
+        // MainActivity's seed is a no-op.
+        ExploreSessionStore.seed(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -442,7 +451,14 @@ class ExploreSessionService : Service() {
                     setContent {
                 // Reads the reactive session — pause/resume/hide from the
                 // notification or the bubble recompose this content live.
+                // Falls back to the persisted session when the reactive
+                // store hasn't been seeded: a system re-arm (START_STICKY
+                // after process death, boot receiver) can start this
+                // service in a process where MainActivity never ran, leaving
+                // activeSessionState null — without the fallback the overlay
+                // window would compose nothing (an invisible empty bubble).
                 val session = ExploreSessionStore.activeSessionState
+                    ?: ExploreSessionStore.getActiveSession(this@ExploreSessionService)
                 if (session != null) {
                     MaterialTheme(
                         colorScheme = curioColorScheme(),

@@ -204,14 +204,19 @@ fun TopicRevealScreen(
 
     val requestNotifications = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { granted ->
+    ) { _ ->
         val pending = pendingNotificationSession
         pendingNotificationSession = null
         if (pending != null) {
-            if (granted && AppPreferences.isLiveNotificationsEnabled(context)) {
-                // The browser hasn't opened yet (proceed is deferred to
-                // here), so the activity is still foreground — starting the
-                // foreground service is allowed.
+            // Start the service for whatever can show right now — the live
+            // notification needs the grant, but the FLOATING BUBBLE needs
+            // only the separate "Display over other apps" permission, so
+            // denying POST_NOTIFICATIONS must never silently kill the
+            // bubble too. The service's render() picks what actually shows
+            // from the current permission state. The browser hasn't opened
+            // yet (proceed is deferred to here), so the activity is still
+            // foreground — starting the foreground service is allowed.
+            if (AppPreferences.exploreServiceShouldRun(context)) {
                 ExploreSessionService.start(context, pending)
             }
             openExploreBrowserAndGoHome(pending)

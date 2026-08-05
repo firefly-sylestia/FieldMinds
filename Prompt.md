@@ -2,6 +2,56 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating explore bubble not appearing even with permissions granted**
+
+### What was requested
+
+The floating bubble isn't appearing at all now, even after "Display over
+other apps" is properly allowed.
+
+### Root causes (two)
+
+1. **Notification-permission gate killed the whole service.** In
+   `TopicRevealScreen.beginExploreSession`, when the overlay permission IS
+   granted but POST_NOTIFICATIONS (Android 13+) is missing, the flow showed
+   the notification-permission dialog and its callback only started
+   `ExploreSessionService` when the grant landed (`granted &&
+   isLiveNotificationsEnabled`). Denying notifications — a permission the
+   bubble does NOT need — meant the service never started → no bubble, no
+   notification, even with the overlay permission granted.
+2. **Invisible bubble after a process restart.** The bubble's composition
+   read only the reactive `ExploreSessionStore.activeSessionState`, seeded
+   by MainActivity. A system re-arm (boot receiver, START_STICKY after
+   process death) starts the service in a process where MainActivity never
+   ran → the state was null → the overlay window composed NOTHING (a
+   zero-size invisible bubble).
+
+### What changed
+
+- `TopicRevealScreen.kt` — the notification-permission callback now starts
+  the service whenever `AppPreferences.exploreServiceShouldRun(context)` is
+  true, regardless of the notification grant; the service's `render()` picks
+  what actually shows from the current permission state. Denying
+  POST_NOTIFICATIONS no longer suppresses the bubble. (Side benefit: this
+  also fixed the sibling path where live-notifs OFF + bubble ON + notification
+  granted never started the service.)
+- `ExploreSessionService.kt` — `onCreate()` now seeds the reactive store
+  (`ExploreSessionStore.seed(this)`), so a fresh-process re-arm has a seeded
+  session and pause/resume/hide recomposition works; the bubble composition
+  also falls back to the persisted session (`getActiveSession`) if the
+  reactive state is somehow still null, instead of composing an empty overlay.
+
+### Validation
+
+- `scripts/check_braces.py` passed for both changed Kotlin files.
+- `git diff --check` passed.
+- Code review approved both fixes.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Latest Request (COMPLETED)
+
 **Pinch-to-zoom for zoomed images + full-screen expand for small ones**
 
 ### What was requested
