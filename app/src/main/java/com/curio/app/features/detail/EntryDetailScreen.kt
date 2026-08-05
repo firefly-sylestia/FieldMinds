@@ -16,6 +16,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
@@ -72,7 +73,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -369,37 +369,40 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Glass title — the topic name floats on frosted glass:
-                    // a blurred, translucent aura copy behind the crisp text
-                    // (light passing through the pane) plus a soft shadow that
-                    // lifts the letterforms off the frosted backdrop.
+                    // ── Glass title — the topic name floats on a frosted
+                    // glass plate matching the Date · Mood · Type card below:
+                    // a frosted white gradient with a faint bloom of the
+                    // banner color and a hairline rim in the hero ink. (The
+                    // old blur-an-aura-copy read as a ghost overlay behind
+                    // the text and the heavy drop shadows smudged the
+                    // letterforms — both gone, the frost is real now.)
                     val heroTitleStyle = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.Bold
                     )
-                    Box(contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(
+                                Brush.verticalGradient(
+                                    0f to Color.White.copy(alpha = 0.28f),
+                                    1f to Color.White.copy(alpha = 0.16f)
+                                )
+                            )
+                            .border(
+                                1.dp,
+                                heroInk.copy(alpha = 0.32f),
+                                RoundedCornerShape(20.dp)
+                            )
+                            .padding(horizontal = 20.dp, vertical = 10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
                             text = resolvedEntry.topic.name,
-                            style = heroTitleStyle.copy(
-                                shadow = Shadow(Color.Black.copy(alpha = 0.35f), Offset(0f, 4f), 14f)
-                            ),
-                            color = heroInk.copy(alpha = 0.38f),
-                            textAlign = TextAlign.Center,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.blur(9.dp)
-                        )
-                        Text(
-                            text = resolvedEntry.topic.name,
-                            style = heroTitleStyle.copy(
-                                shadow = Shadow(Color.Black.copy(alpha = 0.30f), Offset(0f, 2f), 9f)
-                            ),
+                            style = heroTitleStyle,
                             color = heroInk.copy(alpha = 0.97f),
                             textAlign = TextAlign.Center,
                             maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            // The aura copy is decorative — hide it from
-                            // TalkBack so the title isn't announced twice.
-                            modifier = Modifier.clearAndSetSemantics { }
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                     Spacer(Modifier.height(18.dp))

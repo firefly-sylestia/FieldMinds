@@ -1,5 +1,6 @@
 • Paper-style chips (Coffee / Folded / Red Margin / Color) no longer vanish in dark mode — inactive options keep a readable warm label and hairline outline on midnight surfaces
 • The done-exploring prompt gains an in-app Cancel session button behind a double confirmation — first tap asks "Cancel this explore?", second tap ends it quietly without writing it down
+• The detail hero's topic title now sits on a real frosted glass plate — a translucent white gradient with a hairline rim matching the Date · Mood · Type card (the old blur-copy aura that read as a ghost overlay behind the title is gone)
 • The detail hero's Date · Mood · Type bar now wears a frosty white gradient — bright frosted glass at the top with just a faint ~1% hint of the category color breathing through toward the bottom
 • Starting an explore no longer asks for the notification permission when the floating bubble is showing — the bubble carries the timer, so the extra prompt is skipped (it still asks when the bubble can't show)
 • Fixed the floating explore bubble not appearing even with "Display over other apps" allowed — denying the notification permission no longer suppresses the bubble (it only needs the overlay permission), and a restarted process can no longer leave the bubble invisible

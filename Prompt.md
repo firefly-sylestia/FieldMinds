@@ -2,6 +2,45 @@
 
 ## Latest Request (COMPLETED)
 
+**Hero title glass effect broken + ghost overlay behind title**
+
+### What was requested
+
+The detail hero's title "glass frosty" effect isn't working and there's a
+weird background overlay behind/with the title.
+
+### Root cause
+
+The old "glass title" was two stacked Text composables: a blurred 38%-alpha
+copy of the title (with a heavy black TextStyle shadow) behind the crisp
+copy (also with a black shadow). Blurring a duplicate of the text doesn't
+read as glass — it looked like a ghost/smudge overlay behind the title, and
+the drop shadows smudged the letterforms.
+
+### What changed
+
+`EntryDetailScreen.kt` — the two-Text aura is replaced with ONE crisp title
+on a real frosted glass plate matching the Date · Mood · Type card below:
+a Box with `RoundedCornerShape(20.dp)`, a `Brush.verticalGradient` frosted
+white (0.28 → 0.16 alpha), a `Modifier.border` hairline rim in `heroInk`
+(0.32 alpha), padding, and the title in `heroInk` @ 0.97. Reads as milky
+frost on deep banners and as a defined glass plate on light pastels (the
+rim carries it there). Removed the now-unused `Shadow` import; added
+`androidx.compose.foundation.border`. Only one Text remains, so the old
+`clearAndSetSemantics` dedup is correctly gone.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
+- `git diff --check` passed.
+- Code review approved; its tuning note (frost barely visible on light
+  pastel banners) addressed by raising the white to 0.28→0.16.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Latest Request (COMPLETED)
+
 **Dark-mode invisible paper chips + double-confirmed Cancel in done dialog**
 
 ### What was requested
