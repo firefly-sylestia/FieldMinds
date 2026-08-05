@@ -77,6 +77,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -562,13 +563,20 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // 28dp top padding keeps the chips clear of the white under-sheet
         // lip (which now reaches roughly 36dp past the hero's nominal bottom).
         MorphEntrance {
-            // v7.35 — gutters aligned to the format body's 20dp side
-            // padding (the old 28dp column sat inset from the body below,
-            // a ragged left edge under the hero); vertical rhythm opens to
-            // 12dp. Top stays 28dp so the chips clear the white under-sheet
-            // lip; bottom 16dp hands off to the body wrapper's 16dp.
+            // v7.38 — the chips row rides UP to the torn seam: 6dp top pad +
+            // a -14dp lift puts the category pill's top tip ~8dp up inside
+            // the white paper lip (drawn over the sheet, so the torn wave
+            // reads around its top corners and the pill looks like it's
+            // coming out of the tear — only the tip tucks, never the whole
+            // chip). The category pill itself reads larger (labelLarge + 16dp
+            // glyph). The Quick fact sits directly under the chips, then
+            // captured-at, then tags. Gutters stay aligned to the format
+            // body's 20dp side padding; bottom 16dp hands off to the body
+            // wrapper's 16dp.
             Column(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 28.dp, bottom = 16.dp),
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 16.dp)
+                    .offset(y = (-14).dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -578,12 +586,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 else MaterialTheme.colorScheme.surfaceVariant
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
                         ) {
-                            CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.categoryInk(), size = 14.dp)
-                            Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.categoryInk())
+                            CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.categoryInk(), size = 16.dp)
+                            Text(text = cat.displayName, style = MaterialTheme.typography.labelLarge, color = cat.categoryInk())
                         }
                     }
                     if (resolvedEntry.title != null) {
@@ -620,6 +628,16 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         }
                     }
                 }
+
+                // ── Quick fact (v7.38) — the topic's teaser directly under
+                // the chips at the tear: backgroundless (the page wash IS the
+                // background — no card fill or border), collapsed to 2 lines
+                // with a "…more" that expands, and tapping "…less" folds it
+                // back to compact.
+                QuickFactCard(
+                    cat = cat,
+                    teaser = resolvedEntry.topic.teaser
+                )
                 Text(
                     text = if (AppPreferences.entryMetaEnabledState) {
                         capturedAtLabel(resolvedEntry) + " · " +
@@ -662,16 +680,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 // ── Mood meta ───────────────────────────────────────────────
                 // The mood is shown once, in the hero's frosted bar above — the
                 // standalone mood card below was removed to avoid a duplicate.
-
-                // ── Quick fact (v7.35) — the topic's one-line teaser, the
-                // same "get you curious" language the Spin reveal shows, so a
-                // saved entry always carries a spark of why it was worth
-                // capturing — sits above the format body, below the meta.
-                QuickFactCard(
-                    cat = cat,
-                    teaser = resolvedEntry.topic.teaser,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
             }
         }
 
@@ -737,12 +745,16 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 onClick = { navController.popBackStack() },
                 containerColor = Color.Transparent,
                 contentColor = heroCardInk,
-                shadowElevation = 6.dp * frostShift,
+                // v7.38 — the floating shadow lives in the plate modifier
+                // now (drawn before the clip so it can't ring the pill).
+                shadowElevation = 0.dp,
                 // v7.34 — no Material ripple on the frosted pills (see the
                 // more button below): on the small circular glass buttons it
                 // expands past the plate and reads as a circular glitch.
                 disableRipple = true,
-                modifier = Modifier.heroFrostPlate(heroCardInk, RoundedCornerShape(50))
+                modifier = Modifier.heroFrostPlate(
+                    heroCardInk, RoundedCornerShape(50), elevation = 6.dp * frostShift
+                )
             )
             Box {
                 // v7.34 — rippleless, the same logic as Home's sticky pills:
@@ -754,9 +766,13 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 Surface(
                     shape = RoundedCornerShape(50),
                     color = Color.Transparent,
-                    shadowElevation = 6.dp * frostShift,
+                    // v7.38 — the floating shadow lives in the plate modifier
+                    // now (drawn before the clip so it can't ring the pill).
+                    shadowElevation = 0.dp,
                     modifier = Modifier
-                        .heroFrostPlate(heroCardInk, RoundedCornerShape(50))
+                        .heroFrostPlate(
+                            heroCardInk, RoundedCornerShape(50), elevation = 6.dp * frostShift
+                        )
                         .clickable(
                             interactionSource = moreInteraction,
                             indication = null
@@ -912,22 +928,39 @@ private val DetailStickyBarPoppedTop = 12.dp
 
 /**
  * The hero's frosted-glass language for small controls — bright frosted
- * WHITE (near-opaque, brighter at the top) with a hairline rim and
+ * WHITE (fully opaque, brighter at the top) with a hairline rim and
  * deep-slate content. Worn by the banner's back / more buttons so the
  * controls stay legible in every theme; the big Date · Mood · Type card
  * below wears the same rim and slate but a more translucent frost that
  * lets the banner color bloom through — it is the showpiece of the
  * family. (The title now sits on its own TRANSPARENT tint pill, not this
  * plate.)
+ *
+ * v7.38 — the small pills' frost is now FULLY OPAQUE: the old 0.99→0.94
+ * alphas let the hero's color — most visibly a blue Material dynamic
+ * primary or a blue category wash — bleed through the translucent white
+ * and tint the back / menu pills blue. The frost look now comes from the
+ * vertical white gradient + hairline rim alone, so the controls read as
+ * solid frosted glass over ANY hero color.
  */
 private val heroFrostGradient = Brush.verticalGradient(
-    0f to Color.White.copy(alpha = 0.99f),
-    1f to Color.White.copy(alpha = 0.94f)
+    0f to Color.White,
+    1f to Color.White.copy(alpha = 0.97f)
 )
 
-/** [heroFrostGradient] clipped to [shape] with a hairline rim in [ink]. */
-private fun Modifier.heroFrostPlate(ink: Color, shape: Shape): Modifier =
-    clip(shape)
+/**
+ * [heroFrostGradient] clipped to [shape] with a hairline rim in [ink].
+ *
+ * v7.38 — the shadow moved IN HERE, drawn BEFORE the clip: the old Surface
+ * shadowElevation was drawn inside the plate's clip, so as the pill
+ * floated up on scroll its growing shadow got sliced at the circle rim
+ * and read as a dark "donut" ring around the frost. Drawing the shadow
+ * first (clip = false) keeps it a clean soft drop shadow OUTSIDE the pill
+ * with no inner ring — the float reads as a lift, not a glitch.
+ */
+private fun Modifier.heroFrostPlate(ink: Color, shape: Shape, elevation: Dp = 0.dp): Modifier =
+    shadow(elevation, shape, clip = false)
+        .clip(shape)
         .background(heroFrostGradient)
         .border(1.dp, ink.copy(alpha = 0.32f), shape)
 
@@ -1144,11 +1177,18 @@ private fun FormatBody(
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * v7.35 — the saved-entry detail page's "quick fact" card: the topic's
- * one-line teaser under a small "Quick fact" heading, mirroring the Spin
- * reveal's TeaserCard language so a capture keeps the curiosity that
- * introduced it. Theme-aware in every color mode (category surface + border,
- * onSurface text, category ink glyph).
+ * v7.38 — the saved-entry detail page's "quick fact": the topic's one-line
+ * teaser under a small "Quick fact" heading, mirroring the Spin reveal's
+ * TeaserCard language so a capture keeps the curiosity that introduced it.
+ *
+ * v7.38 — BACKGROUNDLESS: the card fill and border are gone — the quick
+ * fact sits directly on the page wash, which is already the entry's tinted
+ * background. The ink is the category's theme-aware [categoryInk]: deep
+ * accent in light / pastel-light (reads on the airy pastel washes), light
+ * twin in dark / AMOLED (reads on the deep washes) and in Material the
+ * category accent keeps its researched hue — so the text stays readable in
+ * every color mode. Collapsed to 2 lines with a "…more" toggle (only shown
+ * when the teaser actually overflows); tapping "…less" folds it back.
  */
 @Composable
 private fun QuickFactCard(
@@ -1156,37 +1196,44 @@ private fun QuickFactCard(
     teaser: String?,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = cat.categorySurface(MaterialTheme.colorScheme.surface),
-        shadowElevation = 0.dp,
-        border = cat.categoryBorder(),
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CurioIcon(
-                    name = CurioIcons.AutoAwesome,
-                    contentDescription = null,
-                    tint = cat.categoryInk(),
-                    size = 16.dp
-                )
-                Text(
-                    text = "Quick fact",
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            Spacer(Modifier.height(10.dp))
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var hasOverflow by remember { mutableStateOf(false) }
+    val ink = cat.categoryInk()
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            CurioIcon(
+                name = CurioIcons.AutoAwesome,
+                contentDescription = null,
+                tint = ink,
+                size = 16.dp
+            )
             Text(
-                text = teaser ?: "Loading topic…",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                softWrap = true,
-                overflow = TextOverflow.Ellipsis
+                text = "Quick fact",
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = ink
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = teaser ?: "Loading topic…",
+            style = MaterialTheme.typography.bodyLarge,
+            color = ink,
+            softWrap = true,
+            maxLines = if (expanded) Int.MAX_VALUE else 2,
+            overflow = if (expanded) TextOverflow.Visible else TextOverflow.Ellipsis,
+            onTextLayout = { layoutResult -> hasOverflow = layoutResult.hasVisualOverflow }
+        )
+        if (expanded || hasOverflow) {
+            Text(
+                text = if (expanded) "…less" else "…more",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = ink.copy(alpha = 0.85f),
+                modifier = Modifier
+                    .clickable { expanded = !expanded }
+                    .padding(top = 4.dp)
             )
         }
     }
@@ -2195,7 +2242,8 @@ private fun RenderQuoteCards(
         else i to pair
     }
     if (quotePairs.isNotEmpty()) {
-        MarginaliaSectionHeader(label = label, category = category, count = quotePairs.size)
+        // v7.38 — no count pill: the header is just the glyph + label.
+        MarginaliaSectionHeader(label = label, category = category)
         quotePairs.forEach { (origIndex, pair) ->
             val (quote, cardSpans) = pair
             // The tilt SAVED with this card (the exact angle the user added
@@ -2237,16 +2285,32 @@ private fun RenderQuoteCards(
                         size = 20.dp
                     )
                     Text(
-                        // Spans shift +1 to account for the curly-quote
-                        // wrapper added around the saved quote text.
+                        // v7.38 — no in-text curly quotes: the leading
+                        // FormatQuote glyph above opens the quote and the
+                        // mirrored glyph below closes it, so the start and
+                        // end of the quote read as symbols, not " marks.
+                        // Spans now align 1:1 with the saved text (no +1
+                        // shift for a removed wrapper).
                         text = buildRichAnnotated(
-                            "\u201C$quote\u201D",
-                            cardSpans.map { it.copy(start = it.start + 1, end = it.end + 1) },
+                            quote,
+                            cardSpans,
                             notePaperHighlight(quoteSheet)
                         ),
                         modifier = Modifier.weight(1f),
                         style = savedNoteStyle(),
                         color = notePaperInk(quoteSheet)
+                    )
+                    CurioIcon(
+                        name = CurioIcons.FormatQuote,
+                        contentDescription = null,
+                        tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
+                        size = 20.dp,
+                        // Mirrored closing mark — the quote's end symbol,
+                        // bottom-aligned so the pair brackets the quote
+                        // (open top-left, close bottom-right).
+                        modifier = Modifier
+                            .align(Alignment.Bottom)
+                            .rotate(180f)
                     )
                     // ── Bookmark — saves the quote to the Home "Saved" shelf ──
                     val saved = AppPreferences.savedQuotesState.any {
@@ -2289,15 +2353,18 @@ private fun RenderQuoteCards(
 }
 
 /**
- * Marginalia section header — small quote-mark glyph + label (+ count)
- * above the journal / quotes sections, mirroring the capture form's
- * section labels so the saved view matches what the user wrote into.
+ * Marginalia section header — small quote-mark glyph + label above the
+ * journal / quotes sections, mirroring the capture form's section labels
+ * so the saved view matches what the user wrote into.
+ *
+ * v7.38 — the count pill was removed from the detail view: the header is
+ * just the glyph + label (a number next to the section name added noise
+ * to the hierarchy the count was meant to summarize).
  */
 @Composable
 private fun MarginaliaSectionHeader(
     label: String,
-    category: CurioCategory,
-    count: Int? = null
+    category: CurioCategory
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -2314,13 +2381,6 @@ private fun MarginaliaSectionHeader(
             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onSurface
         )
-        if (count != null) {
-            Text(
-                text = "$count",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
     }
 }
 
