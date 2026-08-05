@@ -506,10 +506,14 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     .padding(start = 16.dp, end = 16.dp, top = 72.dp)
                     .graphicsLayer {
                         val eased = heroControlsProgress
+                        // Match Home's finalized sticky-control pop: begin
+                        // just under full size, then settle with a tiny upward
+                        // lift. Unlike the old 6dp drop, this cannot read as
+                        // a bounce or overshoot.
                         alpha = eased
-                        scaleX = 0.96f + (0.04f * eased)
-                        scaleY = 0.96f + (0.04f * eased)
-                        translationY = 6.dp.toPx() * (1f - eased)
+                        scaleX = 0.97f + (0.03f * eased)
+                        scaleY = 0.97f + (0.03f * eased)
+                        translationY = -2.dp.toPx() * eased
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically

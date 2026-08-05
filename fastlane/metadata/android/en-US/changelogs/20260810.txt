@@ -1,7 +1,7 @@
 • Improved detail-screen readability: small metadata, captions, counts, subtitles, review/image states, and restored FieldMind labels now use stronger theme-aware or category-aware ink instead of faint colors.
 • Simplified the detail and Spin screens: detail titles are now plain white text with no title plate, while Spin opens directly without the Wildcard/category header, count, or back button.
 • Fixed the Home menu/profile pills' circular ripple glitch: their shapes stay stable, use solid opaque fills, and the hero-to-frost background, rim and icon colors now fade smoothly instead of flashing through a circular transition.
-• Fixed a CI compile error on the detail audio player by using an explicit readable ink color instead of an out-of-scope category reference.
+• Fixed a CI compile error on the detail audio player by using an explicit readable ink color instead of an out-of-scope category reference. Detail-page back and more buttons now use the same subtle pop-and-settle motion as Home's menu/profile controls.
 • Restored Home's random shuffle: each tap now opens either one random category or a fresh 2–3 category mix, and the Home pastel hero is shifted toward a cleaner pink-rose instead of brownish rosewood.
 • Fixed the floating explore bubble handoff after granting overlay permission, so returning from system settings reliably re-arms the timer bubble. Darkened the Currently Exploring label, timer icon, supporting text and Keep exploring action for clearer contrast.
 • Cabinet now opens on the All tab after an app restart instead of restoring the last category or Legacy filter; in-session navigation and rotation still keep the active filter.
