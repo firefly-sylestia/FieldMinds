@@ -63,4 +63,15 @@ pending state, so it survived a data clear.
   TopicRevealScreen, OnboardingScreen, SettingsScreen.
 - Only remaining `Settings.canDrawOverlays` reference is inside
   `overlayActuallyUsable()` itself (verified via code search).
-- Changelog + Prompt.md updated. Awaiting review + commit/push.
+- Reviewer feedback incorporated: pending-state resolution hint added to
+  the TopicReveal overlay dialog, the Settings bubble row now explains
+  "Granted but not showing yet — toggle off and on once" when stuck in
+  the pending state, and the Smart density helper copy is now
+  mode-aware (no longer claims shrinking is active while Off).
+- Reviewed, committed, pushed as `d7ae65c3`. Done.
+
+## Previous Request (COMPLETE)
+
+**Home + detail tear shadows, hero name height, detail pop-up pill ripple**
+— hairline dark rim under both hero tears, hero name scaled to fill the
+gap, rippleless detail back/more pills — shipped in `3a03c353`.

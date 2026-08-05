@@ -367,7 +367,10 @@ fun HomeScreen(navController: NavController) {
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.Medium,
                                     fontSize = 30.sp,
-                                    lineHeight = (44.sp / nameFontScale.coerceAtLeast(1f)).coerceAtLeast(30.sp)
+                                    // Fixed ~44sp leading box held against font scaling (min 30sp).
+                                    // Plain Float math: TextUnit has no coerceAtLeast (it only
+                                    // exposes an operator compareTo, not the Comparable bound).
+                                    lineHeight = (44f / nameFontScale.coerceAtLeast(1f)).coerceAtLeast(30f).sp
                                 ),
                                 color = questInk.copy(alpha = 0.85f),
                                 textAlign = TextAlign.Start,
