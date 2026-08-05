@@ -86,7 +86,6 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -104,6 +103,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
+import com.curio.app.ui.components.AdaptiveImageGallery
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.components.NotePaperCard
@@ -164,7 +164,6 @@ import com.curio.app.ui.theme.glyph
 import com.curio.app.ui.theme.notePaperHighlight
 import com.curio.app.ui.theme.notePaperInk
 import com.curio.app.ui.theme.PatrickHandFontFamily
-import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -1966,98 +1965,20 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             }
         }
         
-        // Attached images — ALL of them, in a scrollable strip that fills
-        // each tile edge-to-edge (Crop, so landscape shots read properly
-        // instead of letterboxing). Tapping one magnifies it IN PLACE with
-        // the same spring zoom as the saved mood board — pinch/pan refine,
-        // tap closes, double-tap resets — no Lightbox navigation. Legacy
-        // entries only stored a count, so keep the badge fallback below.
-        // orEmpty() guards legacy Gson blobs where the imageUris field is
-        // absent (missing Kotlin-default fields decode to null, not default).
+        // v7.36 — adaptive aspect-ratio gallery (Google-Photos style):
+        // images keep their real shape and pack into justified rows (a wide
+        // shot + a portrait, then three portraits on the next line). Tapping
+        // one zooms it IN PLACE over the page (the same no-scrim mood-board
+        // zoom) — no Lightbox page. Legacy entries only stored a count, so
+        // keep the badge fallback below. orEmpty() guards legacy Gson blobs
+        // where the imageUris field is absent (missing Kotlin-default fields
+        // decode to null, not default).
         val attachedUris = data.imageUris.orEmpty()
         if (attachedUris.isNotEmpty()) {
-            // v7.19 — scale + pan animate inside [MoodBoardZoomOverlay] now
-            // (call-site springs removed; close uses a fast tween).
-            val imageZoom = rememberMoodBoardZoomState()
-            BoxWithConstraints(
-                modifier = Modifier.fillMaxWidth().height(if (attachedUris.size == 1) 280.dp else 240.dp)
-            ) {
-                // This Compose version's BoxWithConstraintsScope is NOT a
-                // Density (maxWidth.toPx() doesn't resolve), and its
-                // maxWidth/maxHeight aren't reachable inside the Row lambda
-                // (implicit receiver is RowScope there) — so capture the box
-                // size as Dp here and convert px via LocalDensity explicitly.
-                val density = LocalDensity.current
-                val boxMaxWidth = maxWidth
-                val boxMaxHeight = maxHeight
-                // A single image goes full-width (proper landscape view);
-                // multiple images are 170.dp tiles in the scrollable strip.
-                val singleImage = attachedUris.size == 1
-                val tileSize = 170.dp
-                val tileW = if (singleImage) with(density) { boxMaxWidth.toPx() }
-                else with(density) { tileSize.toPx() }
-                val tileH = if (singleImage) with(density) { boxMaxHeight.toPx() }
-                else with(density) { tileSize.toPx() }
-                val viewW = with(density) { boxMaxWidth.toPx() }
-                val viewH = with(density) { boxMaxHeight.toPx() }
-                val scrollState = rememberScrollState()
-                Row(
-                    modifier = Modifier.fillMaxSize().horizontalScroll(scrollState),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    attachedUris.forEachIndexed { idx, uri ->
-                        Surface(
-                            onClick = {
-                                // v7.24 — report the tile's VIEWPORT spot so
-                                // the image glides from exactly where it sits
-                                // (scroll offset applied) to the strip's
-                                // center. Single full-width images sit at 0.
-                                val viewportX = if (singleImage) 0f
-                                else idx * (tileW + with(density) { 8.dp.toPx() }) - scrollState.value
-                                imageZoom.zoomIn(
-                                    uri,
-                                    centerX = viewportX + tileW / 2f,
-                                    centerY = tileH / 2f,
-                                    tileW = tileW,
-                                    tileH = tileH,
-                                    viewW = viewW,
-                                    viewH = viewH
-                                )
-                            },
-                            shape = RoundedCornerShape(16.dp),
-                            shadowElevation = 0.dp,
-                            modifier = Modifier.size(
-                                if (singleImage) boxMaxWidth else tileSize,
-                                if (singleImage) boxMaxHeight else tileSize
-                            )
-                        ) {
-                            Image(
-                                painter = rememberAsyncImagePainter(uri),
-                                contentDescription = "Attached image",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
-                }
-                // In-place zoom overlay — LAST child of the box (same as the
-                // saved mood board): glides the tapped image from its spot to
-                // the strip's center (arc), pinch/pan refine, tap closes.
-                attachedUris.firstOrNull { it == imageZoom.zoomedUri }?.let { uri ->
-                    MoodBoardZoomOverlay(
-                        zoomState = imageZoom,
-                        tileUri = uri,
-                        tileX = if (singleImage) 0f
-                            else attachedUris.indexOf(uri) * (tileW + with(density) { 8.dp.toPx() }) - scrollState.value,
-                        tileY = 0f,
-                        widthPx = tileW,
-                        heightPx = tileH,
-                        viewW = viewW,
-                        viewH = viewH
-                    )
-                }
-            }
+            AdaptiveImageGallery(
+                uris = attachedUris,
+                modifier = Modifier.fillMaxWidth()
+            )
         } else if (data.imageCount > 0) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
@@ -2192,41 +2113,15 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
 
         // ── Attachments — gallery images + optional voice note ─────────
         // (orEmpty() guards legacy blobs where imageUris is absent.)
-        // ALL attached images show in a scrollable strip — the journal can
-        // hold up to 6 now, and a fixed-width tile lets them all be seen
-        // (the old weight row silently dropped everything past 3).
+        // v7.36 — adaptive aspect-ratio gallery (Google-Photos style) with
+        // in-place zoom — no Lightbox page, no dark scrim — matching the
+        // other formats. ALL images show; none get dropped.
         val attachedUris = data.imageUris.orEmpty()
         if (attachedUris.isNotEmpty()) {
-            // A lone image goes full-width (proper landscape view, matching
-            // Reel Notes); multiple images are fixed tiles in the scrollable
-            // strip so all of them are reachable (the old weight row
-            // silently dropped anything past 3).
-            val singleImage = attachedUris.size == 1
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())
-            ) {
-                attachedUris.forEach { uri ->
-                    Surface(
-                        onClick = {
-                            navController.navigate(CurioRoutes.lightbox(uri)) {
-                                launchSingleTop = true
-                            }
-                        },
-                        shape = RoundedCornerShape(16.dp),
-                        shadowElevation = 0.dp,
-                        modifier = if (singleImage) Modifier.fillMaxWidth().height(280.dp)
-                                   else Modifier.size(150.dp, 120.dp)
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(uri),
-                            contentDescription = "Open image",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxSize().padding(4.dp)
-                        )
-                    }
-                }
-            }
+            AdaptiveImageGallery(
+                uris = attachedUris,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
         if (!data.audioFilePath.isNullOrBlank()) {
             AudioPlayerBar(
@@ -3181,23 +3076,12 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
             }
         }
         if (data.imageUris.isNotEmpty()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                data.imageUris.take(3).forEach { uri ->
-                    Surface(
-                        onClick = { navController.navigate(CurioRoutes.lightbox(uri)) { launchSingleTop = true } },
-                        shape = RoundedCornerShape(16.dp),
-                        shadowElevation = 0.dp,
-                        modifier = Modifier.weight(1f).height(120.dp)
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(uri),
-                            contentDescription = "Open image",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxSize().padding(4.dp)
-                        )
-                    }
-                }
-            }
+            // v7.36 — adaptive aspect-ratio gallery with in-place zoom (no
+            // Lightbox page, no dark scrim), showing ALL images.
+            AdaptiveImageGallery(
+                uris = data.imageUris,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
