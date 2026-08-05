@@ -20,7 +20,12 @@ If you understand the user's request less than ~80%, **ask for confirmation
 before doing anything**. Do not guess, do not assume, do not pick the most
 plausible interpretation and run with it. A wrong guess wastes a full cycle
 (edit → review → commit → push → CI → revert) and can ship an unwanted
-change. When in doubt, use the ask_user tool to clarify the request, and
+change.
+
+**Durable user preference:** Before removing an existing feature, behavior,
+UI element, or code path, ask the user for confirmation first. Refinements
+may change implementation details only when the existing user-visible
+behavior is preserved; if removal is part of the proposed fix, pause and ask. When in doubt, use the ask_user tool to clarify the request, and
 only proceed once the user confirms.
 
 This rule covers ambiguous phrasing, missing context, conflicting

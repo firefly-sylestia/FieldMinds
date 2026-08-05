@@ -92,8 +92,10 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.isCurioDarkTheme
+import com.curio.app.ui.theme.fromHsl
 import com.curio.app.ui.theme.pastelAccent
 import com.curio.app.ui.theme.pastelFillInk
+import com.curio.app.ui.theme.toHsl
 import com.curio.app.ui.theme.themedAccent
 import kotlin.random.Random
 import kotlinx.coroutines.delay
@@ -234,7 +236,10 @@ fun HomeScreen(navController: NavController) {
             // the airy rose-wood pastel twin, otherwise the calm base.
             val accent = CurioColors.HomeRosewood
             val heroFill = homeRoseAccent()
-            val questInk = pastelFillInk(accent)
+            // Use the actual pastel fill as the ink source too, so the
+            // cleaner pink-rose hue carries through the greeting, stat icons
+            // and hero watermark instead of falling back to a brown raw accent.
+            val questInk = pastelFillInk(heroFill)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -426,13 +431,19 @@ fun HomeScreen(navController: NavController) {
                             if (pickMix) all.shuffled().take(2 + Random.nextInt(2))
                             else listOf(all.random())
                         AppPreferences.setLastSpinCategories(context, chosen.map { it.id })
-                        // Use the existing parameterized Spin route for this
-                        // fresh deck. A plain tab route restores its saved
-                        // composition, which can leave an already-open Spin
-                        // screen showing the previous deck after this tap.
-                        navController.navigateToTab(
+                        // Keep the random single/mix selection intact, but
+                        // bypass the generic tab restore here. Restoring a
+                        // previous Spin composition can hide this newly chosen
+                        // deck and make every tap look like the same category.
+                        navController.navigate(
                             CurioRoutes.spinWithCategories(chosen.map { it.id.routeSlug })
-                        )
+                        ) {
+                            popUpTo(CurioRoutes.HOME) { saveState = true }
+                            // This is an explicit fresh shuffle, so even an
+                            // identical random draw must create a new deck.
+                            launchSingleTop = false
+                            restoreState = false
+                        }
                     }
                 )
             }
@@ -676,7 +687,7 @@ fun HomeScreen(navController: NavController) {
             val stickyDark = isCurioDarkTheme()
             // Re-resolve the hero ink here — the original questInk lives in
             // the scroll Column's scope; the sticky bar is OUTSIDE it.
-            val stickyInk = pastelFillInk(CurioColors.HomeRosewood)
+            val stickyInk = pastelFillInk(homeRoseAccent())
             val frostBg = if (stickyDark) Color(0xE623242C) else Color.White.copy(alpha = 0.80f)
             val frostRim = if (stickyDark) Color.White.copy(alpha = 0.28f) else Color.White.copy(alpha = 0.75f)
             val frostIcon = if (stickyDark) Color.White.copy(alpha = 0.92f) else stickyInk
@@ -1080,7 +1091,16 @@ private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = captured
 @Composable
 private fun homeRoseAccent(): Color =
     if (AppPreferences.pastelColorsState) {
-        pastelAccent(CurioColors.HomeRosewood, isCurioDarkTheme())
+        // Home keeps its own softer rose treatment: nudge the rosewood hue
+        // toward pink and lift it slightly so the pastel reads clean and airy,
+        // not brown or terracotta. Other category pastels stay unchanged.
+        val base = toHsl(CurioColors.HomeRosewood)
+        val pinkHue = (base.h - 15f + 360f) % 360f
+        if (isCurioDarkTheme()) {
+            fromHsl(pinkHue, (base.s * 0.55f).coerceIn(0f, 0.55f), 0.42f)
+        } else {
+            fromHsl(pinkHue, (base.s * 0.84f).coerceIn(0f, 0.72f), 0.82f)
+        }
     } else {
         CurioColors.HomeRosewood
     }
