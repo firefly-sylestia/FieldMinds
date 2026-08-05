@@ -273,40 +273,12 @@ fun TopicRevealScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    /** Starts a timed explore session, opens the Google search, back to Home. */
-    fun startExploreSession(topic: CurioTopic) {
-        engaged = true
-        // Engaging for real — record as recently-explored and clear any
-        // recently-unexplored entry. recordExplored tags the row "Resumed"
-        // when the user came back to a topic they'd left.
-        ExploreSessionStore.recordExplored(context, cat.id, topic.name)
-        ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
-        val action = topic.exploreAction
-        val session = ExploreSession(
-            categoryId = cat.id,
-            topicName = topic.name,
-            subtype = topic.subtype,
-            verb = action.verb,
-            targetName = action.targetName,
-            durationMinutes = action.durationMinutes,
-            instruction = action.instruction,
-            searchUrl = buildExploreSearchUrl(topic),
-            startMillis = System.currentTimeMillis()
-        )
-        // Starting a new explore while another session is running would
-        // silently discard it — ask first instead (Save for later / Explore
-        // now). Same-topic restarts are allowed to proceed straight through.
-        val active = ExploreSessionStore.getActiveSession(context)
-        if (active != null && active.topicName != topic.name) {
-            conflictActiveSession = active
-            pendingConflictSession = session
-            showConflictDialog = true
-            return
-        }
-        beginExploreSession(session)
-    }
-
-    /** Starts [session] once the conflict check has passed. */
+    /**
+     * Starts [session] once the conflict check has passed. Declared BEFORE
+     * startExploreSession because Kotlin local functions are scoped from
+     * their declaration point onward — a forward reference from
+     * startExploreSession would be an unresolved reference at compile time.
+     */
     fun beginExploreSession(session: ExploreSession) {
         if (AppPreferences.isExploreSessionsEnabled(context)) {
             ExploreSessionStore.startSession(context, session)
@@ -347,6 +319,39 @@ fun TopicRevealScreen(
             ExploreSessionService.start(context, session)
         }
         openExploreBrowserAndGoHome(session)
+    }
+
+    /** Starts a timed explore session, opens the Google search, back to Home. */
+    fun startExploreSession(topic: CurioTopic) {
+        engaged = true
+        // Engaging for real — record as recently-explored and clear any
+        // recently-unexplored entry. recordExplored tags the row "Resumed"
+        // when the user came back to a topic they'd left.
+        ExploreSessionStore.recordExplored(context, cat.id, topic.name)
+        ExploreSessionStore.removeUnexplored(context, cat.id, topic.name)
+        val action = topic.exploreAction
+        val session = ExploreSession(
+            categoryId = cat.id,
+            topicName = topic.name,
+            subtype = topic.subtype,
+            verb = action.verb,
+            targetName = action.targetName,
+            durationMinutes = action.durationMinutes,
+            instruction = action.instruction,
+            searchUrl = buildExploreSearchUrl(topic),
+            startMillis = System.currentTimeMillis()
+        )
+        // Starting a new explore while another session is running would
+        // silently discard it — ask first instead (Save for later / Explore
+        // now). Same-topic restarts are allowed to proceed straight through.
+        val active = ExploreSessionStore.getActiveSession(context)
+        if (active != null && active.topicName != topic.name) {
+            conflictActiveSession = active
+            pendingConflictSession = session
+            showConflictDialog = true
+            return
+        }
+        beginExploreSession(session)
     }
 
     Box(

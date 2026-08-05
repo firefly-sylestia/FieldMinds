@@ -2,6 +2,46 @@
 
 ## Latest Request (COMPLETED)
 
+**Fix CI compile failure — unresolved local function beginExploreSession**
+
+### What was requested
+
+CI `:app:compileDebugKotlin` failed with
+`TopicRevealScreen.kt:306:9 Unresolved reference 'beginExploreSession'`.
+
+### Root cause
+
+Kotlin local functions are scoped from their declaration point onward — a
+local function cannot call another local function declared LATER in the
+same block (unlike class members, which are order-independent).
+`startExploreSession` (declared first) called `beginExploreSession` whose
+definition sat after it, so the call was an unresolved reference. Every CI
+run since the conflict-dialog feature landed failed at compile; the earlier
+lint log was from a pre-feature run.
+
+### What changed
+
+- `TopicRevealScreen.kt` — moved the `beginExploreSession` definition
+  ABOVE `startExploreSession` so the call chain is strictly
+  declaration-before-use: openExploreBrowserAndGoHome (194) →
+  continueExploreFlow (243) → beginExploreSession (282) →
+  startExploreSession (325). Added a KDoc note explaining the ordering
+  requirement so a future edit doesn't reintroduce the bug.
+
+### Validation
+
+- Verified every local-function caller sits after its declaration (callers
+  at 217/251/321/354/635/669/679/717/788).
+- `scripts/check_braces.py` passed for all four feature files.
+- `git diff --check` passed.
+- Code review confirmed the reorder and that the other queued-session files
+  (ExploreSession.kt object members, HomeScreen.kt top-level composable,
+  AppPreferences.kt clearQueued) hold no similar ordering hazard.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Fix CI lint failure — NonObservableLocale in EntryDetailScreen**
 
 ### What was requested
