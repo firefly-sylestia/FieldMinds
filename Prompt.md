@@ -2,69 +2,24 @@
 
 ## Latest Request (COMPLETED)
 
-**Improve readability of small text on the detail screen**
+**Redesign the normal paper style with optional rounded top edges and hero-style torn bottoms**
 
 ### What was requested
 
-Some of the smaller labels and secondary text on the detail screen were hard to read. Improve their colors without changing the screen structure or removing any existing behavior.
+Redesign the normal ruled paper so its top edges can be rounded as a selectable paper-style option. Give the bottom edge the same broad, soft tear language used by the hero card, and add a matching torn paper backing/background beneath it.
 
 ### What changed
 
-- `EntryDetailScreen.kt`: strengthened small neutral metadata and captions to full theme-aware `onSurface` where appropriate.
-- `EntryDetailScreen.kt`: switched small text on category-tinted surfaces to `categoryInk()` so it remains readable in light, dark, and pastel modes. This covers entry chips, voice-note subtitles/actions, playback time, review/image states, restored FieldMind metadata, tags, species text, and OpenNotebook format labels.
-- Preserved dedicated hero-card ink, category fills, and paper-note ink rather than applying a blanket color replacement.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: added the user-visible readability fix.
+- `CaptureData.kt`: extended the persisted `NotePaperStyle` enum with rounded-top combinations for ruled and temporary torn selections, preserving the choice when switching paper bases.
+- `PaperCard.kt`: normal paper now uses a seeded hero-style soft torn bottom path, optional rounded top corners, and a matching `SoftTornSheetShape` backing lip. Existing rules, coffee stains, folded dog-ear, red margin, colors, rotation, and content padding remain supported.
+- `PaperCard.kt`: added a `+ Rounded top` style-picker option for non-torn paper and threaded the flag through all style combinations.
+- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: added the user-visible paper redesign entry.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
+- `scripts/check_braces.py` passed for `PaperCard.kt` and `CaptureData.kt`.
 - `git diff --check` passed.
-- Static searches confirmed no reduced-alpha `onSurfaceVariant` text remains in the detail screen and the remaining category fills/icons are intentional.
-- Code review found no actionable issues.
-- Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
-- Ready to commit and push.
-
-## Previous Request (COMPLETED)
-
-**Remove the detail title background and simplify the Spin header**
-
-### What was requested
-
-The detail screen title should use plain white text with no title background. The Spin page should no longer show its Wildcard/category header, topic count, or back button.
-
-### What changed
-
-- `EntryDetailScreen.kt`: removed the title plate, gradient, border, and related color calculations; the topic title is now a centered plain white ExtraBold text.
-- `SpinScreen.kt`: removed the Spin header composable, including the category/Wildcard label, count, and back button. The fit calculation no longer reserves space for the deleted header, and stale top-bar comments were updated.
-
-### Validation
-
-- `scripts/check_braces.py` passed for both edited Kotlin files.
-- `git diff --check` passed.
-- Static assertions confirmed the removed header/title symbols are absent and the plain white title remains.
-- Code review found no functional issues.
-- Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
-- Ready to commit and push.
-
-## Previous Request (COMPLETED)
-
-**Fix the Home menu/profile circular visual glitch and use a proper color fade**
-
-### What was requested
-
-The Home sticky menu and profile buttons showed a circular visual artifact during their transition. Both controls and their shapes were preserved, while the circular click indication was removed and the hero-to-frost colors were changed to a smooth fade.
-
-### What changed
-
-- `HomeScreen.kt`: replaced the sticky pills' default Material ripple interaction with a regular `clickable` using `indication = null`, so no expanding circular highlight is drawn over the menu/profile shapes.
-- `HomeScreen.kt`: added short tweened `animateColorAsState` transitions for the pill background, rim, and icon colors. Scroll still determines the target hero/frost colors, but the rendered colors now fade cleanly rather than changing through a circular-looking transition.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: added the user-visible fix summary.
-
-### Validation
-
-- `scripts/check_braces.py` passed for `HomeScreen.kt`.
-- `git diff --check` passed.
-- Static assertions confirmed the color animations, ripple removal, retained click callback, and required imports.
-- Code review found no actionable issues.
+- Static generation check confirmed every combination produced by `notePaperStyleOf` exists in `NotePaperStyle` (52 enum values; no missing names).
+- Code review feedback was addressed: missing imports and brace nesting were fixed, the rounded preference is preserved through Ruled/Torn switching, and the backing lip is layered with reserved space.
 - Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
 - Ready to commit and push.

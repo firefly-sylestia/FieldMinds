@@ -16,7 +16,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -31,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -91,9 +95,10 @@ fun PaperCard(
     modifier: Modifier = Modifier,
     ruled: Boolean = true,
     rotation: Float = 0f,
-    // v7.16 — normal paper is SHARP-edged (a real cut sheet), not rounded.
-    // The folded style keeps its diagonal dog-ear; the other corners stay
-    // square to match.
+    // v7.30 — normal paper now keeps the hero's soft torn bottom seam.
+    // [roundedTop] is the selectable normal-paper option for rounded top
+    // edges; [corner] remains a compatibility inset for quote callers.
+    roundedTop: Boolean = false,
     corner: Dp = 0.dp,
     paperColor: NotePaperColor = NotePaperColor.CREAM,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
@@ -139,16 +144,37 @@ fun PaperCard(
         ) else contentPadding.calculateRightPadding(LayoutDirection.Ltr),
         bottom = contentPadding.calculateBottomPadding()
     )
-    val shape = remember(corner, folded) {
-        if (folded) FoldedCornerShape(corner, 26.dp) else RoundedCornerShape(corner)
+    // Normal sheets share the hero's broad, rounded tear at the bottom. A
+    // separate backing lip sits behind the front sheet so the bite marks read
+    // as layered paper instead of a clipped decorative line.
+    val tearSeed = remember { Random.nextInt(1, 1_000_000) }
+    val topCorner = if (roundedTop) maxOf(corner, 16.dp) else corner
+    val shape = remember(tearSeed, topCorner, folded) {
+        NormalPaperShape(tearSeed, topCorner, folded)
     }
-    Surface(
-        shape = shape,
-        color = notePaperSurface(paperColor),
-        shadowElevation = 1.dp,
-        border = BorderStroke(1.dp, notePaperBorder(paperColor)),
+    val backingShape = remember(tearSeed) {
+        SoftTornSheetShape(tearSeed, lip = 10.dp, baseline = 14.dp)
+    }
+    Box(
         modifier = modifier.heightIn(min = minHeight).rotate(rotation)
     ) {
+        // Paint the backing first so the front page covers its upper edge.
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .offset(y = 4.dp)
+                .clip(backingShape)
+                .background(notePaperSurface(paperColor))
+        )
+        Surface(
+            shape = shape,
+            color = notePaperSurface(paperColor),
+            shadowElevation = 1.dp,
+            border = BorderStroke(1.dp, notePaperBorder(paperColor)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = minHeight)
+        ) {
         Box(
             // Subtle rigid-card sheen — a whisper of top light + bottom
             // depth so the slip reads as stiff paper stock, not a flat fill.
@@ -219,6 +245,18 @@ fun PaperCard(
                 }
             }
         }
+        // Keep the lip as a separate measured layer below the sheet. It is
+        // composed after the sheet in source order only because its negative
+        // offset tucks it under the front surface visually; the front page
+        // remains opaque over the shared tear seam.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(18.dp)
+                .offset(y = (-8).dp)
+                .clip(backingShape)
+                .background(notePaperSurface(paperColor))
+        )
     }
 }
 
@@ -279,6 +317,10 @@ val NotePaperStyle.folded: Boolean
 val NotePaperStyle.redMargin: Boolean
     get() = name.contains("RED_MARGIN")
 
+/** True when normal paper rounds both top corners while keeping its torn bottom. */
+val NotePaperStyle.roundedTop: Boolean
+    get() = name.contains("ROUNDED_TOP")
+
 /**
  * Re-encodes a (base + decorations) combination into its [NotePaperStyle]
  * value by composing the enum NAME from its parts. v7.18 — decorations
@@ -294,12 +336,14 @@ fun notePaperStyleOf(
     ruled: Boolean,
     coffee: Boolean = false,
     folded: Boolean = false,
-    redMargin: Boolean = false
+    redMargin: Boolean = false,
+    roundedTop: Boolean = false
 ): NotePaperStyle {
     val deco = buildString {
         if (coffee) append("_COFFEE")
         if (folded) append("_FOLDED")
         if (redMargin) append("_RED_MARGIN")
+        if (roundedTop) append("_ROUNDED_TOP")
     }
     val name = when {
         !torn -> if (deco.isEmpty()) "RULED" else deco.trimStart('_')
@@ -391,44 +435,82 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawPaperTexture(
  * Deterministic pure function of (size, corner, fold) — stable across
  * recompositions, so typing never re-folds the page.
  */
-private class FoldedCornerShape(
-    private val corner: Dp,
-    private val fold: Dp
+private class NormalPaperShape(
+    private val seed: Int,
+    private val topCorner: Dp,
+    private val folded: Boolean
 ) : Shape {
+    private var cachedSize: Size? = null
+    private var cachedOutline: Outline? = null
+
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val c = with(density) { corner.toPx() }
-        val f = with(density) { fold.toPx() }
-        val w = size.width
-        val h = size.height
-        val path = Path().apply {
-            if (w <= 0f || h <= 0f) {
-                moveTo(0f, 0f); lineTo(w, 0f); lineTo(w, h); lineTo(0f, h); close()
-                return@apply
-            }
-            // Clockwise from the top edge: rounded top-left, straight top
-            // to the fold, diagonal cut, straight right, then the two
-            // remaining rounded corners.
-            moveTo(c, 0f)
-            // Top-left corner (rounded).
-            cubicTo(0f, 0f, 0f, c, 0f, c)
-            // Left edge down to the bottom-left corner.
-            lineTo(0f, h - c)
-            cubicTo(0f, h, c, h, c, h)
-            // Bottom edge to the bottom-right corner.
-            lineTo(w - c, h)
-            cubicTo(w, h, w, h - c, w, h - c)
-            // Right edge up to the fold's lower point.
-            lineTo(w, f)
-            // The diagonal cut — the dog-ear crease.
-            lineTo(w - f, 0f)
-            close()
+        cachedOutline?.let { cached ->
+            if (cachedSize == size) return cached
         }
-        return Outline.Generic(path)
+        val outline = Outline.Generic(buildNormalPaperPath(seed, size, density, topCorner, folded))
+        cachedSize = size
+        cachedOutline = outline
+        return outline
     }
+}
+
+private fun buildNormalPaperPath(
+    seed: Int,
+    size: Size,
+    density: Density,
+    topCorner: Dp,
+    folded: Boolean
+): Path {
+    val w = size.width
+    val h = size.height
+    val path = Path()
+    if (w <= 0f || h <= 0f) {
+        path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
+        return path
+    }
+    val corner = with(density) { topCorner.toPx() }.coerceIn(0f, minOf(w, h) / 2f)
+    val fold = with(density) { 26.dp.toPx() }.coerceIn(0f, minOf(w, h) / 2f)
+    val tear = SoftTearParams(seed, density)
+    val step = with(density) { 4.dp.toPx() }
+
+    // Top-left rounded corner, straight top, optional dog-ear, straight
+    // right side, then the hero-style soft tear from right to left.
+    if (corner > 0f) {
+        path.moveTo(corner, 0f)
+        path.cubicTo(0f, 0f, 0f, corner, 0f, corner)
+    } else {
+        path.moveTo(0f, 0f)
+    }
+    if (folded) {
+        path.lineTo(w - fold, 0f)
+        path.lineTo(w, fold)
+        path.lineTo(w, h + tear.disp(w, w))
+    } else {
+        path.lineTo(w - corner, 0f)
+        if (corner > 0f) {
+            path.cubicTo(w, 0f, w, corner, w, corner)
+        } else {
+            path.lineTo(w, 0f)
+        }
+        path.lineTo(w, h + tear.disp(w, w))
+    }
+    var x = w - step
+    while (x > 0f) {
+        path.lineTo(x, h + tear.disp(x, w))
+        x -= step
+    }
+    path.lineTo(0f, h + tear.disp(0f, w))
+    if (corner > 0f) {
+        path.lineTo(0f, corner)
+    } else {
+        path.lineTo(0f, 0f)
+    }
+    path.close()
+    return path
 }
 
 /**
@@ -1338,6 +1420,7 @@ fun NotePaperCard(
             modifier = modifier.heightIn(min = minHeight),
             ruled = if (style == NotePaperStyle.RULED) ruled else true,
             rotation = rotation,
+            roundedTop = style.roundedTop,
             corner = corner,
             paperColor = paperColor,
             contentPadding = contentPadding,
@@ -1380,10 +1463,24 @@ fun NotePaperStyleToggle(
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             CompactPaperChip("Ruled", !style.torn, accent, enabled) {
-                onStyleChange(notePaperStyleOf(false, true, style.coffee, style.folded, style.redMargin))
+                onStyleChange(notePaperStyleOf(
+                    torn = false,
+                    ruled = true,
+                    coffee = style.coffee,
+                    folded = style.folded,
+                    redMargin = style.redMargin,
+                    roundedTop = style.roundedTop
+                ))
             }
             CompactPaperChip("Torn", style.torn, accent, enabled) {
-                onStyleChange(notePaperStyleOf(true, style.ruled, style.coffee, style.folded, style.redMargin))
+                onStyleChange(notePaperStyleOf(
+                    torn = true,
+                    ruled = style.ruled,
+                    coffee = style.coffee,
+                    folded = style.folded,
+                    redMargin = style.redMargin,
+                    roundedTop = style.roundedTop
+                ))
             }
         }
         // Row 2 — UNIVERSAL decorations: the same chips apply to both bases.
@@ -1395,7 +1492,14 @@ fun NotePaperStyleToggle(
                 // Rules only matter on the torn slip — the ruled page is
                 // always ruled by definition.
                 CompactPaperChip("+ Rules", style.ruled, accent, enabled) {
-                    onStyleChange(notePaperStyleOf(true, !style.ruled, style.coffee, style.folded, style.redMargin))
+                    onStyleChange(notePaperStyleOf(
+                        torn = true,
+                        ruled = !style.ruled,
+                        coffee = style.coffee,
+                        folded = style.folded,
+                        redMargin = style.redMargin,
+                        roundedTop = style.roundedTop
+                    ))
                 }
             }
             // Independent STACKABLE toggles (v7.18) — each chip flips ONLY
@@ -1406,7 +1510,8 @@ fun NotePaperStyleToggle(
                     style.torn, style.ruled,
                     coffee = !style.coffee,
                     folded = style.folded,
-                    redMargin = style.redMargin
+                    redMargin = style.redMargin,
+                    roundedTop = style.roundedTop
                 ))
             }
             CompactPaperChip("+ Folded", style.folded, accent, enabled) {
@@ -1414,7 +1519,8 @@ fun NotePaperStyleToggle(
                     style.torn, style.ruled,
                     coffee = style.coffee,
                     folded = !style.folded,
-                    redMargin = style.redMargin
+                    redMargin = style.redMargin,
+                    roundedTop = style.roundedTop
                 ))
             }
             CompactPaperChip("+ Red Margin", style.redMargin, accent, enabled) {
@@ -1422,8 +1528,21 @@ fun NotePaperStyleToggle(
                     style.torn, style.ruled,
                     coffee = style.coffee,
                     folded = style.folded,
-                    redMargin = !style.redMargin
+                    redMargin = !style.redMargin,
+                    roundedTop = style.roundedTop
                 ))
+            }
+            if (!style.torn) {
+                CompactPaperChip("+ Rounded top", style.roundedTop, accent, enabled) {
+                    onStyleChange(notePaperStyleOf(
+                        torn = false,
+                        ruled = true,
+                        coffee = style.coffee,
+                        folded = style.folded,
+                        redMargin = style.redMargin,
+                        roundedTop = !style.roundedTop
+                    ))
+                }
             }
         }
     }
