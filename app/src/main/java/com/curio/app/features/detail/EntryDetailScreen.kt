@@ -77,6 +77,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -367,33 +368,53 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Title — the topic name on a TRANSPARENT glass pane.
-                    // The letters are crisp ExtraBold geom in the hero ink
-                    // (no gradient inside the glyphs); the pane behind them is
-                    // a translucent tint + hairline rim — the same transparent
-                    // glass pill language as the Home hero's top-bar controls
-                    // — so the banner color shows straight through the plate
-                    // with NO blur.
+                    // ── Title — the topic name in WHITE on a soft glass band.
+                    // The letters are crisp ExtraBold geom in pure white (the
+                    // classic hero title, in every theme — pastel mode used to
+                    // flip them to the accent ink). The pane behind them is a
+                    // gentle vertical gradient: a light frost at the top that
+                    // deepens into the banner's own color at the bottom — a
+                    // little gradient with the background color, so the title
+                    // sits on a subtle color band instead of a flat tint, with
+                    // NO blur.
+                    // Both stops carry the banner color (top: a soft tinted
+                    // frost, bottom: the deepened band) so white letters stay
+                    // readable across the WHOLE pill — a two-line title's
+                    // first line sits on the tinted top, not bare banner.
+                    val titlePaneGradient = Brush.verticalGradient(
+                        listOf(
+                            lerp(heroStart, Color.Black, 0.10f).copy(alpha = 0.30f),
+                            lerp(heroStart, Color.Black, 0.30f).copy(alpha = 0.60f)
+                        )
+                    )
                     Surface(
                         shape = RoundedCornerShape(20.dp),
-                        // 18% — strong enough that the pane still READS as a
-                        // card on an airy pastel banner, transparent enough
-                        // that the banner color shows straight through.
-                        color = heroInk.copy(alpha = 0.18f),
-                        border = BorderStroke(1.dp, heroInk.copy(alpha = 0.26f)),
+                        color = Color.Transparent,
+                        border = BorderStroke(1.dp, heroInk.copy(alpha = 0.30f)),
                         shadowElevation = 0.dp
                     ) {
-                        Text(
-                            text = resolvedEntry.topic.name,
-                            style = MaterialTheme.typography.headlineMedium.copy(
-                                fontWeight = FontWeight.ExtraBold
-                            ),
-                            color = heroInk,
-                            textAlign = TextAlign.Center,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
-                        )
+                        // The gradient must wear the pill's rounded shape
+                        // itself — Surface does not clip its content, so a
+                        // plain background() would bleed square corners past
+                        // the rounded rim.
+                        Box(
+                            modifier = Modifier.background(
+                                titlePaneGradient,
+                                RoundedCornerShape(20.dp)
+                            )
+                        ) {
+                            Text(
+                                text = resolvedEntry.topic.name,
+                                style = MaterialTheme.typography.headlineMedium.copy(
+                                    fontWeight = FontWeight.ExtraBold
+                                ),
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
+                            )
+                        }
                     }
                     Spacer(Modifier.height(18.dp))
 

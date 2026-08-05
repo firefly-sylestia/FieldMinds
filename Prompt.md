@@ -2,6 +2,46 @@
 
 ## Latest Request (COMPLETED)
 
+**Detail hero title white + gradient pill with the background color**
+
+### What was requested
+
+"Make the detail screen title color white and make that card a little
+gradient style with the background color."
+
+### What changed (`EntryDetailScreen.kt`)
+
+- **Title color** → `Color.White` always. Previously the title used
+  `heroInk` (`cat.onAccent()`), which is white in non-pastel but the
+  ACCENT ink in pastel light mode — and pastel is the shipped default, so
+  most users saw a colored title. Now it's the classic white hero title in
+  every theme.
+- **Title pill** → from a flat translucent tint to a soft glass band: the
+  `Surface` is now transparent with a hairline rim (`heroInk` 30%) and
+  wraps a Box whose background is `Brush.verticalGradient` built from the
+  BANNER's own color — top `lerp(heroStart, Black, 0.10f)@0.30` (soft
+  tinted frost) → bottom `lerp(heroStart, Black, 0.30f)@0.60` (deepened
+  color band) — with the rounded shape applied to the background itself
+  (Surface doesn't clip content). Both stops carry the banner color so a
+  two-line title's first line sits on the tinted band, not bare banner
+  (reviewer's pastel-light readability note — the first draft's `heroInk`
+  16% top stop was nearly invisible on airy pastel banners).
+- Added the missing `androidx.compose.ui.graphics.lerp` import.
+
+### Validation
+
+- `scripts/check_braces.py` passed; `git diff --check` clean; import
+  audit clean (`lerp` 2 = import + 1 use, `Brush` still used elsewhere,
+  `heroInk` still used by the glyph + rim, `heroStart` in scope at the
+  hero).
+- Reviewer approved; its tuning note (weaker top stop on airy pastels)
+  applied via the deepened both-stop gradient.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Previous Request (COMPLETED)
+
 **Cabinet watermark no longer shifts between filter pages**
 
 ### What was requested

@@ -1,3 +1,4 @@
+• The detail title is now classic white lettering on a soft glass band — a gentle gradient that deepens into the banner's own color toward the bottom, in every theme
 • The Cabinet's watermark no longer shifts between filter pages — the glyph scatter stays pinned at the same level whether you're on All, a category or Legacy (the page still tints the background and chips per category)
 • Home's hero got a cleaner hierarchy — the greeting sits on one line with your name beneath it, and the Streak · Cabinet · Recent bar now glows just above the tear on a soft rose gradient pane (the banner's own color, not white)
 • Home's Shuffle deck CTA lives below the hero now — a big solid rose-wood "Shuffle a random deck" button under a proper TODAY'S QUEST eyebrow, and it opens a random category (or a random mix) every tap instead of the whole banner being one big button
