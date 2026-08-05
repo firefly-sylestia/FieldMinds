@@ -46,4 +46,6 @@ palette barely read. The user wants the device palette to dominate.
 - Reviewer verified: compile-safe (`toHsl` still used by pastelAccent /
   lightAccentTint / hslBlend / hslCentroid; `.first()` callers like
   EntryDetailScreen work with 2 stops; contrast guard intact).
-- Changelog + Prompt.md updated. Awaiting review + commit/push.
+- Reviewer raised dark-mode category-distinguishability; addressed with a
+  dark-only sprinkle bump (10%→18%) so the deck/picker keep color-coding.
+- Reviewed, committed, pushed as `56d897e9`. Done.
