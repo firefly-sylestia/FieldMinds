@@ -430,33 +430,35 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         // BoxScope, so matchParentSize must live in an
                         // explicit Box).
                         Box(Modifier.fillMaxWidth()) {
-                            // ── Frosted pane: the HERO's actual gradient
-                            // behind this card (its lower glide band), blurred
-                            // + clipped to the card, sits BEHIND the crisp
-                            // segments. The card lives in the banner's lower
-                            // zone — the 0.70→1 tail of the hero gradient — so
-                            // sample only that band instead of squeezing the
-                            // full 0→1 ramp into the card (which would read as
-                            // a different gradient).
+                            // ── Frosted pane: just a WHISPER of the hero's
+                            // color — a ~1% blurred bloom of the backdrop
+                            // behind this card (the solid heroStart), clipped
+                            // to the card and sitting BEHIND the crisp
+                            // segments. Strong enough to tie the card to its
+                            // banner, faint enough that the card reads as
+                            // frosty white. (RenderEffect on API 31+;
+                            // software blur below.)
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
-                                    .background(heroStart)
-                                    // Frost: blurring the pane turns the
-                                    // solid color into a soft bloom behind
-                                    // the content. (RenderEffect on API 31+;
-                                    // software blur below.)
+                                    .background(heroStart.copy(alpha = 0.08f))
                                     .blur(18.dp)
                                     .clip(RoundedCornerShape(18.dp))
                             )
-                            // Frosted white glass — the blurred color blooms
-                            // behind stay faintly visible through the pane,
-                            // but the card now reads as WHITE frosted glass
-                            // (no more blue tint) with deep-slate content.
+                            // Frosty white gradient — brighter, cleaner white
+                            // at the top, letting a bare hint (~1% toward the
+                            // bottom edge) of the background color breathe
+                            // through the glass (light passing through real
+                            // frosted glass), with deep-slate content on top.
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
-                                    .background(Color.White.copy(alpha = 0.78f))
+                                    .background(
+                                        Brush.verticalGradient(
+                                            0f to Color.White.copy(alpha = 0.99f),
+                                            1f to Color.White.copy(alpha = 0.94f)
+                                        )
+                                    )
                             )
                             Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),

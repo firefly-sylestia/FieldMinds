@@ -1,3 +1,4 @@
+• The detail hero's Date · Mood · Type bar now wears a frosty white gradient — bright frosted glass at the top with just a faint ~1% hint of the category color breathing through toward the bottom
 • Starting an explore no longer asks for the notification permission when the floating bubble is showing — the bubble carries the timer, so the extra prompt is skipped (it still asks when the bubble can't show)
 • Fixed the floating explore bubble not appearing even with "Display over other apps" allowed — denying the notification permission no longer suppresses the bubble (it only needs the overlay permission), and a restarted process can no longer leave the bubble invisible
 • Mood-board zoom upgrade: any zoomed image can now expand to full screen — tap the expand button (or the chip on saved-board tiles) and the image opens in a full-window viewer where pinch-to-zoom and pan feel natural, even for tiny collage tiles

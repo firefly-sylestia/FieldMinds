@@ -2,6 +2,45 @@
 
 ## Latest Request (COMPLETED)
 
+**Frosty white gradient on the detail hero's Date · Mood · Type card**
+
+### What was requested
+
+The Date · Mood · Type card in the entry detail view should get a frosty
+white gradient background with ~1% color blur of the background color.
+
+### What changed
+
+`EntryDetailScreen.kt` — the hero's frosted Date · Mood · Type card
+background stack (was: a full-strength blurred solid hero color under a
+flat 78% white overlay) is now:
+
+- A **faint blurred color pane** — the hero's solid category color at 8%
+  alpha, blurred 18dp and clipped to the card, so the backdrop blooms
+  through as a ~1% whisper instead of a strong tint.
+- A **frosty white gradient** over it — `Brush.verticalGradient` from
+  White at 99% (top) to White at 94% (bottom): cleaner, brighter frosted
+  glass at the top that lets just a bare hint of the category color
+  breathe through toward the bottom edge, like light passing through real
+  frosted glass.
+
+The deep-slate content ink (`heroCardInk`) is unchanged and stays legible
+on the whiter card. Tuned from an initial draft (78% flat white + 10%
+color → ~12% bleed at the bottom) to match the requested ~1% color blur
+(bottom bleed now ~5-6%, top ~1%).
+
+### Validation
+
+- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
+- `git diff --check` passed.
+- Code review approved the approach; the reviewer's tuning note (bottom
+  edge bleeding ~12% rather than ~1%) was addressed.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Latest Request (COMPLETED)
+
 **Skip the notification-permission dialog when the bubble shows the timer**
 
 ### What was requested
