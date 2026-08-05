@@ -188,6 +188,7 @@ object CurioBackupManager {
      * Gson decodes every JSON number as Double, so the recorded type is what
      * maps it back to the exact Int/Long/Float the app's getters expect.
      */
+    @Suppress("SENSELESS_COMPARISON", "USELESS_ELVIS") // legacy-blob nulls bypass the non-null types
     suspend fun restore(context: Context, uri: Uri): RestoreResult {
         val json = withContext(Dispatchers.IO) {
             context.contentResolver.openInputStream(uri)?.use { input ->

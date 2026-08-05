@@ -1,3 +1,5 @@
+@file:Suppress("UNNECESSARY_SAFE_CALL") // defensive null guards on non-null Gson-decoded fields
+
 package com.curio.app.data
 
 import com.curio.app.data.CaptureFormat

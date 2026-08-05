@@ -317,7 +317,7 @@ fun MarginaliaFormat(
                         try {
                             val path = recorder.stop()
                             audioFilePath = path
-                            audioFileSize = path?.let { java.io.File(it).length() } ?: 0L
+                            audioFileSize = path.let { java.io.File(it).length() }
                         } catch (_: Exception) {
                             audioFilePath = null
                         }

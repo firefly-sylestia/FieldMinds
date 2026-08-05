@@ -602,6 +602,7 @@ object AppPreferences {
      * granted and let the permission prompts re-ask — toggling the special
      * access off/on in the system page resolves the pending state.
      */
+    @Suppress("DEPRECATION") // AppOps has no stable non-deprecated public check API across API levels
     fun overlayActuallyUsable(context: Context): Boolean {
         if (!Settings.canDrawOverlays(context)) return false
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return true

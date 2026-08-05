@@ -536,7 +536,7 @@ private fun buildNormalPaperPath(
         // instead of a mechanical straight diagonal. Both use control point
         // (w - fold * 0.30, fold * 0.30) so the cut and the flap align.
         path.lineTo(w - fold, 0f)
-        path.quadraticBezierTo(w - fold * 0.30f, fold * 0.30f, w, fold)
+        path.quadraticTo(w - fold * 0.30f, fold * 0.30f, w, fold)
         path.lineTo(w, h + tear.disp(w, w))
     } else {
         path.lineTo(w - corner, 0f)
@@ -689,8 +689,8 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCoffeeStains(
             val tipW = with(density) { (0.7f + rnd.nextFloat() * 0.8f).dp.toPx() }
             val dripPath = Path().apply {
                 moveTo(dripStart.x - tipW, dripStart.y)
-                quadraticBezierTo(dripMid.x - tipW * 0.4f, dripMid.y, dripEnd.x, dripEnd.y)
-                quadraticBezierTo(dripMid.x + tipW * 0.4f, dripMid.y, dripStart.x + tipW, dripStart.y)
+                quadraticTo(dripMid.x - tipW * 0.4f, dripMid.y, dripEnd.x, dripEnd.y)
+                quadraticTo(dripMid.x + tipW * 0.4f, dripMid.y, dripStart.x + tipW, dripStart.y)
                 close()
             }
             drawPath(
@@ -764,7 +764,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     // shape's cut so the flap edge sits exactly on the fold line.
     fun crease(): Path = Path().apply {
         moveTo(w - f, 0f)
-        quadraticBezierTo(w - f * 0.30f, f * 0.30f, w, f)
+        quadraticTo(w - f * 0.30f, f * 0.30f, w, f)
     }
     // Feathered drop shadow — an ink-tinted wedge (NOT raw black: on the
     // torn grain and pastel sheets a hard black triangle reads as pasted
@@ -773,7 +773,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     drawPath(
         Path().apply {
             moveTo(w - f - s, s)
-            quadraticBezierTo(w - f * 0.30f - s * 0.7f, f * 0.30f + s * 0.7f, w - s, f + s)
+            quadraticTo(w - f * 0.30f - s * 0.7f, f * 0.30f + s * 0.7f, w - s, f + s)
             lineTo(w - f - s, f + s)
             close()
         },
@@ -794,7 +794,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     // the fold and brightening where the corner curls up.
     val flap = Path().apply {
         moveTo(w - f, 0f)
-        quadraticBezierTo(w - f * 0.30f, f * 0.30f, w, f)
+        quadraticTo(w - f * 0.30f, f * 0.30f, w, f)
         lineTo(w - f, f)
         close()
     }
@@ -816,7 +816,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFoldFlap(
     drawPath(
         Path().apply {
             moveTo(w - f + s * 1.3f, s * 0.6f)
-            quadraticBezierTo(w - f * 0.30f + s * 1.2f, f * 0.30f - s * 0.4f, w - s * 0.6f, f - s * 0.7f)
+            quadraticTo(w - f * 0.30f + s * 1.2f, f * 0.30f - s * 0.4f, w - s * 0.6f, f - s * 0.7f)
         },
         color = Color.White.copy(alpha = 0.15f),
         style = Stroke(width = with(density) { 1.4.dp.toPx() })

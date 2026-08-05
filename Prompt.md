@@ -48,3 +48,49 @@ when zoomed in. The tap classifier became threshold-consistent
 lands in pinchX/pinchY — tap-to-close still works. Reviewer verified
 single-finger zoomChange is always 1f (no creep) and pan clamps to 0 at
 base zoom. Committed + pushed.
+
+## Follow-up (v7.41) — overlay pill never shows (real root cause) + warning cleanup
+
+### Overlay pill: root-caused from user logcat
+`app/logcat.txt` showed the REAL reason the floating pill never appears:
+
+    E/ExploreSessionService: Unable to create overlay Compose owners; using notification only
+    java.lang.IllegalStateException: You can 'consumeRestoredStateForKey' only after the
+    corresponding component has moved to the 'CREATED' state
+        at ExploreSessionService$OverlayOwner.<init>(ExploreSessionService.kt:157)
+
+Diagnosis (verified against AOSP source + the resolved AARs):
+- The toml pins savedstate 1.3.3 but lifecycle-runtime 2.10.0 / activity
+  1.13.0 pull savedstate **1.4.0** transitively, and gradle takes the max.
+- savedstate 1.4.0 rewrote SavedStateRegistryImpl: `performAttach()` now
+  registers the **Recreator** lifecycle observer immediately, and that
+  observer calls `consumeRestoredStateForKey("androidx.savedstate.Restarter")`
+  on ON_CREATE. `consumeRestoredStateForKey` is now guarded by
+  `check(isRestored)` — and `isRestored` is ONLY set by `performRestore()`.
+- The OverlayOwner only called `performAttach()` then drove ON_CREATE →
+  Recreator fired → check failed → `showBubble()` caught it, latched
+  `bubbleUnavailable = true`, and silently ran notification-only. The pill
+  never shows, even after clean install.
+
+Fix (ComponentActivity's documented contract):
+    savedStateController.performAttach()
+    savedStateController.performRestore(null)   // NEW
+    registry.handleLifecycleEvent(ON_CREATE/START/RESUME)
+`performRestore(null)` marks isRestored=true (restoredState=null), so
+Recreator's consume returns null and no-ops. Null literal compiles against
+both 1.3.3 (`Bundle?`) and 1.4.0 (`SavedState?`) signatures. `bubbleUnavailable`
+stays as an OEM-rejection safety net.
+
+### CI warning cleanup (from pasted build log)
+- AppPreferences.kt — `@Suppress("DEPRECATION")` on overlayActuallyUsable
+  (unsafeCheckOpNoThrow has no stable non-deprecated replacement).
+- CaptureData.kt — `@file:Suppress("UNNECESSARY_SAFE_CALL")` (defensive ?.
+  on non-null Gson-legacy fields — guards kept, warning silenced).
+- CurioBackupManager.kt — `@Suppress("SENSELESS_COMPARISON","USELESS_ELVIS")`
+  on restore() (legacy-blob null guards).
+- MarginaliaFormat.kt — `path?.let` → `path.let` (AudioRecorder.stop():
+  String non-null; dropped the dead `?: 0L`).
+- PaperCard.kt — quadraticBezierTo( → quadraticTo( ×7 (deprecation message
+  names the replacement; same signature).
+
+Review: clean. Committed + pushed.

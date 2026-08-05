@@ -153,7 +153,21 @@ class ExploreSessionService : Service() {
             // ComposeView resolves the saved-state owner during attachment,
             // before its content is composed. Attach the controller first,
             // then move the lifecycle through the normal owner states.
+            //
+            // NOTE (savedstate 1.4.0): performAttach() now registers the
+            // Recreator lifecycle observer immediately, and that observer
+            // calls consumeRestoredStateForKey("androidx.savedstate.Restarter")
+            // on ON_CREATE. consumeRestoredStateForKey is guarded by
+            // check(isRestored), which is only satisfied by performRestore().
+            // Skipping it (as the old savedstate allowed) throws
+            // "You can 'consumeRestoredStateForKey' only after the
+            // corresponding component has moved to the 'CREATED' state",
+            // which showBubble() caught and silently demoted the floating
+            // bubble to notification-only. This mirrors ComponentActivity's
+            // contract: performAttach() at INITIALIZED, then performRestore()
+            // before the lifecycle is allowed to reach ON_CREATE/STARTED.
             savedStateController.performAttach()
+            savedStateController.performRestore(null)
             registry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
             registry.handleLifecycleEvent(Lifecycle.Event.ON_START)
             registry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
