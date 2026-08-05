@@ -1963,6 +1963,45 @@ private fun HeroTicketCard(
                             .padding(end = 6.dp)
                     )
 
+                    // ── Creator byline pill — "Director · Nolan" pinned to
+                    //    the ticket's TOP corner (the band the old subtype
+                    //    badge owned — the content column's 28dp spacer keeps
+                    //    the title clear of it). Same tag language as the
+                    //    Topic Reveal pill and the Home tag pills: the card's
+                    //    ink on a soft tinted pill, so the work's creator
+                    //    reads at a glance while the deck reels. Label comes
+                    //    from the TOPIC's own category so mixed decks stay
+                    //    correct (a book in a films+books mix says "Author",
+                    //    not "Director"). Artworks = painter (their names no
+                    //    longer carry the trailing "by …"), albums = artist.
+                    val byline = topic?.byline?.takeIf { it.isNotBlank() }
+                    val bylineLabel = when (topic?.categoryId) {
+                        CategoryId.ALBUMS -> "Artist"
+                        CategoryId.BOOKS -> "Author"
+                        CategoryId.FILMS -> "Director"
+                        CategoryId.ARTWORKS -> "Painter"
+                        else -> null
+                    }
+                    if (byline != null && bylineLabel != null) {
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = ink.copy(alpha = 0.18f),
+                            shadowElevation = 0.dp,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(20.dp)
+                        ) {
+                            Text(
+                                text = "$bylineLabel · $byline",
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                color = ink,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                            )
+                        }
+                    }
+
                     // ── Content column ─────────────────────────────────
                     Column(
                         modifier = Modifier
