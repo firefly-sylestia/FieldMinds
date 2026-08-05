@@ -217,8 +217,16 @@ User: "make the peek cards gets the mixed card gradients much better and also th
 - Fix: Carousel now passes `gradient = deckGradient` into PeekCard (new `gradient: List<Color>` param); `blendStops = gradient`. Pastel mode steps depth by dropping HSL LIGHTNESS per stop (fromHsl(h, s, l - drop): near 0.06 light / 0.09 dark, far 0.10 light / 0.14 dark) holding hue + saturation; non-pastel keeps the classic black-lerp 0.28/0.42.
 - Added imports `fromHsl` / `toHsl` (internal in CurioColors.kt, same module). Only one PeekCard call site (Carousel).
 
+### Completed: Home hero final polish — left greeting, compact shuffle, sticky pop-out top bar
+
+User: left-align good-morning + name with proper size/hierarchy; small shuffle button with proper padding so TODAY'S QUEST doesn't cut; proper colors + hierarchy; and a sweet pop animation — menu + profile icons pop OUT of the hero card into floating frosted sticky icons when scrolling down (not instant), gliding back smoothly when scrolling up.
+
+- Greeting + name: textAlign Start (left); greeting headlineMedium ExtraBold; name titleMedium Medium at 0.85 alpha (proper hierarchy: big bold greeting, softer smaller name).
+- QuestShuffleCard: inline CTA shrunk 52→44dp height, corner 18→16, side padding 18→12dp, icon 22→18dp, text titleMedium→labelLarge — eyebrow + title column never squeezed on narrow screens.
+- Sticky top bar: menu + profile pills moved OUT of the hero Box into a pinned overlay OUTSIDE the scroll Column (root Box, aligned TopCenter, statusBarsPadding). Scroll state hoisted (`homeScroll`). `stickyProgress` derivedStateOf maps scroll 0→1 across StickyBarThreshold (90dp); frost morph lerps pill bg/rim/icon from translucent hero-ink to frosted glass (white 80% light / #23242CE6 dark), elevation 6dp*progress, -2dp lift. Spring pop: Animatable 0.74→1.09 (damping 0.5)→1.0 (damping 0.65) when engaged, easing back to 1f when the hero returns. Hysteresis (engage ≥1.0, release ≤0.6) so threshold flings can't re-trigger the pop.
+- Reviewer approved; applied its hysteresis + named StickyBarThreshold constant catches. Data batches deliberately NOT started — user said they'll remind.
+
 ### Validation
 
 - `scripts/check_braces.py` passed; `git diff --check` clean.
-- Reviewer approved after one fix: stale v7.8.1 comment block still described the old black-lerp pastel levels — trimmed.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

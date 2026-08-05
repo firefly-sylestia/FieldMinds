@@ -1,5 +1,8 @@
 package com.curio.app.features.home
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,6 +43,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,12 +56,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
@@ -133,6 +142,9 @@ import java.util.Calendar
 private val HomeQuestHeroHeight = 300.dp
 /** Extra layout space reserved for the white sheet below the torn banner. */
 private val HomeQuestSheetExtent = 24.dp
+/** Scroll distance (dp) before the menu + profile pills fully pin as
+ *  frosted floating pills. */
+private val StickyBarThreshold = 90.dp
 /** Fixed tear seed — Home's tear never re-rolls and matches the detail
  *  hero's SoftTorn construction exactly (uniform tear style). */
 private const val HOME_TEAR_SEED = 0x5EED
@@ -193,10 +205,13 @@ fun HomeScreen(navController: NavController) {
             CurioWatermarkBackdrop(
                 activeCat = CurioCategories.byId(CategoryId.WILDCARD)
             )
+            // Hoisted scroll state — the sticky top bar (menu + profile
+            // pills) reads it to pop out of the hero into frosted pills.
+            val homeScroll = rememberScrollState()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(homeScroll)
             ) {
             // ── 1. Quest hero — the detail screen's torn-banner language,
             // extended to the very top: the solid rose-wood banner runs up
@@ -269,17 +284,17 @@ fun HomeScreen(navController: NavController) {
                                 .padding(start = 20.dp, end = 20.dp, top = 64.dp, bottom = 18.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            // Greeting — one line, with the name beneath it
-                            // (the quest CTA moved below the hero).
-                            // Greeting — one line on the right, name beneath it
-                            // (the quest CTA moved below the hero).
+                            // Greeting — one line, left-aligned, with the
+                            // name beneath it (the quest CTA moved below the
+                            // hero). Proper hierarchy: big bold greeting, then
+                            // a smaller, softer name below.
                             Text(
                                 text = greetingWordForNow(),
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.ExtraBold
                                 ),
                                 color = questInk,
-                                textAlign = TextAlign.End,
+                                textAlign = TextAlign.Start,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.fillMaxWidth()
@@ -288,10 +303,10 @@ fun HomeScreen(navController: NavController) {
                             Text(
                                 text = displayName,
                                 style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Medium
                                 ),
-                                color = questInk.copy(alpha = 0.92f),
-                                textAlign = TextAlign.End,
+                                color = questInk.copy(alpha = 0.85f),
+                                textAlign = TextAlign.Start,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.fillMaxWidth()
@@ -391,52 +406,9 @@ fun HomeScreen(navController: NavController) {
                         }
                     }
                 }
-                // ── Top bar OVERLAY — the menu + avatar pills sit ON the
-                // coral, just below the status bar (the coral runs up
-                // behind them). Translucent hero-ink pills + hairline rim,
-                // like the detail hero's frosted controls (no blur).
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .fillMaxWidth()
-                        .statusBarsPadding()
-                        .padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Surface(
-                        onClick = { scope.launch { drawerState.open() } },
-                        shape = RoundedCornerShape(50),
-                        color = questInk.copy(alpha = 0.14f),
-                        border = BorderStroke(1.dp, questInk.copy(alpha = 0.26f)),
-                        shadowElevation = 0.dp,
-                        modifier = Modifier.size(42.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                            CurioIcon(
-                                CurioIcons.Menu, "Open menu",
-                                tint = questInk,
-                                size = 22.dp
-                            )
-                        }
-                    }
-                    Surface(
-                        onClick = { navController.navigate(CurioRoutes.PROFILE) { launchSingleTop = true } },
-                        shape = CircleShape,
-                        color = questInk.copy(alpha = 0.14f),
-                        border = BorderStroke(1.dp, questInk.copy(alpha = 0.26f)),
-                        shadowElevation = 0.dp,
-                        modifier = Modifier.size(42.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                            CurioIcon(
-                                CurioIcons.Person, "Profile",
-                                tint = questInk,
-                                size = 22.dp
-                            )
-                        }
-                    }
-                }
+                // The menu + profile pills no longer live here — they moved
+                // to a scroll-reactive STICKY bar outside the hero (they pop
+                // out of the coral into frosted floating pills on scroll).
             }
 
             Spacer(Modifier.height(14.dp))
@@ -681,6 +653,82 @@ fun HomeScreen(navController: NavController) {
             Spacer(Modifier.height(32.dp))
             Spacer(Modifier.height(navInsets.calculateBottomPadding()))
             }
+
+            // ── Sticky top bar — menu + profile pills ─────────────────
+            // Pinned OUTSIDE the scroll content so they stay on screen.
+            // Resting on the hero they read as translucent hero-ink pills;
+            // as the hero scrolls away they POP out into floating frosted
+            // pills (spring scale + frost morph + shadow), and they glide
+            // back into the hero smoothly when you scroll up.
+            val stickyThresholdPx = with(LocalDensity.current) { StickyBarThreshold.toPx() }
+            val stickyProgress by remember {
+                derivedStateOf { (homeScroll.value / stickyThresholdPx).coerceIn(0f, 1f) }
+            }
+            // Hysteresis — the pop engages once past the threshold and only
+            // releases after scrolling well back, so a fling that oscillates
+            // around the boundary can't re-trigger the pop repeatedly.
+            var stickyEngaged by remember { mutableStateOf(false) }
+            LaunchedEffect(stickyProgress) {
+                if (stickyProgress >= 1f) stickyEngaged = true
+                else if (stickyProgress <= 0.6f) stickyEngaged = false
+            }
+            // Sweet pop — springs from a small scale through a soft overshoot
+            // to rest, then eases back when the hero returns.
+            val popScale = remember { Animatable(1f) }
+            LaunchedEffect(stickyEngaged) {
+                if (stickyEngaged) {
+                    popScale.snapTo(0.74f)
+                    popScale.animateTo(1.09f, spring(dampingRatio = 0.5f, stiffness = Spring.StiffnessMedium))
+                    popScale.animateTo(1f, spring(dampingRatio = 0.65f, stiffness = Spring.StiffnessLow))
+                } else {
+                    popScale.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow))
+                }
+            }
+            val stickyDark = isCurioDarkTheme()
+            // Re-resolve the hero ink here — the original questInk lives in
+            // the scroll Column's scope; the sticky bar is OUTSIDE it.
+            val stickyInk = pastelFillInk(CurioColors.HomeRosewood)
+            val frostBg = if (stickyDark) Color(0xE623242C) else Color.White.copy(alpha = 0.80f)
+            val frostRim = if (stickyDark) Color.White.copy(alpha = 0.28f) else Color.White.copy(alpha = 0.75f)
+            val frostIcon = if (stickyDark) Color.White.copy(alpha = 0.92f) else stickyInk
+            val pillBg = lerp(stickyInk.copy(alpha = 0.14f), frostBg, stickyProgress)
+            val pillRim = lerp(stickyInk.copy(alpha = 0.26f), frostRim, stickyProgress)
+            val pillIcon = lerp(stickyInk, frostIcon, stickyProgress)
+            Row(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                    .graphicsLayer {
+                        scaleX = popScale.value
+                        scaleY = popScale.value
+                        translationY = lerp(0f, -2.dp.toPx(), stickyProgress)
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TopBarPill(
+                    onClick = { scope.launch { drawerState.open() } },
+                    glyph = CurioIcons.Menu,
+                    contentDescription = "Open menu",
+                    shape = RoundedCornerShape(50),
+                    bg = pillBg,
+                    rim = pillRim,
+                    iconTint = pillIcon,
+                    elevation = 6.dp * stickyProgress
+                )
+                TopBarPill(
+                    onClick = { navController.navigate(CurioRoutes.PROFILE) { launchSingleTop = true } },
+                    glyph = CurioIcons.Person,
+                    contentDescription = "Profile",
+                    shape = CircleShape,
+                    bg = pillBg,
+                    rim = pillRim,
+                    iconTint = pillIcon,
+                    elevation = 6.dp * stickyProgress
+                )
+            }
         }
     }
 
@@ -765,6 +813,41 @@ private fun HeroStatSegment(
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// Sticky top-bar pill — one circular menu / profile button for the
+// scroll-linked frosted bar that pops out of the hero.
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun TopBarPill(
+    onClick: () -> Unit,
+    glyph: String,
+    contentDescription: String,
+    shape: Shape,
+    bg: Color,
+    rim: Color,
+    iconTint: Color,
+    elevation: Dp
+) {
+    Surface(
+        onClick = onClick,
+        shape = shape,
+        color = bg,
+        border = BorderStroke(1.dp, rim),
+        shadowElevation = elevation,
+        modifier = Modifier.size(42.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            CurioIcon(
+                name = glyph,
+                contentDescription = contentDescription,
+                tint = iconTint,
+                size = 22.dp
+            )
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // Quest block — the big solid Shuffle CTA that lives between the hero
 // tear and the content below.
 // ═══════════════════════════════════════════════════════════════════════
@@ -802,30 +885,32 @@ private fun QuestShuffleCard(
             )
         }
         // Solid inline CTA — sits on the SAME level as the title, not
-        // stacked below it.
+        // stacked below it. Compact (44dp, snug 12dp side padding) so the
+        // eyebrow + title column never gets squeezed or cut on narrow
+        // screens.
         Surface(
             onClick = onShuffle,
-            shape = RoundedCornerShape(18.dp),
+            shape = RoundedCornerShape(16.dp),
             color = accent,
             shadowElevation = 0.dp,
-            modifier = Modifier.height(52.dp)
+            modifier = Modifier.height(44.dp)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 18.dp),
+                    .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 CurioIcon(
                     CurioIcons.Casino, "Shuffle a random deck",
                     tint = ink,
-                    size = 22.dp
+                    size = 18.dp
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(6.dp))
                 Text(
                     "Shuffle",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                     color = ink
                 )
             }
