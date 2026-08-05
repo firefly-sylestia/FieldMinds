@@ -1,3 +1,4 @@
+• Tuned Home's color balance: pastel mode is a touch more vibrant, while the default rosewood treatment is slightly calmer without changing its hue or readability.
 • Spin's hero card now echoes the page's muted glyph pattern with one oversized spark as its only focal symbol.
 • Slightly shortened the detail-page hero card while keeping its torn seam, under-sheet, content alignment, and backdrop clearance synchronized.
 • Paper cards now have a much deeper layered bottom sheet with a small top breathing inset; quote tilts are sanitized and rounded normal-paper corners use a corrected curved path instead of glitchy geometry.

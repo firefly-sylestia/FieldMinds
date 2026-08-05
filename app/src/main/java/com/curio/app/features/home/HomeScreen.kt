@@ -1158,21 +1158,26 @@ private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = captured
  * on — so the hero, empty state and drawer all wear the SAME rose-wood.
  */
 @Composable
-private fun homeRoseAccent(): Color =
-    if (AppPreferences.pastelColorsState) {
+private fun homeRoseAccent(): Color {
+    val base = toHsl(CurioColors.HomeRosewood)
+    return if (AppPreferences.pastelColorsState) {
         // Home keeps its own softer rose treatment: nudge the rosewood hue
         // toward pink and lift it slightly so the pastel reads clean and airy,
-        // not brown or terracotta. Other category pastels stay unchanged.
-        val base = toHsl(CurioColors.HomeRosewood)
+        // not brown or terracotta. The small saturation lift keeps the pastel
+        // lively without turning it neon. Other category pastels stay unchanged.
         val pinkHue = (base.h - 15f + 360f) % 360f
         if (isCurioDarkTheme()) {
+            // Keep the darker pastel treatment unchanged for midnight surfaces.
             fromHsl(pinkHue, (base.s * 0.55f).coerceIn(0f, 0.55f), 0.42f)
         } else {
-            fromHsl(pinkHue, (base.s * 0.84f).coerceIn(0f, 0.72f), 0.82f)
+            fromHsl(pinkHue, (base.s * 0.90f).coerceIn(0f, 0.80f), 0.82f)
         }
     } else {
-        CurioColors.HomeRosewood
+        // Calm the default rosewood slightly while preserving its hue and
+        // lightness, so the Home banner feels less brown/saturated.
+        fromHsl(base.h, base.s * 0.85f, base.l)
     }
+}
 
 @Composable
 private fun FirstTimeEmpty(

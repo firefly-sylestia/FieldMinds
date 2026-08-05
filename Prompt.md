@@ -2,24 +2,23 @@
 
 ## Latest Request (COMPLETED)
 
-**Increase the paper bottom appearance and fix quote tilt/corners**
+**Tune the Home screen color balance**
 
 ### What was requested
 
-Make the paper's bottom layered/tear appearance much taller, add a little space to the top, and fix glitchy quote tilts and broken rounded corners.
+Make the Home screen's pastel color a little more vibrant, while making the default/non-pastel Home color a little less vibrant.
 
 ### Changes made
 
-- `PaperCard.kt`: added a small 8dp top inset and a substantially deeper 48dp lower paper reveal. The backing sheet is bottom-anchored, uses a deeper tear lip, and the parent reserves the extra measured space so the lower layer remains visible instead of being clipped or collapsing into the next field.
-- `PaperCard.kt`: corrected rounded normal-paper top corners from malformed cubic paths to proper quadratic curves, and applied visual rotation through `graphicsLayer` after layout sizing.
-- `MoodBoardZoom.kt`: sanitizes persisted/fallback quote angles, renders quote tilt through a stable graphics layer, gives normal quote paper an explicit corner radius, and keeps rotated cards inside the board with a small rotation-aware placement inset.
-- `EntryDetailScreen.kt`: sanitizes and reapplies saved quote tilts while keeping quote layout height stable.
-- `CaptureFormatComponents.kt`: keeps the editor toolbar/header level and applies the safe tilt only to the paper editor surface rather than rotating the entire editor controls.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the paper/quote polish.
+- `HomeScreen.kt`: kept the Home palette centralized in `homeRoseAccent()` so the hero, Today's Quest shuffle card, sticky pills, empty state, and drawer stay consistent.
+- Pastel light mode now uses a modest saturation lift (`base.s * 0.90`, capped at `0.80`) while keeping the existing pink hue shift and lightness.
+- Pastel dark mode remains unchanged so the muted deep treatment stays readable on midnight surfaces.
+- Non-pastel mode now reduces saturation to `base.s * 0.85` while preserving the rosewood hue and lightness, making the default treatment calmer rather than brown-heavy.
+- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the Home color balance polish.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for all four changed Kotlin files.
+- `scripts/check_braces.py` passed for `HomeScreen.kt`.
 - `git diff --check` passed.
-- Code review follow-ups applied for saved/editor tilt application, finite angle handling, rounded path geometry, deeper visible backing geometry, and rotated-card edge clamping.
+- Code review found no actionable issues; the adjustment is scoped to Home and preserves dark-mode pastel behavior and existing ink contrast.
 - Gradle/build/lint/test commands were not run locally because the repository explicitly forbids Android compilation in this environment; CI remains the compilation gate.
