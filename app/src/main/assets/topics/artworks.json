@@ -4,14 +4,14 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Physical Impossibility of Death (1991) by Damien Hirst",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "teaser": "A 14-foot tiger shark suspended in a tank of formaldehyde — bought by advertising mogul Charles Saatchi for £50,000 while Hirst was still a student. It became the emblem of the Young British Artists movement and won Hirst the Turner Prize in 1995.",
     "imageUrl": "",
     "byline": "Damien Hirst",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Physical Impossibility of Death (1991) by Damien Hirst",
       "durationMinutes": 9,
-      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+      "instruction": "Circle the tank slowly and watch how the shark's silhouette changes against the blue — the formaldehyde keeps it frozen mid-strike, both menacing and serene. Think about the title: death made physically impossible to imagine, yet held right in front of you."
     },
     "tags": [
       "Installation",
@@ -20,22 +20,22 @@
     "tier": 2
   },
   {
-    "id": "artw-shark-1988-by-jean-michel-135",
+    "id": "artw-untitled-1982-by-jean-michel-135",
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
-    "name": "Shark (1988) by Jean-Michel Basquiat",
-    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "name": "Untitled (1982) by Jean-Michel Basquiat",
+    "teaser": "A skull rendered in oil stick, acrylic and spray paint — the painting that sold for $110.5 million at Sotheby's in 2017, then the most expensive American artwork ever auctioned. The crown floating above the skull is Basquiat's signature.",
     "imageUrl": "",
     "byline": "Jean-Michel Basquiat",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Shark (1988) by Jean-Michel Basquiat",
+      "targetName": "Untitled (1982) by Jean-Michel Basquiat",
       "durationMinutes": 7,
-      "instruction": "Compare the foreground with the right half. The contrast is the whole point of the piece."
+      "instruction": "Find the crown — Basquiat's recurring mark, floating over the skull like a halo and a claim to royalty at once. Then trace the raw, scribbled lines: the painting was built fast, in oil stick and spray, like a page torn from a diary."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Neo-Expressionism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -44,18 +44,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Flag (1954) by Jasper Johns",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Johns painted this after dreaming of the American flag — a familiar symbol rendered in encaustic (hot wax pigment) over newspaper scraps. It quietly ended Abstract Expressionism's reign by asking whether a flag is a thing or a painting.",
     "imageUrl": "",
     "byline": "Jasper Johns",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Flag (1954) by Jasper Johns",
       "durationMinutes": 7,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Look at the surface, not the symbol — the waxy brushstrokes and the newsprint bleeding through make the flag feel handmade. Ask yourself: is it a flag, or is it paint arranged to look like one?"
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Encaustic",
+      "Pop Art"
     ],
     "tier": 2
   },
@@ -64,18 +64,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "LOVE (1970) by Robert Indiana",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Four stacked letters — L-O-V-E — with the O tilted, born as a 1964 MoMA Christmas card and later cast in steel and aluminum across the world. It turned a two-letter Americanism into one of Pop Art's most reproduced images.",
     "imageUrl": "",
     "byline": "Robert Indiana",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "LOVE (1970) by Robert Indiana",
       "durationMinutes": 6,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Notice the O is tilted, not stacked — that tiny rotation is what gives the sculpture its motion. Count how many LOVE sculptures you can name in different cities; each one is a different color scheme."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Pop Art",
+      "Sculpture"
     ],
     "tier": 2
   },
@@ -84,18 +84,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Water Lilies (1919) by Claude Monet",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Monet painted his Giverny pond's water lilies obsessively for the last 30 years of his life, chasing the same light across 250 canvases. This late panel, painted as cataracts clouded his eyes, dissolves the pond into pure color and reflection.",
     "imageUrl": "",
     "byline": "Claude Monet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Water Lilies (1919) by Claude Monet",
       "durationMinutes": 9,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Step back until the lilies stop being flowers and become smears of light — that's the distance Monet wanted. Then look at the sky reflected in the water; the real subject is never the lilies, but the light on the surface."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Impressionism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -104,18 +104,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Last Supper (1498) by Leonardo da Vinci",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Painted directly onto a refectory wall in Milan with an experimental oil-tempera mix instead of true fresco — a gamble that began crumbling within decades. It captures the exact instant Christ says one of the twelve will betray him.",
     "imageUrl": "",
     "byline": "Leonardo da Vinci",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Last Supper (1498) by Leonardo da Vinci",
       "durationMinutes": 10,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Follow the perspective lines — they all converge on Christ's head. Then look at the apostles in their groups of three: shock, denial, betrayal. Find Judas, the only one whose face is in shadow."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Renaissance",
+      "Mural"
     ],
     "tier": 2
   },
@@ -124,18 +124,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Creation of Adam (1512) by Michelangelo",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The centerpiece of the Sistine Chapel ceiling — God's outstretched finger reaching toward Adam's, the spark of life suspended in the gap between them. Painted over four years on his back, it remains the most famous image of divine creation in Western art.",
     "imageUrl": "",
     "byline": "Michelangelo",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Creation of Adam (1512) by Michelangelo",
       "durationMinutes": 3,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Measure the space between the two fingers — the gap IS the painting. Then notice God's arm is wrapped around a shape that anatomists have argued resembles a cross-section of the human brain."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Renaissance",
+      "Fresco"
     ],
     "tier": 2
   },
@@ -144,18 +144,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The School of Athens (1511) by Raphael",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Raphael's fresco gathers the great philosophers of antiquity under one vaulted hall in the Vatican — Plato and Aristotle at center, pointing up and down respectively. It's a love letter to the wisdom of the ancient world.",
     "imageUrl": "",
     "byline": "Raphael",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The School of Athens (1511) by Raphael",
       "durationMinutes": 4,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Find Plato on the left, pointing to the heavens, and Aristotle beside him, palm facing the earth — the two poles of Western thought. Raphael even painted himself in at the far right, listening in."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Renaissance",
+      "Fresco"
     ],
     "tier": 2
   },
@@ -164,18 +164,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Girl with a Pearl Earring (1665) by Johannes Vermeer",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Often called the 'Mona Lisa of the North' — a nameless girl in a turban turning toward the viewer, set against pure black. The pearl is barely a smudge of paint, yet it reads as the most luminous object in the room.",
     "imageUrl": "",
     "byline": "Johannes Vermeer",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Girl with a Pearl Earring (1665) by Johannes Vermeer",
       "durationMinutes": 10,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Move your eye from the earring to her lips — both are made of almost nothing, a few strokes that the mind completes. Notice how the darkness makes her skin glow; the pearl is a lie your brain believes."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Dutch Golden Age",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -184,18 +184,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Swing (1767) by Jean-Honoré Fragonard",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "A Rococo flirtation staged in a garden: a young woman swings high while a hidden admirer in the bushes watches from below — a bishop pushes her. Commissioned by a baron who wanted a picture of his mistress, it's the epitome of 18th-century playful indulgence.",
     "imageUrl": "",
     "byline": "Jean-Honoré Fragonard",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Swing (1767) by Jean-Honoré Fragonard",
       "durationMinutes": 7,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Find the suitor hidden in the foliage on the left and the shoe flying off her foot toward him — a wink about what's happening just out of frame. Note the sculpture of Cupid hushing: the whole garden conspires to keep the secret."
     },
     "tags": [
-      "Oil Painting",
-      "Classical"
+      "Rococo",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -204,18 +204,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Third of May 1808 (1814) by Francisco Goya",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Goya's harrowing record of Napoleon's firing squad executing Madrid's rebels the night after the uprising. The white-shirted man with arms flung wide stands under a lantern like a crucifixion — the first modern anti-war painting.",
     "imageUrl": "",
     "byline": "Francisco Goya",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Third of May 1808 (1814) by Francisco Goya",
       "durationMinutes": 5,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Compare the faceless, machine-like firing squad with the glowing victim — the lantern turns a mass execution into a stage. Notice there is no heroism here, only terror; Goya painted it six years later, still raw."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Romanticism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -224,18 +224,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "Liberty Leading the People (1830) by Eugène Delacroix",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Delacroix's allegory of the July Revolution of 1830 — Marianne, bare-breasted and hoisting the tricolor, leads Parisians over the barricades. Part history painting, part propaganda, it became the visual shorthand for revolution itself.",
     "imageUrl": "",
     "byline": "Eugène Delacroix",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "Liberty Leading the People (1830) by Eugène Delacroix",
       "durationMinutes": 3,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Look at Liberty's face — fierce, not pretty — and the boy with pistols beside her, modeled on a real street urchin. Then check the skyline: Notre-Dame peeks through the smoke, grounding the allegory in real Paris."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Romanticism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -244,18 +244,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Fighting Temeraire (1839) by J.M.W. Turner",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The HMS Temeraire — hero of Trafalgar — is towed by a black steam tug to its final berth to be broken up. Turner's elegy for the age of sail was voted Britain's greatest painting in 2005, and he refused to sell it in his lifetime.",
     "imageUrl": "",
     "byline": "J.M.W. Turner",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Fighting Temeraire (1839) by J.M.W. Turner",
       "durationMinutes": 6,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Compare the ghost-pale Temeraire with the small, dirty tug — the past being dragged into the future. Watch the sun setting behind them; the entire painting is a slow goodbye, and the real subject is time itself."
     },
     "tags": [
-      "Mixed Media",
-      "21st Century"
+      "Romanticism",
+      "Oil Painting"
     ],
     "tier": 2
   },
@@ -264,18 +264,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Luncheon on the Grass (1863) by Édouard Manet",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "A nude woman picnicking with two fully dressed men scandalized Paris when the Salon rejected it and Emperor Napoleon III set up the Salon des Refusés to show it anyway. Manet's flattened light and frank gaze launched modern painting.",
     "imageUrl": "",
     "byline": "Édouard Manet",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Luncheon on the Grass (1863) by Édouard Manet",
       "durationMinutes": 9,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "The woman looks straight at YOU, not at her companions — breaking every rule of classical decorum. Then look at the second woman wading in the background, oddly out of scale; the painting is a collage of borrowed Renaissance motifs."
     },
     "tags": [
-      "Installation",
-      "Contemporary"
+      "Realism",
+      "Impressionism"
     ],
     "tier": 2
   },
@@ -284,18 +284,18 @@
     "categoryId": "ARTWORKS",
     "subtype": "Artwork",
     "name": "The Dance Class (1874) by Edgar Degas",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Degas found his true subject in the Paris Opera ballet — not the performance, but the rehearsal. Dancers stretch, scratch, and adjust their shoes under the master's eye, caught in unguarded, off-balance moments that feel almost candid.",
     "imageUrl": "",
     "byline": "Edgar Degas",
     "exploreAction": {
       "verb": "Look at",
       "targetName": "The Dance Class (1874) by Edgar Degas",
       "durationMinutes": 9,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Notice how no one is posed — one girl scratches her back, another adjusts her dress. Follow the diagonal of the floorboards to the door at the back; Degas built the whole composition around off-center, snapshot-like framing."
     },
     "tags": [
-      "Sculpture",
-      "Modern"
+      "Impressionism",
+      "Oil Painting"
     ],
     "tier": 2
   },

@@ -240,6 +240,17 @@ User: tune the pop, make it beautiful and smooth with proper frost shift.
 
 ### Validation
 
-- `scripts/check_braces.py` passed; `git diff --check` clean.
-- Reviewer approved; applied its snapshotFlow churn note.
+### Completed: data batch 1 — 15 real artwork descriptions
+
+User: remove fake descriptions from the artwork data, add real info in batches of 15 on my own.
+
+- `scripts/batch_artworks_1.py` (kept in scripts/): replaced teaser + exploreAction.instruction for the first 15 entries of artworks.json with factual content (Hirst shark/Saatchi £50k/Turner 1995, Flag encaustic-over-newspaper dream, LOVE 1964 MoMA card, Monet late lilies + cataracts, Last Supper oil-tempera gamble, Sistine finger-gap + brain cloak, Raphael Plato/Aristotle + self-portrait, Vermeer pearl-as-smudge, Fragonard suitor/bishop, Goya 1808 lantern, Delacroix Marianne + Notre-Dame, Turner Temeraire + 2005 poll, Manet Salon des Refusés, Degas unposed rehearsal).
+- Corrected fabricated tags (e.g. Last Supper was 'Installation, Contemporary' → 'Renaissance, Mural').
+- Replaced the FABRICATED 'Shark (1988) by Jean-Michel Basquiat' (no such work; research confirmed) with his real Untitled (1982) skull painting ($110.5M Sotheby's 2017, crown motif) — id renamed artw-untitled-1982-by-jean-michel-135; topic ids only referenced within this JSON (verified).
+- Instructions all ≤257 chars (script limit 280, Gradle 450). validate_topics.py: artworks.json passes (56 validated). albums/artists errors shown are PRE-EXISTING (script touches only artworks.json).
+- Reviewer approved; applied its guard fix (name= fields now assert the entry being edited).
+
+### Validation
+
+- `scripts/check_braces.py` passed; `git diff --check` clean; JSON valid; validate_topics.py artworks passes.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
