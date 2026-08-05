@@ -768,7 +768,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
  * call passes [EntryDetailHeroClearance]), so the two are defined together
  * here and a hero-height change can't silently put glyphs back behind it.
  */
-private val EntryDetailHeroHeight = 380.dp
+private val EntryDetailHeroHeight = 360.dp
 /** Extra layout space reserved for the white sheet below the clipped hero. */
 private val EntryDetailSheetExtent = 24.dp
 

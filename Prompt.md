@@ -2,22 +2,21 @@
 
 ## Latest Request (COMPLETED)
 
-**Make the Spin hero card use a backdrop-like glyph pattern with one larger spark symbol**
+**Slightly reduce the detail-page hero card height**
 
 ### What was requested
 
-The Spin hero card should echo the muted glyph pattern used by the page background, while using only one larger spark symbol as the focal decoration.
+Make the detail screen's hero card a little shorter without disturbing its torn-paper seam, white under-sheet, content placement, or page glyph clearance.
 
 ### Changes made
 
-- `SpinScreen.kt`: replaced the old single category-glyph watermark inside `HeroTicketCard` with six faint, edge-biased, subtly rotated glyphs that echo the shared `CurioWatermarkBackdrop` collage language.
-- `SpinScreen.kt`: kept one oversized `CurioIcons.AutoAwesome` watermark as the only focal spark and increased it to 176dp.
-- `SpinScreen.kt`: removed the now-unused `glyph` parameter from the hero card call and signature, and added a small `HeroPatternGlyph` model for the decorative placements.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the hero-card polish.
+- `EntryDetailScreen.kt`: reduced `EntryDetailHeroHeight` from `380.dp` to `360.dp`.
+- The parent hero extent, hero background, content layer, under-sheet offset, and `EntryDetailHeroClearance` all derive from the same constant, so the tear and backdrop geometry stay synchronized automatically.
+- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the refinement.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `SpinScreen.kt`.
+- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
 - `git diff --check` passed.
-- Call-site/signature and shared icon references were statically checked.
+- Code review confirmed dependent geometry remains synchronized; long titles should be visually checked on smaller devices because internal content padding remains unchanged.
 - Gradle/build/lint/test commands were not run locally because the repository explicitly forbids Android compilation in this environment; CI remains the compilation gate.
