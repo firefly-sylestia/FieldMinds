@@ -419,7 +419,10 @@ fun HomeScreen(navController: NavController) {
                 // out of the coral into frosted floating pills on scroll).
             }
 
-            Spacer(Modifier.height(14.dp))
+            // Give the quest block a deliberate breathing room below the
+            // hero's white sheet so the shuffle deck never feels pinned to
+            // the torn edge.
+            Spacer(Modifier.height(26.dp))
 
             // ── Quest block — below the hero tear, above the content ────
             // "TODAY'S QUEST" eyebrow (no indicator) + the big solid Shuffle

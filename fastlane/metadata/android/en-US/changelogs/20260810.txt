@@ -87,5 +87,6 @@
 • Mood-board stability: dragging images in the centered inline crop no longer resizes or jumps the viewport, and malformed gesture geometry can no longer crash placement with a NaN roundToInt error
 • Explore overlay crash fix: service-owned Compose lifecycle cleanup no longer constructs an invalid saved-state restarter on newer AndroidX lifecycle versions
 • Build fix: corrected FieldMind archive documentation paths that accidentally opened a nested Kotlin block comment and hid the legacy importer from the compiler
+• Home's Today's Quest shuffle deck now has a cleaner top inset below the hero tear, so it no longer feels pushed against the banner.
 • Normal paper gets a new selectable rounded-top style, with the hero's soft torn bottom seam and a matching layered paper lip underneath; existing torn, coffee, folded and red-margin options remain available.
 • Detail hero tear polish: the seeded seam now carries a continuous 6–9-wave rhythm with natural noise variation, while the white under-sheet gets a restrained bumpy edge instead of a rigid line
