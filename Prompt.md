@@ -228,5 +228,18 @@ User: left-align good-morning + name with proper size/hierarchy; small shuffle b
 
 ### Validation
 
+### Completed: pop feel refinement + CI Float-lerp fix
+
+User: tune the pop, make it beautiful and smooth with proper frost shift.
+
+- CI fix: `lerp(0f, -2.dp.toPx(), stickyProgress)` failed — unit.lerp has no Float overload, graphics.lerp needs Color. Replaced with direct multiplication `-2.dp.toPx() * frostShift`.
+- Pop: replaced snapTo(0.74) hard-jump with a smooth 3-beat — anticipation dip to 0.90 (tween 90ms FastOutSlowInEasing) → springy overshoot to 1.08 (spring 0.45 Medium) → settle 1.0 (spring 0.60 Low). New popRotate Animatable adds a wobble (-3.5° → +2.2° → 0°) on the Row's graphicsLayer.
+- Frost shift: new smoothstep `frostShift = p*p*(3-2p)` applied to pill bg/rim/icon lerps, elevation (6dp * frostShift) and translationY (-2dp * frostShift) — the glass morph eases in/out instead of sliding linearly with scroll.
+- Hysteresis moved to `snapshotFlow { stickyProgress }` (keyed LaunchedEffect(Unit)) so the pop only fires on actual threshold crossings, not every scroll frame.
+- New imports: tween, FastOutSlowInEasing, snapshotFlow.
+
+### Validation
+
 - `scripts/check_braces.py` passed; `git diff --check` clean.
+- Reviewer approved; applied its snapshotFlow churn note.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

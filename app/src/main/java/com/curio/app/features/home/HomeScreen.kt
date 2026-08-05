@@ -1,8 +1,10 @@
 package com.curio.app.features.home
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -666,24 +669,40 @@ fun HomeScreen(navController: NavController) {
             }
             // Hysteresis — the pop engages once past the threshold and only
             // releases after scrolling well back, so a fling that oscillates
-            // around the boundary can't re-trigger the pop repeatedly.
+            // around the boundary can't re-trigger the pop repeatedly. The
+            // engaged flag is derived state (not a scroll-keyed effect), so
+            // the pop only fires on actual crossings.
             var stickyEngaged by remember { mutableStateOf(false) }
-            LaunchedEffect(stickyProgress) {
-                if (stickyProgress >= 1f) stickyEngaged = true
-                else if (stickyProgress <= 0.6f) stickyEngaged = false
-            }
-            // Sweet pop — springs from a small scale through a soft overshoot
-            // to rest, then eases back when the hero returns.
-            val popScale = remember { Animatable(1f) }
-            LaunchedEffect(stickyEngaged) {
-                if (stickyEngaged) {
-                    popScale.snapTo(0.74f)
-                    popScale.animateTo(1.09f, spring(dampingRatio = 0.5f, stiffness = Spring.StiffnessMedium))
-                    popScale.animateTo(1f, spring(dampingRatio = 0.65f, stiffness = Spring.StiffnessLow))
-                } else {
-                    popScale.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow))
+            LaunchedEffect(Unit) {
+                snapshotFlow { stickyProgress }.collect { p ->
+                    if (p >= 1f) stickyEngaged = true
+                    else if (p <= 0.6f) stickyEngaged = false
                 }
             }
+            // Sweet pop — a quick anticipation dip, then a springy overshoot
+            // that settles at rest (never a hard snap); a gentle rotation
+            // wobble rides the pop so the pills flick into place. On the way
+            // back everything eases to the hero state.
+            val popScale = remember { Animatable(1f) }
+            val popRotate = remember { Animatable(0f) }
+            LaunchedEffect(stickyEngaged) {
+                if (stickyEngaged) {
+                    // Anticipation dip → lively overshoot → settle.
+                    popScale.animateTo(0.90f, tween(90, easing = FastOutSlowInEasing))
+                    popScale.animateTo(1.08f, spring(dampingRatio = 0.45f, stiffness = Spring.StiffnessMedium))
+                    popScale.animateTo(1f, spring(dampingRatio = 0.60f, stiffness = Spring.StiffnessLow))
+                    // Wobble — tilts out, overshoots back, rights itself.
+                    popRotate.animateTo(-3.5f, tween(110, easing = FastOutSlowInEasing))
+                    popRotate.animateTo(2.2f, tween(150, easing = FastOutSlowInEasing))
+                    popRotate.animateTo(0f, spring(dampingRatio = 0.55f, stiffness = Spring.StiffnessMediumLow))
+                } else {
+                    popScale.animateTo(1f, spring(dampingRatio = 0.80f, stiffness = Spring.StiffnessLow))
+                    popRotate.animateTo(0f, spring(dampingRatio = 0.80f, stiffness = Spring.StiffnessLow))
+                }
+            }
+            // Eased frost shift — smoothstep so the glass morph accelerates
+            // in and decelerates out instead of sliding linearly with scroll.
+            val frostShift = stickyProgress * stickyProgress * (3f - 2f * stickyProgress)
             val stickyDark = isCurioDarkTheme()
             // Re-resolve the hero ink here — the original questInk lives in
             // the scroll Column's scope; the sticky bar is OUTSIDE it.
@@ -691,9 +710,9 @@ fun HomeScreen(navController: NavController) {
             val frostBg = if (stickyDark) Color(0xE623242C) else Color.White.copy(alpha = 0.80f)
             val frostRim = if (stickyDark) Color.White.copy(alpha = 0.28f) else Color.White.copy(alpha = 0.75f)
             val frostIcon = if (stickyDark) Color.White.copy(alpha = 0.92f) else stickyInk
-            val pillBg = lerp(stickyInk.copy(alpha = 0.14f), frostBg, stickyProgress)
-            val pillRim = lerp(stickyInk.copy(alpha = 0.26f), frostRim, stickyProgress)
-            val pillIcon = lerp(stickyInk, frostIcon, stickyProgress)
+            val pillBg = lerp(stickyInk.copy(alpha = 0.14f), frostBg, frostShift)
+            val pillRim = lerp(stickyInk.copy(alpha = 0.26f), frostRim, frostShift)
+            val pillIcon = lerp(stickyInk, frostIcon, frostShift)
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -703,7 +722,9 @@ fun HomeScreen(navController: NavController) {
                     .graphicsLayer {
                         scaleX = popScale.value
                         scaleY = popScale.value
-                        translationY = lerp(0f, -2.dp.toPx(), stickyProgress)
+                        rotationZ = popRotate.value
+                        // Lifts off the hero as the frost deepens (eased).
+                        translationY = -2.dp.toPx() * frostShift
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -716,7 +737,7 @@ fun HomeScreen(navController: NavController) {
                     bg = pillBg,
                     rim = pillRim,
                     iconTint = pillIcon,
-                    elevation = 6.dp * stickyProgress
+                    elevation = 6.dp * frostShift
                 )
                 TopBarPill(
                     onClick = { navController.navigate(CurioRoutes.PROFILE) { launchSingleTop = true } },
@@ -726,7 +747,7 @@ fun HomeScreen(navController: NavController) {
                     bg = pillBg,
                     rim = pillRim,
                     iconTint = pillIcon,
-                    elevation = 6.dp * stickyProgress
+                    elevation = 6.dp * frostShift
                 )
             }
         }
