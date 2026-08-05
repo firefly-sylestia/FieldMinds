@@ -2,6 +2,54 @@
 
 ## Latest Request (COMPLETED)
 
+**Cabinet watermark no longer shifts between filter pages**
+
+### What was requested
+
+"Fix the watermark shifting in cabinet and keep it same level so switching
+page doesn't affect it."
+
+### Root cause
+
+`CurioWatermarkBackdrop` highlights the active category's glyph with a
+stronger alpha "whisper", and each category glyph sits at a DIFFERENT fixed
+bias position in the scatter. The Cabinet passed `activeCat = filterCat ?:
+WILDCARD`, so switching filter pages (All → Artists → Legacy) made the
+highlighted glyph jump across the screen — the perceived "shifting"
+watermark. Glyph POSITIONS were always fixed; only the emphasis moved.
+
+### What changed
+
+`CabinetScreen.kt` — the backdrop now always passes
+`activeCat = CurioCategories.byId(CategoryId.WILDCARD)` (the same constant
+Home uses), so the watermark is fully static on every Cabinet page: same
+glyphs, same positions, same emphasis, no matter which filter is open. The
+active category is still carried by the page wash
+(`categoryBackgroundWash`), the chip row tints and the card tints. Inline
+comment updated to explain why the backdrop must not follow the filter.
+
+### Notes
+
+- Scoped to the Cabinet only — Home / Spin / Reveal / Detail keep their
+  category echo. "All" page looks identical to before (it already showed
+  the wildcard boost); category pages just lose the moving highlight.
+- Reviewer approved; flagged the design tradeoff (the category echo on
+  category pages is gone — a pinned fixed-position "spotlight" could
+  restore it if the user misses it) and an alternative reading (tab-switch
+  level mismatch caused by the Cabinet root Box's statusBarsPadding —
+  intentional, to keep glyphs out from behind the status-bar icons).
+
+### Validation
+
+- `scripts/check_braces.py` passed for `CabinetScreen.kt`; `git diff
+  --check` clean; `filterCat` still used 3× (wash, CurioNavTint handoff,
+  empty states), `CategoryId` still used 6× — no dead references.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Previous Request (COMPLETED)
+
 **Home redesign — hero hierarchy, quest block below the tear, tinted recents**
 
 ### What was requested

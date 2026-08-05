@@ -214,10 +214,14 @@ fun CabinetScreen(navController: NavController) {
         // Muted category-glyph watermark behind the grid — the same
         // backdrop language as Home / Spin / the saved-entry page, so the
         // Cabinet reads as part of the app's paper-and-glyph world. The
-        // active filter's category gets the stronger whisper; "All" falls
-        // back to a neutral scatter.
+        // backdrop is deliberately STATIC (always the wildcard scatter): if
+        // the emphasis followed the active filter, the highlighted glyph
+        // would jump to a different position on every page switch — the
+        // "shifting watermark". Fixed, so switching All / categories /
+        // Legacy never moves a glyph; the active category is already
+        // carried by the page wash, the chip row and the card tints.
         CurioWatermarkBackdrop(
-            activeCat = filterCat ?: CurioCategories.byId(CategoryId.WILDCARD),
+            activeCat = CurioCategories.byId(CategoryId.WILDCARD),
             modifier = Modifier.fillMaxSize()
         )
         Column(
