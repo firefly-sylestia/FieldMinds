@@ -2,6 +2,50 @@
 
 ## Latest Request (COMPLETED)
 
+**Dark-mode invisible paper chips + double-confirmed Cancel in done dialog**
+
+### What was requested
+
+1. In dark mode the inactive paper-style buttons (fold / coffee / color
+   etc.) in the entry are greyed out so much they're invisible.
+2. Add an in-app Cancel button to the "Done exploring" dialog, behind a
+   double confirmation.
+
+### What changed
+
+**PaperCard.kt** — `CompactPaperChip` (Ruled/Torn bases + +Rules / +Coffee /
++ Folded / +Red Margin decoration chips) and the `NotePaperColorToggle`
+"Color" chip used the theme-agnostic dark-brown `paperInk()` at 50-55%
+alpha for inactive labels — on the dark page background they vanished.
+Now inactive labels flip to a warm light tan (`0xFFE0D5BC` @ 0.90) in dark
+mode via the newly-imported `isCurioDarkTheme()` (the same pattern
+`paperControlAccent()` already used), light mode keeps warm brown at a
+slightly stronger 0.62 alpha; inactive hairline borders bumped (chips
+0.18→0.24 light / 0.42 dark; Color chip 0.25→0.30 light / 0.42 dark).
+
+**CurioNavHost.kt** — the Done-exploring dialog gains a red "Cancel
+session" button next to "Keep exploring". Tapping it flips the dialog into
+a confirm step (new `rememberSaveable confirmSessionCancel`): title
+"Cancel this explore?", a warning that the elapsed time isn't saved, and
+"Yes, cancel session" (red) which quietly clears the session, cancels the
+reminder and stops the service — same teardown as the notification's Cancel
+action, no write-it-down page. "Keep exploring" backs out of the confirm
+step. `onDismissRequest` and the two lifecycle observers that re-show the
+dialog also reset `confirmSessionCancel` so a background/foreground cycle
+never reopens it mid-confirm.
+
+### Validation
+
+- `scripts/check_braces.py` passed for both changed Kotlin files.
+- `git diff --check` passed.
+- Code review approved; reviewer's edge-case note (reset confirmSessionCancel
+  in the observers) was applied.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated.
+
+## Latest Request (COMPLETED)
+
 **Frosty white gradient on the detail hero's Date · Mood · Type card**
 
 ### What was requested

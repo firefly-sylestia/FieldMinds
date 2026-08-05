@@ -135,6 +135,9 @@ fun CurioNavHost(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var showDoneDialog by rememberSaveable { mutableStateOf(false) }
+    // v7.31 — two-step "Cancel session": the first tap flips the done-now
+    // dialog into a confirm step, the second tap actually ends the explore.
+    var confirmSessionCancel by rememberSaveable { mutableStateOf(false) }
     // Survives rotation so the startup prompt only fires on a truly fresh
     // process (an active session left behind by a killed app).
     var startupPromptDone by rememberSaveable { mutableStateOf(false) }
@@ -148,6 +151,9 @@ fun CurioNavHost(
                 if (AppPreferences.isExploreSessionsEnabled(context)) {
                     val resumed = ExploreSessionStore.getActiveSession(context)
                     showDoneDialog = resumed != null
+                    // A background/foreground cycle must not reopen the dialog
+                    // already sitting in the cancel-confirm step.
+                    confirmSessionCancel = false
                     // If the user hid the bubble but no other controller
                     // exists (live notifications off) and the bubble is
                     // still enabled, bring it back on return — otherwise
@@ -179,6 +185,7 @@ fun CurioNavHost(
             if (AppPreferences.isExploreSessionsEnabled(context)) {
                 val session = ExploreSessionStore.getActiveSession(context)
                 showDoneDialog = session != null
+                confirmSessionCancel = false
                 if (session != null && AppPreferences.exploreServiceShouldRun(context)) {
                     ExploreSessionService.start(context, session)
                 }
@@ -445,57 +452,100 @@ fun CurioNavHost(
             }
         }
         AlertDialog(
-            onDismissRequest = { showDoneDialog = false },
-            title = { Text("Done exploring ${activeSession.topicName}?") },
+            onDismissRequest = {
+                showDoneDialog = false
+                confirmSessionCancel = false
+            },
+            title = {
+                Text(
+                    if (confirmSessionCancel) "Cancel this explore?"
+                    else "Done exploring ${activeSession.topicName}?"
+                )
+            },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        CurioIcon(
-                            name = if (activeSession.paused) CurioIcons.Pause else CurioIcons.Timer,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            size = 18.dp
-                        )
+                    if (confirmSessionCancel) {
+                        // The double-confirmation step — make the cost of
+                        // cancelling explicit before the session is dropped.
                         Text(
-                            if (activeSession.paused)
-                                "Paused at ${formatElapsed(elapsedMillis)} — tap Resume on the bubble or notification to continue"
-                            else
-                                "You've been exploring for ${formatElapsed(elapsedMillis)}",
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                            "This ends the session now — the ${formatElapsed(elapsedMillis)} isn't saved and you won't be asked to write about ${activeSession.topicName}. You can explore it again anytime.",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CurioIcon(
+                                name = if (activeSession.paused) CurioIcons.Pause else CurioIcons.Timer,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                size = 18.dp
+                            )
+                            Text(
+                                if (activeSession.paused)
+                                    "Paused at ${formatElapsed(elapsedMillis)} — tap Resume on the bubble or notification to continue"
+                                else
+                                    "You've been exploring for ${formatElapsed(elapsedMillis)}",
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                            )
+                        }
+                        Text(
+                            "You started ${activeSession.verb.lowercase()} ${activeSession.targetName} — if you're done, write it down while it's fresh. Or keep exploring, no rush.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    Text(
-                        "You started ${activeSession.verb.lowercase()} ${activeSession.targetName} — if you're done, write it down while it's fresh. Or keep exploring, no rush.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                 }
             },
             confirmButton = {
-                TextButton(onClick = {
-                    showDoneDialog = false
-                    ExploreSessionStore.clearSession(context)
-                    ExploreReminderScheduler.cancel(context)
-                    ExploreSessionService.stop(context)
-                    // Anchor HOME beneath the entry page so Back returns to
-                    // the app instead of exiting from a deep-opened page.
-                    val routePrefix = currentRoute?.substringBefore("/")
-                    if (routePrefix != null &&
-                        routePrefix != CurioRoutes.HOME &&
-                        routePrefix !in CurioRoutes.bootGatePrefixes
-                    ) {
-                        navController.popBackStack(CurioRoutes.HOME, inclusive = false)
+                if (confirmSessionCancel) {
+                    // Second tap — the actual end. Quiet teardown, same as
+                    // the notification's Cancel action (no write-it-down
+                    // page, no done prompt on the next return).
+                    TextButton(onClick = {
+                        showDoneDialog = false
+                        confirmSessionCancel = false
+                        ExploreSessionStore.clearSession(context)
+                        ExploreReminderScheduler.cancel(context)
+                        ExploreSessionService.stop(context)
+                    }) {
+                        Text("Yes, cancel session", color = MaterialTheme.colorScheme.error)
                     }
-                    navController.navigate(
-                        CurioRoutes.captureFor(activeSession.categoryId.routeSlug, activeSession.topicName)
-                    ) { launchSingleTop = true }
-                }) { Text("Done — write about it") }
+                } else {
+                    TextButton(onClick = {
+                        showDoneDialog = false
+                        confirmSessionCancel = false
+                        ExploreSessionStore.clearSession(context)
+                        ExploreReminderScheduler.cancel(context)
+                        ExploreSessionService.stop(context)
+                        // Anchor HOME beneath the entry page so Back returns to
+                        // the app instead of exiting from a deep-opened page.
+                        val routePrefix = currentRoute?.substringBefore("/")
+                        if (routePrefix != null &&
+                            routePrefix != CurioRoutes.HOME &&
+                            routePrefix !in CurioRoutes.bootGatePrefixes
+                        ) {
+                            navController.popBackStack(CurioRoutes.HOME, inclusive = false)
+                        }
+                        navController.navigate(
+                            CurioRoutes.captureFor(activeSession.categoryId.routeSlug, activeSession.topicName)
+                        ) { launchSingleTop = true }
+                    }) { Text("Done — write about it") }
+                }
             },
             dismissButton = {
-                TextButton(onClick = { showDoneDialog = false }) { Text("Keep exploring") }
+                if (confirmSessionCancel) {
+                    // Back out of the cancel — keep exploring.
+                    TextButton(onClick = { confirmSessionCancel = false }) { Text("Keep exploring") }
+                } else {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        TextButton(onClick = { confirmSessionCancel = true }) {
+                            Text("Cancel session", color = MaterialTheme.colorScheme.error)
+                        }
+                        TextButton(onClick = { showDoneDialog = false }) { Text("Keep exploring") }
+                    }
+                }
             }
         )
     }
