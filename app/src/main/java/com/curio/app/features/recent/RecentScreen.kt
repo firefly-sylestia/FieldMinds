@@ -67,7 +67,14 @@ internal sealed interface RecentFeedItem {
     }
 }
 
-/** Newest-first feed shared by Home's five-item preview and the full page. */
+/**
+ * Newest-first feed shared by Home's five-item preview and the full page.
+ *
+ * v7.39 — one row per topic: multiple captures of the same topic collapse
+ * to the newest one, and a topic's explored/unexplored row is superseded
+ * by its newest saved entry (or vice-versa, by timestamp) — so the same
+ * topic never appears twice on Home or in Recents.
+ */
 internal fun buildRecentFeed(
     entries: List<CurioEntry>,
     explored: List<ExploredTopic>,
@@ -76,7 +83,23 @@ internal fun buildRecentFeed(
     addAll(explored.map { RecentFeedItem.Explored(it) })
     addAll(unexplored.map { RecentFeedItem.Unexplored(it) })
     addAll(entries.map { RecentFeedItem.SavedEntry(it) })
-}.sortedByDescending { it.timestamp }
+}
+    // Collapse to the newest item of each topic, then sort the feed.
+    // (maxByOrNull is the non-deprecated form; groups are never empty.)
+    .groupBy { it.topicIdentityKey() }
+    .map { (_, items) -> items.maxByOrNull { it.timestamp } }
+    .filterNotNull()
+    .sortedByDescending { it.timestamp }
+
+/**
+ * Stable identity of the topic an item belongs to — what the feed dedupes
+ * on, so an explored row and its saved entries count as the same topic.
+ */
+private fun RecentFeedItem.topicIdentityKey(): String = when (this) {
+    is RecentFeedItem.Explored -> "${topic.categoryId.name}_${topic.topicName}"
+    is RecentFeedItem.Unexplored -> "${topic.categoryId.name}_${topic.topicName}"
+    is RecentFeedItem.SavedEntry -> "${entry.topic.categoryId.name}_${entry.topic.name}"
+}
 
 /**
  * Full Recent page opened from Home's View all action. It keeps the same
