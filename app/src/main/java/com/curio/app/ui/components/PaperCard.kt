@@ -938,10 +938,13 @@ private class SoftTearParams(private val seed: Int, density: Density) {
     // smaller ripple rhythm rides over them, so the edge is visibly bumpy
     // without becoming a string of oversized waves.
     val waves = 2.2f + rnd.nextFloat() * 0.8f
-    val tooth = with(density) { (5.0f + rnd.nextFloat() * 1.8f).dp.toPx() }
-    val deep = with(density) { (1.8f + rnd.nextFloat() * 1.2f).dp.toPx() }
-    val micro = with(density) { (0.8f + rnd.nextFloat() * 0.6f).dp.toPx() }
-    val ripple = with(density) { (1.0f + rnd.nextFloat() * 0.7f).dp.toPx() }
+    // v7.29 — amplitudes nudged up (~25%) so the tear reads a touch MORE
+    // uneven and hand-torn without overwhelming the broad wave rhythm (the
+    // worst-case bite still sits ~10dp, far inside the hero's content).
+    val tooth = with(density) { (6.4f + rnd.nextFloat() * 2.2f).dp.toPx() }
+    val deep = with(density) { (2.4f + rnd.nextFloat() * 1.5f).dp.toPx() }
+    val micro = with(density) { (1.0f + rnd.nextFloat() * 0.8f).dp.toPx() }
+    val ripple = with(density) { (1.3f + rnd.nextFloat() * 0.9f).dp.toPx() }
     val rippleWaves = 7f + rnd.nextFloat() * 4f
     // Seeded tilt — the whole edge drifts only gently from left to right,
     // so it never overwhelms the broad wave rhythm.

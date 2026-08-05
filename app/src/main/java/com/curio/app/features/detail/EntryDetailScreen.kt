@@ -272,10 +272,20 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // comes from the torn-paper seam: the solid banner is clipped by a
         // seeded soft tear, ONE white sheet sits just behind it, and the
         // page's wash starts right after the sheet's lip.
+        val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
+        // v7.29 — a tiny hand-placed tilt for the whole torn banner, seeded
+        // from the entry id so every detail page sits at its own stable
+        // angle (reopens identically, never re-rolls). Subtle enough that
+        // the back / more buttons stay perfectly tappable. Declared before
+        // the banner Box that applies it.
+        val heroTilt = remember(tearSeed) {
+            kotlin.random.Random(tearSeed * 31 + 0x0CAFE11E).nextFloat() * 2.4f - 1.2f
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(EntryDetailHeroHeight + EntryDetailSheetExtent)
+                .rotate(heroTilt)
         ) {
             // ── White under-sheet — ONE SOLID white sheet layered BEHIND
             // the hero's torn bottom edge. The tear lives ONLY on the hero
@@ -286,8 +296,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             // the sheet's lower edge follows the same broad waves with a
             // thin uneven lip. Its small tooth is independent, creating a
             // believable layered-paper tear without a rigid parallel line or
-            // visible gaps.
-            val tearSeed = remember(entryId) { entryId.hashCode() and 0x7fffffff }
+            // visible gaps. (tearSeed is declared above, with the tilt.)
             // Remembered Shape instances so their internal outline caches
             // survive recompositions (built fresh in the modifier chain, the
             // caches would never hit).

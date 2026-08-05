@@ -2,6 +2,38 @@
 
 ## Latest Request (COMPLETED)
 
+**Detail hero tear more uneven + subtle seeded tilt**
+
+### What was requested
+
+In the entry detail view, make the torn-paper seam a little more uneven
+(not too much), and give the whole banner a random little remembered tilt
+(stable per entry, never re-rolls).
+
+### What changed
+
+- `PaperCard.kt` — `SoftTearParams` amplitudes nudged up ~25% (tooth
+  5.0+1.8 → 6.4+2.2dp, deep 1.8+1.2 → 2.4+1.5dp, micro 0.8+0.6 →
+  1.0+0.8dp, ripple 1.0+0.7 → 1.3+0.9dp) so the hero seam reads a touch
+  rawer and more hand-torn while the broad wave rhythm still dominates;
+  the worst-case bite stays ~10dp, well inside the hero content.
+- `EntryDetailScreen.kt` — the whole torn banner (white under-sheet + hero
+  + content + back/more buttons) now rotates by a tiny seeded angle
+  (`heroTilt = Random(tearSeed*31 + 0x0CAFE11E).nextFloat()*2.4f - 1.2f`, i.e.
+  ±1.2°) via `Modifier.rotate` on the outer banner Box. `heroTilt` and
+  `tearSeed` are declared before the Box that uses them (fixes a forward-
+  reference compile error from the first draft); the old in-Box duplicate
+  `tearSeed` declaration was removed.
+
+### Validation
+
+- `scripts/check_braces.py` passed for both changed Kotlin files.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Conflict dialog when starting a new explore mid-session + queued sessions**
 
 ### What was requested

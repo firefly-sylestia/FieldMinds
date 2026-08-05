@@ -1,3 +1,4 @@
+• Detail pages get a slightly rawer hand-torn look — the hero's seeded tear is a touch more uneven, and the whole banner sits at a subtle per-entry tilt
 • Starting a new explore while another session is running now asks first — save the new topic for later, or queue the running session (paused, resumable from Home) and start the new one
 • Cabinet polish: the Legacy chip now sits last in the filter row and only appears when there are restored FieldMind records, and the bottom nav bar now blends with the active category's page background
 • Fixed the floating explore bubble vanishing after clearing app data — it now retries its overlay window on every new explore session instead of staying silently disabled after one failed attach
