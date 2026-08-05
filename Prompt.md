@@ -2,20 +2,25 @@
 
 ## Latest Request (IN PROGRESS)
 
-**Match the Home menu/profile pop animation on detail-page tool buttons**
+**Enlarge Home quest, limit Home Recents, and add a dedicated Recent page**
 
-### What was requested
+### User decisions
 
-The detail page's back and more controls should use the exact same restrained pop animation recently finalized for Home's menu/profile controls, rather than the old drop-in motion.
+- Quest should match the newer Saved-section UI design language, not copy the Saved text.
+- Home Recents preview limit: 5 items.
+- Dedicated Recent page: always available, no temporary Settings toggle.
 
 ### Changes made
 
-- `EntryDetailScreen.kt`: changed the hero tool-button group from a 0.96→1 scale with a 6dp downward drop to the Home-matched 0.97→1 scale and a small eased 2dp upward lift. The existing opacity entrance, placement, and frosted button styling remain unchanged.
-- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the matching motion polish.
+- `HomeScreen.kt`: redesigned Today's Quest / Shuffle the deck as a larger, spacious Saved-style surface with a 54dp leading glyph tile, stronger typography, supporting subtitle, and 54dp shuffle action.
+- `HomeScreen.kt`: merged explored, unexplored, and saved entries into a timestamp-sorted feed; Home shows only the newest five items and the hero stat uses the full feed count.
+- `CurioRoutes.kt` + `CurioNavHost.kt`: added the always-available `recents` push route.
+- `RecentScreen.kt`: added a dedicated full Recents page with the shared `CurioWatermarkBackdrop`, newest-first feed, back control, empty state, and navigation into captures/reveals.
+- `fastlane/metadata/android/en-US/changelogs/20260810.txt`: documented the user-visible changes.
 
 ### Validation
 
-- `scripts/check_braces.py` passed for `EntryDetailScreen.kt`.
+- Brace checks passed for HomeScreen, RecentScreen, CurioRoutes, and CurioNavHost.
 - `git diff --check` passed.
-- Code review found no actionable Compose issues.
+- Review follow-ups applied: explicit sealed-feed constructor lambdas, removed redundant bottom inset, removed nested duplicate quest click target, and retained full-feed count for the Home hero.
 - Gradle/build/lint/test commands were not run locally because the repository explicitly forbids Android compilation in this environment; CI remains the compilation gate.

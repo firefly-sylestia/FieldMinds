@@ -86,6 +86,8 @@ import com.curio.app.data.formatElapsed
 import com.curio.app.infrastructure.ExploreSessionService
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.navigation.navigateToTab
+import com.curio.app.features.recent.RecentFeedItem
+import com.curio.app.features.recent.buildRecentFeed
 import com.curio.app.ui.components.CurioForwardArrow
 import com.curio.app.ui.components.CurioWatermarkBackdrop
 import com.curio.app.ui.components.SoftTornBottomShape
@@ -170,10 +172,15 @@ fun HomeScreen(navController: NavController) {
     val scope = rememberCoroutineScope()
     val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
         try {
-            value = CurioRepositoryHolder.repo.getAll().take(4)
+            value = CurioRepositoryHolder.repo.getAll().take(5)
         } catch (_: Exception) {
             value = emptyList()
         }
+    }
+    val exploredTopics = ExploreSessionStore.recentlyExploredState
+    val unexploredTopics = ExploreSessionStore.recentlyUnexploredState
+    val recentFeed = remember(recentEntries, exploredTopics, unexploredTopics) {
+        buildRecentFeed(recentEntries, exploredTopics, unexploredTopics)
     }
     var totalSaved by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
@@ -402,7 +409,7 @@ fun HomeScreen(navController: NavController) {
                                         )
                                         HeroStatSegment(
                                             glyph = CurioIcons.History,
-                                            value = "${recentEntries.size}",
+                                            value = "${recentFeed.size}",
                                             label = "Recent",
                                             tint = questInk,
                                             ink = questInk,
@@ -568,8 +575,6 @@ fun HomeScreen(navController: NavController) {
             Spacer(Modifier.height(20.dp))
 
             // ── 5. Recents — explored + unexplored topics and recent entries ──
-            val exploredTopics = ExploreSessionStore.recentlyExploredState
-            val unexploredTopics = ExploreSessionStore.recentlyUnexploredState
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -581,9 +586,9 @@ fun HomeScreen(navController: NavController) {
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onBackground
                     )
-                    if (recentEntries.isNotEmpty()) {
+                    if (recentEntries.isNotEmpty() || exploredTopics.isNotEmpty() || unexploredTopics.isNotEmpty()) {
                         Surface(
-                            onClick = { navController.navigateToTab(CurioRoutes.CABINET) },
+                            onClick = { navController.navigate(CurioRoutes.RECENTS_ALL) { launchSingleTop = true } },
                             shape = RoundedCornerShape(50),
                             color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
@@ -598,7 +603,7 @@ fun HomeScreen(navController: NavController) {
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 CurioForwardArrow(
-                                    "Open Cabinet",
+                                    "Open Recents",
                                     tint = MaterialTheme.colorScheme.primary,
                                     size = 16.dp
                                 )
@@ -608,7 +613,8 @@ fun HomeScreen(navController: NavController) {
                 }
                 Spacer(Modifier.height(10.dp))
 
-                if (recentEntries.isEmpty() && exploredTopics.isEmpty() && unexploredTopics.isEmpty()) {
+                val recentPreview = recentFeed.take(5)
+                if (recentPreview.isEmpty()) {
                     FirstTimeEmpty(
                         surface = MaterialTheme.colorScheme.surfaceContainerLow,
                         onPickCategory = { navController.navigate(CurioRoutes.PICKER) { launchSingleTop = true } },
@@ -616,46 +622,49 @@ fun HomeScreen(navController: NavController) {
                     )
                 } else {
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        // Explore-session topics — recorded the moment the
-                        // user tapped Explore on a reveal, before (or even
-                        // without) anything being saved to the Cabinet.
-                        exploredTopics.forEach { explored ->
-                            val category = CurioCategories.byId(explored.categoryId)
-                            ExploreTopicRow(
-                                category = category,
-                                topicName = explored.topicName,
-                                // A topic the user left unexplored and later
-                                // came back to wears a small "Resumed" tag.
-                                tag = if (explored.wasUnexplored) "Resumed" else null,
-                                subtitle = "Explored · tap to write about it",
-                                onClick = {
-                                    navController.navigate(
-                                        CurioRoutes.captureFor(explored.categoryId.routeSlug, explored.topicName)
-                                    ) { launchSingleTop = true }
+                        // Home keeps this as a five-item preview; the full
+                        // feed is available through View all → Recents.
+                        recentPreview.forEach { item ->
+                            when (item) {
+                                is RecentFeedItem.Explored -> {
+                                    val explored = item.topic
+                                    ExploreTopicRow(
+                                        category = CurioCategories.byId(explored.categoryId),
+                                        topicName = explored.topicName,
+                                        tag = if (explored.wasUnexplored) "Resumed" else null,
+                                        subtitle = "Explored · tap to write about it",
+                                        onClick = {
+                                            navController.navigate(
+                                                CurioRoutes.captureFor(explored.categoryId.routeSlug, explored.topicName)
+                                            ) { launchSingleTop = true }
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                        // Unexplored topics now live INSIDE Recents, tagged —
-                        // no separate section; tap resumes the reveal.
-                        unexploredTopics.forEach { unexplored ->
-                            val category = CurioCategories.byId(unexplored.categoryId)
-                            ExploreTopicRow(
-                                category = category,
-                                topicName = unexplored.topicName,
-                                tag = "Unexplored",
-                                subtitle = "Left without exploring · tap to resume",
-                                onClick = {
-                                    navController.navigate(
-                                        CurioRoutes.revealFor(unexplored.categoryId.routeSlug, unexplored.topicName)
-                                    ) { launchSingleTop = true }
+                                is RecentFeedItem.Unexplored -> {
+                                    val unexplored = item.topic
+                                    ExploreTopicRow(
+                                        category = CurioCategories.byId(unexplored.categoryId),
+                                        topicName = unexplored.topicName,
+                                        tag = "Unexplored",
+                                        subtitle = "Left without exploring · tap to resume",
+                                        onClick = {
+                                            navController.navigate(
+                                                CurioRoutes.revealFor(unexplored.categoryId.routeSlug, unexplored.topicName)
+                                            ) { launchSingleTop = true }
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                        recentEntries.forEach { entry ->
-                            RecentEntryRow(
-                                entry = entry,
-                                onClick = { navController.navigate(CurioRoutes.entryDetail(entry.id)) { launchSingleTop = true } }
-                            )
+                                is RecentFeedItem.SavedEntry -> {
+                                    RecentEntryRow(
+                                        entry = item.entry,
+                                        onClick = {
+                                            navController.navigate(CurioRoutes.entryDetail(item.entry.id)) {
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -903,56 +912,75 @@ private fun QuestShuffleCard(
     // light against the page, so the eyebrow wears the darker ink instead
     // (the button keeps the solid accent fill).
     val ink = pastelFillInk(accent)
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+    // Match the newer Saved shelf language: a clean, spacious row with a
+    // confident leading glyph, larger editorial hierarchy, and one generous
+    // trailing action target instead of a cramped inline chip.
+    Surface(
+        onClick = onShuffle,
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shadowElevation = 0.dp,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "TODAY'S QUEST",
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 1.4.sp
-                ),
-                color = ink
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = "Shuffle the deck",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        // Solid inline CTA — sits on the SAME level as the title, not
-        // stacked below it. Its content is intrinsically sized (rather than
-        // fillMaxSize) so the button cannot claim the title column's width and
-        // overlap it on narrow screens.
-        Surface(
-            onClick = onShuffle,
-            shape = RoundedCornerShape(16.dp),
-            color = accent,
-            shadowElevation = 0.dp,
-            modifier = Modifier.height(44.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            Surface(
+                shape = RoundedCornerShape(18.dp),
+                color = accent.copy(alpha = 0.18f),
+                modifier = Modifier.size(54.dp)
             ) {
-                CurioIcon(
-                    CurioIcons.Casino, "Shuffle a random deck",
-                    tint = ink,
-                    size = 18.dp
-                )
-                Spacer(Modifier.width(6.dp))
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(
+                        CurioIcons.Casino,
+                        "Shuffle a random deck",
+                        tint = ink,
+                        size = 29.dp
+                    )
+                }
+            }
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    "Shuffle",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    text = "TODAY'S QUEST",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 1.6.sp
+                    ),
                     color = ink
                 )
+                Spacer(Modifier.height(5.dp))
+                Text(
+                    text = "Shuffle the deck",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "A fresh mix of ideas, picked for you",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Surface(
+                shape = CircleShape,
+                color = accent,
+                modifier = Modifier.size(54.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(
+                        CurioIcons.Casino,
+                        "Shuffle a random deck",
+                        tint = ink,
+                        size = 25.dp
+                    )
+                }
             }
         }
     }

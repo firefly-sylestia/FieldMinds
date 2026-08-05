@@ -63,6 +63,7 @@ import com.curio.app.features.onboarding.OnboardingScreen
 import com.curio.app.features.profile.ProfileScreen
 import com.curio.app.features.settings.SettingsScreen
 import com.curio.app.features.topichistory.TopicHistoryScreen
+import com.curio.app.features.recent.RecentScreen
 import com.curio.app.features.cabinet.CabinetScreen
 import com.curio.app.features.capture.SaveCaptureScreen
 import com.curio.app.features.detail.EntryDetailScreen
@@ -416,6 +417,9 @@ fun CurioNavHost(
             }
             composable(CurioRoutes.TOPIC_HISTORY) {
                 TopicHistoryScreen(navController = navController)
+            }
+            composable(CurioRoutes.RECENTS_ALL) {
+                RecentScreen(navController = navController)
             }
             composable(CurioRoutes.CRASH) {
                 CurioCrashScreen(navController = navController)

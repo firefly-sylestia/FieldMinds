@@ -98,6 +98,7 @@ object CurioRoutes {
     const val SETTINGS = "settings"
     const val MANAGE_CATEGORIES = "manage-categories"
     const val TOPIC_HISTORY = "topic-history"
+    const val RECENTS_ALL = "recents"
     const val LIGHTBOX = "lightbox"
     const val CRASH = "crash"
     const val BUG_REPORT = "bug-report"
