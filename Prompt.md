@@ -838,3 +838,20 @@ User: (1) disliked the title's gradient font style — change it; (2) doesn't wa
 - `scripts/check_braces.py` passed (both files); `git diff --check` clean; no heroTilt leftovers; `rotate` import stays (still used at ~line 2111 for a different element).
 - Reviewer confirmed geometry/coverage; noted Home's tear now cants too (intended) and the knob is `SoftTearParams.tilt` if the user wants it more/less pronounced.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
+
+---
+
+## Detail title: transparent glass pane (drop glass-text glyphs)
+
+### Changes (EntryDetailScreen.kt)
+
+- **Problem**: the carved glass-text title (TextStyle brush gradient + Shadow on the glyphs) "isn't working" — the letterform treatment didn't render as hoped. User asked to go back to the previous background-card style but TRANSPARENT, not blurry.
+- **Title**: now a `Surface(RoundedCornerShape(20.dp), color = heroInk.copy(alpha = 0.18f), border = BorderStroke(1.dp, heroInk.copy(alpha = 0.26f)))` wrapping plain ExtraBold geom Text in `heroInk` with `padding(horizontal = 20.dp, vertical = 10.dp)` — the transparent tint pill language (same as Home hero's top-bar controls), NO blur, banner color shows through. 18% (not 14%) so it still reads as a card on airy pastel banners.
+- Removed now-unused `androidx.compose.ui.graphics.Shadow` import (Brush/Offset still used).
+- Fixed two stale comments referencing the title as a heroFrostPlate user.
+
+### Validation
+
+- `scripts/check_braces.py` passed; `git diff --check` clean; Shadow verified 0 uses; Brush 4×, Offset 2× still used.
+- Reviewer confirmed readability in all theme modes; its tint bump + comment fixes applied.
+- Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.

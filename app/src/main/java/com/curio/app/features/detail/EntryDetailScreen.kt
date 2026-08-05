@@ -76,7 +76,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -368,36 +367,34 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Title — the topic name CARVED in frosted glass. No
-                    // plate behind it: the letterforms themselves are filled
-                    // with an icy vertical gradient (pale frost catching the
-                    // light at the top of each glyph, melting into the hero
-                    // ink at the base) and lifted by a soft shadow, so the
-                    // type reads as etched frosted glass sitting on the
-                    // banner — crisp ExtraBold geom, the display face.
-                    Text(
-                        text = resolvedEntry.topic.name,
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.ExtraBold,
-                            brush = Brush.verticalGradient(
-                                // Frost top slightly deepened (not pure white)
-                                // so the glyphs keep a hair of definition on
-                                // the airy pastel banner in pastel mode.
-                                0f to Color(0xFFE8EDF3),
-                                0.45f to Color(0xFFCBD3DC),
-                                1f to heroInk
+                    // ── Title — the topic name on a TRANSPARENT glass pane.
+                    // The letters are crisp ExtraBold geom in the hero ink
+                    // (no gradient inside the glyphs); the pane behind them is
+                    // a translucent tint + hairline rim — the same transparent
+                    // glass pill language as the Home hero's top-bar controls
+                    // — so the banner color shows straight through the plate
+                    // with NO blur.
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        // 18% — strong enough that the pane still READS as a
+                        // card on an airy pastel banner, transparent enough
+                        // that the banner color shows straight through.
+                        color = heroInk.copy(alpha = 0.18f),
+                        border = BorderStroke(1.dp, heroInk.copy(alpha = 0.26f)),
+                        shadowElevation = 0.dp
+                    ) {
+                        Text(
+                            text = resolvedEntry.topic.name,
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.ExtraBold
                             ),
-                            shadow = Shadow(
-                                color = Color.Black.copy(alpha = 0.30f),
-                                offset = Offset(0f, 3f),
-                                blurRadius = 8f
-                            )
-                        ),
-                        color = heroInk,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                            color = heroInk,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
+                        )
+                    }
                     Spacer(Modifier.height(18.dp))
 
                     // ── Frosted date / mood / type grid card — the meta
@@ -512,7 +509,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Frosted-glass controls — the same bright-white plate + deep
-                // slate ink as the title and the Date · Mood · Type card.
+                // slate ink as the Date · Mood · Type card.
                 CurioBackButton(
                     onClick = { navController.popBackStack() },
                     containerColor = Color.Transparent,
@@ -773,11 +770,12 @@ private val EntryDetailHeroClearance = EntryDetailHeroHeight + 30.dp
 /**
  * The hero's frosted-glass language for small controls — bright frosted
  * WHITE (near-opaque, brighter at the top) with a hairline rim and
- * deep-slate content. Shared by the title plate and the banner's back /
- * more buttons so the title stays crisp and the controls stay legible in
- * every theme; the big Date · Mood · Type card below wears the same rim
- * and slate but a more translucent frost that lets the banner color bloom
- * through — it is the showpiece of the family.
+ * deep-slate content. Worn by the banner's back / more buttons so the
+ * controls stay legible in every theme; the big Date · Mood · Type card
+ * below wears the same rim and slate but a more translucent frost that
+ * lets the banner color bloom through — it is the showpiece of the
+ * family. (The title now sits on its own TRANSPARENT tint pill, not this
+ * plate.)
  */
 private val heroFrostGradient = Brush.verticalGradient(
     0f to Color.White.copy(alpha = 0.99f),

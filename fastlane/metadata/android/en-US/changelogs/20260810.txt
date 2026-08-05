@@ -2,7 +2,7 @@
 • Streak · Cabinet · Recent now live inside the home hero as a stat bar (fire-orange streak flame), replacing the old pills below it
 • Pastel color mode is now ON by default — soft airy accents in light, muted deep pastels in dark (still toggleable in Settings)
 • Home wears a new muted rose-wood hero with an airy pastel twin
-• The detail title is carved in frosted glass — icy letterforms that catch the light — and the more-menu is a matching glass pane
+• The detail title now sits on a transparent glass pill — crisp display type over a see-through tint, no blur
 • The detail tear now cants on its own seam — the card stays level, only the torn edge tilts
 • Mood-board zoom is now all gestures: double-tap any photo and pinch-to-zoom + pan work right inside it (with a pan clamp so a small tile can never get lost off-screen) — the extra full-screen expand button and the little expand chips on tiles are gone
 • Home got the detail screen's torn-paper hero — the greeting and the quest now live on one solid brand-coral banner with the same seeded soft tear and white under-sheet as every entry's detail page (uniform tear style, no blur), and the whole banner shuffles the wildcard deck when you tap it
