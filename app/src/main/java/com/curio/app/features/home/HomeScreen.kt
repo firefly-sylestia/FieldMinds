@@ -157,7 +157,11 @@ private val HomeQuestSheetExtent = 24.dp
 private val StickyBarThreshold = 90.dp
 /** Fixed tear seed — Home's tear never re-rolls and matches the detail
  *  hero's SoftTorn construction exactly (uniform tear style). */
-private const val HOME_TEAR_SEED = 0x5EED
+// v7.37 — Home's hero tears in its OWN pattern: a different fixed seed
+// than before AND the bolder tear personality, so the home banner reads as
+// a rougher, more hand-torn seam than the detail hero's. Fixed → never
+// re-rolls.
+private const val HOME_TEAR_SEED = 0xC0FEE
 
 /** One mirrored hero watermark pair — the left glyph mirrors the right
  *  (the saved-entry hero's construction, adapted for Home). */
@@ -251,9 +255,12 @@ fun HomeScreen(navController: NavController) {
             // Streak · Cabinet · Recent bar pinned just above the tear on a
             // soft rose gradient pane. The banner itself is NOT tappable —
             // the Shuffle deck CTA lives below the hero.
-            val heroTornShape = remember(HOME_TEAR_SEED) { SoftTornBottomShape(HOME_TEAR_SEED) }
+            // v7.37 — bold = the rougher Home tear personality (deeper,
+            // toothier seam); the under-sheet passes the SAME flag so both
+            // edges stay pixel-aligned.
+            val heroTornShape = remember(HOME_TEAR_SEED) { SoftTornBottomShape(HOME_TEAR_SEED, bold = true) }
             val sheetShape = remember(HOME_TEAR_SEED) {
-                SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp)
+                SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp, bold = true)
             }
             // The quest is always the wildcard Surprise now (the category
             // chip row is gone). The banner wears the muted rose-wood hero

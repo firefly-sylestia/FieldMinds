@@ -131,6 +131,11 @@ fun PaperCard(
      *  category icons, the page-backdrop language printed on the paper
      *  (v7.33). */
     watermark: Boolean = false,
+    /** v7.37 — stable torn-seam/grain seed. Saved views pass a per-entry
+     *  seed so the paper's bottom tear (and its texture) NEVER re-rolls
+     *  between opens — the same entry always tears identically. Null keeps
+     *  the editor's remember-one-random-per-composition behavior. */
+    seed: Int? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val density = LocalDensity.current
@@ -165,7 +170,11 @@ fun PaperCard(
     // front page everywhere EXCEPT through the folded dog-ear's cut corner,
     // where its own torn edge showed as a stray corner. Removed: the fold
     // now shows the true page background through the cut.
-    val tearSeed = remember { Random.nextInt(1, 1_000_000) }
+    // v7.37 — saved views pass a stable per-entry [seed], so the paper's
+    // torn bottom seam never re-rolls between opens; null keeps the
+    // editor's remember-random behavior (stable within a composition).
+    val baseSeed = remember(seed) { seed ?: Random.nextInt(1, 1_000_000) }
+    val tearSeed = baseSeed
     val topCorner = if (roundedTop) maxOf(corner, 16.dp) else corner
     val shape = remember(tearSeed, topCorner, folded) {
         NormalPaperShape(tearSeed, topCorner, folded)
@@ -214,8 +223,10 @@ fun PaperCard(
             val paperInkColor = notePaperInk(paperColor)
             // Every paper card rolls its OWN texture seed, so no two sheets
             // on the page share the same grain pattern (the old fixed seeds
-            // drew the identical scatter on every card).
-            val paperSeed = remember { Random.nextInt(1, 1_000_000) }
+            // drew the identical scatter on every card). With a stable
+            // [seed] the grain derives from it, so saved views keep their
+            // texture between opens too.
+            val paperSeed = remember(baseSeed) { baseSeed * 0x51A7 + 7 }
             Canvas(modifier = Modifier.matchParentSize()) {
                 // Real paper texture — fine grain + soft tonal patches (the
                 // crumpled-then-flattened tooth) under the rules and ink.
@@ -987,7 +998,8 @@ private fun buildTornPath(seed: Int, size: Size, density: Density): Path {
  * edges align pixel-perfect.
  */
 private class SoftTornEdgeShape(
-    private val seed: Int
+    private val seed: Int,
+    private val bold: Boolean = false
 ) : Shape {
     private var cachedSize: Size? = null
     private var cachedOutline: Outline? = null
@@ -1000,16 +1012,21 @@ private class SoftTornEdgeShape(
         cachedOutline?.let { cached ->
             if (cachedSize == size) return cached
         }
-        val outline = Outline.Generic(buildSoftTornPath(seed, size, density))
+        val outline = Outline.Generic(buildSoftTornPath(seed, size, density, bold))
         cachedSize = size
         cachedOutline = outline
         return outline
     }
 }
 
-/** Public bottom-torn clip — the hero's lower edge (meeting point of the blur). */
-class SoftTornBottomShape(seed: Int) : Shape {
-    private val inner = SoftTornEdgeShape(seed)
+/**
+ * Public bottom-torn clip — the hero's lower edge (meeting point of the
+ * blur). [bold] switches to the rougher Home personality (deeper, toothier
+ * seam) while staying deterministic; the matching under-sheet must receive
+ * the SAME flag so the two edges stay pixel-aligned.
+ */
+class SoftTornBottomShape(seed: Int, bold: Boolean = false) : Shape {
+    private val inner = SoftTornEdgeShape(seed, bold)
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
         inner.createOutline(size, layoutDirection, density)
 }
@@ -1030,7 +1047,10 @@ class SoftTornBottomShape(seed: Int) : Shape {
 class SoftTornSheetShape(
     private val seed: Int,
     private val lip: Dp,
-    private val baseline: Dp = 0.dp
+    private val baseline: Dp = 0.dp,
+    // v7.37 — must match the hero's [SoftTornBottomShape.bold] flag so the
+    // under-sheet's top edge reproduces the SAME bold tear curve.
+    private val bold: Boolean = false
 ) : Shape {
     private var cachedSize: Size? = null
     private var cachedOutline: Outline? = null
@@ -1046,7 +1066,8 @@ class SoftTornSheetShape(
         val outline = Outline.Generic(buildSoftSheetPath(
             seed, size, density,
             lipPx = with(density) { lip.toPx() },
-            baselinePx = with(density) { baseline.toPx() }
+            baselinePx = with(density) { baseline.toPx() },
+            bold = bold
         ))
         cachedSize = size
         cachedOutline = outline
@@ -1069,17 +1090,27 @@ class SoftTornSheetShape(
  * the same broad-plus-small rhythm on its exposed lower edge and extends
  * far enough below the hero to keep the page wash from peeking through.
  */
-private class SoftTearParams(private val seed: Int, density: Density) {
+private class SoftTearParams(
+    private val seed: Int,
+    density: Density,
+    // v7.37 — BOLDER tear personality: Home's hero tears a touch deeper and
+    // toothier than the detail hero's (a visibly different pattern), while
+    // its white under-sheet passes the SAME flag so the two edges stay
+    // pixel-aligned.
+    private val bold: Boolean = false
+) {
     private val rnd = Random(seed * 31 + 0x0BADC0DE)
-    // 2–3 broad rounded undulations across the full width. A separate
-    // smaller ripple rhythm rides over them, so the edge is visibly bumpy
-    // without becoming a string of oversized waves.
-    val waves = 2.2f + rnd.nextFloat() * 0.8f
+    // 2–3 broad rounded undulations across the full width (a few more in
+    // the bold pattern). A separate smaller ripple rhythm rides over them,
+    // so the edge is visibly bumpy without becoming a string of oversized
+    // waves.
+    val waves = (2.2f + rnd.nextFloat() * 0.8f) * (if (bold) 1.2f else 1f)
     // v7.29 — amplitudes nudged up (~25%) so the tear reads a touch MORE
     // uneven and hand-torn without overwhelming the broad wave rhythm (the
     // worst-case bite still sits ~10dp, far inside the hero's content).
-    val tooth = with(density) { (6.4f + rnd.nextFloat() * 2.2f).dp.toPx() }
-    val deep = with(density) { (2.4f + rnd.nextFloat() * 1.5f).dp.toPx() }
+    // v7.37 — bold scales them ~35-50% further for Home's rougher seam.
+    val tooth = with(density) { (6.4f + rnd.nextFloat() * 2.2f).dp.toPx() } * (if (bold) 1.35f else 1f)
+    val deep = with(density) { (2.4f + rnd.nextFloat() * 1.5f).dp.toPx() } * (if (bold) 1.5f else 1f)
     val micro = with(density) { (1.0f + rnd.nextFloat() * 0.8f).dp.toPx() }
     val ripple = with(density) { (1.3f + rnd.nextFloat() * 0.9f).dp.toPx() }
     val rippleWaves = 7f + rnd.nextFloat() * 4f
@@ -1132,7 +1163,8 @@ private class SoftTearParams(private val seed: Int, density: Density) {
 private fun buildSoftTornPath(
     seed: Int,
     size: Size,
-    density: Density
+    density: Density,
+    bold: Boolean = false
 ): Path {
     val w = size.width
     val h = size.height
@@ -1141,7 +1173,7 @@ private fun buildSoftTornPath(
         path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
         return path
     }
-    val p = SoftTearParams(seed, density)
+    val p = SoftTearParams(seed, density, bold)
     val step = with(density) { 4.dp.toPx() }
     // Clockwise: straight top, straight right, torn bottom (right→left),
     // straight left, close.
@@ -1172,7 +1204,8 @@ private fun buildSoftSheetPath(
     size: Size,
     density: Density,
     lipPx: Float,
-    baselinePx: Float
+    baselinePx: Float,
+    bold: Boolean = false
 ): Path {
     val w = size.width
     val h = size.height
@@ -1181,7 +1214,7 @@ private fun buildSoftSheetPath(
         path.moveTo(0f, 0f); path.lineTo(w, 0f); path.lineTo(w, h); path.lineTo(0f, h); path.close()
         return path
     }
-    val p = SoftTearParams(seed, density)
+    val p = SoftTearParams(seed, density, bold)
     val step = with(density) { 4.dp.toPx() }
     // Keep the hero and sheet on the SAME broad wave rhythm, but do not
     // duplicate the hero's fine tooth. The exposed white gets only a small,
@@ -1474,6 +1507,10 @@ fun NotePaperCard(
     /** Extra bottom space (Dp) — forwarded to the paper base; see
      *  [PaperCard.tailSpace]. */
     tailSpace: Dp = 0.dp,
+    /** v7.37 — stable torn-seam seed, forwarded to the paper base (see
+     *  [PaperCard.seed]). Saved views pass a per-entry seed so the card's
+     *  tear never re-rolls between opens. */
+    seed: Int? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     if (style.torn) {
@@ -1489,6 +1526,7 @@ fun NotePaperCard(
             contentPadding = contentPadding,
             ruleSpacing = ruleSpacing,
             tailSpace = tailSpace,
+            seed = seed,
             content = content
         )
     } else {
@@ -1508,6 +1546,7 @@ fun NotePaperCard(
             watermark = style.watermark,
             ruleSpacing = ruleSpacing,
             tailSpace = tailSpace,
+            seed = seed,
             content = content
         )
     }

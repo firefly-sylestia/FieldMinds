@@ -206,6 +206,15 @@ private val SavedNoteRuleSpacing = 28.dp
  *  flush at the last line. */
 private val SavedNoteTailSpace = SavedNoteRuleSpacing * 2f
 
+/**
+ * v7.37 — stable per-entry torn-paper seed: entry-derived base XORed with a
+ * per-card salt, so the detail page's paper tears are unique per entry AND
+ * distinct within it, and never re-roll between opens (String.hashCode is
+ * deterministic — the same entry always tears identically).
+ */
+private fun noteSeed(entryId: String, salt: Int): Int =
+    (entryId.hashCode() xor (salt * 0x1F31)) and 0x7fffffff
+
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
     val scope = rememberCoroutineScope()
@@ -1544,6 +1553,7 @@ private fun SoundBiteRender(
                 val noteSheet = data.noteColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.noteStyle ?: data.notePaperStyle(),
+                    seed = noteSeed(entry.id, 1),
                     paperColor = noteSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
@@ -2013,6 +2023,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
         if (!data.reviewText.isNullOrBlank()) {
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
+                seed = noteSeed(entry.id, 2),
                 paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
@@ -2030,6 +2041,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
             // Fallback when no review text
             NotePaperCard(
                 style = data.reviewStyle ?: data.notePaperStyle(),
+                seed = noteSeed(entry.id, 3),
                 paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
@@ -2076,6 +2088,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
             val journalSheet = data.journalColor ?: NotePaperColor.CREAM
             NotePaperCard(
                 style = data.journalStyle ?: data.notePaperStyle(),
+                seed = noteSeed(entry.id, 4),
                 paperColor = journalSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
@@ -2194,6 +2207,9 @@ private fun RenderQuoteCards(
             val quoteSheet = colors.getOrNull(origIndex) ?: NotePaperColor.CREAM
             NotePaperCard(
                 style = styles.getOrNull(origIndex) ?: fallbackStyle,
+                // Per-card salt so the quote cards on one page tear
+                // distinctly, yet the same entry re-tears identically.
+                seed = noteSeed(entryId, 50 + origIndex * 7),
                 paperColor = quoteSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
@@ -2699,7 +2715,10 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                             onBoard = data.quoteOnBoard.orEmpty(),
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            boardScale = boardScale
+                            boardScale = boardScale,
+                            // v7.37 — stable per-entry seed so the on-board
+                            // paper slips never re-roll their tears.
+                            seed = noteSeed(entry.id, 60)
                         )
                     }
                 } else {
@@ -2765,6 +2784,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
             val captionSheet = data.captionColor ?: NotePaperColor.CREAM
             NotePaperCard(
                 style = data.captionStyle ?: data.notePaperStyle(),
+                seed = noteSeed(entry.id, 5),
                 paperColor = captionSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
@@ -2928,7 +2948,10 @@ private fun ExpandedMoodBoardDialog(
                             onBoard = data.quoteOnBoard.orEmpty(),
                             canvasWPx = boardW,
                             canvasHPx = boardH,
-                            boardScale = fit.scale
+                            boardScale = fit.scale,
+                            // v7.37 — stable per-entry seed so the on-board
+                            // paper slips never re-roll their tears.
+                            seed = noteSeed(entry.id, 60)
                         )
                     }
 
@@ -3018,6 +3041,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 val observedSheet = data.observedColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.observedStyle ?: data.notePaperStyle(),
+                    seed = noteSeed(entry.id, 6),
                     paperColor = observedSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
@@ -3039,6 +3063,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 val surprisedSheet = data.surprisedColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.surprisedStyle ?: data.notePaperStyle(),
+                    seed = noteSeed(entry.id, 7),
                     paperColor = surprisedSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
@@ -3060,6 +3085,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                 val learnNextSheet = data.learnNextColor ?: NotePaperColor.CREAM
                 NotePaperCard(
                     style = data.learnNextStyle ?: data.notePaperStyle(),
+                    seed = noteSeed(entry.id, 8),
                     paperColor = learnNextSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,

@@ -674,7 +674,12 @@ fun MoodBoardFloatingCards(
     // v7.22 — parallel per-card flag: false = the card renders BELOW the
     // board, so it must NOT float on the collage. Legacy entries lack the
     // list → null → every card floats (the v7.19 look).
-    onBoard: List<Boolean>? = null
+    onBoard: List<Boolean>? = null,
+    // v7.37 — stable torn-paper seed base: saved views pass a per-entry
+    // seed so the on-board paper slips NEVER re-roll their tears between
+    // opens (a per-index salt keeps the cards distinct on the board). Null
+    // keeps the editor's remember-random behavior.
+    seed: Int? = null
 ) {
     // Guard the pre-measure first frame (canvas = 0) and degenerate scales
     // so cards never stack at the top-left or divide by zero.
@@ -699,6 +704,7 @@ fun MoodBoardFloatingCards(
             h = slot.h * scale,
             boardW = canvasWPx * scale,
             boardH = canvasHPx * scale,
+            seed = seed?.let { it + i * 0x1F31 },
             onEdit = { onEditCard?.invoke(i) },
             onMove = onMoveCard?.let { move ->
                 { rx, ry -> move(i, (rx - offsetX) / scale, (ry - offsetY) / scale) }
@@ -726,6 +732,9 @@ private fun MoodBoardFloatingCard(
     h: Float,
     boardW: Float,
     boardH: Float,
+    // v7.37 — stable torn-paper seed, forwarded to the paper slip (see
+    // [MoodBoardFloatingCards.seed]).
+    seed: Int? = null,
     onEdit: (() -> Unit)? = null,
     onMove: ((Float, Float) -> Unit)? = null
 ) {
@@ -811,6 +820,7 @@ private fun MoodBoardFloatingCard(
     ) {
         NotePaperCard(
             style = style,
+            seed = seed,
             paperColor = color,
             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
             modifier = Modifier.fillMaxSize()

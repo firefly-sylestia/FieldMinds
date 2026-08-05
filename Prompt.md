@@ -2,67 +2,52 @@
 
 ## Latest Request (COMPLETED)
 
-**Detail page: adaptive gallery attachments + in-place zoom; fix moodboard double-tap zoom**
+**Stable per-entry torn-paper tears + a different Home tear pattern**
 
 ### Requested
 
-- The attachments view for images on the saved-entry detail page is
-  squared — make it a gallery where images adjust themselves by aspect
-  ratio (e.g. one horizontal + one vertical, then three verticals in a
-  line), like Google Photos.
-- The zoom view should pop up from the tapped image's place, WITHOUT a
-  darker background, NOT on a new page (no Lightbox) — over the detail
-  page, just like the mood board's zoom.
-- Also: the double-tap-zoomed images in the mood board need pinch-to-zoom
-  and drag to work after the double-tap.
+- The paper bottom tear style doesn't stay the same — it should have a
+  UNIQUE seed per entry, not be the same everywhere; make it remember.
+- Change the home screen's tear style a little — a different pattern.
 
 ### Analysis
 
-- Three squared attachment views existed in `EntryDetailScreen`:
-  ReelNotes (170dp square Crop strip, already in-place zoom), Marginalia
-  (150×120 strip → Lightbox page), FieldNotes (weighted 150×120 row,
-  `take(3)`, → Lightbox page).
-- The mood board's `MoodBoardZoomOverlay` is exactly the requested zoom UX:
-  glides the tapped image from its spot to center, pinch/pan, tap close,
-  NO dark scrim, in place (no page). It was already imported by the detail
-  screen.
-- Moodboard pinch-after-double-tap bug: the overlay used TWO gesture
-  detectors (a parent pan/zoom `pointerInput` + the image's own
-  `detectTapGestures`). After a double-tap, the tap detector consumed
-  events and the parent's `awaitFirstDown()` (requireUnconsumed=true)
-  skipped consumed downs — the two detectors desynced and a pinch/drag
-  begun right after a double-tap could be eaten.
+- `PaperCard` (ruled) seeded its bottom torn seam + texture with
+  `remember { Random.nextInt(...) }` → re-rolled on every fresh
+  composition (every open of the detail page). `TornPaperCard` already
+  took `seed: Int?` but no caller passed one. `NotePaperCard` had no seed
+  plumbing. Result: every paper card on the detail page (journal, reviews,
+  quotes, field-note sections, on-board floating cards) tore differently
+  on each visit.
+- The Home hero used a fixed `HOME_TEAR_SEED = 0x5EED` and the SAME soft
+  tear language as the detail hero → identical-looking seam everywhere.
 
 ### Plan
 
-1. NEW `ui/components/AdaptiveImageGallery.kt`: measures each image's
-   aspect ratio (header-only BitmapFactory decode + EXIF rotation, content
-   URI / file path, on Dispatchers.IO), packs images into JUSTIFIED rows
-   (base width = rowHeight × aspect; rows stretch to fill the container,
-   heights follow — no distortion), single image at natural aspect (capped
-   for extreme portraits); tap → in-place `MoodBoardZoomOverlay` (gallery
-   zIndex 1000 while zooming so later sections don't paint over it).
-2. Replace the three squared strips (ReelNotes / Marginalia / FieldNotes)
-   with `AdaptiveImageGallery` — Lightbox navigation gone from the detail
-   page; FieldNotes now shows ALL images (was take(3)).
-3. `MoodBoardZoom.kt` gesture rewrite: ONE `pointerInput` with
-   `awaitFirstDown(requireUnconsumed = false)` classifies pinch/pan vs
-   taps on the same stream — no dual-detector race. Single tap resets a
-   refinement or closes (delayed by the double-tap window, cancellable);
-   double-tap on the magnified image adds ONE MORE zoom step (×1.5,
-   capped at 8× total) when un-refined, else resets. Taps anywhere close
-   (no scrim).
-4. Import cleanup (ContentScale, rememberAsyncImagePainter removed from
-   EntryDetailScreen); docs; Prompt.md; commit + push.
+1. `PaperCard`: new `seed: Int? = null` — tear seed = `seed ?: random`,
+   grain derived `seed * 0x51A7 + 7` (keeps editor behavior, makes saved
+   views deterministic). `NotePaperCard` gains `seed` and forwards it to
+   `TornPaperCard` / `PaperCard`.
+2. Detail page: `noteSeed(entryId, salt)` helper (hashCode xor salt,
+   masked) seeded ALL 9 paper-card call sites (soundbite note, review +
+   fallback, journal, quote cards per-index, caption, observed/surprised/
+   learnNext) AND the mood-board on-board floating slips (via new
+   `seed` params on `MoodBoardFloatingCards`/`MoodBoardFloatingCard`).
+   Unique per entry, distinct per card, never re-rolls.
+3. Home: new `HOME_TEAR_SEED = 0xC0FEE` + a `bold` tear personality on
+   `SoftTearParams`/`SoftTornBottomShape`/`SoftTornSheetShape` (waves
+   ×1.2, tooth ×1.35, deep ×1.5) — Home's hero now tears as a rougher,
+   deeper seam than the detail hero, both shapes passing `bold = true` so
+   they stay pixel-aligned. Default false keeps the detail hero (and every
+   other caller) unchanged.
 
 ### Status
 
-- All edits applied: AdaptiveImageGallery.kt (new), MoodBoardZoom.kt
-  (single-detector gestures + zoom-step + doc), EntryDetailScreen.kt
-  (3 call sites + imports).
-- Code-reviewer-deepseek-flash verified compile-safety (imports, layout
-  math, division-by-zero guards, AwaitPointerEventScope supports launch,
-  no stale `isPinched` refs) — only minor notes (double-tap window uses
-  down-to-down 300ms; reset/step animatables could race in an edge case;
-  aspect decode opens the stream twice). No action needed.
+- Edits applied: PaperCard.kt (seed plumbing + bold personality),
+  HomeScreen.kt (new seed + bold), EntryDetailScreen.kt (noteSeed + 11
+  seeded call sites), MoodBoardZoom.kt (floating-slip seeds).
+- Code-reviewer-deepseek-flash verified compile-safety (defaults preserve
+  all existing callers; entry.id in scope at every site) and caught one
+  gap — the on-board floating quote cards still re-rolled — which was
+  fixed by threading seeds through MoodBoardFloatingCards/Card.
 - Committed and pushed.
