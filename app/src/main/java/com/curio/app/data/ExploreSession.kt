@@ -87,11 +87,17 @@ object ExploreSessionStore {
     private const val KEY_ACTIVE_SESSION = "explore_active_session"
     private const val KEY_EXPLORED = "explore_recently_explored"
     private const val KEY_UNEXPLORED = "explore_recently_unexplored"
+    private const val KEY_QUEUED_SESSIONS = "explore_queued_sessions"
 
     // Cap the Home lists so they never grow unbounded.
     private const val MAX_LIST = 12
+    // Queued explores are heavier than list rows (full sessions) — keep the
+    // pile small so Home never turns into a backlog.
+    private const val MAX_QUEUED = 3
 
     var activeSessionState by mutableStateOf<ExploreSession?>(null)
+        private set
+    var queuedSessionsState by mutableStateOf<List<ExploreSession>>(emptyList())
         private set
     var recentlyExploredState by mutableStateOf<List<ExploredTopic>>(emptyList())
         private set
@@ -104,6 +110,7 @@ object ExploreSessionStore {
     /** Load all persisted state (called once from MainActivity onCreate). */
     fun seed(context: Context) {
         activeSessionState = readSession(context)
+        queuedSessionsState = readQueued(context)
         recentlyExploredState = readExplored(context)
         recentlyUnexploredState = readUnexplored(context)
     }
@@ -155,6 +162,75 @@ object ExploreSessionStore {
         val current = activeSessionState ?: return
         if (current.pillHidden == hidden) return
         startSession(context, current.copy(pillHidden = hidden))
+    }
+
+    // ── Queued sessions (set aside, resumable) ─────────────────────────
+    // When a new explore starts while another is running, the running one is
+    // paused (time banked) and queued here instead of silently discarded.
+    // Home lists them so the user can swap back anytime.
+
+    /** Pauses the active session (time banked) and queues it for later. */
+    fun queueActiveSession(context: Context) {
+        val current = activeSessionState ?: return
+        val paused = current.copy(
+            paused = true,
+            pausedAtMillis = current.pausedAtMillis ?: System.currentTimeMillis()
+        )
+        saveQueued(context, (listOf(paused) + readQueued(context)).take(MAX_QUEUED))
+    }
+
+    /** Removes one queued session (discarded — its banked time is lost). */
+    fun removeQueued(context: Context, index: Int) {
+        val list = readQueued(context).toMutableList()
+        if (index !in list.indices) return
+        list.removeAt(index)
+        saveQueued(context, list)
+    }
+
+    /** Drops every queued session (feature teardown). */
+    fun clearQueued(context: Context) {
+        saveQueued(context, emptyList())
+    }
+
+    /**
+     * Swaps the queued session at [index] into the active slot: the currently
+     * running session (if any) is pause-banked into the queue, and the
+     * resumed session continues ticking from where it stopped.
+     */
+    fun resumeQueuedSession(context: Context, index: Int) {
+        val queued = readQueued(context).getOrNull(index) ?: return
+        val list = readQueued(context).toMutableList()
+        list.removeAt(index)
+        activeSessionState?.let { current ->
+            list.add(
+                0,
+                current.copy(
+                    paused = true,
+                    pausedAtMillis = current.pausedAtMillis ?: System.currentTimeMillis()
+                )
+            )
+        }
+        saveQueued(context, list.take(MAX_QUEUED))
+        startSession(context, queued)
+        // Bank the paused span so the timer continues from where it stopped.
+        resumeSession(context)
+    }
+
+    private fun readQueued(context: Context): List<ExploreSession> {
+        val raw = prefs(context).getString(KEY_QUEUED_SESSIONS, null) ?: return emptyList()
+        return try {
+            val arr = JSONArray(raw)
+            List(arr.length()) { i -> parseExploreSession(arr.getString(i)) }.filterNotNull()
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun saveQueued(context: Context, sessions: List<ExploreSession>) {
+        val arr = JSONArray()
+        sessions.forEach { arr.put(it.toJson().toString()) }
+        prefs(context).edit().putString(KEY_QUEUED_SESSIONS, arr.toString()).apply()
+        queuedSessionsState = sessions
     }
 
     private fun readSession(context: Context): ExploreSession? {

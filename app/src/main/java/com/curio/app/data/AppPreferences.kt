@@ -508,6 +508,7 @@ object AppPreferences {
             // Turning the feature off mid-session: tear the live session
             // down so the timer, reminder and done-prompt all stop.
             ExploreSessionStore.clearSession(context)
+            ExploreSessionStore.clearQueued(context)
             ExploreReminderScheduler.cancel(context)
             com.curio.app.infrastructure.ExploreSessionService.stop(context)
         }

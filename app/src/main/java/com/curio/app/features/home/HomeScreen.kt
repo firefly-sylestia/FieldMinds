@@ -452,6 +452,45 @@ fun HomeScreen(navController: NavController) {
                 Spacer(Modifier.height(20.dp))
             }
 
+            // ── 4c. Queued explores — sessions set aside for later ────
+            // When a new explore replaced the running one, the old session is
+            // paused (time banked) and queued here. Tap a row to swap it back
+            // into the active slot; the ✕ discards it.
+            val queuedSessions = ExploreSessionStore.queuedSessionsState
+            if (queuedSessions.isNotEmpty()) {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    Text(
+                        "Queued explores",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        queuedSessions.forEachIndexed { index, queued ->
+                            QueuedExploreRow(
+                                session = queued,
+                                onResume = {
+                                    // Cancel the running session's reminder
+                                    // (it's about to be queued), swap the
+                                    // queues, then re-arm everything for the
+                                    // resumed session.
+                                    ExploreReminderScheduler.cancel(context)
+                                    ExploreSessionStore.resumeQueuedSession(context, index)
+                                    ExploreSessionStore.getActiveSession(context)?.let { resumed ->
+                                        ExploreReminderScheduler.schedule(
+                                            context, resumed.startMillis, resumed.durationMinutes
+                                        )
+                                        ExploreSessionService.start(context, resumed)
+                                    }
+                                },
+                                onDiscard = { ExploreSessionStore.removeQueued(context, index) }
+                            )
+                        }
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
+            }
+
             // ── 5. Categories chip row ──────────────────────────────────
             Column {
                 Row(
@@ -1468,4 +1507,56 @@ private fun CurrentlyExploringCard(
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// Queued explore row — a paused session saved for later (tap to resume)
+// ═══════════════════════════════════════════════════════════════════════
 
+@Composable
+private fun QueuedExploreRow(
+    session: ExploreSession,
+    onResume: () -> Unit,
+    onDiscard: () -> Unit
+) {
+    val accent = CurioCategories.byId(session.categoryId).themedAccent()
+    // Plain backgroundless row, matching the Recents / Saved list style —
+    // the frozen elapsed readout comes from the session's banked pause.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(onClick = onResume)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        CurioIcon(CurioIcons.Schedule, null, tint = accent, size = 22.dp)
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                session.topicName,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                "Paused at ${formatElapsed(session.elapsedMillis())} · tap to resume",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Surface(
+            onClick = onDiscard,
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.surfaceContainerLow
+        ) {
+            CurioIcon(
+                CurioIcons.Close, "Discard queued explore",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                size = 16.dp,
+                modifier = Modifier.padding(5.dp)
+            )
+        }
+    }
+}

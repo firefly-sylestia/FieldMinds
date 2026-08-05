@@ -230,6 +230,15 @@ fun TopicRevealScreen(
     var overlayNeedsNotification by remember { mutableStateOf(false) }
     var showOverlayPermissionDialog by rememberSaveable { mutableStateOf(false) }
 
+    // ── Active-session conflict — starting a new explore while another is
+    //    running must ASK first (Save for later / Explore now) instead of
+    //    silently discarding the running session. Plain `remember`: a
+    //    rotation drops the continuation, and the running session is safe
+    //    either way (nothing is started until the dialog resolves).
+    var conflictActiveSession by remember { mutableStateOf<ExploreSession?>(null) }
+    var pendingConflictSession by remember { mutableStateOf<ExploreSession?>(null) }
+    var showConflictDialog by rememberSaveable { mutableStateOf(false) }
+
     /** Continues the explore flow after the overlay-permission step resolves. */
     fun continueExploreFlow(session: ExploreSession) {
         if (overlayNeedsNotification &&
@@ -284,6 +293,21 @@ fun TopicRevealScreen(
             searchUrl = buildExploreSearchUrl(topic),
             startMillis = System.currentTimeMillis()
         )
+        // Starting a new explore while another session is running would
+        // silently discard it — ask first instead (Save for later / Explore
+        // now). Same-topic restarts are allowed to proceed straight through.
+        val active = ExploreSessionStore.getActiveSession(context)
+        if (active != null && active.topicName != topic.name) {
+            conflictActiveSession = active
+            pendingConflictSession = session
+            showConflictDialog = true
+            return
+        }
+        beginExploreSession(session)
+    }
+
+    /** Starts [session] once the conflict check has passed. */
+    fun beginExploreSession(session: ExploreSession) {
         if (AppPreferences.isExploreSessionsEnabled(context)) {
             ExploreSessionStore.startSession(context, session)
             // Reminder always — fires even without the live notification
@@ -704,6 +728,69 @@ fun TopicRevealScreen(
                 ) { Text("Write about it") }
             }
         )
+    }
+
+    // ── Active-session conflict — another explore is running. Save for
+    //    later pins the new topic and keeps the current session going;
+    //    Explore now queues the running session (paused, resumable from
+    //    Home) and starts the new one. Nothing is started until the user
+    //    picks an action — the running session is never silently replaced.
+    if (showConflictDialog) {
+        val old = conflictActiveSession
+        val next = pendingConflictSession
+        if (old != null && next != null) {
+            AlertDialog(
+                onDismissRequest = {
+                    showConflictDialog = false
+                    pendingConflictSession = null
+                    conflictActiveSession = null
+                },
+                title = { Text("Already exploring ${old.topicName}?") },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(
+                            "You're in the middle of exploring ${old.topicName}. " +
+                            "Start exploring ${next.topicName} instead?"
+                        )
+                        Text(
+                            "The current session gets queued — paused with its time banked, " +
+                            "resumable anytime from Home. Or save this new topic for later " +
+                            "and keep going.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        val s = pendingConflictSession
+                        showConflictDialog = false
+                        pendingConflictSession = null
+                        conflictActiveSession = null
+                        if (s != null) {
+                            // Queue the running session (paused, time banked),
+                            // then start the new explore in its place.
+                            ExploreReminderScheduler.cancel(context)
+                            ExploreSessionStore.queueActiveSession(context)
+                            beginExploreSession(s)
+                        }
+                    }) { Text("Explore now") }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        // Save the new topic for later — the current session
+                        // keeps running untouched.
+                        val s = pendingConflictSession
+                        showConflictDialog = false
+                        pendingConflictSession = null
+                        conflictActiveSession = null
+                        if (s != null) {
+                            AppPreferences.pinTopic(context, s.categoryId, s.topicName)
+                        }
+                    }) { Text("Save for later") }
+                }
+            )
+        }
     }
 
     if (confettiTrigger > 0) {
