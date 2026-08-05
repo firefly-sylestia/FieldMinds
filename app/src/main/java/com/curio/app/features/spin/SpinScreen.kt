@@ -117,11 +117,13 @@ import com.curio.app.ui.theme.categoryBackgroundWash
 import com.curio.app.ui.theme.categoryBorder
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
+import com.curio.app.ui.theme.fromHsl
 import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.lightAccentTint
 import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
+import com.curio.app.ui.theme.toHsl
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -1694,6 +1696,7 @@ private fun Carousel(
                         slot = slot,
                         scale = deckScale,
                         accent = deckAccent,
+                        gradient = deckGradient,
                         cat = cat,
                         topic = topic,
                         shuffling = shuffling
@@ -2193,6 +2196,12 @@ private fun PeekCard(
     slot: Int,
     scale: Float = 1f,
     accent: Color,
+    // The deck's TRUE gradient stops — the multi-accent sweep for mixed
+    // decks (same family the hero ticket wears), the theme-aware card
+    // gradient otherwise. The peeks used to rebuild a single-accent
+    // cardGradient(accent) from the blended color, which flattened a
+    // mixed deck's gradient into one flat hue.
+    gradient: List<Color>,
     cat: CurioCategory,
     topic: CurioTopic?,
     shuffling: Boolean
@@ -2224,28 +2233,38 @@ private fun PeekCard(
     // Mixed decks shade the blended accent so the whole deck reads mixed.
     // v7.7 — pastel mode keeps the peeks in the pastel CARD family instead
     // of the old flat mid-tones (which read neither pastel nor deep accent).
-    // v7.8.1 — they sit a step DARKER than the hero ticket (which opens on
-    // the pure pastel accent) so the classic level hierarchy holds: light
-    // mode deepens toward black (near 0.16 / far 0.28), dark mode deepens
-    // the muted pastel twin (near 0.14 / far 0.26).
+    // v7.15 — pastel depth now steps via HSL lightness drop (below), not
+    // black-lerp, so the airy pastels stay in family.
     val pastelMode = AppPreferences.pastelColorsState
     val darkMode = isCurioDarkTheme()
     // v7.14 — peek cards wear the SAME card-gradient family as the hero
     // (the Material card blend when active, the classic category gradient
     // otherwise), stepped a level DARKER so the deck keeps its hierarchy
-    // (hero brightest, near a step down, far a step further). Previously
-    // the peeks were a flat black-lerp of the accent and carried none of
-    // the material palette. The level crush keeps the classic depth:
-    // near 0.28 / far 0.42 in light; pastel light near 0.13 / far 0.22;
-    // pastel dark near 0.11 / far 0.21 (kept from v7.8.1).
-    val blendStops = CurioGradients.cardGradient(accent)
+    // (hero brightest, near a step down, far a step further).
+    // v7.15 — peeks wear the deck's OWN gradient stops (multi-accent sweep
+    // for mixed decks, theme-aware card gradient otherwise) instead of
+    // rebuilding a flat single-accent cardGradient from the blend — so a
+    // mixed deck's peeks read mixed, not one flat hue.
+    val blendStops = gradient
     val cardStops = remember(blendStops, far, pastelMode, darkMode) {
-        val level = when {
-            pastelMode && !darkMode -> if (far) 0.22f else 0.13f
-            pastelMode -> if (far) 0.21f else 0.11f
-            else -> if (far) 0.42f else 0.28f
+        if (pastelMode) {
+            // Pastel peeks stay IN FAMILY: step the depth by dropping
+            // LIGHTNESS (HSL) instead of black-lerping, which greyed the
+            // airy pastels into muddy mids. Hue + saturation are held, so
+            // the peeks read as deeper pastels — never murky.
+            blendStops.map { stop ->
+                val h = toHsl(stop)
+                val drop = if (far) {
+                    if (darkMode) 0.14f else 0.10f
+                } else {
+                    if (darkMode) 0.09f else 0.06f
+                }
+                fromHsl(h.h, h.s, (h.l - drop).coerceIn(0f, 1f))
+            }
+        } else {
+            val level = if (far) 0.42f else 0.28f
+            blendStops.map { lerp(it, Color.Black, level) }
         }
-        blendStops.map { lerp(it, Color.Black, level) }
     }
     // v7.5 — pastel mode lightens the peek fill, so content flips to a deep
     // ink of the deck color (light mode) / a light tint (dark).

@@ -208,8 +208,17 @@ User asks: right-align greeting + name; darker TODAY'S QUEST; shuffle button on 
 - CurrentlyExploringCard: neutral surfaceContainerLow → solid `cat.categorySurface()` (matches recents rows), wrapped in Box with a faint category glyph watermark (96dp, accent 10%, CenterEnd) and the header restyled to the quest-eyebrow treatment (labelSmall ExtraBold + 1.4.sp letterSpacing).
 - Stat card: Streak · Cabinet · Recent icons now wear `questInk` (the deep hero ink) instead of pastel FireOrange/Sage/Lilac; added a sparkle (AutoAwesome) watermark inside the gradient pane. FireOrange is now unused in HomeScreen (only Sage/Lilac remain for empty-state icons).
 
+### Completed: peek cards wear the deck's real mixed gradient + family-kept pastels
+
+User: "make the peek cards gets the mixed card gradients much better and also the pastel colors much better they look odd."
+
+- Root cause 1: PeekCard received only the single blended `deckAccent` and rebuilt `cardGradient(accent)` — mixed decks' peeks flattened to one hue while the hero ticket wore the true multi-accent `deckGradient` sweep.
+- Root cause 2: pastel peek level-crush black-lerped (near 0.13 / far 0.22 light), greying the airy pastels into muddy mids.
+- Fix: Carousel now passes `gradient = deckGradient` into PeekCard (new `gradient: List<Color>` param); `blendStops = gradient`. Pastel mode steps depth by dropping HSL LIGHTNESS per stop (fromHsl(h, s, l - drop): near 0.06 light / 0.09 dark, far 0.10 light / 0.14 dark) holding hue + saturation; non-pastel keeps the classic black-lerp 0.28/0.42.
+- Added imports `fromHsl` / `toHsl` (internal in CurioColors.kt, same module). Only one PeekCard call site (Carousel).
+
 ### Validation
 
 - `scripts/check_braces.py` passed; `git diff --check` clean.
-- Reviewer approved after one fix: the 76dp watermark would have inflated the stat-card pane (wrap-content Box sizes to tallest child) — now wrapped in a `matchParentSize()` Box so it can't grow the card.
+- Reviewer approved after one fix: stale v7.8.1 comment block still described the old black-lerp pastel levels — trimmed.
 - Gradle/build commands were not run because the repository forbids local Android compilation; CI remains the compilation gate.
