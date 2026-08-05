@@ -1,9 +1,12 @@
 package com.curio.app.features.home
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -90,6 +93,7 @@ import com.curio.app.ui.components.SoftTornSheetShape
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.categorySurface
 import com.curio.app.ui.theme.isCurioDarkTheme
@@ -692,9 +696,28 @@ fun HomeScreen(navController: NavController) {
             val frostBg = if (stickyDark) Color(0xE623242C) else Color.White.copy(alpha = 0.80f)
             val frostRim = if (stickyDark) Color.White.copy(alpha = 0.28f) else Color.White.copy(alpha = 0.75f)
             val frostIcon = if (stickyDark) Color.White.copy(alpha = 0.92f) else stickyInk
-            val pillBg = lerp(stickyInk.copy(alpha = 0.14f), frostBg, frostShift)
-            val pillRim = lerp(stickyInk.copy(alpha = 0.26f), frostRim, frostShift)
-            val pillIcon = lerp(stickyInk, frostIcon, frostShift)
+            // Resolve the target colors from scroll, then animate the paint
+            // itself. The old direct lerp was visually abrupt when the sticky
+            // bar crossed the hero boundary; a short tween gives a true color
+            // fade without introducing a second geometric transition.
+            val targetPillBg = lerp(stickyInk.copy(alpha = 0.14f), frostBg, frostShift)
+            val targetPillRim = lerp(stickyInk.copy(alpha = 0.26f), frostRim, frostShift)
+            val targetPillIcon = lerp(stickyInk, frostIcon, frostShift)
+            val pillBg by animateColorAsState(
+                targetValue = targetPillBg,
+                animationSpec = tween(CurioMotion.Durations.Quick),
+                label = "homeStickyPillBackground"
+            )
+            val pillRim by animateColorAsState(
+                targetValue = targetPillRim,
+                animationSpec = tween(CurioMotion.Durations.Quick),
+                label = "homeStickyPillRim"
+            )
+            val pillIcon by animateColorAsState(
+                targetValue = targetPillIcon,
+                animationSpec = tween(CurioMotion.Durations.Quick),
+                label = "homeStickyPillIcon"
+            )
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -830,13 +853,23 @@ private fun TopBarPill(
     iconTint: Color,
     elevation: Dp
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Surface(
-        onClick = onClick,
         shape = shape,
         color = bg,
         border = BorderStroke(1.dp, rim),
         shadowElevation = elevation,
-        modifier = Modifier.size(42.dp)
+        modifier = Modifier
+            .size(42.dp)
+            // Material's default indication is a circular ripple. On these
+            // small floating pills it expands beyond the color fade and reads
+            // as a circular visual glitch, so remove the ripple and let the
+            // animated colors provide the transition instead.
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
     ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             CurioIcon(

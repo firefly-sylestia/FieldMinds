@@ -1,3 +1,4 @@
+• Fixed the Home menu/profile pills' circular ripple glitch: their shapes stay stable, and the hero-to-frost background, rim and icon colors now fade smoothly instead of flashing through a circular transition.
 • Restored Home's random shuffle: each tap now opens either one random category or a fresh 2–3 category mix, and the Home pastel hero is shifted toward a cleaner pink-rose instead of brownish rosewood.
 • Fixed the floating explore bubble handoff after granting overlay permission, so returning from system settings reliably re-arms the timer bubble. Darkened the Currently Exploring label, timer icon, supporting text and Keep exploring action for clearer contrast.
 • Cabinet now opens on the All tab after an app restart instead of restoring the last category or Legacy filter; in-session navigation and rotation still keep the active filter.
