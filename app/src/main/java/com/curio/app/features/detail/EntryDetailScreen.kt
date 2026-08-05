@@ -524,10 +524,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                 title = formatCapturedDate(resolvedEntry.capturedAtMillis),
                                 subtitle = "Date",
                                 ink = heroCardInk,
-                                // v7.39 — the capture time rides tiny under
-                                // the hero's date (the old "Captured today ·
-                                // time" meta line is gone).
-                                tiny = formatCapturedTime(resolvedEntry.capturedAtMillis),
+                                // v7.40 — the tiny line under the hero's
+                                // date: captured today → the time; otherwise
+                                // a short "yesterday" / "3d ago".
+                                tiny = heroDateTinyLabel(resolvedEntry),
                                 modifier = Modifier.weight(1f)
                             )
                             VerticalDivider(
@@ -1103,6 +1103,17 @@ private fun CurioEntry.moodOf(): JournalMood? = when (val d = captureData) {
  * and pastel mode.
  */
 @Composable
+/**
+ * v7.40 — the hero's tiny date line: entries captured TODAY show the
+ * capture time, older entries a short relative label ("yesterday" / "3d
+ * ago") — the date itself already sits on the segment's title line.
+ */
+private fun heroDateTinyLabel(entry: CurioEntry): String = when (val days = entry.capturedAtDaysAgo) {
+    0 -> formatCapturedTime(entry.capturedAtMillis)
+    1 -> "yesterday"
+    else -> "${days}d ago"
+}
+
 private fun FrostedSegment(
     icon: String,
     title: String,
