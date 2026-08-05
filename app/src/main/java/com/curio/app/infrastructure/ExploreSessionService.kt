@@ -98,7 +98,10 @@ class ExploreSessionService : Service() {
     private var bubbleLastW = 0
     private var bubbleLastH = 0
     // Prevent repeated overlay attempts after a synchronous WindowManager or
-    // owner setup failure. The foreground notification remains available.
+    // owner setup failure (a rejected window retried on every render tick
+    // would become a restart loop). The foreground notification remains
+    // available; the latch is cleared again on the next explicit start so a
+    // fresh session always retries the overlay (see onStartCommand).
     private var bubbleUnavailable = false
 
     // ── Periodic live-notification refresh ─────────────────────────────
@@ -178,6 +181,17 @@ class ExploreSessionService : Service() {
                 if (current.paused) ExploreSessionStore.resumeSession(this)
                 else ExploreSessionStore.pauseSession(this)
             }
+        }
+        // A fresh explicit start — a new explore session, or a re-arm after
+        // settings/permission changes — gets a clean overlay slate. The
+        // bubble-failure latch exists to stop restart loops (never retry a
+        // rejected window on every render tick), NOT to permanently disable
+        // the bubble: a transient WindowManager / Android 16 attach failure
+        // in an earlier session must not silence the floating bubble for
+        // every later session in this process. Every explicit start retries
+        // the overlay once.
+        if (intent?.hasExtra(EXTRA_SESSION) == true) {
+            bubbleUnavailable = false
         }
         return render()
     }
@@ -527,14 +541,16 @@ class ExploreSessionService : Service() {
             )
         }
 
-        val added = runCatching { windowManager.addView(view, params) }.isSuccess
-        if (!added) {
+        val addResult = runCatching { windowManager.addView(view, params) }
+        if (addResult.isFailure) {
             // Overlay unavailable (permission revoked between the check and
             // the add, or an OEM rejection) — skip the bubble; the
             // notification-only path keeps running. Never retry this failed
             // window on every service tick, because that can turn an OEM
-            // rejection into a restart loop.
+            // rejection into a restart loop. The latch is cleared again on
+            // the next explicit start (see onStartCommand).
             bubbleUnavailable = true
+            Log.e(TAG, "Explore overlay window add failed; using notification only", addResult.exceptionOrNull())
             composeView.disposeComposition()
             bubbleComposeView = null
             overlayOwner?.destroy()
@@ -595,6 +611,13 @@ class ExploreSessionService : Service() {
         // re-seeds it; leaving stale sizes would mislead the guard.
         bubbleLastW = 0
         bubbleLastH = 0
+        // Release the overlay owner with the window — the next showBubble
+        // builds a FRESH owner instead of reusing a stale RESUMED one across
+        // bubble lifecycles. ComposeView resolves its ViewTree owners during
+        // attachment, so a fresh owner per lifecycle is the reliable path
+        // (the Android 16 overlay-attach hardening depends on it).
+        overlayOwner?.destroy()
+        overlayOwner = null
     }
 
     /** Snaps the bubble to the nearest horizontal edge, clamped on-screen. */

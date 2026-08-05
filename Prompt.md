@@ -2,6 +2,48 @@
 
 ## Latest Request (COMPLETED)
 
+**Floating explore bubble disappears after clearing app data**
+
+### What was requested
+
+After using "Explore now" once (bubble works), clearing app data and starting a
+new explore session leaves the floating bubble missing — even though "Display
+over other apps" still shows Allowed (system permission survives a data clear).
+It used to crash (Android 16 overlay attach) and now silently fails.
+
+### What changed
+
+- `ExploreSessionService.onStartCommand` now clears the `bubbleUnavailable`
+  latch whenever an explicit start intent carries `EXTRA_SESSION` (every new
+  session / re-arm / settings sync). A transient WindowManager or Android 16
+  attach failure can no longer permanently disable the bubble for the life of
+  the process — each fresh "Explore now" retries the overlay once. The latch
+  still stops per-tick retry spam (restart-loop guard) since the 60s
+  notification tick and pause toggles never reset it.
+- `removeBubble()` now also destroys and nulls `overlayOwner`, so hide→show
+  and session cycles build a fresh owner instead of reusing a stale RESUMED
+  one (ComposeView resolves ViewTree owners during attachment).
+- The `WindowManager.addView` failure branch now logs the actual throwable
+  ("Explore overlay window add failed") so a persistent device-level rejection
+  is diagnosable in logcat instead of silent.
+
+### Why not "ask for the perms again"
+
+The system "Display over other apps" grant genuinely survives a data clear
+(the user confirmed it shows Allowed), so re-prompting can't change anything —
+`Settings.canDrawOverlays()` already returns true and no dialog would fire.
+The real failure is the overlay window attach, which is now retried per
+session instead of latched permanently.
+
+### Validation
+
+- `scripts/check_braces.py` passed for `ExploreSessionService.kt`.
+- `git diff --check` passed.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+
+## Latest Request (COMPLETED)
+
 **Fix Cabinet bulk-delete CI compilation error**
 
 ### What was requested
