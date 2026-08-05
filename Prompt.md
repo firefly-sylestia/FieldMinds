@@ -2,6 +2,28 @@
 
 ## Latest Request (COMPLETED)
 
+**Remove the detail title background and simplify the Spin header**
+
+### What was requested
+
+The detail screen title should use plain white text with no title background. The Spin page should no longer show its Wildcard/category header, topic count, or back button.
+
+### What changed
+
+- `EntryDetailScreen.kt`: removed the title plate, gradient, border, and related color calculations; the topic title is now a centered plain white ExtraBold text.
+- `SpinScreen.kt`: removed the Spin header composable, including the category/Wildcard label, count, and back button. The fit calculation no longer reserves space for the deleted header, and stale top-bar comments were updated.
+
+### Validation
+
+- `scripts/check_braces.py` passed for both edited Kotlin files.
+- `git diff --check` passed.
+- Static assertions confirmed the removed header/title symbols are absent and the plain white title remains.
+- Code review found no functional issues.
+- Gradle/build/lint/test commands were not run because the repository explicitly forbids local Android compilation; CI remains the compilation gate.
+- Ready to commit and push.
+
+## Previous Request (COMPLETED)
+
 **Fix the Home menu/profile circular visual glitch and use a proper color fade**
 
 ### What was requested

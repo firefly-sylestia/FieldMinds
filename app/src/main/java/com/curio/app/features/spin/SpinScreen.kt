@@ -41,7 +41,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -103,7 +102,6 @@ import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
-import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioCategoryCard
 import com.curio.app.ui.components.CurioNavTint
 import com.curio.app.ui.components.CurioWatermarkBackdrop
@@ -138,7 +136,8 @@ import kotlin.random.Random
  * The Spin — see CURIO_SPEC.md §5 (v5 redesign).
  *
  * v5 changes:
- *  1. **Simplified top bar** — back button, category name, topic count only.
+ *  1. **Header chrome removed** — the Spin deck opens directly without a
+ *     back button, category label, or topic-count badge.
  *  2. **Category picker moved to bottom** — "Categories" pill button in the
  *     bottom bar opens a beautiful tile-grid bottom sheet (like the Explore
  *     page) for switching categories.
@@ -189,8 +188,8 @@ import kotlin.random.Random
  * v5.7–v5.8 changes:
  * 13. The former gradient/glass ticket treatment was replaced by an opaque
  *     paper ticket with a category-color rule, crisp border, and layered
- *     elevation. The top-bar and bottom controls use solid paper containers;
- *     no ambient halo or glossy surface treatment is used on this screen.
+ *     elevation. The bottom controls use solid paper containers; no ambient
+ *     halo or glossy surface treatment is used on this screen.
  *
  * v5.9–v5.10 changes:
  * 14. The optional Spin page feature toggles (roulette dial, ritual &
@@ -395,8 +394,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         }
     }
-    // The first selected category drives chrome (top bar name, watermark
-    // accent, confetti tint); the pool below merges every selected
+    // The first selected category drives the watermark accent and confetti
+    // tint; the pool below merges every selected
     // category's topics so a multi-select launch spins across all of them.
     val activeCategory = remember(activeCatIds) {
         val id = activeCatIds.firstOrNull() ?: AppPreferences.getLastSpinCategory(context)
@@ -452,7 +451,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var landedTopicName by rememberSaveable(activeCategory.id) {
         // Seeded from AppPreferences (v6): rememberSaveable survives tab
         // switches (saveState/restoreState) but dies when the Spin entry is
-        // popped — e.g. the top-bar back arrow to Home. The prefs mirror
+        // popped from the navigation stack. The prefs mirror
         // restores the landed card the next time Spin is composed.
         mutableStateOf(AppPreferences.getLandedTopic(context, activeCategory.id))
     }
@@ -785,19 +784,15 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         val roomy = highDensity && !heightCompact && !densityExtraCompact
         // ── v7.15 — Continuous fit scale ──────────────────────────────
         // The deck now compresses to the space ACTUALLY available — the
-        // height left between the pinned top bar and bottom bar, AND the
-        // screen width — so on small screens the whole deck shrinks together
-        // with the Category/Filter pills instead of overflowing while the
+        // height left between the deck and bottom controls, AND the screen
+        // width — so on small screens the whole deck shrinks together with
+        // the Category/Filter pills instead of overflowing while the
         // controls squeeze. The tier scales (compact / extra-compact /
         // roomy) still apply on top; the fit scale just guarantees the deck
-        // never exceeds its space. Chrome estimates are deliberately
-        // conservative (over-estimate the top bar so the deck never
-        // overflows): the deck section's own breathing spacer + spin-button
-        // block are subtracted per tier, then the leftover height is divided
-        // by the tier's full-size carousel height.
-        val topBarEst = 88.dp
+        // never exceeds its space. With the header removed, only the bottom
+        // controls and the deck's own breathing spacer are reserved here.
         val bottomBarEst = if (extraCompact) 108.dp else 80.dp
-        val fitHeight = (maxHeight - topBarEst - bottomBarEst).coerceAtLeast(220.dp)
+        val fitHeight = (maxHeight - bottomBarEst).coerceAtLeast(220.dp)
         val (fitChrome, fitCarousel) = when {
             extraCompact -> 144.dp to 350.dp
             compactHeight -> 158.dp to 390.dp
@@ -817,25 +812,10 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-        // ── 1. Top bar — back, category name, topic count (pinned) ──
-        TopBar(
-            cat = deckCat,
-            poolCount = pool.size,
-            filteredCount = filteredPool.size,
-            modifier = Modifier.statusBarsPadding(),
-            onBack = {
-                // Edge case — Spin can be a root destination (deep link or
-                // restored tab) with nothing to pop; fall back to Home.
-                if (!navController.popBackStack()) {
-                    navController.navigate(CurioRoutes.HOME) { launchSingleTop = true }
-                }
-            }
-        )
-
         if (compactHeight) {
             // ── Compact layout (small screens) ────────────────────────
-            // The deck + spin button scroll inside the space between the
-            // pinned top bar and the pinned Categories/Filter bar, so the
+            // The deck + spin button scroll inside the space above the
+            // pinned Categories/Filter bar, so the
             // controls are never pushed off-screen; sizes step down via
             // SpinDeckSection(compact = true).
             Column(
@@ -997,9 +977,8 @@ private fun ColumnScope.SpinDeckSection(
     onCardTap: () -> Unit,
     onSpinClick: () -> Unit
 ) {
-    // ── Breathing room — keeps the header off the deck (tighter when the
-    //    screen is short so the deck fits between the pinned bars; roomier
-    //    on high-density screens so the bigger deck has space) ─────────
+    // ── Breathing room before the deck (tighter when the screen is short;
+    //    roomier on high-density screens so the bigger deck has space) ────
     Spacer(
         Modifier.height(
             when {
@@ -1068,60 +1047,6 @@ private fun ColumnScope.SpinDeckSection(
         )
     }
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Top bar — Back · CategoryMenu chip · topic-count badge
-// ═══════════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun TopBar(
-    cat: CurioCategory,
-    poolCount: Int,
-    filteredCount: Int,
-    modifier: Modifier = Modifier,
-    onBack: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CurioBackButton(onClick = onBack)
-
-        Spacer(Modifier.width(10.dp))
-
-        // ── Category label — plain title text, no pill container ────
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(7.dp)
-        ) {
-            CurioIcon(
-                cat.iconGlyph, null,
-                tint = cat.categoryInk(),
-                size = 18.dp
-            )
-            Text(
-                text = cat.displayName,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1
-            )
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        // ── Right-side topic count — plain text, no pill ────────────
-        if (poolCount > 0) {
-            Text(
-                text = "$filteredCount / $poolCount",
-                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1564,15 +1489,15 @@ private const val PeekIdleOutMs = 280
 private const val PeekWipeTravel = 0.45f
 
 /**
- * Small-screen adaptive layout (v6.11). The Spin stack — top bar + 44dp
- * spacer + 444dp deck + spin button + Categories/Filter bar — needs ~830dp;
- * on short screens the bottom CTA gets pushed off-screen. When the height
- * the NavHost actually grants this screen (after status bar, bottom nav and
- * gesture insets) drops below this threshold, the page switches to the
- * compact layout: the deck + button move into a vertically scrollable
- * middle band pinned between the top bar and the bottom CTA, and every
- * fixed size steps down by [SpinCompactDeckScale]. Above the threshold the
- * layout is byte-for-byte the original — normal screens never change.
+ * Small-screen adaptive layout (v6.11). The Spin stack — 44dp spacer +
+ * 444dp deck + spin button + Categories/Filter bar — needs ~830dp; on short
+ * screens the bottom CTA gets pushed off-screen. When the height the NavHost
+ * actually grants this screen (after status bar, bottom nav and gesture
+ * insets) drops below this threshold, the page switches to the compact
+ * layout: the deck + button move into a vertically scrollable middle band
+ * above the bottom CTA, and every fixed size steps down by
+ * [SpinCompactDeckScale]. Above the threshold the layout is byte-for-byte the
+ * original — normal screens never change.
  */
 private val SpinCompactThresholdHeight = 680.dp
 
