@@ -50,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
@@ -86,6 +87,7 @@ import com.curio.app.ui.theme.isCurioDarkTheme
 import com.curio.app.ui.theme.pastelAccent
 import com.curio.app.ui.theme.pastelFillInk
 import com.curio.app.ui.theme.themedAccent
+import kotlin.random.Random
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.content.Intent
@@ -97,36 +99,37 @@ import java.util.Calendar
  *
  * Layout (top to bottom), tuned for 360×800 dp:
  *   1. **Quest hero** — the detail screen's torn-banner language, extended
- *      to the very top: the solid brand-coral banner runs up BEHIND the
- *      status bar, and the menu / avatar pills overlay it (drawn on the
- *      coral). Same seeded soft tear + white under-sheet (the identical
- *      EntryDetail construction, so the tear style stays UNIFORM — no
- *      blur). Inside: the greeting as the title, a Streak · Cabinet ·
- *      Recent bar in the detail bar's icon/value/label design (streak in
- *      fire orange), and the quest CTA. The whole banner is the quest —
- *      tap it to shuffle the wildcard deck.
- *   2. **Currently exploring / Queued** — the live session card and any
+ *      to the very top: the solid rose-wood banner runs up BEHIND the
+ *      status bar, and the menu / avatar pills overlay it. Same seeded
+ *      soft tear + white under-sheet (the identical EntryDetail
+ *      construction, so the tear style stays UNIFORM — no blur). Inside:
+ *      the greeting (one line) with the name beneath, and a Streak ·
+ *      Cabinet · Recent bar pinned just above the tear on a soft rose
+ *      gradient pane (streak in fire orange). The banner itself is NOT
+ *      tappable.
+ *   2. **Quest block** — "TODAY'S QUEST" eyebrow + the big solid Shuffle
+ *      button, sitting between the hero tear and the content below. The
+ *      button picks a random category (or a random mix) and opens that
+ *      deck on the Shuffle tab.
+ *   3. **Currently exploring / Queued** — the live session card and any
  *      paused sessions set aside for later.
- *   3. **Saved** — bookmarked quotes + pinned topics (hidden when empty),
+ *   4. **Saved** — bookmarked quotes + pinned topics (hidden when empty),
  *      each row tappable through to its entry / topic.
- *   4. **Recents** — explored topics, unexplored topics (tagged
- *      "Unexplored"), and the latest saved entries in one list, or a
- *      beautiful empty-state card prompting the first spin.
- *   5. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
+ *   5. **Recents** — explored topics, unexplored topics (tagged
+ *      "Unexplored"), and the latest saved entries as solid category-
+ *      tinted cards (View all → Cabinet), or a beautiful empty-state card
+ *      prompting the first spin.
+ *   6. **Reminder CTA** (only when reminder is OFF) — a subtle ghost-style
  *      card suggesting the user try a daily shuffle reminder, navigating to
  *      Settings.
  *
  *  The screen still hosts the `ModalNavigationDrawer` for secondary
  *  navigation (Profile, History, Manage Categories, Replay Intro).
- *
- *  Top paddings tightened: `statusBarsPadding()` + `vertical = 4dp` for the
- *  bar, `vertical = 6dp` between sections — keeps the "no empty top"
- *  guarantee we established in Shuffle/TopicReveal.
  */
 /** The quest hero's solid body height — the torn banner. Tall enough for
- *  the greeting + the Streak · Cabinet · Recent bar + the quest CTA, and
- *  generous at large font scales. */
-private val HomeQuestHeroHeight = 340.dp
+ *  the greeting + the Streak · Cabinet · Recent bar (pinned just above the
+ *  tear) and generous at large font scales. */
+private val HomeQuestHeroHeight = 300.dp
 /** Extra layout space reserved for the white sheet below the torn banner. */
 private val HomeQuestSheetExtent = 24.dp
 /** Fixed tear seed — Home's tear never re-rolls and matches the detail
@@ -195,17 +198,18 @@ fun HomeScreen(navController: NavController) {
                     .verticalScroll(rememberScrollState())
             ) {
             // ── 1. Quest hero — the detail screen's torn-banner language,
-            // extended to the very top: the solid brand-coral banner runs
-            // up BEHIND the status bar, and the menu / avatar pills overlay
-            // it (added at the end of this Box, so they sit on the coral).
+            // extended to the very top: the solid rose-wood banner runs up
+            // BEHIND the status bar, and the menu / avatar pills overlay it
+            // (added at the end of this Box, so they sit on the banner).
             // Same seeded SOFT tear (SoftTornBottomShape) + white under-
             // sheet (SoftTornSheetShape — same seed → aligned pixel-
             // perfect): the identical EntryDetail construction, so the tear
-            // style stays UNIFORM across the app. No blur, no gradient:
+            // style stays UNIFORM across the app. No blur on the banner:
             // flat color + a real torn seam. Fixed seed → never re-rolls.
-            // Inside: the greeting, a Streak · Cabinet · Recent bar in the
-            // detail bar's icon/value/label design, and the quest CTA — the
-            // whole banner is the quest (tap = shuffle).
+            // Inside: the greeting (one line) + name beneath, and the
+            // Streak · Cabinet · Recent bar pinned just above the tear on a
+            // soft rose gradient pane. The banner itself is NOT tappable —
+            // the Shuffle deck CTA lives below the hero.
             val heroTornShape = remember(HOME_TEAR_SEED) { SoftTornBottomShape(HOME_TEAR_SEED) }
             val sheetShape = remember(HOME_TEAR_SEED) {
                 SoftTornSheetShape(HOME_TEAR_SEED, lip = 10.dp, baseline = 14.dp)
@@ -215,11 +219,7 @@ fun HomeScreen(navController: NavController) {
             // accent — in pastel mode (the shipped default) it resolves to
             // the airy rose-wood pastel twin, otherwise the calm base.
             val accent = CurioColors.HomeRosewood
-            val heroFill = if (AppPreferences.pastelColorsState) {
-                pastelAccent(accent, isCurioDarkTheme())
-            } else {
-                accent
-            }
+            val heroFill = homeRoseAccent()
             val questInk = pastelFillInk(accent)
             Box(
                 modifier = Modifier
@@ -238,9 +238,10 @@ fun HomeScreen(navController: NavController) {
                         .clip(sheetShape)
                         .background(Color(0xFFFDFCF9))
                 )
-                // ── Solid rose-wood banner, torn bottom edge — tappable quest.
+                // ── Solid rose-wood banner, torn bottom edge. The banner is
+                // NOT tappable — only the Shuffle button below the hero
+                // drives the deck.
                 Surface(
-                    onClick = { navController.navigateToTab(CurioRoutes.SPIN) },
                     shape = heroTornShape,
                     color = heroFill,
                     shadowElevation = 0.dp,
@@ -249,11 +250,12 @@ fun HomeScreen(navController: NavController) {
                         .height(HomeQuestHeroHeight)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // Watermark glyph — the wildcard die, clipped by the tear.
+                        // Watermark glyph — sparkles, clipped by the tear
+                        // (a different glyph from the wildcard die).
                         CurioIcon(
-                            name = CurioIcons.Casino,
+                            name = CurioIcons.AutoAwesome,
                             contentDescription = null,
-                            tint = questInk.copy(alpha = 0.18f),
+                            tint = questInk.copy(alpha = 0.16f),
                             size = 140.dp,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
@@ -263,129 +265,99 @@ fun HomeScreen(navController: NavController) {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .statusBarsPadding()
-                                .padding(start = 20.dp, end = 20.dp, top = 64.dp, bottom = 16.dp),
-                            verticalArrangement = Arrangement.SpaceBetween
+                                .padding(start = 20.dp, end = 20.dp, top = 64.dp, bottom = 18.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            // Greeting — the banner's title. The streak line
-                            // that used to sit here is gone (duplicate) — the
-                            // streak lives in the stat bar below.
+                            // Greeting — one line, with the name beneath it
+                            // (the quest CTA moved below the hero).
                             Text(
-                                text = greetingForNow(displayName),
+                                text = greetingWordForNow(),
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.ExtraBold
                                 ),
                                 color = questInk,
                                 textAlign = TextAlign.Center,
-                                maxLines = 2,
+                                maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(Modifier.height(14.dp))
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = displayName,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = questInk.copy(alpha = 0.92f),
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            // Flex spacer — pins the stat card to the bottom
+                            // of the banner, just above the tear.
+                            Spacer(Modifier.weight(1f))
                             // ── Streak · Cabinet · Recent — the detail bar's
-                            // icon/value/label design, on the hero (no blur).
-                            // The streak wears the fire-orange icon.
+                            // icon/value/label design, sitting just above the
+                            // torn seam on a soft rose gradient pane (the
+                            // banner's own color, not white frost).
                             Surface(
-                                shape = RoundedCornerShape(18.dp),
-                                color = questInk.copy(alpha = 0.14f),
-                                border = BorderStroke(1.dp, questInk.copy(alpha = 0.26f)),
+                                shape = RoundedCornerShape(20.dp),
+                                color = Color.Transparent,
+                                border = BorderStroke(1.dp, questInk.copy(alpha = 0.28f)),
                                 shadowElevation = 0.dp
                             ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 6.dp, vertical = 10.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    HeroStatSegment(
-                                        glyph = "local_fire_department",
-                                        value = "$streakDays",
-                                        label = "Streak",
-                                        tint = CurioColors.FireOrange,
-                                        ink = questInk,
-                                        modifier = Modifier.weight(1f)
+                                // The gradient must wear the card's rounded
+                                // shape itself — Surface does not clip its
+                                // content, so a plain background() would bleed
+                                // square corners past the rounded border.
+                                Box(
+                                    modifier = Modifier.background(
+                                        Brush.verticalGradient(
+                                            listOf(
+                                                heroFill.copy(alpha = 0.12f),
+                                                lerp(heroFill, Color.White, 0.26f).copy(alpha = 0.55f)
+                                            )
+                                        ),
+                                        RoundedCornerShape(20.dp)
                                     )
-                                    VerticalDivider(
-                                        modifier = Modifier.height(34.dp),
-                                        color = questInk.copy(alpha = 0.22f)
-                                    )
-                                    HeroStatSegment(
-                                        glyph = CurioIcons.Inventory2,
-                                        value = "$totalSaved",
-                                        label = "Cabinet",
-                                        tint = CurioColors.Sage,
-                                        ink = questInk,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    VerticalDivider(
-                                        modifier = Modifier.height(34.dp),
-                                        color = questInk.copy(alpha = 0.22f)
-                                    )
-                                    HeroStatSegment(
-                                        glyph = CurioIcons.History,
-                                        value = "${recentEntries.size}",
-                                        label = "Recent",
-                                        tint = CurioColors.Lilac,
-                                        ink = questInk,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-                            }
-                            // Flex spacer — pins the quest CTA to the
-                            // banner's bottom edge.
-                            Spacer(Modifier.weight(1f))
-                            // Quest CTA — eyebrow + deck title + shuffle pill.
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.Bottom,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Column {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .width(3.dp)
-                                                .height(16.dp)
-                                                .background(questInk.copy(alpha = 0.60f), RoundedCornerShape(2.dp))
-                                        )
-                                        Text(
-                                            text = "TODAY'S QUEST",
-                                            style = MaterialTheme.typography.labelSmall.copy(
-                                                fontWeight = FontWeight.ExtraBold,
-                                                letterSpacing = 1.2.sp
-                                            ),
-                                            color = questInk.copy(alpha = 0.88f)
-                                        )
-                                    }
-                                    Spacer(Modifier.height(6.dp))
-                                    Text(
-                                        text = "Shuffle the deck",
-                                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                                        color = questInk,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
-                                Surface(
-                                    shape = RoundedCornerShape(50),
-                                    color = questInk.copy(alpha = 0.18f)
                                 ) {
                                     Row(
-                                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 6.dp, vertical = 10.dp),
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        CurioIcon(
-                                            CurioIcons.Casino, null,
-                                            tint = questInk,
-                                            size = 16.dp
+                                        HeroStatSegment(
+                                            glyph = "local_fire_department",
+                                            value = "$streakDays",
+                                            label = "Streak",
+                                            tint = CurioColors.FireOrange,
+                                            ink = questInk,
+                                            modifier = Modifier.weight(1f)
                                         )
-                                        Text(
-                                            text = "Shuffle",
-                                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                                            color = questInk
+                                        VerticalDivider(
+                                            modifier = Modifier.height(34.dp),
+                                            color = questInk.copy(alpha = 0.22f)
+                                        )
+                                        HeroStatSegment(
+                                            glyph = CurioIcons.Inventory2,
+                                            value = "$totalSaved",
+                                            label = "Cabinet",
+                                            tint = CurioColors.Sage,
+                                            ink = questInk,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        VerticalDivider(
+                                            modifier = Modifier.height(34.dp),
+                                            color = questInk.copy(alpha = 0.22f)
+                                        )
+                                        HeroStatSegment(
+                                            glyph = CurioIcons.History,
+                                            value = "${recentEntries.size}",
+                                            label = "Recent",
+                                            tint = CurioColors.Lilac,
+                                            ink = questInk,
+                                            modifier = Modifier.weight(1f)
                                         )
                                     }
                                 }
@@ -442,6 +414,27 @@ fun HomeScreen(navController: NavController) {
             }
 
             Spacer(Modifier.height(14.dp))
+
+            // ── Quest block — below the hero tear, above the content ────
+            // "TODAY'S QUEST" eyebrow (no indicator) + the big solid Shuffle
+            // button. The button picks a random category — or a random mix —
+            // persists it (the plain Shuffle tab is authoritative from
+            // prefs) and opens the deck.
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                QuestShuffleCard(
+                    accent = homeRoseAccent(),
+                    onShuffle = {
+                        val all = CurioCategories.all
+                        val pickMix = Random.nextBoolean()
+                        val chosen =
+                            if (pickMix) all.shuffled().take(2 + Random.nextInt(2))
+                            else listOf(all.random())
+                        AppPreferences.setLastSpinCategories(context, chosen.map { it.id })
+                        navController.navigateToTab(CurioRoutes.SPIN)
+                    }
+                )
+            }
+            Spacer(Modifier.height(20.dp))
 
             // ── 2. Currently exploring — live session card ──────────────
             val activeSession = ExploreSessionStore.activeSessionState
@@ -573,11 +566,22 @@ fun HomeScreen(navController: NavController) {
                             shape = RoundedCornerShape(50),
                             color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
-                            CurioForwardArrow(
-                                "Open Cabinet",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
-                            )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                Text(
+                                    "View all",
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                CurioForwardArrow(
+                                    "Open Cabinet",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    size = 16.dp
+                                )
+                            }
                         }
                     }
                 }
@@ -735,6 +739,65 @@ private fun HeroStatSegment(
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// Quest block — the big solid Shuffle CTA that lives between the hero
+// tear and the content below.
+// ═══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun QuestShuffleCard(
+    accent: Color,
+    onShuffle: () -> Unit
+) {
+    val ink = pastelFillInk(accent)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "TODAY'S QUEST",
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 1.4.sp
+            ),
+            color = accent
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = "Shuffle the deck",
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+            color = MaterialTheme.colorScheme.onBackground,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(Modifier.height(14.dp))
+        Surface(
+            onClick = onShuffle,
+            shape = RoundedCornerShape(18.dp),
+            color = accent,
+            shadowElevation = 0.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CurioIcon(
+                    CurioIcons.Casino, "Shuffle a random deck",
+                    tint = ink,
+                    size = 22.dp
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    "Shuffle a random deck",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = ink
+                )
+            }
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // ── Saved shelf rows — bookmarked quotes + pinned topics ───────────────
 
 @Composable
@@ -849,20 +912,25 @@ private fun PinnedTopicRow(
 @Composable
 private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
     val cat = CurioCategories.byId(entry.topic.categoryId)
-    // Backgroundless row — recent entries read as a plain list on Home.
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick)
-            .padding(14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    // Solid category-tinted card — matches the recents topic rows.
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = cat.categorySurface(),
+        shadowElevation = 0.dp,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        CurioIcon(
-            cat.iconGlyph, null, tint = cat.themedAccent(), size = 24.dp
-        )
-        Column(modifier = Modifier.weight(1f)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(
+                cat.iconGlyph, null, tint = cat.themedAccent(), size = 24.dp
+            )
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     entry.topic.name,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -882,6 +950,7 @@ private fun RecentEntryRow(entry: CurioEntry, onClick: () -> Unit) {
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
         }
+    }
 }
 
 private fun CurioEntry.capturedAtDaysAgoLabel(): String = when (val d = capturedAtDaysAgo) {
@@ -1219,15 +1288,14 @@ private fun DrawerNavItem(
 // Greeting helpers
 // ═══════════════════════════════════════════════════════════════════════
 
-private fun greetingForNow(displayName: String): String {
+private fun greetingWordForNow(): String {
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-    val greeting = when (hour) {
+    return when (hour) {
         in 5..11 -> "Good morning"
         in 12..16 -> "Good afternoon"
         in 17..21 -> "Good evening"
         else -> "Welcome back"
     }
-    return "$greeting, $displayName"
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -1243,61 +1311,68 @@ private fun ExploreTopicRow(
     tag: String? = null
 ) {
     val accent = category.themedAccent()
-    // Backgroundless row — explored/unexplored topics read as a plain
-    // list on Home; the bare accent glyph keeps the category identity.
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    // Solid category-tinted card — the recents topics wear a solid
+    // background in their category's color family (matching the gradient
+    // identity), instead of a backgroundless row.
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = category.categorySurface(),
+        shadowElevation = 0.dp,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        CurioIcon(category.iconGlyph, null, tint = accent, size = 24.dp)
-        Column(modifier = Modifier.weight(1f)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Text(
-                    topicName,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f, fill = false)
-                )
-                if (tag != null) {
-                    // Small accent pill — signals a topic the user left
-                    // unexplored earlier and came back to (resumed).
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = accent.copy(alpha = 0.14f)
-                    ) {
-                        Text(
-                            text = tag,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-                            color = accent,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CurioIcon(category.iconGlyph, null, tint = accent, size = 24.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        topicName,
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    if (tag != null) {
+                        // Small accent pill — signals a topic the user left
+                        // unexplored earlier and came back to (resumed).
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = accent.copy(alpha = 0.14f)
+                        ) {
+                            Text(
+                                text = tag,
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                                color = accent,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
                     }
                 }
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
-            Text(
-                subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
             CurioForwardArrow(
                 contentDescription = subtitle,
                 tint = accent,
                 modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
             )
         }
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
