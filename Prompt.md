@@ -39,5 +39,12 @@
 Reviewer clean after KDOC refresh (4px pan dead-zone + voice-note indent
 noted as acceptable cosmetics).
 
-## Status
-DONE — implemented, reviewed, Prompt.md updated, committed + pushed.
+## Follow-up (v7.40)
+Killed the zoom overlay's 4px drag dead-zone: pan/zoom deltas are now
+applied to the state on EVERY pointer event (not only after the movement
+threshold trips), so the first pixels of a drag move the image immediately
+when zoomed in. The tap classifier became threshold-consistent
+(`pinchScale > 1.01f || totalPan > 4px`) since sub-threshold jitter now
+lands in pinchX/pinchY — tap-to-close still works. Reviewer verified
+single-finger zoomChange is always 1f (no creep) and pan clamps to 0 at
+base zoom. Committed + pushed.

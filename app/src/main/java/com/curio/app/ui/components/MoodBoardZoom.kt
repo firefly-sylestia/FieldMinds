@@ -488,28 +488,27 @@ fun MoodBoardZoomOverlay(
                         ) {
                             hasMovement = true
                         }
-                        // Apply the deltas PER EVENT while the fingers are
-                        // down so the image tracks them live — accumulating
-                        // and applying once at the end made pinch/pan feel
-                        // delayed (the image only moved on finger-lift).
-                        // Multiplying the cumulative zoom per event is
-                        // equivalent to applying it once at the end.
-                        if (hasMovement) {
-                            pinchScale = (pinchScale * zoomChange).coerceIn(1f, 8f)
-                            // Clamp the pan to the viewport (same rule the
-                            // old full-screen viewer used): the image can
-                            // travel just far enough to bring its edges to
-                            // the viewport edges at the current zoom, and
-                            // ZERO at rest — a tiny tile can never be
-                            // dragged fully off-screen, and pinching back
-                            // out recenters it automatically.
-                            val s = glideScale * pinchScale
-                            val maxPanX = ((widthPx * s - viewW) / 2f).coerceAtLeast(0f)
-                            val maxPanY = ((heightPx * s - viewH) / 2f).coerceAtLeast(0f)
-                            pinchX = (pinchX + panChange.x).coerceIn(-maxPanX, maxPanX)
-                            pinchY = (pinchY + panChange.y).coerceIn(-maxPanY, maxPanY)
-                            event.changes.forEach { it.consume() }
-                        }
+                        // Apply EVERY event's deltas to the state while the
+                        // fingers are down so the image tracks them live —
+                        // including the first sub-threshold pixels of a
+                        // drag (no dead-zone: the very first movement
+                        // already moves the image). A clean tap's sub-pixel
+                        // jitter lands harmlessly — pan is clamped to zero
+                        // at rest and the tap classifier below ignores
+                        // drift under the movement threshold.
+                        pinchScale = (pinchScale * zoomChange).coerceIn(1f, 8f)
+                        // Clamp the pan to the viewport (same rule the old
+                        // full-screen viewer used): the image can travel
+                        // just far enough to bring its edges to the viewport
+                        // edges at the current zoom, and ZERO at rest — a
+                        // tiny tile can never be dragged fully off-screen,
+                        // and pinching back out recenters it automatically.
+                        val s = glideScale * pinchScale
+                        val maxPanX = ((widthPx * s - viewW) / 2f).coerceAtLeast(0f)
+                        val maxPanY = ((heightPx * s - viewH) / 2f).coerceAtLeast(0f)
+                        pinchX = (pinchX + panChange.x).coerceIn(-maxPanX, maxPanX)
+                        pinchY = (pinchY + panChange.y).coerceIn(-maxPanY, maxPanY)
+                        if (hasMovement) event.changes.forEach { it.consume() }
                         if (event.changes.none { it.pressed }) break
                     }
                     if (!hasMovement) {
@@ -526,7 +525,15 @@ fun MoodBoardZoomOverlay(
                             // glide is already folding the pinch back — do
                             // nothing (never start a reset spring mid-close).
                         } else {
-                            val refined = pinchScale > 1.01f || pinchX != 0f || pinchY != 0f
+                            // Threshold-consistent classification: pan is
+                            // clamped to 0 at base zoom, so a "refined"
+                            // state is purely the zoom level — and this
+                            // gesture's drift under the movement threshold
+                            // (totalPan ≤ 4px) still reads as a clean tap.
+                            // (A tiny tap jitter now lands in pinchX/pinchY,
+                            // so raw non-zero pan no longer means refined.)
+                            val refined = pinchScale > 1.01f ||
+                                totalPan.getDistance() > 4f
                             if (refined) resetTick++ else zoomState.zoomOut()
                         }
                     }
