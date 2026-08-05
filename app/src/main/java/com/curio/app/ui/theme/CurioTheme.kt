@@ -178,11 +178,111 @@ fun isCurioDarkThemeForContext(context: Context): Boolean {
 }
 
 /**
+ * The Material style's CALM palette — the device's Material You hues (the
+ * proper Material color given by the device, from the wallpaper) kept as
+ * the identity, but MUTED into non-vibrant pastels on airy LIGHT surfaces
+ * instead of the stock dynamic scheme's vivid primaries and grey
+ * containers.
+ *
+ *  - Light mode: near-white surfaces with a whisper of the device hue
+ *    (very low saturation — calm, non-vibrant), muted pastel accents
+ *    (same hue, low saturation, airy lightness) with deep same-hue ink.
+ *  - Dark mode: a SOFT pastel-tinted dark — lighter and calmer than the
+ *    Curio midnight — carrying the same muted pastel accents, so the
+ *    Material style reads light and gentle in both modes.
+ */
+private fun calmMaterialColorScheme(dynamic: ColorScheme, dark: Boolean): ColorScheme {
+    // Every accent keeps the device hue; only saturation + lightness move.
+    // Saturation is held LOW everywhere (0.08–0.36) so nothing reads
+    // vibrant — the palette stays calm and pastel in every mode.
+    fun hueOf(c: Color): Float = toHsl(c).h
+
+    // Muted pastel fill + deep same-hue ink: light = airy (l 0.80), dark =
+    // soft mid-tone (l 0.62) so buttons/chips read as gentle pastels over
+    // the dark page with crisp deep ink on top.
+    fun fill(c: Color) = fromHsl(hueOf(c), if (dark) 0.34f else 0.30f, if (dark) 0.62f else 0.80f)
+    fun onFill(c: Color) = fromHsl(hueOf(c), if (dark) 0.30f else 0.36f, if (dark) 0.18f else 0.24f)
+    fun container(c: Color) = fromHsl(hueOf(c), if (dark) 0.16f else 0.16f, if (dark) 0.34f else 0.92f)
+    fun onContainer(c: Color) = fromHsl(hueOf(c), if (dark) 0.10f else 0.34f, if (dark) 0.90f else 0.28f)
+
+    val ph = hueOf(dynamic.primary)
+    val sh = hueOf(dynamic.secondary)
+    val th = hueOf(dynamic.tertiary)
+
+    // Surfaces — tinted with the device hue (unique, not stock grey):
+    // light = near-white airy paper, dark = soft pastel-tinted night.
+    val surfaceBg = if (dark) fromHsl(ph, 0.14f, 0.17f) else fromHsl(ph, 0.10f, 0.95f)
+    val surfaceMain = if (dark) fromHsl(ph, 0.13f, 0.19f) else fromHsl(ph, 0.10f, 0.95f)
+    val onSurface = if (dark) fromHsl(ph, 0.08f, 0.92f) else fromHsl(ph, 0.24f, 0.20f)
+    val variant = if (dark) fromHsl(ph, 0.12f, 0.22f) else fromHsl(ph, 0.12f, 0.90f)
+    val onVariant = if (dark) fromHsl(ph, 0.08f, 0.74f) else fromHsl(ph, 0.18f, 0.42f)
+
+    return if (dark) darkColorScheme(
+        primary = fill(dynamic.primary),
+        onPrimary = onFill(dynamic.primary),
+        primaryContainer = container(dynamic.primary),
+        onPrimaryContainer = onContainer(dynamic.primary),
+        secondary = fill(dynamic.secondary),
+        onSecondary = onFill(dynamic.secondary),
+        secondaryContainer = container(dynamic.secondary),
+        onSecondaryContainer = onContainer(dynamic.secondary),
+        tertiary = fill(dynamic.tertiary),
+        onTertiary = onFill(dynamic.tertiary),
+        tertiaryContainer = container(dynamic.tertiary),
+        onTertiaryContainer = onContainer(dynamic.tertiary),
+        background = surfaceBg,
+        onBackground = onSurface,
+        surface = surfaceMain,
+        onSurface = onSurface,
+        surfaceVariant = variant,
+        onSurfaceVariant = onVariant,
+        surfaceContainerLowest = fromHsl(ph, 0.15f, 0.14f),
+        surfaceContainerLow = fromHsl(ph, 0.13f, 0.20f),
+        surfaceContainer = fromHsl(ph, 0.12f, 0.23f),
+        surfaceContainerHigh = fromHsl(ph, 0.11f, 0.27f),
+        surfaceContainerHighest = fromHsl(ph, 0.10f, 0.31f),
+        error = CurioColors.WarmCoralRed,
+        onError = Color.White,
+        outline = fromHsl(ph, 0.10f, 0.50f),
+        outlineVariant = fromHsl(ph, 0.10f, 0.30f)
+    ) else lightColorScheme(
+        primary = fill(dynamic.primary),
+        onPrimary = onFill(dynamic.primary),
+        primaryContainer = container(dynamic.primary),
+        onPrimaryContainer = onContainer(dynamic.primary),
+        secondary = fill(dynamic.secondary),
+        onSecondary = onFill(dynamic.secondary),
+        secondaryContainer = container(dynamic.secondary),
+        onSecondaryContainer = onContainer(dynamic.secondary),
+        tertiary = fill(dynamic.tertiary),
+        onTertiary = onFill(dynamic.tertiary),
+        tertiaryContainer = container(dynamic.tertiary),
+        onTertiaryContainer = onContainer(dynamic.tertiary),
+        background = surfaceBg,
+        onBackground = onSurface,
+        surface = surfaceMain,
+        onSurface = onSurface,
+        surfaceVariant = variant,
+        onSurfaceVariant = onVariant,
+        surfaceContainerLowest = fromHsl(ph, 0.07f, 0.97f),
+        surfaceContainerLow = fromHsl(ph, 0.11f, 0.93f),
+        surfaceContainer = fromHsl(ph, 0.12f, 0.90f),
+        surfaceContainerHigh = fromHsl(ph, 0.13f, 0.87f),
+        surfaceContainerHighest = fromHsl(ph, 0.14f, 0.84f),
+        error = CurioColors.WarmCoralRed,
+        onError = CurioColors.CreamWhite,
+        outline = fromHsl(ph, 0.16f, 0.55f),
+        outlineVariant = fromHsl(ph, 0.12f, 0.80f)
+    )
+}
+
+/**
  * The [ColorScheme] the active theme style wears — Curio (warm cream /
- * midnight), AMOLED (pure black), or the device's Material You dynamic
- * palette. Shared by [CurioTheme] and the floating explore bubble, which
- * renders outside an Activity window and therefore can't use the
- * [CurioTheme] window SideEffect.
+ * midnight), AMOLED (pure black), or the device's Material hues calmed
+ * into muted pastels (see [calmMaterialColorScheme]). Shared by
+ * [CurioTheme] and the floating explore bubble, which renders outside an
+ * Activity window and therefore can't use the [CurioTheme] window
+ * SideEffect.
  */
 @Composable
 fun curioColorScheme(): ColorScheme {
@@ -191,8 +291,10 @@ fun curioColorScheme(): ColorScheme {
     // Theme style decides the color scheme:
     //  - Curio (default): the warm cream/midnight palettes, unchanged.
     //  - AMOLED: the pure-black scheme (always dark).
-    //  - Material: the device's Material You dynamic palette (still
-    //    following the Light/Dark/System setting).
+    //  - Material: the device's Material You hues from the wallpaper,
+    //    CALMED into non-vibrant pastels on light airy surfaces (light) or
+    //    a soft pastel-tinted dark (dark) — still following the
+    //    Light/Dark/System setting.
     return when (AppPreferences.themeStyleState) {
         AppPreferences.THEME_STYLE_AMOLED -> CurioAmoledColorScheme
         AppPreferences.THEME_STYLE_MATERIAL ->
@@ -200,7 +302,9 @@ fun curioColorScheme(): ColorScheme {
             // on older devices fall back to the Curio palettes so the
             // style toggle stays harmless everywhere.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+                val dynamic = if (isDark) dynamicDarkColorScheme(context)
+                              else dynamicLightColorScheme(context)
+                calmMaterialColorScheme(dynamic, isDark)
             } else {
                 if (isDark) CurioDarkColorScheme else CurioLightColorScheme
             }

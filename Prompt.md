@@ -1,23 +1,26 @@
-# Prompt — CI compile fixes + category as text (v7.38)
+# Prompt — Calm pastel Material style (v7.38)
 
 ## Request
-1. User: "i actually dont want category pill i just want text" — convert the detail page's category pill to plain text.
-2. Fix the CI compile failures (5 errors from the previous gallery/zoom/tear commits — Kotlin 2.3.21 + coroutines 1.11.0):
+User: "fix the material theme make it use proper material color given by the device and use light color not too dark and make it calm pastel and unique" + "i meant non vibrant color too".
 
-```
-EntryDetailScreen.kt:3014:45 Unresolved reference 'entry'
-AdaptiveImageGallery.kt:229:23 sumOf overload ambiguity (Int/UInt)
-AdaptiveImageGallery.kt:230:25 'operator' modifier required on Comparable.compareTo (cascade)
-AdaptiveImageGallery.kt:280:45 Argument type mismatch: String? vs String
-MoodBoardZoom.kt:542:42 'launch' can not be called without the corresponding coroutine scope (coroutines 1.11 deprecation-as-error)
-```
+Clarified via ask_user:
+- Dark mode: **Light + softened dark** (light cream in light; a softened pastel-tinted dark, lighter/calmer than the Curio midnight).
+- Device presence: **Full device scheme, calmed** (surfaces/backgrounds also carry a light airy tint of the device hue — classic Material You, softened).
 
-## Fixes (all verified by code-reviewer)
-1. **Category pill → plain text** (EntryDetailScreen): the chip row is now a label line — category glyph + name in `categoryInk()` (labelLarge SemiBold), entry title as text (weight 1, maxLines 1, ellipsis), Legacy as muted text. No Surface backgrounds.
-2. **Unresolved 'entry'** — `ExpandedMoodBoardDialog` has no `CurioEntry`; `seed = noteSeed(entry.id, 60)` → `seed = noteSeed(seed.toString(), 60)` (salted from the dialog's entry-derived seed so slips stay distinct from the board, matching the inline card's split). Inline GalleryWallRender call keeps `noteSeed(entry.id, 60)`.
-3. **sumOf(Float) ambiguity** — `row.sumOf { it.second }` → `row.fold(0f) { acc, pair -> acc + pair.second }` (also clears the compareTo cascade).
-4. **String? mismatch** — `ExifInterface(uri.path)` → `uri.path?.let { path -> ExifInterface(path).getAttributeInt(...) }` (when branches share Int? common type).
-5. **launch scope** — captured `val gestureScope = this` (PointerInputScope : CoroutineScope) at the top of the pointerInput block; delayed single-tap action uses `gestureScope.launch { delay(DoubleTapTimeoutMs) ... }`.
+## What was wrong
+The Material style returned the RAW device dynamic scheme (`dynamicLightColorScheme`/`dynamicDarkColorScheme`) — vivid primaries, grey containers, dark-ish muddy look; nothing calm/pastel/unique about it.
+
+## Changes
+1. **app/src/main/java/com/curio/app/ui/theme/CurioTheme.kt** — new `calmMaterialColorScheme(dynamic, dark)`: keeps the device's Material You hues (the "proper material color given by the device") but mutes EVERYTHING through HSL — saturation held low (0.08–0.36, non-vibrant), surfaces light:
+   - Light: near-white airy pages tinted with the device hue (l 0.95 / s 0.10), muted pastel accents (l 0.80 / s 0.30) with deep same-hue ink (l 0.24).
+   - Dark: soft pastel-tinted night (background l 0.17 — lighter than the 0xFF111722 midnight), pastel mid accents (l 0.62) with deep ink; containers step 0.14→0.31.
+   - `curioColorScheme()` MATERIAL branch now builds the dynamic scheme then calms it (API 31+; older devices unchanged).
+2. **app/src/main/java/com/curio/app/features/settings/SettingsScreen.kt** — Material style blurb → "Your device's Material hues, calmed into soft pastels over light airy surfaces."
+
+Downstream (pre-existing, unchanged): `CurioGradients.cardGradient` anchors on `colorScheme.primary` → in pastel mode (default) it runs pastelAccent on the already-calmed primary (airier); in non-pastel mode floorForWhiteInk darkens the pale primary for white-text cards (existing pattern).
+
+## Review
+Code-reviewer clean — valid Kotlin, correct scheme slots, contrast sane in both modes. Flagged (acceptable): non-pastel card gradients will be floored to lum 0.30 for white text.
 
 ## Status
-DONE — implemented, reviewed, Prompt.md updated, committed + pushed. Awaiting CI.
+DONE — implemented, reviewed, Prompt.md updated, committed + pushed.
