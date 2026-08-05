@@ -149,17 +149,20 @@ object CurioIcons {
      */
     fun heroWatermarkSymbols(family: CategoryFamily): List<String> = when (family) {
         // Exactly 10 — one per hero scatter slot, so no glyph repeats.
+        // v7.33 — swapped the three names missing from the bundled Material
+        // Symbols font (audiotrack / ondemand_video / create rendered as
+        // empty tofu boxes) for glyphs that exist in the font.
         CategoryFamily.MUSIC -> listOf(
             "music_note", "library_music", "headphones", "mic", "album",
-            "equalizer", "piano", "radio", "audiotrack", "queue_music"
+            "equalizer", "piano", "radio", "music_video", "queue_music"
         )
         CategoryFamily.MOVIES -> listOf(
             "movie", "videocam", "theater_comedy", "local_movies", "movie_filter",
-            "play_circle", "ondemand_video", "video_library", "theaters", "smart_display"
+            "play_circle", "slow_motion_video", "video_library", "theaters", "smart_display"
         )
         CategoryFamily.BOOKS -> listOf(
             "menu_book", "auto_stories", "library_books", "edit_note", "book",
-            "format_quote", "import_contacts", "local_library", "create", "menu_open"
+            "format_quote", "import_contacts", "local_library", "edit", "menu_open"
         )
         CategoryFamily.VISUAL_ART -> listOf(
             "brush", "palette", "colorize", "photo_library", "museum",

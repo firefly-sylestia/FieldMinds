@@ -56,7 +56,14 @@ enum class NotePaperStyle {
     // from the enum name just like the other stacked decorations.
     ROUNDED_TOP, COFFEE_ROUNDED_TOP, FOLDED_ROUNDED_TOP, RED_MARGIN_ROUNDED_TOP,
     COFFEE_FOLDED_ROUNDED_TOP, COFFEE_RED_MARGIN_ROUNDED_TOP,
-    FOLDED_RED_MARGIN_ROUNDED_TOP, COFFEE_FOLDED_RED_MARGIN_ROUNDED_TOP
+    FOLDED_RED_MARGIN_ROUNDED_TOP, COFFEE_FOLDED_RED_MARGIN_ROUNDED_TOP,
+    // v7.33 — WATERMARK paper: the sheet's background wears a faint scatter
+    // of category icons (the page-backdrop language printed on the paper).
+    // Combines only with the base + rounded-top — NOT with coffee / folded /
+    // red margin (see notePaperStyleOf), keeping the enum manageable.
+    WATERMARK, WATERMARK_ROUNDED_TOP,
+    TORN_WATERMARK, TORN_WATERMARK_ROUNDED_TOP,
+    TORN_RULED_WATERMARK, TORN_RULED_WATERMARK_ROUNDED_TOP
 }
 
 /**

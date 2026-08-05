@@ -200,6 +200,11 @@ private fun savedNoteStyle(): TextStyle =
 /** The ruled-line cadence matching [savedNoteStyle]'s line height. */
 private val SavedNoteRuleSpacing = 28.dp
 
+/** Extra bottom space for saved-view notes — ~2 blank ruled lines (v7.33),
+ *  so a note reads like a page with room to keep writing instead of ending
+ *  flush at the last line. */
+private val SavedNoteTailSpace = SavedNoteRuleSpacing * 2f
+
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
     val scope = rememberCoroutineScope()
@@ -1429,6 +1434,7 @@ private fun SoundBiteRender(
                     paperColor = noteSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
+                    tailSpace = SavedNoteTailSpace,
                     minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1975,6 +1981,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                 paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
+                tailSpace = SavedNoteTailSpace,
                 minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1991,6 +1998,7 @@ private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
                 paperColor = reviewSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
+                tailSpace = SavedNoteTailSpace,
                 minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -2036,6 +2044,7 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory, navCont
                 paperColor = journalSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
+                tailSpace = SavedNoteTailSpace,
                 minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -2179,6 +2188,7 @@ private fun RenderQuoteCards(
                 paperColor = quoteSheet,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
+                tailSpace = SavedNoteTailSpace,
                 corner = 12.dp,
                 // Hoist the 72dp floor INTO the modifier chain BEFORE the tilt
                 // rotate: passing it as NotePaperCard's minHeight param appends
@@ -2749,6 +2759,7 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 paperColor = captionSheet,
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                 ruleSpacing = SavedNoteRuleSpacing,
+                tailSpace = SavedNoteTailSpace,
                 minHeight = 120.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -3001,6 +3012,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     paperColor = observedSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
+                    tailSpace = SavedNoteTailSpace,
                     minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -3021,6 +3033,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     paperColor = surprisedSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
+                    tailSpace = SavedNoteTailSpace,
                     minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -3041,6 +3054,7 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory, navCont
                     paperColor = learnNextSheet,
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 22.dp),
                     ruleSpacing = SavedNoteRuleSpacing,
+                    tailSpace = SavedNoteTailSpace,
                     minHeight = 120.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {

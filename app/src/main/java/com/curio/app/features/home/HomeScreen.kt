@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -71,6 +73,7 @@ import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
+import com.curio.app.data.CategoryFamily
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.PinnedTopic
@@ -156,9 +159,11 @@ private val StickyBarThreshold = 90.dp
  *  hero's SoftTorn construction exactly (uniform tear style). */
 private const val HOME_TEAR_SEED = 0x5EED
 
-private data class HomeHeroGlyph(
-    val glyph: String,
-    val alignment: Alignment,
+/** One mirrored hero watermark pair — the left glyph mirrors the right
+ *  (the saved-entry hero's construction, adapted for Home). */
+private data class HomeHeroPair(
+    val biasX: Float,
+    val biasY: Float,
     val size: Dp,
     val rotation: Float,
     val alpha: Float
@@ -289,41 +294,26 @@ fun HomeScreen(navController: NavController) {
                         .height(HomeQuestHeroHeight)
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        // Detail-style watermark collage: quiet category glyphs
-                        // sit around the hero edges while the copy stays clear.
-                        // Keep one larger spark as the only focal watermark.
-                        val heroPattern = listOf(
-                            HomeHeroGlyph(CurioIcons.Person, Alignment.TopStart, 54.dp, -12f, 0.095f),
-                            HomeHeroGlyph(CurioIcons.Album, Alignment.TopEnd, 44.dp, 10f, 0.070f),
-                            HomeHeroGlyph(CurioIcons.MenuBook, Alignment.CenterStart, 46.dp, 8f, 0.070f),
-                            HomeHeroGlyph("brush", Alignment.BottomStart, 56.dp, -6f, 0.085f),
-                            HomeHeroGlyph(CurioIcons.Science, Alignment.BottomEnd, 58.dp, -12f, 0.080f)
+                        // v7.33 — detail-style mirrored watermark collage: the
+                        // quest family's symbols (casino, star, sparkle, …)
+                        // scatter around the banner edges in mirrored pairs —
+                        // the EXACT construction of the saved-entry hero, so
+                        // Home and Detail read as one torn-banner family. The
+                        // ink is the banner's own readable ink at a soft alpha
+                        // (the old fixed category glyphs wore dark category
+                        // inks that read muddy against the rose banner).
+                        val heroSymbols = CurioIcons.heroWatermarkSymbols(CategoryFamily.WILDCARD)
+                        val heroPairs = listOf(
+                            HomeHeroPair(biasX = 0.93f, biasY = -0.85f, size = 44.dp, rotation = 12f, alpha = 0.11f),
+                            HomeHeroPair(biasX = 0.55f, biasY = -0.64f, size = 48.dp, rotation = 8f, alpha = 0.13f),
+                            HomeHeroPair(biasX = 0.94f, biasY = -0.12f, size = 56.dp, rotation = 14f, alpha = 0.14f),
+                            HomeHeroPair(biasX = 0.56f, biasY = 0.54f, size = 50.dp, rotation = 10f, alpha = 0.13f),
+                            HomeHeroPair(biasX = 0.94f, biasY = 0.80f, size = 44.dp, rotation = 6f, alpha = 0.11f)
                         )
-                        heroPattern.forEach { pattern ->
-                            val patternInk = CurioCategories.all
-                                .firstOrNull { it.iconGlyph == pattern.glyph }
-                                ?.categoryInk()
-                                ?: questInk
-                            CurioIcon(
-                                name = pattern.glyph,
-                                contentDescription = null,
-                                tint = patternInk.copy(alpha = pattern.alpha),
-                                size = pattern.size,
-                                modifier = Modifier
-                                    .align(pattern.alignment)
-                                    .padding(10.dp)
-                                    .graphicsLayer { rotationZ = pattern.rotation }
-                            )
+                        heroPairs.forEachIndexed { i, pair ->
+                            HomeHeroSymbol(heroSymbols[i * 2], BiasAlignment(-pair.biasX, pair.biasY), pair.size, -pair.rotation, pair.alpha, questInk)
+                            HomeHeroSymbol(heroSymbols[i * 2 + 1], BiasAlignment(pair.biasX, pair.biasY), pair.size, pair.rotation, pair.alpha, questInk)
                         }
-                        CurioIcon(
-                            name = CurioIcons.AutoAwesome,
-                            contentDescription = null,
-                            tint = questInk.copy(alpha = 0.14f),
-                            size = 176.dp,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .padding(end = 2.dp)
-                        )
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -831,6 +821,30 @@ fun HomeScreen(navController: NavController) {
 // Hero stat segment — the detail bar's icon/value/label design, on the
 // home banner (Streak · Cabinet · Recent). No blur, per the home spec.
 // ══════════════════════════════════════════════���════════════════════════
+
+/** One mirrored hero watermark glyph — the banner's readable ink at a soft
+ *  alpha (the saved-entry hero's HeroWatermarkGlyph role, adapted for Home:
+ *  the banner ink instead of solid white). */
+@Composable
+private fun BoxScope.HomeHeroSymbol(
+    glyph: String,
+    alignment: Alignment,
+    size: Dp,
+    rotation: Float,
+    alpha: Float,
+    tint: Color
+) {
+    CurioIcon(
+        name = glyph,
+        contentDescription = null,
+        tint = tint.copy(alpha = alpha),
+        size = size,
+        modifier = Modifier
+            .align(alignment)
+            .padding(10.dp)
+            .graphicsLayer { rotationZ = rotation }
+    )
+}
 
 @Composable
 private fun HeroStatSegment(
