@@ -1,3 +1,4 @@
+• Mood-board zoom upgrade: any zoomed image can now expand to full screen — tap the expand button (or the chip on saved-board tiles) and the image opens in a full-window viewer where pinch-to-zoom and pan feel natural, even for tiny collage tiles
 • Detail pages get a slightly rawer hand-torn look — the hero's seeded tear is a touch more uneven, and the whole banner sits at a subtle per-entry tilt
 • Starting a new explore while another session is running now asks first — save the new topic for later, or queue the running session (paused, resumable from Home) and start the new one
 • Cabinet polish: the Legacy chip now sits last in the filter row and only appears when there are restored FieldMind records, and the bottom nav bar now blends with the active category's page background

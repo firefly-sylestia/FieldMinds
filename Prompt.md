@@ -2,6 +2,50 @@
 
 ## Latest Request (COMPLETED)
 
+**Pinch-to-zoom for zoomed images + full-screen expand for small ones**
+
+### What was requested
+
+Make zoomed images pinch-to-zoomable and let images that are too small be
+expanded, since tiny collage tiles are hard to pinch inside the card.
+
+### What changed
+
+All in `MoodBoardZoom.kt` (v7.30):
+
+- `MoodBoardZoomOverlay` (detail image strip, saved boards, expanded
+  boards, editor magnifier) gained a top-end **expand button** next to the
+  dismiss button. It lifts the zoomed image into a new full-window viewer;
+  the in-place overlay stays composed behind it, so closing the viewer
+  returns to the in-place zoom.
+- New private `FullScreenImageViewer` — a black full-window `Dialog`
+  (`usePlatformDefaultWidth=false`, `decorFitsSystemWindows=false`) with
+  the same hi-res Coil painter (2048px decode), fit-to-screen, pinch-to-zoom
+  1–8x + one-finger pan, a close button, and a "Pinch to zoom · drag to
+  pan" hint. The pan clamp is **derived from the window size × (scale−1)**
+  (via `onSizeChanged`), so the pan range always matches the screen — zero
+  at 1x (can't drag the image off-center at rest) and it tightens as you
+  pinch back out, auto-recentering the image.
+- `MoodBoardTiles` (saved boards) now renders a small dark expand chip on
+  each zoomable tile's bottom end — one tap opens the same full-screen
+  viewer directly, so even the tiniest collage tiles are one tap away from
+  a big pinch canvas (the user's exact pain point). Chip taps don't
+  trigger the tile's double-tap zoom (the chip's clickable consumes the
+  down).
+
+### Validation
+
+- `scripts/check_braces.py` passed for `MoodBoardZoom.kt`.
+- `git diff --check` passed; `CurioIcons.Fullscreen`/`Close` confirmed to
+  exist.
+- Code review approved; reviewer-flagged issue (hardcoded ±1200 pan clamp
+  → off-center drift at 1x) fixed by the size-derived clamp.
+- Gradle/build commands were not run because the repository forbids local
+  Android compilation; CI remains the compilation gate.
+- Store changelog `20260810.txt` updated with the feature entry.
+
+## Latest Request (COMPLETED)
+
 **Fix CI compile failure — unresolved local function beginExploreSession**
 
 ### What was requested
