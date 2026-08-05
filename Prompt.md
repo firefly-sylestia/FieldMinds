@@ -746,17 +746,15 @@ The 2x picker was only setting `densityExtraCompact` when the device's physical 
 
 ## Latest Request (COMPLETED)
 
-**Fix Explore overlay crash loop after clearing app data**
+**Frosty-glass font for the entry-detail hero title**
 
-The supplied log identified the exact crash when the overlay bubble was first attached:
-`IllegalStateException: Composed into the View which doesn't propagate ViewTreeSavedStateRegistryOwner!` from `ComposeView.resolveComposeViewContext()`.
+User asked for a "proper frosty glass font" for the detail screen title (add a new font or use a graphic treatment). The title already sat on the frosted plate in the app's geom display face — so the treatment combined both levers: push geom to its heaviest ExtraBold weight (same family as Spin's hero titles) and carve the letterforms like glass.
 
 ### What changed
 
-- Added a service-owned `SavedStateRegistryOwner` alongside the existing lifecycle and `ViewModelStore` owners for the `TYPE_APPLICATION_OVERLAY` ComposeView.
-- Attached the saved-state owner before `setContent`, and initialized its controller/lifecycle before WindowManager attaches the view.
-- Added the explicit `androidx.savedstate:savedstate` dependency to the active app module.
-- Guarded overlay-owner construction so a device/OEM saved-state failure falls back to the live notification instead of crashing and restarting the process.
+- `EntryDetailScreen.kt` — the hero title style is now `headlineMedium` (geom) copied with `fontWeight = ExtraBold` and a carved-glass fill: `brush = Brush.verticalGradient(0xFFF4F7FA → 0xFFCBD3DC → heroCardInk)`, so each glyph melts from pale frost at its top into the card's deep slate at its base, plus `shadow = Shadow(black 0.30, Offset(0,3f), 8f)` to lift the letters off the plate. Text keeps `color = heroCardInk` as the accessibility fallback (used when the brush is swapped out).
+- Re-added `import androidx.compose.ui.graphics.Shadow`; removed the now-unused `androidx.compose.ui.semantics.clearAndSetSemantics` import.
+- Text-with-brush is an established pattern in the codebase (SpinScreen.kt:1973, CaptureFormatComponents.kt:131).
 - Updated the store changelog.
 
 ### Validation

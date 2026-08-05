@@ -1,3 +1,4 @@
+• The detail hero's topic title is now proper frosty-glass lettering — ExtraBold geom with an icy gradient that catches light at the top of each glyph and deepens to the card's slate, lifted off the plate by a soft shadow
 • Paper-style chips (Coffee / Folded / Red Margin / Color) no longer vanish in dark mode — inactive options keep a readable warm label and hairline outline on midnight surfaces
 • The done-exploring prompt gains an in-app Cancel session button behind a double confirmation — first tap asks "Cancel this explore?", second tap ends it quietly without writing it down
 • The detail hero's glass elements are one family now — the topic title plate and the back / more buttons wear the same bright frosted-white plate with a hairline rim and deep-slate ink as the Date · Mood · Type card (the old blur-copy aura that read as a ghost overlay behind the title is gone)

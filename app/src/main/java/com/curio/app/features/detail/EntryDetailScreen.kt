@@ -73,10 +73,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
@@ -370,15 +370,25 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     )
                     Spacer(Modifier.height(14.dp))
 
-                    // ── Glass title — the topic name floats on a frosted
-                    // glass plate matching the Date · Mood · Type card below:
-                    // a frosted white gradient with a faint bloom of the
-                    // banner color and a hairline rim in the hero ink. (The
-                    // old blur-an-aura-copy read as a ghost overlay behind
-                    // the text and the heavy drop shadows smudged the
-                    // letterforms — both gone, the frost is real now.)
+                    // ── Glass title — the topic name in proper frosty-glass
+                    // lettering. The face is ExtraBold geom (the app's display
+                    // font, the same family the Spin wheel's hero titles use)
+                    // and the treatment is carved glass: each glyph is filled
+                    // with an icy vertical gradient that catches light at its
+                    // top (pale frost melting into the plate) and deepens to
+                    // the card's slate at its base, lifted off the plate by a
+                    // soft shadow so the letters read as etched frosted glass
+                    // rather than flat ink.
                     val heroTitleStyle = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.ExtraBold,
+                        brush = Brush.verticalGradient(
+                            0f to Color(0xFFF4F7FA),
+                            0.45f to Color(0xFFCBD3DC),
+                            1f to heroCardInk
+                        ),
+                        // Soft lift shadow — sets the glyphs just off the
+                        // glass; gentle enough to never smudge the letters.
+                        shadow = Shadow(Color.Black.copy(alpha = 0.30f), Offset(0f, 3f), 8f)
                     )
                     Box(
                         modifier = Modifier
@@ -389,8 +399,9 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         Text(
                             text = resolvedEntry.topic.name,
                             style = heroTitleStyle,
-                            // The plate is the card's bright frosted white, so
-                            // the title wears the card's deep-slate ink too.
+                            // Fallback ink when the gradient brush is replaced
+                            // (accessibility font/contrast overrides) — the
+                            // deep-slate card ink keeps the title legible.
                             color = heroCardInk,
                             textAlign = TextAlign.Center,
                             maxLines = 2,
