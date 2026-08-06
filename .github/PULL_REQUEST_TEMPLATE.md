@@ -28,7 +28,7 @@
 - [ ] I tested the affected flow on an Android device or emulator.
 - [ ] I checked loading, empty, error, and long-content states where relevant.
 - [ ] I verified the change does not remove existing content or user data unexpectedly.
-- [ ] CI will run the required Gradle lint, validation, and debug build checks.
+- [ ] CI will run the required Gradle lint, validation, debug build, and release-variant build checks.
 
 > Local Gradle compile, build, lint, and test commands are intentionally not run in this repository workspace; GitHub Actions is the build source of truth.
 

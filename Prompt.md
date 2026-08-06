@@ -83,3 +83,12 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Updated `.github/AGENTS.md` to document the new triggers, checks, artifacts, templates, and signing contract.
 - Removed the unsupported Android platform/build-tools installation that caused CI's `platforms;android-37` package lookup to fail; restored dynamic build-tools discovery for release signature verification.
 - Validation: all GitHub YAML files parsed successfully, structure assertions passed, no stale product references or tracked signing artifacts remain, and `git diff --check` is clean. No Gradle command run.
+
+## v7.62 — build the release variant on pull requests
+
+- PR/branch CI now runs `assembleDebug` and `assembleRelease` alongside lint and topic validation.
+- CI uploads both debug and release-variant APKs in one artifact for PR testing.
+- PR CI does not receive release signing secrets; the release variant uses the existing debug-signing fallback and is not treated as an official production release.
+- Tag-based release publishing remains unchanged and still requires the official signing secrets.
+- Updated `.github/AGENTS.md` and the PR template to describe both build variants.
+- Validation: GitHub YAML structure and workflow assertions passed; no Gradle command run.

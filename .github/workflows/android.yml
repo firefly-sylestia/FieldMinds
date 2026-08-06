@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Validate, lint, and build debug APK
+    name: Validate, lint, and build debug and release APKs
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -39,8 +39,8 @@ jobs:
       - name: Validate topic catalogs without Gradle
         run: python3 scripts/validate_topics.py
 
-      - name: Run Android checks and build debug APK
-        run: ./gradlew lintDebug validateTopics assembleDebug --stacktrace
+      - name: Run Android checks and build debug and release APKs
+        run: ./gradlew lintDebug validateTopics assembleDebug assembleRelease --stacktrace
 
       - name: Upload lint reports
         if: always()
@@ -54,11 +54,13 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Upload debug APK
+      - name: Upload debug and release APKs
         if: success()
         uses: actions/upload-artifact@v5
         with:
-          name: curio-debug-${{ github.run_number }}
-          path: app/build/outputs/apk/debug/*.apk
+          name: curio-pr-apks-${{ github.run_number }}
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/release/*.apk
           if-no-files-found: error
           retention-days: 14

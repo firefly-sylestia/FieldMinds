@@ -27,9 +27,9 @@ GitHub Actions automation and contributor templates for the Curio Android reposi
 `android.yml` runs on pushes and pull requests targeting `revamp`, plus manual dispatch. It:
 
 - Validates all topic catalogs with `python3 scripts/validate_topics.py`.
-- Runs the Gradle `lintDebug`, `validateTopics`, and `assembleDebug` checks in GitHub Actions using the hosted Android toolchain.
-- Uploads lint reports and the debug APK for 14 days.
-- Uses no signing secrets and never publishes an APK.
+- Runs the Gradle `lintDebug`, `validateTopics`, `assembleDebug`, and `assembleRelease` checks in GitHub Actions using the hosted Android toolchain.
+- Uploads lint reports plus both the debug APK and the release-variant APK for 14 days.
+- Uses no signing secrets; the PR release variant uses the app module's debug-signing fallback and is not an official production release.
 - Cancels an older in-progress run for the same ref when a newer run starts.
 
 ### Release workflow
