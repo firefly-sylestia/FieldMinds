@@ -1594,8 +1594,10 @@ private fun BoxScope.PaperWatermarkGlyphs(
 }
 
 /**
- * The per-text-box note-paper picker — v7.16 UNIVERSAL: a base row
- * (Ruled / Torn) plus a decoration row whose chips work on EITHER base.
+ * The per-text-box note-paper picker — v7.16 UNIVERSAL: the base (Ruled /
+ * Torn) and the stackable decoration chips flow together in ONE tight
+ * row set (v7.43 — the old separate base + decoration rows left a big gap
+ * between the button groups in the editor).
  * v7.18 — decorations STACK: Coffee / Folded / Red Margin are independent
  * toggles, so any combination can be on at once (a folded coffee page with
  * a red margin is legal), and, while the torn base is active, a "+ Rules"
@@ -1617,12 +1619,17 @@ fun NotePaperStyleToggle(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        // Row 1 — base: Ruled (sharp ruled page) · Torn (ragged slip).
-        // Switching keeps the current decoration via [notePaperStyleOf].
+        // ONE tight flow row — the base (Ruled / Torn) and the stackable
+        // decorations (+ Rules / + Coffee / …) sit together in a compact
+        // chip cloud so the picker reads as a single control instead of
+        // separate sparse rows (v7.43 — the old two FlowRows left a big
+        // gap between the base and decoration buttons in the editor).
         FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
+            // Base — Ruled (sharp ruled page) · Torn (ragged slip).
+            // Switching keeps the current decoration via [notePaperStyleOf].
             CompactPaperChip("Ruled", !style.torn, accent, enabled) {
                 onStyleChange(notePaperStyleOf(
                     torn = false,
@@ -1645,12 +1652,7 @@ fun NotePaperStyleToggle(
                     watermark = style.watermark
                 ))
             }
-        }
-        // Row 2 — UNIVERSAL decorations: the same chips apply to both bases.
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
+            // UNIVERSAL decorations — the same chips apply to both bases.
             if (style.torn) {
                 // Rules only matter on the torn slip — the ruled page is
                 // always ruled by definition.
@@ -1762,7 +1764,7 @@ private fun CompactPaperChip(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = if (active) accent else inactiveInk,
-            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
         )
     }
 }
@@ -1792,7 +1794,7 @@ fun NotePaperColorToggle(
     val inactiveInk = if (isCurioDarkTheme()) Color(0xFFE0D5BC).copy(alpha = 0.90f)
     else paperInk().copy(alpha = 0.62f)
     val inactiveBorderAlpha = if (isCurioDarkTheme()) 0.42f else 0.30f
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Surface(
             onClick = { expanded = !expanded },
             enabled = enabled,
@@ -1832,7 +1834,7 @@ fun NotePaperColorToggle(
         }
         if (expanded) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NotePaperColor.entries.forEach { candidate ->

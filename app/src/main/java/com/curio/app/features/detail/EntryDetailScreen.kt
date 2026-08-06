@@ -1445,10 +1445,57 @@ private fun SoundBiteRender(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // v7.42 — the voice-note label ("Voice note · 12s · 1.2MB" + the
-            // format-quality chip) is gone: the capsule player below is
-            // self-explanatory, so the extra text just competed with the
-            // notes on the bare page.
+            // ── Voice-note label — restored (v7.43): "Voice note · 12s ·
+            // 1.2MB" plus the optional title and the encoding chip, sitting
+            // right ABOVE the capsule player so the recording reads as a
+            // titled voice note instead of an anonymous bar on the page.
+            if (!data.audioFilePath.isNullOrBlank()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.Mic,
+                        contentDescription = null,
+                        tint = category.categoryInk(),
+                        size = 16.dp
+                    )
+                    Text(
+                        text = buildString {
+                            append("Voice note · ${data.durationSeconds}s")
+                            if (data.fileSizeBytes > 0) {
+                                append(" · ${formatFileSize(data.fileSizeBytes)}")
+                            }
+                        },
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                        color = category.categoryInk()
+                    )
+                    if (!data.title.isNullOrBlank()) {
+                        Text(
+                            text = data.title,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+                    }
+                    if (data.fileSizeBytes > 0) {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = category.themedAccent().copy(alpha = 0.12f)
+                        ) {
+                            Text(
+                                text = data.encodingFormat,
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                                color = category.categoryInk(),
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+                }
+            }
 
             // ── Real audio player (when file path is available) ─────────
             if (!data.audioFilePath.isNullOrBlank()) {
@@ -1882,6 +1929,15 @@ private fun formatMs(ms: Long): String {
     val mins = totalSecs / 60
     val secs = totalSecs % 60
     return "%d:%02d".format(mins, secs)
+}
+
+/** Format bytes to a human-readable size string (e.g. "1.2 MB"). */
+private fun formatFileSize(bytes: Long): String {
+    return when {
+        bytes < 1024 -> "$bytes B"
+        bytes < 1024 * 1024 -> "${bytes / 1024} KB"
+        else -> "%.1f MB".format(bytes.toDouble() / (1024 * 1024))
+    }
 }
 
 /** WCAG contrast ratio of [a] against [b] — used to keep the hero's frosted

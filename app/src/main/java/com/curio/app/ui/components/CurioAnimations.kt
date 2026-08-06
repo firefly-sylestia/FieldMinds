@@ -308,31 +308,42 @@ fun LiveWaveform(
     level: Float = 0f
 ) {
     val levelState by rememberUpdatedState(level)
-    // Short history ring — the newest mic level goes in at the end; earlier
-    // entries decay toward a floor so the wave shows a natural falling tail.
+    // Short history ring — the newest mic level slides in at the END (the
+    // right edge of the bar row) and every bar shifts one slot toward the
+    // start each frame, so the WHOLE wave ripples with a trailing tail,
+    // exactly like a real audio meter. The old decay loop only ever moved
+    // the last bar (the others multiplied toward the floor in a few frames
+    // and sat frozen), which read as "just the last bar reacts".
     val history = remember { FloatArray(barCount) { 0.08f } }
     var historyTick by remember { mutableIntStateOf(0) }
 
-    // Push a new level every frame while recording; when inactive, decay the
-    // ring to the flat floor so the bars go quiet without jumping.
+    // Push a new level every frame while recording; when inactive, ease the
+    // whole ring back to the quiet floor so the wave goes still within a
+    // few frames of stop/pause (no long lingering tail).
     LaunchedEffect(active) {
         while (true) {
             val target = if (active) levelState else 0.08f
-            // Move the ring one step; each bar eases toward the target from
-            // behind, giving a smooth chasing/decay feel per frame.
-            for (i in 0 until barCount) {
-                val current = history[i]
-                val next = if (active) {
-                    // Front bar snaps to the live level; older bars fall off.
-                    if (i == barCount - 1) {
-                        (current + (target - current) * 0.65f).coerceIn(0.08f, 1f)
-                    } else {
-                        (current * 0.86f).coerceAtLeast(0.08f)
-                    }
-                } else {
-                    (current + (target - current) * 0.25f).coerceIn(0.06f, 0.2f)
+            if (active && barCount > 0) {
+                // Ring-buffer shift: each bar inherits its right neighbour,
+                // so the recent levels' shape is PRESERVED and visible as a
+                // moving wave instead of decaying straight to the floor.
+                for (i in 0 until barCount - 1) {
+                    history[i] = history[i + 1]
                 }
-                history[i] = next
+                // The newest level eases into the front bar (smoothed so a
+                // single spike doesn't make the wave jump around).
+                val front = history[barCount - 1]
+                history[barCount - 1] =
+                    (front + (target - front) * 0.65f).coerceIn(0.08f, 1f)
+            } else {
+                // Idle — settle every bar toward the quiet armed floor
+                // quickly (the old fast-decay behavior), so pausing or
+                // stopping visibly calms the meter right away.
+                for (i in 0 until barCount) {
+                    val current = history[i]
+                    history[i] = (current + (0.08f - current) * 0.35f)
+                        .coerceIn(0.06f, 0.2f)
+                }
             }
             historyTick++
             kotlinx.coroutines.delay(70)

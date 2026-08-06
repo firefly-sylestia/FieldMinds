@@ -148,3 +148,34 @@ synced the 5 titles in scripts/expand_topics.py ARTWORK_NAMES seed list.
 Review pass fixed two fact nits: Marat "within days" → "in the months after"
 (finished Oct 1793), and Balloon Dog "more than a car" → "roughly a tonne".
 All 56 artworks now have real descriptions; 0 boilerplate left. Pushed.
+
+## v7.43 — voice-note label back, recording visualizer fixed, tighter editor chips
+Requests: (1) restore the voice-note text above the voice note on the detail
+page; (2) the recording visualizer only had its LAST bar reacting, the rest
+stayed still; (3) tighten the "huge spaces" between the paper chips (Ruled /
+Torn / +Coffee / … / Color) and the tag + mood chips in the editing screen.
+
+1. **EntryDetailScreen.kt** — the v7.42-removed voice-note label is back:
+   "Voice note · 12s · 1.2MB" (mic glyph + titleSmall SemiBold, category ink)
+   with the optional saved title and the encodingFormat quality chip, sitting
+   right ABOVE the capsule AudioPlayerBar (same audioFilePath condition).
+   Re-added the deleted private formatFileSize() helper next to formatMs().
+2. **CurioAnimations.kt LiveWaveform** — the history loop decayed every bar
+   toward the floor in a few frames, so only the last (front) bar ever moved.
+   Replaced with a true ring-buffer shift: every frame each bar inherits its
+   right neighbour and the newest mic level eases into the front bar, so the
+   whole 36-bar row ripples with a trailing tail. Idle (pause/stop) keeps the
+   old fast-settle behavior: every bar eases to the 0.06–0.2 quiet floor.
+3. **PaperCard.kt** — NotePaperStyleToggle merged its two FlowRows (base Ruled /
+   Torn + decorations) into ONE tight 4dp chip cloud (was 5dp + a row gap), so
+   the base and +Coffee/+Folded/+Red Margin/+Watermark/+Rounded top buttons sit
+   close together; CompactPaperChip padding 7×3 → 6×2; NotePaperColorToggle
+   column + swatch row 6dp → 4dp. Kdoc updated to match.
+4. **CaptureFormatComponents.kt MoodChipsRow** — chip row 8dp → 6dp.
+5. **SaveCaptureScreen.kt TagEditorRow** — section column 8dp → 6dp, chip flow
+   6dp → 5dp, tag-input row 8dp → 6dp.
+
+Also committed the uncommitted scientists.json batch (scripts/batch_scientists.py)
+from the earlier enrichment pass so it stops riding along as a dirty tree.
+Brace-check script BALANCED on all five touched files; no Gradle build run
+(CI owns compilation).

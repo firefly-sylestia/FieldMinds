@@ -829,7 +829,7 @@ fun MoodChipsRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             JournalMood.entries.forEach { m ->
                 val selected = mood == m
