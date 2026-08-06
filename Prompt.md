@@ -343,3 +343,25 @@ consecutive entries share an opener. Only the opening phrase changed; each
 instruction body preserved. Trimmed 3 entries that exceeded the 450-char cap
 under longer openers. Result: 0 "Look at the" openers remain, 1 adjacent
 repeat in 2,262 topics, validate_topics 0 errors.
+
+## v7.50 — artworks instructions handcrafted end-to-end (user: "those starting lines are bad, not personal to the painting")
+
+User: even with varied openers, the artworks instructions still felt like a
+fill-in-the-blank template — "VERB the X first: [detail]. Then the Y:
+[detail]." — and deserved a voice specific to each work. Rewrote ALL 254
+artwork instructions across 5 committed batches (scripts/rewrite_instr_batch1..5
++ rewrite_instr_smooth_last4.py):
+
+- Every instruction is now experiential and painting-specific: "Count the
+  horse's legs and fail" (Blank Signature), "Hold your breath for four
+  minutes" (Rest Energy), "The hands say everything" (Prodigal Son),
+  "The most expensive painting ever sold is all in the hand" (Salvator Mundi).
+- No "VERB the X first / Then the Y" scaffolding remains in artworks (strict
+  detector: 0). 4 pre-existing scaffold-y entries (Hammurabi, Sistine Ceiling,
+  Ambassadors, Truisms) also smoothed.
+- Full-repo audit: remaining detector hits in other files (painters, books,
+  films, discoveries, wildcard…) are natural prose that merely contains
+  "Then" mid-flow — sampled and judged genuine. No verbatim boilerplate
+  anywhere; the only exact duplicates are 3 intentional cross-file pairs
+  (Kafka/Trial, Morrison/Beloved, Lister/antiseptic).
+- validate_topics: 0 errors across 2,262 topics.
