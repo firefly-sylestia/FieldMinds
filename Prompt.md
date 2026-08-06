@@ -240,4 +240,22 @@ Gatsby, Lolita, One Hundred Years of Solitude, …), real teasers + reading
 instructions + corrected tags. Validation still 0 errors. Next up in the
 queue: wildcard + books + discoveries are now CLEAN (0 fakes each, validation 0
 errors throughout).painters + directors are now CLEAN (painters 40+37, directors 40+33).
-Remaining in queue: films.json (67), artists.json (1).
+
+## (v7.46 end) ALL 11 topic files CLEAN — films + artists finished
+films.json: all 67 fakes replaced (2 batches: 40+27) with real facts +
+correct byline (director — the fakes lacked bylines entirely) + corrected
+tags (Close Encounters, Blade Runner, Spirited Away, 2001, Matrix, Inception,
+Titanic, Get Out, Dune, Tár, …). artists.json: the last "fake" (Lana Del
+Rey) turned out to be a FALSE POSITIVE — its teaser is already real,
+high-quality content that merely contains "critics dismissed" mid-sentence;
+same for wildcard's Overview Effect ("original interviews" appears naturally
+in a valid instruction). Strict boilerplate sweep ("Cientit Topic #",
+"often cited but rarely fully understood", "Widely discussed yet still full
+of surprises", "The kind of work that rewards patience", "Hiding in plain
+sight", "A fascinating figure whose work rewards close attention") now
+returns **0 across all 1962 topics / 11 files**; validate_topics.py: 0 errors.
+Summary of the whole campaign: authors 95 (1 batch) + wildcard 118 (3) +
+books 106 (3) + discoveries 87 (3) + painters 77 (2) + directors 73 (2) +
+films 67 (2) = **623 template entries replaced with real, verified content**
+(plus the earlier scientists + artworks batches). Scripts kept in scripts/
+batch_*.py; every batch committed & pushed individually.
