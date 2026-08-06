@@ -1616,18 +1616,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Proton (1919)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Ernest Rutherford identified the proton in 1919 by firing alpha particles at nitrogen and knocking hydrogen nuclei out of the atoms — the first artificial transmutation of one element into another, 5,000 years after the alchemists gave up. He named the hydrogen nucleus 'proton' in 1920, from the Greek for 'first.'",
     "imageUrl": "",
     "byline": "Ernest Rutherford",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Proton (1919)",
+      "targetName": "Rutherford's 1919 transmutation experiments",
       "durationMinutes": 14,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the 1919 paper's experiment and notice the elegance: alpha particles (helium nuclei) striking nitrogen produced oxygen and a hydrogen nucleus, which Rutherford recognized as the building block inside every atom. Then read the naming story — Rutherford proposed 'proton' from the Greek 'protos' (first) — and connect it to the model of the atom he was assembling: positive nucleus, electrons outside, the whole thing mostly empty space."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Physics",
+      "Particles",
+      "1910s"
     ],
     "tier": 2
   },
@@ -1636,38 +1637,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Nuclear Fission (1938)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Nuclear fission was discovered in December 1938 when Otto Hahn and Fritz Strassmann bombarded uranium with neutrons and found barium — an atom half uranium's size — a result they could not explain. The explanation came from Lise Meitner, in exile in Sweden, who with her nephew Otto Frisch named the process 'fission' in a letter, and calculated the enormous energy released.",
     "imageUrl": "",
     "byline": "Otto Hahn & Lise Meitner",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Nuclear Fission (1938)",
+      "targetName": "The 1938 barium experiment + the Meitner–Frisch explanation",
       "durationMinutes": 11,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the sequence of the discovery and notice who was where: Meitner, Jewish, had fled Berlin months earlier; Hahn wrote to her in Stockholm with the baffling barium result, and she worked out the physics — the uranium nucleus had split, and the mass difference had become energy via E=mc²."
     },
     "tags": [
       "Physics",
-      "20th Century"
+      "Nuclear",
+      "1930s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-laser-1960-163",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Laser (1960)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Theodore Maiman built the first working laser on 16 May 1960 at Hughes Research Laboratories — a ruby rod flashed with a photographer's lamp, producing the first beam of coherent light. The press called it 'a solution looking for a problem'; sixty years later, lasers read your discs, cut your metal, measure the Moon, and run fiber-optic internet.",
     "imageUrl": "",
     "byline": "Theodore Maiman",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Laser (1960)",
+      "targetName": "Maiman's 1960 ruby laser + its first applications timeline",
       "durationMinutes": 8,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read Maiman's own account of the breakthrough and notice how it was dismissed: his Nature paper was initially rejected (the editors thought it too sensational), and the field's leaders believed a ruby laser couldn't work because the numbers said the ruby would need too much pumping."
     },
     "tags": [
       "Physics",
-      "20th Century"
+      "Optics",
+      "1960s"
     ],
     "tier": 2
   },
@@ -1676,18 +1679,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Pulsars (1967)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Pulsars were discovered in 1967 by Jocelyn Bell Burnell, a 24-year-old graduate student who noticed 'scruff' — a regular pulse of radio waves, 1.3 seconds apart, in her chart recordings. She and her supervisor Anthony Hewish briefly nicknamed the source LGM-1 ('Little Green Men') before identifying it as a rotating neutron star — the collapsed corpse of a massive star, spinning and beaming like a lighthouse.",
     "imageUrl": "",
     "byline": "Jocelyn Bell Burnell",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Pulsars (1967)",
+      "targetName": "Bell Burnell's 1967 'scruff' discovery + the 1974 Nobel exclusion",
       "durationMinutes": 6,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read Bell Burnell's account of the discovery and notice the conditions: she was analyzing 120 feet of chart paper per day by eye, and the signal's extreme regularity — so precise it initially looked artificial — is what made her rule out interference."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Astronomy",
+      "Neutron Stars",
+      "1960s"
     ],
     "tier": 2
   },
@@ -1696,18 +1700,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Ozone Hole (1985)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "The ozone hole was discovered in 1985 by a small British Antarctic Survey team led by Joe Farman — who initially thought his instruments were broken when they showed a 40% seasonal loss of ozone over Halley Bay. NASA's satellite had seen the same depletion for years but its software had been programmed to discard the readings as impossible errors.",
     "imageUrl": "",
     "byline": "Joseph Farman",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Ozone Hole (1985)",
+      "targetName": "Farman's 1985 Nature paper + the NASA data-discarding story",
       "durationMinutes": 10,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read Farman's 1985 Nature paper and the dramatic footnote it contains: the measurements had actually begun in the 1970s, and the ozone loss appeared suddenly in the late 1970s — a breakpoint that pointed straight at CFCs."
     },
     "tags": [
       "Chemistry",
-      "19th Century"
+      "Environment",
+      "1980s"
     ],
     "tier": 2
   },
@@ -1716,38 +1721,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Higgs Boson (2012)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The Higgs boson — the last missing piece of the Standard Model — was discovered on 4 July 2012 at CERN's Large Hadron Collider, ending a search that had run since the particle was predicted in 1964. The LHC had been running for barely two years; the discovery required 3,000 physicists and collisions at 13 trillion electron-volts.",
     "imageUrl": "",
     "byline": "Peter Higgs & the CERN teams",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Higgs Boson (2012)",
+      "targetName": "The 4 July 2012 Higgs seminar + the 5-sigma standard",
       "durationMinutes": 9,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Watch the 4 July 2012 seminar (the one where Peter Higgs, now 83, wiped his glasses and wept) and read the announcement's language: the teams reported a 'new boson' at 125 GeV with 5-sigma confidence — the threshold particle physicists use for 'discovery' instead of 'evidence.' Then read what a 5-sigma standard means: it's the probability of a false alarm at about 1 in 3.5 million, a bar set after a series of famous near-misses in the field."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Physics",
+      "Particle Physics",
+      "2010s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-big-bang-theory-167",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Theory",
     "name": "The Big Bang Theory",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "The Big Bang theory — that the universe began as an extremely hot, dense point and has been expanding ever since — was first proposed by Belgian priest and physicist Georges Lemaître in 1927 and confirmed by Hubble's 1929 discovery that galaxies are rushing apart. The name was coined dismissively by Fred Hoyle in 1949, and the theory's decisive evidence came in 1964 with the accidental discovery of the cosmic microwave background.",
     "imageUrl": "",
     "byline": "Georges Lemaître",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Big Bang Theory",
+      "targetName": "The 1964 cosmic microwave background discovery + the Hubble expansion",
       "durationMinutes": 14,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the evidence chain in order: Lemaître's 1927 paper (published two years before Hubble's), Hubble's redshift measurements, and then the 1964 discovery by Penzias and Wilson — two radio astronomers who spent a year trying to remove an annoying 'noise' from their antenna before realizing it was the afterglow of the Big Bang itself."
     },
     "tags": [
       "Astronomy",
-      "20th Century"
+      "Cosmology",
+      "Theory"
     ],
     "tier": 2
   },
@@ -1756,38 +1763,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Mendelian Genetics (1866)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Gregor Mendel's pea experiments — 22,000 plants, seven traits, eight years in a monastery garden — established the laws of heredity in 1866, and were then ignored for 35 years until three botanists independently rediscovered them in 1900. Mendel died in 1884 without knowing his work would found the science of genetics; the word 'genetics' wasn't even coined until 1905.",
     "imageUrl": "",
     "byline": "Gregor Mendel",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Mendelian Genetics (1866)",
+      "targetName": "Mendel's 1866 pea experiments + the 1900 rediscovery",
       "durationMinutes": 14,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read Mendel's 1866 paper and notice the mathematics that made it radical: he counted, rather than described, tracking each trait across generations and finding the 3:1 ratio that implied discrete hereditary 'factors' (which we now call genes)."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Biology",
+      "Genetics",
+      "1800s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-electron-microscope-1931-169",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Electron Microscope (1931)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Ernst Ruska built the first electron microscope in 1931, using a beam of electrons — whose wavelength is about 100,000 times shorter than light's — to image objects far below the resolution of any optical microscope. It took the 1986 Nobel Prize, and modern electron microscopes resolve individual atoms; the instrument revealed the viruses and cell structures that light could never show.",
     "imageUrl": "",
     "byline": "Ernst Ruska",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Electron Microscope (1931)",
+      "targetName": "Ruska's 1931 electron microscope + the wavelength-resolution comparison",
       "durationMinutes": 12,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read the physics of the resolution limit first: an optical microscope cannot resolve objects smaller than about half the wavelength of light (~200 nanometers), which is why viruses were invisible until the electron microscope. Then read Ruska's insight: electrons are particles with a wavelength, and a magnetic 'lens' can focus them the way glass focuses light."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "Microscopy",
+      "1930s"
     ],
     "tier": 2
   },
@@ -1796,18 +1805,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The First Antibiotic (1932)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "The first antibacterial drug that could be mass-produced was Prontosil, developed by Gerhard Domagk in 1932 and used from 1935 — a red dye that cured bacterial infections in mice and, famously, Domagk's own daughter. Penicillin had been discovered in 1928 but couldn't be mass-produced until the 1940s; the sulfa drugs were the first to save lives at scale, and Domagk won the 1939 Nobel.",
     "imageUrl": "",
     "byline": "Gerhard Domagk",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The First Antibiotic (1932)",
+      "targetName": "Domagk's 1932 Prontosil + the penicillin timeline",
       "durationMinutes": 14,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read the Prontosil story and its twist: the dye itself was inactive — it worked because the body metabolized it into the active sulfanilamide, which is why the later, colorless sulfa drugs worked identically."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Medicine",
+      "Antibiotics",
+      "1930s"
     ],
     "tier": 2
   },
@@ -1816,38 +1826,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Structure of Insulin (1969)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Dorothy Hodgkin solved the three-dimensional structure of insulin in 1969 — the climax of 35 years of work — having already deciphered penicillin and vitamin B12, for which she won the 1964 Nobel. By the end she was tracing electron-density maps with a magnifying glass, her hands crippled by rheumatoid arthritis; the structure she produced is the one still taught.",
     "imageUrl": "",
     "byline": "Frederick Sanger",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Structure of Insulin (1969)",
+      "targetName": "Hodgkin's 1969 insulin structure + the synthetic insulin outcome",
       "durationMinutes": 10,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read about the 35-year span and notice what changed along the way: Hodgkin had been working on insulin since 1934, but the structure required better X-ray sources and computers, so her success was timed to the technology's maturity as much as her patience."
     },
     "tags": [
       "Biology",
-      "19th Century"
+      "Crystallography",
+      "1960s"
     ],
     "tier": 2
   },
   {
     "id": "disc-mri-imaging-1973-172",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "MRI Imaging (1973)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "MRI (magnetic resonance imaging) was born in 1973 when Paul Lauterbur published the first cross-sectional NMR image, made by adding magnetic field gradients to nuclear magnetic resonance.",
     "imageUrl": "",
     "byline": "Paul Lauterbur",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "MRI Imaging (1973)",
+      "targetName": "Lauterbur's 1973 Nature paper + the Nobel controversy",
       "durationMinutes": 6,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read Lauterbur's 1973 Nature paper — titled 'Image Formation by Induced Local Interactions: Examples Employing Nuclear Magnetic Resonance' — and notice the modesty of the first image: a pair of water-filled tubes."
     },
     "tags": [
       "Medicine",
-      "20th Century"
+      "Imaging",
+      "1970s"
     ],
     "tier": 2
   },
@@ -1856,18 +1868,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Human Genome Project (2003)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The Human Genome Project — 13 years, 20 labs, $3 billion, and 3 billion base pairs — produced a complete draft of the human genetic code in 2000 and the finished sequence in 2003. The genome turned out to contain roughly 20,000 protein-coding genes — fewer than a grape — and the project's real legacy is the technology it forced into existence.",
     "imageUrl": "",
     "byline": "Human Genome Project Consortium",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Human Genome Project (2003)",
+      "targetName": "The 2001 draft sequence announcement + the gene-count surprise",
       "durationMinutes": 13,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 2001 announcement history and notice the race: a private company, Celera, ran a parallel genome project, and the public project published simultaneously to avoid losing the credit."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Biology",
+      "Genomics",
+      "2000s"
     ],
     "tier": 2
   },
@@ -1876,38 +1889,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "RNA Interference (1998)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "RNA interference — the discovery that double-stranded RNA silences genes — was announced by Andrew Fire and Craig Mello in a 1998 Nature paper, and it won the 2006 Nobel. The mechanism turned out to be an ancient immune system: cells use small RNAs to find and destroy foreign or duplicate genetic messages, and scientists can hijack it to switch off any gene on demand.",
     "imageUrl": "",
     "byline": "Andrew Fire & Craig Mello",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "RNA Interference (1998)",
+      "targetName": "Fire & Mello's 1998 Nature paper on RNAi",
       "durationMinutes": 7,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read the 1998 Nature paper and notice the unglamorous details: Fire and Mello injected double-stranded RNA into C. elegans worms and watched specific genes go silent — and the double-stranded form worked a hundredfold better than single strands, which is the clue that cracked the mechanism."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Biology",
+      "Genetics",
+      "1990s"
     ],
     "tier": 2
   },
   {
     "id": "disc-mrna-vaccines-2020-175",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "mRNA Vaccines (2020)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The mRNA vaccines that ended the COVID-19 pandemic's worst phase were the product of a 40-year scientific arc: messenger RNA — the molecule cells use to read genes — repurposed as a drug-delivery system. The key work was done in 2005 by Katalin Karikó and Drew Weissman, who solved the problem of mRNA triggering inflammation; they shared the 2023 Nobel.",
     "imageUrl": "",
     "byline": "Katalin Karikó & Drew Weissman",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "mRNA Vaccines (2020)",
+      "targetName": "The 2005 Karikó–Weissman paper + the 2020 vaccine deployment",
       "durationMinutes": 7,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 2005 Karikó–Weissman paper and notice the drama the award ceremony glossed over: Karikó had been demoted at her university and was a decade into grant rejections when she and Weissman showed that modified nucleosides let mRNA slip past the immune system. Then read the 2020 application: the vaccine instructs cells to make the spike protein, and the 'm' in mRNA is the whole revolution — the message can be rewritten for any virus in weeks."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Medicine",
+      "Vaccines",
+      "2020s"
     ],
     "tier": 2
   },
@@ -1916,18 +1931,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Dark Energy (1998)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Dark energy — the unknown force accelerating the universe's expansion — was inferred in 1998 from distant supernovae that were dimmer than they should be, meaning the expansion isn't slowing as gravity demands but speeding up. It accounts for about 68% of the universe's total content, yet nobody knows what it is; the 2011 Nobel went to the two teams' leaders.",
     "imageUrl": "",
     "byline": "Perlmutter, Schmidt & Riess",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Dark Energy (1998)",
+      "targetName": "The 1998 accelerating-expansion papers + the vacuum-energy problem",
       "durationMinutes": 13,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the 1998 papers and notice what the discoverers expected to find: both teams designed the experiment to measure deceleration — the universe slowing under gravity — and both were forced by their own data to conclude the opposite."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Astronomy",
+      "Cosmology",
+      "1990s"
     ],
     "tier": 2
   },
@@ -1936,18 +1952,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Neutrino Oscillations (1998)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "In 1998, the Super-Kamiokande detector in Japan announced that neutrinos — the universe's most ghostly particles, which pass through the Earth by the trillions — change flavor as they travel, a phenomenon called oscillation. The discovery proved neutrinos have mass, contradicting the Standard Model's assumption and forcing a rewrite of physics; it brought the 2015 Nobel to Takaaki Kajita (and, for solar neutrinos, Arthur McDonald).",
     "imageUrl": "",
     "byline": "Takaaki Kajita & Arthur McDonald",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Neutrino Oscillations (1998)",
+      "targetName": "The 1998 Super-Kamiokande announcement + the oscillation method",
       "durationMinutes": 7,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read how the measurement works: Super-Kamiokande is a 50,000-ton tank of pure water lined with 13,000 light detectors, built to catch the rare flashes when a neutrino collides with a water molecule. The oscillation signature showed up as a deficit: neutrinos created in the atmosphere as muon-type were arriving as fewer muon-neutrinos than expected, with the deficit growing with distance — the telltale of flavor-switching in flight."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Physics",
+      "Particles",
+      "1990s"
     ],
     "tier": 2
   },
@@ -1956,18 +1973,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Topological Insulators (2007)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Topological insulators — materials that insulate electricity in their interior while conducting it perfectly along their surfaces — were predicted and observed in the late 2000s, and they showed that the shape of an electron's wavefunction ('topology') can dictate a material's properties as surely as its chemistry. The field's pioneers won the 2016 Nobel, and the materials are candidates for fault-tolerant quantum computers.",
     "imageUrl": "",
     "byline": "Charles Kane & Eugene Mele",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Topological Insulators (2007)",
+      "targetName": "The 2007 topological insulator experiments + the Möbius analogy",
       "durationMinutes": 14,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read the concept through the familiar example the papers use: a Möbius strip's twist is a global property you can't remove by local changes — similarly, the 'twist' in an electron's quantum state can't be undone by impurities, which is why the surface conduction is so robust."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Physics",
+      "Materials",
+      "2000s"
     ],
     "tier": 2
   },
@@ -1976,37 +1994,39 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Fullerenes (1985)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Buckminsterfullerene — a molecule of 60 carbon atoms arranged like a soccer ball — was discovered in 1985 by Harold Kroto, Richard Smalley, and Robert Curl, who vaporized graphite with a laser and found the carbon atoms assembling themselves into the ball. They named it after Buckminster Fuller, inventor of the geodesic dome, and won the 1996 Nobel; the discovery opened the field of carbon nanostructures that led to nanotubes and graphene.",
     "imageUrl": "",
     "byline": "Kroto, Smalley & Curl",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Fullerenes (1985)",
+      "targetName": "The 1985 laser-vaporization experiment + the C60 structure insight",
       "durationMinutes": 12,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the discovery story and notice the accident within the discovery: the team was trying to understand carbon chains in space (Kroto's interest) and found instead a 60-atom molecule so stable it shouldn't have formed by chance. The 'aha' came when Smalley realized the soccer-ball structure would be perfectly stable."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Chemistry",
+      "Nanoscience",
+      "1980s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-theory-of-everything-180",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Theory",
     "name": "The Theory of Everything (ongoing)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "A 'theory of everything' — one set of equations uniting gravity with quantum mechanics — has been the holy grail of physics for a century, since Einstein spent his last 30 years chasing it and failed. String theory and loop quantum gravity are the leading candidates, but neither has produced a single experimentally confirmed prediction, and the quest is, famously, unfinished.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Theory of Everything (ongoing)",
+      "targetName": "The gravity-vs-quantum contradiction + the two leading candidates",
       "durationMinutes": 13,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read why gravity refuses to fit: quantum mechanics describes the very small with probabilistic waves, general relativity describes the very large with smooth spacetime, and the two formalisms contradict each other at the extremes — inside black holes and at the universe's first instant. Then read the candidates honestly: string theory predicts extra dimensions and has no confirmed experiment; loop quantum gravity is more modest but also untested."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Physics",
+      "Cosmology",
+      "Unified"
     ],
     "tier": 2
   },
@@ -2015,57 +2035,60 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Fractals (1975)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Benoit Mandelbrot coined the word 'fractal' in 1975 for shapes whose complexity repeats at every scale — a coastline measured with a longer ruler gets longer without limit. His 1967 paper, 'How Long Is the Coast of Britain?,' founded the field, and the Mandelbrot set he visualized in 1980 became the most famous mathematical image ever made, its boundary infinitely detailed by a two-line formula.",
     "imageUrl": "",
     "byline": "Benoit Mandelbrot",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Fractals (1975)",
+      "targetName": "Mandelbrot's 'How Long Is the Coast of Britain?' + the Mandelbrot set",
       "durationMinutes": 15,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 1967 coastline paper and follow the paradox: if you measure a coastline with 100 km rulers you get one answer; with 10 km rulers you get a longer one, and the length grows without bound as the rulers shrink — the coast is a fractal, with a dimension between 1 and 2."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Mathematics",
+      "Geometry",
+      "1970s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-internet-protocol-1974-182",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Internet Protocol (1974)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "TCP/IP — the protocol pair that lets every computer on Earth talk to every other — was designed by Vint Cerf and Bob Kahn in 1974, in a paper titled 'A Protocol for Packet Network Intercommunication.' The internet's birth is usually dated to 1 January 1983, when the ARPANET switched over to the new protocol in a single coordinated 'flag day.'",
     "imageUrl": "",
     "byline": "Vint Cerf & Bob Kahn",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Internet Protocol (1974)",
+      "targetName": "The 1974 Cerf–Kahn paper + the 1983 flag day",
       "durationMinutes": 12,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the 1974 paper and notice the design principle that made it universal: the protocol doesn't care what kind of network carries the packets, so radio, satellite, and wired networks could all interoperate — that's the 'inter' in 'internet.' Then read the 1983 flag-day story: the ARPANET cut over to TCP/IP overnight, with zero tolerance for error, and the network that had connected a few universities became the skeleton of a worldwide system."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Computing",
+      "Internet",
+      "1970s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-smartphone-2007-183",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Smartphone (2007)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The smartphone era is usually dated to 9 January 2007, when Steve Jobs introduced the iPhone — a phone, an iPod, and an internet communicator in one touchscreen device with no keyboard. Smartphones themselves predate it (IBM's Simon, 1992), but the iPhone's app store and capacitive touchscreen defined the form every phone since has copied, and there are now more smartphones on Earth than people with bank accounts.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Smartphone (2007)",
+      "targetName": "The 9 January 2007 iPhone keynote + the App Store's arrival",
       "durationMinutes": 5,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Watch the 2007 keynote and notice what Jobs emphasized — 'a revolutionary user interface' — and what he didn't mention: there were no apps initially; the App Store arrived a year later and created the ecosystem that made the device a platform. Then read the numbers: by 2016, two billion people had smartphones, and the devices had become the primary camera, map, and bank for most of humanity — a scale no previous technology reached in a decade."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Technology",
+      "Mobile",
+      "2000s"
     ],
     "tier": 2
   },
@@ -2074,38 +2097,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "AlphaFold Protein Folding (2020)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "AlphaFold — DeepMind's neural network — cracked protein structure prediction in 2020, solving a problem biologists had chased for 50 years: given a protein's amino-acid sequence, predict the 3D shape it folds into. In the biennial CASP competition it scored near-experimental accuracy, and in 2024 its developers shared the Nobel in Chemistry with protein-design pioneer David Baker.",
     "imageUrl": "",
     "byline": "Demis Hassabis & John Jumper",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "AlphaFold Protein Folding (2020)",
+      "targetName": "The 2020 CASP14 results + the 2022 proteome-wide expansion",
       "durationMinutes": 9,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read why folding matters: a protein's shape determines what it does, and knowing a protein's structure is the foundation of drug design — but experimental methods (X-ray crystallography, cryo-EM) can take months or years per protein."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Biology",
+      "AI",
+      "2020s"
     ],
     "tier": 2
   },
   {
     "id": "disc-reusable-rockets-2015-185",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "Reusable Rockets (2015)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "On 21 December 2015, SpaceX landed a Falcon 9 rocket booster upright on a landing pad — the first time an orbital-class rocket had flown again after delivering its payload. For six decades, rockets were single-use: every launch meant building a new rocket, which is why spaceflight cost hundreds of millions per flight. Reusability is the change that made satellite constellations and routine launches economically possible.",
     "imageUrl": "",
     "byline": "Elon Musk & SpaceX",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Reusable Rockets (2015)",
+      "targetName": "The 21 December 2015 booster landing + the cost-reduction math",
       "durationMinutes": 7,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 2015 landing's history and the failures before it: the first landing attempts exploded at sea, and the company was nearly bankrupt in 2008 — the reusable rocket was a decade-long bet that looked reckless for years."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Space",
+      "Rockets",
+      "2010s"
     ],
     "tier": 2
   },
@@ -2114,18 +2139,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Telomerase (1984)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Telomerase — the enzyme that lengthens the protective caps (telomeres) on chromosome ends — was discovered in 1984 by Elizabeth Blackburn and Carol Greider, who shared the 2009 Nobel with Jack Szostak. It's the molecule that lets some cells divide forever: active in stem cells and embryos, hijacked by cancers, and absent in most adult cells, which is why our chromosomes shorten as we age.",
     "imageUrl": "",
     "byline": "Blackburn & Greider",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Telomerase (1984)",
+      "targetName": "The 1984 telomerase discovery + its role in cancer",
       "durationMinutes": 13,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read the discovery story and notice the unlikely setting: Greider was a graduate student who ran the experiments over a Christmas holiday, looking for an enzyme that lengthens the six-base repeating 'TTAGGG' sequence at chromosome tips. Then read the two-faced biology: telomerase keeps germ cells and stem cells young, but ~90% of cancers activate it too — which is why the enzyme is simultaneously a longevity lead and a cancer target."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Biology",
+      "Aging",
+      "1980s"
     ],
     "tier": 2
   },
@@ -2134,18 +2160,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Cell Cycle (2001)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The discovery of the cell cycle's molecular clock — the cyclins and cyclin-dependent kinases that decide when a cell divides — won the 2001 Nobel for Leland Hartwell, Tim Hunt, and Paul Nurse. The machinery they found is so universal that the yeast they studied and human cells run on the same proteins, which is why the cell-cycle research became the foundation of cancer biology.",
     "imageUrl": "",
     "byline": "Hartwell, Hunt & Nurse",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Cell Cycle (2001)",
+      "targetName": "The 2001 Nobel work — cyclins, CDKs, and checkpoints",
       "durationMinutes": 6,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read the three contributions as one story: Hartwell's yeast genetics found the 'checkpoints' that gate division, Hunt's sea-urchin experiments found cyclins (proteins that accumulate and then vanish each cycle), and Nurse's work found the kinase that the cyclins switch on."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Biology",
+      "Cell Biology",
+      "2000s"
     ],
     "tier": 2
   },
@@ -2154,18 +2181,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Optogenetics (2005)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Optogenetics — controlling brain cells with light — was demonstrated in 2005 by Karl Deisseroth's lab at Stanford, which combined a light-sensitive protein from pond algae (channelrhodopsin) with a way to switch it on in specific neurons. The technique lets researchers turn individual circuits in a living brain on and off with millisecond precision, and it was named Nature Methods' Method of the Year in 2010.",
     "imageUrl": "",
     "byline": "Karl Deisseroth",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Optogenetics (2005)",
+      "targetName": "The 2005 optogenetics paper + the Method of the Year story",
       "durationMinutes": 13,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read the 2005 paper and notice what was actually new: algae had been known to use channelrhodopsin for years, but Deisseroth's team got the gene into mammalian neurons and showed a light pulse could fire them — the first time light controlled a mammalian neuron from the outside."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Neuroscience",
+      "Biology",
+      "2000s"
     ],
     "tier": 2
   },
@@ -2174,18 +2202,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The First Gene Therapy (1990)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The first approved gene therapy trial began in September 1990, when four-year-old Ashanti DeSilva — born with ADA-SCID, a near-fatal immune deficiency — received her own white blood cells, modified with a working copy of the ADA gene. The treatment worked, and although the early field was set back by a 1999 trial death, gene therapy has since matured into approved drugs for sickle cell disease, blindness, and hemophilia.",
     "imageUrl": "",
     "byline": "W. French Anderson",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The First Gene Therapy (1990)",
+      "targetName": "The 1990 ADA-SCID trial + the 1999 setback and the modern approvals",
       "durationMinutes": 8,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 1990 trial's outcome and its caveats: Ashanti's treated cells worked but the effect faded, and she needed ongoing enzyme therapy — the trial proved the concept (gene-corrected cells survive and function) more than it cured."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Medicine",
+      "Gene Therapy",
+      "1990s"
     ],
     "tier": 2
   },
@@ -2194,18 +2223,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Climate Change Science (1988)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Climate change entered the mainstream on 23 June 1988, when NASA scientist James Hansen told the US Senate that 'the greenhouse effect has been detected and is changing our climate now' — testimony delivered during the hottest summer on record, in a Washington gripped by 100°F heat. The same year, the UN created the IPCC, which has since produced the definitive assessments that drive global policy.",
     "imageUrl": "",
     "byline": "James Hansen",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Climate Change Science (1988)",
+      "targetName": "Hansen's 23 June 1988 Senate testimony + the IPCC's founding",
       "durationMinutes": 9,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read Hansen's 1988 testimony and notice the audacity: he stated with confidence, before a congressional committee, that the warming signal had emerged from the noise — a claim most colleagues still considered premature. Then read what's happened to his projection: Hansen's models predicted the temperature range we've actually seen, and the 2020s have tracked the upper end of his scenarios."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Climate",
+      "Science",
+      "Policy"
     ],
     "tier": 2
   },
@@ -2214,17 +2244,18 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Ocean Acidification (2000s)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Ocean acidification — the 'other CO2 problem' — became a recognized global threat in the 2000s: the oceans absorb about a quarter of the CO2 humans emit, and that absorption is acidifying seawater. Surface pH has already dropped by about 0.1 unit since the industrial revolution — a 30% increase in acidity — and the change is fastest in the cold polar seas.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Ocean Acidification (2000s)",
+      "targetName": "The ocean pH decline + the shell-dissolution studies",
       "durationMinutes": 10,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read the chemistry first: dissolved CO2 forms carbonic acid, which releases hydrogen ions — the more CO2 the ocean absorbs, the more acidic it becomes. The oceans' buffering kept pH nearly stable for millennia, so the current shift is geologically abrupt."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Climate",
+      "Oceans",
+      "2000s"
     ],
     "tier": 2
   },
@@ -2233,18 +2264,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Lucy the Australopithecus (1974)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Lucy — the 3.2-million-year-old Australopithecus afarensis skeleton found in Ethiopia in 1974 — was 40% complete, enough to prove that a human ancestor walked upright over a million years before big brains evolved. She was named after the Beatles' 'Lucy in the Sky with Diamonds,' which the camp played on the night of the discovery, and she remains the most famous fossil ever found.",
     "imageUrl": "",
     "byline": "Donald Johanson",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Lucy the Australopithecus (1974)",
+      "targetName": "The 1974 Lucy discovery + the Laetoli footprints comparison",
       "durationMinutes": 8,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the 1974 discovery account and notice what made Lucy's pelvis so decisive: her knee and pelvis showed bipedal walking, but her brain was chimp-sized — overturning the assumption that big brains came first and walking later."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Anthropology",
+      "Hominins",
+      "1970s"
     ],
     "tier": 2
   },
@@ -2253,18 +2285,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Homo Floresiensis (2003)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Homo floresiensis — nicknamed 'the hobbit' — was discovered in 2003 in Liang Bua cave on the Indonesian island of Flores: a full adult skeleton standing barely a meter tall, with a chimp-sized brain, dating to as recently as 50,000–60,000 years ago, possibly coexisting with modern humans. The tiny hominin's tools and fire suggest a surprisingly sophisticated culture for its brain size.",
     "imageUrl": "",
     "byline": "Peter Brown & Michael Morwood",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Homo Floresiensis (2003)",
+      "targetName": "The 2003 Liang Bua discovery + the dwarfing debate",
       "durationMinutes": 14,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the discovery and the immediate disbelief: a one-meter-tall hominin with stone tools and fire, living at the same time as Homo sapiens, seemed too good to be true — and some researchers argued the skeleton was a modern human with microcephaly or island dwarfism."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Anthropology",
+      "Hominins",
+      "2000s"
     ],
     "tier": 2
   },
@@ -2273,17 +2306,18 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Wheel (3500 BC)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The wheel was invented in Mesopotamia around 3500 BC — probably a potter's wheel first, with wheeled vehicles following within a few centuries. The Americas never developed the wheel for transport (pre-Columbian wheeled toys exist but no wheeled vehicles), and the wheel's spread was slowed by the absence of roads and suitable draft animals in many regions.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Wheel (3500 BC)",
+      "targetName": "The potter's-wheel-to-chariot sequence + the Americas puzzle",
       "durationMinutes": 7,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the archaeology of the wheel's invention and notice the sequence: the potter's wheel appears in Mesopotamia ~4500 BC, but the first wheels for vehicles (~3500–3200 BC) are solid discs, not spoked — spokes come from the steppe cultures ~2000 BC and make chariots possible. Then read the Americas question: why no wheeled transport?"
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Technology",
+      "History",
+      "Prehistory"
     ],
     "tier": 2
   },
@@ -2292,57 +2326,60 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Writing (3200 BC)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Writing was invented independently in at least three places — cuneiform in Sumer (~3200 BC), hieroglyphs in Egypt, and later in China and Mesoamerica. The first cuneiform tablets were not literature but accounting: records of grain, cattle, and labor, scratched as pictograms into clay. Literature followed centuries later, and the world's first named author, the priestess Enheduanna, wrote hymns around 2300 BC.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Writing (3200 BC)",
+      "targetName": "The earliest cuneiform tablets + the sound-based writing step",
       "durationMinutes": 14,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read what the earliest tablets actually say and notice how unglamorous they are: most are receipts and ledgers, which is why scholars argue writing was invented for bureaucracy, not poetry. Then read the transition from pictures to sounds: Sumerian signs came to stand for syllables, and once a script represents sound rather than meaning, it can write any language — the step that made writing a technology rather than an art form."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "History",
+      "Writing",
+      "Ancient"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-steam-engine-1712-196",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Steam Engine (1712)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Thomas Newcomen's steam engine of 1712 — the first practical one — pumped water out of English coal mines by condensing steam inside a cylinder to create a vacuum that pulled a piston down. It was crude (it burned coal to pump water out of coal mines) but it worked, and James Watt's separate condenser (1769) made the engine efficient enough to power factories, railways, and eventually the Industrial Revolution.",
     "imageUrl": "",
     "byline": "Thomas Newcomen",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Steam Engine (1712)",
+      "targetName": "Newcomen's 1712 engine vs. Watt's 1769 separate condenser",
       "durationMinutes": 14,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Read the Newcomen engine's operation and notice the elegant inefficiency: it was an 'atmospheric' engine — steam pushed the piston up, then cold water condensed the steam, and atmospheric pressure pushed the piston back down."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Technology",
+      "Engineering",
+      "1700s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-telephone-1876-197",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Telephone (1876)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Alexander Graham Bell was granted US patent 174,465 for the telephone on 7 March 1876 — and filed it just hours before rival Elisha Gray's caveat for a similar device, one of the most contested patent moments in history. Three days later, Bell spoke the first complete sentence over a wire: 'Mr. Watson, come here, I want to see you.'",
     "imageUrl": "",
     "byline": "Alexander Graham Bell",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Telephone (1876)",
+      "targetName": "The 1876 Bell–Gray race + the first telephone sentence",
       "durationMinutes": 9,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read the race between Bell and Gray and notice how close it was: Gray filed a patent caveat (an intent to invent) for a liquid transmitter on the same day Bell filed his patent, and the dispute over who invented the telephone ran through the courts for years — Bell's patent was upheld in 600+ cases."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Technology",
+      "Invention",
+      "1870s"
     ],
     "tier": 2
   },
@@ -2351,18 +2388,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Radio (1895)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Guglielmo Marconi sent the first wireless telegraph signals across his family's estate in Italy in 1895, and in 1901 transmitted the letter 'S' across the Atlantic — the moment radio became transcontinental. The invention's priority is tangled: Nikola Tesla and Russian physicist Alexander Popov both demonstrated wireless transmission around the same time, and Tesla's patents were upheld after Marconi's in 1943.",
     "imageUrl": "",
     "byline": "Guglielmo Marconi",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Radio (1895)",
+      "targetName": "Marconi's 1901 transatlantic 'S' + the Tesla patent ruling",
       "durationMinutes": 13,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read the 1901 transatlantic experiment and notice the conditions: the signal (the letter S in Morse) was received in Newfoundland using a kite-borne antenna, and the feat was partly theater — skeptics noted the signal could have been atmospheric noise."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Technology",
+      "Wireless",
+      "1890s"
     ],
     "tier": 2
   },
@@ -2371,18 +2409,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Computer (1940s)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The electronic computer emerged in the 1940s from a wartime race: the Colossus (Britain, 1943, for codebreaking), the ENIAC (US, 1945, for artillery tables), and the stored-program architecture proposed by John von Neumann (1945) that every modern computer still uses. The first programmable electronic computer was arguably the German Z3 (1941), which the war kept secret.",
     "imageUrl": "",
     "byline": "Eckert & Mauchly",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Computer (1940s)",
+      "targetName": "The ENIAC + von Neumann's 1945 stored-program architecture",
       "durationMinutes": 5,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read the ENIAC's specs and notice the scale: 17,000 vacuum tubes, 30 tons, 150 kilowatts, and programming done by physically rewiring the machine — with women mathematicians, the 'ENIAC Six,' doing the rewiring."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Computing",
+      "History",
+      "1940s"
     ],
     "tier": 2
   },
@@ -2391,18 +2430,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Internet (1983)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The internet — as we define it — was born on 1 January 1983, when the ARPANET switched from its original protocol to TCP/IP in a single coordinated cutover, allowing networks to interconnect. The ARPANET itself had been connecting universities since 1969, but 'internetworking' — networks talking to networks — is what the new protocol made possible, and the first email had been sent a decade earlier, in 1971.",
     "imageUrl": "",
     "byline": "Vint Cerf & Bob Kahn",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Internet (1983)",
+      "targetName": "The 1983 TCP/IP cutover + the 1984 domain name system",
       "durationMinutes": 8,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Read the 1983 cutover story and notice what 'flag day' meant: at midnight, every host on the network had to switch protocols simultaneously or be cut off — the internet equivalent of changing every phone number in the world in one night."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Computing",
+      "Internet",
+      "1980s"
     ],
     "tier": 2
   },
@@ -2411,17 +2451,18 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Social Media (2004)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The modern social media era began with the founding of Facebook in 2004 — 'Thefacebook,' from a Harvard dorm room — which brought social networking to real names and real friend lists at mass scale. Social sites predate it (Friendster 2002, MySpace 2003), but Facebook's news feed (2006) invented the algorithmic stream that every platform since has copied, and the feed is what made social media a new kind of mass medium.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Social Media (2004)",
+      "targetName": "The 2006 news feed launch + the engagement-algorithm lineage",
       "durationMinutes": 15,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 2004–2006 sequence and notice which innovation was the real turning point: the news feed, introduced in September 2006, replaced the 'visit a profile' model with an algorithmically ranked stream — the first time a platform decided what you saw without being asked."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Technology",
+      "Social Media",
+      "2000s"
     ],
     "tier": 2
   },
@@ -2430,18 +2471,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Vaccination (1796)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Edward Jenner performed the first vaccination in 1796 by deliberately infecting a boy with cowpox — a mild relative of smallpox — and then showing he was immune to the real disease. The word 'vaccine' comes from vacca, Latin for cow, and Jenner's method — using a related harmless virus to train immunity — is the same principle behind every vaccine since, including the mRNA shots of 2020.",
     "imageUrl": "",
     "byline": "Edward Jenner",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Vaccination (1796)",
+      "targetName": "Jenner's 1796 experiment + the smallpox eradication of 1980",
       "durationMinutes": 14,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read the 1798 paper's experiment and notice the audacity: Jenner took pus from a milkmaid's cowpox sores and scratched it into eight-year-old James Phipps's arm, then, six weeks later, exposed the boy to smallpox itself. The 'monstrous' procedure worked, and Jenner's follow-up — over 20 more vaccinations and a refusal to profit from them — turned a folk observation (milkmaids never got smallpox) into a reproducible medical method."
     },
     "tags": [
-      "Chemistry",
-      "19th Century"
+      "Medicine",
+      "Vaccines",
+      "1700s"
     ],
     "tier": 2
   },
