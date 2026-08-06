@@ -1,5 +1,5 @@
 • Fixed Explore overlay crashes on Android 16 by attaching through an owner-propagating host before composing, with notification-only fallback to prevent restart loops.
 • Fixed CI compile errors in the topic card gradient and torn paper under-sheet path.
 • Smart Density 2x now reliably shrinks the Spin deck on every device.
-• Cabinet search, sorting, bulk selection/deletion, and faster loading are polished.
-• Detail paper seams are thinner, seeded, wavy, and gap-free.
+• Cabinet search, sorting, bulk selection/deletion, and faster loading are polished.• Detail paper seams are thinner, seeded, wavy, and gap-free.
+• Detail-page scrolling is smoother without reducing image, paper, or content quality.

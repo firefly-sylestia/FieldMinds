@@ -365,3 +365,9 @@ artwork instructions across 5 committed batches (scripts/rewrite_instr_batch1..5
   anywhere; the only exact duplicates are 3 intentional cross-file pairs
   (Kafka/Trial, Morrison/Beloved, Lister/antiseptic).
 - validate_topics: 0 errors across 2,262 topics.
+
+## v7.51 — detail page scroll performance (user: "the detail page is lagging a little when scrolling can u fix it without removing or cutting any quality")
+
+- Root cause: EntryDetailScreen read `detailScroll.value` in the same composable scope as the entire rich detail body. Every scroll pixel therefore invalidated the full tree, including paper Canvas textures, rich text, and image painters.
+- Fix: extracted the existing sticky back/more controls into a private `BoxScope.DetailStickyBar` composable. Only that small overlay reads the scroll state; the body keeps the same content, images, paper rendering, animations, and visual behavior.
+- Validation: brace check BALANCED, `git diff --check` clean, static isolation checks pass, reviewer found no critical issues. No Gradle build/compile/lint/test commands run per repository rules; CI remains the Android compilation source of truth.
