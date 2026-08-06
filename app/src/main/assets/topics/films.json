@@ -1112,18 +1112,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Close Encounters of the Third Kind (1977)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Spielberg's first UFO film was a monster hit that defined the 'close encounter' moment in pop culture — the mountain that hums five tones back at you. It was made in the same period as Star Wars, and the two films together convinced Hollywood that the public wanted awe, not cynicism.",
     "imageUrl": "",
     "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Close Encounters of the Third Kind (1977)",
+      "targetName": "Close Encounters of the Third Kind (1977) — the five-note exchange",
       "durationMinutes": 150,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the desert, the lost planes, the abandoned patrol car — and notice how Spielberg shows the aliens before showing the aliens: light, toys, and a mountain that responds to music. Then watch the final sequence at Devils Tower, where the mothership arrives: the five-note exchange between humans and aliens is the film's whole argument about communication."
     },
     "tags": [
-      "Drama",
-      "1990s",
+      "Sci-Fi",
+      "1970s",
       "Hollywood"
     ],
     "tier": 2
@@ -1133,17 +1133,17 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Blade Runner (1982)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Scott's adaptation of Philip K. Dick's Do Androids Dream of Electric Sheep? flopped on release, was re-cut, re-narrated, and rescued by a director's cut that made it a masterpiece — the rain-soaked, neon Los Angeles of 2019 became the visual template for every cyberpunk film since. Harrison Ford was told the film was about whether the replicant Roy Batty was really the hero.",
     "imageUrl": "",
     "byline": "Ridley Scott",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Blade Runner (1982)",
+      "targetName": "Blade Runner (1982) — the opening and Roy Batty's final monologue",
       "durationMinutes": 104,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the eye, the city, the fire — and then the final scene, Roy Batty's 'tears in rain' monologue, which Ford and actor Rutger Hauer improvised in part. The film's central question — do the replicants deserve more empathy than their makers? — is stated in that monologue, and the director's cut's unicorn dream adds the twist: Deckard may be a replicant too."
     },
     "tags": [
-      "Comedy",
+      "Sci-Fi",
       "1980s",
       "Hollywood"
     ],
@@ -1154,18 +1154,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Thing (1982)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Carpenter's remake of The Thing from Another World was hated on release — critics called it 'garbage' — then became one of the most influential horror films ever made: an Antarctic research station, a shape-shifting alien, and a paranoia so total that the film's monster is never clearly named. The practical effects, by Rob Bottin, are still unmatched.",
     "imageUrl": "",
     "byline": "John Carpenter",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Thing (1982)",
+      "targetName": "The Thing (1982) — the kennel scene and the blood-test scene",
       "durationMinutes": 126,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the first transformation scene — the dogsled kennel — and notice what Carpenter does with the monster: it's never fully shown, always mid-change, which is why it stays terrifying. Then watch the blood-test scene near the end, where the film's paranoia becomes a contest of trust: the movie's horror is that the alien is indistinguishable from the crew, and the ending — two men, one fire, no resolution — refuses to break the impasse."
     },
     "tags": [
-      "Sci-Fi",
-      "2000s",
+      "Horror",
+      "1980s",
       "Hollywood"
     ],
     "tier": 2
@@ -1175,18 +1175,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Brazil (1985)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Gilliam's dystopian satire — a bureaucratic totalitarian Britain where a government typo turns a man into a terrorist — was fought over by the studio, which released a 'happy ending' cut Gilliam disowned. The film's signature image is the ductwork: giant air-conditioning conduits that are the real infrastructure of a society that has given up.",
     "imageUrl": "",
     "byline": "Terry Gilliam",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Brazil (1985)",
+      "targetName": "Brazil (1985) — the opening typo and the ending",
       "durationMinutes": 150,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the fly, the typo, the explosion — and notice how Gilliam establishes the world: everything runs on paperwork and ducts, and the hero, Sam Lowry, dreams of flying away in armor. Then watch the ending, which Gilliam fought to keep: the 'happy' version and the real version are both in the film's history, and the difference between them is the film's argument about what hope costs."
     },
     "tags": [
-      "Thriller",
-      "2010s"
+      "Satire",
+      "1980s",
+      "Dystopian"
     ],
     "tier": 2
   },
@@ -1195,18 +1196,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Wings of Desire (1987)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Wenders's Berlin angel film — angels listen to the thoughts of the city's people and one falls in love — is the most tender film ever made about a city. Shot partly in black and white (what angels see) and color (what humans see), it was made before the Wall fell, and its Berlin is a city of memory and longing.",
     "imageUrl": "",
     "byline": "Wim Wenders",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Wings of Desire (1987)",
+      "targetName": "Wings of Desire (1987) — the angel's fall into color",
       "durationMinutes": 109,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the angel Damiel standing on a statue above Berlin, hearing the city's thoughts in a dozen languages — and notice how Wenders films thought: the voiceover is the movie's real soundtrack, and the black-and-white is the angels' permanent condition."
     },
     "tags": [
       "Drama",
-      "1990s"
+      "1980s",
+      "German"
     ],
     "tier": 2
   },
@@ -1215,18 +1217,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Do the Right Thing (1989)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Lee's third feature, set in one Brooklyn block on the hottest day of the summer, was called dangerous and incendiary before release — it opens with a protest song and ends with a riot, and its central question is literal in the title. It was made on a $6 million budget and is now in the National Film Registry.",
     "imageUrl": "",
     "byline": "Spike Lee",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Do the Right Thing (1989)",
+      "targetName": "Do the Right Thing (1989) — the opening dance and the finale",
       "durationMinutes": 122,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — Rosie Perez dancing to 'Fight the Power' over the credits — and notice how Lee establishes the block's community in a series of portraits, each character introduced with their own theme. Then watch the film's final act, from Radio Raheem's death to the riot, and notice what Lee refuses: no clean hero, no clear villain, and the film's last words — 'Love' and 'Hate' — are the knuckles on both fists."
     },
     "tags": [
-      "Thriller",
-      "2010s",
+      "Drama",
+      "1980s",
       "Hollywood"
     ],
     "tier": 2
@@ -1236,18 +1238,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Reservoir Dogs (1992)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Tarantino's debut — made for $1.5 million from a script he'd written in three weeks — announced a new voice: the heist movie that skips the heist, told through overlapping dialogue and a soundtrack of 1970s radio. It made him the most influential new director of the 1990s before his second film existed.",
     "imageUrl": "",
     "byline": "Quentin Tarantino",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Reservoir Dogs (1992)",
+      "targetName": "Reservoir Dogs (1992) — the diner opening and the torture scene",
       "durationMinutes": 129,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — the diner argument about tipping, the slow-motion walk with the music — and notice what's missing: the heist itself. Tarantino cuts straight to the aftermath and builds the film from conversation and flashback. Then watch Mr."
     },
     "tags": [
-      "Comedy",
-      "1980s",
+      "Crime",
+      "1990s",
       "Hollywood"
     ],
     "tier": 2
@@ -1257,18 +1259,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Schindler's List (1993)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Spielberg's Holocaust film — shot in black and white, on location in Poland, with a cast that included actual survivors — won seven Oscars including Best Picture, and its single image of the girl in the red coat remains one of cinema's most debated details. Spielberg, who is Jewish, has said he didn't expect to make it and was told by his rabbi that he was honoring his heritage by doing so.",
     "imageUrl": "",
     "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Schindler's List (1993)",
+      "targetName": "Schindler's List (1993) — the girl in the red coat sequence",
       "durationMinutes": 161,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening — the candle, the prayer, the fading to color — and then the liquidation of the Kraków ghetto, where the girl in the red coat appears: the only color in a black-and-white film, and Spielberg has said it's the film's conscience. Then watch the ending, the real survivors placing stones on Schindler's grave: the film's final sequence makes the horror personal, and the casting of survivors was deliberate."
     },
     "tags": [
-      "Animation",
-      "2000s",
+      "Drama",
+      "1990s",
       "Hollywood"
     ],
     "tier": 2
@@ -1278,18 +1280,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Chungking Express (1994)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Wong's film — two stories, two cops, a snack bar, and the song 'California Dreamin'' — was made during a break from his martial-arts epic Ashes of Time, and it became his international breakthrough: a pop-art meditation on loneliness in Hong Kong. The film's famous blur-motion photography (camera operated by Wong himself on a Steadicam) became a style called 'the Chungking look.'",
     "imageUrl": "",
     "byline": "Wong Kar-wai",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Chungking Express (1994)",
+      "targetName": "Chungking Express (1994) — the snack-bar stories",
       "durationMinutes": 176,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the first story's opening — the cop chasing a suspect through the market in slow-motion, the snack-bar counter — and notice the tone: Wong films loneliness as glamour, and the characters talk to cans of pineapple with expiration dates."
     },
     "tags": [
-      "Foreign",
-      "2000s"
+      "Romance",
+      "1990s",
+      "Hong Kong"
     ],
     "tier": 2
   },
@@ -1298,18 +1301,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Fargo (1996)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The Coens' snowbound crime comedy — a car salesman hires two men to kidnap his wife for ransom, and everything goes wrong in the Minnesota snow — won the Oscar for Best Original Screenplay and made 'oh yah' a national phrase. It was filmed in a Minnesota winter so brutal that one scene's frostbite was real, and the 'true story' claim in the opening credits is a joke — the film is invented.",
     "imageUrl": "",
-    "byline": "Coen Brothers",
+    "byline": "Joel & Ethan Coen",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Fargo (1996)",
+      "targetName": "Fargo (1996) — Marge's investigation and the wood chipper",
       "durationMinutes": 128,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the 'true story' title card and the wood chipper being loaded onto a truck — and notice how the Coens set the tone: the film's comedy and its violence share the same flat accent."
     },
     "tags": [
-      "Comedy",
-      "1980s",
+      "Crime",
+      "1990s",
       "Hollywood"
     ],
     "tier": 2
@@ -1319,18 +1322,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Big Lebowski (1998)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The Coens' shaggy detective comedy — a slacker mistaken for a millionaire, a bowling ball, and a rug that 'really tied the room together' — flopped on release and became one of the most-quoted films of all time, with its own annual festival (Lebowski Fest). The Dude, played by Jeff Bridges, was based partly on the Coens' friend and fellow filmmaker Lewis Abernathy.",
     "imageUrl": "",
-    "byline": "Coen Brothers",
+    "byline": "Joel & Ethan Coen",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Big Lebowski (1998)",
+      "targetName": "The Big Lebowski (1998) — the rug and the dream sequences",
       "durationMinutes": 94,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the bowling alley, the voiceover, the rug — and notice how the Coens structure the film as a shaggy-dog noir: every noir convention (the femme fatale, the missing money, the kidnapping) appears and dissolves."
     },
     "tags": [
       "Comedy",
-      "1980s",
+      "1990s",
       "Hollywood"
     ],
     "tier": 2
@@ -1340,18 +1343,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Beau Travail (1999)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Denis's Foreign Legion film — based loosely on Herman Melville's Billy Budd, with almost no dialogue and a plot told in images — was voted the greatest French film of the 1990s by critics. It follows Sergeant Galoup, whose jealousy of a handsome new recruit destroys him, and it ends with the most celebrated dance scene in modern cinema.",
     "imageUrl": "",
     "byline": "Claire Denis",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Beau Travail (1999)",
+      "targetName": "Beau Travail (1999) — the drill sequences and the final dance",
       "durationMinutes": 105,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the desert, the drills, the men's bodies moving in formation — and notice how Denis tells the story without exposition: the Legion's rituals are the plot, and the rivalry grows through glances and choreography. Then watch the final scene, where Galoup, alone in a disco, dances: the film's ending is a release of everything the Legion repressed, and it turns the tragedy into a triumph of pure cinema."
     },
     "tags": [
-      "Horror",
-      "1970s"
+      "Drama",
+      "1990s",
+      "French"
     ],
     "tier": 2
   },
@@ -1360,18 +1364,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Amélie (2001)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Jeunet's Parisian fable — a shy waitress who secretly improves the lives of her neighbors, then must decide whether to let her own life be improved — became the highest-grossing French film ever released at the time and turned Audrey Tautou into an international star. Its sepia Paris, a fantasy of the city with no traffic and no tourists, was largely shot in studio.",
     "imageUrl": "",
     "byline": "Jean-Pierre Jeunet",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Amélie (2001)",
+      "targetName": "Amélie (2001) — the pleasures list and the blind man scene",
       "durationMinutes": 104,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — the list of Amélie's small pleasures (cracking crème brûlée, skipping stones, plunging a hand into grain) — and notice how Jeunet establishes her world: every detail is a joy, and the film's camera plays like a fairground."
     },
     "tags": [
-      "Animation",
-      "2000s"
+      "Comedy",
+      "2000s",
+      "French"
     ],
     "tier": 2
   },
@@ -1380,18 +1385,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "City of God (2002)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Made on a $3 million budget with a cast of first-time actors recruited from Rio's favelas, City of God became one of the most acclaimed films of the decade — a gangster epic about the slum where photographer Rocket grows up while his friends become killers. The film's non-chronological structure and kinetic camera made it the Scorsese of the slums, and its 'run, you little fool' chicken chase opening is a tutorial in setup.",
     "imageUrl": "",
     "byline": "Fernando Meirelles",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "City of God (2002)",
+      "targetName": "City of God (2002) — the chicken chase and Li'l Zé's rise",
       "durationMinutes": 177,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the chicken, the chase, the freeze-frame of a knife — and notice how Meirelles compresses the film's whole method into two minutes: the camera never stops moving, and the editing is the storytelling."
     },
     "tags": [
-      "Foreign",
-      "2000s"
+      "Crime",
+      "2000s",
+      "Brazilian"
     ],
     "tier": 2
   },
@@ -1400,17 +1406,17 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Eternal Sunshine (2004)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Gondry and screenwriter Charlie Kaufman's romance — a couple erases each other from their memories and falls in love again, having forgotten why they left — won the Oscar for Best Original Screenplay and became the definitive film about the stubbornness of love. The memory-erasure scenes, shot with practical effects rather than CGI, are the film's genius.",
     "imageUrl": "",
     "byline": "Michel Gondry",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Eternal Sunshine (2004)",
+      "targetName": "Eternal Sunshine of the Spotless Mind (2004) — the erasure sequence",
       "durationMinutes": 127,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the two strangers on a train, 'the beach,' the urge to skip work — and notice how Gondry plants the premise before revealing it: the film is the erasure process running backward, and the first act's strangeness is the reveal."
     },
     "tags": [
-      "Foreign",
+      "Romance",
       "2000s",
       "Hollywood"
     ],
@@ -1421,18 +1427,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Pan's Labyrinth (2006)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "del Toro's Spanish Civil War fantasy — a girl's fairy-tale quest in a labyrinth, intercut with her stepfather's fascist brutality — won three Oscars and became the definitive 'adult fairy tale.' The film's central question — is the fantasy real, or the girl's escape? — is never answered, and del Toro has said both readings are intended.",
     "imageUrl": "",
     "byline": "Guillermo del Toro",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Pan's Labyrinth (2006)",
+      "targetName": "Pan's Labyrinth (2006) — the pale man scene and the ending",
       "durationMinutes": 112,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the girl Ofelia reading in the woods, the fairy, the labyrinth — and notice how del Toro cuts between the two worlds: the fascist camp and the fairy tale share the same frame of violence. Then watch the final scene, where Ofelia's choices converge in the throne of the underworld: the ending offers two readings, and del Toro has said the film's meaning is that imagination is a survival mechanism, not an escape from reality."
     },
     "tags": [
-      "Documentary",
-      "2010s"
+      "Fantasy",
+      "2000s",
+      "Spanish"
     ],
     "tier": 2
   },
@@ -1441,18 +1448,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "No Country for Old Men (2007)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The Coens' adaptation of Cormac McCarthy's novel — a hunter, a briefcase of drug money, and a killer who decides his victims with a coin flip — won four Oscars including Best Picture, and Anton Chigurh (Javier Bardem) became one of cinema's great villains. The film's refusal of a conventional ending infuriated and then conquered audiences.",
     "imageUrl": "",
-    "byline": "Coen Brothers",
+    "byline": "Joel & Ethan Coen",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "No Country for Old Men (2007)",
+      "targetName": "No Country for Old Men (2007) — the coin flip and the ending",
       "durationMinutes": 111,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the desert, the tracking shot, the arrested man — and notice how the Coens establish Chigurh's method: the coin flip, the air gun, the cold logic. Then watch the ending, where the retired sheriff recounts a dream about his father carrying fire: the film's refusal to resolve the chase is its point — the forces the sheriff represents are aging out, and the villain isn't killed, he walks away with a broken arm."
     },
     "tags": [
-      "Thriller",
-      "2010s",
+      "Crime",
+      "2000s",
       "Hollywood"
     ],
     "tier": 2
@@ -1462,18 +1469,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Dark Knight (2008)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Nolan's Batman sequel — the Joker's terror campaign against a Gotham that refuses to give up its symbol — grossed a billion dollars and became the first superhero film taken seriously as crime cinema, winning Heath Ledger a posthumous Oscar. The film's 'ferry scene' — two boats, one detonator each — is its moral center.",
     "imageUrl": "",
     "byline": "Christopher Nolan",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Dark Knight (2008)",
+      "targetName": "The Dark Knight (2008) — the bank heist and the ferry scene",
       "durationMinutes": 119,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the bank heist by a team of clowns who turn on each other — and notice how Nolan introduces the Joker: he's the planner, the winner, and the last man out, and Ledger's performance is built from small gestures that get stranger as the film goes on."
     },
     "tags": [
-      "Documentary",
-      "2010s",
+      "Action",
+      "2000s",
       "Hollywood"
     ],
     "tier": 2
@@ -1483,18 +1490,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Inglourious Basterds (2009)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Tarantino's WWII fantasy — Jewish-American soldiers scalping Nazis, a cinema that burns a theater full of the high command — rewrote history on purpose: 'the wish fulfillment' of killing Hitler, as he put it. Its opening scene, the farmhouse interrogation by Christoph Waltz's 'Jew Hunter,' is one of the great suspense sequences ever filmed, and the film's closing image is its thesis.",
     "imageUrl": "",
     "byline": "Quentin Tarantino",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Inglourious Basterds (2009)",
+      "targetName": "Inglourious Basterds (2009) — the farmhouse interrogation",
       "durationMinutes": 110,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the dairy farm, the pipe, the milk, the underfloor hiding — and notice how Tarantino builds suspense from manners: Hans Landa's politeness is the horror, and the scene's rug-pull (the pipe the family can't see) is the film's method in miniature."
     },
     "tags": [
-      "Documentary",
-      "2010s",
+      "War",
+      "2000s",
       "Hollywood"
     ],
     "tier": 2
@@ -1504,18 +1511,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Social Network (2010)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Fincher's film about the founding of Facebook — told in three lawsuits and two depositions — made the invention of a website feel like a Shakespearean tragedy, and Aaron Sorkin's screenplay won the Oscar. Its central argument: Mark Zuckerberg's creation of the most connected world in history came from his inability to connect with people.",
     "imageUrl": "",
     "byline": "David Fincher",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Social Network (2010)",
+      "targetName": "The Social Network (2010) — the opening and the ending",
       "durationMinutes": 154,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the Harvard bar, the break-up, the walk in the cold — and notice how Sorkin's dialogue sets the theme: Zuckerberg's insulted ambition is the engine of everything that follows, and the film's structure (three lawsuits) keeps the present tense pressing on the past."
     },
     "tags": [
-      "Foreign",
-      "2000s",
+      "Drama",
+      "2010s",
       "Hollywood"
     ],
     "tier": 2
@@ -1525,18 +1532,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Tree of Life (2011)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Malick's Palme d'Or winner is a family drama expanded to cosmic scale — a 1950s Texas childhood intercut with the birth of the universe and the history of life on Earth, all held together by a voiceover address to God. It divided audiences and critics in equal measure, and its middle section — the 'creation' sequence of star formation and dinosaurs — is the most radical stretch in mainstream cinema.",
     "imageUrl": "",
     "byline": "Terrence Malick",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Tree of Life (2011)",
+      "targetName": "The Tree of Life (2011) — the creation sequence and the ending",
       "durationMinutes": 86,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the mother's voiceover, the family, the light through the window — and then the creation sequence that follows, where Malick cuts from a boy's grief to the Big Bang: the film's argument is that both scales are the same story, and the cosmic scenes are the grief made visible."
     },
     "tags": [
-      "Horror",
-      "1970s",
+      "Drama",
+      "2010s",
       "Hollywood"
     ],
     "tier": 2
@@ -1546,18 +1553,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Her (2013)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Jonze's film — a lonely letter-writer falls in love with his operating system, voiced by Scarlett Johansson — won the Oscar for Best Original Screenplay and became the definitive film about intimacy in the digital age. It was made before the chatbot boom, and its vision of an AI companion that learns and leaves now looks prophetic.",
     "imageUrl": "",
     "byline": "Spike Jonze",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Her (2013)",
+      "targetName": "Her (2013) — the opening and the ending",
       "durationMinutes": 178,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — Theodore's work dictating love letters for strangers, his empty apartment, his inability to sign his own divorce papers — and notice how Jonze establishes the theme: the man who writes intimacy for a living can't have it."
     },
     "tags": [
-      "Sci-Fi",
-      "2000s",
+      "Romance",
+      "2010s",
       "Hollywood"
     ],
     "tier": 2
@@ -1567,18 +1574,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Boyhood (2014)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Linklater filmed Boyhood over 12 years with the same actor, Ethan Hawke, and the same child, Ellar Coltrane — shooting a few weeks each year so the film could age in real time. The result, a 165-minute portrait of one Texas boy from age 6 to 18, was nominated for six Oscars and became a landmark in the history of the medium: no film had ever been made this way.",
     "imageUrl": "",
     "byline": "Richard Linklater",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Boyhood (2014)",
+      "targetName": "Boyhood (2014) — the 12-year structure and the ending",
       "durationMinutes": 128,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — Mason at six, lying in the grass, his mother announcing the move — and notice how the film's central device works: you're watching an actor grow up, and every cut is years later."
     },
     "tags": [
-      "Comedy",
-      "1980s",
+      "Drama",
+      "2010s",
       "Hollywood"
     ],
     "tier": 2
@@ -1588,18 +1595,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Mad Max Fury Road (2015)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Miller returned to his post-apocalyptic franchise 30 years later with a film that's essentially one continuous car chase — shot in the Namibian desert with real stunts, and it won six Oscars for its craft. Its most radical choice: the story's hero is not Max but Imperator Furiosa, played by Charlize Theron, and the film's plot is a rescue, not a revenge.",
     "imageUrl": "",
     "byline": "George Miller",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Mad Max Fury Road (2015)",
+      "targetName": "Mad Max: Fury Road (2015) — Furiosa's pivot and the ending",
       "durationMinutes": 153,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — Max's capture, the War Boys, the blood bag — and notice how Miller establishes the world with almost no dialogue: the chase is the film's grammar, and the first 20 minutes are a tutorial."
     },
     "tags": [
-      "Sci-Fi",
-      "2000s"
+      "Action",
+      "2010s",
+      "Australian"
     ],
     "tier": 2
   },
@@ -1608,18 +1616,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Arrival (2016)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Villeneuve's adaptation of Ted Chiang's Story of Your Life — a linguist must translate an alien language, and the language turns out to rewrite how its speakers experience time — was nominated for eight Oscars and is considered one of the great science-fiction films. Its twist is philosophical rather than mechanical: the alien gift is not a weapon but a way of seeing.",
     "imageUrl": "",
     "byline": "Denis Villeneuve",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Arrival (2016)",
+      "targetName": "Arrival (2016) — the learning-the-language sequence and the reveal",
       "durationMinutes": 170,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening — the daughter's childhood, the illness, the beach — and notice how the film sets up its reveal: the scenes are out of order, and you won't know it until the end."
     },
     "tags": [
-      "Horror",
-      "1970s",
+      "Sci-Fi",
+      "2010s",
       "Hollywood"
     ],
     "tier": 2
@@ -1629,18 +1637,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Call Me by Your Name (2017)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Guadagnino's adaptation of André Aciman's novel — a 17-year-old's summer affair with his father's graduate assistant in northern Italy in 1983 — became a cultural phenomenon, and the film's ending, with its two-minute final shot of Elio before a fireplace, is one of the most discussed in cinema. The peach scene and the 'Call me by your name and I'll call you by mine' speech are its signature moments.",
     "imageUrl": "",
     "byline": "Luca Guadagnino",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Call Me by Your Name (2017)",
+      "targetName": "Call Me by Your Name (2017) — the ending fireplace shot",
       "durationMinutes": 158,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the summer villa, the arrival of Oliver, the first glance — and notice how Guadagnino films desire as weather: the heat, the bicycles, the long lunches. Then watch the ending — Elio's call, the fireplace, the single unbroken shot of his face: the film's argument is that love is permanent even when it ends, and the final shot — a teenager learning to grieve in public — is the film's whole case."
     },
     "tags": [
-      "Sci-Fi",
-      "2000s"
+      "Romance",
+      "2010s",
+      "Italian"
     ],
     "tier": 2
   },
@@ -1649,18 +1658,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Soul (2020)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Pixar's film — a jazz pianist who dies before his big break and must help a reluctant soul find its 'spark' — won the Oscars for Best Animated Feature and Best Original Score (Jon Batiste and Trent Reznor). It became Pixar's most philosophical film: the argument, delivered through a Manhattan music teacher and a lost soul named 22, is that the 'spark' isn't a purpose — it's the willingness to live.",
     "imageUrl": "",
     "byline": "Pete Docter",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Soul (2020)",
+      "targetName": "Soul (2020) — the Great Before and the ending",
       "durationMinutes": 179,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — Joe's rehearsal, the phone call, the manhole — and notice how the film's two worlds are set: the real New York, photographed with texture and music, and the Great Before, designed as a blue abstract."
     },
     "tags": [
-      "Documentary",
-      "2010s",
+      "Animation",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1670,18 +1679,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Drive My Car (2021)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Hamaguchi's three-hour adaptation of a Haruki Murakami story — a theater director who hires a chauffeur after his wife's death — won the Oscar for Best International Film and became the most celebrated Japanese film in decades. Its climax, a multilingual production of Uncle Vanya with deaf actors signing Chekhov, is the film's argument in performance.",
     "imageUrl": "",
     "byline": "Ryusuke Hamaguchi",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Drive My Car (2021)",
+      "targetName": "Drive My Car (2021) — the rehearsal opening and the Uncle Vanya finale",
       "durationMinutes": 150,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the wife and husband rehearsing their play at home, the daughter's death, the affair — and notice how Hamaguchi compresses a marriage into its scenes: the film's first 40 minutes are a short film about a life."
     },
     "tags": [
       "Drama",
-      "1990s"
+      "2020s",
+      "Japanese"
     ],
     "tier": 2
   },
@@ -1690,18 +1700,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Everything Everywhere All at Once (2022)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The Daniels' multiverse comedy — a laundromat owner who must access infinite versions of herself to fight a multiversal villain, played by Michelle Yeoh — won seven Oscars including Best Picture, and became the highest-grossing A24 film ever. Its philosophy — that kindness is the radical choice in an infinite multiverse — made it the most influential comedy of the decade.",
     "imageUrl": "",
-    "byline": "Daniels",
+    "byline": "Daniel Kwan & Daniel Scheinert",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Everything Everywhere All at Once (2022)",
+      "targetName": "Everything Everywhere All at Once (2022) — the rocks scene",
       "durationMinutes": 78,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the laundromat, the IRS audit, the 'verse-jumping' explanation — and notice how the film establishes its rules through Evelyn's failure: the multiverse is accessed through statistical improbability, and the jokes are the metaphysics."
     },
     "tags": [
-      "Animation",
-      "2000s",
+      "Comedy",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1711,18 +1721,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Fabelmans (2022)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Spielberg's most personal film — a semi-autobiographical portrait of his own childhood, with Sammy Fabelman as the young Spielberg discovering cinema — was his 33rd feature and the first time he turned the camera on his family's story, including his parents' divorce and his mother's affair. It was nominated for seven Oscars.",
     "imageUrl": "",
     "byline": "Steven Spielberg",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Fabelmans (2022)",
+      "targetName": "The Fabelmans (2022) — the camping-trip footage scene",
       "durationMinutes": 165,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — the young Sammy's first movie, the train crash that frightens and fascinates him — and notice how Spielberg establishes the film's theme: cinema as a way of understanding what hurts you."
     },
     "tags": [
-      "Documentary",
-      "2010s",
+      "Drama",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1732,18 +1742,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Barbie (2023)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Gerwig's Barbie — the doll's journey from Barbieland to the real world — became the highest-grossing film of 2023 and the highest-grossing film ever directed by a woman, grossing $1.4 billion.",
     "imageUrl": "",
     "byline": "Greta Gerwig",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Barbie (2023)",
+      "targetName": "Barbie (2023) — the monologue and the ending",
       "durationMinutes": 167,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — the Kubrick-style prologue where the giant Barbie appears over the girls of Barbieland — and notice how Gerwig sets her terms: the film is a critique of the toy it celebrates, and the opening homage to 2001 tells you which tradition she's joining."
     },
     "tags": [
-      "Foreign",
-      "2000s",
+      "Comedy",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1753,18 +1763,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Past Lives (2023)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Song's debut — a Korean-Canadian woman, her childhood sweetheart from Seoul, and the 24 years between them — was nominated for two Oscars and became the most acclaimed romance of its year. It's structured around the Korean concept of inyeon (fateful connection) and the question of which of our lives is the 'real' one.",
     "imageUrl": "",
     "byline": "Celine Song",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Past Lives (2023)",
+      "targetName": "Past Lives (2023) — the bar opening and the crosswalk ending",
       "durationMinutes": 158,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening — the three people at a bar, the voiceover explaining who they are to each other — and notice how Song establishes the frame: strangers overhear the scene, and the narrator tells you the relationships before the film shows them."
     },
     "tags": [
-      "Drama",
-      "1990s",
+      "Romance",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1774,18 +1784,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Zone of Interest (2023)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Glazer's Holocaust film — which won the Grand Prix at Cannes and the Oscar for Best International Film — shows the Höss family's idyllic garden life next to Auschwitz, never showing the camp itself. The horror is in the sound design: screams, gunshots, and the furnaces are audible over the family's domestic routine, and the film's ending, with a time-travel jump to the museum's cleaning staff, is its argument.",
     "imageUrl": "",
     "byline": "Jonathan Glazer",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Zone of Interest (2023)",
+      "targetName": "The Zone of Interest (2023) — the garden and the ending",
       "durationMinutes": 111,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — the family's move into the house, the idyllic garden, the first distant sounds — and notice what Glazer refuses to show: the camp is always just off-frame, and the film's power is entirely in the audio, which was mixed to make the off-screen horror unbearable."
     },
     "tags": [
-      "Animation",
-      "2000s"
+      "Drama",
+      "2020s",
+      "Holocaust"
     ],
     "tier": 2
   },
@@ -1794,18 +1805,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Holdovers (2023)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Payne's 1970s-set comedy — a cranky classics teacher, a grief-stricken cook, and a student stuck at boarding school over Christmas — won Da'Vine Joy Randolph the Oscar for Best Supporting Actress, and its grainy, film-stock look and title-card opening made it a love letter to 1970s cinema. It was shot in 27 days on a budget under $30 million.",
     "imageUrl": "",
     "byline": "Alexander Payne",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Holdovers (2023)",
+      "targetName": "The Holdovers (2023) — the Boston trip and the ending",
       "durationMinutes": 117,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the period title cards, the deadened boarding school, Paul Giamatti's first-class lecture — and notice how Payne establishes the film's register: it looks and sounds like a 1970s film, and the melancholy is the production design."
     },
     "tags": [
       "Comedy",
-      "1980s",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1815,18 +1826,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Rashomon (1950)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Kurosawa's film — a samurai's death described by four witnesses who contradict each other — gave the English language the word 'Rashomon' for irreconcilable accounts, and won the Golden Lion at Venice, introducing Japanese cinema to the West. The film's rain-soaked gate, its grove of conflicting testimonies, and its final act of kindness made it one of the most influential films ever made.",
     "imageUrl": "",
     "byline": "Akira Kurosawa",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Rashomon (1950)",
+      "targetName": "Rashomon (1950) — the four testimonies and the ending",
       "durationMinutes": 137,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening — the three men under the ruined gate in the rain, the woodcutter's confession that he's hiding something — and notice how Kurosawa structures the film: the same event told four times, each version flattering its narrator."
     },
     "tags": [
-      "Comedy",
-      "1980s"
+      "Classic",
+      "1950s",
+      "Japanese"
     ],
     "tier": 2
   },
@@ -1835,18 +1847,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Rear Window (1954)",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Hitchcock's film — a photographer with a broken leg who believes his neighbor has murdered his wife — is a film about watching films: the entire movie is staged in one apartment as the hero watches the world through his window. It's the purest expression of Hitchcock's method, and it has been analyzed as a metaphor for cinema itself.",
     "imageUrl": "",
     "byline": "Alfred Hitchcock",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Rear Window (1954)",
+      "targetName": "Rear Window (1954) — the courtyard and the finale",
       "durationMinutes": 92,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening — the camera pulling back from the window to reveal the whole courtyard in one unbroken shot — and notice how Hitchcock sets the trap: every neighbor's window is a story, and the hero's surveillance is the audience's."
     },
     "tags": [
-      "Documentary",
-      "2010s",
+      "Thriller",
+      "1950s",
       "Hollywood"
     ],
     "tier": 2
@@ -1856,18 +1868,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Night of the Hunter (1955)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Laughton's only directorial effort — a preacher with 'LOVE' and 'HATE' tattooed on his knuckles hunts two children who know where the money is — flopped on release and was rediscovered decades later as one of the greatest American films ever made. Its dreamlike fairy-tale visuals, shot by cinematographer Stanley Cortez, make it a horror film that looks like a children's storybook.",
     "imageUrl": "",
     "byline": "Charles Laughton",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Night of the Hunter (1955)",
+      "targetName": "The Night of the Hunter (1955) — the river sequence",
       "durationMinutes": 157,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the children, the lullaby, the father's murder — and notice how Laughton establishes the film's tone: it's a fairy tale, complete with a narrator, and the horror is the storybook darkness."
     },
     "tags": [
-      "Foreign",
-      "2000s",
+      "Thriller",
+      "1950s",
       "Hollywood"
     ],
     "tier": 2
@@ -1877,18 +1889,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Breathless (1960)",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Godard's debut — a car thief, an American girl, and a crime that dooms them both — was shot in four weeks with a handheld camera and jump cuts that broke every rule of editing, and it announced the French New Wave to the world. Its famous 'jump cuts' were, by Godard's own account, partly a way to shorten the film — and they invented a style.",
     "imageUrl": "",
     "byline": "Jean-Luc Godard",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Breathless (1960)",
+      "targetName": "Breathless (1960) — the jump cuts and the ending",
       "durationMinutes": 88,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the car theft, the police, the highway — and notice the editing: Godard cuts mid-movement, mid-gesture, and the jumps are the film's signature. Then watch the ending, where Michel, dying, makes faces at the camera: the film's argument — that cinema is a game of freedom, and that characters are just images — is dramatized in that death scene, and the film's final freeze-frame is the New Wave's manifesto."
     },
     "tags": [
-      "Foreign",
-      "2000s"
+      "Classic",
+      "1960s",
+      "French"
     ],
     "tier": 2
   },
@@ -1897,18 +1910,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Yojimbo (1961)",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Kurosawa's film — a masterless samurai who plays two rival gangs against each other in a decaying town — inspired A Fistful of Dollars and, through it, the entire spaghetti western genre, which inspired it back. Toshiro Mifune's wandering ronin, with his 'I'm just a passerby' shrug, became the template for a century of antiheroes.",
     "imageUrl": "",
     "byline": "Akira Kurosawa",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Yojimbo (1961)",
+      "targetName": "Yojimbo (1961) — the two-gang gambit and the final duel",
       "durationMinutes": 128,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening — the ronin tossing a stick to choose a direction, the town's two gambling houses — and notice how Kurosawa establishes the premise: Sanjuro manipulates both gangs into mutual destruction, and the film's comedy and violence share the same rhythm."
     },
     "tags": [
-      "Drama",
-      "1990s"
+      "Classic",
+      "1960s",
+      "Japanese"
     ],
     "tier": 2
   },
@@ -1917,18 +1931,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Dr. Strangelove (1964)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Kubrick's cold-war satire — an insane general starts a nuclear war and the President's war room can't stop it — was made when the bomb was a daily fear, and it turned apocalypse into comedy. The film's famous line, 'Gentlemen, you can't fight in here! This is the War Room!,' and its ending montage of nuclear explosions set to a love song made it the definitive black comedy.",
     "imageUrl": "",
     "byline": "Stanley Kubrick",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Dr. Strangelove (1964)",
+      "targetName": "Dr. Strangelove (1964) — the war room and the ending",
       "durationMinutes": 106,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening — the planes, the refueling, the voiceover about the 'Doomsday Machine' — and notice how Kubrick stages the satire: the film's premise is absurd and its execution is deadpan. Then watch the war-room scenes, where the President, the general, and the German-accented Dr."
     },
     "tags": [
       "Comedy",
-      "1980s",
+      "1960s",
       "Hollywood"
     ],
     "tier": 2
