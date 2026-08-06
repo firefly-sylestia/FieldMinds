@@ -1449,28 +1449,49 @@ private fun SoundBiteRender(
             // 1.2MB" plus the optional title and the encoding chip, sitting
             // right ABOVE the capsule player so the recording reads as a
             // titled voice note instead of an anonymous bar on the page.
+            // v7.44 — the primary line is titleMedium again (the size it
+            // wore before the v7.42 removal), and the title moves to its
+            // own line below it; the encoding chip rides the primary line.
             if (!data.audioFilePath.isNullOrBlank()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.Mic,
-                        contentDescription = null,
-                        tint = category.categoryInk(),
-                        size = 16.dp
-                    )
-                    Text(
-                        text = buildString {
-                            append("Voice note · ${data.durationSeconds}s")
-                            if (data.fileSizeBytes > 0) {
-                                append(" · ${formatFileSize(data.fileSizeBytes)}")
+                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CurioIcon(
+                            name = CurioIcons.Mic,
+                            contentDescription = null,
+                            tint = category.categoryInk(),
+                            size = 18.dp
+                        )
+                        Text(
+                            text = buildString {
+                                append("Voice note · ${data.durationSeconds}s")
+                                if (data.fileSizeBytes > 0) {
+                                    append(" · ${formatFileSize(data.fileSizeBytes)}")
+                                }
+                            },
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = category.categoryInk(),
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+                        if (data.fileSizeBytes > 0) {
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = category.themedAccent().copy(alpha = 0.12f)
+                            ) {
+                                Text(
+                                    text = data.encodingFormat,
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                                    color = category.categoryInk(),
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                )
                             }
-                        },
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = category.categoryInk()
-                    )
+                        }
+                    }
+                    // The saved title gets its OWN line under the primary
+                    // label (v7.44), muted so it never competes with it.
                     if (!data.title.isNullOrBlank()) {
                         Text(
                             text = data.title,
@@ -1478,21 +1499,8 @@ private fun SoundBiteRender(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f, fill = false)
+                            modifier = Modifier.padding(start = 26.dp)
                         )
-                    }
-                    if (data.fileSizeBytes > 0) {
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color = category.themedAccent().copy(alpha = 0.12f)
-                        ) {
-                            Text(
-                                text = data.encodingFormat,
-                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                                color = category.categoryInk(),
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                            )
-                        }
                     }
                 }
             }

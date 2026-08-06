@@ -179,3 +179,11 @@ Also committed the uncommitted scientists.json batch (scripts/batch_scientists.p
 from the earlier enrichment pass so it stops riding along as a dirty tree.
 Brace-check script BALANCED on all five touched files; no Gradle build run
 (CI owns compilation).
+
+## Follow-up (v7.44) — voice-note label back to titleMedium, title on its own line
+User wanted the restored label bigger — titleMedium (the pre-v7.42 size)
+with the saved title on its OWN line below it. Restructured the v7.43 label
+into a Column: primary row = 18dp mic glyph + "Voice note · 12s · 1.2MB"
+(titleMedium SemiBold, category ink, weight(fill=false)) + the encoding
+chip; the title renders below on its own line (bodySmall, muted,
+indented 26dp to align under the label text). Braces BALANCED; pushed.
