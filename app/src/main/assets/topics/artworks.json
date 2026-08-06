@@ -111,7 +111,7 @@
       "verb": "Look at",
       "targetName": "The Last Supper (1498) by Leonardo da Vinci",
       "durationMinutes": 10,
-      "instruction": "Follow the perspective lines — they all converge on Christ's head. Then look at the apostles in their groups of three: shock, denial, betrayal. Find Judas, the only one whose face is in shadow."
+      "instruction": "Let your eye ride the vanishing lines — every one lands on Christ's head, the still center of a room in chaos. The apostles break into clusters of three, each answering the same sentence differently: shock, doubt, accusation. Judas alone leans away from the light, his hand already reaching for the bread that seals his betrayal."
     },
     "tags": [
       "Renaissance",
@@ -231,7 +231,7 @@
       "verb": "Look at",
       "targetName": "Liberty Leading the People (1830) by Eugène Delacroix",
       "durationMinutes": 3,
-      "instruction": "Look at Liberty's face — fierce, not pretty — and the boy with pistols beside her, modeled on a real street urchin. Then check the skyline: Notre-Dame peeks through the smoke, grounding the allegory in real Paris."
+      "instruction": "She is not a marble allegory — she is the loudest person in the painting, a working woman who has grabbed the tricolor and is mid-stride over the bodies. The boy beside her, a pistol in each hand, was painted from a real street urchin Delacroix saw at the barricades. Notre-Dame rising through the smoke pins the myth to a real Tuesday in Paris."
     },
     "tags": [
       "Romanticism",
@@ -1128,7 +1128,7 @@
       "verb": "Look at",
       "targetName": "Venus of Willendorf (c. 28,000 BCE) — hold it in your mind's hand",
       "durationMinutes": 8,
-      "instruction": "Follow the proportions, not the face: the head is covered in what may be braided hair or a woven cap, and the arms rest on the breasts. No face, no feet — only the body matters. Then think about the scale: at 11 cm it fits in one hand, which means it was made to be held and passed around, not displayed. Researchers who made a 3D copy found it has no visible base — it can't stand upright on its own."
+      "instruction": "No face, no feet — only belly, breasts, and thighs, carved small enough to close a hand around. She was made to be held and passed from palm to palm, not displayed; a 3D scan showed she cannot even stand upright. One theory says she is a self-portrait: the view a woman has of her own body looking down. Hold your hand in a fist and imagine her inside it."
     },
     "tags": [
       "Prehistoric",
@@ -1188,7 +1188,7 @@
       "verb": "Look at",
       "targetName": "Mask of Tutankhamun (c. 1323 BCE) — the eyes and the cobra-vulture",
       "durationMinutes": 8,
-      "instruction": "Notice the eyes: they're made of quartz and obsidian, set to catch light so the mask seems to look back. The stripes on the nemes headdress are lapis lazuli, a stone imported from Afghanistan — 2,000 miles away in 1323 BCE. Then find the cobra and vulture on the forehead: symbols of Upper and Lower Egypt, meaning the king ruled both lands even in death."
+      "instruction": "The eyes are the trick: quartz and obsidian, set to catch light so the mask stares back from inside its coffin. The blue stripes of the headdress are lapis lazuli hauled two thousand miles from Afghanistan — blue that had to cross the world to sit on a dead boy's brow. On the forehead, a cobra and a vulture: the two Egypts, still ruled from the grave."
     },
     "tags": [
       "Ancient Egypt",
@@ -1268,7 +1268,7 @@
       "verb": "Look at",
       "targetName": "Venus de Milo (c. 130 BCE) — the spiral stance and the apple fragment",
       "durationMinutes": 8,
-      "instruction": "Pick out the twist: her hips face one way and her shoulders another — a contrapposto spiral that makes the marble feel alive even without arms. Then consider the arms themselves: a nearby fragment of a left hand holding an apple was found at the same site, and it may have been hers (the name 'Milo' means apple)."
+      "instruction": "Her hips face right, her shoulders face left — a contrapposto twist that keeps the marble alive even with both arms gone. The missing arms are the point: a hand holding an apple was found near her on Milos, and the island's name means apple. Try to imagine the gesture and you become the sculptor; every visitor does."
     },
     "tags": [
       "Ancient Greek",
@@ -1328,7 +1328,7 @@
       "verb": "Look at",
       "targetName": "Augustus of Prima Porta (c. 20 CE) — the breastplate and the cupid",
       "durationMinutes": 8,
-      "instruction": "Pause on the breastplate first: the scene on it shows the Parthians handing back the Roman eagle standards lost in a previous defeat — the statue's way of spinning a surrender into a triumph. Then look down at the cupid riding a dolphin at Augustus's feet: the dolphin = victory at sea (Actium), the cupid = descent from Venus. Notice the bare feet — a sign the emperor is being shown as a hero in the divine realm, not a politician in Rome."
+      "instruction": "Every inch is a press release. The breastplate shows the Parthians handing back the Roman eagle standards — a diplomatic return staged as a battlefield win. The cupid at his feet claims descent from Venus; the bare feet say he has already left the mortal realm. Augustus never wore this much meaning at once, but that was never the point."
     },
     "tags": [
       "Ancient Roman",
@@ -1388,7 +1388,7 @@
       "verb": "Look at",
       "targetName": "The Oath of the Horatii (1784) — the outstretched arms and the weeping women",
       "durationMinutes": 8,
-      "instruction": "Consider the geometry: the three brothers' arms form straight lines that echo the three columns behind them — human bodies built like architecture, which is the Neoclassical ideal. Then the contrast: the men are vertical, hard, and purposeful while the women are curved, soft, and collapsed in grief — the painting literally arranges the sexes into different shapes."
+      "instruction": "Three arms, three columns, three straight lines — the brothers are built like the architecture behind them, which is exactly the Neoclassical program. Then the other half of the canvas: women folded into soft curves, collapsed in grief, literally drawn in different shapes. David arranged the sexes into geometry, and the painting became the salute of real revolutionaries a few years later."
     },
     "tags": [
       "Neoclassicism",
@@ -1408,7 +1408,7 @@
       "verb": "Look at",
       "targetName": "The Birth of Venus (1485) — the shell and the impossible shoulder",
       "durationMinutes": 8,
-      "instruction": "Begin with the shell first: scallops were the medieval badge of pilgrims, and Venus standing on one makes her a holy traveler. Then trace the pose — the modest hand covering the body is copied from ancient Roman statues of Venus Pudica, so the painting claims a classical lineage. Notice the wind gods are painted as a tangled knot of limbs and wings, while Venus herself is an unbroken vertical line — stillness at the center of motion."
+      "instruction": "Her neck is too long, her shoulder slopes at an angle no shoulder can make — Botticelli elongated her on purpose so she reads as a dream, not a woman. She stands dead vertical inside a tangle of wind gods and falling roses, stillness at the center of motion. The shell was a pilgrim's badge; the pose copies an ancient statue of Venus Pudica. Everything about her is borrowed, and everything is new."
     },
     "tags": [
       "Renaissance",
@@ -1448,7 +1448,7 @@
       "verb": "Look at",
       "targetName": "David (1504) — the oversized hand and the pre-battle face",
       "durationMinutes": 8,
-      "instruction": "Look at his hands: the right one is oversized — Michelangelo deliberately enlarged it, the hand that will kill, because the statue was made to be seen from 13 meters below, and the hands are the part the viewer sees first. Then the face: the brows are knit, the nostrils flared, the eyes turned sharply to the left — this is not calm, it's the moment of decision."
+      "instruction": "Walk to where the statue was meant to be seen — thirteen meters below. That is why the right hand is oversized: it is the hand that will kill, and it is the part you meet first from the ground. His brows are knit, his nostrils flared, his eyes locked left on an enemy we cannot see. This is not victory; this is the second before the sling swings."
     },
     "tags": [
       "Renaissance",
@@ -1468,7 +1468,7 @@
       "verb": "Look at",
       "targetName": "Pietà (1499) — the youth of Mary and the anatomy of Christ",
       "durationMinutes": 8,
-      "instruction": "Look at Mary's age: she looks younger than her son — Michelangelo said virgins don't age, and he made her face that of a girl to match. Then the drapery: the folds of her robe are cut so deeply that light pools in them, and the cloth seems heavier than the marble it's made from. Notice the contrast: the body of Christ is smooth, slack, and anatomically exact — the veins in his arm visible — while Mary's robe is a mountain of cloth."
+      "instruction": "Michelangelo was 24, and the only work he ever signed carries the signature across Mary's sash — carved there after he heard pilgrims credit the statue to someone else. Mary looks younger than her son: virgins do not age, he said. The trick is scale — her lap is carved wide enough to hold a grown man, and the cloth of her robe is a mountain against the smooth, slack body of Christ."
     },
     "tags": [
       "Renaissance",
@@ -1528,7 +1528,7 @@
       "verb": "Look at",
       "targetName": "The Calling of Saint Matthew (1600) — the beam of light and the boy's gesture",
       "durationMinutes": 8,
-      "instruction": "Scan the light: a diagonal beam enters from the right, following Christ's pointing hand — the divine is a shaft of light in a dark room, a style called tenebrism that Caravaggio invented. Then look at the tax collectors' faces: they're not biblical types but real Roman working men, and the boy at the end of the table gestures at himself in surprise — the joke of the painting is that the audience does the same."
+      "instruction": "The divine arrives as a shaft of street light and a pointing finger — no halos, no clouds. The tax collectors are real Roman working men hunched over coins, and the boy at the end of the table points at himself as if to say 'who, me?' The joke is that you do the same thing the moment you recognize the scene: this is what a call looks like in a smoky room."
     },
     "tags": [
       "Baroque",
@@ -1568,7 +1568,7 @@
       "verb": "Look at",
       "targetName": "The Anatomy Lesson of Dr. Nicolaes Tulp (1632) — the wrong tendons",
       "durationMinutes": 8,
-      "instruction": "Examine the corpse's face: it's half in shadow, half in light — and it's the only face in the painting not looking at the dissection, which scholars read as Rembrandt's quiet comment on death watching the living. Then follow the composition: the surgeons form a pyramid leading the eye to Tulp's hands."
+      "instruction": "The corpse's face is half lit, half dark — and it is the only face in the room not watching the dissection. Scholars read it as death looking back at the living. Rembrandt was 25 and already breaking the rules: eight surgeons arranged not in a row but in a pyramid aimed at Tulp's hands, and those hands are pinching the wrong tendons — he painted from a book, not a cadaver."
     },
     "tags": [
       "Dutch Golden Age",
@@ -1588,7 +1588,7 @@
       "verb": "Look at",
       "targetName": "The Milkmaid (c. 1658) — the pouring milk and the bread crust",
       "durationMinutes": 8,
-      "instruction": "Study the milk first: the thin stream is frozen mid-pour, and the jug is painted so the light hits the glaze. Then the wall behind her: it's blank white, but Vermeer added a subtle shadow of the maid's figure onto it — a detail easy to miss. Notice the Delftware tile at the baseboard (a Cupid figure) and the foot warmer on the floor — small objects that scholars read as symbols of love and longing."
+      "instruction": "The milk is frozen mid-stream, a thin white line that has been falling for 350 years. The wall behind her is blank white — except for the faint shadow of her figure Vermeer let fall on it. Up close, the bread's crust is hundreds of separate specks of pigment; the Delftware tile at the baseboard hides a Cupid, and the foot warmer on the floor is a symbol of longing. A servant, painted with the stillness of a saint."
     },
     "tags": [
       "Dutch Golden Age",
@@ -1608,7 +1608,7 @@
       "verb": "Look at",
       "targetName": "The Rokeby Venus (c. 1647) — the blurred mirror face",
       "durationMinutes": 8,
-      "instruction": "Turn to the face in the mirror: it's slightly blurred compared to the body — Velázquez painted the reflection as if the mirror is a soft, imperfect surface. Then the back: the spine's curve is one long unbroken S, and the skin tones are built from hundreds of tiny strokes of pale pink, gray, and white. Notice Cupid: he holds the mirror not for Venus's vanity but so she can see herself as the viewer does — the painting is about being looked at."
+      "instruction": "She is painted from behind, which lets Velázquez draw one unbroken S down her spine. The face in the mirror is deliberately blurred — the reflection is softer than the body, as if mirrors lie. In 1914 a suffragette slashed her seven times with a meat cleaver to protest the arrest of Emmeline Pankhurst. Cupid holds the mirror not for vanity but so she can see herself the way we see her: the subject of the painting is being looked at."
     },
     "tags": [
       "Baroque",
@@ -1628,7 +1628,7 @@
       "verb": "Look at",
       "targetName": "The Ecstasy of Saint Teresa (1652) — the wind-swept marble and the golden rays",
       "durationMinutes": 8,
-      "instruction": "Pick out the marble: Teresa's habit is carved in deep, wind-swept folds that ripple like water, while the angel's garments are smooth — the contrast makes the divine and human feel like different substances. Then notice the theatrical machinery: the chapel's hidden window above the group casts real light down the golden rays, and the side 'balconies' hold spectators carved in marble — the audience is part of the performance."
+      "instruction": "The chapel is a theater: a hidden window above pours real light down gilded rays, and marble spectators lean from the side 'balconies' to watch. Teresa's habit is carved in deep, wind-swept folds — cloth in motion — while the angel's robes are smooth. Her face is not pain. Bernini found the one expression sculpture can hold that painting cannot: a swoon that never ends."
     },
     "tags": [
       "Baroque",
@@ -1648,7 +1648,7 @@
       "verb": "Look at",
       "targetName": "The Blue Boy (1770) — the satin brushwork up close",
       "durationMinutes": 8,
-      "instruction": "Focus on the brushwork: up close the satin is a scribble of loose strokes, but from a distance it resolves into the most convincing blue fabric ever painted — Gainsborough worked with long brushes and a candlelit mirror. Then the pose: the boy stands like Van Dyck's aristocratic portraits of a century earlier, but he's a middle-class kid in a fancy costume his family bought for the occasion."
+      "instruction": "The academy said blue belonged to skies, never to the main figure — so Gainsborough painted the entire boy blue on purpose. Up close the satin is a scribble of loose strokes made with long brushes under candlelight; step back and it resolves into the most convincing fabric in English painting. The boy is not an aristocrat — he is a hardware dealer's son in a costume his family bought for the sitting."
     },
     "tags": [
       "18th Century",
@@ -1668,7 +1668,7 @@
       "verb": "Look at",
       "targetName": "An Experiment on a Bird in the Air Pump (1768) — the hidden candle",
       "durationMinutes": 8,
-      "instruction": "Peer at the light first: the candle is hidden behind the glass globe, and every face in the room is lit in a different way — the children lit brightly, the scientist in profile, the old man in shadow. Then the bird: it's a cockatoo, a precious pet, not a lab animal — Wright chose it to make the sacrifice feel personal."
+      "instruction": "The candle is hidden behind the glass globe, so every face is lit differently: the children bright, the scientist in profile, the old man sunk in shadow. The bird is a cockatoo — a precious pet, not a lab animal — and Wright chose it so the sacrifice feels personal. This is the Enlightenment as family drama: reason is literally the light in the room, and the bird is the price of knowledge."
     },
     "tags": [
       "18th Century",
@@ -1688,7 +1688,7 @@
       "verb": "Look at",
       "targetName": "The Hay Wain (1821) — the broken reflections and the sky",
       "durationMinutes": 8,
-      "instruction": "Pause on the water: the reflections are painted with loose, broken strokes of color — not blended — and the house on the left was the real cottage of a farm worker named Willy Lott, who supposedly never left it for more than a few days in 80 years. Then the sky: Constable called the sky the 'chief organ of sentiment,' and this one is full of moving clouds — he painted clouds from life his whole life."
+      "instruction": "The water is painted in loose, broken strokes of color that refuse to blend — the move that electrified the French when this crossed the Channel in 1824. The cottage on the left belonged to Willy Lott, who supposedly left it for a total of a few days in 80 years. Constable called the sky 'the chief organ of sentiment,' and this sky is full of moving clouds he spent a lifetime studying."
     },
     "tags": [
       "Romanticism",
@@ -1708,7 +1708,7 @@
       "verb": "Look at",
       "targetName": "The Slave Ship (1840) — the limbs in the water",
       "durationMinutes": 8,
-      "instruction": "Look for the limbs first: in the lower-right water, chained arms and legs rise from the waves, and fish circle them — the horror is painted as part of the seascape's beauty. Then the sky: Turner built the sunset from reds and golds that get more violent as you stare, and the storm's heart is a single white-hot patch."
+      "instruction": "The horror hides in the beauty: in the lower-right water, chained arms and legs rise from the waves while fish circle them, and the sunset around them is glorious. Turner based it on the Zong, whose captain threw 133 enslaved people overboard to claim insurance. He exhibited it with his own poem: 'Hope, Hope, fallacious Hope!' The storm's heart is a single white-hot patch — look for the limbs before you let the color win."
     },
     "tags": [
       "Romanticism",
@@ -1728,7 +1728,7 @@
       "verb": "Look at",
       "targetName": "Wanderer Above the Sea of Fog (1818) — the back of the wanderer",
       "durationMinutes": 8,
-      "instruction": "Look at what the painting refuses to show: the man's face. His back is the whole subject — the viewer is invited to stand in his position and feel the sublime for themselves. Then the fog: the peaks below look like floating islands, and Friedrich painted them from sketches he made in the Elbe sandstone mountains."
+      "instruction": "He stands with his back to us, and that refusal is the whole painting: we cannot see his face, so we climb into his boots and look at the fog ourselves. The peaks below float like islands, sketched by Friedrich in the Elbe sandstone mountains. Nobody knows who the man is — a self-portrait, a forestry official, an invention. Stand where he stands and the sublime does the rest."
     },
     "tags": [
       "Romanticism",
@@ -1748,7 +1748,7 @@
       "verb": "Look at",
       "targetName": "The Gleaners (1857) — the three bent postures and the golden harvest",
       "durationMinutes": 8,
-      "instruction": "Consider the three women: they form a group of three repeated postures — the first is nearly upright, the second bent lower, the third almost doubled over — a progression that makes the labor feel eternal. Then the horizon: the abundant harvest behind them is painted in gold, and the harvesters' wealth stands in the distance while the gleaners' work is in the foreground."
+      "instruction": "Three women, three degrees of bending — nearly upright, bent low, doubled over — a progression that makes the work feel eternal. Behind them the harvest glows in gold; ahead of them the field is bare. Wealthy Parisians read it as a socialist threat and compared the women to praying figures. Millet made the people everyone walked past the subject of a large painting, and the scandal never quite died."
     },
     "tags": [
       "Realism",
@@ -1768,7 +1768,7 @@
       "verb": "Look at",
       "targetName": "Ophelia (1852) — the symbolic flowers and the open mouth",
       "durationMinutes": 8,
-      "instruction": "Begin with the flowers: each one is a symbol from the play — the willow for forsaken love, the nettles for pain, the daisies for innocence, and the poppies for death. Then the face: Ophelia's mouth is slightly open, and her hands are raised in a gesture that was once read as drowning but is now read as singing — Shakespeare's text says she drowned singing."
+      "instruction": "Every flower is a line from the play: willow for forsaken love, nettles for pain, daisies for innocence, poppies for death. Millais painted them from real specimens over five months while Elizabeth Siddal lay in a studio bathtub — the lamps went out once and the chill nearly killed her. Ophelia's mouth is open, and her hands float upward: she is drowning, or she is singing, as Shakespeare wrote, 'as one incapable of her own distress.'"
     },
     "tags": [
       "Pre-Raphaelite",
@@ -1808,7 +1808,7 @@
       "verb": "Look at",
       "targetName": "Little Dancer of Fourteen Years (1881) — the real tutu and the working pose",
       "durationMinutes": 8,
-      "instruction": "Single out the materials: the figure is bronze (cast after Degas's death from his wax original), but the tutu is real fabric, the ribbon real, and the slippers real — the combination of sculpture and costume was shocking in 1881. Then the pose: her chin is up, her hands clasped behind her back, her feet in the ballet's fourth position — a working pose, not a pretty one."
+      "instruction": "Bronze body, real tutu, real ribbon, real slippers — the mix of sculpture and costume shocked the 1881 exhibition and critics called her rat-faced. She was Marie van Goethem, a dancer at the Paris Opera who then vanished from the records. Her chin is up, her hands clasped behind her back, her feet in a working fourth position. This is not a pretty pose; it is a job."
     },
     "tags": [
       "Impressionism",
@@ -1828,7 +1828,7 @@
       "verb": "Look at",
       "targetName": "Dance at Le Moulin de la Galette (1876) — the dappled light on faces",
       "durationMinutes": 8,
-      "instruction": "Fix on the light: the sun comes through the acacia trees and lands as patches of yellow and blue on the faces and clothes — Renoir painted light as color, not as brightness, a defining Impressionist move. Then the crowd: this is a working-class party, not a ballroom — the men in straw hats and cheap suits, the women in everyday dresses."
+      "instruction": "The sun comes through the acacia trees and lands on faces as patches of yellow and blue — light painted as color, not brightness, which is the Impressionist move in a single stroke. The dancers are real: friends, a Montmartre laundress, a model named Margot, men in straw hats and cheap suits. Renoir painted it on the spot over weeks, and the crowd is working-class Paris having a Sunday."
     },
     "tags": [
       "Impressionism",
@@ -1888,7 +1888,7 @@
       "verb": "Look at",
       "targetName": "The Potato Eaters (1885) — the earth-colored faces",
       "durationMinutes": 8,
-      "instruction": "Scan the faces and hands: they're painted in muddy browns and grays, deliberately the color of the earth — van Gogh said he wanted the people to match the food. Then the light: the single lamp casts a weak yellow glow, and everything else is swallowed in shadow, making the meal a small circle of warmth in the dark."
+      "instruction": "The people are painted in the color of the food they eat — muddy browns and grays — and van Gogh said that was the point: 'they have earned their meal with these hands digging in the earth.' One lamp casts a weak yellow glow and everything else sinks into shadow, so the meal is a small circle of warmth in the dark. He painted it with real laborers as models and was proudest of this, his first great painting."
     },
     "tags": [
       "Post-Impressionism",
@@ -1928,7 +1928,7 @@
       "verb": "Look at",
       "targetName": "Café Terrace at Night (1888) — the haloed stars and the warm yellow",
       "durationMinutes": 8,
-      "instruction": "Examine the sky first: the stars are painted as circles of yellow and white with radiating halos — van Gogh told his brother that 'the sky is aquamarine, the walls are violet.' Then the contrast: the café glows warm yellow under its awning while the street beyond is cool blue — the painting is a study of how artificial light warms the night."
+      "instruction": "This is the first night sky van Gogh painted without black — deep blue with stars that radiate halos of yellow and white. He painted it after dinner, in the dark, by lamplight, in the Place du Forum in Arles, where the café still stands with its yellow awning. The terrace glows warm against the cool blue street beyond: the whole painting is a study of what artificial light does to the night."
     },
     "tags": [
       "Post-Impressionism",
@@ -1968,7 +1968,7 @@
       "verb": "Look at",
       "targetName": "The Kiss (1889) — the almost-touching lips",
       "durationMinutes": 8,
-      "instruction": "Turn to the lips: they almost touch but never do — Rodin froze the moment of maximum desire, not its fulfillment, which is why the sculpture feels more erotic than any completed kiss. Then the marble: the woman's skin is polished to a high gloss while the rock beneath and behind them is left rough — Rodin let the untouched stone act as the lovers' rocky cave."
+      "instruction": "Their lips never touch — a millimeter of air between them, frozen forever, which is why the sculpture is more erotic than any completed kiss. Rodin chose the moment of maximum desire, not its fulfillment. The woman's skin is polished to a gloss while the rock around them stays rough, so the lovers are carved out of the cave they are hiding in. They are Paolo and Francesca from Dante, who fell in love reading and died for it."
     },
     "tags": [
       "Modern Sculpture",
@@ -1988,7 +1988,7 @@
       "verb": "Look at",
       "targetName": "The Sick Child (1886) — the scraped surface and the dissolved face",
       "durationMinutes": 8,
-      "instruction": "Pick out the painting's surface: the brushwork is violent — long, scraped strokes that Munch made by dragging a palette knife through wet paint, so the canvas looks wounded. Then the girl's face: it's almost dissolved into the pillow, barely painted, while the mother's head is bent in shadow — the dying child is less solid than the grief around her."
+      "instruction": "The surface looks wounded: long, scraped strokes where Munch dragged a palette knife through wet paint. He painted this six times over forty years — his sister Sophie died of tuberculosis when he was 15, and he said 'my art is rooted in this.' The girl's face is almost dissolved into the pillow, barely there, while the mother's head bends in shadow. The dying child is less solid than the grief around her."
     },
     "tags": [
       "Expressionism",
@@ -2008,7 +2008,7 @@
       "verb": "Look at",
       "targetName": "Madonna (1894) — the closed eyes and the red halo",
       "durationMinutes": 8,
-      "instruction": "Focus on the pose: she stands in a shallow S-curve, head tilted back, eyes closed, hair flowing — Munch said it was 'the pause when the whole world stops in its path,' describing the moment of conception. Then the frame: in the versions Munch printed, the border shows a writhing sperm and a small fetus — the sacred frame of a religious icon remade for biology."
+      "instruction": "She is not a Christian virgin — she is a woman mid-trance, eyes closed, head tilted back, hair loose, standing in a shallow S-curve. Munch called it 'the pause that the whole world stops for' and printed versions of it with a border of writhing sperm and a small fetus — a church icon redesigned as a fertility goddess. The dark halo is not gold; it is the moment of conception."
     },
     "tags": [
       "Expressionism",
@@ -2028,7 +2028,7 @@
       "verb": "Look at",
       "targetName": "The Birth of Venus (1863) — the academic pose and the Salon context",
       "durationMinutes": 8,
-      "instruction": "Peer at the pose: Venus reclines on the water, one arm above her head — a pose of total passivity that the Salon adored and the Impressionists would mock. Then the details that made it a hit: the foam-flecked toes, the putti floating above, the perfected, polished skin."
+      "instruction": "One arm above the head, body reclined on the water, utterly passive — the pose the Salon adored and the Impressionists were about to mock. Napoleon III bought it on sight, and it became official French taste. The foam-flecked toes, the floating putti, the polished skin: this is the painting the rebels were rebelling against, and it was the hit of the very year they were rejected."
     },
     "tags": [
       "Academic",
@@ -2048,7 +2048,7 @@
       "verb": "Look at",
       "targetName": "The Bathers (1887) — the solid, rounded bodies",
       "durationMinutes": 8,
-      "instruction": "Pause on the bodies: they're not thin or idealized — they're real women with soft stomachs and heavy thighs, painted in a warm rose palette that makes them glow. Then the setting: the stream, the rocks, and the leaves are painted with the broken Impressionist brush, but the women are built with smooth, blended strokes — the painting is Renoir's attempt to marry Impressionist color to classical form."
+      "instruction": "Renoir came back from Italy convinced his style was 'too thin' and wanted bodies as solid as Raphael's. So these women are real — soft stomachs, heavy thighs — painted in a warm rose that makes them glow. The stream, rocks, and leaves around them use the broken Impressionist brush; the women are built with smooth, blended strokes. He said he repainted the legs endlessly, and it shows: they are the point."
     },
     "tags": [
       "Impressionism",
@@ -2068,7 +2068,7 @@
       "verb": "Look at",
       "targetName": "The Angelus (1859) — the coffin under the wheelbarrow",
       "durationMinutes": 8,
-      "instruction": "Dwell on the wheelbarrow and the pitchfork first: Dalí had the painting X-rayed and found the ghost of a small coffin beneath the wheelbarrow — the couple may originally have been painted at a graveside, and Millet (or his dealer) painted over it. Then the postures: both figures bow at the same angle, the man's cap in his hands, and the light of the setting sun throws their shadows forward like sundials."
+      "instruction": "Two peasants, two bowed heads, one shared prayer at the sound of the evening bell. The painting became the most reproduced image in France — and then Dalí had it X-rayed and found the ghost of a small coffin under the wheelbarrow: the couple may originally have been standing at a graveside, and the coffin was painted over. The man's cap in his hands, the setting sun throwing their shadows forward like sundials: a prayer, or a funeral."
     },
     "tags": [
       "Realism",
@@ -2088,7 +2088,7 @@
       "verb": "Look at",
       "targetName": "The Execution of Lady Jane Grey (1833) — the blindfolded hands",
       "durationMinutes": 8,
-      "instruction": "Check the young queen's face: her eyes are covered by a blindfold, and her hands are reaching forward, searching for the block — she is guided by a man in white who steadies her. Then the details: the straw beneath the block, the executioner's axe leaning against the wall, the ladies-in-waiting collapsing in grief at the right."
+      "instruction": "She was queen for nine days, and she is 16, blindfolded, her hands reaching blindly for the block while a man in white steadies her. Delaroche painted history as a private tragedy, not a public event — no crowd, no spectacle, just the straw, the axe leaning against the wall, and the ladies-in-waiting collapsing at the right. It became the most reproduced painting in England."
     },
     "tags": [
       "Romanticism",
@@ -2108,7 +2108,7 @@
       "verb": "Look at",
       "targetName": "The Balcony (1869) — the three unconnected gazes",
       "durationMinutes": 8,
-      "instruction": "Consider the faces: none of the three looks at the others — each stares outward in a different direction, and the servant behind is only half a face in the dark. The painting is Manet's portrait of modern loneliness: people together without connection. Then the details: the green railings, the fan in Berthe Morisot's hand, the gloves Fanny Claus holds — the props of Parisian leisure painted as flat, bright shapes."
+      "instruction": "None of the three looks at any of the others — each stares off in a different direction, and the servant behind them is only half a face in the dark. The critics called them 'three marionettes,' and that was the compliment: Manet painted modern people together without connection. The fan, the gloves, the green railings — the props of Parisian leisure, painted flat and bright, doing nothing."
     },
     "tags": [
       "Impressionism",
@@ -2208,7 +2208,7 @@
       "verb": "Look at",
       "targetName": "The Two Fridas (1939) — the joined hearts and the cut artery",
       "durationMinutes": 8,
-      "instruction": "Follow the hearts first: they're anatomical and exposed, and the artery that joins them runs between the two women's hands — but the thread is cut at the European Frida's end, and she drips blood onto her white dress. The Tehuana Frida holds a miniature portrait of Diego Rivera as a child; the other holds the forceps that clamped her artery."
+      "instruction": "Two Fridas sit side by side, hearts exposed, joined by one artery — painted the year she divorced Diego. The Frida in the European dress holds forceps on her own cut artery and bleeds onto her white skirt; the Frida in the Tehuana dress holds a miniature portrait of Diego as a child and stays whole. The same woman, the same heart, two costumes, one bleeding: that is the painting in one sentence."
     },
     "tags": [
       "Surrealism",
@@ -2228,7 +2228,7 @@
       "verb": "Look at",
       "targetName": "Self-Portrait with Thorn Necklace (1940) — the bleeding thorns",
       "durationMinutes": 8,
-      "instruction": "Zero in on the blood first: the thorns have sunk into her neck, and drops of blood bead at the puncture points — she wears her pain like jewelry and looks directly at you without flinching. Then the animals: the black cat on her left shoulder, the monkey on her right — in Kahlo's paintings these are stand-ins for herself and for Diego. The dead hummingbird at her throat is a talisman of failed love in Mexican folk tradition."
+      "instruction": "The thorns have sunk into her neck and blood beads at each puncture — she wears her pain like jewelry and meets your eyes without flinching. The dead hummingbird at her throat is a Mexican talisman of failed love; the black cat behind one shoulder and the monkey behind the other are her stand-ins for herself and for Diego. She looks at you until you look away."
     },
     "tags": [
       "Surrealism",
@@ -2248,7 +2248,7 @@
       "verb": "Look at",
       "targetName": "Swans Reflecting Elephants (1937) — the swan-to-elephant double image",
       "durationMinutes": 8,
-      "instruction": "Scan the water first: the swans are white and solid, but their reflections are gray elephants — the transformation happens because Dalí matched the swans' silhouettes to the shapes of the rocks and trees on the far bank, and the reflection merges the two. Then notice the autumn trees in the background are bare, and one on the left echoes the elephant-trunk shape."
+      "instruction": "Three swans float on the water; their reflections are elephants. The trick is that Dalí matched the swans' silhouettes to the shapes of the bare trees on the far bank, so the reflection merges bird and landscape into trunk and ear. One tree on the left even echoes the elephant-trunk curve. It is a double image that only works because the water is perfectly still — and it always is."
     },
     "tags": [
       "Surrealism",
@@ -2288,7 +2288,7 @@
       "verb": "Look at",
       "targetName": "The Old Guitarist (1903) — the contorted body and the all-blue palette",
       "durationMinutes": 8,
-      "instruction": "Examine the posture first: the guitarist's body is contorted, folded almost double, and his legs are crossed so tightly the anatomy is impossible — Picasso distorted the body to express collapse, not to imitate it. Then the color: the entire painting is blue — skin, guitar, air — because in Picasso's Blue Period, blue was the color of grief and cold."
+      "instruction": "The guitarist is folded almost double, his legs crossed so tightly the anatomy is impossible — Picasso distorted the body to express collapse, not to copy it. Everything is blue: skin, guitar, air. X-rays show he painted this over an earlier painting and a woman's portrait — he was so poor he reused canvases. The blue is grief and cold, and the blind man plays for no one."
     },
     "tags": [
       "Blue Period",
@@ -2308,7 +2308,7 @@
       "verb": "Look at",
       "targetName": "Three Musicians (1921) — the paper-collage illusion and the hidden dog",
       "durationMinutes": 8,
-      "instruction": "Study the surface: it's painted to imitate cut-and-pasted paper, with flat shapes and visible 'edges' — Picasso faked collage in paint because he wanted the permanence of oil with the look of scissors. Then the figures: the dog at the bottom left is squeezed between the Pierrot's legs, almost hidden, and the whole composition is a puzzle of overlapping shapes that only resolve into three musicians when you step back."
+      "instruction": "It is painted to look like cut paper — flat shapes, visible edges — but it is all oil: Picasso faked collage so he could keep the look with the permanence of paint. Step back and the overlapping planes snap into three figures — Pierrot with a clarinet, Harlequin with a guitar, a monk with sheet music. The dog squeezed between their legs at the bottom left is almost hidden, like a signature."
     },
     "tags": [
       "Cubism",
@@ -2328,7 +2328,7 @@
       "verb": "Look at",
       "targetName": "The Weeping Woman (1937) — the shattered face and the biting teeth",
       "durationMinutes": 8,
-      "instruction": "Turn to the face's geometry: the eyes are in different positions and the teeth are sharp triangles biting a handkerchief — Picasso shattered the face the way the war shattered its subjects. Then the details: the tears are real drops sliding down the painted planes, and the woman's hat and shoulders are outlined in black like glass edges."
+      "instruction": "Her face is shattered into planes: one eye higher than the other, teeth as sharp triangles biting a handkerchief. Picasso broke the face the way the war broke its subjects — she is the weeping companion to Guernica. The model was Dora Maar, whose crying fits Picasso said fascinated him. The tears are real drops sliding down the painted edges, and the black outlines hold the fragments together like glass."
     },
     "tags": [
       "Cubism",
@@ -2388,7 +2388,7 @@
       "verb": "Look at",
       "targetName": "Composition with Red, Blue and Yellow (1930) — the heavy red and the taped grid",
       "durationMinutes": 8,
-      "instruction": "Peer at the red rectangle first: it's the largest block of color and it anchors the whole painting — Mondrian balanced the heavy red with the small blue and yellow blocks so the canvas never tips. Then the black lines: they're not all the same thickness, and the grid is uneven — Mondrian adjusted the lines by fractions of a millimeter, moving them with tape until the balance felt absolute."
+      "instruction": "The red rectangle is the heavy anchor; the small blue and yellow blocks keep the canvas from tipping over. Mondrian moved the black lines by fractions of a millimeter, taping them until the balance felt absolute — the grid is not even, it is tuned. He called this neoplasticism and believed these three colors and right angles could express universal harmony. There is nothing else to see, and that is the whole point."
     },
     "tags": [
       "De Stijl",
@@ -2408,7 +2408,7 @@
       "verb": "Look at",
       "targetName": "Number 5, 1948 — the web with no center",
       "durationMinutes": 8,
-      "instruction": "Pause on the surface: there is no center, no top, no bottom — Pollock said he was 'in' the painting, and the web of lines pulls your eye in every direction at once. Then the textures: he poured, dripped, and flicked enamel paint, sometimes mixed with sand and broken glass, so the surface has depth you can almost feel."
+      "instruction": "There is no center, no top, no bottom — Pollock said he was 'in' the painting, and the web of lines pulls your eye in every direction at once. He poured, dripped, and flicked enamel from sticks, sometimes mixed with sand and broken glass, so the surface has a texture you almost feel. It sold privately in 2006 for $140 million — a record — and it is all middle, deliberately, forever."
     },
     "tags": [
       "Abstract Expressionism",
@@ -2428,7 +2428,7 @@
       "verb": "Look at",
       "targetName": "Blue Poles (1952) — the eight poles in the storm",
       "durationMinutes": 8,
-      "instruction": "Dwell on the blue poles first: they break the 'no center' rule of Pollock's other work — eight strong verticals cut through the chaos, and scholars still debate whether he added them early or as a final organizing gesture. Then the storm around them: the reds, yellows, and turquoise are poured and dripped in layers, and the poles look like they're holding the canvas together."
+      "instruction": "Eight vertical lines of blue cut straight through the chaos — and they break every rule of Pollock's own all-over style, which is why scholars still argue about when he added them. The storm around them is reds, yellows, and turquoise poured in layers, and the poles read like the only structure in the room. Australia paid $1.3 million for it in 1973, then a record, and the country argued about it for years."
     },
     "tags": [
       "Abstract Expressionism",
@@ -2448,7 +2448,7 @@
       "verb": "Look at",
       "targetName": "Orange, Red, Yellow (1961) — the breathing edges and inner glow",
       "durationMinutes": 8,
-      "instruction": "Check the edges: the rectangles don't have hard lines — the colors bleed into each other with fuzzy boundaries, so the shapes seem to breathe and shift as you watch. Then the glow: Rothko built the colors from many thin layers of paint, so the rectangles seem lit from within rather than painted on the surface."
+      "instruction": "The rectangles have no hard edges — the colors bleed into each other, so the shapes seem to breathe and shift as you watch. Rothko built each color from many thin layers, so the blocks glow as if lit from within. He hated the idea that these were color studies: they are, he said, about the human experience. Stand close and let the fuzzy edges do their work; it sold for $86.9 million in 2012."
     },
     "tags": [
       "Abstract Expressionism",
@@ -2488,7 +2488,7 @@
       "verb": "Look at",
       "targetName": "Christina's World (1948) — the crawling figure and the distant house",
       "durationMinutes": 8,
-      "instruction": "Begin with the posture: Christina is not resting — her arms are braced, her body is twisted, and she is mid-crawl toward the house, which sits impossibly far away. Wyeth painted her from behind so we see the effort, not the face. Then the landscape: the grass is painted stroke by stroke, and the fields are enormous compared to the tiny figure — the painting's famous loneliness is the reality of her life."
+      "instruction": "She is not resting — her arms are braced, her body twisted, and she is mid-crawl toward a farmhouse that sits impossibly far away. Wyeth painted his neighbor Christina Olson, who could not walk and dragged herself everywhere; he watched her do exactly this. He painted her from behind so we see the effort, not the face, and the fields are enormous around her. The loneliness is not metaphor; it is her real life."
     },
     "tags": [
       "Regionalism",
@@ -2508,7 +2508,7 @@
       "verb": "Look at",
       "targetName": "A Bigger Splash (1967) — the splash without a swimmer",
       "durationMinutes": 8,
-      "instruction": "Start with the splash first: it's the whole subject — a white explosion frozen against the flat blue of the pool — and there's no one in the water to make it. The diver has already jumped in and the pool is about to go still again; the painting is a still from a movie that isn't running. Then the rest: the empty chair, the flat modern house, the palm tree — all painted with the hard, graphic precision of a travel poster."
+      "instruction": "A white explosion frozen against flat blue — and no one in the water to have made it. The diver has already jumped in, and the pool is about to go still again; the painting is a still from a movie that is not running. Hockney painted it from a photo in a book, using masking tape for the pool lines, in two weeks in his London studio. The empty chair, the flat house, the palm: Los Angeles, holding its breath."
     },
     "tags": [
       "Pop Art",
@@ -2548,7 +2548,7 @@
       "verb": "Look at",
       "targetName": "Garrowby Hill (1998) — the yellow road and the quilted fields",
       "durationMinutes": 8,
-      "instruction": "Fix on the road: it's not gray — it's bright yellow, and it curves across the canvas like a river of light, pulling your eye up and over the hill's crest. Then the fields: they're painted in flat, saturated patches of green and yellow, like a quilt laid over the land, with no people and no buildings."
+      "instruction": "The road is bright yellow — not gray — and it curves across the canvas like a river of light, pulling your eye up and over the hill's crest. Hockney painted this view from his Yorkshire childhood after moving home from California, and he said he wanted the feeling of driving over a hill. The fields are flat, saturated patches of green and yellow, like a quilt on the land, with no people and no buildings in sight."
     },
     "tags": [
       "Contemporary",
@@ -2588,7 +2588,7 @@
       "verb": "Look at",
       "targetName": "The Red Studio (1911) — the artworks floating in the red",
       "durationMinutes": 8,
-      "instruction": "Zero in on the red first: it covers the walls and floor with almost no shading, so the room is a single flat field of color — and the artworks inside it are the only things that stand out. Then find the objects: a bronze sculpture, his painting Le Luxe II on the wall, a ceramic dish, a clock with no hands, and a chair. Matisse said he wanted 'to express space and reality with color alone,' and the red makes the room a world of its own."
+      "instruction": "The red is total — walls, floor, everything — one flat field of color with almost no shading, and Matisse's own artworks float in it like islands. Find them: a bronze sculpture, Le Luxe II on the wall, a ceramic dish, a clock with no hands, an empty chair. He said he wanted 'to express space and reality with color alone.' The clock has no hands because time has stopped inside the red."
     },
     "tags": [
       "Fauvism",
@@ -2608,7 +2608,7 @@
       "verb": "Look at",
       "targetName": "Woman with a Hat (1905) — the green and orange face",
       "durationMinutes": 8,
-      "instruction": "Scan the face: it's not painted in skin tones — the cheeks are green, the forehead is orange, the nose is pink — Matisse used color to express light and feeling, not to imitate reality. Then the hat: it's a huge confection of feathers and flowers painted in flat, clashing strokes, and it dominates the portrait."
+      "instruction": "The cheeks are green, the forehead orange, the nose pink — no skin tones anywhere. Matisse used color to express light and feeling, not to imitate flesh, and the critic who saw this at the 1905 Salon called the painters 'les fauves' — the wild beasts. The name stuck. The hat is an enormous confection of feathers and flowers that dominates the portrait of his wife Amélie, painted in flat, clashing strokes."
     },
     "tags": [
       "Fauvism",
@@ -2628,7 +2628,7 @@
       "verb": "Look at",
       "targetName": "The Snail (1953) — the radiating spiral of cut paper",
       "durationMinutes": 8,
-      "instruction": "Notice the spiral: the colored rectangles radiate outward from the center like a shell, and the colors build from deep blues and purples at the heart to bright yellows and oranges at the rim. Then the technique: Matisse was bedridden, so he 'painted with scissors' — assistants painted sheets of paper, then cut them into shapes he directed from his bed."
+      "instruction": "Colored rectangles radiate outward from the center like a shell, building from deep blues and purples at the heart to bright yellows and oranges at the rim. Matisse was bedridden, so he 'painted with scissors' — assistants painted sheets of paper and cut them into shapes he directed from bed. This was one of the last things he made before he died at 84, and the spiral is a snail's shell only if you step back far enough."
     },
     "tags": [
       "Cut-out",
@@ -2648,7 +2648,7 @@
       "verb": "Look at",
       "targetName": "Portrait of Adele Bloch-Bauer I (1907) — the gold leaf and the painted face",
       "durationMinutes": 8,
-      "instruction": "Examine the gold: Adele's dress and the background are covered in real gold leaf, with spirals, eyes, and geometric patterns picked out — Klimt's father was a gold engraver, and the technique comes from Byzantine mosaics. Then the face: it's the only 'painted' part, soft and realistic, floating above the ornate body like a person inside a shrine."
+      "instruction": "The dress and background are covered in real gold leaf, patterned with spirals, eyes, and Byzantine geometry — Klimt's father was a gold engraver. The face is the only softly painted part of the canvas, floating above the ornate body like a person inside a shrine. The painting was seized by the Nazis, returned to Adele's niece in 2006 after a Supreme Court fight, and sold for $135 million. The woman herself died of meningitis at 43."
     },
     "tags": [
       "Art Nouveau",
@@ -2668,7 +2668,7 @@
       "verb": "Look at",
       "targetName": "Melancholy and Mystery of a Street (1914) — the impossible shadows",
       "durationMinutes": 8,
-      "instruction": "Study the shadows: they're impossibly long and point in impossible directions — the light doesn't come from anywhere in the painting, so the scene feels like a stage set for a play that hasn't started. Then the figures: the girl with her hoop is the only living thing, and the dark shape at the end of the street is either a statue or a figure — nobody can agree."
+      "instruction": "The shadows are impossibly long and point in directions the light cannot explain — the sun does not exist inside the painting, so the square feels like a stage set before the play starts. A little girl rolls a hoop toward the light, the only living thing in the city. At the end of the street stands a shape that is either a statue or a figure; nobody has ever agreed. De Chirico called this metaphysical art, and the Surrealists never recovered."
     },
     "tags": [
       "Metaphysical",
@@ -2688,7 +2688,7 @@
       "verb": "Look at",
       "targetName": "The False Mirror (1928) — the sky inside the eye",
       "durationMinutes": 8,
-      "instruction": "Turn to the iris: it's not an iris — it's a daytime sky with clouds, replacing the colored ring of a real eye. Then the pupil: it's a dark circle that reads as an eclipse, so the eye is both a mirror of the sky and a hole in it. Magritte painted several 'eyes' but this is the famous one, and the Surrealist André Breton used it as the cover of his journal."
+      "instruction": "The iris of the eye is a daytime sky with clouds — the organ of sight replaced by the thing it sees. The pupil is a dark circle that reads as an eclipse, so the eye is both a mirror of the sky and a hole in it. Magritte called the eye a false mirror because it reflects the world but sees nothing. The Surrealist André Breton put it on the cover of his journal, and it has stared back from that position ever since."
     },
     "tags": [
       "Surrealism",
@@ -2788,7 +2788,7 @@
       "verb": "Look at",
       "targetName": "Metamorphosis of Narcissus (1937) — the man becoming the flower-hand",
       "durationMinutes": 8,
-      "instruction": "Dwell on the two figures: on the left, a man crouches by a pool, his head reflected below; on the right, his body has become a giant stone hand holding an egg, and from the egg grows the narcissus flower — the myth made literal. Then the background: a naked figure on a pedestal, a dog, chess pieces — the landscape of a dream."
+      "instruction": "Left, a man crouches by a pool, his head mirrored in the water. Right, that same body has become a giant stone hand holding an egg, and from the egg grows the narcissus flower — the myth made literal, the man turning into the flower he is named for. In the background: a naked figure on a pedestal, a dog, chess pieces. Dalí wrote a poem to go with it, and Freud, whom he idolized, analyzed the painting's paranoia."
     },
     "tags": [
       "Surrealism",
@@ -2808,7 +2808,7 @@
       "verb": "Look at",
       "targetName": "Christ of Saint John of the Cross (1951) — the floating view from above",
       "durationMinutes": 8,
-      "instruction": "Check the viewpoint first: you see Christ from above and slightly behind, floating in the sky — the composition is a triangle, with Christ's arms as the widest points and the cross's shadow behind him. Then the scale: the tiny boat and fisherman at the bottom make Christ enormous, and the water and shore below are painted with Dalí's exact realism."
+      "instruction": "You see Christ from above and slightly behind, floating — no cross, no nails, no crown of thorns, just a man, a shadow, and a triangle of light. Dalí took the composition from a drawing by Saint John of the Cross. The scale is the shock: a tiny boat with a fisherman sits far below, making Christ enormous. In 1986 a man threw a bottle of ink at it in protest. The painting survived; the ink did not."
     },
     "tags": [
       "Surrealism",
@@ -2828,7 +2828,7 @@
       "verb": "Look at",
       "targetName": "Lavender Mist (1950) — find the invisible lavender and the calm rhythm",
       "durationMinutes": 8,
-      "instruction": "Look for the lavender: it's almost invisible, a faint haze of color under the black and white lines — Pollock named the painting for a color most viewers never notice. Then the structure: unlike his densest works, this canvas has breathing room, with the drips and loops spread in a wide, calm rhythm."
+      "instruction": "The lavender is almost invisible — a faint haze under the black and white lines, and Pollock named the whole painting for a color most viewers never notice. Unlike his densest canvases, this one has breathing room: the drips and loops spread in a wide, calm rhythm. It is one of the works that made the CIA's cultural program fall in love with Abstract Expressionism — proof, they thought, that America was free, daring, and new."
     },
     "tags": [
       "Abstract Expressionism",
@@ -2848,7 +2848,7 @@
       "verb": "Look at",
       "targetName": "Wrapped Reichstag (1995) — the silver transformation",
       "durationMinutes": 8,
-      "instruction": "Begin with the transformation: the Reichstag, a heavy stone building full of political meaning, became a soft, silver, anonymous mass — the wrapping erased its history for two weeks and made people see it fresh. Then the logistics: it took a team of 90 professional climbers and 120 workers, and the fabric was specially woven silver polypropylene."
+      "instruction": "For 14 days in 1995 the German parliament became a soft, silver, anonymous mass — 106,000 square meters of fabric tied with 15 km of blue rope. The wrapping erased the building's history for two weeks and made people see it fresh. It took Christo and Jeanne-Claude 24 years and 13 rejected parliamentary votes to get permission, and two million people came to look at a government building wearing a blanket."
     },
     "tags": [
       "Land Art",
@@ -2868,7 +2868,7 @@
       "verb": "Look at",
       "targetName": "Running Fence (1976) — the 39 km ribbon through the hills",
       "durationMinutes": 8,
-      "instruction": "Start with the scale: the fence ran 39 kilometers, 5.5 meters tall, crossing private ranches whose owners had to be convinced one by one — it took 42 months of negotiations and 18 public hearings to get permission. Then the material: white nylon panels, so the fence changed with the weather, appearing as a solid wall in fog and a shimmering line in sun. Christo said he wanted to create 'a ribbon of light' that followed the land's contours."
+      "instruction": "39 kilometers of white nylon, 5.5 meters tall, crossing 14 private ranches, a highway, and the edge of the Pacific — for exactly two weeks in 1976. Getting permission took 42 months and 18 public hearings. The fence changed with the weather: a solid wall in fog, a shimmering line in sun. Christo called it 'a ribbon of light' following the land's contours, and after the two weeks it was removed completely, leaving no trace."
     },
     "tags": [
       "Land Art",
@@ -2888,7 +2888,7 @@
       "verb": "Look at",
       "targetName": "Puppy (1992) — the 12-meter flower dog",
       "durationMinutes": 8,
-      "instruction": "Single out the scale first: the dog is taller than the museum's facade behind it, and its face is friendly but enormous — the size makes the cute subject absurd and monumental at once. Then the material: the 'fur' is 60,000 bedding plants — begonias, petunias, marigolds — grown on a steel frame with a hidden irrigation system, so the sculpture literally changes with the seasons."
+      "instruction": "The dog is 12 meters tall and made of 60,000 living flowers — steel, soil, and a hidden irrigation system. The cute subject becomes absurd and monumental at once, which is the joke. The 'fur' is begonias, petunias, and marigolds planted on a steel frame, so the sculpture literally changes with the seasons — it blooms every spring outside the Guggenheim in Bilbao. A city once tried to buy it and stalled on the logistics of a flowering terrier."
     },
     "tags": [
       "Contemporary",
@@ -2968,7 +2968,7 @@
       "verb": "Look at",
       "targetName": "The Holy Virgin Mary (1996) — the African Madonna and the dung",
       "durationMinutes": 8,
-      "instruction": "Scan the figure first: Mary is a Black woman made from layered paint, glitter, and map pinheads, standing inside a golden halo — she's an African Virgin, deliberately remaking the sacred image."
+      "instruction": "Mary is a Black woman built from layered paint, glitter, and map pinheads, standing inside a golden halo — an African Virgin, deliberately remaking the sacred image. The elephant dung she is made with is Ofili's signature material, and in 1999 Mayor Giuliani threatened to cut the museum's funding over it. Visitors lined up around the block to see what the fuss was about. The outrage was the point; the painting outlasted the mayor."
     },
     "tags": [
       "Contemporary",
@@ -2988,7 +2988,7 @@
       "verb": "Look at",
       "targetName": "Rhythm 0 (1974) — the 72 objects and the six hours",
       "durationMinutes": 8,
-      "instruction": "Notice the objects first: 72 items on a table — the harmless (feather, grapes, bread) and the dangerous (knife, chain, a loaded pistol with one bullet). Abramović stood still for six hours while strangers did whatever they chose: some fed her, some dressed her wounds, and the performance only ended when the gun appeared."
+      "instruction": "On a table: 72 objects — feathers, grapes, bread, a knife, a chain, and a loaded pistol with one bullet. Abramović stood motionless for six hours while the audience was told they could use anything on her however they wished. It started gentle: people fed her, dressed her wounds. It ended when the gun was aimed at her neck and a fight broke out. The performance taught her what people will do when given permission, and she never repeated it."
     },
     "tags": [
       "Performance Art",
@@ -3028,7 +3028,7 @@
       "verb": "Look at",
       "targetName": "Untitled (Your Gaze Hits the Side of My Face) (1981) — the ad-style words",
       "durationMinutes": 8,
-      "instruction": "Study the words first: they're printed in the aggressive style of magazine ads — white Futura type on a red field — and they describe what's happening to the bust: the viewer's gaze is hitting it like an object. Then the image: a classical marble head in profile, the kind of object museum visitors stare at without thinking. Kruger's sentences are confrontations — 'your gaze hits the side of my face' makes looking itself the subject."
+      "instruction": "The words are printed in the aggressive style of a magazine ad — white Futura on red — and they describe what is happening in the image: a classical marble bust in profile, your gaze hitting the side of her face like an object. Kruger borrowed the visual language of advertising to turn it against the culture that sells. The bust is the kind of thing museums expect you to stare at without thinking; she makes the staring itself the subject."
     },
     "tags": [
       "Feminist Art",
@@ -3048,7 +3048,7 @@
       "verb": "Look at",
       "targetName": "I Shop Therefore I Am (1987) — the card that proves you exist",
       "durationMinutes": 8,
-      "instruction": "Turn to the hand: it's cropped, anonymous, and holds the card the way a passport holder holds an ID — the card is the proof of existence. Then the slogan: Descartes said 'cogito ergo sum' — I think, therefore I am — and Kruger replaces thinking with shopping, so identity is defined by what you buy. The design is borrowed from advertising: bold type, red frame, flat colors."
+      "instruction": "A cropped, anonymous hand holds a card the way a passport holder holds an ID — the card is the proof of existence. Descartes said 'I think, therefore I am'; Kruger replaces thinking with shopping, so identity becomes what you buy. The design is pure ad: bold type, red frame, flat colors. It became the slogan of the 1980s — on T-shirts, posters, and tote bags — and the critique got so popular it became the merchandise."
     },
     "tags": [
       "Feminist Art",
@@ -3068,7 +3068,7 @@
       "verb": "Look at",
       "targetName": "One and Three Chairs (1965) — the chair, the photo, and the word",
       "durationMinutes": 8,
-      "instruction": "Pick out the three parts: a real chair, a photo of the chair, and the dictionary entry for 'chair' — each one claims to be 'a chair' in a different language: object, image, and word. Then the question the work asks: which one is the real chair? The answer — none, or all three — is the artwork's point. Kosuth said 'the art is the idea,' and that the physical objects were just documentation."
+      "instruction": "A real wooden chair, a photograph of that chair, and the dictionary definition of 'chair' — the same object in three languages: object, image, and word. Kosuth's point is that the art is not any one of them but the idea that connects them all, which makes this the founding work of Conceptual Art. Which one is the real chair? None, or all three — that is the work."
     },
     "tags": [
       "Conceptual Art",
@@ -3108,7 +3108,7 @@
       "verb": "Look at",
       "targetName": "The Lightning Field (1977) — the 400 poles in the desert",
       "durationMinutes": 8,
-      "instruction": "Peer at the scale first: 400 poles of polished steel across a grid measuring one mile by one kilometer, each pole's tip sharpened to a point, standing in an empty desert."
+      "instruction": "400 stainless-steel poles across a grid one mile by one kilometer, each tip sharpened to a point, standing in an empty New Mexico desert. In storm season the poles attract lightning — but most visitors see them still, and De Maria said the stillness is the art. You must stay overnight in a small cabin on the site, limited to six visitors at a time, from May to October. The field is a measure of the sky, and it takes a night to see it."
     },
     "tags": [
       "Land Art",
@@ -3128,7 +3128,7 @@
       "verb": "Look at",
       "targetName": "The Ghent Altarpiece (1432) — the central Lamb panel and the grisaille wings",
       "durationMinutes": 8,
-      "instruction": "Pause on the central panel first: the Lamb of God stands on an altar bleeding into a chalice, while fountains, prophets, and crowds fill a panoramic landscape — the entire Christian story compressed into one image. Then the panels: the closed wings show the Annunciation in grisaille (paint that mimics stone sculpture), and opening the altarpiece reveals the full color world inside."
+      "instruction": "The central panel is the entire Christian story compressed: the Lamb of God bleeding into a chalice on an altar, surrounded by fountains, prophets, and a panoramic crowd. It is also the most stolen artwork in history — looted and dismembered six times in 600 years, and one panel, The Just Judges, is still missing, replaced by a copy. Closed, the wings show a stone-grey Annunciation; open them and the color world appears."
     },
     "tags": [
       "Northern Renaissance",
@@ -3148,7 +3148,7 @@
       "verb": "Look at",
       "targetName": "The Last Judgement (1541) — Christ's raised arm and the flayed self-portrait",
       "durationMinutes": 8,
-      "instruction": "Dwell on the center: Christ returns at the top, his arm raised in judgment, with Mary tucked under his arm — and every figure around them is a naked athlete, because Michelangelo painted the body as God's image, not as shame. Then the bottom right: the damned are dragged into hell, and Charon, the ferryman of Greek myth, clubs them with his oar — a pagan figure inside a Christian Last Judgement."
+      "instruction": "Christ returns at the top, arm raised in judgment, Mary tucked under his arm — and every soul around them is a naked athlete, because Michelangelo painted the body as God's image, not as shame. The Church disagreed: after his death, painters were hired to add loincloths, a censorship campaign that took 300 years. Look at the bottom right and you will find Charon — a pagan ferryman from Greek myth — clubbing the damned into hell with his oar."
     },
     "tags": [
       "Renaissance",
@@ -3168,7 +3168,7 @@
       "verb": "Look at",
       "targetName": "The Wedding at Cana (1563) — find the painter in the musicians",
       "durationMinutes": 8,
-      "instruction": "Check the musicians in the center foreground: the man in white playing the viola da gamba is Veronese himself, and the man next to him in blue is believed to be the architect Andrea Palladio — the painter put his friends into the Bible. Then the banquet: the guests are dressed in 16th-century Venetian fashion, not ancient robes, because Veronese painted the Bible as a contemporary Venetian feast."
+      "instruction": "Find the musician in white in the center foreground playing the viola da gamba — that is Veronese himself, and the man in blue beside him may be the architect Palladio. The painter put his friends inside the Bible. The guests wear 16th-century Venetian dress, not ancient robes, because Veronese painted the miracle as a contemporary Venetian feast. At 6.77 by 9.94 meters, it is the largest canvas in the Louvre."
     },
     "tags": [
       "Venetian Renaissance",
@@ -3188,7 +3188,7 @@
       "verb": "Look at",
       "targetName": "The Entombment of Christ (1603) — the bare feet pointing at you",
       "durationMinutes": 8,
-      "instruction": "Consider the feet first: Nicodemus's legs are exposed and his feet, bare and grimy, point straight at you — Caravaggio's way of dragging the sacred down to street level, which is what made him famous and infamous. Then the weight: every figure strains — the bearded man holds Christ's knees, another grips the shroud, and the women's faces are lit from above by an invisible light."
+      "instruction": "The feet come at you first: bare, grimy, thrust straight out of the canvas — Caravaggio's way of dragging the sacred down to street level, which made him famous and infamous at once. Six figures strain with the weight of the corpse: one grips Christ's knees, another bears the shroud, the women's faces are lit from above by a light that comes from nowhere in the room. It is one of the great altarpieces of the Baroque."
     },
     "tags": [
       "Baroque",
@@ -3208,7 +3208,7 @@
       "verb": "Look at",
       "targetName": "The Nightmare (1781) — the demon on the chest and the horse in the curtain",
       "durationMinutes": 8,
-      "instruction": "Begin with the woman: she lies limp on her back, arms and head hanging off the bed, while the incubus — a demon of folklore — squats on her chest. Then find the horse: its head and neck burst through the curtain at the back, its eyes wild — the painting is the origin of the 'nightmare horse' image. Fuseli based the demon on local folklore and on his own sleep paralysis, and the painting was so popular that he made engraved copies."
+      "instruction": "The word 'nightmare' literally means night-mare: the horse was believed to sit on sleepers' chests and crush them. Here the woman lies limp, arms and head hanging off the bed, while the incubus squats on her chest and the horse's wild head bursts through the curtain behind. Fuseli painted this in 1781 from folklore and his own sleep paralysis, and it became the original horror poster — he made engraved copies that sold for decades."
     },
     "tags": [
       "Romanticism",
@@ -3228,7 +3228,7 @@
       "verb": "Look at",
       "targetName": "Washington Crossing the Delaware (1851) — count the historical errors",
       "durationMinutes": 8,
-      "instruction": "Start with the boat: it's impossibly crowded and Washington stands tall in it — in reality the crossing was at night in freezing weather, and Washington almost certainly stayed seated to avoid capsizing. Then the flag: the Betsy Ross-style flag with 13 stars in a circle wasn't used until 1777, a year after the crossing."
+      "instruction": "Almost everything in it is wrong: Washington stands in a small boat that would have sunk, beneath a flag that did not exist until a year after the crossing, in daylight — the real crossing was at night in freezing weather, and he almost certainly stayed seated. The painter, a German who never saw the Delaware, made it more heroic than history. The most famous American history painting, and it is fiction."
     },
     "tags": [
       "American",
@@ -3268,7 +3268,7 @@
       "verb": "Look at",
       "targetName": "Whistler's Mother (1871) — the color arrangement, not the portrait",
       "durationMinutes": 8,
-      "instruction": "Fix on the title first: 'Arrangement in Grey and Black No. 1' — Whistler deliberately named the painting after its color scheme, treating his mother as a still-life arrangement of tones. Then the composition: the profile, the black dress, the white cap and handkerchief, the grey wall with a framed print — everything is a study in muted tones, and the picture is perfectly balanced like a geometric diagram."
+      "instruction": "The title is 'Arrangement in Grey and Black No. 1' — Whistler named the portrait of his mother after its color scheme, treating her as a still-life arrangement of tones. The profile, the black dress, the white cap and handkerchief, the grey wall with its framed print: everything is a study in muted colors, balanced like a geometric diagram. His mother sat in profile because she was too old to hold a frontal pose comfortably."
     },
     "tags": [
       "American",
@@ -3288,7 +3288,7 @@
       "verb": "Look at",
       "targetName": "The Floor Scrapers (1875) — the rhythm of the three backs",
       "durationMinutes": 8,
-      "instruction": "Follow the bodies: three men in profile, working in rhythm, their backs and arms curved in identical postures — Caillebotte painted labor with the seriousness usually reserved for heroes. Then the light: the sun falls in a broad diagonal across the floor, and the scraped wood gleams while the men cast long shadows. Notice the details: the bottles of wine and the brazier, the dust, the rolled sleeves — the scene is real Paris, not an allegory."
+      "instruction": "Three men on their knees scraping a Paris floor, bare backs curved in identical working postures — labor painted with the seriousness usually reserved for heroes. The sun falls in a broad diagonal, the scraped wood gleams, long shadows stretch from the workers. The wine bottles, the brazier, the rolled sleeves, the dust: real Paris, not allegory. The Salon rejected it; the Impressionists showed it and built their name on modern life."
     },
     "tags": [
       "Impressionism",
