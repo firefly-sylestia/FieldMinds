@@ -239,5 +239,5 @@ proper subtypes, real tags. books.json: all 106 fakes replaced (3 batches:
 Gatsby, Lolita, One Hundred Years of Solitude, …), real teasers + reading
 instructions + corrected tags. Validation still 0 errors. Next up in the
 queue: wildcard + books + discoveries are now CLEAN (0 fakes each, validation 0
-errors throughout). Remaining in queue: painters.json (77), directors.json
-(73), films.json (67), artists.json (1).
+errors throughout).painters.json is now CLEAN too (2 batches: 40+37). Remaining in queue:
+directors.json (73), films.json (67), artists.json (1).

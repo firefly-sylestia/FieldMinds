@@ -1604,17 +1604,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Henri de Toulouse-Lautrec",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Toulouse-Lautrec — aristocrat, dwarf, chronicler of Montmartre's nightlife — painted and drew the dancers and drinkers of the Moulin Rouge in posters that invented modern graphic design. His legs stopped growing after two childhood falls; he made his short stature the vantage point from which he saw everything.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Henri de Toulouse-Lautrec",
+      "targetName": "Henri de Toulouse-Lautrec — 'At the Moulin Rouge' (1892) and the La Goulue poster",
       "durationMinutes": 3,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at 'At the Moulin Rouge' (1892) and find the figures Lautrec painted repeatedly: the dancers, the absinthe drinkers, and the painter himself at the back, small and peripheral. Then look at his poster of La Goulue (1891) — flat color, bold type, cropped figures — and read why it mattered: it turned the poster into an art form and made Montmartre's performers into icons. His world was loud, and his line is the sharpest in the century."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Post-Impressionism",
+      "French",
+      "Poster"
     ],
     "tier": 2
   },
@@ -1623,17 +1624,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Egon Schiele",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Schiele — Gustav Klimt's protégé — drew the human body with an intensity that got him arrested: in 1912 the police seized his drawings and he spent 24 days in prison on charges of distributing erotic images. He died in the 1918 flu pandemic at 28, having produced some 3,000 works in his final decade.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Egon Schiele",
+      "targetName": "Egon Schiele — the twisted self-portraits and the 1912 arrest",
       "durationMinutes": 10,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at a Schiele self-portrait and notice what he does to the body: the limbs are twisted, the ribs and tendons drawn as if under pressure, the face gaunt — the body as confession rather than beauty. Then read the 1912 arrest: his drawings of adolescent nudes led to a trial, and the judge burned one drawing in the courtroom."
     },
     "tags": [
-      "Contemporary",
-      "21st Century"
+      "Expressionism",
+      "Austrian",
+      "Figurative"
     ],
     "tier": 2
   },
@@ -1642,17 +1644,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Kazimir Malevich",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Malevich painted the most radical painting of the 20th century — Black Square (1915), a plain black square on a white ground — and declared art's 'zero of form': the end of representation. He called the movement Suprematism, and the painting's first public display hung it high in a corner, where Russians hang icons.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Kazimir Malevich",
+      "targetName": "Kazimir Malevich — 'Black Square' (1915) and 'White on White' (1918)",
       "durationMinutes": 5,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Look at Black Square and then read the icon theory: Malevich hung it in the corner reserved for Orthodox icons, and its meaning is inseparable from that gesture — the square as a replacement for the divine image. Then look at 'Suprematist Composition: White on White' (1918), three years later: the square has become almost invisible, and art has nearly vanished into pure feeling."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Suprematism",
+      "Russian",
+      "Avant-Garde"
     ],
     "tier": 2
   },
@@ -1661,17 +1664,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "René Magritte",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Magritte painted pipes that are 'not a pipe,' apples that hide faces, and men in bowler hats whose heads float in clouds — the most imitated images in modern art. His 1929 painting 'The Treachery of Images,' with its famous caption 'Ceci n'est pas une pipe' ('This is not a pipe'), is the single most quoted artwork about images in existence.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "René Magritte",
+      "targetName": "René Magritte — 'The Treachery of Images' (1929) and 'The Son of Man'",
       "durationMinutes": 5,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Look at 'The Treachery of Images' and read the paradox slowly: the painting shows a pipe and says it isn't one — and it's right, because it's a painting of a pipe."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Surrealism",
+      "Belgian",
+      "Conceptual"
     ],
     "tier": 2
   },
@@ -1680,17 +1684,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Joan Miró",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Miró's paintings — stars, moons, ladders, and biomorphic shapes floating on bright fields — look childlike and are anything but: he called them 'assassinations of painting,' and they were worked and reworked over months. The ladder is his recurring symbol for escape — he used it to leave the earth and, he said, to leave the studio.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Joan Miró",
+      "targetName": "Joan Miró — 'The Hunter (Catalan Landscape)' (1923) and the Constellations",
       "durationMinutes": 8,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at 'The Hunter (Catalan Landscape)' (1923–24) and find the coded elements: the hunter's eye, the heart, the ladder, the sardine — Miró said the painting is a map of a day in the countryside. Then look at the 'Constellation' series (1940–41), made during the German occupation of France: small, jewel-like canvases of stars and arcs painted while Europe was dark, which Miró called his 'sky paintings.'"
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Surrealism",
+      "Spanish",
+      "Abstract"
     ],
     "tier": 2
   },
@@ -1699,17 +1704,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Tamara de Lempicka",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Lempicka painted the Jazz Age's art deco icons — sleek, angular women with polished faces and cigarette holders, figures of cool glamour. She was a Polish aristocrat who fled the Russian Revolution, arrived in Paris, and made herself the painter of the era's wealth; her 1925 self-portrait in a green Bugatti is the image of modern femininity she invented for herself.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Tamara de Lempicka",
+      "targetName": "Tamara de Lempicka — 'Self-Portrait in a Green Bugatti' (1925)",
       "durationMinutes": 10,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at 'Self-Portrait in a Green Bugatti' (1925) — she never actually owned a Bugatti — and notice the angles: the scarf, the head tilt, the sharp chin all cut the canvas like facets. Then read the paradox of her career: she painted the rich and became one of the most successful women painters of the century, then was forgotten for decades and revived in the 1970s."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Art Deco",
+      "Polish-French",
+      "Portraiture"
     ],
     "tier": 2
   },
@@ -1718,17 +1724,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Grant Wood",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Wood's American Gothic (1930) — the farmer with the pitchfork and his stern companion — is the most parodied painting in American history, and Wood intended it as a dignified portrait of rural Iowa, not a satire. He based the farmer on his dentist and the woman on his sister, who insisted the painting showed them as 'proper people.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Grant Wood",
+      "targetName": "Grant Wood — 'American Gothic' (1930)",
       "durationMinutes": 3,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Look at American Gothic and notice the details that are actually Gothic: the arched window, the pitchfork echoing the overalls, the strict symmetry — Wood called it a portrait of 'the kind of people I fancied should live in that house.' Then read the reception: Iowans were furious at first, seeing caricature; the painting won a prize at the Art Institute of Chicago and became a national icon within a decade."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Regionalism",
+      "American",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1737,17 +1744,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Andrew Wyeth",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Wyeth painted Christina's World (1948), the second-most-famous American painting after American Gothic: a woman in a pink dress crawling through a field toward a farmhouse. The model, Christina Olson, was paralyzed from the waist down and refused a wheelchair — she crawled everywhere, which is exactly what the painting shows, though Wyeth removed the signs of struggle.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Andrew Wyeth",
+      "targetName": "Andrew Wyeth — 'Christina's World' (1948)",
       "durationMinutes": 9,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at Christina's World and notice what Wyeth changed: Christina was 55 when he painted her; the figure is young, and the distance to the house is compressed. The painting's pull comes from that tension — dignity against the impossibility of the task."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Regionalism",
+      "American",
+      "Realism"
     ],
     "tier": 2
   },
@@ -1756,16 +1764,17 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Lucian Freud",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Freud — grandson of Sigmund — painted the human body with an unblinking scrutiny that made him the most important figurative painter of his era: sagging skin, awkward poses, hours-long sittings. His 'Benefits Supervisor Sleeping' (1995) set the record in 2008 for the most expensive painting by a living artist ($33.6 million).",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Lucian Freud",
+      "targetName": "Lucian Freud — 'Benefits Supervisor Sleeping' (1995) and the long sittings",
       "durationMinutes": 10,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Look at a Freud portrait and read the method behind the mercilessness: he painted from life, sometimes for 16-month sittings, and his portraits record the sitter's endurance as much as their face. Then look at 'Benefits Supervisor Sleeping' — a 275-pound woman asleep on a sofa — and read the response: critics called it grotesque, and its record price made it famous."
     },
     "tags": [
-      "Expressionism",
+      "Figurative",
+      "British",
       "20th Century"
     ],
     "tier": 2
@@ -1775,17 +1784,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Gerhard Richter",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Richter is the most expensive living artist in history (an abstract sold for $46.3 million in 2015) and the rare painter who works in two opposite styles at once: photo-realist paintings blurred from photographs, and huge abstract canvases scraped with a squeegee. He has said both are attempts 'to make a picture without knowing what it is.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Gerhard Richter",
+      "targetName": "Gerhard Richter — 'Betty' (1988) and the squeegee abstracts",
       "durationMinutes": 6,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Look at a blurred photopainting ('Betty,' 1988, is the masterpiece — his daughter seen from behind, based on a photo) and notice what the blur does: it makes a photograph into a painting, and makes memory — indistinct, emotional — the real subject. Then look at an abstract squeegee painting and read the process: Richter paints layers, then drags a long squeegee across them, letting chance destroy what he made."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Contemporary",
+      "German",
+      "Abstract"
     ],
     "tier": 2
   },
@@ -1794,17 +1804,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Georg Baselitz",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Baselitz turned his paintings upside down in 1969 — and has painted most of his work that way since, as a way of 'liberating the subject from content.' He is the most important German painter to grapple with the country's postwar shame, and his 1963 exhibition was closed by prosecutors for obscenity.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Georg Baselitz",
+      "targetName": "Georg Baselitz — the inverted paintings and the 1963 seizure",
       "durationMinutes": 5,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at an inverted Baselitz and notice the effect: once the painting is upside down, the image (a figure, an eagle, a forest) becomes paint first and subject second — which is the point he has spent 50 years making. Then read the 1963 scandal: his painting 'The Big Night Down the Drain' was seized by German prosecutors for obscenity, making him famous at 25. His upside-down bodies are an argument about what Germany could and couldn't look at."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Contemporary",
+      "German",
+      "Figurative"
     ],
     "tier": 2
   },
@@ -1813,17 +1824,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Takashi Murakami",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Murakami coined 'Superflat' — the aesthetic that flattens Japanese art history, anime, and consumer culture into one surface — and his smiling flowers, mushroom clouds, and skulls became the most recognizable contemporary Japanese art of the century. He also collaborated with Louis Vuitton, which made his art global in a way galleries never could.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Takashi Murakami",
+      "targetName": "Takashi Murakami — the Superflat flowers and the mushroom-cloud series",
       "durationMinutes": 9,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at a Murakami flower and notice what's missing: no depth, no shading, just outline and flat color — the Superflat principle, which Murakami argues is the continuation of Japanese art from ukiyo-e through anime. Then read the darker layer: the same smiling flower appears in 'The Castle of Tin Tin' and in his mushroom-cloud paintings, and he has said his work is about Japan's postwar trauma and its consumer compensation."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Superflat",
+      "Japanese",
+      "Contemporary"
     ],
     "tier": 2
   },
@@ -1832,17 +1844,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Zao Wou-Ki",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Zao Wou-Ki fused Chinese calligraphy and landscape with Western abstraction — he was born in China in 1920, moved to Paris in 1948, and became one of the most successful Asian painters of the 20th century. His large abstract canvases — which he said were landscapes in his bones — sold for record prices in the 2010s, decades after his best period.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Zao Wou-Ki",
+      "targetName": "Zao Wou-Ki — the calligraphic abstracts (1960s) and the late canvases",
       "durationMinutes": 3,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at a Zao Wou-Ki abstract from the 1960s and notice the two traditions meeting: the sweeping, ink-like gestures of calligraphy and the layered oil color of European abstraction — his paintings are landscapes that don't name themselves. Then read the turning point: in 1971 he stopped painting for a year after his second wife's death, and when he returned, the work opened up into the luminous, monumental canvases that made his late reputation."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Abstract",
+      "Chinese-French",
+      "Lyrical"
     ],
     "tier": 2
   },
@@ -1851,17 +1864,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Helen Frankenthaler",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Frankenthaler invented the 'soak-stain' technique: pouring thinned paint onto raw canvas so it soaked in like dye, eliminating the brushstroke entirely. Her 1952 painting 'Mountains and Sea' — painted when she was 23 — is considered the bridge between abstract expressionism and color field painting, and she was the movement's most influential woman.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Helen Frankenthaler",
+      "targetName": "Helen Frankenthaler — 'Mountains and Sea' (1952) and the soak-stain technique",
       "durationMinutes": 6,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Look at 'Mountains and Sea' (1952) and notice the consequence of the technique: there is no brushstroke, no texture, no edge — the color is inside the canvas, and the painting is as much an object as an image. Then read the history: Frankenthaler showed the soaking method to Morris Louis and Kenneth Noland, who built Color Field painting from it — she never patented the idea, and her generosity shaped a generation."
     },
     "tags": [
-      "Contemporary",
-      "21st Century"
+      "Abstract Expressionism",
+      "American",
+      "Color Field"
     ],
     "tier": 2
   },
@@ -1870,17 +1884,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Joan Mitchell",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Mitchell painted fierce, gestural abstractions — sweeping arcs of color that look like storms, flowers, and memory — and she was among the few women in the first rank of abstract expressionism. She left New York for the French countryside in 1967, where her paintings grew into huge, confident canvases built around remembered landscapes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Joan Mitchell",
+      "targetName": "Joan Mitchell — the 'Sunflowers' series and the late French canvases",
       "durationMinutes": 9,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at a late Mitchell ('Noon' or any of the 'Sunflowers' series) and notice the scale and confidence: the canvases are bigger than a person, and the strokes have the sweep of weather. Then read the turning point: Mitchell, like her friend Frankenthaler, was initially overlooked by the critics who canonized her male peers, and her late recognition was part of the 1970s revision of the movement's history."
     },
     "tags": [
-      "Contemporary",
-      "21st Century"
+      "Abstract Expressionism",
+      "American",
+      "Gesture"
     ],
     "tier": 2
   },
@@ -1889,17 +1904,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Faith Ringgold",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Ringgold made story quilts — painted narratives stitched into fabric borders — that fuse her African American family history, feminism, and political art into a form no one else was using. Her first quilt, 'Who's Afraid of Aunt Jemima?' (1983), was a direct answer to the mammy figure, and her best-known work, 'Tar Beach' (1988), was turned into a children's book.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Faith Ringgold",
+      "targetName": "Faith Ringgold — 'Tar Beach' (1988) and the story-quilt form",
       "durationMinutes": 9,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at 'Tar Beach Part I' (1988) and read the story in the fabric: the girl Cassie flies over the George Washington Bridge, claiming the sky — and the quilt's borders carry text narrating her flight, so the art is read as much as seen. Then read the form's history: Ringgold began quilting with her mother, a fashion designer, and turned the craft into a vehicle for stories about Black life that painting alone couldn't carry."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Contemporary",
+      "American",
+      "Story Quilt"
     ],
     "tier": 2
   },
@@ -1908,17 +1924,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Howardena Pindell",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Pindell is best known for her 'video drawings' — canvases covered in thousands of small punched-out circles, many backed with paper dots — and for 'Free, White and 21' (1980), a 12-minute video in which she performs her experiences of racism against a white actress dismissing them. She has been unflinching about both aesthetics and politics since the 1960s.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Howardena Pindell",
+      "targetName": "Howardena Pindell — the video drawings and 'Free, White and 21' (1980)",
       "durationMinutes": 3,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at a 'video drawing' up close and then from a distance: the punched dots read as pure pattern from across the room and as an obsessive, physical labor when you're near — Pindell has said the repetitive process is part of the meaning. Then watch 'Free, White and 21': Pindell, in a blonde wig and whiteface, plays the dismissive white woman while her real voice narrates experiences of discrimination."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Contemporary",
+      "American",
+      "Conceptual"
     ],
     "tier": 2
   },
@@ -1927,17 +1944,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Kerry James Marshall",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Marshall paints Black life at monumental scale — interiors, gardens, housing projects, portraits — in a style that mixes realism with flat, graphic color, and he has said his project is to make Black figures so present in painting that they can't be ignored. His work sells for tens of millions, and he is widely considered the most important living American painter.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Kerry James Marshall",
+      "targetName": "Kerry James Marshall — the 'Garden Project' and the Black-pantheon portraits",
       "durationMinutes": 8,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Look at 'Vignette (The Joy of Living)' or the 'Garden Project' series and notice the two directions: real spaces (the housing project, the garden) and impossible ones (the same spaces transformed into paradise). Then read his stated ambition: he has said he wants to create images of Black life with 'the authority of a master' — European painting's language used for subjects it never admitted."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Contemporary",
+      "American",
+      "Figurative"
     ],
     "tier": 2
   },
@@ -1946,17 +1964,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Amy Sherald",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Sherald paints Black Americans in flat, gray-scale skin against saturated backgrounds — most famously her 2018 official portrait of Michelle Obama, which made her the first Black woman to paint a First Lady's portrait. The gray skin is her signature: she has said it 'removes the color from the conversation' and lets the viewer see the person.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Amy Sherald",
+      "targetName": "Amy Sherald — the Michelle Obama portrait (2018) and the gray-skin portraits",
       "durationMinutes": 8,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at the Michelle Obama portrait and notice what Sherald kept and removed: the First Lady sits in a geometric dress by a Black designer, against a patterned background — and her skin is flat gray, which shocked the public and was exactly the point. Then read her method: she works from photographs, and the gray skin pushes the figure into a space that's neither naturalistic nor abstract."
     },
     "tags": [
       "Contemporary",
-      "21st Century"
+      "American",
+      "Portraiture"
     ],
     "tier": 2
   },
@@ -1965,17 +1984,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Njideka Akunyili Crosby",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Akunyili Crosby builds large figurative paintings from photo transfers, acrylic, charcoal, and collaged fabric — dense domestic scenes of Nigerian life that layer her two homes, Lagos and Los Angeles, into one image. Her breakthrough works show a young couple (she and her husband) in interiors where Nigerian family photographs and American pop imagery share the same wall.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Njideka Akunyili Crosby",
+      "targetName": "Njideka Akunyili Crosby — 'Drown' (2012) and the domestic layers",
       "durationMinutes": 8,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at 'Drown' (2012) or 'The Beautiful Ones' and spend time with the surfaces: the figures are painted, but the backgrounds are built from photo transfers of Nigerian family archives and patterned fabric — the domestic details (the lacy curtains, the portraits) are as much the subject as the people."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Contemporary",
+      "Nigerian-American",
+      "Figurative"
     ],
     "tier": 2
   },
@@ -1984,17 +2004,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Wangechi Mutu",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Mutu makes collages, paintings, and sculptures that splice the female body with machine parts, plants, and animal forms — a science-fiction critique of how Black women's bodies are represented and mutilated. She grew up in Nairobi, trained in sculpture, and her work has moved from intimate collage to monumental bronze figures in public plazas.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Wangechi Mutu",
+      "targetName": "Wangechi Mutu — the hybrid collages and the Rockefeller Center bronzes",
       "durationMinutes": 10,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at an early collage (the 'Pin Up' and 'Sleeping Serpent' series) and read the hybrid bodies: the figures combine magazine cutouts, ink, and organic forms into creatures that are beautiful and wounded at once. Then read her stated subject: the imagery of the exoticized, violated, medicalized Black female body in Western culture — and her answer, which is to build new bodies entirely."
     },
     "tags": [
-      "Modernism",
-      "20th Century"
+      "Contemporary",
+      "Kenyan-American",
+      "Sculpture"
     ],
     "tier": 2
   },
@@ -2003,17 +2024,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Lynette Yiadom-Boakye",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Yiadom-Boakye paints invented portraits of Black people who don't exist — figures made up from her imagination, titled after the times they could have lived ('The Hour of Bewilderbeast'). She has said she 'makes paintings with the people in them as props' and that she has 'no interest in realism as a process.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Lynette Yiadom-Boakye",
+      "targetName": "Lynette Yiadom-Boakye — the invented portraits and 'The Hour of Bewilderbeast'",
       "durationMinutes": 7,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at a Yiadom-Boakye portrait and read the absence: the sitters are fictional, with no backstory, no commission, no identity — which is precisely the point she has made for two decades."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Contemporary",
+      "British",
+      "Figurative"
     ],
     "tier": 2
   },
@@ -2022,17 +2044,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Jadé Fadojutimi",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Fadojutimi — born in London in 1993, of Nigerian and Japanese heritage — paints huge, saturated canvases of memory and emotion: layered strokes, bold color, and gestural forms that suggest places and feelings without naming them. She is among the youngest artists ever to see her work auctioned for millions, and she has said her paintings are 'maps of my mind.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Jadé Fadojutimi",
+      "targetName": "Jadé Fadojutimi — the memory maps and the saturated canvases",
       "durationMinutes": 6,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Look at a Fadojutimi canvas and notice the size and the color first: the paintings swallow the wall, and the palette — electric blues, pinks, yellows — is emotional before it's pictorial. Then read her stated method: she paints from memory of places she's been (her mother's garden, a walk) and of feelings, and the canvases are built over many sessions of layering and erasing."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Contemporary",
+      "British",
+      "Abstract"
     ],
     "tier": 2
   },
@@ -2041,17 +2064,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Salman Toor",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Toor paints intimate, nocturnal scenes of queer South Asian life — men in bars, apartments, and hammams, rendered with loose brushwork and glowing color. Born in Lahore, he came out as gay while living in Pakistan, and his work has been read as a portrait of 'what it's like to be gay and South Asian' — a subject he has said is 'both personal and political.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Salman Toor",
+      "targetName": "Salman Toor — 'The Bar' and the queer South Asian scenes",
       "durationMinutes": 8,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at a Toor painting ('The Bar' or 'Friends in a Green Room') and notice the light: the scenes glow from within, and the figures — men dancing, talking, watching — inhabit the space with ease that took the artist decades to find."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Contemporary",
+      "Pakistani-American",
+      "Queer"
     ],
     "tier": 2
   },
@@ -2060,17 +2084,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Amoako Boafo",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Boafo — from Accra, Ghana — paints Black subjects, often people he knows, with bold finger-painted marks and expressive color against abstracted flat backgrounds. His portraits made him a market phenomenon in the early 2020s, and he has said his work is a way of 'celebrating Black identity and Black joy' without trauma as the frame.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Amoako Boafo",
+      "targetName": "Amoako Boafo — the finger-painted portraits of Black joy",
       "durationMinutes": 7,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Look at a Boafo portrait and notice the technique first: much of the skin and clothing is applied with fingers and hands, leaving visible strokes and dabs that make the surface feel alive. Then read his project: his subjects — friends, fashion figures, community members — are painted large and close, with backgrounds reduced to abstract blocks of color."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Contemporary",
+      "Ghanaian",
+      "Portraiture"
     ],
     "tier": 2
   },
@@ -2079,17 +2104,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Tunji Adeniyi-Jones",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Adeniyi-Jones makes large-scale paintings of Black figures in rhythmic, dancing poses — often in indigo and ultramarine — that channel the Nigerian modernists and the Yoruba traditions he grew up with. He has said his work is about 'the cadence of the Black body,' and his compositions repeat like music or textile patterns.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Tunji Adeniyi-Jones",
+      "targetName": "Tunji Adeniyi-Jones — the dancing figures and the indigo palette",
       "durationMinutes": 9,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Look at an Adeniyi-Jones canvas and follow the repetition: the figures recur across the canvas like notes or motifs, and the blue-on-blue palette creates a rhythm that is the painting's real subject. Then read the influences he names: the Nigerian master painters (like Uche Okeke) and the indigo dye traditions of West African cloth. His dancers are not portraits — they're a physical idea: the body as pattern, memory, and music."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Contemporary",
+      "Nigerian-British",
+      "Figurative"
     ],
     "tier": 2
   },
@@ -2098,17 +2124,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Louise Giovanelli",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Giovanelli paints scenes that hover between realism and abstraction — a stage curtain, a swimmer, a shimmering surface — working from photographs of staged scenes and live performance. Her canvases of the early 2020s (the 'Seance' paintings) show faces emerging from darkness like apparitions, and she has become one of the most discussed young painters in Europe.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Louise Giovanelli",
+      "targetName": "Louise Giovanelli — the 'Seance' paintings and the staged-performance method",
       "durationMinutes": 7,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Look at a Giovanelli painting of a performer or a curtain and notice the focus: the image is almost photographic at the center and dissolves at the edges, so the painting seems to be happening in front of you."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Contemporary",
+      "British",
+      "Painting"
     ],
     "tier": 2
   },
@@ -2117,17 +2144,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Giotto",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Giotto — the 14th-century Florentine painter Dante called 'the pride of the painters' — is credited with inventing modern painting: he gave figures weight, volume, and real emotion, breaking the flat Byzantine style that had dominated for centuries. His fresco cycle in the Scrovegni Chapel in Padua is one of the foundations of Western art.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Giotto",
+      "targetName": "Giotto — the Scrovegni Chapel 'Lamentation' (c. 1305)",
       "durationMinutes": 8,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Look at the Scrovegni Chapel's 'Lamentation' and notice what was new: the figures have mass, the composition has depth, and the mourners express grief with their bodies — angels literally tumble out of the sky. Then compare a Giotto with any Byzantine painting of the same subject: the Byzantine figures float and stare; Giotto's stand, weep, and grieve."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Proto-Renaissance",
+      "Italian",
+      "Fresco"
     ],
     "tier": 2
   },
@@ -2136,17 +2164,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Piero della Francesca",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Piero della Francesca — a mathematician who painted — built his compositions on geometry so rigorous that his 'Flagellation of Christ' is measured in 3D reconstructions. He wrote treatises on perspective and the regular solids, and his fresco of the resurrected Christ in Sansepolcro was called 'the greatest painting in the world' by Aldous Huxley.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Piero della Francesca",
+      "targetName": "Piero della Francesca — 'The Flagellation of Christ' (c. 1455)",
       "durationMinutes": 10,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at the 'Flagellation of Christ' (c. 1455) and notice the split: the flagellation happens in a classical colonnade on the left, while three modern men confer on the right — and the mystery of who they are and why they're there has occupied scholars for centuries. Then measure the painting yourself: Piero constructed the floor in perfect perspective, and the figures' positions obey a strict geometry."
     },
     "tags": [
-      "Modernism",
-      "20th Century"
+      "Renaissance",
+      "Italian",
+      "Perspective"
     ],
     "tier": 2
   },
@@ -2155,17 +2184,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Matthias Grünewald",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Grünewald — the most intense religious painter of the German Renaissance — made the Isenheim Altarpiece (c. 1512–16), whose crucified Christ is covered in wounds, thorns, and spasms of agony. The altarpiece was painted for a hospital chapel whose patients suffered from skin diseases, which is why the body of Christ mirrors their suffering.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Matthias Grünewald",
+      "targetName": "Matthias Grünewald — the Isenheim Altarpiece (c. 1512–16)",
       "durationMinutes": 7,
-      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+      "instruction": "Look at the Isenheim Altarpiece's Crucifixion and notice the anatomy: Christ's body is contorted, skin greenish and covered in lash wounds, fingers rigid — painted for an audience of hospital patients who bore the same marks. Then look at the altarpiece's closed and open states: closed, it shows the agony; opened, the resurrection glows in gold and light."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Northern Renaissance",
+      "German",
+      "Religious"
     ],
     "tier": 2
   },
@@ -2174,17 +2204,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Pieter Bruegel the Elder",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Bruegel painted the lives of peasants — weddings, dances, winter hunts — at a scale and detail no one had attempted, and his landscapes of 1565, the months cycle, helped invent the genre of landscape painting. He was called 'Peasant Bruegel,' but his peasant scenes are moral allegories: his 'Land of Cockaigne' shows the lazy dreaming of food while the world starves.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Pieter Bruegel the Elder",
+      "targetName": "Pieter Bruegel the Elder — 'Hunters in the Snow' (1565) and 'Land of Cockaigne'",
       "durationMinutes": 5,
-      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+      "instruction": "Look at 'Hunters in the Snow' (1565) — the first great winter landscape — and read the human details: the hunters return tired, the dogs trail, the village glows below the hills, and the whole painting is one long exhale."
     },
     "tags": [
-      "Renaissance",
-      "15th Century"
+      "Northern Renaissance",
+      "Flemish",
+      "Genre"
     ],
     "tier": 2
   },
@@ -2193,17 +2224,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Artemisia Gentileschi",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Gentileschi was the first woman admitted to Florence's Accademia, a friend of Galileo, and the painter of the most ferocious Judith in art history — her 'Judith Slaying Holofernes' (c. 1620) shows two women working together to behead a general, blood spraying. At 17 she was raped by her father's colleague and testified in a trial that used thumbscrews to test her truthfulness.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Artemisia Gentileschi",
+      "targetName": "Artemisia Gentileschi — 'Judith Slaying Holofernes' (c. 1620)",
       "durationMinutes": 6,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at 'Judith Slaying Holofernes' and notice the realism of the violence: Judith and her maid work as a team, arms braced, and the blood is anatomically plausible — Gentileschi had studied the body in a way few women painters could."
     },
     "tags": [
-      "Impressionism",
-      "19th Century"
+      "Baroque",
+      "Italian",
+      "Caravaggisti"
     ],
     "tier": 2
   },
@@ -2212,17 +2244,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Rachel Ruysch",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Ruysch — daughter of a botanist — painted flower still lifes so precise that her 1716 painting of a rose in a glass vase took eight years. She worked from the age of 15 into her 80s, outliving her male rivals, and her work sold for double that of Rembrandt's at her death; her flowers, she admitted, could never have grown together in nature — the bouquets were ideal, not real.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Rachel Ruysch",
+      "targetName": "Rachel Ruysch — the flower still lifes and the eight-year rose",
       "durationMinutes": 6,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at a Ruysch bouquet and read the impossibility: flowers from different seasons bloom together in one vase, and the composition is balanced with a naturalist's eye and a mathematician's control. Then read her method and career: her father's botanical garden gave her models, and she painted with a precision the microscope was beginning to rival."
     },
     "tags": [
-      "Impressionism",
-      "19th Century"
+      "Dutch Golden Age",
+      "Still Life",
+      "Baroque"
     ],
     "tier": 2
   },
@@ -2231,17 +2264,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Élisabeth Vigée Le Brun",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Vigée Le Brun was Marie Antoinette's favorite portraitist — she painted the queen over 30 times — and one of the most successful women artists in history, with a client list that ran from the Queen of France to Catherine the Great. She fled the Revolution and painted her way across Europe for twelve years, and she is one of the only major portraitists to paint herself smiling.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Élisabeth Vigée Le Brun",
+      "targetName": "Élisabeth Vigée Le Brun — the 1790 self-portrait and the Marie Antoinette portraits",
       "durationMinutes": 9,
-      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+      "instruction": "Look at her 1790 self-portrait — in which she paints her own portrait, with a palette and a smile, and a fresh young face at 35 — and read what was radical: formal self-portraits were not supposed to smile, and hers broke the rule."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Rococo",
+      "French",
+      "Portraiture"
     ],
     "tier": 2
   },
@@ -2250,17 +2284,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Camille Corot",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Corot painted the golden light of French landscapes for six decades and was the bridge between classical landscape and Impressionism — the Impressionists called him 'Papa Corot,' and his open-air paintings taught them how to see. He also made the 'souvenir' paintings — invented, idealized landscapes of places he'd been — which made him rich and, later, the most forged painter in history.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Camille Corot",
+      "targetName": "Camille Corot — 'The Bridge at Narni' (1826) and the 'souvenirs'",
       "durationMinutes": 4,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at a Corot landscape ('The Bridge at Narni' or a 'souvenir') and notice the silver-gray tonality and the soft light — his paintings look like memory, which is why his late 'souvenirs' blur real places into ideal ones."
     },
     "tags": [
-      "Impressionism",
-      "19th Century"
+      "Realism",
+      "French",
+      "Landscape"
     ],
     "tier": 2
   },
@@ -2269,17 +2304,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "Gustave Courbet",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Courbet invented Realism and declared himself 'the first and only representative' of it — he painted laborers, burials, and his own enormous self-portrait studio instead of the gods and nymphs the academy demanded. His 'The Stone Breakers' (1849) and 'A Burial at Ornans' put working life on the scale of history painting, and his politics were as confrontational as his art: he was jailed for his role in the Paris Commune and died in exile.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "Gustave Courbet",
+      "targetName": "Gustave Courbet — 'A Burial at Ornans' (1850) and the Realist manifesto",
       "durationMinutes": 5,
-      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+      "instruction": "Look at 'A Burial at Ornans' (1850) and read the scandal: a rural funeral painted on a canvas the size of a history painting — the academy's grandest format used for ordinary people — and the critics called it ugly, democratic, and dangerous."
     },
     "tags": [
-      "Expressionism",
-      "20th Century"
+      "Realism",
+      "French",
+      "19th Century"
     ],
     "tier": 2
   },
@@ -2288,17 +2324,18 @@
     "categoryId": "PAINTERS",
     "subtype": "Painter",
     "name": "James McNeill Whistler",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Whistler — American-born, London-based — painted 'Arrangement in Grey and Black No. 1' (1871), the portrait of his mother that became an icon, and then sued the critic John Ruskin for calling one of his paintings 'a pot of paint flung in the public's face.' Whistler won the libel case, was awarded a farthing (a quarter of a penny), and was bankrupted by the costs — but the trial established that art could be judged on its own terms.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "James McNeill Whistler",
+      "targetName": "James McNeill Whistler — 'Arrangement in Grey and Black No. 1' (1871) and the Ruskin trial",
       "durationMinutes": 10,
-      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+      "instruction": "Look at 'Arrangement in Grey and Black No. 1' and read Whistler's own title: it is not 'Portrait of My Mother' — the human subject is deliberately secondary to the arrangement of tones, which was the radical claim. Then read the Ruskin trial of 1878: Ruskin, Europe's most powerful critic, attacked 'Nocturne in Black and Gold,' Whistler sued, and in court Whistler defended his 'Nocturne' by saying it was about the art of painting, not the scene."
     },
     "tags": [
-      "Baroque",
-      "17th Century"
+      "Aestheticism",
+      "American-British",
+      "Portraiture"
     ],
     "tier": 2
   }
