@@ -1,0 +1,141 @@
+package com.curio.app.features.settings
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.curio.app.data.AppPreferences
+import com.curio.app.data.SmartDensityMode
+import com.curio.app.ui.components.CurioCardHeader
+import com.curio.app.ui.components.CurioSectionLabel
+import com.curio.app.ui.components.CurioSettingsCard
+import com.curio.app.ui.components.CurioSettingsDivider
+import com.curio.app.ui.components.CurioSettingsInfoRow
+import com.curio.app.ui.components.CurioSettingsRow
+import com.curio.app.ui.theme.CurioIcons
+
+/**
+ * Experimental controls live here instead of inside Appearance. Each switch
+ * keeps its existing preference and remains independently reversible.
+ */
+@Composable
+fun ExperimentsScreen(navController: NavController) {
+    val context = LocalContext.current
+    Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
+        SettingsHeader(
+            title = "Experiments",
+            subtitle = "Try ideas before they ship",
+            onBack = { navController.popBackStack() }
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            item { CurioSectionLabel("Card surfaces") }
+            item {
+                CurioSettingsCard {
+                    CurioCardHeader(CurioIcons.Layers, "Card & deck look", "Independent visual tests for Spin")
+                    ExperimentSwitchRow("Top-lit deck cards", "Peek cards catch light at the top edge", AppPreferences.peekGradientState) {
+                        AppPreferences.setPeekGradientEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Tinted deck edges", "Category-tinted hairline on peek cards", AppPreferences.peekHairlineState) {
+                        AppPreferences.setPeekHairlineEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Deck card shadows", "Soft ambient depth under peek cards", AppPreferences.peekShadowsState) {
+                        AppPreferences.setPeekShadowsEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Roomier deck titles", "Two-line near-card titles", AppPreferences.peekTitlesState) {
+                        AppPreferences.setPeekTitlesEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Enhanced main gradient", "Richer top-lit depth on the hero card", AppPreferences.heroGradientState) {
+                        AppPreferences.setHeroGradientEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Main card accent border", "Category-tinted border on the hero card", AppPreferences.heroBorderState) {
+                        AppPreferences.setHeroBorderEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Main card shadow", "Ambient depth below the hero card", AppPreferences.heroShadowState) {
+                        AppPreferences.setHeroShadowEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Material card blends", "Device palette with a category-color whisper", AppPreferences.materialCardBlendsState) {
+                        AppPreferences.setMaterialCardBlendsEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("3D shuffle button", "Raised gradient, shadow, and orbiting dots", AppPreferences.threeDButtonState) {
+                        AppPreferences.set3DButtonGradientEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Pastel crown depth", "A subtle darker crown on pastel cards", AppPreferences.pastelCrownDepthState) {
+                        AppPreferences.setPastelCrownDepthEnabled(context, it)
+                    }
+                }
+            }
+            item { CurioSectionLabel("Layout & input") }
+            item {
+                CurioSettingsCard {
+                    CurioCardHeader(CurioIcons.ScienceGlyph, "Behavior tests", "Temporary options for tuning")
+                    ExperimentSwitchRow("Smart Spin layout", "Fits the deck on short screens", AppPreferences.smartSpinLayoutState) {
+                        AppPreferences.setSmartSpinLayoutEnabled(context, it)
+                    }
+                    CurioSettingsDivider()
+                    Text("Smart density", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold), modifier = Modifier.padding(top = 6.dp))
+                    SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
+                        SmartDensityMode.entries.forEachIndexed { index, mode ->
+                            SegmentedButton(
+                                selected = mode == AppPreferences.smartDensityModeState,
+                                onClick = { AppPreferences.setSmartDensityMode(context, mode) },
+                                shape = SegmentedButtonDefaults.itemShape(index = index, count = SmartDensityMode.entries.size)
+                            ) { Text(densityModeSegmentLabel(mode), style = MaterialTheme.typography.labelSmall) }
+                        }
+                    }
+                    Text(densityModeSummary(AppPreferences.smartDensityModeState), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp, bottom = 4.dp))
+                    CurioSettingsDivider()
+                    ExperimentSwitchRow("Voice-to-text", "Dictation buttons on voice-note fields", AppPreferences.voiceToTextEnabledState) {
+                        AppPreferences.setVoiceToTextEnabled(context, it)
+                    }
+                }
+            }
+            item { CurioSettingsInfoRow(CurioIcons.Info, "About experiments", "These controls are temporary and may change") }
+        }
+    }
+}
+
+@Composable
+private fun ExperimentSwitchRow(title: String, subtitle: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold))
+                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Switch(checked = checked, onCheckedChange = onCheckedChange)
+        }
+    }
+}

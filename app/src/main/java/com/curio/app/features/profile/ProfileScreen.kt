@@ -194,7 +194,7 @@ fun ProfileScreen(navController: NavController) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
                 ProfileHero(
@@ -446,7 +446,7 @@ private fun ProfileStat(modifier: Modifier, icon: String, value: String, label: 
         shadowElevation = 0.dp
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 11.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
@@ -534,7 +534,7 @@ private fun SettingsNavCard(onOpenSettings: () -> Unit) {
 private fun LanesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) {
     CurioSettingsCard {
         CurioCardHeader(CurioIcons.Palette, "Your lanes", "Where you've been exploring")
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(6.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(counts.entries.sortedByDescending { it.value }.take(4)) { (categoryId, count) ->
                 val category = CurioCategories.byId(categoryId)
@@ -543,7 +543,7 @@ private fun LanesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) {
                     color = category.themedAccent().copy(alpha = 0.14f),
                     border = androidx.compose.foundation.BorderStroke(1.dp, category.themedAccent().copy(alpha = 0.20f))
                 ) {
-                    Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+                    Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
                         CurioIcon(category.iconGlyph, null, tint = category.themedAccent(), size = 20.dp)
                         Spacer(Modifier.height(4.dp))
                         Text(category.displayName, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface, maxLines = 1)
@@ -552,14 +552,14 @@ private fun LanesCard(counts: Map<CategoryId, Int>, onCabinet: () -> Unit) {
                 }
             }
         }
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(8.dp))
         Surface(
             onClick = onCabinet,
             shape = RoundedCornerShape(14.dp),
             color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                 CurioIcon(CurioIcons.Inventory2, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                 Spacer(Modifier.width(8.dp))
                 Text("Open the Cabinet", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))

@@ -3,3 +3,6 @@
 • Fixed malformed gallery boards that could crash and made voice-note saves persist reliably
 • Tightened Paper/Style/Color controls in the editor with smooth collapse animations
 • Fixed floating-pill topic text clipping and strengthened pastel text/borders
+• Redesigned Profile and Settings with compact Home/detail-style cards
+• Added an always-visible Experiments page for card and deck customization
+• Moved backup, restore, and legacy import into a focused data workspace

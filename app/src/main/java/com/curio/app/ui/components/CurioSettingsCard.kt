@@ -41,7 +41,7 @@ fun CurioSettingsCard(content: @Composable ColumnScope.() -> Unit) {
         shadowElevation = 0.dp,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.38f)),
         modifier = Modifier.fillMaxWidth()
-    ) { Column(modifier = Modifier.padding(horizontal = 17.dp, vertical = 16.dp), content = content) }
+    ) { Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp), content = content) }
 }
 
 /** Icon-chip card header — coral glyph chip + title + subtitle. */

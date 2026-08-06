@@ -61,7 +61,11 @@ import com.curio.app.features.lightbox.LightboxScreen
 import com.curio.app.features.managecategories.ManageCategoriesScreen
 import com.curio.app.features.onboarding.OnboardingScreen
 import com.curio.app.features.profile.ProfileScreen
-import com.curio.app.features.settings.SettingsScreen
+import com.curio.app.features.settings.BackupToolsScreen
+import com.curio.app.features.settings.ExperimentsScreen
+import com.curio.app.features.settings.SettingsHubScreen
+import com.curio.app.features.settings.SettingsPage
+import com.curio.app.features.settings.SettingsSectionScreen
 import com.curio.app.features.topichistory.TopicHistoryScreen
 import com.curio.app.features.recent.RecentScreen
 import com.curio.app.features.cabinet.CabinetScreen
@@ -410,7 +414,25 @@ fun CurioNavHost(
                 ProfileScreen(navController = navController)
             }
             composable(CurioRoutes.SETTINGS) {
-                SettingsScreen(navController = navController)
+                SettingsHubScreen(navController = navController)
+            }
+            composable(CurioRoutes.SETTINGS_APPEARANCE) {
+                SettingsSectionScreen(navController = navController, page = SettingsPage.APPEARANCE)
+            }
+            composable(CurioRoutes.SETTINGS_NOTIFICATIONS) {
+                SettingsSectionScreen(navController = navController, page = SettingsPage.NOTIFICATIONS)
+            }
+            composable(CurioRoutes.SETTINGS_RECORDING) {
+                SettingsSectionScreen(navController = navController, page = SettingsPage.RECORDING)
+            }
+            composable(CurioRoutes.SETTINGS_DATA) {
+                BackupToolsScreen(navController = navController)
+            }
+            composable(CurioRoutes.SETTINGS_ABOUT) {
+                SettingsSectionScreen(navController = navController, page = SettingsPage.ABOUT)
+            }
+            composable(CurioRoutes.EXPERIMENTS) {
+                ExperimentsScreen(navController = navController)
             }
             composable(CurioRoutes.MANAGE_CATEGORIES) {
                 ManageCategoriesScreen(navController = navController)
