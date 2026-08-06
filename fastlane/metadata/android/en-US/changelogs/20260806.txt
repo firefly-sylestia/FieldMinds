@@ -4,4 +4,4 @@
 • Tightened Paper/Style/Color editor controls and collapse spacing
 • Redesigned Profile and Settings with compact cards
 • Added Experiments for card/deck customization
-• Fixed Experiments build labels and expanded mood-board quote editing
+• Made Smart Density settings labels compile-proof

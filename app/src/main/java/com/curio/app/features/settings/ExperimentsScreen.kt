@@ -31,18 +31,6 @@ import com.curio.app.ui.components.CurioSettingsInfoRow
 import com.curio.app.ui.components.CurioSettingsRow
 import com.curio.app.ui.theme.CurioIcons
 
-private fun densityModeSegmentLabel(mode: SmartDensityMode): String = when (mode) {
-    SmartDensityMode.OFF -> "Off"
-    SmartDensityMode.COMPACT -> "Compact"
-    SmartDensityMode.EXTRA_COMPACT -> "2x"
-}
-
-private fun densityModeSummary(mode: SmartDensityMode): String = when (mode) {
-    SmartDensityMode.OFF -> "Density sizing off"
-    SmartDensityMode.COMPACT -> "Smaller on low-density phones · larger on high-density"
-    SmartDensityMode.EXTRA_COMPACT -> "2x — even smaller on very low-density phones"
-}
-
 /**
  * Experimental controls live here instead of inside Appearance. Each switch
  * keeps its existing preference and remains independently reversible.
@@ -121,10 +109,28 @@ fun ExperimentsScreen(navController: NavController) {
                                 selected = mode == AppPreferences.smartDensityModeState,
                                 onClick = { AppPreferences.setSmartDensityMode(context, mode) },
                                 shape = SegmentedButtonDefaults.itemShape(index = index, count = SmartDensityMode.entries.size)
-                            ) { Text(densityModeSegmentLabel(mode), style = MaterialTheme.typography.labelSmall) }
+                            ) {
+                                Text(
+                                    text = when (mode) {
+                                        SmartDensityMode.OFF -> "Off"
+                                        SmartDensityMode.COMPACT -> "Compact"
+                                        SmartDensityMode.EXTRA_COMPACT -> "2x"
+                                    },
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
                         }
                     }
-                    Text(densityModeSummary(AppPreferences.smartDensityModeState), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp, bottom = 4.dp))
+                    Text(
+                        text = when (AppPreferences.smartDensityModeState) {
+                            SmartDensityMode.OFF -> "Density sizing off"
+                            SmartDensityMode.COMPACT -> "Smaller on low-density phones · larger on high-density"
+                            SmartDensityMode.EXTRA_COMPACT -> "2x — even smaller on very low-density phones"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 6.dp, bottom = 4.dp)
+                    )
                     CurioSettingsDivider()
                     ExperimentSwitchRow("Voice-to-text", "Dictation buttons on voice-note fields", AppPreferences.voiceToTextEnabledState) {
                         AppPreferences.setVoiceToTextEnabled(context, it)
