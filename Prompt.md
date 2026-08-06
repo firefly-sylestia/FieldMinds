@@ -65,3 +65,10 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Removed legacy numeric store changelogs and deleted stale references to removed design documents.
 - Rewrote README and project indexes around Curio; no runtime code or active app files were removed.
 - Standalone topic validation passed: 11 files, 2,312 topics, 2,312 unique IDs, zero errors. `git diff --check` passed. No Gradle command run per repository rules. The ignored local release keystore was preserved as a private credential.
+
+## v7.60 — rewrite the root README as Curio-only documentation
+
+- Replaced the root README with a standalone Curio project guide covering the current app, repository layout, requirements, topic data, development workflow, CI/release metadata, and local validation.
+- Removed the old archive-import/history wording and any FieldMind, Rhythm, or legacy product references from the README.
+- Marked Gradle build and schema tasks as CI-only so the README matches the repository's no-local-Gradle rule; retained `python3 scripts/validate_topics.py` as the local content check.
+- Validation: README assertions passed, standalone topic validation passed for 11 files and 2,312 topics with zero errors, and `git diff --check` is clean. No Gradle command run.
