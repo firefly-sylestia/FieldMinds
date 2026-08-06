@@ -50,6 +50,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.ExploreSession
@@ -120,6 +121,11 @@ fun ExploreBubbleContent(
     val category = CurioCategories.byId(session.categoryId)
     val accent = category.themedAccent()
     val ink = category.categoryInk()
+    // Pastel accents are intentionally airy for fills, but using that same
+    // pale color for the pill outline makes the overlay disappear against
+    // light surfaces. Use the category's resolved ink as the stronger edge
+    // and keep the original accent treatment outside pastel mode.
+    val pillBorderColor = if (AppPreferences.pastelColorsState) ink else accent
 
     // Live elapsed — recomputed every second while NOT paused. When paused
     // the value freezes (session.elapsedMillis handles the freeze itself).
@@ -194,7 +200,10 @@ fun ExploreBubbleContent(
         // shapes melt into each other instead of hard-swapping.
         shape = RoundedCornerShape(corner),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = BorderStroke(1.dp, accent.copy(alpha = 0.50f)),
+        border = BorderStroke(
+            1.dp,
+            pillBorderColor.copy(alpha = if (AppPreferences.pastelColorsState) 0.78f else 0.50f)
+        ),
         // No elevation shadow: the old 8dp shadow rendered BEYOND the
         // overlay window's bounds and the window clipped it into a hard,
         // boxy edge around the pill. The crisp accent border carries the
@@ -284,7 +293,8 @@ private fun MinimizedPill(
             MarqueeTopicText(
                 text = session.topicName,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (AppPreferences.pastelColorsState) ink
+                        else MaterialTheme.colorScheme.onSurface,
                 maxWidth = MINIMIZED_TOPIC_WIDTH,
                 paused = session.paused
             )
@@ -292,8 +302,13 @@ private fun MinimizedPill(
                 text = if (session.paused) "Paused · ${compactElapsed(elapsed)}"
                        else compactElapsed(elapsed),
                 style = MaterialTheme.typography.labelSmall,
-                color = if (session.paused) accent
-                        else MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (session.paused) {
+                    if (AppPreferences.pastelColorsState) ink else accent
+                } else if (AppPreferences.pastelColorsState) {
+                    ink.copy(alpha = 0.78f)
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
             )
         }
 
@@ -301,7 +316,7 @@ private fun MinimizedPill(
         BubbleIconButton(
             icon = CurioIcons.KeyboardArrowUp,
             contentDescription = "Expand timer",
-            tint = accent,
+            tint = if (AppPreferences.pastelColorsState) ink else accent,
             onClick = onExpand
         )
     }
@@ -343,7 +358,8 @@ private fun ExpandedPanel(
                 MarqueeTopicText(
                     text = session.topicName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (AppPreferences.pastelColorsState) ink
+                            else MaterialTheme.colorScheme.onSurface,
                     maxWidth = EXPANDED_TOPIC_WIDTH,
                     paused = session.paused
                 )
@@ -358,7 +374,8 @@ private fun ExpandedPanel(
             BubbleIconButton(
                 icon = CurioIcons.KeyboardArrowDown,
                 contentDescription = "Minimize timer",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = if (AppPreferences.pastelColorsState) ink
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = onMinimize
             )
         }
@@ -368,7 +385,7 @@ private fun ExpandedPanel(
             LabeledBubbleButton(
                 icon = if (session.paused) CurioIcons.PlayArrow else CurioIcons.Pause,
                 label = if (session.paused) "Resume" else "Pause",
-                tint = accent,
+                tint = if (AppPreferences.pastelColorsState) ink else accent,
                 onClick = onTogglePause
             )
             LabeledBubbleButton(
@@ -380,7 +397,8 @@ private fun ExpandedPanel(
             LabeledBubbleButton(
                 icon = CurioIcons.Close,
                 label = "Hide",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = if (AppPreferences.pastelColorsState) ink
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = onHide
             )
         }
@@ -444,10 +462,16 @@ private fun MarqueeTopicText(
     }
     val textWidthPx = textLayout.size.width
     val capPx = with(density) { maxWidth.toPx() }.roundToInt()
-    val boxWidthPx = minOf(textWidthPx, capPx)
+    // Text glyphs can have a small negative left side-bearing. The old
+    // exact-width Text node clipped that bearing during the first marquee
+    // frame, making the opening letters look cut off. Keep a tiny breathing
+    // inset inside the mask and let the outer Box do the only clipping.
+    val textInsetPx = with(density) { 2.dp.toPx() }.roundToInt()
+    val boxWidthPx = minOf(textWidthPx + textInsetPx * 2, capPx)
+    val visibleTextWidthPx = (boxWidthPx - textInsetPx * 2).coerceAtLeast(0)
 
     val scrollX = remember { Animatable(0f) }
-    val scrollDistance = (textWidthPx - boxWidthPx).coerceAtLeast(0)
+    val scrollDistance = (textWidthPx - visibleTextWidthPx).coerceAtLeast(0)
     LaunchedEffect(scrollDistance, text, paused) {
         scrollX.snapTo(0f)
         if (paused || scrollDistance <= 0) return@LaunchedEffect
@@ -474,10 +498,15 @@ private fun MarqueeTopicText(
             color = color,
             maxLines = 1,
             softWrap = false,
-            overflow = TextOverflow.Clip,
+            // The outer Box is the marquee mask. Keeping overflow visible on
+            // this inner node prevents its exact measured width from cutting
+            // the first glyph before the mask gets a chance to draw it.
+            overflow = TextOverflow.Visible,
             modifier = Modifier
-                .requiredWidth(with(density) { textWidthPx.toDp() })
-                .graphicsLayer { translationX = -scrollX.value }
+                .requiredWidth(with(density) { (textWidthPx + textInsetPx * 2).toDp() })
+                .graphicsLayer {
+                    translationX = textInsetPx.toFloat() - scrollX.value
+                }
         )
     }
 }
@@ -494,7 +523,10 @@ private fun BubbleIconButton(
         onClick = onClick,
         shape = CircleShape,
         color = MaterialTheme.colorScheme.surfaceContainerHighest,
-        border = BorderStroke(1.dp, tint.copy(alpha = 0.35f)),
+        border = BorderStroke(
+            1.dp,
+            tint.copy(alpha = if (AppPreferences.pastelColorsState) 0.58f else 0.35f)
+        ),
         shadowElevation = 0.dp
     ) {
         CurioIcon(
@@ -519,7 +551,10 @@ private fun LabeledBubbleButton(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = MaterialTheme.colorScheme.surfaceContainerHighest,
-        border = BorderStroke(1.dp, tint.copy(alpha = 0.35f)),
+        border = BorderStroke(
+            1.dp,
+            tint.copy(alpha = if (AppPreferences.pastelColorsState) 0.58f else 0.35f)
+        ),
         shadowElevation = 0.dp
     ) {
         Row(

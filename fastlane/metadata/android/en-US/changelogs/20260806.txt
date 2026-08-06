@@ -2,3 +2,4 @@
 • Quote cards now cap at 280 characters and 5 ruled lines with accurate in-flow quote marks
 • Fixed malformed gallery boards that could crash and made voice-note saves persist reliably
 • Tightened Paper/Style/Color controls in the editor with smooth collapse animations
+• Fixed floating-pill topic text clipping and strengthened pastel text/borders

@@ -397,3 +397,9 @@ artwork instructions across 5 committed batches (scripts/rewrite_instr_batch1..5
 - Reduced the vertical gap between the Paper style and Color controls, and tightened the Ruled/Torn/decorations chip flow so the editing toolbar feels compact.
 - Added the same expand/fade and collapse/shrink animation used by Format to the Paper panel and Color swatches, without removing any paper options.
 - Validation: brace checks BALANCED, `git diff --check` clean, and reviewer found no Compose/Kotlin blockers. No Gradle build/compile/lint/test commands run per repository rules; CI remains the Android compilation source of truth.
+
+## v7.53 — floating pill marquee and pastel contrast (user follow-up)
+
+- Fixed the opening letters of the floating pill's topic marquee being clipped by the exact-width inner text node. The text now has a small measured inset and renders inside the outer marquee mask without losing glyph overhang.
+- Pastel floating-pill topic text, elapsed text, action icons, and borders now use the darker category ink; pastel borders are stronger while Stop retains its semantic error color.
+- Validation: brace check BALANCED, `git diff --check` clean, and reviewer found no Compose/Kotlin blockers. No Gradle build/compile/lint/test commands run per repository rules; CI remains the Android compilation source of truth.
