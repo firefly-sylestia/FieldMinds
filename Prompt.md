@@ -81,5 +81,5 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Replaced branch CI with a focused Curio workflow that runs standalone topic validation, `lintDebug`, Gradle topic validation, and `assembleDebug`, then uploads reports and the debug APK.
 - Replaced release automation with a tag-only signed release workflow; it requires all four signing secrets, rejects debug-signed APKs, and publishes only the tagged release APK.
 - Updated `.github/AGENTS.md` to document the new triggers, checks, artifacts, templates, and signing contract.
-- Added explicit Android platform API 37 and build-tools 35.0.0 installation to both workflows so CI does not depend on runner-image defaults.
+- Removed the unsupported Android platform/build-tools installation that caused CI's `platforms;android-37` package lookup to fail; restored dynamic build-tools discovery for release signature verification.
 - Validation: all GitHub YAML files parsed successfully, structure assertions passed, no stale product references or tracked signing artifacts remain, and `git diff --check` is clean. No Gradle command run.
