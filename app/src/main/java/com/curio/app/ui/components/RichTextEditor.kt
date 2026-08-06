@@ -46,6 +46,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
@@ -364,6 +365,10 @@ fun RichTextEditor(
     modifier: Modifier = Modifier,
     placeholder: String = "",
     minHeight: Dp = 96.dp,
+    /** Optional hard character cap for compact fields such as quote cards. */
+    maxCharacters: Int? = null,
+    /** Optional visual line cap; the field never grows beyond this many lines. */
+    maxLines: Int? = null,
     toolbarMode: RichTextToolbarMode = RichTextToolbarMode.MAIN,
     enabled: Boolean = true,
     accent: Color = MaterialTheme.colorScheme.primary,
@@ -481,8 +486,25 @@ fun RichTextEditor(
             )
         }
     }
-
     fun emit(new: TextFieldValue) {
+        // Quote cards use hard input caps. Trim pasted/IME content rather
+        // than dropping the entire edit, while keeping the selection valid.
+        val cappedText = new.text
+            .take(maxCharacters ?: Int.MAX_VALUE)
+            .let { candidate ->
+                if (maxLines == null) candidate
+                else candidate.split('\n').take(maxLines).joinToString("\n")
+            }
+        val accepted = if (cappedText == new.text) new else TextFieldValue(
+            cappedText,
+            selection = TextRange(
+                new.selection.start.coerceIn(0, cappedText.length),
+                new.selection.end.coerceIn(0, cappedText.length)
+            ),
+            // A capped edit can invalidate the IME's old composition range;
+            // let the IME establish a fresh composition on the next event.
+            composition = if (cappedText == new.text) new.composition else null
+        )
         val oldText = tfv.text
         // The text itself changed (a real user edit) — NEVER trust what
         // BasicTextField reports back as its AnnotatedString: it can silently
@@ -492,9 +514,9 @@ fun RichTextEditor(
         // then merge in any caret-inherited styles the field DID report for
         // the new characters (e.g. typing inside an existing bold span keeps
         // inheriting bold without an explicit arm).
-        val textChanged = new.text != oldText
+        val textChanged = accepted.text != oldText
         var spans = if (textChanged) {
-            rebaseSpans(oldText, new.text, extractRichSpans(tfv.annotatedString))
+            rebaseSpans(oldText, accepted.text, extractRichSpans(tfv.annotatedString))
         } else {
             // Text unchanged — a caret/selection move or an IME re-report
             // (e.g. the extra event that follows committing a space). NEVER
@@ -518,7 +540,7 @@ fun RichTextEditor(
         // styled word even when the toolbar was turned off. Continuing a
         // style after an explicit apply is handled by the armed (sticky)
         // pending flags, which the user can toggle off.
-        val insertedRange = if (textChanged) findInsertedRange(oldText, new.text) else null
+        val insertedRange = if (textChanged) findInsertedRange(oldText, accepted.text) else null
         if (insertedRange != null) {
             val caret = insertedRange.first
             val inherited = extractRichSpans(tfv.annotatedString).filter { sp ->
@@ -561,14 +583,34 @@ fun RichTextEditor(
             }
         }
         val result = TextFieldValue(
-            buildRichAnnotated(new.text, spans, effectiveHighlight),
-            selection = new.selection,
-            composition = new.composition
+            buildRichAnnotated(accepted.text, spans, effectiveHighlight),
+            selection = accepted.selection,
+            composition = accepted.composition
         )
         tfv = result
         // `text` is plain String in this Compose version; the styled
         // AnnotatedString lives on `annotatedString`.
         onRichTextChange(result.text, extractRichSpans(result.annotatedString))
+    }
+
+    // BasicTextField's maxLines limits its viewport but does not reject
+    // wrapped text. Trim at the fifth measured visual line as a second
+    // defensive layer, keeping the stored quote from growing beyond its
+    // ruled paper.
+    LaunchedEffect(layoutResult, maxLines) {
+        val layout = layoutResult ?: return@LaunchedEffect
+        if (maxLines != null && layout.lineCount > maxLines && tfv.text.isNotEmpty()) {
+            val end = layout.getLineEnd(maxLines - 1)
+            if (end < tfv.text.length) {
+                emit(TextFieldValue(
+                    tfv.text.take(end),
+                    selection = TextRange(
+                        tfv.selection.start.coerceIn(0, end),
+                        tfv.selection.end.coerceIn(0, end)
+                    )
+                ))
+            }
+        }
     }
 
     fun applyFlag(flag: RichFlag) {
@@ -794,6 +836,12 @@ fun RichTextEditor(
                             imeAction = ImeAction.Default
                         ),
                         onTextLayout = { layoutResult = it },
+                        // Keep the layout unrestricted when a visual cap is
+                        // requested so onTextLayout can see the real wrapped
+                        // line count and trim the stored text. BasicTextField's
+                        // own maxLines only clips the viewport; it does not
+                        // reject overflow from a paste or IME commit.
+                        maxLines = Int.MAX_VALUE,
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = minHeight)

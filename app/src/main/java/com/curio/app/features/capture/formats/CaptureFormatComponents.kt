@@ -60,6 +60,8 @@ import com.curio.app.ui.components.NotePaperColorToggle
 import com.curio.app.ui.components.NotePaperStyleToggle
 import com.curio.app.ui.components.RichTextEditor
 import com.curio.app.ui.components.RichTextToolbarMode
+import com.curio.app.ui.components.QuoteLimits
+import com.curio.app.ui.components.limitQuoteContent
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -490,9 +492,14 @@ class QuoteCardsState(
     initialPositions: List<CaptureData.QuotePos> = emptyList(),
     initialOnBoard: List<Boolean> = emptyList()
 ) {
-    val quotes = mutableStateListOf<String>().apply { addAll(initialQuotes) }
+    private val limitedInitial = initialQuotes.mapIndexed { index, quote ->
+        limitQuoteContent(quote, initialSpans.getOrNull(index).orEmpty())
+    }
+    val quotes = mutableStateListOf<String>().apply {
+        addAll(limitedInitial.map { it.first })
+    }
     val spans = mutableStateListOf<List<TextSpan>>().apply {
-        addAll(initialSpans)
+        addAll(limitedInitial.map { it.second })
         // Pad any missing per-quote span lists (legacy entries) so the
         // parallel list always matches quotes 1:1.
         while (size < quotes.size) add(emptyList())
@@ -565,8 +572,9 @@ class QuoteCardsState(
 
     fun setText(index: Int, text: String, cardSpans: List<TextSpan>) {
         if (index !in quotes.indices) return
-        quotes[index] = text
-        spans[index] = cardSpans
+        val (limitedText, limitedSpans) = limitQuoteContent(text, cardSpans)
+        quotes[index] = limitedText
+        spans[index] = limitedSpans
     }
 
     fun setStyle(index: Int, style: NotePaperStyle) {
@@ -786,6 +794,8 @@ fun QuoteCardEditor(
             placeholder = placeholder,
             toolbarMode = RichTextToolbarMode.MAIN,
             minHeight = 64.dp,
+            maxCharacters = QuoteLimits.MAX_CHARACTERS,
+            maxLines = QuoteLimits.MAX_LINES,
             enabled = enabled,
             ink = paperInk(),
             accent = accent,

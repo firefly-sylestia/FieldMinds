@@ -93,6 +93,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -143,7 +144,9 @@ import com.curio.app.ui.components.MoodBoardFloatingCards
 import com.curio.app.ui.components.MoodBoardTiles
 import com.curio.app.ui.components.MoodBoardZoomOverlay
 import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.QuoteLimits
 import com.curio.app.ui.components.formatGlyph
+import com.curio.app.ui.components.limitQuoteContent
 import com.curio.app.ui.components.rememberMoodBoardZoomState
 import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.components.SoftTornBottomShape
@@ -2280,11 +2283,12 @@ private fun RenderQuoteCards(
     // index through the blank filter so each card can find its saved tilt.
     val spansPadded = spans.toMutableList()
     while (spansPadded.size < safeQuotes.size) spansPadded.add(emptyList())
-    val quotePairs = safeQuotes.zip(spansPadded).mapIndexedNotNull { i, pair ->
-        if (pair.first.isNullOrBlank()) null
+    val quotePairs = safeQuotes.mapIndexedNotNull { i, rawQuote ->
+        val (quote, clippedSpans) = limitQuoteContent(rawQuote.orEmpty(), spansPadded[i])
+        if (quote.isBlank()) null
         // Skip indices the caller excluded (mood board below-board split).
         else if (includeIndex != null && !includeIndex(i)) null
-        else i to pair
+        else i to (quote to clippedSpans)
     }
     if (quotePairs.isNotEmpty()) {
         // v7.38 — no count pill: the header is just the glyph + label.
@@ -2298,6 +2302,7 @@ private fun RenderQuoteCards(
             val rotation = tilts.getOrNull(origIndex)
                 ?: remember(origIndex) { kotlin.random.Random.nextFloat() * 5f - 2.5f }
             val quoteSheet = colors.getOrNull(origIndex) ?: NotePaperColor.CREAM
+            var renderedQuote by remember(quote, cardSpans) { mutableStateOf(quote) }
             NotePaperCard(
                 style = styles.getOrNull(origIndex) ?: fallbackStyle,
                 // Per-card salt so the quote cards on one page tear
@@ -2323,39 +2328,40 @@ private fun RenderQuoteCards(
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    CurioIcon(
-                        name = CurioIcons.FormatQuote,
-                        contentDescription = null,
-                        tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
-                        size = 20.dp
-                    )
                     Text(
-                        // v7.38 — no in-text curly quotes: the leading
-                        // FormatQuote glyph above opens the quote and the
-                        // mirrored glyph below closes it, so the start and
-                        // end of the quote read as symbols, not " marks.
-                        // Spans now align 1:1 with the saved text (no +1
-                        // shift for a removed wrapper).
-                        text = buildRichAnnotated(
-                            quote,
-                            cardSpans,
-                            notePaperHighlight(quoteSheet)
-                        ),
+                        // Use real opening/closing quotation marks INSIDE the
+                        // text flow. The closing mark is therefore attached
+                        // to the final visible character, never parked at
+                        // the far edge of a weighted row. Rich-text spans
+                        // remain aligned because the marks are added outside
+                        // the original annotated quote.
+                        text = buildAnnotatedString {
+                            append('“')
+                            append(buildRichAnnotated(
+                                renderedQuote,
+                                cardSpans,
+                                notePaperHighlight(quoteSheet)
+                            ))
+                            append('”')
+                        },
                         modifier = Modifier.weight(1f),
                         style = savedNoteStyle(),
-                        color = notePaperInk(quoteSheet)
-                    )
-                    CurioIcon(
-                        name = CurioIcons.FormatQuote,
-                        contentDescription = null,
-                        tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
-                        size = 20.dp,
-                        // Mirrored closing mark — the quote's end symbol,
-                        // bottom-aligned so the pair brackets the quote
-                        // (open top-left, close bottom-right).
-                        modifier = Modifier
-                            .align(Alignment.Bottom)
-                            .rotate(180f)
+                        color = notePaperInk(quoteSheet),
+                        // Let the first measurement reveal visual wrapping so
+                        // we can store/display exactly five ruled lines, then
+                        // re-measure the shortened flow. Unlike maxLines, this
+                        // keeps the closing glyph in the text flow instead of
+                        // clipping it or replacing it with a distant icon.
+                        onTextLayout = { layout ->
+                            if (layout.lineCount > QuoteLimits.MAX_LINES) {
+                                val flowEnd = layout.getLineEnd(QuoteLimits.MAX_LINES - 1)
+                                val contentEnd = (flowEnd - 1)
+                                    .coerceIn(0, renderedQuote.length)
+                                if (contentEnd < renderedQuote.length) {
+                                    renderedQuote = renderedQuote.take(contentEnd)
+                                }
+                            }
+                        }
                     )
                     // ── Bookmark — saves the quote to the Home "Saved" shelf ──
                     val saved = AppPreferences.savedQuotesState.any {
@@ -2459,27 +2465,60 @@ private fun fitTileLayout(
     viewH: Float,
     cover: Boolean = false
 ): FitTileLayout {
-    if (tiles.isEmpty()) return FitTileLayout(emptyList(), 0f, 0f, 1f)
-    val maxX = tiles.maxOf { it.offsetXPx + it.widthPx }
-    val maxY = tiles.maxOf { it.offsetYPx + it.heightPx }
+    val safeTiles = sanitizeTileLayouts(tiles)
+    if (safeTiles.isEmpty()) return FitTileLayout(emptyList(), 0f, 0f, 1f)
+    val safeViewW = viewW.takeIf { it.isFinite() && it > 0f } ?: 1f
+    val safeViewH = viewH.takeIf { it.isFinite() && it > 0f } ?: 1f
+    val maxX = safeTiles.maxOf { it.offsetXPx + it.widthPx }
+    val maxY = safeTiles.maxOf { it.offsetYPx + it.heightPx }
     val scale = if (maxX > 0f && maxY > 0f) {
-        if (cover) (viewW / maxX).coerceAtLeast(viewH / maxY)
-        else (viewW / maxX).coerceAtMost(viewH / maxY)
+        if (cover) (safeViewW / maxX).coerceAtLeast(safeViewH / maxY)
+        else (safeViewW / maxX).coerceAtMost(safeViewH / maxY)
     } else 1f
-    val scaledTiles = tiles.map {
+    val safeScale = scale.takeIf { it.isFinite() && it > 0f }?.coerceAtMost(32f) ?: 1f
+    val maxTileW = (safeViewW * 4f).coerceAtLeast(1f)
+    val maxTileH = (safeViewH * 4f).coerceAtLeast(1f)
+    val maxBoardW = maxTileW * 4f
+    val maxBoardH = maxTileH * 4f
+    val scaledTiles = safeTiles.map {
         CaptureData.TileLayout(
             uri = it.uri,
-            offsetXPx = it.offsetXPx * scale,
-            offsetYPx = it.offsetYPx * scale,
+            offsetXPx = (it.offsetXPx * safeScale).coerceIn(0f, maxBoardW),
+            offsetYPx = (it.offsetYPx * safeScale).coerceIn(0f, maxBoardH),
             rotationDeg = it.rotationDeg,
-            widthPx = it.widthPx * scale,
-            heightPx = it.heightPx * scale
+            widthPx = (it.widthPx * safeScale).coerceIn(1f, maxTileW),
+            heightPx = (it.heightPx * safeScale).coerceIn(1f, maxTileH)
         )
     }
-    val boardW = scaledTiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
-    val boardH = scaledTiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
-    return FitTileLayout(scaledTiles, boardW, boardH, scale)
+    val boardW = (scaledTiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f)
+        .coerceAtMost(maxBoardW)
+    val boardH = (scaledTiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f)
+        .coerceAtMost(maxBoardH)
+    return FitTileLayout(scaledTiles, boardW, boardH, safeScale)
 }
+
+/**
+ * Saved boards can contain malformed geometry from old drafts or interrupted
+ * writes. Keep valid layouts unchanged, but prevent NaN/zero/absurd values
+ * from reaching Compose's size/offset constraints.
+ */
+private fun sanitizeTileLayouts(tiles: List<CaptureData.TileLayout>): List<CaptureData.TileLayout> =
+    tiles.mapNotNull { tile ->
+        if (tile.uri.isBlank()) return@mapNotNull null
+        val x = tile.offsetXPx.safeTileNumber(0f)
+        val y = tile.offsetYPx.safeTileNumber(0f)
+        val width = tile.widthPx.safeTileNumber(1f)
+        val height = tile.heightPx.safeTileNumber(1f)
+        tile.copy(
+            offsetXPx = x,
+            offsetYPx = y,
+            widthPx = width,
+            heightPx = height
+        )
+    }
+
+private fun Float.safeTileNumber(fallback: Float): Float =
+    if (isFinite()) coerceIn(fallback, 8192f) else fallback
 
 /**
  * v7.23 — Save / Share the full mood board as a high-res PNG. Both actions
@@ -2689,28 +2728,34 @@ private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory, navCon
                 // maxOfOrNull: legacy GalleryWall entries store only
                 // imageCount (no tileLayouts) — an empty-list maxOf would
                 // crash the detail screen before the isNotEmpty() guard.
-                val maxX = data.tileLayouts.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
-                val maxY = data.tileLayouts.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
+                val safeTileLayouts = sanitizeTileLayouts(data.tileLayouts.orEmpty())
+                val maxX = safeTileLayouts.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f
+                val maxY = safeTileLayouts.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f
                 val widthScale = if (maxX > 0f) canvasW / maxX else 1f
                 // Edge case for wide/short collages: a width-fit board would
                 // shrink to a sliver below the card — height-fit instead so
                 // the collage stays presentable (nothing to crop then).
-                val boardScale = if (maxY * widthScale < canvasH * 0.55f && maxY > 0f)
-                    canvasH / maxY else widthScale
-                val scaledTiles = data.tileLayouts.map {
+                val boardScale = (if (maxY * widthScale < canvasH * 0.55f && maxY > 0f)
+                    canvasH / maxY else widthScale)
+                    .takeIf { it.isFinite() && it > 0f }
+                    ?.coerceAtMost(32f)
+                    ?: 1f
+                val scaledTiles = safeTileLayouts.map {
                     CaptureData.TileLayout(
                         uri = it.uri,
-                        offsetXPx = it.offsetXPx * boardScale,
-                        offsetYPx = it.offsetYPx * boardScale,
+                        offsetXPx = (it.offsetXPx * boardScale).coerceIn(0f, canvasW * 2f),
+                        offsetYPx = (it.offsetYPx * boardScale).coerceIn(0f, canvasH * 2f),
                         rotationDeg = it.rotationDeg,
-                        widthPx = it.widthPx * boardScale,
-                        heightPx = it.heightPx * boardScale
+                        widthPx = (it.widthPx * boardScale).coerceIn(1f, canvasW * 2f),
+                        heightPx = (it.heightPx * boardScale).coerceIn(1f, canvasH * 2f)
                     )
                 }
-                val boardW = maxX * boardScale
-                val boardH = maxY * boardScale
+                val boardW = (scaledTiles.maxOfOrNull { it.offsetXPx + it.widthPx } ?: 0f)
+                    .coerceAtMost(canvasW * 4f)
+                val boardH = (scaledTiles.maxOfOrNull { it.offsetYPx + it.heightPx } ?: 0f)
+                    .coerceAtMost(canvasH * 4f)
 
-                if (data.tileLayouts.isNotEmpty()) {
+                if (sanitizeTileLayouts(data.tileLayouts.orEmpty()).isNotEmpty()) {
                     // ── Edit button — reopen this board in the editor ──────
                     Surface(
                         onClick = { navController.navigate(CurioRoutes.editMoodBoard(entry.id)) { launchSingleTop = true } },
@@ -2995,7 +3040,7 @@ private fun ExpandedMoodBoardDialog(
                 val dialogW = with(density) { maxWidth.toPx() }
                 val dialogH = with(density) { maxHeight.toPx() }
 
-                if (data.tileLayouts.isNotEmpty()) {
+                if (sanitizeTileLayouts(data.tileLayouts.orEmpty()).isNotEmpty()) {
                     // Fit the collage to the dialog with the SAME shared
                     // [fitTileLayout] the inline card uses — bounds →
                     // uniform scale → centered — so the full-screen board

@@ -74,6 +74,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /**
  * Which note field a dictation session lands its transcript in.
@@ -434,9 +435,13 @@ fun SoundBiteFormat(
     // holds typed content (title / note / quotes, no recording) is still a
     // saveable draft — the old recording-only rule silently dropped those
     // on back/switch.
+    // A very short but valid recording can report 0 elapsed seconds because
+    // the UI timer is second-granular. Use the actual file as the save gate so
+    // those voice notes are not silently omitted from the saved entry.
     val hasRecording = recordingState == AudioRecorder.State.STOPPED &&
-                       recordingSeconds > 0 &&
-                       savedFilePath != null &&
+                       savedFilePath?.let { path ->
+                           File(path).isFile && File(path).length() > 0L
+                       } == true &&
                        !trimInProgress
     val hasTypedContent = title.isNotBlank() || note.isNotBlank() || quoteCards.hasContent
     val canSave = hasRecording || hasTypedContent

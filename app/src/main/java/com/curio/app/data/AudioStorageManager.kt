@@ -26,22 +26,28 @@ object AudioStorageManager {
      * @param context       Android context for accessing filesDir.
      * @param cacheFilePath Absolute path to the temp cache file.
      * @param entryId       The capture entry ID (used as the persistent filename).
-     * @return [PersistResult] with the persisted path and file size in bytes,
-     *         or a result with the original cache path and 0 if the copy fails.
+     * @return [PersistResult] with the persisted path and file size in bytes.
+     * @throws IllegalArgumentException if the source is missing/empty or the
+     *         destination copy does not produce a non-empty file.
      */
     fun persistAudio(context: Context, cacheFilePath: String, entryId: String): PersistResult {
         val cacheFile = File(cacheFilePath)
-        if (!cacheFile.exists()) return PersistResult(cacheFilePath, 0L)
+        require(cacheFile.isFile && cacheFile.length() > 0L) {
+            "The temporary recording is missing or empty."
+        }
 
         val audioDir = File(context.filesDir, AUDIO_DIR).apply { mkdirs() }
         val destFile = File(audioDir, "${entryId}.m4a")
-
-        return try {
+        // Editing an existing voice note already points at this destination.
+        // Do not copy a file onto itself; just reuse the verified persistent
+        // file so editing title/notes never makes the entry disappear.
+        if (cacheFile.canonicalFile != destFile.canonicalFile) {
             cacheFile.copyTo(destFile, overwrite = true)
-            PersistResult(destFile.absolutePath, destFile.length())
-        } catch (_: Exception) {
-            PersistResult(cacheFilePath, 0L) // fallback to original cache path
         }
+        require(destFile.isFile && destFile.length() > 0L) {
+            "The recording could not be persisted."
+        }
+        return PersistResult(destFile.absolutePath, destFile.length())
     }
 
     /**

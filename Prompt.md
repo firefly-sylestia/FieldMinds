@@ -39,6 +39,26 @@
 Reviewer clean after KDOC refresh (4px pan dead-zone + voice-note indent
 noted as acceptable cosmetics).
 
+## v7.52 — detail stability, quote bounds, and voice-note persistence
+
+- Quote cards now enforce 280 characters and five ruled/visual lines while
+  editing and when rendering legacy saved entries. Opening and closing quote
+  marks live inside the text flow, so the closing mark stays next to the final
+  visible text rather than at the far edge of the card. Mood-board quote
+  previews use the same five-line measured trim.
+- Gallery and mood-board geometry is sanitized before Compose size/offset
+  modifiers receive it. Zero, non-finite, and absurd saved dimensions are
+  bounded; the gallery row-height math no longer multiplies a width scale by
+  row height, preventing the reported 537636px constraint crash.
+- Voice-note saves now persist only verified non-empty files, show a retryable
+  error instead of silently failing, accept valid sub-second recordings, and
+  reuse an already-persistent file when editing. Portfolio recordings receive
+  section-specific filenames to avoid overwriting one another.
+- Validation: brace checks BALANCED and `git diff --check` clean. No Gradle
+  build/compile/lint/test commands run per repository rules; CI remains the
+  Android compilation source of truth.
+
+
 ## Follow-up (v7.40)
 Killed the zoom overlay's 4px drag dead-zone: pan/zoom deltas are now
 applied to the state on EVERY pointer event (not only after the movement

@@ -53,6 +53,7 @@ import com.curio.app.data.CaptureData
 import com.curio.app.data.NotePaperColor
 import com.curio.app.data.NotePaperStyle
 import com.curio.app.ui.components.NotePaperCard
+import com.curio.app.ui.components.limitQuoteContent
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.PatrickHandFontFamily
@@ -116,7 +117,11 @@ class MoodBoardZoomState {
             offsetX = 0f
             offsetY = 0f
         }
-        defaultScale = fitZoomScale(tileW, tileH, viewW, viewH)
+        val safeTileW = tileW.takeIf { it.isFinite() && it > 0f }?.coerceAtMost(8192f) ?: 1f
+        val safeTileH = tileH.takeIf { it.isFinite() && it > 0f }?.coerceAtMost(8192f) ?: 1f
+        val safeViewW = viewW.takeIf { it.isFinite() && it > 0f }?.coerceAtMost(8192f) ?: 1f
+        val safeViewH = viewH.takeIf { it.isFinite() && it > 0f }?.coerceAtMost(8192f) ?: 1f
+        defaultScale = fitZoomScale(safeTileW, safeTileH, safeViewW, safeViewH)
         scaleTarget = defaultScale
         // Glide target: the overlay lays the image out at the viewport's
         // top-left and its graphicsLayer scales about the image's OWN center
@@ -127,8 +132,8 @@ class MoodBoardZoomState {
         // (the scaled image stays centered as it zooms). The tile's resting
         // spot is NOT part of this target — the overlay owns it via its own
         // tileX/tileY and returns there on close.
-        offsetX = viewW / 2f - tileW / 2f
-        offsetY = viewH / 2f - tileH / 2f
+        offsetX = (safeViewW / 2f - safeTileW / 2f).coerceIn(-8192f, 8192f)
+        offsetY = (safeViewH / 2f - safeTileH / 2f).coerceIn(-8192f, 8192f)
     }
 
     /**
@@ -318,6 +323,19 @@ fun MoodBoardZoomOverlay(
     modifier: Modifier = Modifier
 ) {
     if (zoomState.zoomedUri == null) return
+    // A malformed legacy tile must never become an invalid Compose size or
+    // an unbounded pan calculation. Valid boards stay within these generous
+    // bounds; degenerate/absurd records get a small, drawable fallback.
+    val safeWidthPx = widthPx.takeIf { it.isFinite() && it > 0f }
+        ?.coerceAtMost(8192f) ?: 1f
+    val safeHeightPx = heightPx.takeIf { it.isFinite() && it > 0f }
+        ?.coerceAtMost(8192f) ?: 1f
+    val safeViewW = viewW.takeIf { it.isFinite() && it > 0f } ?: 1f
+    val safeViewH = viewH.takeIf { it.isFinite() && it > 0f } ?: 1f
+    val safeTileX = tileX.takeIf { it.isFinite() }?.coerceIn(-8192f, 8192f) ?: 0f
+    val safeTileY = tileY.takeIf { it.isFinite() }?.coerceIn(-8192f, 8192f) ?: 0f
+    val safeOffsetX = zoomState.offsetX.takeIf { it.isFinite() }?.coerceIn(-8192f, 8192f) ?: 0f
+    val safeOffsetY = zoomState.offsetY.takeIf { it.isFinite() }?.coerceIn(-8192f, 8192f) ?: 0f
     val density = LocalDensity.current
     // ── Arc glide clock — ONE shared clock drives scale + pan in phase so
     // the image swoops from its resting spot to the centered target, and
@@ -326,8 +344,8 @@ fun MoodBoardZoomOverlay(
     // to the NEW tile's resting spot (a stale glideX/Y from the previous
     // tile would make the next open start from the wrong place).
     var glideScale by remember(tileUri) { mutableFloatStateOf(1f) }
-    var glideX by remember(tileUri) { mutableFloatStateOf(tileX) }
-    var glideY by remember(tileUri) { mutableFloatStateOf(tileY) }
+    var glideX by remember(tileUri) { mutableFloatStateOf(safeTileX) }
+    var glideY by remember(tileUri) { mutableFloatStateOf(safeTileY) }
     val glideProgress = remember { Animatable(0f) }
 
     // ── Pinch / pan refinement — applied ON TOP of the glide (neutral at
@@ -395,8 +413,8 @@ fun MoodBoardZoomOverlay(
         val fromPinchX = pinchX
         val fromPinchY = pinchY
         val toScale = if (zoomState.closing) 1f else zoomState.scaleTarget
-        val toX = if (zoomState.closing) tileX else zoomState.offsetX
-        val toY = if (zoomState.closing) tileY else zoomState.offsetY
+        val toX = if (zoomState.closing) safeTileX else safeOffsetX
+        val toY = if (zoomState.closing) safeTileY else safeOffsetY
         val dx = toX - fromX
         val dy = toY - fromY
         val len = sqrt(dx * dx + dy * dy)
@@ -503,9 +521,8 @@ fun MoodBoardZoomOverlay(
                         // edges at the current zoom, and ZERO at rest — a
                         // tiny tile can never be dragged fully off-screen,
                         // and pinching back out recenters it automatically.
-                        val s = glideScale * pinchScale
-                        val maxPanX = ((widthPx * s - viewW) / 2f).coerceAtLeast(0f)
-                        val maxPanY = ((heightPx * s - viewH) / 2f).coerceAtLeast(0f)
+                        val s = glideScale * pinchScale                         val maxPanX = ((safeWidthPx * s - safeViewW) / 2f).coerceAtLeast(0f)
+                         val maxPanY = ((safeHeightPx * s - safeViewH) / 2f).coerceAtLeast(0f)
                         pinchX = (pinchX + panChange.x).coerceIn(-maxPanX, maxPanX)
                         pinchY = (pinchY + panChange.y).coerceIn(-maxPanY, maxPanY)
                         if (hasMovement) event.changes.forEach { it.consume() }
@@ -568,9 +585,8 @@ fun MoodBoardZoomOverlay(
                 }
         ) {
             val imageModifier = Modifier
-                .size(
-                    width = with(density) { widthPx.toDp() },
-                    height = with(density) { heightPx.toDp() }
+                .size(                     width = with(density) { safeWidthPx.toDp() },
+                     height = with(density) { safeHeightPx.toDp() }
                 )
                 .clip(RoundedCornerShape(14.dp))
             // Frameless, like the editor tiles. The board-size painter renders
@@ -811,12 +827,23 @@ private fun MoodBoardFloatingCard(
             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
             modifier = Modifier.fillMaxSize()
         ) {
+            var renderedQuote by remember(text) { mutableStateOf(limitQuoteContent(text).first) }
             Text(
-                text = text.ifBlank { "Quote…" },
+                text = if (renderedQuote.isBlank()) "Quote…" else "“$renderedQuote”",
                 style = MaterialTheme.typography.bodySmall.copy(fontFamily = PatrickHandFontFamily),
                 color = notePaperInk(color),
-                maxLines = 4,
-                overflow = TextOverflow.Ellipsis
+                onTextLayout = { layout ->
+                    if (layout.lineCount > 5) {
+                        val flowEnd = layout.getLineEnd(4)
+                        // The opening glyph occupies index 0; keep only the
+                        // quote characters that fit before the fifth line.
+                        val contentEnd = (flowEnd - 1)
+                            .coerceIn(0, renderedQuote.length)
+                        if (contentEnd < renderedQuote.length) {
+                            renderedQuote = renderedQuote.take(contentEnd)
+                        }
+                    }
+                }
             )
         }
     }

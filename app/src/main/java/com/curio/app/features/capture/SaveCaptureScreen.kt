@@ -3,7 +3,6 @@ package com.curio.app.features.capture
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -74,6 +73,7 @@ import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.data.shortName
+import android.util.Log
 import com.curio.app.features.capture.formats.FieldNotesFormat
 import com.curio.app.features.capture.formats.GalleryWallFormat
 import com.curio.app.features.capture.formats.MarginaliaFormat
@@ -168,6 +168,7 @@ fun SaveCaptureScreen(
     var hasAnyDraft by remember { mutableStateOf(false) }
     var currentCaptureData by remember { mutableStateOf<CaptureData?>(null) }
     var saveInProgress by remember { mutableStateOf(false) }
+    var saveError by remember { mutableStateOf<String?>(null) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
     var emberTrigger by remember { mutableIntStateOf(0) }
     var savedEntryId by remember { mutableStateOf<String?>(null) }
@@ -252,63 +253,73 @@ fun SaveCaptureScreen(
         val data = currentCaptureData
         if (data != null) {
             saveInProgress = true
+            saveError = null
             scope.launch {
-                val entryId = editEntryId ?: CaptureRepository.createId()
+                try {
+                    val entryId = editEntryId ?: CaptureRepository.createId()
 
-                // Persist audio file from cache to internal storage before
-                // saving — recurses through Portfolio/OpenNotebook so every
-                // SoundBite section gets a stable path, not just top-level.
-                val persistedData = persistAudioDeep(context, data, entryId)
-
-                val resolvedTopic = topic
-                if (resolvedTopic == null) {
-                    saveInProgress = false
-                    return@launch
-                }
-
-                // Local capture: editingEntry is a delegated property (produceState),
-                // so the compiler can't smart-cast it — grab a stable local first.
-                val existingEntry = editingEntry
-                // Edit mode must NEVER write a fresh entry: Room REPLACEs by id,
-                // so a fresh entry here would overwrite the original with blank
-                // data. If the source entry is somehow missing, abort instead.
-                if (editEntryId != null && existingEntry == null) {
-                    saveInProgress = false
-                    return@launch
-                }
-                val entry = if (existingEntry != null) {
-                    // Edit mode: keep id/topic/title/timestamp, swap the data.
-                    existingEntry.copy(
-                        format = formatOf(persistedData),
-                        captureData = persistedData,
-                        tags = tags
-                    )
-                } else {
-                    CurioEntry(
-                        id = entryId,
-                        topic = resolvedTopic,
-                        // A single section stores its own format; a Portfolio
-                        // entry uses its first section's format so Cabinet glyph
-                        // and detail dispatch stay correct.
-                        format = formatOf(persistedData),
-                        captureData = persistedData,
-                        tags = tags
-                    )
-                }
-                runCatching { CurioRepositoryHolder.repo.save(entry) }
-                    .onSuccess {
-                        savedEntryId = entry.id
-                        StreakTracker.recordActivity(context)
-                        // Saved — the autosaved draft is now redundant. Null the
-                        // snapshot too, so a debounced write that re-fires when
-                        // saveInProgress flips back can't resurrect it.
-                        draftData = null
-                        CaptureDraftStore.clear(context, categorySlug, resolvedTopic.name)
-                        delay(400)
-                        confettiTrigger++
-                        emberTrigger++
+                    // Persist audio file from cache to internal storage before
+                    // saving — recurses through Portfolio/OpenNotebook so every
+                    // SoundBite section gets a stable path, not just top-level.
+                    val persistedData = persistAudioDeep(context, data, entryId)
+                    val resolvedTopic = topic ?: run {
+                        saveError = "The topic is still loading. Please try again."
+                        return@launch
                     }
-                saveInProgress = false
+
+                    // Local capture: editingEntry is a delegated property (produceState),
+                    // so the compiler can't smart-cast it — grab a stable local first.
+                    val existingEntry = editingEntry
+                    // Edit mode must NEVER write a fresh entry: Room REPLACEs by id,
+                    // so a fresh entry here would overwrite the original with blank
+                    // data. If the source entry is somehow missing, abort instead.
+                    if (editEntryId != null && existingEntry == null) {
+                        saveError = "This entry is no longer available. Please go back and try again."
+                        return@launch
+                    }
+                    val entry = if (existingEntry != null) {
+                        // Edit mode: keep id/topic/title/timestamp, swap the data.
+                        existingEntry.copy(
+                            format = formatOf(persistedData),
+                            captureData = persistedData,
+                            tags = tags
+                        )
+                    } else {
+                        CurioEntry(
+                            id = entryId,
+                            topic = resolvedTopic,
+                            // A single section stores its own format; a Portfolio
+                            // entry uses its first section's format so Cabinet glyph
+                            // and detail dispatch stay correct.
+                            format = formatOf(persistedData),
+                            captureData = persistedData,
+                            tags = tags
+                        )
+                    }
+                    runCatching { CurioRepositoryHolder.repo.save(entry) }
+                        .onSuccess {
+                            savedEntryId = entry.id
+                            saveError = null
+                            StreakTracker.recordActivity(context)
+                            // Saved — the autosaved draft is now redundant. Null the
+                            // snapshot too, so a debounced write that re-fires when
+                            // saveInProgress flips back can't resurrect it.
+                            draftData = null
+                            CaptureDraftStore.clear(context, categorySlug, resolvedTopic.name)
+                            delay(400)
+                            confettiTrigger++
+                            emberTrigger++
+                        }
+                        .onFailure { error ->
+                            Log.e("SaveCaptureScreen", "Failed to save capture ${entry.id}", error)
+                            saveError = "Couldn't save this entry. Your recording is still here — try again."
+                        }
+                } catch (error: Exception) {
+                    Log.e("SaveCaptureScreen", "Failed to prepare capture", error)
+                    saveError = "Couldn't save this entry. Your recording is still here — try again."
+                } finally {
+                    saveInProgress = false
+                }
             }
         }
     }
@@ -510,6 +521,14 @@ fun SaveCaptureScreen(
                         )
                 )
                 Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+                    saveError?.let { message ->
+                        Text(
+                            text = message,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
                     // The save button wears the category TINT with ink content
                     // when the tint setting is on; with it off it reverts to
                     // the plain accent fill + white content as before.
@@ -1322,12 +1341,15 @@ private suspend fun persistAudioDeep(
         }
     is CaptureData.OpenNotebook ->
         data.copy(subData = persistAudioDeep(context, data.subData, entryId))
-    is CaptureData.Portfolio ->
-        data.copy(
-            sections = data.sections.map {
-                it.copy(data = persistAudioDeep(context, it.data, entryId))
-            }
-        )
+    is CaptureData.Portfolio -> {
+        val persistedSections = mutableListOf<CaptureData.CaptureSection>()
+        data.sections.forEachIndexed { index, section ->
+            persistedSections += section.copy(
+                data = persistAudioDeep(context, section.data, "$entryId-$index")
+            )
+        }
+        data.copy(sections = persistedSections)
+    }
     else -> data
 }
 

@@ -82,13 +82,23 @@ fun AdaptiveImageGallery(
         val containerW = with(density) { maxWidth.toPx() }
         val gapPx = with(density) { gap.toPx() }
         val rowHPx = with(density) { rowHeight.toPx() }
+        val safeRowHPx = rowHPx.takeIf { it.isFinite() && it > 0f }
+            ?.coerceAtMost(2048f) ?: 1f
+        // BoxWithConstraints can report a zero-width probe during an
+        // intermediate measure. Do not hand that width to SizeNode, and do
+        // not calculate a gallery height until the real viewport exists.
+        if (containerW <= 0f || !containerW.isFinite()) return@BoxWithConstraints
         val layout = remember(uris, aspects, containerW, gapPx, rowHPx) {
-            computeGalleryLayout(uris, aspects, containerW, gapPx, rowHPx)
+            computeGalleryLayout(uris, aspects, containerW, gapPx, safeRowHPx)
         }
+        val safeHeight = layout.heightPx.takeIf { it.isFinite() && it > 0f }
+            ?.coerceAtMost(safeRowHPx * uris.size.coerceAtLeast(1) * 3f)
+            ?.coerceAtLeast(1f)
+            ?: safeRowHPx
         Box(
             modifier = Modifier
                 .width(with(density) { containerW.toDp() })
-                .height(with(density) { layout.heightPx.toDp() })
+                .height(with(density) { safeHeight.toDp() })
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -115,7 +125,7 @@ fun AdaptiveImageGallery(
                                         tileW = tile.widthPx,
                                         tileH = tile.heightPx,
                                         viewW = containerW,
-                                        viewH = layout.heightPx
+                                        viewH = safeHeight
                                     )
                                 },
                                 shape = RoundedCornerShape(cornerRadius),
@@ -153,7 +163,7 @@ fun AdaptiveImageGallery(
                         widthPx = tile.widthPx,
                         heightPx = tile.heightPx,
                         viewW = containerW,
-                        viewH = layout.heightPx
+                        viewH = safeHeight
                     )
                 }
         }
@@ -198,6 +208,9 @@ private fun computeGalleryLayout(
     gapPx: Float,
     rowHPx: Float
 ): GalleryLayout {
+    if (uris.isEmpty() || containerW <= 0f || !containerW.isFinite()) {
+        return GalleryLayout(emptyList(), 0f)
+    }
     if (uris.size == 1) {
         val a = (aspects[uris[0]] ?: 1f).coerceIn(0.25f, 4f)
         // Cap the single-image height so a portrait can't tower off the page.
@@ -258,13 +271,16 @@ private fun computeGalleryLayout(
             // Multi-image row — justify to the container width; heights
             // scale with the stretch so every aspect ratio holds.
             val avail = (containerW - (row.size - 1) * gapPx).coerceAtLeast(0f)
-            // sumOf has no Float overload — fold the aspects in Float.
+            // The row is justified by its TOTAL aspect width. The previous
+            // formula multiplied the width scale by rowHeight again, so a
+            // narrow portrait row could become hundreds of thousands of px
+            // tall (the reported 537636px crash). Derive height directly:
+            // totalWidth = rowHeight * sum(aspects) = avail.
             val sum = row.fold(0f) { acc, item -> acc + item.aspect }
-            val s = if (sum > 0f) avail / sum else 1f
-            val h = rowHPx * s
+            val h = if (sum > 0f) avail / sum else rowHPx
             var x = 0f
             val tiles = row.map { item ->
-                val w = rowHPx * item.aspect * s
+                val w = h * item.aspect
                 val tile = GalleryTile(item.uri, x, y, w, h)
                 x += w + gapPx
                 tile
