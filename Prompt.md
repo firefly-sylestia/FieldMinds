@@ -57,3 +57,11 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Rewrote Curio's font/module documentation so no active source or DOX guidance depends on the deleted legacy tree.
 - Filesystem-date audit found no checkout files older than July 6, 2026; no unrelated active files were removed under the date rule.
 - Validation: no remaining legacy-tree references, only `:app` is included, and `git diff --check` is clean. No Gradle command run per repository rules.
+
+## v7.59 — remove obsolete repository surfaces
+
+- Removed the old web landing site, wiki, historical docs, standalone worker, root legacy assets, workspace metadata, and unused package/deployment files.
+- Kept Curio Android source/resources, topic data and schema, all topic-maintenance scripts, Gradle/wrapper configuration, CI/release metadata, fastlane date-based Curio notes, and DOX instructions.
+- Removed legacy numeric store changelogs and deleted stale references to removed design documents.
+- Rewrote README and project indexes around Curio; no runtime code or active app files were removed.
+- Standalone topic validation passed: 11 files, 2,312 topics, 2,312 unique IDs, zero errors. `git diff --check` passed. No Gradle command run per repository rules. The ignored local release keystore was preserved as a private credential.

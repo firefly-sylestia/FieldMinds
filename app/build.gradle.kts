@@ -6,8 +6,8 @@ plugins {
 
 // ── Release signing wiring ───────────────────────────────────────────────────
 //
-// Curio consumes the existing KEYSTORE_* secrets that were carried over from
-// the legacy fieldmind build's android.yml CI pipeline (KEYSTORE_BASE64 +
+// Curio consumes the repository KEYSTORE_* secrets from the Android CI
+// pipeline (KEYSTORE_BASE64 +
 // KEYSTORE_PASSWORD + KEY_ALIAS + KEY_PASSWORD). The CI workflow decodes the
 // base64-encoded keystore to ./release.keystore and exports KEYSTORE_PATH etc.
 // as env vars at build time, which we read here.

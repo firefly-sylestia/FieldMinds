@@ -45,7 +45,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Manage Categories — see CURIO_SPEC.md §13.4 (v2 brief).
+ * Manage Categories — see Curio category-management contract.
  *
  * Reorderable list of all 6 categories with drag handle (visual for the
  * placeholder phase; up/down stepper buttons are wired to [moveCategory])

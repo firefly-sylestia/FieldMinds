@@ -1,7 +1,0 @@
-Discoverable Restore from backup card on the Backup & Restore screen.
-
-• New prominent primary-tinted card always visible below the hero status card
-• Stays visible across Export, Import, and Backup tabs — no more hunting for the hidden Import tab pill
-• Tapping the card switches the active tab to Import AND auto-launches the system file picker (one-tap restore)
-• Card matches the active journal aesthetic (Victorian / Sketchbook / BulletJournal / Ghibli)
-• Press scale + shadow give it the same tactile feedback as other clickable cards

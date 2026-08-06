@@ -1,4 +1,4 @@
-# GitHub Configuration — AGENTS.md
+# Curio GitHub Configuration — AGENTS.md
 
 ## DOX Framework
 
@@ -10,7 +10,7 @@ Read `master.md` and root `AGENTS.md` first, then this file for GitHub-specific 
 
 ## Purpose
 
-CI/CD automation, issue tracking templates, and funding configuration for the FieldMind repository on GitHub.
+CI/CD automation and issue tracking templates for the Curio Android repository on GitHub.
 
 ## Ownership
 
@@ -18,7 +18,6 @@ CI/CD automation, issue tracking templates, and funding configuration for the Fi
 - `.github/workflows/android.yml` — PR/branch CI build workflow
 - `.github/ISSUE_TEMPLATE/bug-report.yml` — Structured bug report form
 - `.github/ISSUE_TEMPLATE/feature-request.yml` — Structured feature request form
-- `.github/FUNDING.yml` — Sponsor/funding links configuration
 - `.github/PULL_REQUEST_TEMPLATE.md` — PR description template
 
 ## Local Contracts
@@ -26,14 +25,14 @@ CI/CD automation, issue tracking templates, and funding configuration for the Fi
 ### Workflows
 
 #### `android.yml` — Android CI
-- Triggers: `push` / `pull_request` on `main`
+- Triggers: `push` / `pull_request` on the active development branches
 - Jobs: `check` (lint) and `build` (assemble debug + release APKs)
-- Builds signed universal APKs for both `github` product flavors
+- Builds the flavorless Curio debug and release APKs
 - Artifacts retained for 14 days
 
 #### `release.yml` — Release Build
 - Triggers: tag push matching `v*`
-- Builds `assembleGithubRelease` + `assembleFdroidRelease`
+- Builds `assembleRelease` for Curio
 - Creates GitHub Release with generated release notes
 - Pre-release flag set for tags containing `alpha`, `beta`, or `rc`
 
@@ -49,7 +48,7 @@ CI/CD automation, issue tracking templates, and funding configuration for the Fi
 
 - When adding new workflows, keep naming consistent with existing patterns
 - Secrets are injected via GitHub Actions secrets; document new secret requirements here
-- APK artifact naming pattern: `FieldMind-{version}-{variant}-{signature}-universal.apk`
+- APK artifacts are collected from `app/build/outputs/apk/`
 - PRs should include at minimum a successful `lint` run before merging
 
 ## Verification

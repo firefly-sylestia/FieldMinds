@@ -1,19 +1,19 @@
 # CURIO DATA PLAN
 
 **Version:** v1
-**Date:** (matched against CURIO_SPEC.md v2)
-**Purpose:** Define Curio's content layer — the categories, the topics, the per-topic "what to do" prompt, the schema, and the rollout cadence. Sits alongside `CURIO_SPEC.md` (which defines the UX shell). Everything below is the data layer's contract; the spec defines how the UI consumes it.
+**Date:** Current Curio data contract
+**Purpose:** Define Curio's content layer — the categories, the topics, the per-topic "what to do" prompt, the schema, and the rollout cadence. This document is the source of truth for Curio topic data and authoring; the active Android code consumes the contract defined here.
 
-**How this doc relates to `CURIO_SPEC.md`:**
-- `CURIO_SPEC.md` §0.2 owns the **6-category Midnight Signal starter palette** and the Wildcard rule. That section is still authoritative for what's shipped NOW.
-- This doc owns the **forward-looking 10-category roadmap**, the **topic data schema**, the **authoring pipeline**, and the **per-category rollout cadence**.
-- When a new category's topics are authored + shipped, this doc becomes the source-of-truth `§0.2` supersedes; the original `CURIO_SPEC.md` §0.2 gets a one-line history entry pointing here.
+**How this doc relates to the app:**
+- The active Curio source owns the shipped UI, category presentation, and capture behavior.
+- This document owns the **topic data schema**, the **authoring pipeline**, and the **per-category rollout cadence**.
+- When new category topics are authored and shipped, this document remains the source of truth for their data contract.
 
 ---
 
 ## §1. Category Roadmap
 
-### Currently shipped (from `CURIO_SPEC.md` v2 §0.2)
+### Currently shipped categories
 
 | ID | Category          | Accent (CURIO_SPEC §0.2) | Glyph (CURIO_SPEC §0.6)       | §8 capture format | Status |
 |----|-------------------|---------------------------|-------------------------------|-------------------|--------|
@@ -319,7 +319,7 @@ This template is invoked from the Curio repo's `scripts/` directory (Phase 4 wor
 
 ---
 
-## §7. Open Decisions (queue for `CURIO_SPEC.md` §14.x)
+## §7. Open Decisions
 
 | # | Decision | Status |
 |---|----------|--------|
@@ -330,7 +330,7 @@ This template is invoked from the Curio repo's `scripts/` directory (Phase 4 wor
 | 14.11 | **Per-topic `ExploreAction`** — one structured (verb, targetName, durationMinutes, instruction) per topic. Quality bar in §2.1. ✅ Locked here. |
 | 14.12 | **Wildcard refactor** — meta-spin that lands on any ready category; not its own pool. ✅ Locked here. |
 
-When each batch of new-category topics is ready to ship, copy the matching row above into `CURIO_SPEC.md` §14 with the timestamp.
+When each batch of new-category topics is ready to ship, update the category roadmap and rollout notes above.
 
 ---
 

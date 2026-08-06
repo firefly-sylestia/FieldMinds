@@ -70,7 +70,7 @@ import com.curio.app.ui.theme.CurioIcons
 import kotlinx.coroutines.launch
 
 /**
- * First-launch onboarding — see CURIO_SPEC.md §2 (v2).
+ * First-launch onboarding — see Curio onboarding contract.
  *
  * Upgraded with:
  *  - MorphEntrance for each slide content on page change

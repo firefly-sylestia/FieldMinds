@@ -10,7 +10,7 @@ Read `master.md` and root `AGENTS.md` first, then this file for Gradle-specific 
 
 ## Purpose
 
-Centralized Gradle build system configuration for the FieldMind Android project. Manages dependency versions, plugin versions, and the Gradle wrapper.
+Centralized Gradle build system configuration for the Curio Android project. Manages dependency versions, plugin versions, and the Gradle wrapper.
 
 ## Ownership
 
@@ -25,11 +25,7 @@ Centralized Gradle build system configuration for the FieldMind Android project.
 - Sections: `[versions]`, `[libraries]`, `[plugins]`
 
 ### Key Version Ground Rules
-- AGP: `9.2.1`
-- Kotlin: `2.3.21`
-- KSP: `2.3.6` (matches Kotlin version)
-- Compose BOM: `2026.05.01`
-- Material3: `1.5.0-alpha20`
+- AGP, Kotlin, KSP, Compose BOM, and Material3 versions are pinned in `libs.versions.toml`.
 - Target/Compile SDK: `37`
 - Min SDK: `26`
 
@@ -54,9 +50,8 @@ Examples:
 
 ## Verification
 
-- Run `./gradlew --version` to verify wrapper
-- Run `./gradlew lint` to verify dependency resolution
-- Run `./gradlew dependencies` to inspect full dependency tree
+- CI runs the authoritative Curio lint and build checks.
+- Do not run Gradle compile, build, lint, or test commands in this workspace; the root DOX contract reserves those for CI.
 
 ## Child DOX Index
 

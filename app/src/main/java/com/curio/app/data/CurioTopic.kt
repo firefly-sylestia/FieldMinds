@@ -123,7 +123,7 @@ data class CurioEntry(
 }
 
 /**
- * The six capture formats from CURIO_SPEC.md section 8.
+ * The six capture formats from Curio design contract section 8.
  *
  * 11 categories map onto these 6 format bodies — see
  * [CurioCategories] for the mapping. Two categories from the same

@@ -49,7 +49,7 @@ import com.curio.app.ui.theme.CurioTheme
 import kotlinx.coroutines.delay
 
 /**
- * Splash screen — see CURIO_SPEC.md §13.1.
+ * Splash screen — see Curio splash contract.
  *
  * The first thing the user sees on app launch. Covers the gap between
  * process start and MainActivity being ready.

@@ -17,7 +17,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Shared top-bar primitives — see CURIO_SPEC.md §0.5 ("M3 surface tokens").
+ * Shared top-bar primitives — see Curio surface contract.
  *
  * Currently houses the standardized [CurioBackButton] used by every
  * push-destination screen (Settings, ManageCategories, TopicHistory,

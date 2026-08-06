@@ -101,7 +101,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * Save / Capture — see CURIO_SPEC.md §8.
+ * Save / Capture — see Curio capture contract.
  *
  * Premium redesign with:
  *  - Structured data collection via [CaptureData] callbacks from each format

@@ -1,2 +1,0 @@
-v0.47.2 — Export Page Redesign (new design language)
-Header subtitle now reflects the active tab + a live record count. Privacy & encryption card is tucked into a CollapsibleSection (collapsed by default; tap to expand). The mis-placed Import button on the Export tab is gone — switch via the Tab selector at the top. Expanded state persists across tab swaps.

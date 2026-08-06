@@ -1,5 +1,0 @@
-v0.47.5 — Device-Reported Fixes
-• Biometric retry: removed re-entrancy flag that could deadlock on fast scans or system-back cancels.
-• Fast scan: same fix; prompt no longer freezes on rapid finger lift+place.
-• Discard buttons: removed popBackStack() (Capture tab is the root start destination, so prior code popped the root and froze nav). User now stays on the tab.
-• No other behavioral changes.

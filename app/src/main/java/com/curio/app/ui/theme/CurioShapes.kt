@@ -5,7 +5,7 @@ import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
 
 /**
- * Curio's shape system — see CURIO_SPEC.md §0.3.
+ * Curio's shape system — see Curio shape contract.
  *
  * M3 shape tokens pushed rounder across the board:
  * - Small components (chips, small buttons) ..... 16dp corner radius

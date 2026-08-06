@@ -49,7 +49,7 @@ import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
- * Cabinet's entry card — used in the 2-col grid (CURIO_SPEC.md §9).
+ * Cabinet's entry card — used in the 2-col grid (Curio Cabinet contract).
  *
  * Upgraded with:
  *  - Press scale animation for tactile feel

@@ -28,7 +28,7 @@ import kotlin.random.Random
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Confetti / sparkle burst — see CURIO_SPEC.md section 0.5 (\"Rewarding
+ * Confetti / sparkle burst — see Curio design contract section 0.5 (\"Rewarding
  * moments (topic revealed, entry saved) get a small confetti / sparkle
  * burst — a scatter of 6 to 10 tiny shapes in the category's accent color,
  * fading and falling with slight rotation, ~600ms total\").

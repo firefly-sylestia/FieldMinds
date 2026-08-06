@@ -112,19 +112,13 @@ See [`DOX_TREE.md`](DOX_TREE.md) for a visual Mermaid diagram and ASCII tree of 
 
 ## Child DOX Index
 
-- `AGENTS.md` (root) — Project-wide DOX rail: environment rules, workflow, Prompt.md management, What's New guidance
-  - `app/AGENTS.md` — Android app module: FieldMind features, architecture, conventions
-    - `app/src/main/java/.../features/field/AGENTS.md` — Field feature module (core product, 120 files)
-      - `features/field/data/AGENTS.md` — Data layer: weather, vision, AI, database, repository, all domain packages
-      - `features/field/presentation/AGENTS.md` — Presentation layer: screens, components, navigation, viewmodel, theme
-    - `app/src/main/java/.../shared/AGENTS.md` — Shared code: base theme, common components, settings model
-    - `app/src/main/java/.../infrastructure/AGENTS.md` — Infrastructure: workers, widgets
-    - `app/src/main/res/AGENTS.md` — Android resources: layouts, drawables, strings, themes, animations, fonts
-  - `web/AGENTS.md` — Web landing page: Next.js, Tailwind, Vercel deployment
-  - `gradle/AGENTS.md` — Gradle build system: version catalog, plugin versions
-  - `wiki/AGENTS.md` — Wiki documentation: user/contributor docs
-  - `fastlane/AGENTS.md` — App store metadata and deployment
-  - `.github/AGENTS.md` — GitHub CI/CD, issue templates, funding
+- `AGENTS.md` (root) — Project-wide DOX rail: environment rules, workflow, Prompt.md management, and release-note guidance
+  - `app/AGENTS.md` — Active Curio Android app module
+    - `app/CURIO_DATA_PLAN.md` — Topic taxonomy, schema, and authoring contract
+    - `app/src/main/assets/topics/SCHEMA.md` — Topic JSON quick reference
+  - `gradle/AGENTS.md` — Version catalog and Gradle wrapper
+  - `fastlane/AGENTS.md` — Android store metadata and release notes
+  - `.github/AGENTS.md` — GitHub CI/CD and issue templates
 
 ### Visualization
 

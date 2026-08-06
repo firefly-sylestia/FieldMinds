@@ -10,7 +10,7 @@ package com.curio.app.features
  *   - TopicHistoryScreen      → com.curio.app.features.topichistory.TopicHistoryScreen
  *   - LightboxScreen          → com.curio.app.features.lightbox.LightboxScreen
  *
- * (See CURIO_SPEC.md §2 / §11 / §13.2 / §13.4 / §13.5.)
+ * (See Curio screen and navigation contract.)
  *
  * This file is intentionally empty so the once-conflicting top-level names
  * no longer shadow the per-feature implementations. Kept as a directory

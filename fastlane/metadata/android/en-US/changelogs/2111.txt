@@ -1,6 +1,0 @@
-v0.48.0 — Journal Styles: Full Aesthetic Transformation
-• Pick any of 4 journal aesthetics (Victorian, Sketchbook, BulletJournal, Ghibli) — entire UI transforms: cards, headers, chips, ornaments, dividers.
-• Universal ClickableCard + InfoCard + SettingsGroupCard + SectionHeader + StandardScreenHeader now read LocalJournalStyle by default.
-• New JournalDecorations.kt: per-style ornament (Victorian fleuron, Ghibli cloud) + decorative dividers (ornamental rule, wavy path, pencil marks, dots).
-• Cards now visibly differ in shape, border style, gradient, and texture overlay across the 4 styles — not just background.
-• Backwards-compatible: composables that pass an explicit shape override the journal default.

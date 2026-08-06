@@ -36,7 +36,7 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      # Reuses the legacy FieldMind keystore via the existing
+      # Uses the repository's Curio release keystore.
       # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
       # app/build.gradle.kts reads these env vars at build time and signs the
       # release APK with them when all four are present; otherwise falls back

@@ -12,7 +12,7 @@ Read `master.md` and root `AGENTS.md` first, then this file for app-module-speci
 
 The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library.
 
-**Design direction comes from the user, not from in-repo docs.** There is no design spec in this repo (the former `CURIO_SPEC.md` was deleted). Before making design decisions — colors, typography, shapes, motion, layout, empty states, copy, emoji-vs-icon policy — ask the user for direction. Do not invent or follow design rules from old docs, prompts, or code comments.
+**Design direction comes from the user, not from historical documents.** Before making design decisions — colors, typography, shapes, motion, layout, empty states, copy, emoji-vs-icon policy — ask the user for direction. Do not invent or follow design rules from old prompts or code comments.
 
 The **data layer** (category taxonomy, topic schema, `ExploreAction` prompt format, authoring pipeline, rollout cadence) is documented separately in [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md). It expands the category palette from 6 → 10 and ships 150+ topics per category authored via LLM-draft + human-review. **Read it before any feature work that touches data or content.**
 
@@ -58,7 +58,7 @@ app/src/main/java/com/curio/app/
 - `app/src/main/res/values/colors.xml` — Midnight Signal XML resources used at the OS-level splash/background before Compose takes over
 - `app/src/main/res/drawable/ic_launcher_{background,foreground,monochrome}.xml` — angular open-portal launcher mark with midnight background, electric-blue frame, mint aperture, orange spark, and themed monochrome mask
 - `app/src/main/res/mipmap-anydpi-v26/ic_launcher{,_round}.xml` — adaptive-icon declarations referencing the colored and monochrome layers above
-- `app/src/main/assets/topics/` — Curio topic data files (one per ready category; see Content authoring below)
+- `app/src/main/assets/topics/` — Curio topic data files and schema reference (one per ready category; see Content authoring below)
 
 ## Local Contracts
 
@@ -67,7 +67,7 @@ app/src/main/java/com/curio/app/
 - `applicationId = "com.curio.app"` (new install, separate from FieldMind; users install Curio as a separate app)
 - `minSdk = 26`, `targetSdk = 37`, `compileSdk = 37`
 - `versionName = "0.1.0-curio"`, `versionCode = 1`
-- No product flavors yet — flavors will be reintroduced in a later phase when Room DB + storage permissions land
+- No product flavors; Curio builds as a single flavorless Android application
 - Debug builds append `.debug` to `applicationId` → `com.curio.app.debug` so both can coexist on one device
 - Bundles `material_symbols_outlined.ttf` + `geom.ttf` directly in `app/src/main/res/font/`; neither depends on another module or source tree
 
@@ -132,8 +132,8 @@ Topic data lives in JSON files under `app/src/main/assets/topics/{category}.json
 
 - `MainActivity` compiles and runs as `com.curio.app` on debug builds with `applicationId = "com.curio.app.debug"`.
 - No background workers, no widgets, no Room/SharedPreferences persistence wiring yet — those arrive in Phase 4+.
-- **CI gate**: this environment has no Android SDK, so CI on push to `revamp` is the source of truth for compilation. Local `gradlew assemble*` is explicitly forbidden by root AGENTS.md.
-- **CI expectations (flavorless)**: the new `app/` does NOT define `github`/`fdroid` product flavors. CI workflows call `./gradlew assembleDebug assembleRelease` (PRs) and `./gradlew assembleRelease` (tagged releases). Output APKs are at `app/build/outputs/apk/{debug,release}/`. The legacy fieldmind-* APK naming, the keystore + env-var pipeline, and the abi-split custom-renaming are NOT carried over. Release-key signing is **deferred to Phase 4+** when Curio's distribution-channel logic lands — until then, AGP's default debug-key fallback makes the release APK installable for PR previews.
+- **CI gate**: this environment has no Android SDK, so CI on push to `revamp` is the source of truth for compilation. Local Gradle compile/build/lint/test commands are explicitly forbidden by root AGENTS.md.
+- **CI expectations (flavorless)**: CI calls `./gradlew assembleDebug assembleRelease` for Android checks and `./gradlew assembleRelease` for tagged releases. Output APKs are at `app/build/outputs/apk/{debug,release}/`. Release signing uses the repository keystore secrets when configured; local builds fall back to the debug signing key.
 - All placeholder screens route correctly: tapping the Home hero with no chip → `PICKER`; with a chip → `spin/{slug}`; bottom-nav switching preserves each tab's back stack; back arrow pops the current route.
 
 ## Child DOX Index

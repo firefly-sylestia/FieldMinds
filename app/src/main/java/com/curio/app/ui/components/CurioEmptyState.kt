@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.CurioIcon
 
 /**
- * Curio's universal empty-state skeleton — see CURIO_SPEC.md §13.7.
+ * Curio's universal empty-state skeleton — see Curio empty-state contract.
  *
  * Upgraded with a gentle breathing scale on the glyph for a living,
  * breathing feel even on empty screens. Content renders all at once.

@@ -4,7 +4,7 @@ import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.spring
 
 /**
- * Curio's motion design tokens — see CURIO_SPEC.md section 0.5.
+ * Curio's motion design tokens — see Curio design contract section 0.5.
  *
  * Centralizes the spring specs + duration constants that the rest of the app
  * uses for animations, so every transition uses the same easing vocabulary.

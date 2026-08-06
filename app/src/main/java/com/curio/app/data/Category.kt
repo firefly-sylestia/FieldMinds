@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import com.curio.app.ui.theme.CurioColors
 
 /**
- * Curio's 11 content categories — see CURIO_SPEC.md §0.2.
+ * Curio's 11 content categories — see Curio design contract.
  *
  * Each "domain" (Music / Movies / Books / Visual Art / Science) is split
  * into TWO first-class categories so the user has granular control over

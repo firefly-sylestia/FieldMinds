@@ -1,1 +1,0 @@
-Bug fix: Daily Field Journal overlay no longer flashes visible and disappears on first launch of the day. The sheet now properly slides up and fades in, and slides down plus fades out on dismiss. No more brief invisible-but-touch-blocking state where the modal blocked all app taps.

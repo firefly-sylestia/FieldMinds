@@ -48,7 +48,7 @@ import com.curio.app.ui.theme.CurioMotion
  * content; the back-bar / top-bar should be rendered outside so the bar
  * stays anchored while the body slides in.
  *
- * Per CURIO_SPEC.md §0.5: "Everywhere else, keep transitions under 400ms
+ * Per Curio motion contract: "Everywhere else, keep transitions under 400ms
  * so the app never feels like it's making you wait to be delighted."
  */
 @Composable
@@ -268,7 +268,7 @@ fun rememberAnimatedScaleOnPress(
 
 /**
  * Pulsing scale for any element that needs a \"live\" feel — used by the
- * Sound Bite mic ring while recording (CURIO_SPEC.md §8.1: \"Button morphs
+ * Sound Bite mic ring while recording (Curio Sound Bite contract: \"Button morphs
  * into a pulsing ring while live\"). Returns 1f when inactive; when active,
  * pulses between 1.0 and ~1.18 over a 900ms cycle.
  */
@@ -290,7 +290,7 @@ fun rememberPulseScale(active: Boolean): Float {
 /**
  * Live waveform display — REAL microphone-driven visualizer drawn as N
  * rounded vertical bars. Used by Save/Capture Sound Bite format
- * (CURIO_SPEC.md §8.1) while recording, and as a quiet \"armed\" indicator
+ * (Curio Sound Bite contract) while recording, and as a quiet \"armed\" indicator
  * when not yet started.
  *
  * [level] is the live mic amplitude (0.0–1.0) polled from
@@ -371,7 +371,7 @@ fun LiveWaveform(
 
 /**
  * Formats an elapsed-seconds count as mm:ss for the Sound Bite timer
- * (CURIO_SPEC.md §8.1: \"running timer\").
+ * (Curio Sound Bite contract: \"running timer\").
  */
 fun formatRecordingTime(seconds: Int): String {
     val mm = seconds / 60

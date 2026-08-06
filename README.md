@@ -1,222 +1,68 @@
-# FieldMind
+# Curio
 
-**Observe. Question. Discover.**
+**Explore something. Notice more. Keep the discovery.**
 
-> ## 🌱 FieldMind is being reborn
->
-> This is not an update. FieldMind is being **rebuilt from the ground up** — a
-> complete re-imagination of what this app is, shaped into something entirely
-> new.
->
-> The FieldMind you know **was** — it won't receive new updates anymore. We'll
-> keep sending a few fixes so it stays usable for anyone who wants to keep
-> using it, but the story is moving on.
->
-> Some of what you know will carry over. Much of what you'll see will be new —
-> things we've never shown anyone before. And we're working on **proper data
-> migration**, so nothing you've captured gets left behind.
->
-> We're keeping the details to ourselves for now: no new name, no feature
-> lists, no dates. Just this promise — **what exists today is only the
-> beginning.**
->
-> Something new is coming. Stay curious — it'll be worth the wait. ✨
+Curio is an Android discovery app built with Kotlin and Jetpack Compose. It gives you a topic through **The Spin**, helps you explore it in the real world, and lets you save what you found into **The Cabinet**.
 
----
+## Current app
 
-> ⚡ Originally forked from the Rhythm music player, FieldMind has been completely rebuilt into a dedicated field research platform.
+- Topic discovery across Curio's curated categories
+- Capture formats including Field Notes, Marginalia, Gallery Wall, Reel Notes, Sound Bite, and Open Notebook
+- Rich paper-style editing with quotes, images, audio, and tags
+- Cabinet browsing, search, recent discoveries, and entry detail views
+- Profile, Settings, Experiments, backup/restore, and crash recovery
+- Additive import of FieldMind V3 `.fieldmind` archives and plain archive JSON
+- Offline-first local storage with Room
+- No analytics or tracking
 
-FieldMind is an offline-first Android field research notebook built with Kotlin and Jetpack Compose. It helps researchers, naturalists, and citizen scientists capture observations, form hypotheses, track projects, analyze data, and generate reports — all without requiring an internet connection.
+## Project structure
 
----
-
-## 🧭 Core Research Flow
-
-```
-Observe → Question → Research → Hypothesize → Collect Data → Analyze → Conclude → Archive
+```text
+app/                     Active Curio Android application
+app/src/main/assets/     Curated topic JSON and schema reference
+fastlane/                Android store metadata and release notes
+scripts/                 Topic authoring, validation, and maintenance utilities
+gradle/                  Version catalog and Gradle wrapper configuration
+.github/                 Android CI, release workflow, and issue templates
+AGENTS.md                Project-wide development contract
+master.md               DOX framework definition
+Prompt.md               Running request and validation log
 ```
 
-Every feature in FieldMind is designed to support this chain of scientific inquiry.
+## Build
 
----
+Requirements:
 
-## 📱 Features
-
-### 📸 Capture & Observe
-- **Rich observation form** — subject, facts, category, confidence, tags, evidence, location, species identification
-- **In-app camera** — capture photos directly within an observation session using CameraX
-- **Location tagging** — automatic GPS capture with MapLibre offline maps
-- **Species identification** — taxonomic browser with kingdom-to-species drill-down
-- **Media attachments** — photos and evidence attached to observations
-
-### 🔬 Research & Analysis
-- **Research sessions** — timed sessions with background notifications, laps, and persistence
-- **Research questions** — track questions with status, category, and linked hypotheses
-- **Hypothesis management** — confidence scoring, status tracking, and evidence linkage
-- **Data tools** — measurement log, checklist, counter, event log, site log, weather log, species tracker, comparison table
-- **Reports** — generate structured reports from collected data
-- **Flashcards** — spaced repetition (SM-2) for review and memorization
-
-### 📚 Library & Learning
-- **Knowledge library** — organize articles, papers, books, videos, websites, and notes
-- **Sources** — curated reading with guided paper-reading prompts
-- **Learn hub** — personalized learning path based on research activity
-- **PDF viewer** — in-app document reading with annotations
-
-### 📊 Insights & Dashboards
-- **Home dashboard** — animated weather scene, current project, streak, stats, recent activity
-- **Insights screen** — research health scores, category analysis, time-series analytics, knowledge graph visualization, weather correlation, achievements
-- **Evidence hub** — filterable, sortable grid of all research records with bulk management
-- **Field log** — chronological log with list/gallery views, advanced filters, session grouping
-
-### 🗺️ Maps & Location
-- **Offline maps** — powered by MapLibre, no API key required
-- **Drawing tools** — points, lines, polygons on the map
-- **Track recording** — GPS track logging
-- **Geo-fence reminders** — location-based notifications
-
-### 🔐 Privacy & Security
-- **Biometric lock** — secure the app with fingerprint or face unlock
-- **Offline-first** — all data stored locally in Room database
-- **Encrypted backups** — export with passphrase protection
-- **No analytics** — zero tracking code
-
-### 🧠 AI Assistant (Optional)
-- **Gemini integration** — observation review, question quality analysis, hypothesis suggestions, summarization, and flashcard generation without inventing evidence
-- **Local model support** — bring your own LLM endpoint
-
-### ⚙️ Settings
-- **Profile** — researcher name, role, focus area, daily/weekly goals
-- **Appearance** — Material 3 theming, light/dark mode, icon shapes
-- **Capture defaults** — default category, certainty, evidence prompt, media planning
-- **AI assistant** — Gemini API key, local model endpoint configuration
-- **Backup & export** — encrypted ZIP backups, Markdown/CSV/JSON export
-- **Security** — biometric lock, privacy settings
-- **Data management** — cache clearing, database maintenance
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart TD
-    UI[Compose UI Layer] --> VM[ViewModels]
-    VM --> Repo[Repositories]
-    Repo --> Room[Room Database / DataStore]
-    Repo --> Camera[CameraX / Location]
-    Repo --> Network[Retrofit APIs]
-```
-
-### Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Language | **Kotlin** 100% |
-| UI | **Jetpack Compose** + **Material 3** |
-| Architecture | **MVVM** with StateFlow |
-| Database | **Room** (SQLite) — 9 entity types |
-| Maps | **MapLibre** (offline, no API key) |
-| Camera | **CameraX** (in-app capture) |
-| Networking | **Retrofit** + **OkHttp** |
-| Image loading | **Coil** |
-| Background | **WorkManager**, **Foreground Service** |
-| Widgets | **Glance** (Material 3) |
-| Biometrics | **AndroidX Biometric** |
-| Build | **Gradle Kotlin DSL**, version catalog |
-
-### Data Model
-
-- `Observation` — field observations with category, certainty, evidence, location
-- `Note` — free-form research notes
-- `Question` — research questions with status tracking
-- `Hypothesis` — testable hypotheses with confidence scoring
-- `Project` — research projects with methods, templates, journal
-- `Source` — articles, papers, books, videos, websites
-- `DataRecord` — structured data collection records
-- `Report` — generated research reports
-- `Flashcard` — spaced repetition review cards
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Android Studio Hedgehog (2023.1.1) or newer
+- Android Studio with Android SDK 37
 - JDK 17
-- Android SDK 34+
+- Android device or emulator running API 26+
 
-### Building
+Build the active module with:
 
 ```bash
-# Clone the repository
-git clone https://github.com/firefly-sylestia/FieldMinds.git
-cd FieldMinds
-
-# Build F-Droid variant (FOSS)
-./gradlew assembleFdroidDebug
-
-# Build GitHub variant
-./gradlew assembleGithubDebug
+./gradlew assembleDebug
 ```
 
-### Running
+Run topic validation with:
 
-Open in Android Studio and run on a device or emulator targeting API 26+.
-
----
-
-## 📁 Project Structure
-
-```
-app/
-├── src/main/java/fieldmind/research/app/
-│   ├── activities/           # Main activity, crash handler
-│   ├── features/field/
-│   │   ├── background/       # Timer service, notifications
-│   │   ├── data/
-│   │   │   ├── database/     # Room entities, DAOs, migrations
-│   │   │   └── repository/   # Repository implementations
-│   │   └── presentation/
-│   │       ├── components/   # Reusable composables (weather, charts, camera, etc.)
-│   │       ├── navigation/   # Navigation graph, screen definitions
-│   │       └── screens/      # All screen composables
-│   ├── shared/
-│   │   └── presentation/     # Shared theme, icons, components
-│   └── ...
-├── docs/                     # Design documentation
-├── wiki/                     # Legacy wiki (archive)
-└── fastlane/                 # Play Store metadata
+```bash
+./gradlew validateTopics
 ```
 
----
+The repository's Android SDK/build environment is provided by CI. See `.github/workflows/` for the authoritative build and release workflows.
 
-## 📦 Distribution
+## Topic data
 
-| Variant | Channel | Features |
-|---------|---------|----------|
-| `fdroid` | F-Droid | All features enabled |
-| `github` | GitHub Releases | All features enabled |
+Topic catalogs live in `app/src/main/assets/topics/`. The schema and authoring rules are documented in:
 
----
+- `app/CURIO_DATA_PLAN.md` — canonical data plan and authoring workflow
+- `app/src/main/assets/topics/SCHEMA.md` — quick reference beside the JSON files
+- `scripts/validate_topics.py` — standalone validation helper
 
-## 📄 License
+## Release
 
-FieldMind is free and open source software.
+Store metadata and versioned release notes live under `fastlane/`. Release builds are produced by the GitHub Actions workflows and signed from repository secrets.
 
----
+## License
 
-## 🙏 Acknowledgments
-
-- Originally forked from [Rhythm](https://github.com/cromaguy/Rhythm) music player
-- Built with [Jetpack Compose](https://developer.android.com/jetpack/compose)
-- Maps by [MapLibre](https://maplibre.org/)
-- Icons by [Material Symbols](https://fonts.google.com/icons)
-
----
-
-## 🔗 Links
-
-- **GitHub**: [github.com/firefly-sylestia/FieldMinds](https://github.com/firefly-sylestia/FieldMinds)
-- **Issues**: [github.com/firefly-sylestia/FieldMinds/issues](https://github.com/firefly-sylestia/FieldMinds/issues)
-- **Translations**: [Crowdin](https://crowdin.com/project/fieldmind) *(coming soon)*
+Curio is free and open source software.

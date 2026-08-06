@@ -46,7 +46,7 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.categoryInk
 
 /**
- * Topic History — see CURIO_SPEC.md §13.5.
+ * Topic History — see Curio topic-history contract.
  *
  * Lists every topic the user has ever spun, grouped by day ("Today" /
  * "Yesterday" / "Last week" headers). Each row shows the topic name +

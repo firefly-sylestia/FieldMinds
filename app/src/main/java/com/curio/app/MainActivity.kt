@@ -17,7 +17,7 @@ import com.curio.app.navigation.PendingEntryOpen
 import com.curio.app.ui.theme.CurioTheme
 
 /**
- * Curio's single Activity — see CURIO_SPEC.md.
+ * Curio's single Activity — see Curio design contract.
  *
  * Hosts the entire app via [CurioNavHost] inside [CurioTheme]. Edge-to-edge
  * is enabled so the splash background and bottom-nav surface extend behind

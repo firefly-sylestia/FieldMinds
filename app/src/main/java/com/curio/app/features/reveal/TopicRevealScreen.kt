@@ -92,7 +92,7 @@ import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
- * Topic Reveal — see CURIO_SPEC.md §6 (v2 polish).
+ * Topic Reveal — see Curio reveal contract.
  *
  * Upgraded from the previous §6 design:
  *  - Gradient-ticket hero header card (260dp) matching the Spin screen:

@@ -134,7 +134,7 @@ import com.curio.app.ui.components.MorphEntrance
 import kotlin.random.Random
 
 /**
- * The Spin — see CURIO_SPEC.md §5 (v5 redesign).
+ * The Spin — see Curio Spin contract.
  *
  * v5 changes:
  *  1. **Header chrome removed** — the Spin deck opens directly without a
@@ -275,8 +275,8 @@ import kotlin.random.Random
  * v7.7 changes (EXPERIMENTAL, four independent toggles):
  * 30. **Deck card redesign toggles** — Settings → Appearance → "Deck
  *     cards" (each OFF by default) swaps the flat peek-card slabs for the
- *     recommended set from PEEK_CARD_DESIGN_SUGGESTIONS.md, one upgrade per
- *     toggle so each can be A/B'd alone: a top-lit two-stop gradient fill,
+ *     recommended deck treatment, one upgrade per toggle so each can be
+ *     A/B'd alone: a top-lit two-stop gradient fill,
  *     a category-tinted hairline border (deep ink in light, light twin in
  *     dark), soft ambient shadows, and roomier near-card titles (16sp
  *     SemiBold, light tracking, two lines) with proportional glyphs (22dp

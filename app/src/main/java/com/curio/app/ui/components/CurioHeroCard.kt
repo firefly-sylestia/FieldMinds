@@ -41,7 +41,7 @@ import com.curio.app.ui.theme.onAccent
 import com.curio.app.ui.theme.themedAccent
 
 /**
- * Home screen's hero \"Shuffle the Deck\" card — see CURIO_SPEC.md §3.
+ * Home screen's hero \"Shuffle the Deck\" card — see Curio Home contract.
  *
  * The single largest tap target on the home screen (~40% vertical space).
  *

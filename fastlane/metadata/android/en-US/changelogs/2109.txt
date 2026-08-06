@@ -1,4 +1,0 @@
-v0.47.6 — Crash UI Redesign + Lock Recovery
-• Crash UI redesigned to match journal aesthetic: rounded cards, warm palette, Material symbols. Self-contained (no theme deps).
-• New "Disable lock & PIN, then restart" button. After confirm, resets all lock/PIN/export-password settings, then restarts.
-• Prefs writes use .commit() (sync) so they flush before process exit. Native fallback also gets the new button.

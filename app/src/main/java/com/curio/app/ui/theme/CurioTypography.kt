@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.curio.app.R
 
 /**
- * Curio's typography — see CURIO_SPEC.md §0.4.
+ * Curio's typography — see Curio typography contract.
  *
  * Display / headline: Curio's bundled `geom.ttf` variable font. Heavy weight
  * (700+) for headlines and titles.

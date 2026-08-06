@@ -39,7 +39,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Lightbox — full-screen image viewer — see CURIO_SPEC.md §13.2.
+ * Lightbox — full-screen image viewer — see Curio lightbox contract.
  *
  * Per spec §3 (Home "Recently explored") + §10 (Entry Detail): topic
  * image tap opens a full-screen viewer with pinch-zoom. Per §13.2:

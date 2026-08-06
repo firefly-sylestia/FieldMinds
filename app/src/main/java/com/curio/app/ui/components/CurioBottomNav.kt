@@ -70,7 +70,7 @@ object CurioNavTint {
 }
 
 /**
- * Curio's persistent bottom navigation — see CURIO_SPEC.md §1 + §3.
+ * Curio's persistent bottom navigation — see Curio navigation contract.
  *
  * Three destinations:
  *   [ Home ]   [ Shuffle ]   [ Cabinet ]

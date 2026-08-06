@@ -22,7 +22,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Small streak counter pill shown on the Home screen — see CURIO_SPEC.md §3.
+ * Small streak counter pill shown on the Home screen — see Curio Home contract.
  *
  * Renders a tiny "local_fire_department" Material Symbols glyph + the streak
  * count if [days] > 0, otherwise returns nothing. Tapping pops a small info

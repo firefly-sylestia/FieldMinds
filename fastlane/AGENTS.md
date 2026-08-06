@@ -10,7 +10,7 @@ Read `master.md` and root `AGENTS.md` first, then this file for fastlane-specifi
 
 ## Purpose
 
-App store metadata, changelogs, and deployment configuration for distributing FieldMind on Android app stores.
+App store metadata and release notes for distributing Curio on Android app stores.
 
 ## Ownership
 

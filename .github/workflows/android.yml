@@ -48,7 +48,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Reuses the legacy FieldMind keystore via the existing
+      # Uses the repository's Curio release keystore when configured.
       # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
       # app/build.gradle.kts reads these env vars at build time and signs release
       # APKs with them when all four are present; otherwise the release buildType
@@ -121,7 +121,7 @@ jobs:
       - name: Upload installable APK release bundle
         uses: actions/upload-artifact@v5
         with:
-          name: fieldmind-${{ github.event_name }}-${{ github.run_number }}-installable-apks
+          name: curio-${{ github.event_name }}-${{ github.run_number }}-installable-apks
           path: artifact-installable-apks/*
           if-no-files-found: error
           retention-days: 14

@@ -177,7 +177,7 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
 /**
- * Entry Detail — see CURIO_SPEC.md §10. Framed presentation of a saved capture.
+ * Entry Detail — see Curio detail contract. Framed presentation of a saved capture.
  *
  * Upgraded with:
  *  - Room database persistence (loads from CaptureRepository)

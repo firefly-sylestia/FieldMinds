@@ -73,7 +73,7 @@ import com.curio.app.ui.theme.categoryInk
 import com.curio.app.ui.theme.themedAccent
 
 /**
- * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
+ * The Cabinet — see Curio design contract. Library of saved captures.
  *
  * Upgraded with:
  *  - Entry cards render at once (no per-item stagger)

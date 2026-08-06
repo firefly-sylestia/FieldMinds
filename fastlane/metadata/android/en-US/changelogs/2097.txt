@@ -1,6 +1,0 @@
-• Map zoom shows town/village instead of tiny block area
-• Pick from map: tap NW/SE corners to select tile download area
-• GPS auto-retries with loading spinner and attempt progress
-• Observation points shown as markers on region picker map
-• Zoom to your location button on the map
-• Place names show locality + block for better context

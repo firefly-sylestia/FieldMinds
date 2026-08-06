@@ -53,9 +53,7 @@ agent, who asks the user.
 
 ### 🛡️ COMPILE-SAFETY RULES (read before ANY edit)
 
-These rules were derived from a postmortem of actual CI compilation failures
-(see `docs/CI_ERROR_POSTMORTEM.md`). Every error was avoidable. Follow these
-rules to prevent repeating them.
+These rules were derived from actual CI compilation failures. Every error was avoidable. Follow these rules to prevent repeating them.
 
 1. **READ BEFORE WRITING** — Before constructing any entity, ViewModel,
    settings, or data class constructor call, **read the actual data class
@@ -206,7 +204,7 @@ Whenever you make significant changes, you MUST update the "What's New" section 
 
 ### What NOT to Update
 
-Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATION.md`, `WHATS_NEW_SUMMARY.txt`
+Do not create historical design/status documents for routine changes. Keep durable guidance in the active DOX files and Curio data contract.
 
 ### Version Consistency
 
@@ -216,10 +214,8 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 
 ## Child DOX Index
 
-- [app/AGENTS.md](app/AGENTS.md) — Active Android app module (Curio) under rebuild — design direction comes from the user, not from in-repo docs
-- [app/CURIO_DATA_PLAN.md](app/CURIO_DATA_PLAN.md) — Curio data-layer spec (topics, categories, authoring pipeline)
-- [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
-- [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
-- [wiki/AGENTS.md](wiki/AGENTS.md) — Wiki documentation: user/contributor docs
-- [fastlane/AGENTS.md](fastlane/AGENTS.md) — App store metadata and deployment
-- [.github/AGENTS.md](.github/AGENTS.md) — GitHub CI/CD, issue templates, funding
+- [app/AGENTS.md](app/AGENTS.md) — Active Curio Android app module
+- [app/CURIO_DATA_PLAN.md](app/CURIO_DATA_PLAN.md) — Curio topic data contract
+- [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle version catalog and wrapper
+- [fastlane/AGENTS.md](fastlane/AGENTS.md) — Android store metadata and release notes
+- [.github/AGENTS.md](.github/AGENTS.md) — GitHub CI/CD and issue templates

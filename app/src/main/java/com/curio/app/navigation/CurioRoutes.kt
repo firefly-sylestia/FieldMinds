@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.navigation.NavController
 
 /**
- * Centralized route names for the Curio NavHost — see CURIO_SPEC.md §1.
+ * Centralized route names for the Curio NavHost — see Curio navigation contract.
  *
  * Routes that take arguments use placeholder-path syntax that maps directly
  * to Compose Navigation `composable("route/{argName}")` patterns. The

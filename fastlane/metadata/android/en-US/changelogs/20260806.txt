@@ -1,8 +1,6 @@
-• Smoother detail scrolling with full visual quality
+• Smoother detail scrolling and reliable voice-note saves
 • Quote cards capped at 280 characters and 5 ruled lines
-• Fixed gallery crashes and reliable voice-note saves
-• Tightened Paper/Style/Color editor controls and collapse spacing
-• Redesigned Profile and Settings with compact cards
-• Added Experiments for card/deck customization
-• Made Smart Density settings labels compile-proof
-• Removed the obsolete legacy module; Curio remains self-contained with archive import support
+• Compact Paper/Style/Color editing controls
+• Redesigned Profile, Settings, and Experiments
+• Smart Density labels compile-proof
+• Removed obsolete legacy Android, web, wiki, docs, assets, and package files; Curio source, topic data, scripts, and archive import support remain intact

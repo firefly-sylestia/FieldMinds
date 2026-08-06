@@ -1,6 +1,0 @@
-• Entity icon colors now adapt to any color scheme (12+ schemes supported)
-• Subtle scheme-reflective gradient backgrounds on all 5 tab screens
-• Card animations 3× faster with quicker staggered entrance
-• Gradient card backgrounds with 9 styles + visual picker in Settings
-• Pastel color scheme with soft lavender/blush/mint palette
-• Plush card shadows, rounded corners, and Geom font consistency

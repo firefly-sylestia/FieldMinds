@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Text
 
 /**
- * Curio's icon system — see CURIO_SPEC.md §0.6.
+ * Curio's icon system — see Curio icon contract.
  *
  * **NO emoji anywhere** in the app. All icons come from the Material Symbols
  * variable font bundled directly in Curio at
@@ -37,7 +37,7 @@ import androidx.compose.material3.Text
  */
 object CurioIcons {
 
-    // ── Category glyphs (CURIO_SPEC.md §0.6 — used everywhere a category appears)
+    // ── Category glyphs (Curio icon contract — used everywhere a category appears)
     const val Music       = "album"        // vinyl record
     const val Movies      = "movie"        // clapperboard
     const val Books       = "menu_book"    // open book
