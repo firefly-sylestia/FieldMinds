@@ -283,3 +283,50 @@ content matches the name field (ids like scientist-gauss-anecdote → Emmy
 Noether are just ugly generator slots). Full template sweep (12 families,
 30+ phrases) now returns **0 across all 1962 topics**; validate 0 errors.
 Committed + pushed.
+
+## (v7.48) artworks expansion — 150 new handcrafted entries (56 → 206)
+User asked to "increase artworks" in batches of 50 with real fun facts,
+handcrafted, fun-to-explore entries. Audited artworks.json (56 entries,
+ids to -104), then added three batches of 50 (scripts/batch_artworks_add_{1,2,3}.py):
+- Batch 1 (ids 105-154): prehistoric/ancient to 19th c. — Venus of
+  Willendorf, Lascaux, Nefertiti, Tutankhamun, Hammurabi, Terracotta Army,
+  Nike of Samothrace, Venus de Milo, Laocoön, Discobolus, Augustus, Book of
+  Kells, Bayeux, Oath of the Horatii, Birth of Venus, Vitruvian Man, David,
+  Pietà, Sistine Ceiling, Ambassadors, Calling of Matthew, Judith Beheading
+  Holofernes, Anatomy Lesson, Milkmaid, Rokeby Venus, Ecstasy of Teresa,
+  Blue Boy, Air Pump, Hay Wain, Slave Ship, Wanderer, Gleaners, Ophelia,
+  Folies-Bergère, Little Dancer, Moulin de la Galette, Card Players, Mont
+  Sainte-Victoire, Potato Eaters, Bedroom, Café Terrace, Thinker, Kiss
+  (Rodin), Sick Child, Madonna, Cabanel Venus, Bathers, Angelus, Lady Jane,
+  Balcony.
+- Batch 2 (ids 155-204): modern/contemporary — Nude Descending, L.H.O.O.Q.,
+  Treachery of Images, Son of Man, Two Fridas, Thorn Necklace, Dalí (Swans
+  Reflecting Elephants, Face of War, Metamorphosis, Christ of Saint John),
+  Picasso (Old Guitarist, Three Musicians, Weeping Woman, Girl Before
+  Mirror), Mondrian (Broadway Boogie Woogie, Composition), Pollock (Number
+  5, Blue Poles, Lavender Mist), Rothko (Orange/Red/Yellow, No. 61),
+  Hockney (Bigger Splash, Pool with Two Figures, Garrowby Hill), Matisse
+  (Dance, Red Studio, Woman with a Hat, Snail), Klimt Adele, De Chirico,
+  Magritte (False Mirror, Human Condition, Empire of Light), Oppenheim fur
+  cup, Koons (Puppy, Tulips), Hirst (For the Love of God, Thousand Years),
+  Ofili, Abramović (Rhythm 0, The Artist Is Present), Kruger, Kosuth,
+  Marclay Clock, Lightning Field.
+- Batch 3 (ids 205-254): Ghent Altarpiece, Sistine Last Judgement, Wedding
+  at Cana, Entombment, Nightmare, Washington Crossing, Ninth Wave,
+  Whistler's Mother, Floor Scrapers, L'Absinthe, Paris Street Rainy Day,
+  Cradle, Bath, van Gogh (Wheatfield with Crows, Sunflowers, Almond
+  Blossoms, Bandaged Ear, Dr. Gachet), Large Bathers, Dance of Life, Broken
+  Column, Gertrude Stein, Braque (L'Estaque, Violin and Candlestick), Dalí
+  (Soft Construction, Elephants, Temptation), Magritte (Golconda, Lovers,
+  Listening Room), Pollock (Number 1A, Convergence), Rothko White Center,
+  Mondrian Victory Boogie Woogie, Brillo Boxes, Drowning Girl, Triple
+  Elvis, Koons Rabbit, Sun Tunnels, Vietnam Veterans Memorial, Angel of the
+  North, Spoonbridge and Cherry, Cadillac Ranch, Watts Towers, Banksy Girl
+  with Balloon, Sleeping Gypsy, Napoleon Crossing the Alps, I and the
+  Village, Saturn Devouring His Son, Death of Socrates.
+All entries: handcrafted teaser (quirky verifiable fact), quality-bar
+instruction (specific, time-bounded, curiously framed), real targetName,
+corrected category-specific tags, proper subtype (Sculpture/Installation/
+Photograph/Textile/Manuscript overrides where apt). Dup-checked display
+names and ids; validate_topics 0 errors across 2112 topics. Committed &
+pushed per batch.
