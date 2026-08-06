@@ -521,8 +521,9 @@ fun MoodBoardZoomOverlay(
                         // edges at the current zoom, and ZERO at rest — a
                         // tiny tile can never be dragged fully off-screen,
                         // and pinching back out recenters it automatically.
-                        val s = glideScale * pinchScale                         val maxPanX = ((safeWidthPx * s - safeViewW) / 2f).coerceAtLeast(0f)
-                         val maxPanY = ((safeHeightPx * s - safeViewH) / 2f).coerceAtLeast(0f)
+                        val s = glideScale * pinchScale
+                        val maxPanX = ((safeWidthPx * s - safeViewW) / 2f).coerceAtLeast(0f)
+                        val maxPanY = ((safeHeightPx * s - safeViewH) / 2f).coerceAtLeast(0f)
                         pinchX = (pinchX + panChange.x).coerceIn(-maxPanX, maxPanX)
                         pinchY = (pinchY + panChange.y).coerceIn(-maxPanY, maxPanY)
                         if (hasMovement) event.changes.forEach { it.consume() }
