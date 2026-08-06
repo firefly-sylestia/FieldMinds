@@ -2490,40 +2490,42 @@
   {
     "id": "disc-germ-theory-of-disease-203",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Theory",
     "name": "Germ Theory of Disease (1860s)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The germ theory of disease — that microscopic organisms cause infection — was established in the 1860s–70s by Louis Pasteur and Robert Koch, against the millennia-old theory of 'spontaneous generation,' which held that life arose from rotting matter.",
     "imageUrl": "",
     "byline": "Louis Pasteur",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Germ Theory of Disease (1860s)",
+      "targetName": "Pasteur's swan-neck flasks (1861) + Koch's TB discovery (1882)",
       "durationMinutes": 12,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Read Pasteur's swan-neck flask experiment and follow the logic: broth in a flask with a curved neck boiled and stayed clear for years — air reached it, but the dust (and microbes) trapped in the neck's bend did not."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Biology",
+      "Medicine",
+      "1800s"
     ],
     "tier": 2
   },
   {
     "id": "disc-quantum-theory-1900-204",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Theory",
     "name": "Quantum Theory (1900)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Quantum theory began on 14 December 1900, when Max Planck — reluctantly, calling it 'an act of desperation' — proposed that energy comes in discrete packets, or quanta, to explain why heated objects glow the way they do. Einstein extended the idea to light itself in 1905, and within three decades the quantum had explained atoms, chemistry, and nuclear physics — while making physicists argue about what it all means to this day.",
     "imageUrl": "",
     "byline": "Max Planck",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Quantum Theory (1900)",
+      "targetName": "Planck's 1900 quantum paper + the interpretation debate",
       "durationMinutes": 13,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read the 1900 blackbody problem and feel Planck's reluctance: classical physics predicted the wrong color for glowing objects (the 'ultraviolet catastrophe'), and Planck's fix — assuming energy is emitted in chunks of h×f — worked perfectly but had no physical justification he believed in."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Physics",
+      "Quantum",
+      "1900s"
     ],
     "tier": 2
   },
@@ -2532,18 +2534,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Atomic Nucleus (1911)",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The atomic nucleus was discovered in 1911 by Ernest Rutherford's lab, when a gold-foil experiment — designed to measure the spread of alpha particles — found that a tiny fraction bounced straight back: the atom's mass is concentrated in a nucleus 100,000 times smaller than the atom itself. Rutherford reportedly compared it to firing a 15-inch shell at tissue paper and having it bounce back at you.",
     "imageUrl": "",
     "byline": "Ernest Rutherford",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Atomic Nucleus (1911)",
+      "targetName": "The 1911 gold-foil experiment + the nuclear atom model",
       "durationMinutes": 12,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Read the 1911 gold-foil experiment and notice the setup: Geiger and Marsden, Rutherford's students, fired alpha particles at gold foil and counted where they emerged — most passed through (the atom is mostly empty space), but about 1 in 8,000 bounced back, which required a dense positive core."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Physics",
+      "Atoms",
+      "1910s"
     ],
     "tier": 2
   },
@@ -2552,38 +2555,40 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Neutron (1932)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "James Chadwick discovered the neutron in 1932 — a neutral particle with roughly the proton's mass, whose existence had been suspected for a decade but never shown. The discovery was the key that unlocked nuclear physics: with the neutron, physicists could explain isotopes, split the atom (fission, 1938), and build the chain reaction — Chadwick won the 1935 Nobel, and his finding made both nuclear power and nuclear weapons possible.",
     "imageUrl": "",
     "byline": "James Chadwick",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Neutron (1932)",
+      "targetName": "Chadwick's 1932 experiments + the isotope explanation",
       "durationMinutes": 6,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the 1932 experiments and notice what made them conclusive: Chadwick bombarded beryllium with alpha particles and got radiation that knocked protons out of paraffin wax with energies no photon could have — the 'rays' had to be particles of proton-like mass."
     },
     "tags": [
-      "Medicine",
-      "20th Century"
+      "Physics",
+      "Particles",
+      "1930s"
     ],
     "tier": 2
   },
   {
     "id": "disc-the-transistor-1947-207",
     "categoryId": "DISCOVERIES",
-    "subtype": "Discovery",
+    "subtype": "Invention",
     "name": "The Transistor (1947)",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The transistor was invented on 23 December 1947 at Bell Labs by John Bardeen, Walter Brattain, and William Shockley — a tiny solid-state device that amplifies or switches electrical signals, replacing the vacuum tube. It is the fundamental building block of everything electronic: a modern computer chip holds billions of transistors, and the three inventors shared the 1956 Nobel.",
     "imageUrl": "",
     "byline": "Bardeen, Brattain & Shockley",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Transistor (1947)",
+      "targetName": "The 23 December 1947 point-contact transistor + Moore's Law",
       "durationMinutes": 13,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Read the December 1947 demonstration and notice the scale: the first working transistor was a wedge of gold foil pressed into germanium, amplifying an audio signal by a factor of ~100 — and it worked for 17 hours before failing."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "Electronics",
+      "1940s"
     ],
     "tier": 2
   }

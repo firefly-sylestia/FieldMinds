@@ -238,5 +238,6 @@ proper subtypes, real tags. books.json: all 106 fakes replaced (3 batches:
 40+44+22) — 2023 releases and the classics (Moby-Dick, Anna Karenina,
 Gatsby, Lolita, One Hundred Years of Solitude, …), real teasers + reading
 instructions + corrected tags. Validation still 0 errors. Next up in the
-queue: discoveries.json (87), painters.json (77), directors.json (73),
-films.json (67), artists.json (1).
+queue: wildcard + books + discoveries are now CLEAN (0 fakes each, validation 0
+errors throughout). Remaining in queue: painters.json (77), directors.json
+(73), films.json (67), artists.json (1).
