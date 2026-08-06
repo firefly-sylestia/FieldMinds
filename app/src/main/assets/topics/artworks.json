@@ -5115,5 +5115,1005 @@
       "Public Sculpture"
     ],
     "tier": 2
+  },
+  {
+    "id": "artw-the-lady-of-shalott-305",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Lady of Shalott (1888)",
+    "teaser": "Waterhouse's painting of the doomed Lady of Shalott from Tennyson's poem — she is cursed to weave, watching the world only in a mirror, and she leaves her tower to die for love of Lancelot. Waterhouse shows her at the exact moment of leaving: the web she was weaving unravels behind her, and the mirror that held her world is cracked.",
+    "imageUrl": "",
+    "byline": "John William Waterhouse (1888)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Lady of Shalott (1888) — the cracked mirror and the unraveling web",
+      "durationMinutes": 8,
+      "instruction": "Look at the mirror first: it's cracked — 'the mirror crack'd from side to side' is the poem's line — and behind her the woven tapestry she made is coming apart. Then her face: she looks forward, toward the river and the boat that will carry her to Camelot, with a kind of grief and resolve."
+    },
+    "tags": [
+      "Pre-Raphaelite",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-beata-beatrix-306",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Beata Beatrix (1870)",
+    "teaser": "Rossetti's portrait of his wife Elizabeth Siddal as Beatrice, the beloved of Dante's Divine Comedy — painted after Siddal died of an overdose of laudanum in 1862. Rossetti buried his unpublished poems with her, then exhumed her coffin seven years later to retrieve them; the painting's red dove — a symbol of death — delivers a white poppy to her open hands.",
+    "imageUrl": "",
+    "byline": "Dante Gabriel Rossetti (1870)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Beata Beatrix (1870) — the dove, the poppy, and the exhumed poems",
+      "durationMinutes": 8,
+      "instruction": "Look at the figure first: she sits with her eyes closed, hands open in a trance — Rossetti painted Siddal as Beatrice at the moment of death, surrounded by light. Then the symbols: the red dove, messenger of death, drops a white poppy into her hands, and behind her the sundial and the city of Florence frame the scene."
+    },
+    "tags": [
+      "Pre-Raphaelite",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-last-of-england-307",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Last of England (1855)",
+    "teaser": "Brown's painting of an emigrant couple leaving England by ship — he painted it because his friend, the sculptor Thomas Woolner, was emigrating to Australia, and it captures the wave of emigration that emptied Britain's villages. The couple stares back at the receding coast, and Brown painted himself and his wife as the models.",
+    "imageUrl": "",
+    "byline": "Ford Madox Brown (1855)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Last of England (1855) — the fixed gaze back at the coast",
+      "durationMinutes": 8,
+      "instruction": "Look at the faces first: the man and woman look back toward the England they're leaving, with a fixed, resolute sadness — Brown modeled the couple on himself and his wife. Then the details: the cabbages hanging from the ship's rail (emigrants brought food for the voyage), the baby wrapped in the woman's shawl, and the man's hand clenched on the rail."
+    },
+    "tags": [
+      "Pre-Raphaelite",
+      "Emigration"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-awakening-conscience-308",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Awakening Conscience (1853)",
+    "teaser": "Hunt's painting of a kept woman suddenly rising from her lover's lap — a 'fallen woman' realizing her situation — with the entire room painted in moral symbols: a cat playing with a bird, a discarded glove, a sheet of music left open. Critics were scandalized by the subject when it was shown in 1854, and the painting started a national debate about redemption.",
+    "imageUrl": "",
+    "byline": "William Holman Hunt (1853)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Awakening Conscience (1853) — the rising woman and the trapped bird",
+      "durationMinutes": 8,
+      "instruction": "Look at the young woman first: she rises from the man's lap with her hands clasped, a look of dawning horror — she has just understood her situation."
+    },
+    "tags": [
+      "Pre-Raphaelite",
+      "Moral Symbolism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-light-of-the-world-309",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Light of the World (1851-53)",
+    "teaser": "Hunt's painting of Christ knocking at a door overgrown with ivy — with no handle on the outside, because the door is the human heart and can only be opened from within. The painting toured the world and drew enormous crowds; Queen Victoria asked to see it privately, and it became one of the most reproduced religious images in the English-speaking world.",
+    "imageUrl": "",
+    "byline": "William Holman Hunt (1851-53)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Light of the World (1851-53) — the door with no handle",
+      "durationMinutes": 8,
+      "instruction": "Look at the door first: it has no handle — Hunt painted it that way on purpose, because the door is the human heart, and it can only be opened from the inside. Then the details: Christ carries a lantern and wears a crown of thorns, and the ivy has overgrown the door because it has been shut for a long time. The apple among the ivy alludes to the Fall, and the bats and weeds show the neglect of the heart."
+    },
+    "tags": [
+      "Pre-Raphaelite",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-crystal-palace-310",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Crystal Palace (1851)",
+    "teaser": "The glass-and-iron exhibition hall built in London for the Great Exhibition of 1851 — a building made almost entirely of prefabricated glass panels and cast iron, covering 19 acres, designed in nine days by a gardener. It was the largest building in the world, and it was dismantled and rebuilt in south London, where it stood until it burned down in 1936.",
+    "imageUrl": "",
+    "byline": "Joseph Paxton (1851)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Crystal Palace (1851) — the glass-and-iron prefabrication",
+      "durationMinutes": 8,
+      "instruction": "Look at the design: the palace was built from 300,000 panes of glass and thousands of identical cast-iron columns, all prefabricated and assembled on site — a building made like a machine, and the model for every modern skyscraper. Paxton was a gardener who had designed greenhouses, and his nine-day design borrowed their techniques on a colossal scale."
+    },
+    "tags": [
+      "Victorian",
+      "Architecture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-ardabil-carpet-311",
+    "categoryId": "ARTWORKS",
+    "subtype": "Textile",
+    "name": "The Ardabil Carpet (1539-40)",
+    "teaser": "A 10.5 by 5.3 meter silk-and-wool carpet from 16th-century Persia — one of the world's greatest carpets, and one of only two made as a pair for the shrine at Ardabil. It contains 10 million knots, and its design — a central sunburst medallion with hanging lamps — is a symmetrical maze that takes the eye hours to trace.",
+    "imageUrl": "",
+    "byline": "Unknown (1539-40)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Ardabil Carpet (1539-40) — the deliberately unequal lamps",
+      "durationMinutes": 8,
+      "instruction": "Look at the center first: the large medallion is a sunburst with 16 pendants, and two lamps hang at the sides — one slightly smaller, because in Islamic art the perfect symmetry is deliberately broken (the smaller lamp is the 'other' that reminds you this is the work of human hands, not God). Then the border: it's a dense garden of cartouches with Persian calligraphy, including the weaver's signature and date."
+    },
+    "tags": [
+      "Islamic Art",
+      "Textile"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-blue-quran-312",
+    "categoryId": "ARTWORKS",
+    "subtype": "Manuscript",
+    "name": "The Blue Qur'an (c. 9th century)",
+    "teaser": "A Qur'an copied on parchment dyed indigo with silver-gold Kufic lettering — the most luxurious manuscript ever made, and one of the rarest: its pages were scattered across collections in Tunisia, Turkey, and the West over centuries. Only about 100 of the original 600 pages survive, and the dye was so expensive that each page was worth a fortune.",
+    "imageUrl": "",
+    "byline": "Unknown (c. 9th century)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Blue Qur'an (c. 9th century) — the indigo pages and the gold script",
+      "durationMinutes": 8,
+      "instruction": "Look at the color first: the parchment is dyed a deep indigo blue — a luxury that made each page precious — and the script is Kufic, the angular early Arabic calligraphy, written in gold and silver. Then the size: the pages are enormous, nearly 50 cm wide, made for public reading in a great mosque."
+    },
+    "tags": [
+      "Islamic Art",
+      "Manuscript"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-tale-of-genji-scroll-313",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Tale of Genji Scroll (c. 1130)",
+    "teaser": "A set of painted scrolls illustrating the world's first novel, Lady Murasaki's Tale of Genji, written in the 11th century — the surviving scroll fragments are the oldest surviving painted narrative in Japan, and they show court scenes with faces painted in the 'blown-off roof' style: interiors shown from above, with the roofs removed so you look down into the rooms.",
+    "imageUrl": "",
+    "byline": "Unknown (c. 1130)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Tale of Genji Scroll (c. 1130) — the mask faces and the removed roofs",
+      "durationMinutes": 8,
+      "instruction": "Look at the faces first: the court figures are shown with simplified, mask-like faces — the 'blown-off roof' style shows the scene from above, and the emotions are conveyed by the tilt of the heads and the fall of the robes. Then the colors: the layers of kimono are painted with the technique of building colors one over another, so the clothing is rich and jewel-like."
+    },
+    "tags": [
+      "Japanese Art",
+      "Scroll"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-great-arch-at-ctesiphon-314",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Arch of Ctesiphon (c. 540)",
+    "teaser": "The largest brick vault in the world — a 34-meter-tall arch built by the Sasanian Empire in what is now Iraq, part of the palace of the Persian kings. It stood for 1,400 years until a flood in 2025 partially collapsed it; its single-span brick arch was the model for Islamic architecture and a symbol of Persian engineering.",
+    "imageUrl": "",
+    "byline": "Unknown (c. 540)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Arch of Ctesiphon (c. 540) — the single-span brick vault",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale first: the arch is 34 meters tall with a single span — the largest brick vault ever built without support, and it stood for over 1,400 years. Then the construction: the entire arch is made of mud brick laid in courses that lean into each other, a technique that prefigures modern arch engineering. The palace at Ctesiphon was the seat of the Sasanian kings, and the arch's shape echoed through Islamic mosques for a thousand years."
+    },
+    "tags": [
+      "Ancient Mesopotamia",
+      "Architecture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-standard-of-ur-315",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "The Standard of Ur (c. 2500 BCE)",
+    "teaser": "A 4,500-year-old wooden box from the Sumerian city of Ur, decorated on four sides with shell, lapis lazuli, and red limestone mosaics — the 'War' panel shows soldiers and chariots, the 'Peace' panel shows a banquet. It was found in a royal tomb in the 1920s by Leonard Woolley, who believed it was a standard carried on a pole; no one knows for certain what it was.",
+    "imageUrl": "",
+    "byline": "Unknown (c. 2500 BCE)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Standard of Ur (c. 2500 BCE) — the War and Peace panels",
+      "durationMinutes": 8,
+      "instruction": "Look at the two main panels: the 'War' side shows the king's army — chariots with wheels made of solid discs, soldiers in cloaks, and prisoners — and the 'Peace' side shows a banquet with a lyre and a musician, where the king drinks from a cup. Then the materials: the figures are inlaid in shell, lapis lazuli imported from Afghanistan, and red limestone — an astonishing range of materials for a box from 2500 BCE."
+    },
+    "tags": [
+      "Sumerian",
+      "Mosaic"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-mask-of-agamemnon-316",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "The Mask of Agamemnon (c. 1550 BCE)",
+    "teaser": "A gold death mask found by Heinrich Schliemann at Mycenae in 1876 — he telegraphed the king of Greece that he had 'gazed upon the face of Agamemnon,' the king who led the Greeks at Troy. But the mask is 400 years older than Agamemnon would have been, and scholars now doubt both the identification and, for some, its authenticity — it may have been a genuine Mycenaean mask, or Schliemann may have embellished it.",
+    "imageUrl": "",
+    "byline": "Unknown (c. 1550 BCE)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Mask of Agamemnon (c. 1550 BCE) — the beaten gold face",
+      "durationMinutes": 8,
+      "instruction": "Look at the face first: the mask is beaten from a single sheet of gold, with a heavy mustache, closed eyes, and a fixed expression — made to cover the face of a dead king, not to look alive. Then the history: Schliemann found it at Mycenae in 1876 and wired the king of Greece that he had found Agamemnon's face — but the tomb is 400 years too early, so the identification is almost certainly wrong."
+    },
+    "tags": [
+      "Mycenaean",
+      "Goldwork"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-apollo-and-daphne-317",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Apollo and Daphne (1622-25)",
+    "teaser": "Bernini's marble sculpture of the moment Apollo catches the nymph Daphne and she begins to turn into a laurel tree — her fingers become leaves, her legs become bark, mid-transformation. The story comes from Ovid, and Bernini carved the change so convincingly that visitors still circle the sculpture waiting for the transformation to finish. The marble is so thin in places that light passes through the leaves.",
+    "imageUrl": "",
+    "byline": "Gian Lorenzo Bernini (1622-25)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Apollo and Daphne (1622-25) — the fingers becoming leaves",
+      "durationMinutes": 8,
+      "instruction": "Look at the transformation first: Daphne's left hand is already sprouting leaves, her hair is becoming foliage, and bark is climbing her legs from the ground up — Bernini carved the change at the exact instant of capture. Then the emotion: Apollo's face shows triumph turning to shock, and his hand reaches for a waist that is no longer flesh."
+    },
+    "tags": [
+      "Baroque",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-gates-of-hell-318",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "The Gates of Hell (1880-1917)",
+    "teaser": "Rodin's unfinished masterpiece — a 6-meter bronze door covered with 180 figures from Dante's Inferno, including the Thinker, the Kiss, and dozens of desperate souls. He worked on it for 37 years and died before it was cast; the door's figures became the most borrowed vocabulary in modern sculpture.",
+    "imageUrl": "",
+    "byline": "Auguste Rodin (1880-1917)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Gates of Hell (1880-1917) — find the Thinker and the Kiss",
+      "durationMinutes": 8,
+      "instruction": "Look at the door as a whole: it's a maelstrom of bodies — 180 figures pressed, falling, and embracing across the bronze, from Dante's Inferno. Then find the famous ones: the Thinker sits at the top of the lintel (Rodin's Dante), and the Kiss appears in the lower right — both began as details of this door and became independent masterpieces."
+    },
+    "tags": [
+      "Sculpture",
+      "Bronze"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-burghers-of-calais-319",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "The Burghers of Calais (1889)",
+    "teaser": "Rodin's monument to six wealthy citizens of Calais who offered themselves as hostages to end the English siege of 1347 — and Rodin broke every rule of public sculpture: instead of a heroic pose, he showed the six men walking to their deaths, each with his own gesture of despair, and he placed them at ground level so viewers walk among them.",
+    "imageUrl": "",
+    "byline": "Auguste Rodin (1889)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Burghers of Calais (1889) — the six individual deaths",
+      "durationMinutes": 8,
+      "instruction": "Look at the six figures: each one faces death differently — one covers his face, one clutches his head, one holds the key to the city, one walks with resignation — and none of them looks heroic. Then the placement: Rodin insisted the group be set at ground level, not on a pedestal, so passers-by walk among the doomed men and share their walk."
+    },
+    "tags": [
+      "Sculpture",
+      "Bronze"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-unveiling-of-laszlo-320",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Execution of Emperor Maximilian (1868)",
+    "teaser": "Manet painted the execution of the Austrian archduke Maximilian, installed as a puppet emperor of Mexico by France and shot by a firing squad in 1867 — a subject so politically sensitive that Manet's paintings of it were censored and could not be exhibited in France for years. He painted several versions, each refining the composition, and the largest is considered his greatest political work.",
+    "imageUrl": "",
+    "byline": "Édouard Manet (1868)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Execution of Emperor Maximilian (1868) — the casual firing squad",
+      "durationMinutes": 8,
+      "instruction": "Look at the composition first: the emperor stands with his hand raised, facing the squad, while one soldier takes aim and the others fire — Manet based the scene on newspaper accounts, and the firing squad is almost casual, mid-execution. Then the details: the smoke, the wall behind the victims, and the same sergeant who appears in Manet's earlier work."
+    },
+    "tags": [
+      "Realism",
+      "History Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-grande-odalisque-321",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Grande Odalisque (1814)",
+    "teaser": "Ingres's painting of a reclining nude in a harem — with a back that is anatomically impossible: she has three too many vertebrae. Critics attacked the distortion when it was shown, and Ingres, far from apologizing, defended it as deliberate: he said he wanted 'longer lines' and that a painter should exaggerate for beauty. The painting is the founding image of the 'orientalist' nude.",
+    "imageUrl": "",
+    "byline": "Jean-Auguste-Dominique Ingres (1814)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Grande Odalisque (1814) — the impossible, three-vertebrae back",
+      "durationMinutes": 8,
+      "instruction": "Look at the back first: count the curve from shoulder to hip — Ingres gave the odalisque a spine with three extra vertebrae, so her body bends like a swan's neck. He did it on purpose: 'the beautiful line,' he said, comes before anatomical truth, and the elongation makes the figure more elegant."
+    },
+    "tags": [
+      "Neoclassicism",
+      "Orientalism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-procuress-322",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Procuress (1656)",
+    "teaser": "Vermeer's early painting of a soldier, a young woman, and a procuress — an old woman receiving payment — is his largest and most crowded scene, and it's the painting that scholars believe is a self-portrait: the musician on the left is thought to be Vermeer himself. It's the key to his early style, made when he was 24, ten years before his quiet domestic scenes.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (1656)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Procuress (1656) — find the probable self-portrait",
+      "durationMinutes": 8,
+      "instruction": "Look at the musician on the left first: he's believed to be Vermeer himself, playing a lute and watching the scene — if so, it's the only self-portrait he ever made. Then the center: the soldier in a red coat and broad hat places his hand on the young woman's breast while the procuress holds out her hand for payment — a brothel scene, the opposite of Vermeer's later quiet interiors."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-woman-holding-a-balance-323",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Woman Holding a Balance (c. 1664)",
+    "teaser": "Vermeer's painting of a woman in a blue-edged white cap weighing pearls on a tiny balance — while behind her hangs a painting of the Last Judgement. The scales are empty, and scholars argue whether she weighs worldly goods or weighs her soul; either way, Vermeer turned a quiet domestic moment into a meditation on judgment.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1664)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Woman Holding a Balance (c. 1664) — the empty scales and the Last Judgement",
+      "durationMinutes": 8,
+      "instruction": "Look at the balance first: the pans are empty — she is weighing nothing, or everything — and her face is calm, intent, and lit from the window on the left. Then the background: the painting behind her is a Last Judgement, with Christ enthroned, so the woman's weighing is set against the final weighing of souls. On the table, the pearl box is open and coins gleam — the goods of this world."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-little-street-324",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Little Street (c. 1658)",
+    "teaser": "Vermeer's painting of an ordinary street in Delft — two brick houses, a passageway, a woman sewing, two children playing — is the only street scene he ever painted, and it's one of the most beloved images in Dutch art. The street has been identified by scholars as the Vlamingstraat in Delft, and Vermeer painted it from his window.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1658)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Little Street (c. 1658) — the woman sewing and the playing children",
+      "durationMinutes": 8,
+      "instruction": "Look at the ordinariness first: no drama, no grand architecture — just two plain brick houses, a woman sewing at a doorway, and two children playing in the passage. Then the composition: Vermeer framed the street like a photographer, with the houses cropped by the canvas edges, and the brickwork is painted brick by brick with astonishing care."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Cityscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-menaced-assassin-325",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Menaced Assassin (1927)",
+    "teaser": "Magritte's murder scene from his early 'word and image' period — a naked woman lies dead beside a phonograph while three men in bowler hats watch from the next room and two more appear through the window; a sixth figure stands at the door with a club. The scene is staged like a theater, and nobody looks panicked — the menace is the calm.",
+    "imageUrl": "",
+    "byline": "René Magritte (1927)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Menaced Assassin (1927) — the staged murder and the calm",
+      "durationMinutes": 8,
+      "instruction": "Look at the composition first: it's staged like a photograph — the dead woman, the phonograph, the two men at the window — and the murderer in the doorway looks more like a waiter than a killer. Then the calm: every figure is posed and detached, and the whole scene feels frozen mid-story, a thriller without action."
+    },
+    "tags": [
+      "Surrealism",
+      "Narrative"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-castle-of-the-pyrenees-326",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Castle of the Pyrenees (1959)",
+    "teaser": "Magritte's impossible landscape: a colossal stone tower crowned with a castle floats over a calm sea, suspended in mid-air above the waves. Magritte painted it for a friend who was a surrealist collector, and the combination of the massive, ancient tower and the empty, weightless sky makes the painting both monumental and dreamlike.",
+    "imageUrl": "",
+    "byline": "René Magritte (1959)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Castle of the Pyrenees (1959) — the floating mountain",
+      "durationMinutes": 8,
+      "instruction": "Look at the tower first: it's a great rocky mass — a mountain carved into a castle — hanging in the sky above the sea with no support, and the waves below are painted in flat, hard-edged bands. Then the contradiction: the castle is ancient and heavy, the sea is calm and empty, and nothing explains how the rock stays up."
+    },
+    "tags": [
+      "Surrealism",
+      "Impossible Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-time-transfixed-327",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Time Transfixed (1938)",
+    "teaser": "Magritte's painting of a steam locomotive bursting out of a fireplace at full speed — smoke rising into the chimney, the mantel clock untouched, the room otherwise perfectly ordinary. It was commissioned by the poet Edward James for his London house, and James complained that the fireplace hid the train; Magritte replied that the painting's job was 'to make the everyday visible.'",
+    "imageUrl": "",
+    "byline": "René Magritte (1938)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Time Transfixed (1938) — the train in the fireplace",
+      "durationMinutes": 8,
+      "instruction": "Look at the fireplace first: a miniature express train emerges from the grate at full speed, its smoke curling up the chimney — while the clock on the mantel shows the room's real time, undisturbed. Then the room: a dining room, perfectly ordinary, with candles, a mirror, and a carpet — everything else is asleep."
+    },
+    "tags": [
+      "Surrealism",
+      "Impossible Object"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-wounded-deer-328",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Wounded Deer (1946)",
+    "teaser": "Kahlo's self-portrait as a stag — a deer with her own face, pierced by nine arrows, bleeding into a forest clearing. She painted it after a spinal operation, during years of chronic pain, and the deer runs through a wood with broken branches — the painting is one of her most direct statements about suffering. The arrows, she said, were 'nine life events.'",
+    "imageUrl": "",
+    "byline": "Frida Kahlo (1946)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Wounded Deer (1946) — the nine arrows and the flight",
+      "durationMinutes": 8,
+      "instruction": "Look at the figure first: the deer has Kahlo's face, and nine arrows pierce its body — each one, she said, a life event, including her broken spine and her marriage. Then the forest: the branches are broken, the clearing is empty, and a distant sea and a storm gather behind — the scene is both flight and waiting. The deer's antlers and the wound in its side echo the Christian imagery of the wounded hart, but Kahlo makes it intensely personal."
+    },
+    "tags": [
+      "Surrealism",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-henry-ford-hospital-329",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Henry Ford Hospital (1932)",
+    "teaser": "Kahlo's painting of herself bleeding on a hospital bed after a miscarriage, connected by red ribbons to six floating objects: a fetus, a snail, a flower, a machine, a pelvis, and an orchid — each ribbon tied to her like an umbilical cord. She painted it in Detroit while her husband Diego Rivera painted his famous mural, and it is one of the first paintings ever to show a woman's miscarriage.",
+    "imageUrl": "",
+    "byline": "Frida Kahlo (1932)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Henry Ford Hospital (1932) — the six ribbons and the floating objects",
+      "durationMinutes": 8,
+      "instruction": "Look at the bed first: Kahlo lies naked and bleeding on a metal hospital bed, floating in an empty landscape — the Detroit skyline and its factory chimneys shrink in the distance. Then the ribbons: six red threads tie her to the objects that surround her — the fetus she lost, the snail (the slow passage of time), the machine (the hospital, the industrial city), the pelvis, the flower, and the orchid Diego gave her."
+    },
+    "tags": [
+      "Surrealism",
+      "Personal History"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-suicide-of-dorothy-hale-330",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Suicide of Dorothy Hale (1938)",
+    "teaser": "Kahlo's grimmest painting: the New York socialite Dorothy Hale falls through the air against a blood-red sky, with her own body lying dead on the ground below — and the caption at the bottom, painted by Kahlo, records the event 'as told to Frida Kahlo.' The painting was commissioned by Hale's friend Clare Boothe Luce, who was so horrified by the result she kept it hidden.",
+    "imageUrl": "",
+    "byline": "Frida Kahlo (1938)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Suicide of Dorothy Hale (1938) — the fall, the ground, and the dead",
+      "durationMinutes": 8,
+      "instruction": "Look at the fall first: Dorothy Hale falls against a red sky, three times — falling, hitting the ground, and lying dead — in a single image, like a comic strip of death. Then the caption: the bottom band reads 'The Suicide of Dorothy Hale... as told to Frida Kahlo,' giving the date, 1938, and the method."
+    },
+    "tags": [
+      "Surrealism",
+      "Biography"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-not-to-be-reproduced-331",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Not to Be Reproduced (1937)",
+    "teaser": "Magritte's portrait of the poet Edward James — seen from behind, looking into a mirror, but the mirror reflects his back again instead of his face. The book on the mantel — a novel by Edgar Allan Poe — is also reflected correctly instead of reversed, so only the face is refused its reflection. It is one of the most copied images of the 20th century.",
+    "imageUrl": "",
+    "byline": "René Magritte (1937)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Not to Be Reproduced (1937) — the mirror that refuses the face",
+      "durationMinutes": 8,
+      "instruction": "Look at the mirror first: the man's back is reflected — his face is never shown, even though he is looking straight at the mirror, and the mirror refuses to return his gaze. Then the book: the copy of Poe's tales on the mantel is reflected the right way round, not reversed — so the mirror obeys physics for the book and disobeys it for the face."
+    },
+    "tags": [
+      "Surrealism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-blank-signature-332",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Blank Signature (1965)",
+    "teaser": "Magritte's equestrian painting where the rider, the horse, and the trees keep hiding each other: the horse's front legs vanish behind a tree trunk, the rider's body merges with the forest, and the whole scene refuses to resolve into a single figure — a woman rides through a wood that both hides and reveals her.",
+    "imageUrl": "",
+    "byline": "René Magritte (1965)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Blank Signature (1965) — the horse that hides itself",
+      "durationMinutes": 8,
+      "instruction": "Look at the horse first: its legs disappear behind a tree, and the rider's body is cut into pieces by the tree trunks — the figure is simultaneously in front of and behind the wood. Then the word 'blank': Magritte called it 'the blank signature' because the painting, like a signature, identifies the painter — but the scene itself refuses to be pinned down. The horse has four legs but you cannot count them: every time you try, one is hidden."
+    },
+    "tags": [
+      "Surrealism",
+      "Optical Illusion"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-umbrellas-333",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "The Umbrellas (1991)",
+    "teaser": "Christo and Jeanne-Claude's paired installation — 1,340 blue umbrellas across 18 miles of Japanese rice fields and 1,760 yellow umbrellas across 18 miles of California hills — opened simultaneously on both sides of the Pacific on October 9, 1991. The project was cut short by tragedy: a woman in California was killed when a wind gust lifted her umbrella, and the project was dismantled early.",
+    "imageUrl": "",
+    "byline": "Christo & Jeanne-Claude (1991)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Umbrellas (1991) — blue over Japan, yellow over California",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale first: 3,100 umbrellas, each 6 meters tall, opened at the same hour on two continents — blue in Japan, yellow in California, so the two landscapes were 'tied' across the Pacific. Then the logistics: the project took four years, cost $26 million, and was paid for entirely by selling Christo's drawings. The blue and yellow were chosen because they echoed the landscape colors of each site — rice and grass."
+    },
+    "tags": [
+      "Land Art",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-mastaba-334",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "The Mastaba (2018)",
+    "teaser": "Christo's floating installation on London's Serpentine Lake — 7,506 oil barrels in red, blue, and mauve stacked into a trapezoid, a form he had drawn for 60 years and finally built months before his death. The 'Mastaba' (Arabic for 'bench') is his tribute to the ancient Egyptian tombs of that name, and it stood on the lake for four months in 2018.",
+    "imageUrl": "",
+    "byline": "Christo & Jeanne-Claude (2018)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Mastaba (2018) — the 7,506-barrel trapezoid",
+      "durationMinutes": 8,
+      "instruction": "Look at the shape first: a trapezoid — flat top, sloping sides — built from 7,506 oil barrels stacked in tiers, a form Christo first sketched in 1958 and finally built in 2018, the year before he died. Then the colors: the barrels are red, blue, and mauve, arranged so the pattern shifts as you walk around the floating platform. The barrels' industrial form is deliberately anonymous — the piece is about pure shape and color."
+    },
+    "tags": [
+      "Contemporary",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-rest-energy-335",
+    "categoryId": "ARTWORKS",
+    "subtype": "Performance",
+    "name": "Rest Energy (1980)",
+    "teaser": "In Abramović's performance with her partner Ulay, they stood facing each other, holding a drawn bow and arrow — Abramović holding the bow, Ulay the arrow, its steel point aimed directly at her heart. A microphone recorded their heartbeats, which sped up to 156 beats a minute during the four minutes. One tremor in either hand would have killed her.",
+    "imageUrl": "",
+    "byline": "Marina Abramović & Ulay (1980)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rest Energy (1980) — the arrow aimed at the heart",
+      "durationMinutes": 8,
+      "instruction": "Look at the setup first: two people face each other, holding a fully drawn bow — the arrow's point presses against Abramović's chest, and the entire performance is the tension of holding that position. Then the physics: Abramović holds the bow, Ulay holds the arrow, and the arrow's tip points at her heart; a microphone amplified their heartbeats, and hers reached 156 beats per minute."
+    },
+    "tags": [
+      "Performance Art",
+      "Trust"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-24-hour-psycho-336",
+    "categoryId": "ARTWORKS",
+    "subtype": "Video",
+    "name": "24 Hour Psycho (1993)",
+    "teaser": "Gordon slowed Alfred Hitchcock's Psycho to two frames per second, stretching the 109-minute film to 24 hours — Janet Leigh's famous shower scene takes over an hour, and the whole film becomes a series of still images that creep forward. The gallery shows it on a translucent screen, so visitors see both sides of the image at once.",
+    "imageUrl": "",
+    "byline": "Douglas Gordon (1993)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "24 Hour Psycho (1993) — the hour-long shower scene",
+      "durationMinutes": 8,
+      "instruction": "Look at the screen first: the film is projected on a translucent screen, so you can walk around and watch it from both sides. Then the timing: Psycho normally runs 109 minutes; here it runs 24 hours, at two frames per second — the shower scene, which takes about 45 seconds, takes over an hour."
+    },
+    "tags": [
+      "Video Art",
+      "Found Footage"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-broken-circle-spiral-hill-337",
+    "categoryId": "ARTWORKS",
+    "subtype": "Land Art",
+    "name": "Broken Circle/Spiral Hill (1971)",
+    "teaser": "Smithson's earthwork in Emmen, the Netherlands: a white sand circle broken into two arcs with a jetty across the gap, and nearby a spiral hill of black earth. The two forms — one carved into the land, one built up from it — were made for a lake that has since flooded the circle, so the work now exists half underwater, changing with the seasons.",
+    "imageUrl": "",
+    "byline": "Robert Smithson (1971)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Broken Circle/Spiral Hill (1971) — the flooded ring and the spiral",
+      "durationMinutes": 8,
+      "instruction": "Look at the circle first: a ring of white sand, broken into two arcs, with a jetty bridging the break — and the water of the lake now covers part of it, so the circle is sometimes whole and sometimes flooded. Then the hill: a spiral ramp of black earth rises from the water, the mirror of the circle — one form dug from the land, one built up from it."
+    },
+    "tags": [
+      "Land Art",
+      "Earthwork"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-womanhouse-338",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Womanhouse (1972)",
+    "teaser": "Womanhouse was a run-down Los Angeles mansion that Chicago and Schapiro, with 21 students, transformed into a feminist art installation in 1972 — every room became a statement: a kitchen whose walls were covered in fried-egg breasts, a bedroom that was a giant ironing board, a closet full of women's dresses.",
+    "imageUrl": "",
+    "byline": "Judy Chicago & Miriam Schapiro (1972)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Womanhouse (1972) — the kitchen of fried-egg breasts",
+      "durationMinutes": 8,
+      "instruction": "Look at the rooms first: each one is a woman's life turned into an environment — the Nurturant Kitchen with its breast-egg walls, the Menstruation Bathroom in blood red, the Ironing Board bedroom where the board is the bed. Then the method: Chicago, Schapiro, and their students renovated the abandoned mansion themselves — the work was as much about women doing construction as about the art inside."
+    },
+    "tags": [
+      "Feminist Art",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-a-line-made-by-walking-339",
+    "categoryId": "ARTWORKS",
+    "subtype": "Land Art",
+    "name": "A Line Made by Walking (1967)",
+    "teaser": "Long walked back and forth across a field in Wiltshire until the trampled grass formed a visible line, then photographed it from above — the entire artwork is that line and that photograph. It is one of the founding works of conceptual art, made when Long was a 22-year-old student, and it cost nothing but time.",
+    "imageUrl": "",
+    "byline": "Richard Long (1967)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "A Line Made by Walking (1967) — the walk made visible",
+      "durationMinutes": 8,
+      "instruction": "Look at the line first: a pale stripe across a field of grass — made not by drawing but by walking, back and forth, until the trampled blades flattened into a visible path. Then the idea: the artwork is the walk itself, recorded in a photograph, and it exists in the world only until the grass grows back. Long was a student at St Martin's School of Art when he made it in 1967, and the work turned walking into sculpture."
+    },
+    "tags": [
+      "Conceptual Art",
+      "Land Art"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-sky-mirror-340",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Sky Mirror (2006)",
+    "teaser": "Kapoor's giant concave mirror — 10 meters in diameter, made of polished stainless steel — set on its edge so it reflects the sky and the city upside down. A version stood in Rockefeller Center in New York in 2006, where the mirrored bowl turned the skyline into a curved, upside-down image that visitors could walk around and see themselves in.",
+    "imageUrl": "",
+    "byline": "Anish Kapoor (2006)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Sky Mirror (2006) — the bowl that holds the city upside down",
+      "durationMinutes": 8,
+      "instruction": "Look at the surface first: a huge concave disc of polished steel, tilted so it gathers the sky and the buildings and bends them into an upside-down bowl. Then the reflections: the city's towers curve into the mirror's curve, and when you stand at the right distance you see yourself floating in the sky."
+    },
+    "tags": [
+      "Contemporary",
+      "Public Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-wrapped-pont-neuf-341",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Wrapped Pont Neuf (1985)",
+    "teaser": "Christo and Jeanne-Claude wrapped the Pont Neuf — the oldest bridge in Paris — in 40,000 square meters of golden sandstone-colored fabric, tied with 13 kilometers of rope, for two weeks in September 1985. The project took nine years of negotiations with the city of Paris, and the wrapped bridge, its lamps still glowing through the cloth, turned a 400-year-old monument into a ghost of itself.",
+    "imageUrl": "",
+    "byline": "Christo & Jeanne-Claude (1985)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Wrapped Pont Neuf (1985) — the bridge wrapped in sandstone cloth",
+      "durationMinutes": 8,
+      "instruction": "Look at the fabric first: the whole bridge — its arches, its lamps, its stone — is wrapped in sandstone-colored cloth, so the oldest bridge in Paris becomes a soft, anonymous mass. Then the lamps: the street lamps were left free of fabric and still glowed, so at night the wrapped bridge became a row of floating lights."
+    },
+    "tags": [
+      "Contemporary",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-valley-curtain-342",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Valley Curtain (1972)",
+    "teaser": "Christo and Jeanne-Claude hung a 417-meter orange nylon curtain across Rifle Gap, a canyon in Colorado — 200,000 square feet of fabric suspended on steel cables, meant to stay for 28 months. It lasted 28 hours: a gale shredded it, and the couple spent the next two years removing the scraps from the canyon. The attempt, and its failure, made them famous.",
+    "imageUrl": "",
+    "byline": "Christo & Jeanne-Claude (1972)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Valley Curtain (1972) — the orange curtain and the 28-hour lifespan",
+      "durationMinutes": 8,
+      "instruction": "Look at the image first: a vast orange curtain stretched across a canyon mouth, the fabric catching the wind in huge folds — the project was built from 200,000 square feet of nylon, suspended on two steel cables weighing 41 tons. Then the physics: the wind in the canyon was far stronger than the engineers predicted — the curtain billowed like a sail and tore in a gale 28 hours after it was installed."
+    },
+    "tags": [
+      "Land Art",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-destruction-of-the-father-343",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "The Destruction of the Father (1974)",
+    "teaser": "Bourgeois's installation: a low, cave-like platform covered in lumpy, flesh-colored plaster forms — a family at a dinner table, the father at the head, and the children who 'murdered' him, tearing him apart and eating him. Bourgeois said the work came from a childhood fantasy of destroying her own father, and the 'cave' is the dining room turned tomb.",
+    "imageUrl": "",
+    "byline": "Louise Bourgeois (1974)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Destruction of the Father (1974) — the feast of the father's body",
+      "durationMinutes": 8,
+      "instruction": "Look at the mass first: the work is a table-like platform crowded with soft, bulbous forms — Bourgeois called them 'the father's body, dismembered and eaten' — arranged like a feast laid out on the table. Then the setting: the platform is built like a cave, with the forms piled inside it, and the lighting makes the whole thing feel like a sacrificial altar."
+    },
+    "tags": [
+      "Contemporary",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-mother-and-child-divided-344",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Mother and Child Divided (1993)",
+    "teaser": "Hirst's installation of a cow and a calf, each cut in half lengthwise and suspended in separate tanks of formaldehyde, displayed so you can walk between the halves — the four steel tanks arranged in a line, with the animal halves facing each other across the gap. It won the Turner Prize for Hirst in 1995 and remains his most powerful work.",
+    "imageUrl": "",
+    "byline": "Damien Hirst (1993)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Mother and Child Divided (1993) — walk between the two halves",
+      "durationMinutes": 8,
+      "instruction": "Look at the line first: four steel tanks in a row — a cow and a calf, each split down the middle, each half in its own tank, with a walkway between them so you pass between the two halves of a single animal. Then the details: the cow's organs are visible, arranged in the pale formaldehyde, and the calf's body is small and perfect."
+    },
+    "tags": [
+      "Contemporary",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-michael-jackson-and-bubbles-345",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Michael Jackson and Bubbles (1988)",
+    "teaser": "Koons's life-size gold-leaf porcelain sculpture of Michael Jackson cradling his pet chimpanzee Bubbles — Jackson in a gold suit, Bubbles in a matching jacket, both frozen like a royal portrait. The sculpture, one of three porcelain casts, sold at auction in 2001 for $5.6 million, and its strange combination of celebrity, kitsch, and sentiment made it a defining image of the 1980s art boom.",
+    "imageUrl": "",
+    "byline": "Jeff Koons (1988)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Michael Jackson and Bubbles (1988) — the gold-leaf royal portrait",
+      "durationMinutes": 8,
+      "instruction": "Look at the pose first: it's a royal portrait — Jackson seated, holding Bubbles like a queen holding a lapdog, both dressed in matching gold-trimmed clothes. Then the material: the sculpture is porcelain, cast from life, then covered in gold leaf — a cheap ceramic material gilded like a Fabergé egg, which is exactly Koons's point about celebrity."
+    },
+    "tags": [
+      "Contemporary",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-pumpkin-346",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Pumpkin (1994)",
+    "teaser": "Kusama's bronze pumpkin — a two-meter, bright yellow-and-black dotted gourd on the pier of Naoshima island in Japan — is the most photographed sculpture in Japan. Kusama has said the pumpkin is her 'alter ego,' and she has made them in every size and material since 1948, when she was a child and her family's farm was covered in pumpkins she painted with dots.",
+    "imageUrl": "",
+    "byline": "Yayoi Kusama (1994)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Pumpkin (1994) — the dotted gourd on the pier",
+      "durationMinutes": 8,
+      "instruction": "Look at the form first: a two-meter pumpkin, squat and solid, covered in the black polka dots that are Kusama's signature — the dots are, she says, 'a way to obliterate the self.' Then the setting: it stands on a pier on Naoshima, an island turned into an art museum, with the sea behind it, and the yellow against the grey water makes the sculpture glow."
+    },
+    "tags": [
+      "Contemporary",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-everyone-i-have-ever-slept-with-347",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Everyone I Have Ever Slept With (1995)",
+    "teaser": "Emin's tent — a blue pop-up tent with the names of every person she had ever slept with appliquéd on the inside in her own handwriting: lovers, friends, family members, a grandmother, two unborn children, and 'Myself.' It was shown at the Turner Prize in 1999, where it was destroyed in a warehouse fire in 2004; the loss of the tent, Emin said, was 'like losing a diary.'",
+    "imageUrl": "",
+    "byline": "Tracey Emin (1995)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Everyone I Have Ever Slept With (1995) — the names inside the tent",
+      "durationMinutes": 8,
+      "instruction": "Look at the tent first: a plain blue pop-up tent, and inside, in appliquéd fabric letters, the names of 102 people — Emin's lovers, her friends, her family, two unborn children, and 'Myself.' Then the intimacy: the names are sewn in her own handwriting, so the tent is a private diary you can walk into."
+    },
+    "tags": [
+      "Contemporary",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-dream-of-the-fishermans-wife-348",
+    "categoryId": "ARTWORKS",
+    "subtype": "Print",
+    "name": "The Dream of the Fisherman's Wife (1814)",
+    "teaser": "Hokusai's woodblock of a woman being embraced by two octopuses — the most famous erotic image in Japanese art, and the ancestor of an entire genre of tentacle imagery that still flourishes today. It was made for a shunga (erotic) book, and it influenced artists from Picasso to the modern creators of 'tentacle erotica' — the image is simultaneously tender, monstrous, and funny.",
+    "imageUrl": "",
+    "byline": "Katsushika Hokusai (1814)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Dream of the Fisherman's Wife (1814) — the calm face and the octopus",
+      "durationMinutes": 8,
+      "instruction": "Look at the woman first: her face is calm, almost bored, while the large octopus — its mouth on hers — embraces her, and a small octopus attends to her. Then the composition: the bodies interlock in a single flowing curve, and the textures — the octopus's suckers, the woman's skin, the water — are printed with the precision of Hokusai's best work. The print was made for a shunga album in 1814, when Hokusai was 54 and at the height of his powers."
+    },
+    "tags": [
+      "Ukiyo-e",
+      "Woodblock"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-church-at-auvers-349",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Church at Auvers (1890)",
+    "teaser": "Van Gogh painted the church at Auvers-sur-Oise in the last summer of his life, months before he shot himself in a field nearby. The church's stone shimmers and ripples like water, the sky is a churning blue, and the path is split between sunlight and shadow — the building looks alive, moving, even breathing, and the painting is one of his most intense late works.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1890)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Church at Auvers (1890) — the church that shimmers like water",
+      "durationMinutes": 8,
+      "instruction": "Look at the stone first: the church's walls ripple and shimmer as if the building is alive — van Gogh painted the solid stone in the same broken, vibrating strokes he used for the sky, so the church breathes. Then the light: the path in the foreground is split — one side in bright sun, the other in deep shade — and the sky is a dense, churning ultramarine."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-sower-350",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Sower (1888)",
+    "teaser": "Van Gogh's sower — a peasant scattering seed across a plowed field, with the huge sun setting behind him — was painted in Arles in 1888, and it was the subject he obsessed over most: he painted and drew sowers for years, and made at least thirty versions. The painting is van Gogh's vision of the cycle of life: the man, the seed, the sun, and the earth, all in one image.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1888)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Sower (1888) — the man beneath the wheel of the sun",
+      "durationMinutes": 8,
+      "instruction": "Look at the sower first: he walks across the field scattering seed, his body dark against the enormous setting sun — van Gogh made the sun almost half the painting, so the man works beneath a wheel of light. Then the color: the purple field, the chrome-yellow sun, the green sky — the palette is deliberately impossible, and it works."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Symbolism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-charnel-house-351",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Charnel House (1945)",
+    "teaser": "Picasso's painting of a family killed in their kitchen — a woman, a man, a child lying across a table, their bodies pressed flat in black, grey, and white — painted in 1945 after the liberation of Paris, when the camps were opening. It is often called Guernica's companion: both are grey, both are about the dead, and both refuse to show the killers. Picasso never said which massacre it shows — he meant it for all of them.",
+    "imageUrl": "",
+    "byline": "Pablo Picasso (1945)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Charnel House (1945) — the family on the table, no killer in sight",
+      "durationMinutes": 8,
+      "instruction": "Look at the table first: the bodies lie on and around it — a woman slumped, a man fallen, a child stretched across the top — all painted in the flat, grey palette Picasso used for Guernica. Then the absence: there is no killer in the painting, no cause, no explanation — only the result, laid out like evidence."
+    },
+    "tags": [
+      "Cubism",
+      "War"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-shades-of-night-352",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Lovers' Encounter (1928)",
+    "teaser": "Magritte's painting of a couple embracing, their heads wrapped in white cloth — kissing through fabric, unable to see each other. He painted it in 1928, the same year as his more famous Lovers, and both paintings are haunted by the same story: when Magritte was 13, his mother drowned in the river, and was found with her nightgown covering her face.",
+    "imageUrl": "",
+    "byline": "René Magritte (1928)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Lovers' Encounter (1928) — the kiss through the cloth",
+      "durationMinutes": 8,
+      "instruction": "Look at the cloths first: the two figures are wrapped so completely that not a feature shows — they kiss, but through linen, so the embrace is also a blindness. Then the ambiguity: the painting can be read as romantic — two people united even blindfolded — or as suffocating, two people who can never truly see each other."
+    },
+    "tags": [
+      "Surrealism",
+      "Romance"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-anxiety-353",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Anxiety (1894)",
+    "teaser": "Munch's painting of a crowd on a bridge at sunset — faces pressed together, hollow and expressionless, against the same blood-red sky as The Scream. Munch said the painting showed 'people in anxiety' crossing the bridge at dusk, and he described the sky as 'the blood' of the setting sun. The crowd is the subject: everyone is alone together.",
+    "imageUrl": "",
+    "byline": "Edvard Munch (1894)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Anxiety (1894) — the mask faces in the blood-red dusk",
+      "durationMinutes": 8,
+      "instruction": "Look at the faces first: a line of people crossing a bridge, their faces pressed together in a row — pale, mask-like, expressionless, each one isolated even in the crowd. Then the sky: the same blood-red band that appears in The Scream, with the town and the fjord below in blue-black. Munch made the painting in 1894, a year after The Scream, and he described the setting sun's color as 'blood' — the red light of anxiety."
+    },
+    "tags": [
+      "Expressionism",
+      "Anxiety"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-salvator-mundi-354",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Salvator Mundi (c. 1500)",
+    "teaser": "Leonardo's 'Savior of the World' — Christ holding a crystal globe, one hand raised in blessing — became the most expensive painting ever sold when it went for $450.3 million at auction in 2017. The journey: the painting was lost for centuries, repainted, discovered in 2005, restored, attributed to Leonardo, then sold to a Saudi prince. Its authenticity is still debated — some experts say it is by Leonardo, others by his workshop.",
+    "imageUrl": "",
+    "byline": "Leonardo da Vinci (c. 1500)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Salvator Mundi (c. 1500) — the crystal globe and the $450 million hand",
+      "durationMinutes": 8,
+      "instruction": "Look at the globe first: it's a crystal sphere that Christ holds in his left hand — and the crystal is painted with a triple refraction, so the globe distorts what's behind it like a real lens, a detail scholars use to argue for Leonardo's hand. Then the hand: the right hand is raised in blessing, and the fingers are painted with the soft, smoky transitions of sfumato."
+    },
+    "tags": [
+      "Renaissance",
+      "Portrait"
+    ],
+    "tier": 2
   }
 ]
