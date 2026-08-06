@@ -20,3 +20,12 @@ Redesign Profile and Settings to match the Home/detail visual language, use comp
 
 ## Validation
 Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check` is clean. No local Gradle build/compile/lint/test was run because the repository forbids Android build commands here; CI remains the compilation source of truth.
+
+## v7.54 — compact paper/style/color controls in the editing page
+
+- Paper style options (Ruled, Torn, Rules, Coffee, Folded, Red Margin, Watermark, Rounded top) now stay on one horizontally scrollable strip instead of wrapping into a tall multi-line block.
+- Expanded Color swatches use the same horizontal scrolling treatment.
+- Reduced the Paper/Format toggle bottom padding from 6dp to 2dp, the expanded Paper-to-Color gap to 1dp, and the formatting toolbar bottom padding to 2dp.
+- Tightened the shared PaperLineField stack spacing from 8dp to 3dp so labels, controls, and the paper field read as one compact group.
+- Collapse/expand animations and all paper options remain intact; no behavior or visual quality was removed.
+- Validation: brace checks BALANCED for RichTextEditor.kt, PaperCard.kt, and CaptureFormatComponents.kt; `git diff --check` clean. No Gradle command run per repository rules.

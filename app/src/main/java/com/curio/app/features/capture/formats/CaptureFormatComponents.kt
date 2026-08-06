@@ -383,7 +383,10 @@ fun PaperLineField(
      *  field's top-right, level with the label. */
     trailingAction: (@Composable () -> Unit)? = null
 ) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    // Keep the label, paper/format controls, and paper field visually grouped;
+    // the old 8dp rhythm made the compact controls look like separate
+    // sections and consumed too much editing space.
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(3.dp)) {
         if (label != null || trailingAction != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

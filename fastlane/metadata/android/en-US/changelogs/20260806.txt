@@ -6,3 +6,4 @@
 • Redesigned Profile and Settings with compact Home/detail-style cards
 • Added an always-visible Experiments page for card and deck customization
 • Moved backup, restore, and legacy import into a focused data workspace
+• Made paper options a compact scrollable strip and tightened editor spacing

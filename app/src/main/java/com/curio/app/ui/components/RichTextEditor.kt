@@ -738,7 +738,7 @@ fun RichTextEditor(
                             if (next) toolbarExpanded = false
                             styleExpanded = next
                         },
-                        modifier = Modifier.padding(bottom = 6.dp)
+                        modifier = Modifier.padding(bottom = 2.dp)
                     )
                 }
                 ToolToggleButton(
@@ -754,7 +754,7 @@ fun RichTextEditor(
                         if (next) styleExpanded = false
                         toolbarExpanded = next
                     },
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 2.dp)
                 )
             }
             trailingAction?.invoke()
@@ -766,7 +766,7 @@ fun RichTextEditor(
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
+                verticalArrangement = Arrangement.spacedBy(1.dp)
             ) {
                 NotePaperStyleToggle(
                     style = paperStyle,
@@ -1074,7 +1074,7 @@ private fun FormatToolbar(
     onSizePick: (Float) -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(bottom = 6.dp),
+        modifier = Modifier.padding(bottom = 2.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

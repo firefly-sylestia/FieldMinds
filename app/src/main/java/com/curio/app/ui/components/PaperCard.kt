@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -1600,9 +1598,8 @@ private fun BoxScope.PaperWatermarkGlyphs(
 
 /**
  * The per-text-box note-paper picker — v7.16 UNIVERSAL: the base (Ruled /
- * Torn) and the stackable decoration chips flow together in ONE tight
- * row set (v7.43 — the old separate base + decoration rows left a big gap
- * between the button groups in the editor).
+ * Torn) and stackable decoration chips stay in one compact horizontal strip
+ * (v7.53 — wrapping into multiple rows made the expanded editor too tall).
  * v7.18 — decorations STACK: Coffee / Folded / Red Margin are independent
  * toggles, so any combination can be on at once (a folded coffee page with
  * a red margin is legal), and, while the torn base is active, a "+ Rules"
@@ -1611,7 +1608,6 @@ private fun BoxScope.PaperWatermarkGlyphs(
  * toolbar (alongside the format toolbox), NOT in a section-level row — so
  * each text box keeps its own independent paper look.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NotePaperStyleToggle(
     style: NotePaperStyle,
@@ -1622,16 +1618,18 @@ fun NotePaperStyleToggle(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
-        // ONE tight flow row — the base (Ruled / Torn) and the stackable
-        // decorations (+ Rules / + Coffee / …) sit together in a compact
-        // chip cloud so the picker reads as a single control instead of
-        // separate sparse rows (v7.43 — the old two FlowRows left a big
-        // gap between the base and decoration buttons in the editor).
-        FlowRow(
+        // Keep the base (Ruled / Torn) and decoration chips on one compact
+        // horizontal strip. The strip scrolls instead of wrapping, so the
+        // picker never grows into a tall block on narrow phones; every
+        // option remains available without changing the paper behavior.
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(3.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Base — Ruled (sharp ruled page) · Torn (ragged slip).
             // Switching keeps the current decoration via [notePaperStyleOf].
@@ -1843,6 +1841,7 @@ fun NotePaperColorToggle(
             exit = shrinkVertically() + fadeOut()
         ) {
             Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
