@@ -999,17 +999,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Antonie van Leeuwenhoek",
-    "teaser": "Cientit Topic #51 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "teaser": "A cloth merchant with no university degree who built single-lens microscopes so fine they revealed 'animalcules' - bacteria and protozoa - to science for the first time. He never published a book: his findings went to the Royal Society as handwritten letters in Dutch.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Antonie van Leeuwenhoek",
       "durationMinutes": 14,
-      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+      "instruction": "He called bacteria 'little animals' and watched them in rainwater, in pepper water, and in plaque scraped from his own teeth. His microscopes were single tiny lenses, some smaller than a pinhead - he refused to share how he ground them."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Biology",
+      "Microscopy",
+      "17th Century"
     ],
     "tier": 2
   },
@@ -1018,17 +1019,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Humphry Davy",
-    "teaser": "Cientit Topic #52 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "teaser": "The self-taught chemist who isolated sodium and potassium with electricity - and discovered laughing gas by inhaling it himself. He hired a young bookbinder's apprentice as an assistant; the boy's name was Michael Faraday.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Humphry Davy",
       "durationMinutes": 6,
-      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+      "instruction": "Davy got students and literary friends high on nitrous oxide for laughs before its anesthetic use was imagined. His miners' safety lamp saved thousands of lives, and he refused to patent it, saying public good came first."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Chemistry",
+      "19th Century"
     ],
     "tier": 2
   },
@@ -1037,17 +1038,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Heinrich Hertz",
-    "teaser": "Colleagues described Cientit Topic #53 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "teaser": "In 1888 Hertz proved that invisible electromagnetic waves - predicted by Maxwell - really exist, using a spark gap and a loop of wire across his lab. The unit of frequency bears his name. He died at 36, doubting his discovery would ever matter.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Heinrich Hertz",
       "durationMinutes": 8,
-      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+      "instruction": "His receiver was a simple wire loop with a tiny gap; when the transmitter sparked a few meters away, a spark jumped the gap - proof the waves carried energy. He tested their reflection, refraction, and speed. Within a decade Marconi turned the 'useless' waves into radio."
     },
     "tags": [
-      "Chemistry",
-      "20th Century"
+      "Physics",
+      "Electromagnetism",
+      "19th Century"
     ],
     "tier": 2
   },
@@ -1056,17 +1058,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Erwin Schrödinger",
-    "teaser": "Cientit Topic #54 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "teaser": "He wrote the wave equation that became the heart of quantum mechanics while on a mountain holiday with a mystery companion, and his famous cat was invented to mock the theory he helped build. His 1944 book 'What is Life?' inspired the men who found DNA's structure.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Erwin Schrödinger",
       "durationMinutes": 11,
-      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+      "instruction": "Schrödinger's cat was a protest: a cat in a box with poison that quantum rules say is neither alive nor dead until measured. He meant it as absurd. His equation treats particles as waves of probability - and 'What is Life?' argued heredity needs an aperiodic crystal."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "Quantum Mechanics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1075,17 +1078,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Enrico Fermi",
-    "teaser": "Colleagues described Cientit Topic #55 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "teaser": "The man who built the world's first nuclear reactor - under the stands of a Chicago football stadium, from graphite blocks and uranium, with no one else on site knowing - and then calmly announced, 'The Italian navigator has landed in the New World.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Enrico Fermi",
       "durationMinutes": 19,
-      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+      "instruction": "He was famous for Fermi problems: order-of-magnitude guesses from almost nothing. And his Fermi paradox - the universe is huge and old, so where is everyone? - still drives astrobiology."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "Nuclear Physics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1094,17 +1098,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Otto Hahn",
-    "teaser": "Colleagues described Cientit Topic #56 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "teaser": "Hahn split the uranium atom in 1938 with Fritz Strassmann - and couldn't explain it. The physics was worked out in a Swedish exile by his old collaborator Lise Meitner, who was left off the Nobel he won.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Otto Hahn",
       "durationMinutes": 6,
-      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+      "instruction": "Watch the sequence: Hahn bombarded uranium with neutrons expecting heavier elements; Strassmann found barium - an atom half the size. Meitner and her nephew Otto Frisch named it 'fission' in a letter."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Chemistry",
+      "Nuclear Physics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1113,16 +1118,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Edwin Hubble",
-    "teaser": "Cientit Topic #57 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "teaser": "A Rhodes scholar and former lawyer who proved the Andromeda 'nebula' was another galaxy - and then found every galaxy rushing away from every other: the expanding universe. The telescope that still bears his name began as his idea.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Edwin Hubble",
       "durationMinutes": 10,
-      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+      "instruction": "Hubble found Cepheid variable stars in Andromeda - pulsating 'standard candles' - and used them to measure a distance far beyond the Milky Way. Then with Milton Humason he measured redshifts: farther galaxies fly faster."
     },
     "tags": [
       "Astronomy",
+      "Cosmology",
       "20th Century"
     ],
     "tier": 2
@@ -1132,17 +1138,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Subrahmanyan Chandrasekhar",
-    "teaser": "Cientit Topic #58 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "teaser": "At 19, on a long boat voyage from India to Cambridge, he worked out that a star above 1.4 solar masses cannot end as a white dwarf - it must collapse further, into a neutron star or black hole. The idea was mocked for decades, then won him the Nobel at 72.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Subrahmanyan Chandrasekhar",
       "durationMinutes": 16,
-      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+      "instruction": "The limit - now the Chandrasekhar limit - is why massive stars end in supernovae and black holes."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Astrophysics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1151,17 +1157,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Murray Gell-Mann",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "He named the building blocks of matter after a nonsense word from James Joyce's 'Finnegans Wake' - 'Three quarks for Muster Mark!' - and his classification of particles, the 'Eightfold Way,' earned a Nobel at 40.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Murray Gell-Mann",
       "durationMinutes": 6,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Gell-Mann insisted quarks were mathematical conveniences, not real objects - until experiments found them inside protons. His Eightfold Way grouped particles like a periodic table of matter, predicting particles not yet seen."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Physics",
+      "Particle Physics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1170,17 +1177,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Dorothy Hodgkin",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "She spent 35 years solving the structure of insulin, and by then her hands were so crippled by rheumatoid arthritis she traced electron-density maps with a magnifying glass. She had already deciphered penicillin and vitamin B12 - the third woman ever to win the Chemistry Nobel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Dorothy Hodgkin",
       "durationMinutes": 18,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Hodgkin worked by X-ray crystallography: shoot crystals, catch diffracted beams, rebuild atoms from the spots."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Chemistry",
+      "Crystallography",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1189,17 +1197,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Francis Crick",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The ex-physicist who, the day the double helix clicked, announced in a Cambridge pub that he had 'found the secret of life.' He and Watson built the model on X-ray data from Rosalind Franklin - who was left off the 1962 Nobel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Francis Crick",
       "durationMinutes": 16,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Crick applied the 'gossip test': will people still talk about this in decades? DNA passed. His central dogma - information flows DNA to RNA to protein - set molecular biology's agenda."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Biology",
+      "Molecular Biology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1208,17 +1217,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Lynn Margulis",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Her 1967 paper arguing that our cells' power plants are descended from swallowed bacteria was rejected by fifteen journals before publication. Fifty years later, endosymbiosis is textbook biology - and it started as an outsider's heresy.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Lynn Margulis",
       "durationMinutes": 18,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "The evidence is in your own body: mitochondria have their own DNA, their own double membranes, and reproduce independently of the cell. Margulis proposed that complex cells formed by mergers of simpler ones, not just gradual mutation."
     },
     "tags": [
       "Biology",
-      "19th Century"
+      "Evolution",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1227,17 +1237,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Roger Penrose",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "He and Stephen Hawking proved that black holes must contain singularities where physics breaks - work that won him the 2020 Physics Nobel. He also invented impossible staircases and floor tiles that never repeat, and argues consciousness is rooted in quantum physics.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Roger Penrose",
       "durationMinutes": 17,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Penrose's singularity theorem (1965) showed gravity inevitably crushes a collapsing star to a point - the math needed no details of the star. He is also a geometer: the Penrose triangle and aperiodic tilings appear in art and in Escher's prints."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Physics",
+      "Mathematics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1246,17 +1257,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Neil deGrasse Tyson",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The astrophysicist who demoted Pluto years before the official vote - his Hayden Planetarium opened a display in 2000 without Pluto as a planet, igniting a public feud. He is the most-watched science communicator of his generation.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Neil deGrasse Tyson",
       "durationMinutes": 12,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Tyson's career hinges on translation: making dark matter, cosmic rays, and exoplanets feel like dinner conversation. Watch how he uses everyday objects - a pea for the Sun, a grain of sand for Earth - to make the cosmos relatable. He also trained as a wrestler and a dancer."
     },
     "tags": [
-      "Chemistry",
-      "20th Century"
+      "Astronomy",
+      "Astrophysics",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1265,17 +1277,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Dian Fossey",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "A Kentucky occupational therapist who went to Rwanda on a dare from Louis Leakey and became the world's authority on mountain gorillas. She fought poachers so fiercely that she was murdered at her research camp in 1985 - a killing still officially unsolved.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Dian Fossey",
       "durationMinutes": 19,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Fossey earned gorillas' trust by imitating their vocalizations - chest-beats, grunts, hoots - after years of patient observation. She estimated poaching was driving the population to extinction and campaigned globally."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Biology",
+      "Primatology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1284,17 +1297,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "E.O. Wilson",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The world's leading expert on ants who coined the term 'biodiversity' and wrote a book on human nature that got him called a fascist - he defined the field of sociobiology. He won two Pulitzers, including one for a 700-page book about ants.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "E.O. Wilson",
       "durationMinutes": 18,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Wilson watched ants for a living: 'The Ants' took over a decade and won a Pulitzer. With Robert MacArthur he built island biogeography - how size and distance shape species counts, now the backbone of conservation."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Biology",
+      "Ecology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1303,16 +1317,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Richard Dawkins",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "He coined the word 'meme' in 1976 to describe ideas that replicate like genes - decades before the internet adopted it. His 'The Selfish Gene' reframed evolution from the gene's point of view and made him the most famous atheist alive.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Richard Dawkins",
       "durationMinutes": 17,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Dawkins's insight: bodies are survival machines built by genes, so evolution is best understood at the gene level, not the species level. The 'selfish' gene metaphor - cooperation and altruism can be genetically selfish - transformed how biologists talk."
     },
     "tags": [
-      "Chemistry",
+      "Biology",
+      "Evolution",
       "20th Century"
     ],
     "tier": 2
@@ -1322,17 +1337,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Vint Cerf",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "In 1974, with Bob Kahn, he designed TCP/IP - the protocol that lets all the world's networks talk to each other - and the internet was born. He now works at Google under the title 'Chief Internet Evangelist.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Vint Cerf",
       "durationMinutes": 15,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Cerf's problem in the 1970s: connect different networks - packet radio, satellite, ARPANET - so they interoperate. TCP/IP solved it with no central authority; anyone can join."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Computer Science",
+      "Internet",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1341,16 +1357,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Margaret Hamilton",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "She led the team that wrote the software that landed humans on the Moon - and coined the term 'software engineering' to describe it, because people insisted software wasn't engineering. Her code caught a mid-flight alarm that could have aborted Apollo 11's landing.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Margaret Hamilton",
       "durationMinutes": 7,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Watch the famous photo: Hamilton beside a stack of Apollo source code taller than she is. On Apollo 11's descent, her error-detection software prioritized tasks and saved the landing when the computer overloaded."
     },
     "tags": [
-      "Astronomy",
+      "Computer Science",
+      "Software",
       "20th Century"
     ],
     "tier": 2
@@ -1360,17 +1377,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Katherine Johnson",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "John Glenn wouldn't fly until she personally checked the numbers. The NASA mathematician who calculated the orbits for America's first spaceflight and the Moon landing was a Black woman in a segregated computing pool - until 'Hidden Figures' made her a household name.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Katherine Johnson",
       "durationMinutes": 6,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "At NASA's Langley, Johnson's hand calculations were so trusted that Glenn asked for 'the girl' to verify the computer's orbital figures before his 1962 flight. She worked through the Mercury, Apollo, and Space Shuttle programs across 33 years and co-authored 26 research papers."
     },
     "tags": [
       "Mathematics",
-      "18th Century"
+      "Spaceflight",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1379,17 +1397,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Dorothy Vaughan",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "NASA's first Black supervisor: a math teacher who joined the segregated 'West Computing' pool in 1943 and rose to lead it, then taught herself and her team FORTRAN to survive the arrival of electronic computers.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Dorothy Vaughan",
       "durationMinutes": 6,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Vaughan saw the IBM machines coming and learned FORTRAN from a manual before her group needed it, positioning her team for the space program's computer age. She worked on the Scout launch vehicle program."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Mathematics",
+      "Computer Science",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1398,17 +1417,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Mae Jemison",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Physician, dancer, and engineer who became the first Black woman in space aboard Endeavour in 1992. She took a poster of the Alvin Ailey dance company with her - and later appeared on an episode of 'Star Trek: The Next Generation.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Mae Jemison",
       "durationMinutes": 11,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Jemison trained as a doctor and served in the Peace Corps in Sierra Leone and Liberia before applying to NASA. On STS-47 she flew as a mission specialist, and she left NASA in 1993 to start her own tech company and the 100 Year Starship project aimed at interstellar travel."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Spaceflight",
+      "Medicine",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1417,17 +1437,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Vera Rubin",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "She measured how galaxies spin and found they move far too fast to stay together - the first solid evidence that most of the universe's matter is invisible 'dark matter.' She never won the Nobel, a snub many call one of science's greatest.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Vera Rubin",
       "durationMinutes": 14,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Rubin's key data: the outer edges of spiral galaxies rotate at nearly the same speed as their cores. Newton's laws say they should slow down unless something massive and unseen holds them."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Astronomy",
+      "Dark Matter",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1436,17 +1457,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Donna Strickland",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "She co-invented a way to stretch laser pulses, amplify them, then compress them - creating the most intense light ever made. It's why laser eye surgery exists. In 2018 she became only the third woman ever to win the Nobel Prize in Physics.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Donna Strickland",
       "durationMinutes": 8,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Chirped pulse amplification: stretch the pulse in time so it doesn't destroy the amplifier, boost its energy, then compress it back - the peak power explodes. She and Gérard Mourou published the method in 1985; it now powers eye surgery, micromachining, and particle accelerators."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "Optics",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1455,17 +1477,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Emmanuelle Charpentier",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "She found the bacterial immune system that became CRISPR, and in 2012 showed it could be aimed at any gene like a cut-and-paste tool for DNA. In 2020 she shared the Chemistry Nobel - the first all-female Nobel science pair.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Emmanuelle Charpentier",
       "durationMinutes": 11,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Charpentier's 2011 discovery: a small RNA (tracrRNA) guides the Cas9 protein to cut specific DNA. Working with Jennifer Doudna, she turned this bacterial defense into a programmable gene editor."
     },
     "tags": [
       "Biology",
-      "19th Century"
+      "Genetics",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1474,17 +1497,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Katalin Karikó",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "She spent decades convinced messenger RNA could be medicine while grant after grant was rejected - she was even demoted at her university. Her 2005 work with Drew Weissman made the mRNA COVID vaccines possible; they shared the 2023 Nobel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Katalin Karikó",
       "durationMinutes": 15,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Karikó's problem: synthetic mRNA triggered inflammation and was destroyed. Her fix - swapping in modified nucleosides like pseudouridine - let mRNA slip past the immune system."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Biology",
+      "mRNA",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1493,16 +1517,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Françoise Barré-Sinoussi",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "In 1983, at the Pasteur Institute, she isolated the virus behind AIDS from a patient's lymph node - a discovery that made her the face of the 2008 Nobel. She spent her career pushing for HIV research in the poorest countries.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Françoise Barré-Sinoussi",
       "durationMinutes": 16,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Barré-Sinoussi's team named the virus LAV (later HIV); a bitter priority dispute with Robert Gallo's US lab followed until the two groups were jointly credited."
     },
     "tags": [
-      "Chemistry",
+      "Medicine",
+      "Virology",
       "20th Century"
     ],
     "tier": 2
@@ -1512,16 +1537,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Gerty Cori",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "The first woman to win a Nobel Prize in Physiology or Medicine - she and her husband Carl cracked the chemical cycle that turns stored glycogen into blood sugar and back. Universities routinely offered the husband a job and her nothing.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Gerty Cori",
       "durationMinutes": 20,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "The Cori cycle: liver glycogen to blood glucose to muscle glycogen to lactic acid and back. Gerty and Carl worked as a team for 30 years, co-authoring the discovery that won the 1947 Nobel with Bernardo Houssay."
     },
     "tags": [
-      "Physics",
+      "Biochemistry",
+      "Medicine",
       "20th Century"
     ],
     "tier": 2
@@ -1531,17 +1557,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "May-Britt Moser",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "With her husband Edvard, she found grid cells - neurons that tile the brain with a hexagonal coordinate map, like the latitude lines of a GPS. They shared the 2014 Nobel with John O'Keefe, discoverer of place cells.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "May-Britt Moser",
       "durationMinutes": 15,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Grid cells fire in a repeating hexagonal pattern as a rat explores, letting the brain compute position - the neural basis of navigation, now found in humans too. May-Britt ran experiments with her husband for decades; they divorced but kept collaborating."
     },
     "tags": [
-      "Chemistry",
-      "20th Century"
+      "Neuroscience",
+      "Medicine",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1550,17 +1577,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Alexander Fleming",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "In 1928 he came back from holiday to find mold growing on a forgotten petri dish - and the bacteria around it dead. That accident gave the world penicillin. He was famously a messy scientist; tidiness might have cost us the antibiotic age.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Alexander Fleming",
       "durationMinutes": 18,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Fleming identified the mold as Penicillium notatum and showed it killed staph, but he couldn't isolate the active compound. A decade later Howard Florey and Ernst Chain purified it into a drug that saved millions in WWII."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Medicine",
+      "Antibiotics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1569,16 +1597,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Albert Sabin",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "He built the polio vaccine that helped eradicate the disease - a live, weakened virus you swallow on a sugar cube, cheaper and easier than Salk's shot. He famously tested it on himself, his wife, and his children.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Albert Sabin",
       "durationMinutes": 9,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Sabin's vaccine uses a weakened live virus that multiplies in the gut and creates lasting immunity - immunity that even spreads to unvaccinated neighbors via feces. It became the workhorse of global eradication campaigns from the 1960s onward."
     },
     "tags": [
-      "Chemistry",
+      "Medicine",
+      "Virology",
       "20th Century"
     ],
     "tier": 2
@@ -1588,17 +1617,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Frederick Banting",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "A struggling doctor who had a midnight idea about the pancreas and, with a medical student and a summer lab, turned it into insulin - the discovery that made diabetes survivable. He sold the patent for one dollar so everyone could afford it.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Frederick Banting",
       "durationMinutes": 18,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Banting's insight: the pancreas's digestive cells and its insulin-making islets are different - tie off the duct, let the digesters die, keep the islets, extract the hormone. With Charles Best he proved the extract saved diabetic dogs, then himself."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Medicine",
+      "Endocrinology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1607,17 +1637,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Barry Marshall",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "To prove bacteria cause stomach ulcers, he drank a beaker full of them - and gave himself gastritis. The medical world had insisted ulcers came from stress; his self-experiment, with Robin Warren, overturned a century of dogma and won the 2005 Nobel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Barry Marshall",
       "durationMinutes": 15,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "In 1984 Marshall and Warren linked the spiral bacterium H. pylori to stomach ulcers - met with ridicule. Marshall's self-infection completed Koch's postulates: swallow the bug, get the disease. Today ulcers are cured with antibiotics, and H."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Medicine",
+      "Microbiology",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1626,17 +1657,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Harold Varmus",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "He proved that cancer-causing genes are not alien invaders but hijacked versions of normal genes - the oncogene concept that reshaped cancer research. He and Michael Bishop shared the 1989 Nobel, and he later ran the NIH.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Harold Varmus",
       "durationMinutes": 12,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Varmus and Bishop showed the Rous sarcoma virus's cancer gene (v-src) came from a normal chicken gene (c-src) - meaning cancer can arise from our own DNA going wrong."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Medicine",
+      "Oncology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1645,16 +1677,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Eric Kandel",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "He fled Nazi Vienna as a child, became a psychiatrist, and decided the brain's 'black box' was too hard - so he studied memory in a sea slug with 20,000 neurons. That slug won him the 2000 Nobel and mapped how learning physically rewires synapses.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Eric Kandel",
       "durationMinutes": 13,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Kandel chose Aplysia because its giant neurons are visible and repeatable: a single tap on its siphon trains a reflex, and he watched the synapses grow stronger - the cellular basis of memory."
     },
     "tags": [
-      "Astronomy",
+      "Neuroscience",
+      "Medicine",
       "20th Century"
     ],
     "tier": 2
@@ -1664,16 +1697,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "V.S. Ramachandran",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "He built a simple box of mirrors that made amputees' phantom limbs 'come back' and eased their pain - the mirror box. His work on phantom limbs and mirror neurons made him one of the most cited neuroscientists alive.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "V.S. Ramachandran",
       "durationMinutes": 19,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Ramachandran's mirror box fools the brain into seeing the missing limb move, relieving phantom pain. He also studies synesthesia and mirror neurons - brain cells that fire when you act and when you watch someone else act, which he calls the basis of empathy and civilization."
     },
     "tags": [
-      "Astronomy",
+      "Neuroscience",
+      "Psychology",
       "20th Century"
     ],
     "tier": 2
@@ -1683,16 +1717,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Amos Tversky",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "The psychologist who mapped how humans actually decide - biases, loss aversion, overconfidence - and changed economics forever. His collaborator won the Nobel for their joint work; Tversky had died six years earlier, and the prize can't go posthumously.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Amos Tversky",
       "durationMinutes": 10,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Prospect theory showed people fear losses roughly twice as much as they value equivalent gains - loss aversion - and judge probability by vividness, not math. Tversky and Kahneman built their experiments from everyday questions: would you take an 80% chance to win $100?"
     },
     "tags": [
-      "Astronomy",
+      "Psychology",
+      "Behavioral Economics",
       "20th Century"
     ],
     "tier": 2
@@ -1702,17 +1737,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "B.F. Skinner",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The behaviorist who argued free will is an illusion and everything we do is shaped by rewards - and demonstrated it with pigeons in boxes that learned to peck for food. He even designed an 'air crib' for his baby daughter that tabloids turned into a horror story.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "B.F. Skinner",
       "durationMinutes": 20,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Skinner's operant conditioning: behavior followed by reinforcement repeats; punishment weakens it. His boxes - pigeons pecking keys, rats pressing levers - showed how schedules of reward sculpt behavior."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Psychology",
+      "Behaviorism",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1721,16 +1757,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Lev Vygotsky",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The psychologist who said children learn not alone but by reaching toward what adults and peers show them - the 'zone of proximal development.' He died of tuberculosis at 37, his work banned for decades, and he still became a cornerstone of modern education.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Lev Vygotsky",
       "durationMinutes": 6,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Vygotsky's core idea: what a child can do with help today, she can do alone tomorrow - the zone between 'can't do yet' and 'can do' is where teaching matters. He emphasized language and culture as the engines of thought, arguing tools and symbols shape the mind."
     },
     "tags": [
-      "Astronomy",
+      "Psychology",
+      "Education",
       "20th Century"
     ],
     "tier": 2
@@ -1740,17 +1777,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Juan Maldacena",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "At 29 he proposed the AdS/CFT correspondence - that a universe with gravity is a hologram of a quantum theory living on its edge. It became the most-cited paper in modern theoretical physics and a working bridge between gravity and quantum mechanics.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Juan Maldacena",
       "durationMinutes": 5,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Maldacena's hologram: quantum particles on a 2D surface encode everything that happens in the 3D space inside - information is preserved, black holes don't destroy it. Physicists use the correspondence to compute things that are impossible in gravity directly."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "String Theory",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1759,17 +1797,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Brian Greene",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "A Columbia physicist who made string theory a pop-culture word with 'The Elegant Universe' - a book about 10-dimensional vibrating strings that spent months on bestseller lists. He now runs the World Science Festival to bring science to the public.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Brian Greene",
       "durationMinutes": 7,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Greene's pitch: the universe's particles are vibrating strings, and different vibrations make different particles; extra dimensions curl up invisibly at tiny scales."
     },
     "tags": [
       "Physics",
-      "20th Century"
+      "String Theory",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -1778,17 +1817,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Robert Hooke",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The man who first saw and named 'cells' - the empty cork walls in 'Micrographia' (1665) reminded him of monks' cells. He was Newton's great rival, proposed the inverse-square law first, and no portrait of him survives - Newton's influence erased him from history.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Robert Hooke",
       "durationMinutes": 19,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Hooke's 'Micrographia' showed fleas and flies the size of dinner plates to a stunned public - the first great science bestseller. His law of elasticity (stress proportional to strain) is still taught as Hooke's law."
     },
     "tags": [
       "Physics",
-      "20th Century"
+      "Microscopy",
+      "17th Century"
     ],
     "tier": 2
   },
@@ -1797,17 +1837,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Carl Linnaeus",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "He gave every living thing a two-part Latin name and called us Homo sapiens - 'wise man.' His 'Systema Naturae' (10th edition, 1758) is the starting point of all modern taxonomy, and he organized nature with a confidence scientists still use.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Carl Linnaeus",
       "durationMinutes": 20,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Linnaeus's binomial system - two names, genus and species - replaced a tangle of descriptive phrases. He traveled across Lapland on foot, dressed as a Sami, cataloguing plants."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Biology",
+      "Taxonomy",
+      "18th Century"
     ],
     "tier": 2
   },
@@ -1816,17 +1857,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Benjamin Franklin",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The printer who flew a kite in a thunderstorm to prove lightning is electricity, then refused to patent his inventions - the lightning rod, bifocals, the Franklin stove - so everyone could use them free. He coined 'battery,' 'positive' and 'negative' charge.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Benjamin Franklin",
       "durationMinutes": 18,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Franklin's single-fluid theory of electricity - charges flow like liquid - gave us the words positive, negative, conductor, and battery. His kite experiment was dangerous; others died repeating it."
     },
     "tags": [
       "Physics",
-      "20th Century"
+      "Electricity",
+      "18th Century"
     ],
     "tier": 2
   },
@@ -1835,17 +1877,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Lord Kelvin",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The physicist-engineer who gave us the absolute temperature scale and helped lay the first transatlantic cable - while his estimate of Earth's age was a hundred times too young because nobody knew about radioactivity yet.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Lord Kelvin",
       "durationMinutes": 13,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Kelvin's work on heat engines produced the second law of thermodynamics and the absolute (Kelvin) scale, where nothing gets colder than 0 K."
     },
     "tags": [
-      "Chemistry",
-      "20th Century"
+      "Physics",
+      "Thermodynamics",
+      "19th Century"
     ],
     "tier": 2
   },
@@ -1854,17 +1897,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Wilhelm Röntgen",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "In 1895 he discovered rays that could photograph the inside of the body, and named them X-rays - X for 'unknown.' His first image was his wife's hand with her wedding ring, bones beneath. He won the first Physics Nobel and refused to patent it.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Wilhelm Röntgen",
       "durationMinutes": 18,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Röntgen found a barium screen glowing near a vacuum tube covered in black paper - rays were passing through. He spent weeks verifying before announcing, then let the world use X-rays freely, donating his Nobel money to his university."
     },
     "tags": [
       "Physics",
-      "20th Century"
+      "Radiology",
+      "19th Century"
     ],
     "tier": 2
   },
@@ -1873,16 +1917,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Pierre Curie",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "With Marie he discovered radium and polonium, and with his brother he discovered piezoelectricity - the crystal effect inside every microphone and ultrasound machine. He shared the 1903 Nobel with Marie and was killed at 46, struck by a horse-drawn carriage.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Pierre Curie",
       "durationMinutes": 9,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Curie's early work with Jacques showed squeezing certain crystals generates electricity - piezoelectricity, now the heart of quartz watches, microphones, and medical ultrasound. His 'Curie point' is the temperature where magnetism disappears."
     },
     "tags": [
-      "Biology",
+      "Physics",
+      "Radioactivity",
       "19th Century"
     ],
     "tier": 2
@@ -1892,16 +1937,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Max Planck",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The conservative physicist who accidentally started the quantum revolution by assuming energy comes in tiny discrete packets - a 'lucky guess' he called it. He spent years trying to undo his own idea, and his constant h governs all of quantum mechanics.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Max Planck",
       "durationMinutes": 13,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Planck solved the 'ultraviolet catastrophe' - physics predicted infinite energy from a hot body - by dividing energy into finite chunks, h times f. He distrusted the idea: only Einstein's 1905 photon paper made it real."
     },
     "tags": [
-      "Chemistry",
+      "Physics",
+      "Quantum Mechanics",
       "20th Century"
     ],
     "tier": 2
@@ -1911,17 +1957,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Werner Heisenberg",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "He showed you can't know both a particle's position and speed exactly - the uncertainty principle, 1927. He led Germany's wartime atomic project, and his 1941 conversation with Bohr remains a historical mystery.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Werner Heisenberg",
       "durationMinutes": 7,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Heisenberg's principle isn't about bad instruments - it's baked into reality: pinning a particle's position disturbs its momentum. It replaced orbits with probability clouds."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Physics",
+      "Quantum Mechanics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1930,16 +1977,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Wolfgang Pauli",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "He stated that no two identical particles can occupy the same quantum state - the exclusion principle that explains why matter doesn't collapse and why chemistry works. He won the 1945 Nobel, and colleagues joked his mere presence made lab equipment explode: the 'Pauli effect.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Wolfgang Pauli",
       "durationMinutes": 12,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "The exclusion principle: electrons fill orbits one per quantum state, which builds the periodic table - two electrons per orbital, new shells for new rows."
     },
     "tags": [
-      "Chemistry",
+      "Physics",
+      "Quantum Mechanics",
       "20th Century"
     ],
     "tier": 2
@@ -1949,17 +1997,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Lise Meitner",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "She co-discovered nuclear fission - and explained it - but the 1944 Nobel went to her collaborator alone. She fled the Nazis in 1938 with ten marks and a suitcase; the element meitnerium bears her name, 70 years after her exile.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Lise Meitner",
       "durationMinutes": 6,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "In December 1938 Hahn wrote to Meitner that uranium had 'burst' into barium; she and Frisch worked out the physics - the nucleus splits, releasing enormous energy - and named it 'fission' by analogy with cell division. She refused to join the Manhattan Project on moral grounds."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Physics",
+      "Nuclear Physics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1968,17 +2017,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Kurt Gödel",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "In 1931, at 25, he proved any consistent mathematical system contains truths it cannot prove - destroying Hilbert's dream of complete mathematics. Einstein called him the greatest logician since Aristotle; the two walked to the Institute together daily.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Kurt Gödel",
       "durationMinutes": 17,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Gödel's first theorem: a system rich enough for arithmetic can't be both complete and consistent - there will always be unprovable truths. His second: such a system can't prove its own consistency. The result stunned the mathematical world and informs computer science's limits."
     },
     "tags": [
       "Mathematics",
-      "18th Century"
+      "Logic",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -1987,16 +2037,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Georges Lemaître",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "A Belgian priest who proposed that the universe began as a single 'primeval atom' that exploded - the Big Bang, in 1927. He derived the expanding-universe law two years before Hubble, and Einstein called his physics 'abominable' before conceding.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Georges Lemaître",
       "durationMinutes": 5,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Lemaître's 1927 paper derived the recession of galaxies (now called Hubble's law) but was published in a French journal and went unnoticed - Hubble published in English two years later and got the credit."
     },
     "tags": [
-      "Physics",
+      "Astronomy",
+      "Cosmology",
       "20th Century"
     ],
     "tier": 2
@@ -2006,17 +2057,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "John Bardeen",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The only person to win two Physics Nobels: he co-invented the transistor - the switch inside every computer - then cracked superconductivity, where electricity flows without resistance. So quiet that colleagues forgot he was in the room.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "John Bardeen",
       "durationMinutes": 18,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Bardeen's transistor (1947, with Brattain and Shockley) replaced vacuum tubes and launched the electronics age; he left Bell Labs when Shockley grew impossible."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Physics",
+      "Electronics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2025,17 +2077,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Linus Pauling",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The only person to win two unshared Nobel Prizes - Chemistry in 1954 for the chemical bond, Peace in 1962 for campaigning against nuclear testing. He also nearly beat Watson and Crick to DNA's structure with an elegant triple helix that was simply wrong.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Linus Pauling",
       "durationMinutes": 6,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Pauling quantified how atoms pull electrons (electronegativity) and predicted the alpha helix, protein structure's backbone. He campaigned so effectively against fallout that the 1963 test ban treaty was partly credited to him."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Chemistry",
+      "Peace",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2044,16 +2097,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "James Watson",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "He was 23 when he and Crick built the DNA double helix in three weeks - a race they won partly because they'd seen Rosalind Franklin's X-ray photograph without her permission. The 1962 Nobel went to him, Crick, and Wilkins; Franklin had died, and the rules bar posthumous awards.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "James Watson",
       "durationMinutes": 20,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "The discovery story is messy: Franklin's Photo 51 - the X-ray image that revealed the helix - was shown to Watson by Wilkins, apparently without her consent."
     },
     "tags": [
-      "Physics",
+      "Biology",
+      "Genetics",
       "20th Century"
     ],
     "tier": 2
@@ -2063,17 +2117,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Stephen Hawking",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Diagnosed with ALS at 21 and given two years to live, he became the most famous physicist since Einstein - and showed that black holes slowly leak radiation and eventually evaporate. 'A Brief History of Time' sold over 10 million copies.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Stephen Hawking",
       "durationMinutes": 13,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Hawking's breakthrough: quantum effects near a black hole's edge make it emit particles and lose mass - Hawking radiation - shrinking over cosmic timescales until it vanishes. That 1974 idea tied gravity to quantum theory for the first time."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Physics",
+      "Cosmology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2082,16 +2137,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Carl Sagan",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "The astronomer who brought the universe to living rooms with 'Cosmos' - the most-watched PBS series ever - and championed the Voyager golden records, messages in bottles to space. He called Earth 'the pale blue dot' and reminded us everyone we love lives on a mote of dust.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Carl Sagan",
       "durationMinutes": 10,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Sagan built the golden records - sounds and images of Earth - aboard Voyager 1 and 2, with a cover showing how to play them. He pushed the search for extraterrestrial intelligence, argued for the greenhouse effect on Venus, and warned about nuclear winter."
     },
     "tags": [
-      "Physics",
+      "Astronomy",
+      "Science Communication",
       "20th Century"
     ],
     "tier": 2
@@ -2101,16 +2157,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "David Attenborough",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "He's been making natural history films for over 70 years - 'Life on Earth,' 'The Blue Planet' - and his 2017 series on the oceans helped turn public opinion against plastic pollution. He started at the BBC by asking to be sent anywhere with animals.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "David Attenborough",
       "durationMinutes": 9,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Attenborough's breakthrough: 'Life on Earth' (1979) used his voice and on-camera encounters to tell evolution as a story. 'Blue Planet II' (2017) ended with a plastic bag settling on the deep seafloor - an image that moved governments to act."
     },
     "tags": [
-      "Physics",
+      "Biology",
+      "Conservation",
       "20th Century"
     ],
     "tier": 2
@@ -2120,17 +2177,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Tim Berners-Lee",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "He invented the World Wide Web in 1989 as a way to share documents among physicists at CERN - and gave it to the world free, refusing to patent it. His proposal was initially marked 'vague but exciting.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Tim Berners-Lee",
       "durationMinutes": 10,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Berners-Lee wrote the first web browser, server, and web page, and set up the web's rules so no one could own it - he still believes the web should be free and open. His original proposal for 'Mesh' was labeled 'vague but exciting' by his boss."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Computer Science",
+      "Internet",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2139,16 +2197,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Grace Hopper",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "A Navy rear admiral who invented the first compiler - software that translates human-like code into machine instructions - and helped create COBOL. She popularized 'debugging' after literally extracting a moth from a computer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Grace Hopper",
       "durationMinutes": 17,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Hopper's team found a moth jammed in a Harvard Mark II relay and taped it in the logbook - 'first actual case of bug being found' - making her the mother of 'debugging.' She pushed programming toward English-like languages because people can't do machine code fast enough."
     },
     "tags": [
-      "Chemistry",
+      "Computer Science",
+      "Programming",
       "20th Century"
     ],
     "tier": 2
@@ -2158,17 +2217,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Mary Jackson",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "NASA's first Black woman engineer - she had to petition a segregated Virginia court for permission to take night classes toward the title. She spent her later career making sure other women and minorities could advance at NASA.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Mary Jackson",
       "durationMinutes": 9,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Jackson started in the West Computing pool of Black 'human computers,' then asked to join the engineers' training program - a path the segregated school system blocked. After becoming an engineer in 1958, she pivoted to equal-opportunity work, mentoring the next generation."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Engineering",
+      "Spaceflight",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2177,17 +2237,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Sally Ride",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "In 1983 she became the first American woman in space - and famously answered reporters' questions about menstruation affecting her flight. She later served on the panels investigating both shuttle disasters and founded a nonprofit to get girls into STEM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Sally Ride",
       "durationMinutes": 6,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Ride was one of six women picked in NASA's 1978 astronaut class, the first to include women. On STS-7 she helped deploy satellites and operated the shuttle's robotic arm. She sat on the Challenger (1986) and Columbia (2003) investigation boards."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Spaceflight",
+      "Physics",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2196,17 +2257,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Chien-Shiung Wu",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "She designed and ran the experiment that toppled a 'law' of physics - showing nature does not respect left-right symmetry. The Nobel went to the two theorists, not to her; she was called the First Lady of Physics and the 'Chinese Madame Curie.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Chien-Shiung Wu",
       "durationMinutes": 7,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "In 1956 Lee and Yang suggested parity - mirror symmetry - might fail; Wu, an expert experimenter, designed a cobalt-60 decay test using ultra-cold nuclei in a magnetic field and found the electrons favored one direction. Parity was dead."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Physics",
+      "Weak Force",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2215,16 +2277,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Jocelyn Bell Burnell",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "As a graduate student in 1967 she found a radio signal blinking every 1.3 seconds - 'little green men' she half-joked - the first pulsar. The 1974 Nobel went to her supervisor, not her; she donated her later $3M Breakthrough Prize to support women in physics.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Jocelyn Bell Burnell",
       "durationMinutes": 17,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Bell noticed a 'scruffy' signal among miles of chart paper that instruments were recording - regular pulses no natural object was supposed to make. She and her supervisor ruled out aliens, then identified the source: a spinning neutron star sweeping its beam like a lighthouse."
     },
     "tags": [
-      "Physics",
+      "Astronomy",
+      "Pulsars",
       "20th Century"
     ],
     "tier": 2
@@ -2234,17 +2297,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Andrea Ghez",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "For 20 years she tracked stars whipping around an invisible object at the Milky Way's heart - proving a supermassive black hole four million times the Sun's mass sits there. In 2020 she became the fourth woman to win the Physics Nobel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Andrea Ghez",
       "durationMinutes": 19,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Ghez's stars orbit the galactic center at up to 6,000 km/s; one star, S2, swings past every 16 years. Watching those orbits requires adaptive optics - flexing mirrors that cancel atmospheric blur - at the Keck telescope on Mauna Kea."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Astronomy",
+      "Black Holes",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -2253,17 +2317,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Tu Youyou",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "She found the malaria cure in a 1,600-year-old recipe for 'fever tea' made from sweet wormwood - and tested it on herself. In 2015 she became China's first woman Nobel laureate in science; artemisinin has saved millions of lives.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Tu Youyou",
       "durationMinutes": 17,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "During the Cultural Revolution, Mao's Project 523 sought a malaria drug for troops in Vietnam; Tu screened 2,000+ traditional recipes. One text from 340 CE suggested cold-soaking wormwood rather than boiling it - the low-temperature extraction preserved the active compound."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Medicine",
+      "Pharmacology",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2272,17 +2337,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Rita Levi-Montalcini",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Banned from Italian universities as a Jew in 1938, she set up a lab in her bedroom and, with eggs and a bicycle, discovered how nerves grow - nerve growth factor. She won the 1986 Nobel, became a senator for life, and worked until her death at 103.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Rita Levi-Montalcini",
       "durationMinutes": 17,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Levi-Montalcini grafted mouse tumors onto chick embryos and saw nerves sprout toward them - a protein was calling them: NGF, the first growth factor ever found. It revealed how the nervous system wires itself and led to insights into cancer and Alzheimer's."
     },
     "tags": [
       "Neuroscience",
-      "21st Century"
+      "Medicine",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2291,16 +2357,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Maria Goeppert Mayer",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "The second woman ever to win the Physics Nobel - she showed atomic nuclei have 'shells,' like electrons, explaining why some numbers of protons and neutrons are magic. For years she worked as an unpaid volunteer because universities had no jobs for women.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Maria Goeppert Mayer",
       "durationMinutes": 12,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Goeppert Mayer noticed nuclei with certain 'magic numbers' of nucleons (2, 8, 20, 28, 50...) were unusually stable - like closed shells of electrons. She and Jensen built the shell model in 1949; she got the 1963 Nobel shared with Jensen and Wigner."
     },
     "tags": [
       "Physics",
+      "Nuclear Physics",
       "20th Century"
     ],
     "tier": 2
@@ -2310,17 +2377,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Edward Jenner",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "In 1796 he scraped pus from a milkmaid's cowpox sore into a cut on 8-year-old James Phipps - then exposed the boy to smallpox, which never took. That experiment gave the world vaccination, the word coming from vacca, Latin for cow.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Edward Jenner",
       "durationMinutes": 9,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Jenner noticed milkmaids who'd had cowpox never caught smallpox - the deadliest disease of the age. His 1796 experiment was risky and ethically dated, but it worked: Phipps survived later smallpox challenges."
     },
     "tags": [
-      "Astronomy",
-      "20th Century"
+      "Medicine",
+      "Vaccination",
+      "18th Century"
     ],
     "tier": 2
   },
@@ -2329,16 +2397,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Jonas Salk",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "He developed the first polio vaccine, tested on nearly two million schoolchildren in 1955 - and refused to patent it, asking, 'Would you patent the sun?' He became the most beloved scientist in America overnight.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Jonas Salk",
       "durationMinutes": 17,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Salk grew polio virus, killed it with formaldehyde, and proved the dead virus still trains immunity - an approach experts doubted. The 1954 field trial was the largest medical experiment in history; within a year polio cases collapsed."
     },
     "tags": [
-      "Chemistry",
+      "Medicine",
+      "Virology",
       "20th Century"
     ],
     "tier": 2
@@ -2348,16 +2417,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Gertrude Elion",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "She designed drugs molecule by molecule instead of screening thousands at random - cures for leukemia, herpes, and AIDS, plus the drugs that make organ transplants possible. She never earned a PhD, yet won the 1988 Nobel in Medicine.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Gertrude Elion",
       "durationMinutes": 7,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Elion's method: understand the biochemistry of disease, then build a molecule that blocks the enemy enzyme without hurting the patient's cells."
     },
     "tags": [
-      "Chemistry",
+      "Medicine",
+      "Pharmacology",
       "20th Century"
     ],
     "tier": 2
@@ -2367,16 +2437,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Charles Best",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "He was a 22-year-old medical student when he and Banting isolated insulin and kept a diabetic dog alive through the summer of 1921. The Nobel went to Banting and Macleod - Banting was so angry he gave half his prize money to Best.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Charles Best",
       "durationMinutes": 16,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Best learned the isolation technique in days and worked the exhausting overnight shifts testing extracts on diabetic dogs. When the 1923 Nobel went to Banting and Macleod, Banting split his share with Best in protest."
     },
     "tags": [
-      "Physics",
+      "Medicine",
+      "Endocrinology",
       "20th Century"
     ],
     "tier": 2
@@ -2386,17 +2457,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Robin Warren",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The pathologist who noticed spiral bacteria lurking in ulcer biopsies when the whole medical world insisted ulcers were stress-induced. With Barry Marshall he proved the bacterium causes ulcers - and they shared the 2005 Nobel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Robin Warren",
       "durationMinutes": 7,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Warren saw curved bacteria on ulcer tissue and suspected they mattered; most doctors dismissed it as contamination. Marshall grew the stubborn organism over a long Easter weekend, by luck."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Medicine",
+      "Pathology",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -2405,17 +2477,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Santiago Ramón y Cajal",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "The father of modern neuroscience - he proved the brain is made of separate cells, not a continuous web, by drawing them in exquisite detail. A failed art student who was told he had 'no aptitude for drawing,' he won the 1906 Nobel for his neuron doctrine.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Santiago Ramón y Cajal",
       "durationMinutes": 18,
-      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+      "instruction": "Cajal used a silver stain (invented by Golgi, who shared the Nobel but disagreed with him) to reveal individual neurons, then drew them obsessively - his illustrations still appear in textbooks."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Neuroscience",
+      "Anatomy",
+      "19th Century"
     ],
     "tier": 2
   },
@@ -2424,16 +2497,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Oliver Sacks",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "A neurologist who told his patients' stories so well that 'Awakenings' became a Robert De Niro film - people with catatonia awakened by a drug, then losing the miracle. He called himself a 'clinical tales' writer, and his books made the strangest brains feel human.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Oliver Sacks",
       "durationMinutes": 16,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Sacks treated patients with conditions most doctors never see - someone who couldn't recognize faces, a man who heard music constantly, a surgeon who mistook his wife for a hat. He described their inner worlds without reducing them to cases."
     },
     "tags": [
-      "Physics",
+      "Neuroscience",
+      "Medicine",
       "20th Century"
     ],
     "tier": 2
@@ -2443,17 +2517,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Daniel Kahneman",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "A psychologist who won the Nobel Prize in Economics - the only one ever - for showing humans are systematically irrational: we fear losses twice as much as we enjoy gains. 'Thinking, Fast and Slow' made the science of human error a bestseller.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Daniel Kahneman",
       "durationMinutes": 15,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Kahneman's work, mostly with the late Amos Tversky, catalogued the biases that steer us: anchoring, availability, overconfidence, framing."
     },
     "tags": [
-      "Physics",
-      "20th Century"
+      "Psychology",
+      "Behavioral Economics",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -2462,16 +2537,17 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Noam Chomsky",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "He argued that language is not learned from scratch but grown from an innate grammar hardwired into every human brain - a claim that rewrote linguistics. He's also spent 60 years as the world's most prominent critic of US foreign policy.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Noam Chomsky",
       "durationMinutes": 18,
-      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+      "instruction": "Chomsky's 'Syntactic Structures' (1957) showed sentences are generated by recursive rules - a finite system making infinite sentences. His universal grammar says children acquire language too fast and too uniformly for pure imitation; the brain must come pre-equipped."
     },
     "tags": [
-      "Physics",
+      "Linguistics",
+      "Cognitive Science",
       "20th Century"
     ],
     "tier": 2
@@ -2481,17 +2557,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Jean Piaget",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "The psychologist who mapped how children's minds grow in stages - he published his first scientific paper at age 10, about albino sparrows. His famous conservation tests showed a child believes a taller glass holds more water until a certain age.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Jean Piaget",
       "durationMinutes": 12,
-      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+      "instruction": "Piaget watched his own children and concluded thinking develops in four stages: sensorimotor (0-2), preoperational (2-7), concrete operational (7-11), formal operational (11+)."
     },
     "tags": [
-      "Neuroscience",
-      "21st Century"
+      "Psychology",
+      "Development",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2500,17 +2577,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Edward Witten",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "The only physicist ever to win the Fields Medal, mathematics' top prize - for uniting string theory into M-theory, an 11-dimensional framework some call the 'theory of everything' candidate. He's been called the greatest living theoretical physicist.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Edward Witten",
       "durationMinutes": 17,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "In 1995 Witten showed the five competing string theories were facets of one deeper theory - M-theory - in 11 dimensions, where strings are slices of higher-dimensional membranes."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Physics",
+      "String Theory",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -2519,17 +2597,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Cumrun Vafa",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "A Harvard string theorist from Tehran who invented F-theory and, with Andrew Strominger, used string theory to count the microstates of black holes - explaining their entropy from the inside. He's among the most-cited physicists of his generation.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Cumrun Vafa",
       "durationMinutes": 14,
-      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+      "instruction": "Vafa's 1996 work with Strominger counted black hole quantum states in string theory and matched Bekenstein-Hawking entropy exactly - one of string theory's most concrete successes. F-theory (1996) offered a compact way to build particle physics from geometry."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Physics",
+      "String Theory",
+      "21st Century"
     ],
     "tier": 2
   },
@@ -2538,17 +2617,18 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
     "name": "Lisa Randall",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "She proposed that the universe is a 3D island - a 'brane' - floating in a higher-dimensional space where gravity leaks in from a hidden dimension. The Randall-Sundrum model gave extra dimensions a new job and made her one of physics' best-known voices.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
       "targetName": "Lisa Randall",
       "durationMinutes": 7,
-      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+      "instruction": "Randall's idea with Raman Sundrum: extra dimensions can be 'warped,' solving the hierarchy problem - why gravity is so weak compared to other forces - without exotic particles. Testable predictions (graviton states) were sought at the LHC."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Physics",
+      "Particle Physics",
+      "21st Century"
     ],
     "tier": 2
   }
