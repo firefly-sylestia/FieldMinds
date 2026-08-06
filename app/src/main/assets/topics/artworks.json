@@ -6115,5 +6115,1005 @@
       "Portrait"
     ],
     "tier": 2
+  },
+  {
+    "id": "artw-the-goldfinch-355",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Goldfinch (1654)",
+    "teaser": "Fabritius's tiny painting of a chained goldfinch perched on its feeder box — a masterpiece of Dutch realism that became world-famous in 2013 when Donna Tartt named her Pulitzer-winning novel after it. The painting is only 33 by 23 cm, and the chain and the little bird are painted with such tenderness that it has been called the most beloved small painting in the world.",
+    "imageUrl": "",
+    "byline": "Carel Fabritius (1654)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Goldfinch (1654) — the chained bird and the loose wall",
+      "durationMinutes": 8,
+      "instruction": "Look at the bird first: it is chained by its leg to the feeder — a pet, caught forever — and its head is turned slightly, watching you. Then the wall behind it: the pale plaster is painted in a few loose strokes, with the bird's shadow falling on it, and the whole scene is lit from the left with a warmth that makes the tiny canvas feel like a room."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Animal Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-love-letter-356",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Love Letter (c. 1669)",
+    "teaser": "Vermeer's painting of a maid handing a letter to her seated mistress — with the whole scene seen through a doorway, as if we are spying on them from another room. The foreground is dark and out of focus, with a crumpled rug, a broom, and a lute on the floor, and through the door the two women share a knowing look — the letter is a love letter, and the music on the wall hints at the heart's tune.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1669)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Love Letter (c. 1669) — the letter through the doorway",
+      "durationMinutes": 8,
+      "instruction": "Look through the door first: the foreground — the broom, the crumpled rug, the slippers — is dark and slightly out of focus, while the two women beyond are sharp and brightly lit, so you are the third person in the house, watching through the doorway."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-art-of-painting-357",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Art of Painting (c. 1666)",
+    "teaser": "Vermeer's largest and most complex painting: an artist sits with his back to us, painting a model dressed as Clio, the muse of history, while a chandelier, a map, and a curtain frame the scene. The artist is believed to be Vermeer himself, and the painting is his manifesto — he kept it in his studio and refused to sell it, even when he was drowning in debt.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1666)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Art of Painting (c. 1666) — the artist painting the muse",
+      "durationMinutes": 8,
+      "instruction": "Look at the artist first: he sits with his back to us, painting the model — and the model is Clio, the muse of history, with her laurel wreath, her trumpet, and her book. Then the room: the chandelier above is painted with a precision that makes it gleam, the map of the Netherlands hangs on the back wall, and the curtain in the foreground — pulled back by a trick of perspective — invites you in."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-geographer-358",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Geographer (c. 1669)",
+    "teaser": "Vermeer's painting of a scholar in his study, pausing with a pair of dividers in his hand and a globe on the cabinet — one of only two paintings Vermeer made of a man alone (the other is The Astronomer), and both were probably painted from the same model. The geographer's face is lit by the window, his map-covered walls and his instruments tell a story of a man measuring the world.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1669)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Geographer (c. 1669) — the pause with the dividers",
+      "durationMinutes": 8,
+      "instruction": "Look at the geographer first: he pauses, dividers in hand, looking up from his maps as if he has just solved a problem — the light from the window falls across his face and his papers. Then the room: the walls are covered with maps and charts, a globe stands on the cabinet, and a book lies open on the table — a scholar's world."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-girl-interrupted-at-her-music-359",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Girl Interrupted at Her Music (c. 1658)",
+    "teaser": "Vermeer's painting of a young woman at a virginal — a keyboard instrument — turning to look at us as if we have just walked in and interrupted her song. A man's silhouette is hinted in a painting on the wall, and the wine on the table suggests she was not practicing alone. The girl's glance out of the canvas is one of Vermeer's most direct engagements with the viewer.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1658)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Girl Interrupted at Her Music (c. 1658) — the glance as you enter",
+      "durationMinutes": 8,
+      "instruction": "Look at the girl first: she has just stopped playing and turned to face us, her hands still at the keys — Vermeer lets us walk into the room and break the music. Then the clues: the wine glass and the jug on the table, the viola da gamba on the floor, and the dark painting on the wall that seems to show a man watching — the scene is a courtship, and we are the intruders."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-woman-with-a-pearl-necklace-360",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Woman with a Pearl Necklace (c. 1664)",
+    "teaser": "Vermeer's painting of a young woman before a mirror, holding up two yellow ribbons to her pearl necklace — the mirror shows only a pale reflection of her face, and the pearls lie on the table, waiting. The painting is a study of vanity and light: the woman checks her jewels, the mirror reflects without showing, and the light from the window turns everything to gold.",
+    "imageUrl": "",
+    "byline": "Johannes Vermeer (c. 1664)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Woman with a Pearl Necklace (c. 1664) — the mirror and the ribbons",
+      "durationMinutes": 8,
+      "instruction": "Look at the mirror first: it shows only the faintest reflection of her face — the mirror, in Dutch painting, is the symbol of vanity, and here it reveals nothing. Then the ribbons: she holds two yellow ribbons up to the pearls, checking how they look, and the pearls themselves still lie on the table — the moment is before, not after."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-return-of-the-prodigal-son-361",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Return of the Prodigal Son (c. 1669)",
+    "teaser": "Rembrandt's last great painting: the parable of the prodigal son, painted at the end of the artist's life — bankrupt, grieving, and stripped of everything. The father bends over his returning son, his hands on the boy's shoulders, while the older brother watches from the shadow. It is Rembrandt's final statement about forgiveness, and it is often called the greatest religious painting of the 17th century.",
+    "imageUrl": "",
+    "byline": "Rembrandt van Rijn (c. 1669)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Return of the Prodigal Son (c. 1669) — the father's hands",
+      "durationMinutes": 8,
+      "instruction": "Look at the father first: he is nearly blind, bent with age, and his hands rest on the ragged son's shoulders with a tenderness that makes the whole painting — the hands, the light on them, the son's head against the father's chest — feel like a single act of forgiveness. Then the son: his shoes are worn through, his back is bare, his head is shaved like a beggar's. The older brother stands in shadow at the right, excluded and resentful."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-belshazzars-feast-362",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Belshazzar's Feast (1635)",
+    "teaser": "Rembrandt's painting of the Babylonian king Belshazzar recoiling as a divine hand writes Hebrew letters on the wall — 'Mene, Mene, Tekel, Upharsin' — 'numbered, weighed, divided,' the prophecy of his fall. Rembrandt painted the mysterious handwriting correctly: he had a Jewish scholar copy the real Aramaic script, and the letters are written right to left, the way the king's guests would have read them.",
+    "imageUrl": "",
+    "byline": "Rembrandt van Rijn (1635)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Belshazzar's Feast (1635) — the handwriting on the wall",
+      "durationMinutes": 8,
+      "instruction": "Look at the king first: he twists away from the table, his face lit by the ghostly letters, his crown askew — the wine in his goblet is still, caught mid-splash. Then the letters: they are real Aramaic, written right to left, and Rembrandt got a Jewish scholar to copy them accurately — the inscription reads 'Mene, Mene, Tekel, Upharsin,' the famous writing on the wall."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-danae-363",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Danaë (1636)",
+    "teaser": "Rembrandt's painting of Danaë, the princess whom Zeus visited as a shower of gold — here shown as a real, ordinary woman welcoming the light that is the god's arrival. Rembrandt worked on it for over a decade, repainting the head of Danaë and the face of the maidservant, and in 1985 the painting was slashed and doused with acid by a visitor; it took years of restoration to bring it back.",
+    "imageUrl": "",
+    "byline": "Rembrandt van Rijn (1636)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Danaë (1636) — the golden light and the welcoming body",
+      "durationMinutes": 8,
+      "instruction": "Look at Danaë first: she is not a classical goddess but a flesh-and-blood woman, raising herself on the bed as the golden light — the god — pours over her. Then the details: the maidservant pulls back the curtain, the cupid above the bed cries, and the golden shower of light is the entire subject — the painting is about the moment before. Rembrandt repainted Danaë's face and the maidservant over the years, leaving a patchwork of styles."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Mythology"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-polish-rider-364",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Polish Rider (c. 1655)",
+    "teaser": "Rembrandt's painting of a young horseman riding through a dark, mountainous landscape — his fur cap, his saber, his yellow coat, his calm face. No one knows who the rider is: a Polish nobleman, a Hungarian, a soldier of fortune, or simply an ideal of the wanderer. The painting's mystery is its power — the rider rides through a landscape of shadows toward something we cannot see.",
+    "imageUrl": "",
+    "byline": "Rembrandt van Rijn (c. 1655)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Polish Rider (c. 1655) — the rider into the dark",
+      "durationMinutes": 8,
+      "instruction": "Look at the rider first: he sits calmly on a pale horse, his fur cap and his saber suggesting a soldier, but his face is thoughtful, almost gentle — he is no portrait, but an idea of the solitary traveler. Then the landscape: the hills are dark, the sky is gathering, and the path ahead is hidden — the rider moves out of the darkness into more darkness."
+    },
+    "tags": [
+      "Dutch Golden Age",
+      "Equestrian"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-annunciation-leonardo-365",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Annunciation (c. 1472)",
+    "teaser": "Leonardo's early painting of the angel Gabriel announcing to Mary that she will bear the son of God — painted when he was about 20, still working in the workshop of Verrocchio. The painting is full of his signature touches already: the angel's wing is anatomically wrong (it belongs to a bird), and the marble table in front of Mary is painted with a perspective that has a hidden flaw — the young Leonardo was already breaking rules.",
+    "imageUrl": "",
+    "byline": "Leonardo da Vinci (c. 1472)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Annunciation (c. 1472) — the bird-winged angel and the flawed table",
+      "durationMinutes": 8,
+      "instruction": "Look at the angel first: Gabriel kneels in the garden, his right hand raised in blessing, and his wing is painted with the feathers of a bird — a mistake in anatomy that scholars use to date the painting to Leonardo's youth. Then Mary: she sits behind a marble table, her right hand raised in surprise, her left hand on the book she was reading."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-virgin-of-the-rocks-366",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Virgin of the Rocks (1483-86)",
+    "teaser": "Leonardo's painting of the Virgin Mary, the infant Jesus, the infant John the Baptist, and an angel in a dark, fantastic grotto of rocks and water — the first great painting of his Milan years. The figures are arranged in a pyramid, the light comes from nowhere and everywhere, and the landscape behind them is a dream of caves and mist.",
+    "imageUrl": "",
+    "byline": "Leonardo da Vinci (1483-86)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Virgin of the Rocks (1483-86) — the pyramid in the grotto",
+      "durationMinutes": 8,
+      "instruction": "Look at the grotto first: the rocks are not a real cave but a geological fantasy — limestone towers, dark water, and plants that Leonardo drew from life, arranged like a dream of the earth's beginning. Then the figures: Mary's hand hovers over the infant John, the angel points at the infant Jesus, and the four of them form a pyramid that holds the dark landscape in balance."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-ginevra-de-benci-367",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Ginevra de' Benci (c. 1474)",
+    "teaser": "Leonardo's portrait of a young Florentine woman, Ginevra de' Benci — the only Leonardo painting in the Americas. Ginevra was a poet and a philosopher's daughter, and Leonardo painted her against a juniper bush, because 'ginevra' sounds like the Italian for juniper, 'ginepro' — a visual pun. The back of the panel is painted with a wreath of laurel and palm, the symbols of poetry and virtue.",
+    "imageUrl": "",
+    "byline": "Leonardo da Vinci (c. 1474)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Ginevra de' Benci (c. 1474) — the juniper pun and the pale face",
+      "durationMinutes": 8,
+      "instruction": "Look at her face first: she is pale, composed, and her eyes do not quite meet yours — she is painted in profile-three-quarter, and the light models her face softly, the way only Leonardo could. Then the juniper: the bush behind her is a pun on her name — 'Ginevra' sounds like 'ginepro,' juniper — and the sprigs are painted with botanical care."
+    },
+    "tags": [
+      "Renaissance",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-baptism-of-christ-368",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Baptism of Christ (c. 1475)",
+    "teaser": "The painting of John the Baptist baptizing Jesus in the Jordan, made in Verrocchio's workshop — with the famous detail that the left-hand angel was painted by the young apprentice Leonardo, and it is so much more alive than the rest that legend says Verrocchio gave up painting forever. The story is probably untrue, but the angel is the first brushwork we can certainly attribute to Leonardo.",
+    "imageUrl": "",
+    "byline": "Andrea del Verrocchio & Leonardo da Vinci (c. 1475)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Baptism of Christ (c. 1475) — find the angel Leonardo painted",
+      "durationMinutes": 8,
+      "instruction": "Look at the angel first: on the left, a kneeling angel with golden curls, turning his head toward the viewer — his face and his hair are painted with a softness the rest of the painting lacks, and this figure is the work of the young Leonardo, then a teenager in Verrocchio's workshop. Then the rest: John the Baptist, the dove, the hand of God, and the river are painted in the harder, flatter style of the older workshop."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-pallas-and-the-centaur-369",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Pallas and the Centaur (c. 1482)",
+    "teaser": "Botticelli's painting of Pallas Athena, goddess of wisdom, gripping the hair of a centaur — half man, half horse — who bows before her, armed with a bow and a quiver. The painting's meaning is debated: Athena taming the wild forces of passion, or a Medici allegory of reason defeating instinct, painted for the ruler of Florence. The centaur's face, resigned and beautiful, makes the painting a meditation on the cost of civilization.",
+    "imageUrl": "",
+    "byline": "Sandro Botticelli (c. 1482)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Pallas and the Centaur (c. 1482) — the hand in the centaur's hair",
+      "durationMinutes": 8,
+      "instruction": "Look at the centaur first: he is half man, half horse, with a bow in his hand and a resigned, almost gentle face — he bows, and Athena's hand in his hair is both a grip and a caress. Then Athena: her dress is embroidered with the three rings of the Medici, and her spear and her calm face make her the figure of reason and rule."
+    },
+    "tags": [
+      "Renaissance",
+      "Mythology"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-mystic-nativity-370",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Mystic Nativity (1500-01)",
+    "teaser": "Botticelli's strange, apocalyptic Nativity — the last painting he dated, signed in Greek, with angels and devils, a dark cave, and the Holy Family in a world that is falling apart. At the top, angels dance in a circle, and below, three men embrace three angels — Botticelli painted this at the turn of the century, when Florence was gripped by the preacher Savonarola's warnings of doom, and the painting is full of that fear and hope.",
+    "imageUrl": "",
+    "byline": "Sandro Botticelli (1500-01)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Mystic Nativity (1500-01) — the dancing angels and the fleeing devils",
+      "durationMinutes": 8,
+      "instruction": "Look at the top first: twelve angels dance in a circle over the roof of the stable — and beneath the roof, three angels embrace three men, while three devils flee into the cracks of the earth. Then the Nativity itself: Mary kneels before the child, Joseph sleeps, and the ox and the ass look on — but the stable is a cave, and the sky is dark and strange."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-madonna-of-the-meadow-371",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Madonna of the Meadow (1506)",
+    "teaser": "Raphael's painting of Mary with the infant Jesus and the infant John the Baptist in a green meadow — the three figures form a perfect pyramid, and the composition became the model for every Madonna painted after it. The child Jesus reaches for a small cross held by John — a premonition of the Crucifixion — and the whole painting is built on balance, calm, and the geometry of love.",
+    "imageUrl": "",
+    "byline": "Raphael (1506)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Madonna of the Meadow (1506) — the child reaching for the cross",
+      "durationMinutes": 8,
+      "instruction": "Look at the pyramid first: Mary's head is the apex, and her blue robe and red dress spread to the base where the two children sit — the composition is so balanced that the painting feels inevitable. Then the cross: John the Baptist holds a small reed cross, and the infant Jesus reaches for it — the child reaching for the instrument of his own death, painted with complete serenity."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-sistine-madonna-372",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Sistine Madonna (1513-14)",
+    "teaser": "Raphael's most famous Madonna — Mary carrying the infant Jesus, stepping forward out of a curtained heaven, with Saint Sixtus and Saint Barbara kneeling at the sides. At the bottom, two little angels lean on the frame, looking up — the most copied cherubs in art history, reproduced on everything from greeting cards to wine labels.",
+    "imageUrl": "",
+    "byline": "Raphael (1513-14)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Sistine Madonna (1513-14) — the two cherubs on the frame",
+      "durationMinutes": 8,
+      "instruction": "Look at the bottom first: two cherubs lean on the frame, elbows on the wood, looking up at the Virgin — they were added at the end, and they have become the most famous angels in Western art. Then the Virgin: she steps forward out of the clouds, holding the child, her feet bare, her face young and grave, and the curtain behind her is pulled back as if heaven has opened."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-marriage-of-the-virgin-373",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Marriage of the Virgin (1504)",
+    "teaser": "Raphael's early masterpiece, painted when he was 21 — the wedding of Mary and Joseph, with the high priest joining their hands, the suitors with their withered rods, and the great temple of Jerusalem in the background, drawn in perfect perspective. The painting is famous for that temple: a domed building with colonnades, painted with a vanishing point that makes the whole scene feel real and deep.",
+    "imageUrl": "",
+    "byline": "Raphael (1504)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Marriage of the Virgin (1504) — the temple and the withered rods",
+      "durationMinutes": 8,
+      "instruction": "Look at the temple first: the great domed building in the background is drawn with a perspective so precise that the eye travels through the whole painting to its vanishing point — Raphael, at 21, was showing off. Then the ceremony: the high priest joins the hands of Mary and Joseph, while the disappointed suitors snap their withered rods — the legend says only Joseph's rod flowered."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-st-george-and-the-dragon-374",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "St George and the Dragon (c. 1506)",
+    "teaser": "Raphael's small painting of Saint George in armor, on a rearing white horse, spearing the dragon while the princess flees in the background — one of the most copied images of the saint. The painting is only 28 by 21 cm, made to be carried, and it was given to Henry VII of England — Raphael's first contact with the English court that would later own so many of his works.",
+    "imageUrl": "",
+    "byline": "Raphael (c. 1506)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "St George and the Dragon (c. 1506) — the lance in the dragon's mouth",
+      "durationMinutes": 8,
+      "instruction": "Look at the strike first: George's lance pierces the dragon's mouth, the horse rears, and the saint leans into the blow — the whole action is frozen at the instant of the kill. Then the princess: she flees in the background, small and golden, and the landscape opens into a distance of hills and light. The painting is tiny — made to be held — and it was a gift to Henry VII of England, part of a diplomatic exchange between the courts."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-deposition-375",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Deposition (1507)",
+    "teaser": "Raphael's painting of Christ's body being carried from the cross to the tomb — four men carry the dead Christ, Mary Magdalene holds his hand, and the Virgin Mary faints in the arms of the women at the left. The painting was commissioned for a church in Perugia, and it shows Raphael at the moment he was absorbing the drama of Michelangelo — the bodies twist, the grief is physical, and the composition breaks out of the calm of his early work.",
+    "imageUrl": "",
+    "byline": "Raphael (1507)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Deposition (1507) — the dead weight of Christ",
+      "durationMinutes": 8,
+      "instruction": "Look at Christ first: his body is carried diagonally, head down, his arm hanging — the dead weight is real, and the men straining under it are painted with effort in every muscle. Then the grief: the Virgin has fainted and is held up by the women, Mary Magdalene grasps Christ's hand, and the young man at the right carries the crown of thorns and the nails."
+    },
+    "tags": [
+      "Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-dying-slave-376",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "The Dying Slave (1513-16)",
+    "teaser": "Michelangelo's marble figure of a young man, one hand on his chest, one arm raised, his body twisting in a slow, graceful arc — made for the tomb of Pope Julius II, along with its companion, the Rebellious Slave. The slaves were meant to symbolize the arts, imprisoned by death, and the Dying Slave has been read as the soul's last breath, the body's surrender, and the most beautiful figure Michelangelo ever carved.",
+    "imageUrl": "",
+    "byline": "Michelangelo (1513-16)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Dying Slave (1513-16) — the body released",
+      "durationMinutes": 8,
+      "instruction": "Look at the body first: the young man's torso twists in a long, soft curve — the head falls back, the arm rises, and the whole figure seems to be released, not struggling. Then the face: it is calm, almost asleep, which is why the figure has been read as death's gentle arrival rather than resistance. Michelangelo carved the slave for the tomb of Pope Julius II, one of a series of captives meant to represent the arts bound by death."
+    },
+    "tags": [
+      "Renaissance",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-moses-michelangelo-377",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Moses (1513-15)",
+    "teaser": "Michelangelo's marble Moses, carved for the tomb of Pope Julius II — a figure with horns, a flowing beard, and a body of coiled power, seated with the tablets of the Law under his arm. The horns come from a mistranslation of the Bible: the Latin said Moses' face 'shone' with light, but the translator used the word for 'horned,' and Michelangelo followed the text.",
+    "imageUrl": "",
+    "byline": "Michelangelo (1513-15)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Moses (1513-15) — the horns and the coiled power",
+      "durationMinutes": 8,
+      "instruction": "Look at the horns first: Moses has two horns — they come from a famous mistranslation, where the Hebrew for 'rays of light' became the Latin for 'horns,' and Michelangelo faithfully carved what the text said. Then the body: the beard flows like water, the muscles are coiled, and the figure sits with one foot raised, ready to rise — the moment before he smashes the tablets."
+    },
+    "tags": [
+      "Renaissance",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-david-with-the-head-of-goliath-378",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "David with the Head of Goliath (c. 1610)",
+    "teaser": "Caravaggio's painting of the young David holding up the severed head of Goliath — and the head is a self-portrait of Caravaggio. He painted it in the last year of his life, exiled from Rome for murder and hoping for a pardon, and the painting was sent to the papal authorities as a plea. David looks at the head with pity and horror, and the head — Caravaggio's own face — is dead, the mouth open, the eyes still.",
+    "imageUrl": "",
+    "byline": "Caravaggio (c. 1610)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "David with the Head of Goliath (c. 1610) — the self-portrait as the dead giant",
+      "durationMinutes": 8,
+      "instruction": "Look at the head first: it is Caravaggio's own face — he painted his self-portrait as the dead giant, sending it to the pope as a confession and a plea for pardon. Then David: the boy holds the head at arm's length, his sword still in his hand, and his expression is not triumph but horror — he looks at the face he has killed as if he recognizes it."
+    },
+    "tags": [
+      "Baroque",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-narcissus-caravaggio-379",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Narcissus (c. 1597)",
+    "teaser": "Caravaggio's painting of Narcissus, the youth who fell in love with his own reflection and drowned — here he kneels at the edge of a dark pool, his hands braced on the water, staring at his own face. The painting is built on the symmetry of the boy and his reflection, and the dark, empty background makes the two faces — one real, one watery — the entire world of the picture.",
+    "imageUrl": "",
+    "byline": "Caravaggio (c. 1597)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Narcissus (c. 1597) — the boy and his reflection",
+      "durationMinutes": 8,
+      "instruction": "Look at the symmetry first: the kneeling boy and his reflection form a single circle, his face and its double — the painting's whole meaning is that symmetry, the self meeting itself. Then the darkness: the background is black and empty, and only the boy's shoulder and face catch the light, as if the world has disappeared into his obsession."
+    },
+    "tags": [
+      "Baroque",
+      "Mythology"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-judith-slaying-holofernes-380",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Judith Slaying Holofernes (c. 1620)",
+    "teaser": "Artemisia Gentileschi's painting of Judith and her maidservant killing the Assyrian general Holofernes — blood spraying, arms straining, the two women working together to cut the general's throat. Artemisia painted this version in Florence, years after she was raped by her teacher and testified in a brutal trial; the painting's violence is often read as her revenge made art. It is one of the most powerful images of women in Western painting.",
+    "imageUrl": "",
+    "byline": "Artemisia Gentileschi (c. 1620)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Judith Slaying Holofernes (c. 1620) — the two women and the blood",
+      "durationMinutes": 8,
+      "instruction": "Look at the violence first: Judith saws through Holofernes' neck while her maidservant pins his shoulders down — the blood sprays in arcs, the general's legs kick, and the two women strain with real physical effort. Then the light: the scene is lit from the left, and the faces are in the half-darkness — this is not a sanitized Biblical scene but a real killing."
+    },
+    "tags": [
+      "Baroque",
+      "Biblical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-self-portrait-allegory-of-painting-381",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Self-Portrait as the Allegory of Painting (1638-39)",
+    "teaser": "Artemisia's self-portrait as the personification of Painting itself — the first time a woman artist painted herself as the allegory of her own art. She holds a brush in one hand and a palette in the other, her arm raised, her hair loose, her face turned toward the work. No male artist had painted himself as the female allegory of Painting; Artemisia took the symbol and made it her own face.",
+    "imageUrl": "",
+    "byline": "Artemisia Gentileschi (1638-39)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Self-Portrait as the Allegory of Painting (1638-39) — the painter as Painting",
+      "durationMinutes": 8,
+      "instruction": "Look at the face first: Artemisia looks out from the canvas, not at the viewer — she is caught at the moment of turning toward her work, and the concentration is real. Then the pose: her raised arm, the brush, the palette, and the loose hair are the exact attributes of the allegorical figure of Painting, a symbol usually shown as an anonymous woman — Artemisia made it her own self-portrait, the first time a woman painted herself as the art."
+    },
+    "tags": [
+      "Baroque",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-fall-of-icarus-382",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Landscape with the Fall of Icarus (c. 1560)",
+    "teaser": "Bruegel's painting of the myth of Icarus, who flew too close to the sun and fell — but Bruegel painted the fall almost invisibly: in the corner of a busy harbor scene, Icarus's legs splash into the sea while a farmer plows, a shepherd leans on his staff, and a fisherman casts his line, all ignoring the drowning boy. The painting is the great image of the world's indifference to individual tragedy.",
+    "imageUrl": "",
+    "byline": "Pieter Bruegel the Elder (c. 1560)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Landscape with the Fall of Icarus (c. 1560) — find the legs in the water",
+      "durationMinutes": 8,
+      "instruction": "Look for Icarus first: his legs kick out of the water in the lower right corner — the rest of him is already under — and no one is looking at him. Then the others: the farmer plows, the shepherd stares at the sky (at the sun, not the boy), the fisherman casts his line, and the ship sails on, its sails full of wind."
+    },
+    "tags": [
+      "Northern Renaissance",
+      "Mythology"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-hunters-in-the-snow-383",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Hunters in the Snow (1565)",
+    "teaser": "Bruegel's painting of hunters returning through the snow, their dogs at their heels, their spears over their shoulders — with a village below, skaters on a frozen pond, and the mountains of the Alps on the horizon. It is the most famous winter scene in Western art, and the whole cycle of seasonal paintings it belongs to was made for a wealthy Antwerp patron.",
+    "imageUrl": "",
+    "byline": "Pieter Bruegel the Elder (1565)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Hunters in the Snow (1565) — the hunters and the skaters",
+      "durationMinutes": 8,
+      "instruction": "Look at the hunters first: three men walk downhill with their dogs, carrying their spears — they have caught almost nothing, a fox is all that hangs from one spear. Then the village: below them, in the valley, people skate and play on a frozen pond, a fire burns, and the houses smoke — the world goes on, warm and busy, while the hunters descend into it. Bruegel painted this as part of a series of the months, made in 1565; it is the January scene."
+    },
+    "tags": [
+      "Northern Renaissance",
+      "Winter"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-tower-of-babel-384",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Tower of Babel (1563)",
+    "teaser": "Bruegel's painting of the Tower of Babel from the Bible — a colossal spiral tower rising into the clouds, surrounded by a bustling city and harbor, built with every kind of crane and scaffold. The tower is painted like a real construction site, with hundreds of tiny workers, and Bruegel based its spiral form on the Colosseum in Rome, which he had seen on his Italian journey.",
+    "imageUrl": "",
+    "byline": "Pieter Bruegel the Elder (1563)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Tower of Babel (1563) — the spiral tower and its tiny builders",
+      "durationMinutes": 8,
+      "instruction": "Look at the tower first: it spirals into the sky in concentric rings, each level a construction site with cranes, scaffolding, and tiny workers — Bruegel based the design on the Roman Colosseum. Then the details: the stone arches, the brick courses, the roads winding up the sides, and at the base, King Nimrod in red, inspecting the work."
+    },
+    "tags": [
+      "Northern Renaissance",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-oxbow-385",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "View from Mount Holyoke (The Oxbow) (1836)",
+    "teaser": "Thomas Cole's painting of the Connecticut River bending through the landscape from the top of Mount Holyoke — the founding image of American landscape painting. The view splits in two: on the left, a dark, storm-torn wilderness with a dead tree and a single artist sketching; on the right, a sunlit valley of cultivated fields.",
+    "imageUrl": "",
+    "byline": "Thomas Cole (1836)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Oxbow (1836) — the split between wilderness and farm",
+      "durationMinutes": 8,
+      "instruction": "Look at the split first: the painting is divided diagonally — the dark, wild side with the storm and the dead tree, and the bright, tamed side with the fields and the river. Then the artist: on the rocky foreground at the left, a tiny figure with an umbrella sits sketching — it is Cole himself, and he has placed his own easel on the wild side. The river bends like a snake, and the storm is breaking, leaving the sunlit valley."
+    },
+    "tags": [
+      "American",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-course-of-empire-386",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Course of Empire (1833-36)",
+    "teaser": "Cole's five-painting series showing the rise and fall of a civilization in the same landscape: The Savage State, The Arcadian or Pastoral State, The Consummation of Empire, Destruction, and Desolation. Painted in the 1830s, the series is a warning to America: every empire that reached the peak of its glory — like the marble city in the third painting — was destroyed, and the same hill ends as ruins.",
+    "imageUrl": "",
+    "byline": "Thomas Cole (1833-36)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Course of Empire (1833-36) — the same hill, five ages",
+      "durationMinutes": 8,
+      "instruction": "Look at the arc first: the same bay and hill appear in all five paintings — first wilderness with a lone Indian, then a pastoral village, then a marble city of columns and domes at the height of power. Then the fall: in the fourth painting, Destruction, the same city burns while a general on horseback crosses a bridge, and in the fifth, Desolation, the ruins stand empty under a dead moon."
+    },
+    "tags": [
+      "American",
+      "Allegory"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-kindred-spirits-387",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Kindred Spirits (1849)",
+    "teaser": "Durand's painting of the painter Thomas Cole and the poet William Cullen Bryant standing on a rocky ledge in the Catskills, looking into a wild valley — a tribute painted after Cole's death, showing the two friends who founded the Hudson River School. The painting is the emblem of American romanticism: two men, a wilderness, and the belief that nature was the nation's true cathedral.",
+    "imageUrl": "",
+    "byline": "Asher B. Durand (1849)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Kindred Spirits (1849) — the painter and the poet in the Catskills",
+      "durationMinutes": 8,
+      "instruction": "Look at the two men first: Cole stands pointing into the valley while Bryant, his arms crossed, follows his gaze — they are 'kindred spirits' in the title, friends sharing the wilderness. Then the setting: a rock ledge in the Catskills, with the stream far below and the mountains fading into blue haze — the landscape is painted from sketches Durand made in the actual gorge."
+    },
+    "tags": [
+      "American",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-gulf-stream-388",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Gulf Stream (1899)",
+    "teaser": "Homer's painting of a lone Black sailor on a broken boat in the Gulf Stream — the mast snapped, the tiller gone, sharks circling the hull, a waterspout on the horizon. Homer reworked the painting for years, and critics read it as a man adrift, beyond help, surrounded by danger — a meditation on race, fate, and the sea. The sailor, calm and indifferent, does not even look at the sharks.",
+    "imageUrl": "",
+    "byline": "Winslow Homer (1899)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Gulf Stream (1899) — the calm sailor among the sharks",
+      "durationMinutes": 8,
+      "instruction": "Look at the sailor first: he lies on the broken deck, propped on his elbow, staring past us — he does not look at the sharks, the broken mast, or the waterspout, and his calm is the painting's deepest mystery. Then the danger: the sharks circle the hull, one already biting at the bow, and the sky gathers a waterspout on the horizon — the sea is full of death, and the man is beyond caring."
+    },
+    "tags": [
+      "American",
+      "Marine"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-snap-the-whip-389",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Snap the Whip (1872)",
+    "teaser": "Homer's painting of barefoot country boys playing snap-the-whip in a schoolyard meadow — a chain of children running and whipping, the last boys flung outward by the force. Painted in 1872, it became the emblem of American childhood: freedom, summer, and the open field.",
+    "imageUrl": "",
+    "byline": "Winslow Homer (1872)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Snap the Whip (1872) — the chain about to break",
+      "durationMinutes": 8,
+      "instruction": "Look at the chain first: the boys hold hands and run, and the force of the whip flings the last two boys outward — their legs fly, their hats fly, and the chain is about to break. Then the setting: a schoolhouse in the background, a meadow of wildflowers, and the mountains in the distance — the whole painting is summer."
+    },
+    "tags": [
+      "American",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-gross-clinic-390",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Gross Clinic (1875)",
+    "teaser": "Eakins's painting of the surgeon Dr. Samuel Gross performing surgery in an amphitheater of medical students — a live operation, with blood on the surgeon's hands and the patient's wound open on the table. It was painted as a contribution to the Centennial Exhibition, and it was rejected for its realism: the blood, the scalpel, and the bare wound were considered unfit for public display.",
+    "imageUrl": "",
+    "byline": "Thomas Eakins (1875)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Gross Clinic (1875) — the scalpel raised in the light",
+      "durationMinutes": 8,
+      "instruction": "Look at the surgeon first: Dr. Gross stands in the middle of the amphitheater, a bloody scalpel in his raised hand, lecturing as he operates — his head is crowned by the light from above, making him a priest of the new scientific medicine. Then the scene: the patient's leg is open on the table, his mother cowers in the shadows at the left, and a woman in the foreground shields her eyes — the only figure who cannot look."
+    },
+    "tags": [
+      "American",
+      "Realism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-agnew-clinic-391",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Agnew Clinic (1889)",
+    "teaser": "Eakins's second great medical painting — a mastectomy in progress, with the surgeon Dr. D. Hayes Agnew presiding over a clean, white amphitheater, his hand raised in mid-lecture. Compared to the Gross Clinic, the operating room is transformed: everyone wears white, the patient is draped, and a nurse stands by — a painting of medicine becoming antiseptic, modern, and female.",
+    "imageUrl": "",
+    "byline": "Thomas Eakins (1889)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Agnew Clinic (1889) — the white room and the draped patient",
+      "durationMinutes": 8,
+      "instruction": "Look at the change first: compared to the Gross Clinic, everything is white — the surgeons, the gowns, the amphitheater — and the patient, draped and unconscious, is tended by a nurse, a new figure in the operating room. Then the surgeon: Dr. Agnew stands with his hand raised, mid-sentence, above the operation, a lecturer as much as a surgeon."
+    },
+    "tags": [
+      "American",
+      "Realism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-max-schmitt-in-a-single-scull-392",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Max Schmitt in a Single Scull (1871)",
+    "teaser": "Eakins's painting of his friend Max Schmitt, a champion oarsman, rowing on the Schuylkill River in Philadelphia — with the painter himself rowing in a second scull in the middle distance, recognizable by his beard and hat.",
+    "imageUrl": "",
+    "byline": "Thomas Eakins (1871)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Max Schmitt in a Single Scull (1871) — find the painter in the second boat",
+      "durationMinutes": 8,
+      "instruction": "Look at the oarsman first: Max Schmitt sits in his scull, his oars trailing, resting mid-stroke, his face turned toward the painter — and in the middle distance, a second sculler rows toward the viewer: that is Eakins himself, putting himself into his own painting. Then the water: the river is painted with a glassy exactness, reflecting the bridge and the boathouses, and the light is set to a specific late-afternoon hour."
+    },
+    "tags": [
+      "American",
+      "Sport"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-madame-x-393",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Portrait of Madame X (1884)",
+    "teaser": "Sargent's portrait of the American-born Parisian beauty Virginie Gautreau — her pale skin, her dark hair, her bare shoulders, and her famous profile. When it was shown at the Paris Salon in 1884, the public and the critics were scandalized: her bare shoulder, her pose, and even the strap of her dress slipping were read as indecent, and Sargent left Paris for London, his reputation in France destroyed.",
+    "imageUrl": "",
+    "byline": "John Singer Sargent (1884)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Portrait of Madame X (1884) — the pale profile that scandalized Paris",
+      "durationMinutes": 8,
+      "instruction": "Look at the profile first: Madame Gautreau's head is turned in sharp profile against the dark background, her skin almost white, her nose and chin drawn with a precision that makes her look like a marble statue. Then the details: her bare shoulders, the jeweled strap of her dress, and the deep V of her bodice — the 1884 Salon public found her pose and her pallor indecent, and the scandal drove Sargent out of Paris."
+    },
+    "tags": [
+      "American",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-daughters-of-edward-boit-394",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Daughters of Edward Darley Boit (1882)",
+    "teaser": "Sargent's portrait of the four Boit sisters in their family's Paris apartment — the eldest two stand at the back, the youngest sits on the floor, and one little girl stands in the foreground, staring out at us with a doll in her arms.",
+    "imageUrl": "",
+    "byline": "John Singer Sargent (1882)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Daughters of Edward Darley Boit (1882) — the scattered sisters and the vases",
+      "durationMinutes": 8,
+      "instruction": "Look at the arrangement first: the four sisters are not posed together — one sits on the floor, one stands before the vases, two stand at the back in the shadows — and the space between them is as much the subject as the girls. Then the little girl in front: she stares straight at us with her doll, the only one who meets our eyes, and she seems about to step out of the painting."
+    },
+    "tags": [
+      "American",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-carnation-lily-lily-rose-395",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Carnation, Lily, Lily, Rose (1885-86)",
+    "teaser": "Sargent's painting of two little girls in a garden at dusk, lighting paper lanterns among the flowers — the title comes from a popular song of the time. He painted it outdoors, in the English countryside, only at dusk, when the light was exactly right — the painting took two summers and hundreds of sessions, and the girls, the real daughters of his host, had to stand still in the twilight with lanterns that were relit every time the light failed.",
+    "imageUrl": "",
+    "byline": "John Singer Sargent (1885-86)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Carnation, Lily, Lily, Rose (1885-86) — the lanterns in the dusk",
+      "durationMinutes": 8,
+      "instruction": "Look at the light first: the painting was made only at dusk, when the lanterns' glow and the fading blue of the sky balanced exactly — Sargent spent two summers, painting only in that hour, with the girls standing still while assistants relit the lanterns. Then the girls: they are painted from the back and side, absorbed in their task, their white dresses glowing in the twilight."
+    },
+    "tags": [
+      "American",
+      "Genre Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-women-of-tahiti-396",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Women of Tahiti (1891)",
+    "teaser": "Gauguin's first painting of Tahitian women — two women seated on the sand, one in a red pareu, one in blue, in the shade of a tree, with the sea behind them. Gauguin had just arrived in Tahiti, fleeing Europe, and he painted the women as he dreamed they were: calm, monumental, and remote from the world he left. The painting's peace is deceptive — Gauguin's Tahiti was partly a fantasy, and his life there was full of conflict.",
+    "imageUrl": "",
+    "byline": "Paul Gauguin (1891)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Women of Tahiti (1891) — the two women in the shade",
+      "durationMinutes": 8,
+      "instruction": "Look at the two women first: they sit in the shade, one in red, one in blue, their faces calm and distant, their bodies painted in broad, flat shapes — Gauguin simplified everything into color and stillness. Then the setting: the tree above, the sand, and the sea beyond, painted in bands of blue and green, with no perspective and no hurry."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-yellow-christ-397",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Yellow Christ (1889)",
+    "teaser": "Gauguin's painting of a crucifixion in the Breton countryside — a yellow Christ on a cross above three kneeling women, with the fields of Brittany behind them, painted in flat bands of gold, green, and red. Gauguin painted the crucifix as an image of rural faith: the women kneel in their Breton caps, the harvest is gathered, and the yellow Christ seems to belong to the autumn fields. It is the most famous of Gauguin's Breton paintings.",
+    "imageUrl": "",
+    "byline": "Paul Gauguin (1889)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Yellow Christ (1889) — the gold crucifix in the autumn fields",
+      "durationMinutes": 8,
+      "instruction": "Look at the color first: the Christ is painted bright yellow, and the fields behind are bands of gold and green — Gauguin abandoned natural color for the color of feeling, and the crucifix glows like a harvest sun. Then the women: three Breton women in white caps kneel at the cross's foot, their heads bowed, and the landscape — a Breton village with its church spire — is painted flat, like a tapestry."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-nevermore-398",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Nevermore (1897)",
+    "teaser": "Gauguin's painting of a naked Tahitian woman lying on a bed, with a black bird — a raven — perched behind her, and two figures whispering in the shadows. The title, 'Nevermore,' quotes Poe's raven, but Gauguin said the painting was 'not about Poe' — the raven is an image of the dark thoughts that filled his last years in Tahiti.",
+    "imageUrl": "",
+    "byline": "Paul Gauguin (1897)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Nevermore (1897) — the raven and the turning woman",
+      "durationMinutes": 8,
+      "instruction": "Look at the woman first: she lies naked on the bed, her head turned away, her body calm and heavy — she does not look at the raven, and the raven does not look at her. Then the raven: it perches on the frame behind her, a black presence, and in the shadows two women whisper — the painting is full of watching."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Symbolism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-mr-and-mrs-clark-and-percy-399",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Mr and Mrs Clark and Percy (1970-71)",
+    "teaser": "Hockney's double portrait of the fashion designer Ossie Clark and his wife Celia Birtwell in their London flat — he stands with his hand on his hip, she sits in a chair with a cat, Percy, on her lap.",
+    "imageUrl": "",
+    "byline": "David Hockney (1970-71)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Mr and Mrs Clark and Percy (1970-71) — the couple and the cat",
+      "durationMinutes": 8,
+      "instruction": "Look at the couple first: Ossie Clark stands by the open balcony door, hand on hip, in a printed shirt; Celia sits in the chair, barefoot, a cat on her lap — they look at each other, and we are the third person in the room. Then the space: the flat is Hockney's friends' real flat, with the white furniture, the rug, and the balcony door open to the light."
+    },
+    "tags": [
+      "British",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-cape-cod-morning-400",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Cape Cod Morning (1950)",
+    "teaser": "Hopper's painting of a woman leaning out of her kitchen window, her hands on the sill, looking up at the sky — the morning light streams through the windows and throws long shadows across the lawn. Hopper's wife Jo was the model, and she remembered him arranging her pose for hours: the woman looks not at the sea but at the sky above it, and the whole painting is a held breath before the day begins.",
+    "imageUrl": "",
+    "byline": "Edward Hopper (1950)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Cape Cod Morning (1950) — the woman at the window looking up",
+      "durationMinutes": 8,
+      "instruction": "Look at the woman first: she leans out of the window, hands on the sill, chin up, looking at the sky — Hopper had his wife Jo pose for hours to get the angle right, and the woman's gaze is the painting's whole subject. Then the light: the morning sun pours through the two windows, cutting sharp shadows across the lawn, and the yellow of the house glows against the green."
+    },
+    "tags": [
+      "American",
+      "Realism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-black-on-maroon-401",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Black on Maroon (1958)",
+    "teaser": "Rothko's painting of a dark rectangle floating on a maroon field — one of a series he made in 1958, in which the colors darkened and the rectangles began to feel like doorways.",
+    "imageUrl": "",
+    "byline": "Mark Rothko (1958)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Black on Maroon (1958) — the dark doorway in the glowing field",
+      "durationMinutes": 8,
+      "instruction": "Look at the rectangle first: a dark, almost black form floats inside the maroon field, and the edges are ragged and smoky, as if the darkness is eating into the color around it — Rothko's late paintings darkened as his mood darkened, and the black shapes read like doorways or voids. Then the surface: the maroon is built from thin layers of paint, glowing from within, so the dark rectangle seems to hover rather than sit."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Color Field"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-one-number-31-1950-402",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "One: Number 31, 1950 (1950)",
+    "teaser": "Pollock's most famous drip painting — 2.7 by 5.3 meters of black, white, and aluminum paint, thrown, dripped, and splattered across the canvas laid flat on the floor. Pollock walked around the canvas, dripping paint from sticks and cans, and the painting has no center, no top, and no bottom — it is an all-over field of energy that keeps the eye moving forever.",
+    "imageUrl": "",
+    "byline": "Jackson Pollock (1950)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "One: Number 31, 1950 (1950) — the web with no center",
+      "durationMinutes": 8,
+      "instruction": "Look at the surface first: the paint is built in layers — black and white drips over aluminum silver, lines crossing and looping with no beginning and no end — Pollock laid the canvas flat and walked around it, dripping paint from a stick, so the painting has no top and no bottom."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Action Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-orange-and-yellow-403",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Orange and Yellow (1956)",
+    "teaser": "Rothko's painting of a great orange rectangle above a smaller yellow one, on a field of deeper orange — one of the 'classic' Rothkos of the mid-1950s, in which the rectangles float in a luminous haze. The painting is nearly three meters tall, and Rothko designed such canvases to be hung low, so that standing before them, the color becomes an environment. He once said he wanted his paintings to be experienced 'like a landscape,' from the inside.",
+    "imageUrl": "",
+    "byline": "Mark Rothko (1956)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Orange and Yellow (1956) — the glowing bands",
+      "durationMinutes": 8,
+      "instruction": "Look at the two rectangles first: a wide orange band floats above a smaller yellow one, and the edges are so soft that the colors glow against each other rather than meeting — Rothko built the surface with thin washes of paint, layering until the color seemed to emit light. Then the size: the canvas is almost three meters high, and Rothko insisted his big paintings hang low, close to the floor, so that the viewer stands inside the color field."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Color Field"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-two-forms-404",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Two Forms (1969)",
+    "teaser": "Hepworth's sculpture of two interlocking bronze forms — one pierced with holes, the other solid — standing together like two figures, made in the last year of her life. Hepworth carved and cast abstract forms all her career, and she said her work was about 'the relationship of one form to another' — here, the two shapes lean toward each other, one open, one closed, like a conversation in bronze.",
+    "imageUrl": "",
+    "byline": "Barbara Hepworth (1969)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Two Forms (1969) — the open form and the closed form",
+      "durationMinutes": 8,
+      "instruction": "Look at the two forms first: one is pierced with circular holes, the other is solid and curved — they lean toward each other like two figures, one open and one closed, and the space between them is as much the sculpture as the bronze. Then the surfaces: the bronze is polished in some areas and roughly textured in others, so the light moves across it as you walk around."
+    },
+    "tags": [
+      "British",
+      "Sculpture"
+    ],
+    "tier": 2
   }
 ]
