@@ -49,3 +49,11 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Replaced the two fragile `densityModeSegmentLabel` and `densityModeSummary` helper references in ExperimentsScreen with exhaustive inline `when` expressions over SmartDensityMode.
 - Preserved the existing Off, Compact, 2x labels and explanatory summaries while ensuring the reported unresolved-reference failure cannot recur from stale helper scope.
 - Validation: ExperimentsScreen brace check BALANCED; `git diff --check` clean; no old helper references remain. No Gradle command run per repository rules.
+
+## v7.58 — remove the obsolete legacy module
+
+- Removed the entire frozen legacy Android tree (346 files) after confirming it is not included by Gradle and is not loaded by Curio at runtime.
+- Kept Curio's self-contained FieldMind archive importer, copied fonts, active app source, build configuration, and required assets intact.
+- Rewrote Curio's font/module documentation so no active source or DOX guidance depends on the deleted legacy tree.
+- Filesystem-date audit found no checkout files older than July 6, 2026; no unrelated active files were removed under the date rule.
+- Validation: no remaining legacy-tree references, only `:app` is included, and `git diff --check` is clean. No Gradle command run per repository rules.

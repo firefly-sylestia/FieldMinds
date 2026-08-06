@@ -11,8 +11,7 @@ import com.curio.app.R
 /**
  * Curio's typography — see CURIO_SPEC.md §0.4.
  *
- * Display / headline: `geom.ttf` (variable font, inherited from the legacy
- * FieldMind app at `app-legacy/src/main/res/font/geom.ttf`). Heavy weight
+ * Display / headline: Curio's bundled `geom.ttf` variable font. Heavy weight
  * (700+) for headlines and titles.
  *
  * Body / UI text: a clean neutral sans (M3 default) for readability in

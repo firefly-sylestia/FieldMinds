@@ -5,3 +5,4 @@
 • Redesigned Profile and Settings with compact cards
 • Added Experiments for card/deck customization
 • Made Smart Density settings labels compile-proof
+• Removed the obsolete legacy module; Curio remains self-contained with archive import support

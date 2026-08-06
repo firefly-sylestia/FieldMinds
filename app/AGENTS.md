@@ -16,7 +16,7 @@ The `app/` module is the active Android application — **Curio**, a discovery a
 
 The **data layer** (category taxonomy, topic schema, `ExploreAction` prompt format, authoring pipeline, rollout cadence) is documented separately in [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md). It expands the category palette from 6 → 10 and ships 150+ topics per category authored via LLM-draft + human-review. **Read it before any feature work that touches data or content.**
 
-The legacy FieldMind codebase is preserved at `app-legacy/` — **frozen, NEVER modified**. Do not edit, refactor, or "fix" anything under `app-legacy/`; treat it as read-only reference at most. Curio inherits two things from it: the **Material Symbols** variable font and **geom.ttf** display typography. Both font files are **copied** into `app/src/main/res/font/`; `app-legacy/` is never read at runtime by Curio except via the curated copy.
+Curio is self-contained. Its **Material Symbols** variable font and **geom.ttf** display typography live directly under `app/src/main/res/font/`; no external legacy module or source tree is read at build time or runtime.
 
 ## Ownership
 
@@ -51,8 +51,8 @@ app/src/main/java/com/curio/app/
 
 ### Resources
 
-- `app/src/main/res/font/geom.ttf` — display/headline typography (copied from `app-legacy/src/main/res/font/geom.ttf`)
-- `app/src/main/res/font/material_symbols_outlined.ttf` — UI + category icons (copied from `app-legacy/src/main/res/font/material_symbols_outlined.ttf`)
+- `app/src/main/res/font/geom.ttf` — bundled display/headline typography
+- `app/src/main/res/font/material_symbols_outlined.ttf` — bundled UI + category icon font
 - `app/src/main/res/values/strings.xml` — Curio app name + screen titles + category display names
 - `app/src/main/res/values/themes.xml` — `Theme.Curio` (M3 DayNight no-actionbar, Midnight Signal bootstrap surface)
 - `app/src/main/res/values/colors.xml` — Midnight Signal XML resources used at the OS-level splash/background before Compose takes over
@@ -69,12 +69,12 @@ app/src/main/java/com/curio/app/
 - `versionName = "0.1.0-curio"`, `versionCode = 1`
 - No product flavors yet — flavors will be reintroduced in a later phase when Room DB + storage permissions land
 - Debug builds append `.debug` to `applicationId` → `com.curio.app.debug` so both can coexist on one device
-- Inherits `material_symbols_outlined.ttf` + `geom.ttf` from `app-legacy/src/main/res/font/` (copied once during the Phase 2 scaffold, never re-read at runtime)
+- Bundles `material_symbols_outlined.ttf` + `geom.ttf` directly in `app/src/main/res/font/`; neither depends on another module or source tree
 
 ### Curio Database (separate from FieldMind)
 - Curio installs as a separate app under `applicationId = "com.curio.app"` — its data directory is `/data/data/com.curio.app/databases/` (DB name TBD when persistence lands).
 - FieldMind's data lives in FieldMind's separate install at `/data/data/fieldmind.research.app/databases/fieldmind_database`. Curio CANNOT access it directly.
-- FieldMind data is recoverable only by sideloading the legacy FieldMind APK (built from `app-legacy/`) and using its built-in V3 backup exporter (see `app-legacy/src/main/java/.../data/export/FieldMindExport.kt`).
+- FieldMind data can be imported into Curio through the self-contained FieldMind archive importer in `com.curio.app.data.FieldMindLegacyImport`, which accepts V3 `.fieldmind` packages and plain archive JSON.
 - The two apps do not share DB names, schemas, or SharedPreferences namespaces — fully isolated.
 
 ### UI

@@ -9,7 +9,7 @@ graph TB
     DOX Rail — Project-wide rules"]
 
     ROOT --> APP["📱 app/AGENTS.md
-    Android App Module"]
+    Curio Android App Module"]
 
     APP --> FEATURES["🧩 features/field/AGENTS.md
     Field Feature Module"]
@@ -71,7 +71,7 @@ graph TB
 ```
 📐 master.md                          ← DOX Framework (the rules)
  └─📋 AGENTS.md (root)               ← DOX Rail (project-wide rules)
-    ├─📱 app/AGENTS.md                ← Android App Module
+    ├─📱 app/AGENTS.md                ← Curio Android App Module
     │  ├─🧩 features/field/AGENTS.md  ← Field Feature (core product)
     │  │  ├─🗄️ data/AGENTS.md        ← Data layer (weather, vision, AI, DB, etc.)
     │  │  └─🎨 presentation/AGENTS.md ← UI layer (screens, components, nav)

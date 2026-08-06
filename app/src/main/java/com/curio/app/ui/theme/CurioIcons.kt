@@ -25,9 +25,8 @@ import androidx.compose.material3.Text
  * Curio's icon system — see CURIO_SPEC.md §0.6.
  *
  * **NO emoji anywhere** in the app. All icons come from the Material Symbols
- * variable font (inherited from the legacy FieldMind app at
- * `app-legacy/src/main/res/font/material_symbols_outlined.ttf`, copied into
- * `app/src/main/res/font/`).
+ * variable font bundled directly in Curio at
+ * `app/src/main/res/font/material_symbols_outlined.ttf`.
  *
  * Icons are rendered as Text composables using the ligature names from the
  * Material Symbols glyph catalog. The font is bound to [MaterialSymbolsFontFamily]

@@ -199,7 +199,7 @@ Whenever you make significant changes, you MUST update the "What's New" section 
 
 ### What to Update
 
-1. **In-App Changelog** — only when the active `app/` module has a changelog screen. The new Curio app has no changelog screen yet; the old `FieldMindChangelogScreen.kt` lives in frozen `app-legacy/` and is **never edited**. When a changelog screen exists, add a new entry at the top of its list following the existing entry structure and style.
+1. **In-App Changelog** — only when the active `app/` module has a changelog screen. The Curio app has no changelog screen yet. When a changelog screen exists, add a new entry at the top of its list following the existing entry structure and style.
 
 2. **Fastlane Store Changelog** — `fastlane/metadata/android/en-US/changelogs/{versionCode}.txt`
    - See `fastlane/AGENTS.md` for store conventions (≤500 chars, versionCode naming)
@@ -218,7 +218,6 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 
 - [app/AGENTS.md](app/AGENTS.md) — Active Android app module (Curio) under rebuild — design direction comes from the user, not from in-repo docs
 - [app/CURIO_DATA_PLAN.md](app/CURIO_DATA_PLAN.md) — Curio data-layer spec (topics, categories, authoring pipeline)
-- [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — **Frozen legacy Android app source — NEVER modified, refactored, or "fixed"**. Not built, not shipped, read-only reference at most
 - [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
 - [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
 - [wiki/AGENTS.md](wiki/AGENTS.md) — Wiki documentation: user/contributor docs
