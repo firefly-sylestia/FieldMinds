@@ -2115,5 +2115,1005 @@
       "Oil Painting"
     ],
     "tier": 2
+  },
+  {
+    "id": "artw-nude-descending-a-staircase-155",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Nude Descending a Staircase, No. 2 (1912)",
+    "teaser": "Duchamp's painting of a body in motion — a nude made of overlapping cubist planes on a staircase — was rejected by Cubist exhibitors as 'too literary' and then became the most mocked painting at the 1913 Armory Show in New York, where critics called it 'an explosion in a shingle factory.' It's the work that introduced modern art to America.",
+    "imageUrl": "",
+    "byline": "Marcel Duchamp (1912)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Nude Descending a Staircase, No. 2 (1912) — find the figure in the planes",
+      "durationMinutes": 8,
+      "instruction": "Look for the figure: there is no nude body at all — only a sequence of sharp-edged planes and repeated curves that build the shape of a person walking downstairs, like frames of film stacked on one canvas. Notice the stair rail on the left and the stairs themselves: they're the only solid objects, and the body is pure motion."
+    },
+    "tags": [
+      "Cubism",
+      "Modern Art"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-lhooq-1919-156",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "L.H.O.O.Q. (1919)",
+    "teaser": "Duchamp bought a cheap postcard of the Mona Lisa and drew a mustache and goatee on her — then signed it L.H.O.O.Q., which when read aloud in French sounds like 'Elle a chaud au cul' ('she has a hot ass'). It's the most famous act of art vandalism ever, and it redefined what a masterpiece could be: a joke.",
+    "imageUrl": "",
+    "byline": "Marcel Duchamp (1919)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "L.H.O.O.Q. (1919) — the careful mustache on the sacred image",
+      "durationMinutes": 8,
+      "instruction": "Look at the postcard, not the joke: Duchamp picked the most sacred image in Western art and defaced it with a schoolboy prank, which is the whole point — he was declaring that art is an idea, not an object, and that no image is beyond questioning. The title is a phonetic pun that only works when spoken in French."
+    },
+    "tags": [
+      "Dada",
+      "Readymade"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-treachery-of-images-157",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Treachery of Images (1929)",
+    "teaser": "Magritte's painting of a pipe with the words 'This is not a pipe' written beneath it — the most famous caption in art. He wasn't joking: the painting is not a pipe, it's paint arranged to look like one, and the sentence is literally true. Magritte said the picture is 'an image of a pipe' — the name is not the thing.",
+    "imageUrl": "",
+    "byline": "René Magritte (1929)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Treachery of Images (1929) — the caption and the flat pipe",
+      "durationMinutes": 8,
+      "instruction": "Read the caption out loud: 'Ceci n'est pas une pipe' — this is not a pipe. Then check: it's true. You cannot smoke it, it will not hold tobacco, it is pigment on canvas. Magritte's point is that every image is a stand-in, and that we confuse representations with the things they represent."
+    },
+    "tags": [
+      "Surrealism",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-son-of-man-158",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Son of Man (1964)",
+    "teaser": "Magritte's self-portrait — a man in an overcoat and bowler hat whose face is hidden by a floating green apple. He painted himself as an ordinary man, and said the apple hides the face because of 'the desire to see what is hidden.' The image has been copied more than almost any other 20th-century painting — from album covers to movie posters.",
+    "imageUrl": "",
+    "byline": "René Magritte (1964)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Son of Man (1964) — the floating apple and the impossible elbow",
+      "durationMinutes": 8,
+      "instruction": "Look at the apple: it floats a few centimeters in front of the face, hiding it but not replacing it — you can see the eyes and the outline of the face around the fruit. Magritte said everything we see hides something else, and the painting is about that gap. Notice the man's left arm: it bends backward at the elbow in a way an arm cannot, a detail most copies remove."
+    },
+    "tags": [
+      "Surrealism",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-two-fridas-159",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Two Fridas (1939)",
+    "teaser": "Kahlo painted two versions of herself sitting side by side, hearts exposed and joined by a single artery — painted in 1939, the year she divorced Diego Rivera. One Frida wears a European dress and holds surgical forceps on a bleeding artery; the other wears a Tehuana dress and holds a small portrait of Diego. The European Frida is the one who bleeds.",
+    "imageUrl": "",
+    "byline": "Frida Kahlo (1939)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Two Fridas (1939) — the joined hearts and the cut artery",
+      "durationMinutes": 8,
+      "instruction": "Look at the hearts first: they're anatomical and exposed, and the artery that joins them runs between the two women's hands — but the thread is cut at the European Frida's end, and she drips blood onto her white dress. The Tehuana Frida holds a miniature portrait of Diego Rivera as a child; the other holds the forceps that clamped her artery."
+    },
+    "tags": [
+      "Surrealism",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-self-portrait-with-thorn-160",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Self-Portrait with Thorn Necklace and Hummingbird (1940)",
+    "teaser": "Kahlo painted herself wearing a necklace of thorns that pierce her neck and draw blood, with a dead hummingbird hanging from her throat. She painted it after her divorce, and every element is a symbol: the thorns are Christ's crown, the hummingbird is a symbol of love in Mexican culture, and the black cat behind her shoulder is about to pounce.",
+    "imageUrl": "",
+    "byline": "Frida Kahlo (1940)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Self-Portrait with Thorn Necklace (1940) — the bleeding thorns",
+      "durationMinutes": 8,
+      "instruction": "Look at the blood first: the thorns have sunk into her neck, and drops of blood bead at the puncture points — she wears her pain like jewelry and looks directly at you without flinching. Then the animals: the black cat on her left shoulder, the monkey on her right — in Kahlo's paintings these are stand-ins for herself and for Diego. The dead hummingbird at her throat is a talisman of failed love in Mexican folk tradition."
+    },
+    "tags": [
+      "Surrealism",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-swans-reflecting-elephants-161",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Swans Reflecting Elephants (1937)",
+    "teaser": "Dalí's double-image painting — three swans floating on a lake whose reflections become elephants — is one of his most famous exercises in optical illusion. The trick: the swans' necks become elephant trunks and their bodies become elephant heads, using only the reflection and the lakeshore's outline.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1937)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Swans Reflecting Elephants (1937) — the swan-to-elephant double image",
+      "durationMinutes": 8,
+      "instruction": "Look at the water first: the swans are white and solid, but their reflections are gray elephants — the transformation happens because Dalí matched the swans' silhouettes to the shapes of the rocks and trees on the far bank, and the reflection merges the two. Then notice the autumn trees in the background are bare, and one on the left echoes the elephant-trunk shape."
+    },
+    "tags": [
+      "Surrealism",
+      "Optical Illusion"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-face-of-war-162",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Face of War (1940)",
+    "teaser": "Dalí painted this skull after the Spanish Civil War — a face made of a skull whose eye sockets and mouth each contain another skull, each of which contains another. In the sand beside the head he painted a single footprint, his own, as if he had just walked away from the vision.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1940)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Face of War (1940) — the skulls within the skull",
+      "durationMinutes": 8,
+      "instruction": "Look into the skull's face: each eye socket holds a smaller skull, and the mouth holds a third — the recursion suggests war that feeds on war without end. Then the skin of the face: it's gray and stretched like a mask, and the snakes around the head are painted with the same texture as the face, so the whole image is alive and dead at once."
+    },
+    "tags": [
+      "Surrealism",
+      "War"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-old-guitarist-163",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Old Guitarist (1903)",
+    "teaser": "Picasso's painting of a blind, starving old musician bent over his guitar — the masterpiece of his 'Blue Period,' when he painted nothing but poverty and sorrow in shades of blue. X-rays show he painted over a woman's portrait and another painting underneath; he was so poor he reused canvases.",
+    "imageUrl": "",
+    "byline": "Pablo Picasso (1903)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Old Guitarist (1903) — the contorted body and the all-blue palette",
+      "durationMinutes": 8,
+      "instruction": "Look at the posture first: the guitarist's body is contorted, folded almost double, and his legs are crossed so tightly the anatomy is impossible — Picasso distorted the body to express collapse, not to imitate it. Then the color: the entire painting is blue — skin, guitar, air — because in Picasso's Blue Period, blue was the color of grief and cold."
+    },
+    "tags": [
+      "Blue Period",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-three-musicians-164",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Three Musicians (1921)",
+    "teaser": "Picasso's collage-like painting of three figures — a Pierrot with a clarinet, a Harlequin with a guitar, and a monk with sheet music — is his tribute to the commedia dell'arte characters who had appeared in his work since 1905. Painted in Synthetic Cubism, it looks like a paper cutout but is entirely oil on canvas.",
+    "imageUrl": "",
+    "byline": "Pablo Picasso (1921)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Three Musicians (1921) — the paper-collage illusion and the hidden dog",
+      "durationMinutes": 8,
+      "instruction": "Look at the surface: it's painted to imitate cut-and-pasted paper, with flat shapes and visible 'edges' — Picasso faked collage in paint because he wanted the permanence of oil with the look of scissors. Then the figures: the dog at the bottom left is squeezed between the Pierrot's legs, almost hidden, and the whole composition is a puzzle of overlapping shapes that only resolve into three musicians when you step back."
+    },
+    "tags": [
+      "Cubism",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-weeping-woman-165",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Weeping Woman (1937)",
+    "teaser": "Picasso's painting of a woman sobbing, her face shattered into jagged planes, is his companion piece to Guernica — she represents the grief of the bombing's victims, and she was painted dozens of times. The model was Dora Maar, Picasso's partner, whose crying fits he said fascinated him.",
+    "imageUrl": "",
+    "byline": "Pablo Picasso (1937)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Weeping Woman (1937) — the shattered face and the biting teeth",
+      "durationMinutes": 8,
+      "instruction": "Look at the face's geometry: the eyes are in different positions and the teeth are sharp triangles biting a handkerchief — Picasso shattered the face the way the war shattered its subjects. Then the details: the tears are real drops sliding down the painted planes, and the woman's hat and shoulders are outlined in black like glass edges."
+    },
+    "tags": [
+      "Cubism",
+      "War"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-girl-before-a-mirror-166",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Girl Before a Mirror (1932)",
+    "teaser": "Picasso's painting of Marie-Thérèse Walter looking at her reflection — the face in the mirror is dark and ancient while the girl is young and glowing, and the painting is one of the most analyzed works of the 20th century. The mirror shows what time does: the girl in front is youth, the reflection is mortality.",
+    "imageUrl": "",
+    "byline": "Pablo Picasso (1932)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Girl Before a Mirror (1932) — the young face and the dark reflection",
+      "durationMinutes": 8,
+      "instruction": "Look at the two faces: the girl's is bright, round, and full of light — painted from the side in profile — while her reflection is dark, severe, and staring directly forward, like a mask or a skull. The dress is yellow and striped like a wasp, and the mirror's frame is built of diagonal stripes."
+    },
+    "tags": [
+      "Cubism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-broadway-boogie-woogie-167",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Broadway Boogie Woogie (1943)",
+    "teaser": "Mondrian's last completed painting — a grid of colored squares that is actually a map of Manhattan, painted in New York after he fled the Nazi occupation of Europe. The little blocks of color are the city's traffic lights and buildings, and the painting is Mondrian's tribute to boogie-woogie jazz, which he loved.",
+    "imageUrl": "",
+    "byline": "Piet Mondrian (1943)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Broadway Boogie Woogie (1943) — the grid as a map of Manhattan",
+      "durationMinutes": 8,
+      "instruction": "Look at the grid differently: this is not an abstract pattern — the small squares of yellow, red, blue, and gray are traffic lights and moving cars on Broadway, and the larger blocks are city blocks. Mondrian lived near the real Broadway, and he said boogie-woogie 'destroys the melody, but constructs it' — the painting does the same with the grid, breaking it into rhythm."
+    },
+    "tags": [
+      "De Stijl",
+      "Abstract"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-composition-with-red-blue-168",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Composition with Red, Blue and Yellow (1930)",
+    "teaser": "Mondrian's most famous painting — a white canvas with a bold black grid and three rectangles of red, blue, and yellow. He spent his career stripping art down to this: only primary colors, only straight lines, only right angles. He called his style 'neoplasticism' and believed the grid could express a universal harmony.",
+    "imageUrl": "",
+    "byline": "Piet Mondrian (1930)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Composition with Red, Blue and Yellow (1930) — the heavy red and the taped grid",
+      "durationMinutes": 8,
+      "instruction": "Look at the red rectangle first: it's the largest block of color and it anchors the whole painting — Mondrian balanced the heavy red with the small blue and yellow blocks so the canvas never tips. Then the black lines: they're not all the same thickness, and the grid is uneven — Mondrian adjusted the lines by fractions of a millimeter, moving them with tape until the balance felt absolute."
+    },
+    "tags": [
+      "De Stijl",
+      "Abstract"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-number-5-1948-169",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Number 5, 1948 (1948)",
+    "teaser": "Pollock's 8-by-4-foot canvas of tangled drips and loops — painted by laying the canvas flat and flinging paint from a stick — sold privately in 2006 for $140 million, then the highest price ever paid for a painting. There is no beginning or end to the image, which is the point: it is all middle.",
+    "imageUrl": "",
+    "byline": "Jackson Pollock (1948)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Number 5, 1948 — the web with no center",
+      "durationMinutes": 8,
+      "instruction": "Look at the surface: there is no center, no top, no bottom — Pollock said he was 'in' the painting, and the web of lines pulls your eye in every direction at once. Then the textures: he poured, dripped, and flicked enamel paint, sometimes mixed with sand and broken glass, so the surface has depth you can almost feel."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Drip Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-blue-poles-170",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Blue Poles (1952)",
+    "teaser": "Pollock's enormous painting — eight vertical lines of blue enamel running through a storm of color — was bought by the Australian government in 1973 for $1.3 million, then the highest price ever paid for a contemporary American painting, and it triggered a national scandal about spending public money on art. It's now the centerpiece of the National Gallery of Australia.",
+    "imageUrl": "",
+    "byline": "Jackson Pollock (1952)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Blue Poles (1952) — the eight poles in the storm",
+      "durationMinutes": 8,
+      "instruction": "Look at the blue poles first: they break the 'no center' rule of Pollock's other work — eight strong verticals cut through the chaos, and scholars still debate whether he added them early or as a final organizing gesture. Then the storm around them: the reds, yellows, and turquoise are poured and dripped in layers, and the poles look like they're holding the canvas together."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Drip Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-orange-red-yellow-171",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Orange, Red, Yellow (1961)",
+    "teaser": "Rothko's painting of three floating rectangles — orange, red, and yellow — with soft, breathing edges, sold at Christie's in 2012 for $86.9 million, then a record for post-war art. Rothko didn't think of these as color studies: he said his paintings 'have no center, no focus — they're about the human experience,' and he wanted viewers to stand close and be enveloped.",
+    "imageUrl": "",
+    "byline": "Mark Rothko (1961)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Orange, Red, Yellow (1961) — the breathing edges and inner glow",
+      "durationMinutes": 8,
+      "instruction": "Look at the edges: the rectangles don't have hard lines — the colors bleed into each other with fuzzy boundaries, so the shapes seem to breathe and shift as you watch. Then the glow: Rothko built the colors from many thin layers of paint, so the rectangles seem lit from within rather than painted on the surface."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Color Field"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-no-61-1953-172",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "No. 61 (Rust and Blue) (1953)",
+    "teaser": "Rothko's painting of a rust-colored field under a band of deep blue — one of his 'tragic' canvases, painted when he was at the height of his powers. Rothko refused to call his paintings abstract: he said they were about 'the human experience,' and he once told a viewer who asked what the paintings meant to 'look at them as if you were looking at a face.'",
+    "imageUrl": "",
+    "byline": "Mark Rothko (1953)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "No. 61 (Rust and Blue) (1953) — the rust field and the blue band",
+      "durationMinutes": 8,
+      "instruction": "Look at the proportions: the rust field takes up most of the canvas and the blue band sits at the top like a sky — but this is not a landscape, it's an emotional scale. The edges of the two fields are uneven and soft, so the rust seems to press up against the blue like heat against water."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Color Field"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-christinas-world-173",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Christina's World (1948)",
+    "teaser": "Wyeth's painting of a woman lying in a field, looking toward a farmhouse on the horizon — she is Christina Olson, his neighbor in Maine, who had a degenerative muscle disease and could not walk; she crawled everywhere. The painting is her real life: Wyeth watched her drag herself across the fields and painted her from a distance, so she's small in a huge landscape.",
+    "imageUrl": "",
+    "byline": "Andrew Wyeth (1948)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Christina's World (1948) — the crawling figure and the distant house",
+      "durationMinutes": 8,
+      "instruction": "Look at the posture: Christina is not resting — her arms are braced, her body is twisted, and she is mid-crawl toward the house, which sits impossibly far away. Wyeth painted her from behind so we see the effort, not the face. Then the landscape: the grass is painted stroke by stroke, and the fields are enormous compared to the tiny figure — the painting's famous loneliness is the reality of her life."
+    },
+    "tags": [
+      "Regionalism",
+      "Realism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-a-bigger-splash-174",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "A Bigger Splash (1967)",
+    "teaser": "Hockney's painting of a swimming pool in Los Angeles — with a splash frozen mid-air but no swimmer visible. The splash was inspired by a photo of a diving pool in a book, and Hockney painted it over two weeks in his London studio, using masking tape to get the straight pool lines. The invisible swimmer is the joke: the splash is the event, and it's already over.",
+    "imageUrl": "",
+    "byline": "David Hockney (1967)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "A Bigger Splash (1967) — the splash without a swimmer",
+      "durationMinutes": 8,
+      "instruction": "Look at the splash first: it's the whole subject — a white explosion frozen against the flat blue of the pool — and there's no one in the water to make it. The diver has already jumped in and the pool is about to go still again; the painting is a still from a movie that isn't running. Then the rest: the empty chair, the flat modern house, the palm tree — all painted with the hard, graphic precision of a travel poster."
+    },
+    "tags": [
+      "Pop Art",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-portrait-of-an-artist-pool-175",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Portrait of an Artist (Pool with Two Figures) (1972)",
+    "teaser": "Hockney's painting of a man in a suit watching a swimmer underwater — the most expensive painting by a living artist at its 2018 sale for $90.3 million. The man is Peter Schlesinger, Hockney's former lover, and the swimmer is another man seen from below; the painting is about the moment a relationship becomes a portrait: watched, not joined.",
+    "imageUrl": "",
+    "byline": "David Hockney (1972)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Portrait of an Artist (Pool with Two Figures) (1972) — the watcher and the swimmer",
+      "durationMinutes": 8,
+      "instruction": "Look at the two figures: the man on the pool's edge is fully dressed, still, and looking down; the swimmer below the surface is weightless and in motion — they're in the same painting but not the same world."
+    },
+    "tags": [
+      "Pop Art",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-garrowby-hill-176",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Garrowby Hill (1998)",
+    "teaser": "Hockney's painting of a Yorkshire road curving over a hill — a view from his childhood, painted in his 60s after he moved home from California. The road is a thick yellow band that curves across the green fields, and the whole painting vibrates with the landscape's energy — Hockney said he wanted to paint 'the feeling of driving over a hill.'",
+    "imageUrl": "",
+    "byline": "David Hockney (1998)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Garrowby Hill (1998) — the yellow road and the quilted fields",
+      "durationMinutes": 8,
+      "instruction": "Look at the road: it's not gray — it's bright yellow, and it curves across the canvas like a river of light, pulling your eye up and over the hill's crest. Then the fields: they're painted in flat, saturated patches of green and yellow, like a quilt laid over the land, with no people and no buildings."
+    },
+    "tags": [
+      "Contemporary",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-dance-1910-177",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Dance (1910)",
+    "teaser": "Matisse's painting of five naked figures holding hands in a ring, spinning so fast that one figure leans back almost horizontal — commissioned by a Russian collector who was shocked by it and hid it in his mansion. Matisse said he wanted to express 'the feeling of joy,' and the painting's simplicity — three colors, five bodies, one circle — became one of the most famous images of the 20th century.",
+    "imageUrl": "",
+    "byline": "Henri Matisse (1910)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Dance (1910) — the unbalanced circle and the three colors",
+      "durationMinutes": 8,
+      "instruction": "Look at the circle: the five figures form a ring, but they're not balanced — one is leaning way back, almost flying, and the gap in the circle is where the energy escapes."
+    },
+    "tags": [
+      "Fauvism",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-red-studio-178",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Red Studio (1911)",
+    "teaser": "Matisse's painting of his own studio painted entirely in red — the walls, the floor, everything — with his actual artworks (paintings, sculptures, ceramics) scattered around the room like islands in a red sea. He painted over a year of his life's work into one room, and the red is so total that the paintings float in it.",
+    "imageUrl": "",
+    "byline": "Henri Matisse (1911)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Red Studio (1911) — the artworks floating in the red",
+      "durationMinutes": 8,
+      "instruction": "Look at the red first: it covers the walls and floor with almost no shading, so the room is a single flat field of color — and the artworks inside it are the only things that stand out. Then find the objects: a bronze sculpture, his painting Le Luxe II on the wall, a ceramic dish, a clock with no hands, and a chair. Matisse said he wanted 'to express space and reality with color alone,' and the red makes the studio feel like a world of its own."
+    },
+    "tags": [
+      "Fauvism",
+      "Interior"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-woman-with-a-hat-179",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Woman with a Hat (1905)",
+    "teaser": "The painting that started Fauvism — Matisse's portrait of his wife Amélie wearing an enormous hat, her face painted in green, orange, and pink strokes instead of skin tones. When it was shown at the 1905 Salon d'Automne, a critic called Matisse and his friends 'les fauves' — the wild beasts — and the name stuck.",
+    "imageUrl": "",
+    "byline": "Henri Matisse (1905)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Woman with a Hat (1905) — the green and orange face",
+      "durationMinutes": 8,
+      "instruction": "Look at the face: it's not painted in skin tones — the cheeks are green, the forehead is orange, the nose is pink — Matisse used color to express light and feeling, not to imitate reality. Then the hat: it's a huge confection of feathers and flowers painted in flat, clashing strokes, and it dominates the portrait."
+    },
+    "tags": [
+      "Fauvism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-snail-1953-180",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Snail (1953)",
+    "teaser": "Matisse's final great work — an abstract spiral of cut colored paper, made when he was too ill to paint and worked by directing assistants to pin colored shapes on his wall. It's called The Snail because the spiral of colored squares suggests a snail's shell, and it's one of the last things he made before he died at 84.",
+    "imageUrl": "",
+    "byline": "Henri Matisse (1953)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Snail (1953) — the radiating spiral of cut paper",
+      "durationMinutes": 8,
+      "instruction": "Look at the spiral: the colored rectangles radiate outward from the center like a shell, and the colors build from deep blues and purples at the heart to bright yellows and oranges at the rim. Then the technique: Matisse was bedridden, so he 'painted with scissors' — assistants painted sheets of paper, then cut them into shapes he directed from his bed."
+    },
+    "tags": [
+      "Cut-out",
+      "Late Matisse"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-adele-bloch-bauer-181",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Portrait of Adele Bloch-Bauer I (1907)",
+    "teaser": "Klimt's 'golden portrait' of a Viennese society woman wrapped in gold leaf and Byzantine pattern — the painting at the center of a famous legal fight: seized by the Nazis, then returned to Adele's niece in 2006 after a Supreme Court ruling, then sold for $135 million, the highest price for a painting at the time. The woman died of meningitis at 43, and Klimt painted her portrait with her face framed by the gold like an icon.",
+    "imageUrl": "",
+    "byline": "Gustav Klimt (1907)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Portrait of Adele Bloch-Bauer I (1907) — the gold leaf and the painted face",
+      "durationMinutes": 8,
+      "instruction": "Look at the gold: Adele's dress and the background are covered in real gold leaf, with spirals, eyes, and geometric patterns picked out — Klimt's father was a gold engraver, and the technique comes from Byzantine mosaics. Then the face: it's the only 'painted' part, soft and realistic, floating above the ornate body like a person inside a shrine."
+    },
+    "tags": [
+      "Art Nouveau",
+      "Gold Leaf"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-melancholy-and-mystery-182",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Melancholy and Mystery of a Street (1914)",
+    "teaser": "De Chirico's painting of an empty Italian square with long shadows, a vanishing arcade, and a little girl rolling a hoop toward the light — one of the strangest, most influential images of the 20th century. It's called 'metaphysical art': a dream of a city with the wrong light and no people, and it haunted the Surrealists who came after.",
+    "imageUrl": "",
+    "byline": "Giorgio de Chirico (1914)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Melancholy and Mystery of a Street (1914) — the impossible shadows",
+      "durationMinutes": 8,
+      "instruction": "Look at the shadows: they're impossibly long and point in impossible directions — the light doesn't come from anywhere in the painting, so the scene feels like a stage set for a play that hasn't started. Then the figures: the girl with her hoop is the only living thing, and the dark shape at the end of the street is either a statue or a figure — nobody can agree."
+    },
+    "tags": [
+      "Metaphysical",
+      "Surrealism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-false-mirror-183",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The False Mirror (1928)",
+    "teaser": "Magritte's painting of a giant eye whose iris is a blue sky with white clouds — the eye is the 'false mirror' of the title because it reflects the sky but sees nothing. Magritte said the painting shows 'the eye as a window onto the world' — and the window is painted over.",
+    "imageUrl": "",
+    "byline": "René Magritte (1928)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The False Mirror (1928) — the sky inside the eye",
+      "durationMinutes": 8,
+      "instruction": "Look at the iris: it's not an iris — it's a daytime sky with clouds, replacing the colored ring of a real eye. Then the pupil: it's a dark circle that reads as an eclipse, so the eye is both a mirror of the sky and a hole in it. Magritte painted several 'eyes' but this is the famous one, and the Surrealist André Breton used it as the cover of his journal."
+    },
+    "tags": [
+      "Surrealism",
+      "Optical Illusion"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-human-condition-184",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Human Condition (1933)",
+    "teaser": "Magritte's painting of an easel holding a canvas that shows a landscape — and the painted canvas continues the real landscape behind it so seamlessly you can't tell where painting ends and view begins. It's the definitive image of Magritte's central idea: we only ever see the representation, never the thing itself.",
+    "imageUrl": "",
+    "byline": "René Magritte (1933)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Human Condition (1933) — the seamless seam between painting and view",
+      "durationMinutes": 8,
+      "instruction": "Look at the seam: the canvas on the easel shows a landscape that continues exactly into the window view behind it — the painted tree line lines up with the real tree line. Magritte's point is that there is no 'real' view: we are always looking through someone's frame. The painting inside the painting is the trick that made Magritte famous, and he painted the same idea many times with different subjects — the window, the easel, the mirror."
+    },
+    "tags": [
+      "Surrealism",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-empire-of-light-185",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Empire of Light (1954)",
+    "teaser": "Magritte's painting of a quiet street at night — with a daytime sky of blue clouds overhead. The contradiction — a lit lamppost under a bright sky — is the whole work, and he painted 17 versions of it. He said the painting 'brings together things which are mutually exclusive: day and night.'",
+    "imageUrl": "",
+    "byline": "René Magritte (1954)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Empire of Light (1954) — the night street under a day sky",
+      "durationMinutes": 8,
+      "instruction": "Look at the split: the lower half is a night street — a lit streetlamp, dark house fronts, a shadowed facade — while the upper half is a bright blue day with clouds. Magritte painted the two together with perfect realism, so the impossibility feels as calm as a photograph."
+    },
+    "tags": [
+      "Surrealism",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-le-dejeuner-en-fourrure-186",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Le Déjeuner en fourrure (1936)",
+    "teaser": "Oppenheim's fur-covered teacup, saucer, and spoon — made when she was 23, after Picasso joked at a café that anything could be covered in fur. She went home and lined a real teacup with gazelle fur, and the Museum of Modern Art bought it immediately — the only object by a woman in their Surrealist collection's first decade.",
+    "imageUrl": "",
+    "byline": "Méret Oppenheim (1936)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Le Déjeuner en fourrure (1936) — the fur-lined teacup",
+      "durationMinutes": 8,
+      "instruction": "Look at the contradiction: a teacup is the emblem of polite domesticity, and fur is animal and erotic — the two shouldn't meet, and the meeting is the joke. The cup is a real teacup lined inside and out with gazelle fur, so drinking from it would be absurd, which is the point: the familiar object is made unfamiliar, and the mind recoils and delights at once."
+    },
+    "tags": [
+      "Surrealism",
+      "Object"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-burning-giraffe-187",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Burning Giraffe (1937)",
+    "teaser": "Dalí's painting of a woman with drawer-like compartments opening from her chest and back, standing before a giraffe whose neck and back are on fire. The drawers are Dalí's symbol for the hidden, repressed parts of the psyche — Freud's unconscious made into furniture — and the burning giraffe is a premonition of war.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1937)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Burning Giraffe (1937) — the drawers in the body and the burning neck",
+      "durationMinutes": 8,
+      "instruction": ""
+    },
+    "tags": [
+      "Surrealism",
+      "Symbolism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-metamorphosis-of-narcissus-188",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Metamorphosis of Narcissus (1937)",
+    "teaser": "Dalí's painting of the myth of Narcissus, who fell in love with his own reflection and drowned — shown as a real man on the left and his transformation into a flower-hand on the right. Dalí wrote a poem to accompany it, and Freud, whose theories Dalí was obsessed with, analyzed the painting's paranoia.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1937)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Metamorphosis of Narcissus (1937) — the man becoming the flower-hand",
+      "durationMinutes": 8,
+      "instruction": "Look at the two figures: on the left, a man crouches by a pool, his head reflected below; on the right, his body has become a giant stone hand holding an egg, and from the egg grows the narcissus flower — the myth made literal. Then the background: a naked figure on a pedestal, a dog, chess pieces — the landscape of a dream."
+    },
+    "tags": [
+      "Surrealism",
+      "Mythology"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-christ-of-saint-john-189",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Christ of Saint John of the Cross (1951)",
+    "teaser": "Dalí's painting of Christ floating above a landscape, seen from above and in front — no cross, no nails, no crown of thorns, just a man and a shadow. The composition was inspired by a drawing by Saint John of the Cross, and Dalí placed a tiny fisherman and boat below to give the scale. A man threw a bottle of ink at it in 1986 in protest.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1951)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Christ of Saint John of the Cross (1951) — the floating view from above",
+      "durationMinutes": 8,
+      "instruction": "Look at the viewpoint first: you see Christ from above and slightly behind, floating in the sky — the composition is a triangle, with Christ's arms as the widest points and the cross's shadow behind him. Then the scale: the tiny boat and fisherman at the bottom make Christ enormous, and the water and shore below are painted with Dalí's exact realism."
+    },
+    "tags": [
+      "Surrealism",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-lavender-mist-190",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Lavender Mist: Number 1, 1950 (1950)",
+    "teaser": "Pollock's painting of swirling silver, black, white, and a hidden lavender — the 'mist' that gives it its name is barely there, and the painting is one of his most balanced. It's also one of the paintings that made the CIA's cultural program love Abstract Expressionism: it showed America as free, daring, and new.",
+    "imageUrl": "",
+    "byline": "Jackson Pollock (1950)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Lavender Mist (1950) — find the invisible lavender and the calm rhythm",
+      "durationMinutes": 8,
+      "instruction": "Look for the lavender: it's almost invisible, a faint haze of color under the black and white lines — Pollock named the painting for a color most viewers never notice. Then the structure: unlike his densest works, this canvas has breathing room, with the drips and loops spread in a wide, calm rhythm."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Drip Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-wrapped-reichstag-191",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Wrapped Reichstag (1995)",
+    "teaser": "Christo and Jeanne-Claude wrapped the German parliament building — 106,000 square meters of silver fabric tied with 15 km of blue rope — for 14 days in 1995, after 24 years of lobbying and 13 rejected parliamentary votes. Two million people came to see it, and the building looked like a silver sculpture, not a government building.",
+    "imageUrl": "",
+    "byline": "Christo & Jeanne-Claude (1995)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Wrapped Reichstag (1995) — the silver transformation",
+      "durationMinutes": 8,
+      "instruction": "Look at the transformation: the Reichstag, a heavy stone building full of political meaning, became a soft, silver, anonymous mass — the wrapping erased its history for two weeks and made people see it fresh. Then the logistics: it took a team of 90 professional climbers and 120 workers, and the fabric was specially woven silver polypropylene."
+    },
+    "tags": [
+      "Land Art",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-running-fence-192",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Running Fence (1976)",
+    "teaser": "Christo and Jeanne-Claude stretched 39 km of white nylon fabric across the California countryside — over 14 ranches, a highway, and into the Pacific Ocean — for two weeks in 1976. It was funded by selling drawings, built by 350 workers, and removed completely afterward, leaving no trace: the only proof is the film and photographs.",
+    "imageUrl": "",
+    "byline": "Christo & Jeanne-Claude (1976)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Running Fence (1976) — the 39 km ribbon through the hills",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale: the fence ran 39 kilometers, 5.5 meters tall, crossing private ranches whose owners had to be convinced one by one — it took 42 months of negotiations and 18 public hearings to get permission. Then the material: white nylon panels, so the fence changed with the weather, appearing as a solid wall in fog and a shimmering line in sun. Christo said he wanted to create 'a ribbon of light' that followed the land's contours."
+    },
+    "tags": [
+      "Land Art",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-puppy-1992-193",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Puppy (1992)",
+    "teaser": "Koons's 12-meter-tall West Highland terrier made of 60,000 living flowers — steel, soil, and an irrigation system that keeps the dog blooming. It was first shown in Germany, where the city of Aachen wanted to buy it but the logistics of a 12-meter flowering dog stalled the deal; it now stands outside the Guggenheim in Bilbao, blooming every spring.",
+    "imageUrl": "",
+    "byline": "Jeff Koons (1992)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Puppy (1992) — the 12-meter flower dog",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale first: the dog is taller than the museum's facade behind it, and its face is friendly but enormous — the size makes the cute subject absurd and monumental at once. Then the material: the 'fur' is 60,000 bedding plants — begonias, petunias, marigolds — grown on a steel frame with a hidden irrigation system, so the sculpture literally changes with the seasons."
+    },
+    "tags": [
+      "Contemporary",
+      "Public Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-tulips-1995-194",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Tulips (1995)",
+    "teaser": "Koons's seven stainless-steel tulips — mirror-polished so they reflect everything around them, with stems, leaves, and blossoms built from inflated-looking metal. The colors are candy-bright, and the sculptures are so reflective that the sky and the viewer's face slide across their surfaces as you move.",
+    "imageUrl": "",
+    "byline": "Jeff Koons (1995)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Tulips (1995) — the mirror-polish surfaces",
+      "durationMinutes": 8,
+      "instruction": "Look at the surfaces: the steel is polished to a mirror finish, so the tulips are also seven distorted mirrors — your reflection and the room stretch and slide across the petals as you walk around them."
+    },
+    "tags": [
+      "Contemporary",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-for-the-love-of-god-195",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "For the Love of God (2007)",
+    "teaser": "Hirst's sculpture of a human skull cast in platinum and covered in 8,601 diamonds, with the original teeth left in place — it cost £14 million to make, the most expensive single artwork ever made, and Hirst said he made it 'to feel invincible.' The skull is a copy of a real 18th-century skull Hirst bought in a London shop.",
+    "imageUrl": "",
+    "byline": "Damien Hirst (2007)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "For the Love of God (2007) — the diamond death's head",
+      "durationMinutes": 8,
+      "instruction": "Look at the contradiction: a death's head — the classic symbol of mortality — covered in the most expensive, permanent material humans know. The diamonds are 8,601 of them, totaling 1,106 carats, on a platinum cast of a real skull, and the only unpainted parts are the original teeth."
+    },
+    "tags": [
+      "Contemporary",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-a-thousand-years-196",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "A Thousand Years (1990)",
+    "teaser": "Hirst's glass box containing a cow's head, maggots, flies, sugar, and water — a complete, working ecosystem in which flies hatch, feed, breed, and die, with some electrocuted on a fly-killing lamp inside. It was the work that made Hirst's name, and when the Saatchi Gallery showed it, the gallery's chairman called it 'probably the most extraordinary work of art made by anyone under 40 anywhere in the world.'",
+    "imageUrl": "",
+    "byline": "Damien Hirst (1990)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "A Thousand Years (1990) — watch the fly life-cycle complete",
+      "durationMinutes": 8,
+      "instruction": "Look at the cycle: the box is a sealed life-support system — maggots hatch from the cow's head, become flies, drink the sugar water, breed, lay more maggots, and die either on the lamp or of old age. The artwork is a working farm of birth and death, running 24 hours a day, and every visitor watches a tiny life-cycle complete."
+    },
+    "tags": [
+      "Contemporary",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-holy-virgin-mary-197",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Holy Virgin Mary (1996)",
+    "teaser": "Ofili's painting of the Virgin Mary made with glitter, resin, and elephant dung — one of the most controversial artworks of the 1990s. It became the center of a censorship battle in New York in 1999, when Mayor Giuliani threatened to cut the museum's funding because the painting offended him — and visitors lined up around the block to see what the fuss was about.",
+    "imageUrl": "",
+    "byline": "Chris Ofili (1996)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Holy Virgin Mary (1996) — the African Madonna and the dung",
+      "durationMinutes": 8,
+      "instruction": "Look at the figure first: Mary is a Black woman made from layered paint, glitter, and map pinheads, standing inside a golden halo — she's an African Virgin, deliberately remaking the sacred image."
+    },
+    "tags": [
+      "Contemporary",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-rhythm-0-1974-198",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Rhythm 0 (1974)",
+    "teaser": "Abramović's performance in which she stood motionless for six hours while the audience was given 72 objects — flowers, honey, scissors, and a loaded gun — and told they could use them on her however they wished. The crowd started gently, then cut her clothes, cut her skin, and finally the gun was aimed at her neck before a fight broke out and the performance was stopped.",
+    "imageUrl": "",
+    "byline": "Marina Abramović (1974)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rhythm 0 (1974) — the 72 objects and the six hours",
+      "durationMinutes": 8,
+      "instruction": "Look at the objects first: 72 items on a table — the harmless (feather, grapes, bread) and the dangerous (knife, chain, a loaded pistol with one bullet). Abramović stood still for six hours while strangers did whatever they chose: some fed her, some dressed her wounds, and the performance only ended when the gun appeared."
+    },
+    "tags": [
+      "Performance Art",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-artist-is-present-199",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "The Artist Is Present (2010)",
+    "teaser": "Abramović sat silently in a chair in MoMA's atrium for 736 hours and 30 minutes, across three months, while visitors took the chair opposite and sat looking at her. More than 1,500 people sat with her; many wept, and one visitor, a former lover she hadn't seen in 22 years, sat down and the two held hands across the table — the most famous moment in performance art history.",
+    "imageUrl": "",
+    "byline": "Marina Abramović (2010)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Artist Is Present (2010) — sit in the silence for ten minutes",
+      "durationMinutes": 8,
+      "instruction": "Look at the ritual: the setup is minimal — two chairs, a table, and an artist who doesn't move, speak, or react. Each visitor sits, and the two stare at each other until the visitor leaves; the artwork is the accumulated silence of 1,500 encounters. Abramović later said the piece taught her 'that I can do anything with my mind,' and that the hardest part was not the stillness but the emotion of strangers."
+    },
+    "tags": [
+      "Performance Art",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-your-gaze-hits-200",
+    "categoryId": "ARTWORKS",
+    "subtype": "Photograph",
+    "name": "Untitled (Your Gaze Hits the Side of My Face) (1981)",
+    "teaser": "Kruger's photomontage of a marble female bust photographed in profile, with the words 'Your Gaze Hits the Side of My Face' printed in white-on-red over the image. She made it in her early 30s, using a style borrowed from advertising — bold type, cropped photos, declarative sentences — to turn the language of selling against the culture that sells.",
+    "imageUrl": "",
+    "byline": "Barbara Kruger (1981)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Untitled (Your Gaze Hits the Side of My Face) (1981) — the ad-style words",
+      "durationMinutes": 8,
+      "instruction": "Look at the words first: they're printed in the aggressive style of magazine ads — white Futura type on a red field — and they describe what's happening to the bust: the viewer's gaze is hitting it like an object. Then the image: a classical marble head in profile, the kind of object museum visitors stare at without thinking. Kruger's sentences are confrontations — 'your gaze hits the side of my face' makes looking itself the subject."
+    },
+    "tags": [
+      "Feminist Art",
+      "Photomontage"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-i-shop-therefore-201",
+    "categoryId": "ARTWORKS",
+    "subtype": "Photograph",
+    "name": "I Shop Therefore I Am (1987)",
+    "teaser": "Kruger's most famous slogan — a red-framed photograph of a hand holding a card that reads 'I shop therefore I am,' a twist on Descartes's 'I think therefore I am.' The image was everywhere in the 1980s: on T-shirts, posters, and tote bags, and it's become the shorthand for consumer culture's hold on identity.",
+    "imageUrl": "",
+    "byline": "Barbara Kruger (1987)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "I Shop Therefore I Am (1987) — the card that proves you exist",
+      "durationMinutes": 8,
+      "instruction": "Look at the hand: it's cropped, anonymous, and holds the card the way a passport holder holds an ID — the card is the proof of existence. Then the slogan: Descartes said 'cogito ergo sum' — I think, therefore I am — and Kruger replaces thinking with shopping, so identity is defined by what you buy. The design is borrowed from advertising: bold type, red frame, flat colors."
+    },
+    "tags": [
+      "Feminist Art",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-one-and-three-chairs-202",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "One and Three Chairs (1965)",
+    "teaser": "Kosuth's installation shows a real wooden chair, a photograph of that chair, and a dictionary definition of 'chair' — the same object presented three ways. It's the founding work of Conceptual Art, because the 'art' is not the chair, the photo, or the text — it's the idea that connects all three.",
+    "imageUrl": "",
+    "byline": "Joseph Kosuth (1965)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "One and Three Chairs (1965) — the chair, the photo, and the word",
+      "durationMinutes": 8,
+      "instruction": "Look at the three parts: a real chair, a photo of the chair, and the dictionary entry for 'chair' — each one claims to be 'a chair' in a different language: object, image, and word. Then the question the work asks: which one is the real chair? The answer — none, or all three — is the artwork's point. Kosuth said 'the art is the idea,' and that the physical objects were just documentation."
+    },
+    "tags": [
+      "Conceptual Art",
+      "Installation"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-clock-2010-203",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "The Clock (2010)",
+    "teaser": "Marclay's video is a 24-hour film made from thousands of movie clips — every single shot shows a clock or watch, and the time shown in each clip matches the real time of day as you watch it. If the film shows a clock saying 3:47, it is actually 3:47 wherever you're watching. It took three years and 12,000 hours of footage to assemble.",
+    "imageUrl": "",
+    "byline": "Christian Marclay (2010)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Clock (2010) — check your watch against the screen",
+      "durationMinutes": 8,
+      "instruction": "Look at the correspondence: the film runs for 24 hours, and at any moment the clock in the clip matches the real time — if you check your watch and look up, the screen agrees. Marclay and his assistants watched thousands of films, collecting every scene with a visible timepiece, then edited them into a seamless day. The result turns cinema into a clock: viewers report losing track of hours as the film hypnotizes them."
+    },
+    "tags": [
+      "Video Art",
+      "Found Footage"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-lightning-field-204",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "The Lightning Field (1977)",
+    "teaser": "Walter De Maria's installation in the New Mexico desert: 400 stainless-steel poles arranged in a grid over one mile by one kilometer, each pole 5 to 8 meters tall, waiting for lightning. Visitors stay overnight in a small cabin on the site, and in thunderstorm season the poles attract bolts — but most visitors see the field still, and the stillness is the art.",
+    "imageUrl": "",
+    "byline": "Walter De Maria (1977)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Lightning Field (1977) — the 400 poles in the desert",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale first: 400 poles of polished steel across a grid measuring one mile by one kilometer, each pole's tip sharpened to a point, standing in an empty desert."
+    },
+    "tags": [
+      "Land Art",
+      "Minimalism"
+    ],
+    "tier": 2
   }
 ]
