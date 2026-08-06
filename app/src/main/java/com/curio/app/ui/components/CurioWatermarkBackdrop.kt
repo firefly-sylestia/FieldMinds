@@ -64,7 +64,10 @@ fun CurioWatermarkBackdrop(
     // When set, every glyph stays ENTIRELY below this line (e.g. below a
     // hero banner) — the layout switches to a lower-band slot set tuned so
     // no glyph crosses the clearance or the screen edges on any screen.
-    topClearance: Dp = 0.dp
+    topClearance: Dp = 0.dp,
+    // Per-screen readability tuning. Detail pages use a quieter backdrop so
+    // the saved entry remains the visual priority without removing the glyphs.
+    alphaScale: Float = 1f
 ) {
     val isDark = isCurioDarkTheme()
     // Every glyph maps to its category accent — the same colors that open
@@ -117,23 +120,24 @@ fun CurioWatermarkBackdrop(
                     bandTop = topClearance,
                     activeCat = activeCat,
                     accentByGlyph = accentByGlyph,
-                    isDark = isDark
+                    isDark = isDark,
+                    alphaScale = alphaScale
                 )
             }
         }
     } else {
         Box(modifier = modifier.fillMaxSize()) {
-            WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("videocam", BiasAlignment(0.95f, -0.55f), 108.dp, -8f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("movie", BiasAlignment(0.82f, -0.15f), 56.dp, 16f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("edit_note", BiasAlignment(0.9f, 0.38f), 80.dp, -14f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("menu_book", BiasAlignment(-0.88f, -0.38f), 72.dp, 8f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("brush", BiasAlignment(-0.92f, 0.15f), 96.dp, -6f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("palette", BiasAlignment(-0.78f, 0.68f), 88.dp, 12f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("science", BiasAlignment(0.75f, 0.62f), 104.dp, -12f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("lightbulb", BiasAlignment(0.05f, 0.92f), 76.dp, 6f, activeCat, accentByGlyph, isDark)
-            WatermarkGlyph("casino", BiasAlignment(0.3f, -0.2f), 92.dp, -4f, activeCat, accentByGlyph, isDark)
+            WatermarkGlyph("person", BiasAlignment(-0.92f, -0.88f), 92.dp, -12f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("album", BiasAlignment(0.62f, -0.92f), 64.dp, 10f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("videocam", BiasAlignment(0.95f, -0.55f), 108.dp, -8f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("movie", BiasAlignment(0.82f, -0.15f), 56.dp, 16f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("edit_note", BiasAlignment(0.9f, 0.38f), 80.dp, -14f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("menu_book", BiasAlignment(-0.88f, -0.38f), 72.dp, 8f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("brush", BiasAlignment(-0.92f, 0.15f), 96.dp, -6f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("palette", BiasAlignment(-0.78f, 0.68f), 88.dp, 12f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("science", BiasAlignment(0.75f, 0.62f), 104.dp, -12f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("lightbulb", BiasAlignment(0.05f, 0.92f), 76.dp, 6f, activeCat, accentByGlyph, isDark, alphaScale)
+            WatermarkGlyph("casino", BiasAlignment(0.3f, -0.2f), 92.dp, -4f, activeCat, accentByGlyph, isDark, alphaScale)
         }
     }
 }
@@ -150,7 +154,8 @@ private fun BoxScope.WatermarkGlyph(
     rotation: Float,
     activeCat: CurioCategory,
     accentByGlyph: Map<String, Color>,
-    isDark: Boolean
+    isDark: Boolean,
+    alphaScale: Float
 ) {
     val active = glyph == activeCat.iconGlyph
     val accent = accentByGlyph[glyph] ?: CurioColors.WarmWatermarkInk
@@ -163,7 +168,7 @@ private fun BoxScope.WatermarkGlyph(
     CurioIcon(
         name = glyph,
         contentDescription = null,
-        tint = accent.copy(alpha = alpha),
+        tint = accent.copy(alpha = (alpha * alphaScale).coerceIn(0f, 1f)),
         size = size,
         modifier = Modifier
             .align(alignment)
@@ -198,7 +203,8 @@ private fun BoxWithConstraintsScope.LowerBandGlyph(
     bandTop: Dp,
     activeCat: CurioCategory,
     accentByGlyph: Map<String, Color>,
-    isDark: Boolean
+    isDark: Boolean,
+    alphaScale: Float
 ) {
     val active = glyph == activeCat.iconGlyph
     val accent = accentByGlyph[glyph] ?: CurioColors.WarmWatermarkInk
@@ -218,7 +224,7 @@ private fun BoxWithConstraintsScope.LowerBandGlyph(
     CurioIcon(
         name = glyph,
         contentDescription = null,
-        tint = accent.copy(alpha = alpha),
+        tint = accent.copy(alpha = (alpha * alphaScale).coerceIn(0f, 1f)),
         size = size,
         modifier = Modifier
             .offset { IntOffset(x, y) }

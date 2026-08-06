@@ -29,3 +29,10 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Tightened the shared PaperLineField stack spacing from 8dp to 3dp so labels, controls, and the paper field read as one compact group.
 - Collapse/expand animations and all paper options remain intact; no behavior or visual quality was removed.
 - Validation: brace checks BALANCED for RichTextEditor.kt, PaperCard.kt, and CaptureFormatComponents.kt; `git diff --check` clean. No Gradle command run per repository rules.
+
+## v7.55 — restore detail quote glyphs and tighten detail readability
+
+- Restored the real Material Symbols `format_quote` glyph at the opening and closing edges of saved quote cards; quote text remains raw rich text, so spans and the five-line limit stay accurate.
+- Tightened the detail metadata stack and reclaimed the lifted seam space before the format body, removing the oversized visual gap beneath Quick Facts without removing content.
+- Added a detail-only watermark alpha scale so the background glyphs remain present but sit quietly behind readable text.
+- Validation: brace checks BALANCED for EntryDetailScreen.kt and CurioWatermarkBackdrop.kt; `git diff --check` clean. No Gradle command run per repository rules.

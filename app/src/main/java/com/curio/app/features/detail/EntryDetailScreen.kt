@@ -93,7 +93,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -288,6 +287,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         CurioWatermarkBackdrop(
             activeCat = cat,
             topClearance = EntryDetailHeroClearance,
+            alphaScale = 0.68f,
             modifier = Modifier.fillMaxSize()
         )
         // Hoisted scroll state — the sticky top bar (back + more controls)
@@ -343,7 +343,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(EntryDetailHeroHeight + EntryDetailSheetExtent)
+                .height(EntryDetailHeroHeight + EntryDetailSheetExtent - EntryDetailMetaLift)
         ) {
             // ── White under-sheet — ONE SOLID white sheet layered BEHIND
             // the hero's torn bottom edge. The tear lives ONLY on the hero
@@ -568,19 +568,17 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         // ── Topic meta — the title lives INSIDE the hero above, so this
         // block keeps the category label + quick fact + tags. The captured
         // date/time now lives on the hero's Date segment (v7.39).
-        // v7.39 — the category label rides UP to the torn seam: 6dp top pad
-        // + a -32dp lift puts the label's top tip right AT the torn edge
-        // (just above the hero's tear baseline, so its tip tucks into the
-        // wave and the line visibly comes OUT of the tear). The category is
-        // the PRIMARY line (titleLarge ExtraBold), the Quick fact sits
-        // directly under it as SECONDARY (smaller), then tags. Gutters stay
-        // aligned to the format body's 20dp side padding; the smaller
-        // bottom pads keep the tags-to-body gap unchanged despite the lift.
+        // v7.39 — the category label rides at the torn seam with a 6dp top
+        // pad. The hero container reclaims the old 32dp tuck in measured
+        // layout, so the label still meets the wave without leaving a blank
+        // band below it. The category is the PRIMARY line (titleLarge
+        // ExtraBold), the Quick fact sits directly under it as SECONDARY
+        // (smaller), then tags. Gutters stay aligned to the format body's
+        // 20dp side padding.
         Column(
             modifier = Modifier
-                .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 8.dp)
-                .offset(y = (-32).dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(start = 20.dp, end = 20.dp, top = 6.dp, bottom = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // v7.38 — the category is plain TEXT, not a pill: glyph + name in
             // the category's theme-aware ink, LARGE (titleLarge ExtraBold + a
@@ -654,7 +652,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             )
 
             MorphEntrance {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     // ── Custom tags (v7.17) — the labels added on the save
                     // page, rendered as small #chips (the captured-at line
                     // moved onto the hero's Date segment in v7.39).
@@ -686,10 +684,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         }
 
         // ── Format body ────────────────────────────────────────────────
-        // v7.39 — 8dp vertical padding: the lifted meta block (-32dp tuck)
-        // already carries the breathing room at the tear, so the body only
-        // needs a small hand-off; horizontal stays 20dp to match the meta
-        // column gutter.
+        // v7.39 — 8dp vertical padding: the metadata block's 32dp seam tuck
+        // is reclaimed in the hero container's measured height, so the body
+        // receives no extra blank band; horizontal stays 20dp to match the
+        // metadata column gutter.
         Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
             FormatBody(entry = resolvedEntry, category = cat, navController = navController)
         }
@@ -754,6 +752,13 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 private val EntryDetailHeroHeight = 360.dp
 /** Extra layout space reserved for the white sheet below the clipped hero. */
 private val EntryDetailSheetExtent = 24.dp
+/**
+ * The category/Quick Facts block tucks 32dp into the hero seam. Subtracting
+ * the tuck from the hero container's measured height removes the same space
+ * from the scroll layout instead of merely drawing the body upward with an
+ * offset.
+ */
+private val EntryDetailMetaLift = 32.dp
 
 /** Hero height + a small gap — the watermark's top clearance on this page
  *  (keeps the backdrop glyphs clear of the thin white under-sheet lip below
@@ -2328,40 +2333,46 @@ private fun RenderQuoteCards(
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    CurioIcon(
+                        name = CurioIcons.FormatQuote,
+                        contentDescription = null,
+                        tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
+                        size = 20.dp
+                    )
                     Text(
-                        // Use real opening/closing quotation marks INSIDE the
-                        // text flow. The closing mark is therefore attached
-                        // to the final visible character, never parked at
-                        // the far edge of a weighted row. Rich-text spans
-                        // remain aligned because the marks are added outside
-                        // the original annotated quote.
-                        text = buildAnnotatedString {
-                            append('“')
-                            append(buildRichAnnotated(
-                                renderedQuote,
-                                cardSpans,
-                                notePaperHighlight(quoteSheet)
-                            ))
-                            append('”')
-                        },
+                        // Keep the quote symbols as real Material Symbols
+                        // glyphs outside the text flow. The text therefore
+                        // stays 1:1 with its saved rich spans, while the
+                        // opening mark sits at the true start of the card.
+                        text = buildRichAnnotated(
+                            renderedQuote,
+                            cardSpans,
+                            notePaperHighlight(quoteSheet)
+                        ),
                         modifier = Modifier.weight(1f),
                         style = savedNoteStyle(),
                         color = notePaperInk(quoteSheet),
-                        // Let the first measurement reveal visual wrapping so
-                        // we can store/display exactly five ruled lines, then
-                        // re-measure the shortened flow. Unlike maxLines, this
-                        // keeps the closing glyph in the text flow instead of
-                        // clipping it or replacing it with a distant icon.
+                        // The closing glyph is anchored to the measured end
+                        // of the text row below, so it follows the final
+                        // visible line instead of floating at the card edge.
                         onTextLayout = { layout ->
                             if (layout.lineCount > QuoteLimits.MAX_LINES) {
                                 val flowEnd = layout.getLineEnd(QuoteLimits.MAX_LINES - 1)
-                                val contentEnd = (flowEnd - 1)
-                                    .coerceIn(0, renderedQuote.length)
+                                val contentEnd = flowEnd.coerceIn(0, renderedQuote.length)
                                 if (contentEnd < renderedQuote.length) {
                                     renderedQuote = renderedQuote.take(contentEnd)
                                 }
                             }
                         }
+                    )
+                    CurioIcon(
+                        name = CurioIcons.FormatQuote,
+                        contentDescription = null,
+                        tint = notePaperInk(quoteSheet).copy(alpha = 0.45f),
+                        size = 20.dp,
+                        modifier = Modifier
+                            .align(Alignment.Bottom)
+                            .rotate(180f)
                     )
                     // ── Bookmark — saves the quote to the Home "Saved" shelf ──
                     val saved = AppPreferences.savedQuotesState.any {
