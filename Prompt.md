@@ -391,3 +391,9 @@ artwork instructions across 5 committed batches (scripts/rewrite_instr_batch1..5
 - Root cause: EntryDetailScreen read `detailScroll.value` in the same composable scope as the entire rich detail body. Every scroll pixel therefore invalidated the full tree, including paper Canvas textures, rich text, and image painters.
 - Fix: extracted the existing sticky back/more controls into a private `BoxScope.DetailStickyBar` composable. Only that small overlay reads the scroll state; the body keeps the same content, images, paper rendering, animations, and visual behavior.
 - Validation: brace check BALANCED, `git diff --check` clean, static isolation checks pass, reviewer found no critical issues. No Gradle build/compile/lint/test commands run per repository rules; CI remains the Android compilation source of truth.
+
+## v7.52 — compact paper editor controls (user follow-up)
+
+- Reduced the vertical gap between the Paper style and Color controls, and tightened the Ruled/Torn/decorations chip flow so the editing toolbar feels compact.
+- Added the same expand/fade and collapse/shrink animation used by Format to the Paper panel and Color swatches, without removing any paper options.
+- Validation: brace checks BALANCED, `git diff --check` clean, and reviewer found no Compose/Kotlin blockers. No Gradle build/compile/lint/test commands run per repository rules; CI remains the Android compilation source of truth.

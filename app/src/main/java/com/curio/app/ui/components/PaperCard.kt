@@ -1,6 +1,11 @@
 package com.curio.app.ui.components
 
 import android.graphics.Bitmap
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -1617,7 +1622,7 @@ fun NotePaperStyleToggle(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         // ONE tight flow row — the base (Ruled / Torn) and the stackable
         // decorations (+ Rules / + Coffee / …) sit together in a compact
@@ -1625,8 +1630,8 @@ fun NotePaperStyleToggle(
         // separate sparse rows (v7.43 — the old two FlowRows left a big
         // gap between the base and decoration buttons in the editor).
         FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             // Base — Ruled (sharp ruled page) · Torn (ragged slip).
             // Switching keeps the current decoration via [notePaperStyleOf].
@@ -1794,7 +1799,7 @@ fun NotePaperColorToggle(
     val inactiveInk = if (isCurioDarkTheme()) Color(0xFFE0D5BC).copy(alpha = 0.90f)
     else paperInk().copy(alpha = 0.62f)
     val inactiveBorderAlpha = if (isCurioDarkTheme()) 0.42f else 0.30f
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Surface(
             onClick = { expanded = !expanded },
             enabled = enabled,
@@ -1832,7 +1837,11 @@ fun NotePaperColorToggle(
                 )
             }
         }
-        if (expanded) {
+        AnimatedVisibility(
+            visible = expanded,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically

@@ -759,22 +759,30 @@ fun RichTextEditor(
             }
             trailingAction?.invoke()
         }
-        if (paper && styleExpanded) {
-            NotePaperStyleToggle(
-                style = paperStyle,
-                onStyleChange = onPaperStyleChange,
-                accent = effectiveAccent,
-                enabled = enabled,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (showColorTool) {
-                NotePaperColorToggle(
-                    color = paperColor,
-                    onColorChange = onPaperColorChange,
+        AnimatedVisibility(
+            visible = paper && styleExpanded,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                NotePaperStyleToggle(
+                    style = paperStyle,
+                    onStyleChange = onPaperStyleChange,
                     accent = effectiveAccent,
                     enabled = enabled,
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
+                if (showColorTool) {
+                    NotePaperColorToggle(
+                        color = paperColor,
+                        onColorChange = onPaperColorChange,
+                        accent = effectiveAccent,
+                        enabled = enabled
+                    )
+                }
             }
         }
         AnimatedVisibility(
