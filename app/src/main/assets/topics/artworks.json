@@ -3115,5 +3115,1005 @@
       "Minimalism"
     ],
     "tier": 2
+  },
+  {
+    "id": "artw-the-ghent-altarpiece-205",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Ghent Altarpiece (1432)",
+    "teaser": "The Adoration of the Mystic Lamb — a 12-panel altarpiece in Ghent, Belgium, and the most stolen artwork in history: it has been looted, dismembered, and hidden six times over 600 years, and one panel (The Just Judges) is still missing, replaced by a copy. It's also one of the first great works in oil paint, with colors that still glow after six centuries.",
+    "imageUrl": "",
+    "byline": "Hubert & Jan van Eyck (1432)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Ghent Altarpiece (1432) — the central Lamb panel and the grisaille wings",
+      "durationMinutes": 8,
+      "instruction": "Look at the central panel first: the Lamb of God stands on an altar bleeding into a chalice, while fountains, prophets, and crowds fill a panoramic landscape — the entire Christian story compressed into one image. Then the panels: the closed wings show the Annunciation in grisaille (paint that mimics stone sculpture), and opening the altarpiece reveals the full color world inside."
+    },
+    "tags": [
+      "Northern Renaissance",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-last-judgement-sistine-206",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Last Judgement (1541)",
+    "teaser": "Michelangelo's giant fresco behind the Sistine Chapel altar — hundreds of muscular, naked souls rising to heaven and falling to hell — scandalized the Church so much that after his death, another painter was hired to paint loincloths on the figures. The nudity censorship campaign is called the 'fig-leaf campaign,' and it took 300 years to complete.",
+    "imageUrl": "",
+    "byline": "Michelangelo (1541)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Last Judgement (1541) — Christ's raised arm and the flayed self-portrait",
+      "durationMinutes": 8,
+      "instruction": "Look at the center: Christ returns at the top, his arm raised in judgment, with Mary tucked under his arm — and every figure around them is a naked athlete, because Michelangelo painted the body as God's image, not as shame. Then the bottom right: the damned are dragged into hell, and Charon, the ferryman of Greek myth, clubs them with his oar — a pagan figure inside a Christian Last Judgement."
+    },
+    "tags": [
+      "Renaissance",
+      "Fresco"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-wedding-at-cana-207",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Wedding at Cana (1563)",
+    "teaser": "The largest canvas in the Louvre — 6.77 by 9.94 meters — showing the wedding where Christ turned water into wine, with 130 guests including the artist himself, who painted his own portrait into the group of musicians at the center. It was painted for a monastery's refectory, where it would have appeared to extend the dining hall into the biblical banquet.",
+    "imageUrl": "",
+    "byline": "Paolo Veronese (1563)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Wedding at Cana (1563) — find the painter in the musicians",
+      "durationMinutes": 8,
+      "instruction": "Look at the musicians in the center foreground: the man in white playing the viola da gamba is Veronese himself, and the man next to him in blue is believed to be the architect Andrea Palladio — the painter put his friends into the Bible. Then the banquet: the guests are dressed in 16th-century Venetian fashion, not ancient robes, because Veronese painted the Bible as a contemporary Venetian feast."
+    },
+    "tags": [
+      "Venetian Renaissance",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-entombment-of-christ-208",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Entombment of Christ (1603)",
+    "teaser": "Caravaggio's painting of Christ's body being lowered into the tomb — six figures struggling with the weight of a corpse, with one detail that scandalized viewers: Nicodemus's bare, dirty feet are thrust directly at the viewer. The painting is considered one of the greatest altarpieces of the Baroque.",
+    "imageUrl": "",
+    "byline": "Caravaggio (1603)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Entombment of Christ (1603) — the bare feet pointing at you",
+      "durationMinutes": 8,
+      "instruction": "Look at the feet first: Nicodemus's legs are exposed and his feet, bare and grimy, point straight at you — Caravaggio's way of dragging the sacred down to street level, which is what made him famous and infamous. Then the weight: every figure strains — the bearded man holds Christ's knees, another grips the shroud, and the women's faces are lit from above by an invisible light."
+    },
+    "tags": [
+      "Baroque",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-nightmare-1781-209",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Nightmare (1781)",
+    "teaser": "Fuseli's painting of a sleeping woman with a demon crouched on her chest and a horse's head emerging from the curtains — the original horror-movie poster. It was painted in 1781 and became an instant sensation, and the word 'nightmare' literally means 'night-mare': the horse (mare) was believed to sit on sleepers' chests and crush them.",
+    "imageUrl": "",
+    "byline": "Henry Fuseli (1781)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Nightmare (1781) — the demon on the chest and the horse in the curtain",
+      "durationMinutes": 8,
+      "instruction": "Look at the woman: she lies limp on her back, arms and head hanging off the bed, while the incubus — a demon of folklore — squats on her chest. Then find the horse: its head and neck burst through the curtain at the back, its eyes wild — the painting is the origin of the 'nightmare horse' image. Fuseli based the demon on local folklore and on his own sleep paralysis, and the painting was so popular that he made engraved copies."
+    },
+    "tags": [
+      "Romanticism",
+      "Gothic"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-washington-crossing-210",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Washington Crossing the Delaware (1851)",
+    "teaser": "The most famous American history painting — but it's full of deliberate inaccuracies: painted in Germany by a German artist who never saw the Delaware, it shows Washington standing in a small boat that would have sunk, a flag that didn't exist in 1776, and ice that wouldn't have been there. Washington never stood; the crossing happened in darkness, not daylight.",
+    "imageUrl": "",
+    "byline": "Emanuel Leutze (1851)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Washington Crossing the Delaware (1851) — count the historical errors",
+      "durationMinutes": 8,
+      "instruction": "Look at the boat: it's impossibly crowded and Washington stands tall in it — in reality the crossing was at night in freezing weather, and Washington almost certainly stayed seated to avoid capsizing. Then the flag: the Betsy Ross-style flag with 13 stars in a circle wasn't used until 1777, a year after the crossing."
+    },
+    "tags": [
+      "American",
+      "History Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-ninth-wave-211",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Ninth Wave (1850)",
+    "teaser": "Aivazovsky's towering painting of shipwreck survivors clinging to a mast as a giant wave — the 'ninth wave' of Russian sea lore, the one that breaks hardest — towers over them at sunrise. The painting is the most famous seascape ever painted, and Aivazovsky painted over 6,000 sea paintings in his life, mostly from memory.",
+    "imageUrl": "",
+    "byline": "Ivan Aivazovsky (1850)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Ninth Wave (1850) — the wave versus the sunrise",
+      "durationMinutes": 8,
+      "instruction": "Look at the wave: it's enormous, translucent green, and about to break over the survivors, yet the painting is not despairing — the sunrise behind it floods the scene with gold, and the survivors have survived the night."
+    },
+    "tags": [
+      "Romanticism",
+      "Seascape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-whistlers-mother-212",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Whistler's Mother (1871)",
+    "teaser": "The most famous portrait of a mother in the world — but Whistler didn't call it that. He titled it Arrangement in Grey and Black No. 1, because he insisted his paintings were about color and composition, not people. His mother Anna posed because his model was sick, and she sat for the portrait in profile because she was too old to sit for a frontal view comfortably.",
+    "imageUrl": "",
+    "byline": "James McNeill Whistler (1871)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Whistler's Mother (1871) — the color arrangement, not the portrait",
+      "durationMinutes": 8,
+      "instruction": "Look at the title first: 'Arrangement in Grey and Black No. 1' — Whistler deliberately named the painting after its color scheme, treating his mother as a still-life arrangement of tones. Then the composition: the profile, the black dress, the white cap and handkerchief, the grey wall with a framed print — everything is a study in muted tones, and the picture is perfectly balanced like a geometric diagram."
+    },
+    "tags": [
+      "American",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-floor-scrapers-213",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Floor Scrapers (1875)",
+    "teaser": "Caillebotte's painting of three workers on their knees scraping a Paris floor — the first major painting of working men doing physical labor, with their bare backs and tools made the subject of high art. It was rejected by the Salon and shown instead at the second Impressionist exhibition, where it made the movement's reputation for depicting modern life.",
+    "imageUrl": "",
+    "byline": "Gustave Caillebotte (1875)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Floor Scrapers (1875) — the rhythm of the three backs",
+      "durationMinutes": 8,
+      "instruction": "Look at the bodies: three men in profile, working in rhythm, their backs and arms curved in identical postures — Caillebotte painted labor with the seriousness usually reserved for heroes. Then the light: the sun falls in a broad diagonal across the floor, and the scraped wood gleams while the men cast long shadows. Notice the details: the bottles of wine and the brazier, the dust, the rolled sleeves — the scene is real Paris, not an allegory."
+    },
+    "tags": [
+      "Impressionism",
+      "Realism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-labsinthe-214",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "L'Absinthe (1876)",
+    "teaser": "Degas's painting of a man and a woman sitting silently at a café table with a glass of green absinthe in front of her — the definitive image of modern loneliness. The woman was a real actress named Ellen Andrée, and the man the painter Marcellin Desboutin; when the painting was shown in London, critics were horrified by what they saw as a portrait of two drunks.",
+    "imageUrl": "",
+    "byline": "Edgar Degas (1876)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "L'Absinthe (1876) — the empty half of the canvas",
+      "durationMinutes": 8,
+      "instruction": "Look at the composition: the two figures are pushed to the right of the canvas, leaving a huge empty tabletop and floor to their left — the emptiness is the subject, and the angle is tilted as if seen from a neighboring table. Then the glasses: hers is the tall green absinthe glass, his a wine glass, and both are nearly empty — but the point is not drinking, it's the silence between them; they don't look at each other or at us."
+    },
+    "tags": [
+      "Impressionism",
+      "Realism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-paris-street-rainy-day-215",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Paris Street; Rainy Day (1877)",
+    "teaser": "Caillebotte's enormous painting of a rainy Paris intersection — men and women in 1870s coats and umbrellas crossing the Place de Dublin — is the definitive image of the modern city. The man in the foreground, cropped by the frame like a photograph, walks toward you under a grey sky while everyone else is caught mid-step.",
+    "imageUrl": "",
+    "byline": "Gustave Caillebotte (1877)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Paris Street; Rainy Day (1877) — the cropped foreground figure",
+      "durationMinutes": 8,
+      "instruction": "Look at the foreground man: he's cut off at the knees by the painting's edge — a radical composition borrowed from photography, which was new — and he walks directly toward the viewer, while the other pedestrians are shown mid-stride as if the rain froze them. Then the surfaces: the wet cobblestones reflect the streetlights and the umbrellas, and the buildings recede with mathematical perspective."
+    },
+    "tags": [
+      "Impressionism",
+      "Cityscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-cradle-1872-216",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Cradle (1872)",
+    "teaser": "Morisot's painting of her sister Edma watching her baby daughter sleep — the first Impressionist painting of motherhood, shown at the first Impressionist exhibition of 1874. Morisot was one of the few women at the movement's core, and she painted the private world of women that male artists rarely showed.",
+    "imageUrl": "",
+    "byline": "Berthe Morisot (1872)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Cradle (1872) — the mother's gaze and the gauze",
+      "durationMinutes": 8,
+      "instruction": "Look at the mother: she leans over the cradle, her face softened into a dream — Morisot painted the gaze of a woman at her child with a tenderness that is also a kind of privacy. Then the baby: barely visible under the gauze curtain, a suggestion of a face — Morisot leaves the child almost abstract, so the painting is about the mother's attention, not the baby's features."
+    },
+    "tags": [
+      "Impressionism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-bath-cassatt-217",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Bath (1893)",
+    "teaser": "Cassatt's painting of a mother bathing her daughter — shown in the famous 1893 impressionist room at the Chicago World's Fair — is the most celebrated image of maternal care in American art. Cassatt, an American who lived in Paris, painted the everyday intimacy of mothers and children, and she insisted on showing women as strong, competent people.",
+    "imageUrl": "",
+    "byline": "Mary Cassatt (1893)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Bath (1893) — the mother's hands and the pyramid of care",
+      "durationMinutes": 8,
+      "instruction": "Look at the composition: the mother and child form a compact pyramid, and the mother's striped dress and the round basin repeat the curves — everything is organized around the small body being washed. Then the gesture: the mother's left hand steadies the child's leg while her right hand washes the foot, and the child's hand presses against the mother's arm — a real, working moment, not a posed one."
+    },
+    "tags": [
+      "Impressionism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-wheatfield-with-crows-218",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Wheatfield with Crows (1890)",
+    "teaser": "Van Gogh's stormy wheatfield with a dark road splitting the golden crop and black crows rising — painted in the last weeks of his life in Auvers-sur-Oise, and long believed to be his final painting. The sky churns with black clouds, the crows are painted in quick dark strokes, and three roads lead nowhere into the field.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1890)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Wheatfield with Crows (1890) — the three dead-end roads",
+      "durationMinutes": 8,
+      "instruction": "Look at the sky first: it's a living storm of short, curling strokes, and the black clouds press down on the field. Then the crows: they're painted as dark V-shapes that scatter toward the viewer, and they're some of the most famous birds in art. The three paths vanish into the wheat without reaching the horizon — a detail many read as a dead end."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-sunflowers-1888-219",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Sunflowers (1888)",
+    "teaser": "Van Gogh painted seven versions of sunflowers in vases — and they became the most famous flower paintings in the world, partly because he made them as a welcome gift for his friend Paul Gauguin, who never quite appreciated them. The sunflowers were painted in Arles as decoration for the 'Yellow House' studio he hoped to share with Gauguin.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1888)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Sunflowers (1888) — the thick paint and the range of yellows",
+      "durationMinutes": 8,
+      "instruction": "Look at the texture: the sunflower petals and centers are built with thick, sculptural dabs of paint — van Gogh squeezed the paint so thickly that the flowers seem to pop off the canvas. Then the colors: he used at least 12 different yellows, from pale lemon to deep ochre, and the flowers range from full bloom to withered, showing a whole life cycle in one vase."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Still Life"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-almond-blossoms-220",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Almond Blossoms (1890)",
+    "teaser": "Van Gogh painted almond blossoms for his newborn nephew — the only child of his brother Theo — and hung it above the family bed. The painting is his gentlest work: white blossoms against a bright blue sky, painted with the delicacy of Japanese prints. The baby was named Vincent, after him.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1890)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Almond Blossoms (1890) — the Japanese-print calm",
+      "durationMinutes": 8,
+      "instruction": "Look at the calm: after years of storms and wheatfields, this painting is pure tenderness — white flowers against a flat blue sky, with no turbulence at all. The composition borrows from Japanese woodblock prints, which van Gogh loved: branches cropped at the edges, blossoms floating on an empty background."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-self-portrait-bandaged-ear-221",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Self-Portrait with Bandaged Ear (1889)",
+    "teaser": "Van Gogh's self-portrait after he cut off his ear — the bandaged head, the fur cap, the pipe, and behind him a Japanese print and an empty canvas on an easel. He painted it in the weeks after the ear incident, looking straight at the viewer, calm and defiant, in a way that has made it one of the most recognized faces in art.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1889)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Self-Portrait with Bandaged Ear (1889) — the steady eyes",
+      "durationMinutes": 8,
+      "instruction": "Look at the bandage: it covers the ear he injured, and he's wearing a winter cap that holds it in place — he painted himself in the aftermath, not hiding from it. Then the background: a Japanese print on the wall and an empty canvas on an easel — he's showing himself as an artist, still working."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-portrait-of-dr-gachet-222",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Portrait of Dr. Gachet (1890)",
+    "teaser": "Van Gogh's portrait of the homeopathic doctor who cared for him in Auvers — a man resting his head on his hand beside a foxglove plant (the source of the heart medicine digitalis). It became the most expensive painting in the world when it sold for $82.5 million in 1990 — a record that held for 14 years.",
+    "imageUrl": "",
+    "byline": "Vincent van Gogh (1890)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Portrait of Dr. Gachet (1890) — the mirrored pose and the foxglove",
+      "durationMinutes": 8,
+      "instruction": "Look at the pose: Gachet rests his head on his hand with the same exhausted gesture as van Gogh's own self-portraits — the doctor and the patient mirror each other. Then the foxglove: its flowers produce digitalis, a heart medicine, so the plant is both a doctor's badge and a symbol of the melancholy that runs through the painting."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-large-bathers-223",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Large Bathers (1906)",
+    "teaser": "Cézanne's final masterpiece — a monumental painting of nude bathers arranged under the arching branches of trees, which he worked on for years and left unfinished at his death. It's considered the bridge between Impressionism and Cubism, and it directly inspired Picasso and Matisse, who called it 'the father of us all.'",
+    "imageUrl": "",
+    "byline": "Paul Cézanne (1906)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Large Bathers (1906) — the arching trees and geometric bodies",
+      "durationMinutes": 8,
+      "instruction": "Look at the composition: the bathers are arranged in a triangle, the trees arch over them to form a dome, and the whole painting is built from geometric masses — the bodies are simplified into almost columnar shapes. Then the brushwork: the paint is applied in parallel strokes that build form the way a mason builds a wall, and the canvas is left unfinished in places, showing bare cloth."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-dance-of-life-224",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Dance of Life (1900)",
+    "teaser": "Munch's painting of a summer dance on the pier — a couple in the center, the woman in a red dress (Munch's model Tulla Larsen), a young girl in white on the left, and a dark figure on the right. It's the centerpiece of his 'Frieze of Life,' the series he called 'a poem about life, love, and death.'",
+    "imageUrl": "",
+    "byline": "Edvard Munch (1900)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Dance of Life (1900) — the red dress and the white and black figures",
+      "durationMinutes": 8,
+      "instruction": "Look at the central couple: the woman in red is the same figure who appears throughout Munch's work — he painted her in red for passion, and the man bending toward her is Munch himself. Then the flanking figures: the girl in white on the left is innocence, and the dark woman on the right is age or death — the painting is a single image of a woman's whole life."
+    },
+    "tags": [
+      "Expressionism",
+      "Symbolism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-broken-column-225",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Broken Column (1944)",
+    "teaser": "Kahlo's self-portrait after spinal surgery — her torso split open to reveal a broken Ionic column where her spine should be, held together by nails and a surgical brace. She painted it after a year of operations following the bus accident that had shattered her body at 18.",
+    "imageUrl": "",
+    "byline": "Frida Kahlo (1944)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Broken Column (1944) — the ruined column and the nails",
+      "durationMinutes": 8,
+      "instruction": "Look at the column: where her spine should be, a cracked Ionic column stands, its sections held by metal brackets — Kahlo turned her own body into a ruined classical monument. Then the nails: they're driven into her face and torso, each one a small point of pain, while the surgical corset straps hold her up."
+    },
+    "tags": [
+      "Surrealism",
+      "Self-Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-portrait-of-gertrude-stein-226",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Portrait of Gertrude Stein (1906)",
+    "teaser": "Picasso painted the American writer Gertrude Stein at least 90 times before he was satisfied — he scraped the face off and repainted it from memory after a trip to Spain, telling her 'I look at you, I see you.' Stein, who became one of the century's greatest art patrons, said the portrait would 'survive us both.'",
+    "imageUrl": "",
+    "byline": "Pablo Picasso (1906)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Portrait of Gertrude Stein (1906) — the mask face and the monumental pose",
+      "durationMinutes": 8,
+      "instruction": "Look at the face first: it's mask-like and angular, almost sculptural, while her body is painted in loose, brown tones — Picasso repainted the face from memory after his trip to Spain, giving it the weight of an Iberian sculpture."
+    },
+    "tags": [
+      "Proto-Cubism",
+      "Portrait"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-houses-at-lestaque-227",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Houses at L'Estaque (1908)",
+    "teaser": "Braque's painting of a Provençal village reduced to cubes — the painting that gave Cubism its name, when a critic said Braque was 'reducing everything to little cubes.' It was shown in 1908 and mocked, but Picasso saw it and the two artists began the most famous collaboration in art history.",
+    "imageUrl": "",
+    "byline": "Georges Braque (1908)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Houses at L'Estaque (1908) — the geometric village",
+      "durationMinutes": 8,
+      "instruction": "Look at the houses: they're not cubes exactly, but the roofs, walls, and trees are all built from geometric slabs, and the whole village looks like a cluster of carved blocks. Then the space: there's almost no horizon — the houses stack upward, and the sky is reduced to a few patches, because Braque was flattening perspective into a single plane."
+    },
+    "tags": [
+      "Cubism",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-violin-and-candlestick-228",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Violin and Candlestick (1910)",
+    "teaser": "Braque's painting of a violin and a candle — seen from every angle at once, broken into planes so the objects are almost unrecognizable. It's a masterpiece of Analytic Cubism, the style Braque and Picasso developed in 1910-11, in which objects are shattered into facets and shown from multiple viewpoints simultaneously.",
+    "imageUrl": "",
+    "byline": "Georges Braque (1910)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Violin and Candlestick (1910) — find the violin in the facets",
+      "durationMinutes": 8,
+      "instruction": "Look for the violin: the curves of its body, the f-holes, and the strings are suggested by lines and planes, but the instrument is broken apart and seen from the front, side, and top at the same time. Then the candlestick: its flame is a small bright shape near the top, and its stem is a series of vertical planes."
+    },
+    "tags": [
+      "Cubism",
+      "Still Life"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-soft-construction-229",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Soft Construction with Boiled Beans (1936)",
+    "teaser": "Dalí's painting of a monstrous figure tearing itself apart — a body with arms and legs that pull in opposite directions, its head screaming, set in a barren landscape with a plate of boiled beans. He painted it as his response to the Spanish Civil War, and he said the figure is 'a human body with its own limbs tearing each other.'",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1936)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Soft Construction with Boiled Beans (1936) — the self-tearing body",
+      "durationMinutes": 8,
+      "instruction": "Look at the monster: it's made of a ribcage, a head, and limbs that yank against each other — one leg reaches up, another down, and the hands claw at the body itself, so the figure is both the war and its victim."
+    },
+    "tags": [
+      "Surrealism",
+      "War"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-elephants-1948-230",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Elephants (1948)",
+    "teaser": "Dalí's painting of two elephants with impossibly long, spindly legs — one carrying an obelisk, the other a load of stones — walking through a desert toward a sunset. The elephants have appeared in many Dalí paintings, and their legs are so thin they seem to be walking on stilts, inspired by Gian Lorenzo Bernini's sculpture of an elephant carrying an obelisk.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1948)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Elephants (1948) — the impossibly thin legs",
+      "durationMinutes": 8,
+      "instruction": "Look at the legs: they're as thin as matchsticks, yet they carry an obelisk and a pile of rocks — Dalí took Bernini's real elephant-and-obelisk sculpture and stretched the legs until the animals seem to float. Then the scale: the elephants are huge in the foreground but the desert around them is empty, and the sunset's orange light turns the scene into a dream."
+    },
+    "tags": [
+      "Surrealism",
+      "Symbolism"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-temptation-of-st-231",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Temptation of St Anthony (1946)",
+    "teaser": "Dalí's painting of the hermit saint Anthony on a rock, raising a cross against a parade of temptations: a horse with a tower on its back, an elephant with a naked woman on its back, another with a building, all walking on spider-leg stilts. He painted it for a 1946 contest for a film of The Private Affairs of Bel Ami — he didn't win.",
+    "imageUrl": "",
+    "byline": "Salvador Dalí (1946)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Temptation of St Anthony (1946) — the parade on stilt legs",
+      "durationMinutes": 8,
+      "instruction": "Look at the temptations: each animal carries a symbol of worldly desire — the horse carries a phallic tower, the first elephant carries a naked woman, the others carry buildings and monuments — and all of them walk on legs too thin to be real. Then the saint: Anthony is tiny, on the right, raising a cross — the only solid thing in the painting — and Dalí shows him refusing the parade."
+    },
+    "tags": [
+      "Surrealism",
+      "Religious"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-golconda-1953-232",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Golconda (1953)",
+    "teaser": "Magritte's painting of a grey sky filled with identical men in overcoats and bowler hats, raining down like a flock of birds — with one man in the foreground, larger, as if descending toward the viewer. The title comes from Golconda, an Indian diamond town associated with wealth; Magritte chose it, he said, for its sound.",
+    "imageUrl": "",
+    "byline": "René Magritte (1953)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Golconda (1953) — the raining identical men",
+      "durationMinutes": 8,
+      "instruction": "Look at the pattern: dozens of identical men in identical coats and hats, each separated by the same gap, raining from the sky at the same angle — the painting is a machine of repetition. Then the foreground figure: one man is bigger and closer, breaking the pattern and pointing the rain toward the viewer, so the painting asks whether you're next."
+    },
+    "tags": [
+      "Surrealism",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-lovers-1928-233",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Lovers (1928)",
+    "teaser": "Magritte's painting of a man and a woman kissing — their faces completely covered by white cloths. It's one of his most haunting images: intimacy and anonymity at once, two people who can never see or fully know each other, even while kissing. The painting's exact meaning is disputed — but the cloths make the kiss both tender and suffocating.",
+    "imageUrl": "",
+    "byline": "René Magritte (1928)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Lovers (1928) — the kiss through the cloths",
+      "durationMinutes": 8,
+      "instruction": "Look at the cloths: they cover the faces completely, with no holes for eyes or mouths — the kiss happens between two blank masks, so the painting is both the most romantic and most alienating kiss in art. Then the background: a featureless wall and a corner of a room — no context, just two people and a mystery."
+    },
+    "tags": [
+      "Surrealism",
+      "Romance"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-listening-room-234",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Listening Room (1952)",
+    "teaser": "Magritte's painting of a giant green apple filling an entire room, from floor to ceiling, in a space with no windows — the apple is so large it has become the room. It's the 'listening room' of the title, a sound-proofed chamber, and the apple is his famous motif pushed to an impossible scale.",
+    "imageUrl": "",
+    "byline": "René Magritte (1952)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Listening Room (1952) — the apple that is the room",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale: the apple is the same shape as a normal apple, but it fills the whole room — the wall, floor, and ceiling all meet its green surface, so the familiar fruit has become an alien presence. Then the room: no windows, no door, just a space that exists to be filled — a 'listening room' with nothing to listen to."
+    },
+    "tags": [
+      "Surrealism",
+      "Conceptual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-number-1a-1948-235",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Number 1A, 1948 (1948)",
+    "teaser": "Pollock's breakthrough painting — the canvas that showed his 'drip' method fully formed: poured and dripped enamel in black, white, and colour over the whole surface, with a single red drip line running through it. It's at MoMA, where it's considered one of the most important paintings of the 20th century.",
+    "imageUrl": "",
+    "byline": "Jackson Pollock (1948)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Number 1A, 1948 — follow the red line through the web",
+      "durationMinutes": 8,
+      "instruction": "Look at the red line: a single trail of red paint cuts through the tangle of black and white — Pollock poured it at the end, and it acts as the painting's signature and its spine. Then the surface: the paint is built in layers — black under white under color — so the painting has physical depth, and the drips loop and tangle without a center."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Drip Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-convergence-1952-236",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Convergence (1952)",
+    "teaser": "Pollock's dense, colorful web of drips — one of his most famous works, named because the black lines converge and diverge across the canvas, with bursts of white, red, yellow, and blue. It became famous beyond the art world when a reproduction of it was used as a poster for a 1950s art textbook.",
+    "imageUrl": "",
+    "byline": "Jackson Pollock (1952)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Convergence (1952) — the knots where the lines meet",
+      "durationMinutes": 8,
+      "instruction": "Look at the convergence: the black lines cross and re-cross the canvas, and at certain points they knot together — Pollock named the painting for those meeting points. Then the color: unlike his earlier black-and-white works, Convergence explodes with red, yellow, and blue poured over the black web, so the painting reads as a battle between order and eruption."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Drip Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-white-center-1950-237",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "White Center (1950)",
+    "teaser": "Rothko's painting of a white rectangle floating between bands of red, yellow, and pink — it sold in 2007 for $72.8 million, a record for post-war art at the time. Rothko considered his 1950 paintings his breakthrough: he stopped painting recognizable shapes and made the color itself the subject.",
+    "imageUrl": "",
+    "byline": "Mark Rothko (1950)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "White Center (1950) — the glowing bands and the blurred edges",
+      "durationMinutes": 8,
+      "instruction": "Look at the white center: it's not pure white but a subtle layering of off-whites, and the bands around it — red, yellow, rose — glow against each other like a sunset held still. Then the edges: each rectangle's border is soft and blurred, so the bands breathe and vibrate against each other instead of sitting flat."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Color Field"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-victory-boogie-woogie-238",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Victory Boogie Woogie (1944)",
+    "teaser": "Mondrian's last, unfinished painting — a dense grid of tiny colored squares that dances across the canvas, his most joyful work. He worked on it in New York during WWII until his death from pneumonia in 1944, and the painting was still on his easel, unfinished — it's now considered a national treasure of the Netherlands.",
+    "imageUrl": "",
+    "byline": "Piet Mondrian (1944)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Victory Boogie Woogie (1944) — the dancing grid and the unfinished edge",
+      "durationMinutes": 8,
+      "instruction": "Look at the density: unlike his earlier grids with large blocks, this canvas is packed with small squares of color, and the grid breaks apart into a rhythm that seems to move — the painting is literally boogie-woogie, the jazz Mondrian loved, translated into paint."
+    },
+    "tags": [
+      "De Stijl",
+      "Abstract"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-brillo-boxes-239",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Brillo Boxes (1964)",
+    "teaser": "Warhol's wooden sculptures that look exactly like shipping boxes for Brillo soap pads — and they started the biggest philosophical argument in modern art: what makes art art? The philosopher Arthur Danto used the Brillo Boxes to ask why a cardboard Brillo box in a supermarket is garbage but a wooden copy in a gallery is art. The answer, he argued, is the art world itself.",
+    "imageUrl": "",
+    "byline": "Andy Warhol (1964)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Brillo Boxes (1964) — the boxes that ask what art is",
+      "durationMinutes": 8,
+      "instruction": "Look at the boxes first: they're wooden, hand-painted, and stacked exactly like the real thing — Warhol had the real Brillo boxes in his studio and made wooden replicas because they'd last longer. Then the question: the real boxes hold soap pads; these hold nothing. Danto said the difference between them is invisible to the eye and visible only to the mind — the gallery, the artist, the history."
+    },
+    "tags": [
+      "Pop Art",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-drowning-girl-240",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Drowning Girl (1963)",
+    "teaser": "Lichtenstein's painting of a woman drowning in a melodramatic sea, with the thought bubble 'I don't care! I'd rather sink — than call Brad for help!' — blown up from a comic book panel. It's the masterpiece of Pop Art's most ironic move: high art copying low art, with the tragedy rendered in comic-book dots.",
+    "imageUrl": "",
+    "byline": "Roy Lichtenstein (1963)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Drowning Girl (1963) — the Ben-Day dots and the absurd bubble",
+      "durationMinutes": 8,
+      "instruction": "Look at the speech bubble first: the woman would rather drown than call Brad — the drama is deliberately absurd, and Lichtenstein painted it with complete seriousness. Then the technique: the face and waves are built from Ben-Day dots — the printed dot pattern of comics — which Lichtenstein painted by hand or with stencils, enlarging them until they become abstract patterns."
+    },
+    "tags": [
+      "Pop Art",
+      "Oil Painting"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-triple-elvis-241",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Triple Elvis (1963)",
+    "teaser": "Warhol's silkscreen of Elvis Presley repeated three times, drawn with a revolver and silver paint — part of his series of repeated celebrities that turned stars into products. Warhol silkscreened dozens of Elvises from a single publicity photo, and the repetitions made Elvis both omnipresent and anonymous.",
+    "imageUrl": "",
+    "byline": "Andy Warhol (1963)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Triple Elvis (1963) — the silver reflection and the repeat",
+      "durationMinutes": 8,
+      "instruction": "Look at the repetition: the same Elvis three times, each print slightly offset, like a film strip or a row of identical products — Warhol said he repeated images so people would notice the differences, not the sameness. Then the silver: Warhol coated the canvas with metallic paint, so the painting reflects light and looks like a movie screen — Elvis is a star made of light and repetition."
+    },
+    "tags": [
+      "Pop Art",
+      "Silkscreen"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-rabbit-1986-242",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Rabbit (1986)",
+    "teaser": "Koons's stainless-steel rabbit — smooth, mirror-polished, and inflated-looking, holding a carrot — sold in 2019 for $91.1 million, a record for a work by a living artist. The rabbit looks like a party balloon but weighs over 30 kg, and its mirror surface reflects the room so the sculpture appears to be made of light.",
+    "imageUrl": "",
+    "byline": "Jeff Koons (1986)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rabbit (1986) — the mirror surface and the inflated look",
+      "durationMinutes": 8,
+      "instruction": "Look at the surface: the steel is polished to a mirror finish, so the rabbit reflects the gallery, the walls, and you — the sculpture is also a giant curved mirror, and it looks weightless while weighing more than 30 kg."
+    },
+    "tags": [
+      "Contemporary",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-sun-tunnels-243",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Sun Tunnels (1976)",
+    "teaser": "Nancy Holt's land art in the Utah desert: four concrete tunnels, each 5.5 meters long, arranged in an open cross, so that at sunrise and sunset on the solstices the sun shines straight through each tube. Holt drilled holes in the tunnels' walls that map the constellations of Draco, Perseus, Columba, and Capricorn.",
+    "imageUrl": "",
+    "byline": "Nancy Holt (1976)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Sun Tunnels (1976) — look through the tunnel at the framing desert",
+      "durationMinutes": 8,
+      "instruction": "Look at the tunnels first: four giant concrete cylinders in the empty desert, each open at both ends — from inside, the desert is framed in a circle, and the sky is framed in another. Then the holes: Holt drilled them to match the stars of four constellations, so by day the sun projects points of light onto the tunnel floor, and by night the stars shine through the same holes — the tunnel is an observatory that works both ways."
+    },
+    "tags": [
+      "Land Art",
+      "Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-vietnam-veterans-memorial-244",
+    "categoryId": "ARTWORKS",
+    "subtype": "Installation",
+    "name": "Vietnam Veterans Memorial (1982)",
+    "teaser": "Maya Lin's design — a V-shaped wall of black granite sunk into the ground, carved with the names of 58,000 dead — was chosen when she was a 21-year-old Yale student, and it provoked a furious public debate before it was built. The wall is a wound in the earth that heals as you walk its length: the names rise from knee height to head height at the center, then sink away.",
+    "imageUrl": "",
+    "byline": "Maya Lin (1982)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Vietnam Veterans Memorial (1982) — walk the length and watch yourself reflected",
+      "durationMinutes": 8,
+      "instruction": "Look at the wall's shape: it's a V sunk into the earth, its polished black granite reflecting the viewer, the sky, and the trees — you see yourself in the memorial while reading the names, which was Lin's intention: the living and the dead share the surface. Then the names: they're carved in chronological order of death, and the wall rises as the war's toll rises, peaking at its center."
+    },
+    "tags": [
+      "Memorial",
+      "Landscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-angel-of-the-north-245",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "The Angel of the North (1998)",
+    "teaser": "Gormley's 20-meter-tall steel angel with 54-meter wingspan stands on a hill beside a highway in Gateshead, England — the largest angel sculpture in the world, built from 200 tons of weathering steel that turns rust-red with age. It was so controversial before construction that locals feared it would be 'a giant statue with a skirt.'",
+    "imageUrl": "",
+    "byline": "Antony Gormley (1998)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Angel of the North (1998) — the forward-swept wings",
+      "durationMinutes": 8,
+      "instruction": "Look at the wings: they're angled forward, not spread flat — Gormley said the angel is 'not a symbol but a body turned into space,' and the forward-swept wings make it look like it's leaning into the wind. Then the material: weathering steel, which rusts to a permanent red-brown — the sculpture is literally aging and changing color as it stands."
+    },
+    "tags": [
+      "Contemporary",
+      "Public Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-spoonbridge-and-cherry-246",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Spoonbridge and Cherry (1988)",
+    "teaser": "The giant stainless-steel spoon with a cherry on top — 16 meters long, weighing 1,600 kg of steel — stands in the Minneapolis Sculpture Garden, where water sprays from the cherry stem like a fountain. It's the most photographed sculpture in the Midwest, and the artists' gift to their favorite city.",
+    "imageUrl": "",
+    "byline": "Claes Oldenburg & Coosje van Bruggen (1988)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Spoonbridge and Cherry (1988) — the bus-length spoon",
+      "durationMinutes": 8,
+      "instruction": "Look at the scale first: the spoon is as long as a bus, and the cherry weighs more than a car — Oldenburg and van Bruggen specialized in blowing ordinary objects up to absurd sizes. Then the fountain: water jets from the top of the cherry and arcs over the spoon's bowl, so the sculpture is also a working fountain that freezes in Minnesota winters."
+    },
+    "tags": [
+      "Pop Art",
+      "Public Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-cadillac-ranch-247",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Cadillac Ranch (1974)",
+    "teaser": "Ten half-buried Cadillacs standing nose-down in a Texas field, their tailfins pointing at the sky — the most famous roadside art in America, built by the art collective Ant Farm in 1974 on a ranch outside Amarillo. The cars are buried at the same angle as the Great Pyramid of Giza, and visitors are encouraged to spray-paint them — they're repainted constantly.",
+    "imageUrl": "",
+    "byline": "Ant Farm (1974)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Cadillac Ranch (1974) — the tailfin wave at sunset",
+      "durationMinutes": 8,
+      "instruction": "Look at the row: ten Cadillacs from 1949 to 1963, buried nose-first at the same angle as the Great Pyramid, their tailfins rising like a wave — the fins chart the evolution of American car design in a single line. Then the paint: the cars are covered in layers of spray-paint put there by visitors — the ranch encourages it, and the cars are repainted and re-covered in an endless cycle."
+    },
+    "tags": [
+      "Land Art",
+      "Public Sculpture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-watts-towers-248",
+    "categoryId": "ARTWORKS",
+    "subtype": "Sculpture",
+    "name": "Watts Towers (1954)",
+    "teaser": "An Italian immigrant named Simon Rodia spent 33 years building a cluster of seventeen towers from steel pipes, wire, and found objects — broken bottles, seashells, tiles — bound in mortar, in his yard in Los Angeles. He called it 'Nuestro Pueblo' ('our town'), and when a demolition order threatened the towers in 1959, a group of citizens saved them by testing their strength with a cable and crane — they held.",
+    "imageUrl": "",
+    "byline": "Simon Rodia (1954)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Watts Towers (1954) — the 30-meter hand-built towers",
+      "durationMinutes": 8,
+      "instruction": "Look at the tallest tower: it rises 30 meters — as tall as a 10-story building — and was built without scaffolding, without drawings, and almost entirely by one man with hand tools. Then the materials: the towers are decorated with fragments of broken bottles, mirrors, tiles, and seashells set into the mortar — Rodia gathered them from the neighborhood and from demolition sites."
+    },
+    "tags": [
+      "Outsider Art",
+      "Architecture"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-girl-with-balloon-249",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Girl with Balloon (2002)",
+    "teaser": "Banksy's stencil of a little girl reaching for a red heart-shaped balloon — the most reproduced image of 21st-century street art, spray-painted on walls around the world. In 2018, a framed copy of the print sold at auction for £1 million — and the moment the hammer fell, it shredded itself through a shredder hidden in the frame. The piece was renamed Love is in the Bin, and the shredded work became worth even more.",
+    "imageUrl": "",
+    "byline": "Banksy (2002)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Girl with Balloon (2002) — the shredded auction moment",
+      "durationMinutes": 8,
+      "instruction": "Look at the image first: the girl's arm stretches toward a red heart on a string, and the balloon is just out of reach — Banksy's critics call it sentimental, and his defenders say the sentiment is the point."
+    },
+    "tags": [
+      "Street Art",
+      "Stencil"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-sleeping-gypsy-250",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Sleeping Gypsy (1897)",
+    "teaser": "Rousseau's painting of a sleeping woman in a desert with a lion standing over her — the lion, though hungry, does not move. Rousseau, a self-taught toll collector, was mocked by critics who called his work childish, and he sold this painting for 300 francs in 1897; it now hangs in MoMA, one of the most beloved paintings of the 20th century.",
+    "imageUrl": "",
+    "byline": "Henri Rousseau (1897)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Sleeping Gypsy (1897) — the lion that does not move",
+      "durationMinutes": 8,
+      "instruction": "Look at the lion first: it stands inches from the sleeping woman, staring straight ahead, but it does not attack — Rousseau said the lion, though hungry, did not move, and the mystery of why is the painting."
+    },
+    "tags": [
+      "Naive Art",
+      "Dreamscape"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-napoleon-crossing-the-alps-251",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Napoleon Crossing the Alps (1801)",
+    "teaser": "David's heroic portrait of Napoleon on a rearing white horse against the Alps — painted from imagination, because Napoleon refused to pose, and the result is pure propaganda: the real crossing happened on a mule, in good weather, with an escort. David painted five versions, each slightly different, so the Emperor could gift them to allies.",
+    "imageUrl": "",
+    "byline": "Jacques-Louis David (1801)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Napoleon Crossing the Alps (1801) — the names carved in the rock",
+      "durationMinutes": 8,
+      "instruction": "Look at the pose first: Napoleon points up the mountain on a rearing horse, cape flying — but the real crossing was made on a mule, in clear weather, weeks after the snow, with guides. David never saw Napoleon on the pass; the Emperor told him 'it is not important to be exact.' Then the details: the names carved on the rocks — BONAPARTE, HANNIBAL, KAROLUS MAGNUS — place Napoleon among the generals who crossed the Alps before him."
+    },
+    "tags": [
+      "Neoclassicism",
+      "Propaganda"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-i-and-the-village-252",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "I and the Village (1911)",
+    "teaser": "Chagall's painting of his childhood village in Russia — a green-faced man and a cow stare at each other across a dreamscape of memory, with a tiny milkmaid, a tree, and upside-down people. He painted it in Paris, two years after leaving home, and it's the painting that made his name as the poet of memory.",
+    "imageUrl": "",
+    "byline": "Marc Chagall (1911)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "I and the Village (1911) — the green face and the cow",
+      "durationMinutes": 8,
+      "instruction": "Look at the two big faces: on the right, the artist's green profile; on the left, a cow's head with a smaller cow being milked inside its cheek — Chagall painted memory as a place where the living and the remembered share one space. Then find the details: the milkmaid, the tree with a woman's face, the man with a scythe, the upside-down couple, and the little house with a church — each one a fragment of the village he left behind."
+    },
+    "tags": [
+      "Cubism",
+      "Memory"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-saturn-devouring-his-son-253",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "Saturn Devouring His Son (1819-23)",
+    "teaser": "Goya's horrifying painting of the Titan Saturn eating his own child — painted on the walls of his own house in Madrid, in the series now called the Black Paintings. He painted it directly on the plaster walls for himself, never intending it for display; it was transferred to canvas decades after his death. Saturn ate his children because a prophecy said one would overthrow him.",
+    "imageUrl": "",
+    "byline": "Francisco Goya (1819-23)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Saturn Devouring His Son (1819-23) — the staring eyes",
+      "durationMinutes": 8,
+      "instruction": "Look at the eyes first: Saturn's are wide, white, and staring — and the headless, armless body he grips is painted in cold flesh tones against the dark background. Goya painted the Black Paintings on the walls of his home, the Quinta del Sordo, after a near-fatal illness left him deaf and isolated — they were never meant to be seen."
+    },
+    "tags": [
+      "Romanticism",
+      "Black Paintings"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-the-death-of-socrates-254",
+    "categoryId": "ARTWORKS",
+    "subtype": "Painting",
+    "name": "The Death of Socrates (1787)",
+    "teaser": "David's painting of Socrates calmly taking the hemlock cup while his students grieve around him — the philosopher chose death over renouncing his ideas, and David painted it as a heroic martyrdom. Every element is engineered: the light, the pointing finger of Socrates, the despairing students — and the painting became the visual definition of principle over life.",
+    "imageUrl": "",
+    "byline": "Jacques-Louis David (1787)",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "The Death of Socrates (1787) — the calm hand and the poison cup",
+      "durationMinutes": 8,
+      "instruction": "Look at Socrates: he sits upright, one hand raised as he makes his final point, the other reaching for the poison cup — he is the only calm figure in the room. Then the students: one hides his face, one clutches Socrates's thigh, and the old man at the foot of the bed is Plato, painted with the face of the ancient philosopher but shown at the age of the real Socrates's execution — David mixed history and fiction freely."
+    },
+    "tags": [
+      "Neoclassicism",
+      "History Painting"
+    ],
+    "tier": 2
   }
 ]
