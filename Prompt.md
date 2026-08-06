@@ -231,3 +231,12 @@ real teaser (quirky verifiable fact), specific targetName (archive/museum/
 simulation/photograph), quality-bar instruction, real 2–3 tags (was placeholder
 pairs like Oddity|Historical), and a proper subtype (Artifact/Site/Practice/
 Event/… was blanket "Curiosity"). Validation 0 errors; committed per-batch.
+
+## (v7.46 cont.) wildcard + books now CLEAN; discoveries next
+wildcard.json: all 118 fakes replaced (3 batches: 40+40+38) with real facts,
+proper subtypes, real tags. books.json: all 106 fakes replaced (3 batches:
+40+44+22) — 2023 releases and the classics (Moby-Dick, Anna Karenina,
+Gatsby, Lolita, One Hundred Years of Solitude, …), real teasers + reading
+instructions + corrected tags. Validation still 0 errors. Next up in the
+queue: discoveries.json (87), painters.json (77), directors.json (73),
+films.json (67), artists.json (1).
