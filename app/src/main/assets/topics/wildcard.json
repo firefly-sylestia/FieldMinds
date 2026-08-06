@@ -50,7 +50,7 @@
       "verb": "Explore",
       "targetName": "National Archaeological Museum of Athens, Antikythera Mechanism gallery",
       "durationMinutes": 60,
-      "instruction": "Look at the three main gear fragments under glass. The smallest preserved gear has 23 teeth. Twenty-three. That's the Saros cycle for predicting eclipses, which the Greeks used. The number isn't obvious from outside."
+      "instruction": "Start with the three main gear fragments under glass. The smallest preserved gear has 23 teeth. Twenty-three. That's the Saros cycle for predicting eclipses, which the Greeks used. The number isn't obvious from outside."
     },
     "tags": [
       "Ancient",
@@ -590,7 +590,7 @@
       "verb": "Read",
       "targetName": "Kepler's 1596 \"Mysterium Cosmographicum\" — introduction and figures",
       "durationMinutes": 45,
-      "instruction": "Look at the diagrams. Each planet is nested inside a Platonic solid, which is nested inside the next planet's sphere. The five solids AND precisely describe the orbital radii. It's wrong, but so beautiful that Kepler spent his whole life trying to make it the..."
+      "instruction": "Pick out the diagrams. Each planet is nested inside a Platonic solid, which is nested inside the next planet's sphere. The five solids AND precisely describe the orbital radii. It's wrong, but so beautiful that Kepler spent his whole life trying to make it the..."
     },
     "tags": [
       "History",
@@ -850,7 +850,7 @@
       "verb": "Explore",
       "targetName": "The Terracotta Army (Pit 1) — Xi'an, high-resolution museum imagery",
       "durationMinutes": 3,
-      "instruction": "Look at the warriors' faces in a high-resolution gallery and count how many distinct facial types you can spot — each soldier was individually modeled, not cast from a mold. Then find the bronze chariots, which were assembled from hundreds of parts, and reflect on what mass production 2,200 years ago must have taken."
+      "instruction": "Begin with the warriors' faces in a high-resolution gallery and count how many distinct facial types you can spot — each soldier was individually modeled, not cast from a mold. Then find the bronze chariots, which were assembled from hundreds of parts, and reflect on what mass production 2,200 years ago must have taken."
     },
     "tags": [
       "Archaeology",
@@ -970,7 +970,7 @@
       "verb": "Explore",
       "targetName": "The Passion vs. Nativity façades of the Sagrada Família, Barcelona",
       "durationMinutes": 9,
-      "instruction": "Look at the Passion façade — designed by Gaudí but carved in the 1980s from his drawings, in sharp angular contrast to the organic Nativity façade he completed himself. The difference between the two facades is a masterclass in how much of the building is the original architect's versus his successors'."
+      "instruction": "Single out the Passion façade — designed by Gaudí but carved in the 1980s from his drawings, in sharp angular contrast to the organic Nativity façade he completed himself. The difference between the two facades is a masterclass in how much of the building is the original architect's versus his successors'."
     },
     "tags": [
       "Architecture",
@@ -1070,7 +1070,7 @@
       "verb": "Explore",
       "targetName": "Tassili n'Ajjer rock art (swimming + cattle scenes), Sahara",
       "durationMinutes": 26,
-      "instruction": "Look at the Tassili n'Ajjer rock art, which shows a lush savanna world — swimming figures and herds — then check a paleoclimate map of northern Africa 8,000 years ago. The desertification that followed is one of the fastest climate shifts in the human record."
+      "instruction": "Consider the Tassili n'Ajjer rock art, which shows a lush savanna world — swimming figures and herds — then check a paleoclimate map of northern Africa 8,000 years ago. The desertification that followed is one of the fastest climate shifts in the human record."
     },
     "tags": [
       "Geology",
@@ -1170,7 +1170,7 @@
       "verb": "Explore",
       "targetName": "The JWST Deep Field vs. Hubble Ultra-Deep Field comparison",
       "durationMinutes": 26,
-      "instruction": "Look at the 'Deep Field' image released July 2022 and compare it with Hubble's — the red smudges are galaxies more than 13 billion light-years away, seen as they were shortly after the Big Bang. Then watch the deployment animation of the mirror segments: each one must align to nanometers, automatically."
+      "instruction": "Turn to the 'Deep Field' image released July 2022 and compare it with Hubble's — the red smudges are galaxies more than 13 billion light-years away, seen as they were shortly after the Big Bang. Then watch the deployment animation of the mirror segments: each one must align to nanometers, automatically."
     },
     "tags": [
       "Astronomy",
@@ -1470,7 +1470,7 @@
       "verb": "Explore",
       "targetName": "The 1927 Kulik expedition photos of the Tunguska blast zone",
       "durationMinutes": 27,
-      "instruction": "Look at the aerial photos of the blast zone: the trees lie in a perfect radial pattern away from the epicenter, like spokes. Then read the witness accounts — even 60 km away, people were knocked off their feet and reported the sky glowing for nights afterward. The 2013 Chelyabinsk meteor, also an airburst, is the modern echo."
+      "instruction": "Scan the aerial photos of the blast zone: the trees lie in a perfect radial pattern away from the epicenter, like spokes. Then read the witness accounts — even 60 km away, people were knocked off their feet and reported the sky glowing for nights afterward. The 2013 Chelyabinsk meteor, also an airburst, is the modern echo."
     },
     "tags": [
       "Science",
@@ -1590,7 +1590,7 @@
       "verb": "Explore",
       "targetName": "The 1966 lead masks case — scene photos and the notebook instructions",
       "durationMinutes": 5,
-      "instruction": "Look at the scene photographs: the men lay as if sleeping, the masks over their faces, with a bottle of water and a notebook between them. The notebook's final instruction — '16:30 be at the agreed place, 18:30 consume the capsules' — was followed to the letter. Read the theories, from a UFO experiment to an industrial accident, and weigh which evidence each camp ignores."
+      "instruction": "Check the scene photographs: the men lay as if sleeping, the masks over their faces, with a bottle of water and a notebook between them. The notebook's final instruction — '16:30 be at the agreed place, 18:30 consume the capsules' — was followed to the letter. Read the theories, from a UFO experiment to an industrial accident, and weigh which evidence each camp ignores."
     },
     "tags": [
       "Mystery",
@@ -1730,7 +1730,7 @@
       "verb": "Explore",
       "targetName": "Hashima Island's sea-wall apartments — 1959 population records",
       "durationMinutes": 25,
-      "instruction": "Look at the island's concrete walls rising directly from the sea — the 'Battleship Island' silhouette. Then read the numbers that made it possible: the reinforced apartment blocks were so dense that the whole island functioned like a single building, with baths, school, and shops stacked inside the seawall. A section of the island appeared in the James Bond film Skyfall."
+      "instruction": "Study the island's concrete walls rising directly from the sea — the 'Battleship Island' silhouette. Then read the numbers that made it possible: the reinforced apartment blocks were so dense that the whole island functioned like a single building, with baths, school, and shops stacked inside the seawall. A section of the island appeared in the James Bond film Skyfall."
     },
     "tags": [
       "Japan",
@@ -1790,7 +1790,7 @@
       "verb": "Explore",
       "targetName": "Lake Natron's calcified birds + the flamingo breeding colonies",
       "durationMinutes": 7,
-      "instruction": "Look at the 2013 photographs of animals 'petrified' on the lake's shore — the calcium carbonate encrusts bodies quickly. Then find the flamingo colonies that nest on the salt islands in the middle, where the caustic water keeps predators away. The lake is simultaneously a killer and a nursery."
+      "instruction": "Consider the 2013 photographs of animals 'petrified' on the lake's shore — the calcium carbonate encrusts bodies quickly. Then find the flamingo colonies that nest on the salt islands in the middle, where the caustic water keeps predators away. The lake is simultaneously a killer and a nursery."
     },
     "tags": [
       "Tanzania",
@@ -1810,7 +1810,7 @@
       "verb": "Explore",
       "targetName": "Long-exposure glowworm ceiling — Waitomo, New Zealand",
       "durationMinutes": 13,
-      "instruction": "Look at a long-exposure photo of the glowworm ceiling: each worm is a point of light, but the 'curtains' are the sticky threads below them, invisible until insects hit them. Then read why the glow is brightest when the worm is hungry — the bioluminescence is a hunting advertisement, not decoration."
+      "instruction": "Dwell on a long-exposure photo of the glowworm ceiling: each worm is a point of light, but the 'curtains' are the sticky threads below them, invisible until insects hit them. Then read why the glow is brightest when the worm is hungry — the bioluminescence is a hunting advertisement, not decoration."
     },
     "tags": [
       "New Zealand",
@@ -1830,7 +1830,7 @@
       "verb": "Explore",
       "targetName": "The Pamukkale travertine terraces + Hierapolis above them",
       "durationMinutes": 5,
-      "instruction": "Look at the terraces from above and note the geometry: each pool is a self-built basin that overflows into the next, the water temperature around 35°C at the source. Then find the Roman theater and the Plutonium — a cave shrine where priests survived the volcanic CO2 that killed animals, using it as proof of divine protection."
+      "instruction": "Scan the terraces from above and note the geometry: each pool is a self-built basin that overflows into the next, the water temperature around 35°C at the source. Then find the Roman theater and the Plutonium — a cave shrine where priests survived the volcanic CO2 that killed animals, using it as proof of divine protection."
     },
     "tags": [
       "Turkey",
@@ -1870,7 +1870,7 @@
       "verb": "Explore",
       "targetName": "Sunrise Point hoodoo field, Bryce Canyon — frost-wedging explanation",
       "durationMinutes": 4,
-      "instruction": "Look at the hoodoo field from Sunrise Point at sunrise — the 'fairy chimneys' change color as the light moves. The mechanism is counterintuitive: it's not wind but ice — water seeps into joints, freezes, expands, and pries the rock apart, erosion working from the top down at about a centimeter per century."
+      "instruction": "Examine the hoodoo field from Sunrise Point at sunrise — the 'fairy chimneys' change color as the light moves. The mechanism is counterintuitive: it's not wind but ice — water seeps into joints, freezes, expands, and pries the rock apart, erosion working from the top down at about a centimeter per century."
     },
     "tags": [
       "USA",
@@ -2070,7 +2070,7 @@
       "verb": "Explore",
       "targetName": "The Intihuatana stone and the mortarless ashlar walls of Machu Picchu",
       "durationMinutes": 10,
-      "instruction": "Look at the dry-stone ashlar walls — no mortar, no gaps, with stones locked by their angles rather than cement. Then find the Intihuatana stone, whose name means 'hitching post of the sun,' carved so that on the equinoxes the sun sits directly above it at noon — the Inca used the site as a solar observatory as much as a city."
+      "instruction": "Peer at the dry-stone ashlar walls — no mortar, no gaps, with stones locked by their angles rather than cement. Then find the Intihuatana stone, whose name means 'hitching post of the sun,' carved so that on the equinoxes the sun sits directly above it at noon — the Inca used the site as a solar observatory as much as a city."
     },
     "tags": [
       "Peru",
@@ -2110,7 +2110,7 @@
       "verb": "Explore",
       "targetName": "The Great Pyramid's base alignment + surviving casing stones",
       "durationMinutes": 13,
-      "instruction": "Look at the pyramid's core blocks near the base, then compare with a surviving casing stone at the base or in the British Museum — the casing was stripped in the Middle Ages for Cairo's buildings. The precision is the wonder: the base is square to within 5.5 cm over 230 meters, and the four sides align to the cardinal points within a fraction of a degree."
+      "instruction": "Follow the pyramid's core blocks near the base, then compare with a surviving casing stone at the base or in the British Museum — the casing was stripped in the Middle Ages for Cairo's buildings. The precision is the wonder: the base is square to within 5.5 cm over 230 meters, and the four sides align to the cardinal points within a fraction of a degree."
     },
     "tags": [
       "Egypt",
@@ -2130,7 +2130,7 @@
       "verb": "Explore",
       "targetName": "The Colosseum hypogeum cross-section — the arena's underground machinery",
       "durationMinutes": 3,
-      "instruction": "Look at a cross-section of the hypogeum — the trapdoors and lifts below the sand floor, operated by a system of pulleys and counterweights. Then count the arches and imagine the ticketing: 80 entrances, each with a number, letting a crowd the size of a modern soccer stadium enter and exit without a crush."
+      "instruction": "Notice a cross-section of the hypogeum — the trapdoors and lifts below the sand floor, operated by a system of pulleys and counterweights. Then count the arches and imagine the ticketing: 80 entrances, each with a number, letting a crowd the size of a modern soccer stadium enter and exit without a crush."
     },
     "tags": [
       "Rome",
@@ -2230,7 +2230,7 @@
       "verb": "Explore",
       "targetName": "The Great Unconformity — the billion-year gap in the canyon walls",
       "durationMinutes": 10,
-      "instruction": "Look at the canyon wall layers on the Bright Angel Trail route: the Tapeats Sandstone at the bottom sits directly on granite, with over a billion years of missing record between them — the Great Unconformity, visible as a clean horizontal line. Then find the Nankoweap Granaries, where ancient Pueblo people stored corn in cliff caves."
+      "instruction": "Examine the canyon wall layers on the Bright Angel Trail route: the Tapeats Sandstone at the bottom sits directly on granite, with over a billion years of missing record between them — the Great Unconformity, visible as a clean horizontal line. Then find the Nankoweap Granaries, where ancient Pueblo people stored corn in cliff caves."
     },
     "tags": [
       "USA",
@@ -2310,7 +2310,7 @@
       "verb": "Explore",
       "targetName": "The Yellowstone caldera map + the continuous prehistoric bison herd",
       "durationMinutes": 25,
-      "instruction": "Look at the caldera map and notice that most of the park's features — the geysers, the hot springs, the mud pots — trace its rim, where the volcanic heat is closest to the surface. Then find the bison: Yellowstone's herd is the only one in the US to have lived continuously on the same land since prehistoric times, surviving the species' near-extinction."
+      "instruction": "Check the caldera map and notice that most of the park's features — the geysers, the hot springs, the mud pots — trace its rim, where the volcanic heat is closest to the surface. Then find the bison: Yellowstone's herd is the only one in the US to have lived continuously on the same land since prehistoric times, surviving the species' near-extinction."
     },
     "tags": [
       "USA",
@@ -2330,7 +2330,7 @@
       "verb": "Explore",
       "targetName": "Strokkur's regular eruptions + the Mid-Atlantic Ridge rift through Iceland",
       "durationMinutes": 10,
-      "instruction": "Look at a map of the Mid-Atlantic Ridge running through Iceland and note the rift valleys, then find the Strokkur geyser — it erupts every 6–10 minutes, unlike its older sibling Geysir which now erupts only after earthquakes. The same heat that powers the geysers runs the country's district heating, an infrastructure choice made since the 1930s."
+      "instruction": "Pause on a map of the Mid-Atlantic Ridge running through Iceland and note the rift valleys, then find the Strokkur geyser — it erupts every 6–10 minutes, unlike its older sibling Geysir which now erupts only after earthquakes. The same heat that powers the geysers runs the country's district heating, an infrastructure choice made since the 1930s."
     },
     "tags": [
       "Iceland",
@@ -2370,7 +2370,7 @@
       "verb": "Explore",
       "targetName": "Hubble's pre/post-COSTAR images + the Pillars of Creation",
       "durationMinutes": 19,
-      "instruction": "Look at the 1990 vs. 1994 images of the same star — the COSTAR fix turned a $1.5 billion paperweight into the most productive observatory in history. Then find the 1995 'Pillars of Creation' image: the pillars are gas columns being eroded by starlight, and the box Hubble pointed at for 34 hours was nearly empty sky."
+      "instruction": "Zero in on the 1990 vs. 1994 images of the same star — the COSTAR fix turned a $1.5 billion paperweight into the most productive observatory in history. Then find the 1995 'Pillars of Creation' image: the pillars are gas columns being eroded by starlight, and the box Hubble pointed at for 34 hours was nearly empty sky."
     },
     "tags": [
       "Space",
@@ -2450,7 +2450,7 @@
       "verb": "Explore",
       "targetName": "A digitized Gutenberg Bible page — printed text + hand-rubricated initials",
       "durationMinutes": 13,
-      "instruction": "Look at a digitized page and notice the two innovations at once: the black text is machine-printed, but the red headings and decorations were added by hand afterward, which is why each copy is unique. Then read why the press mattered: a scribe took a year per Bible; Gutenberg's press could produce the same work in weeks, collapsing the price of a book."
+      "instruction": "Study a digitized page and notice the two innovations at once: the black text is machine-printed, but the red headings and decorations were added by hand afterward, which is why each copy is unique. Then read why the press mattered: a scribe took a year per Bible; Gutenberg's press could produce the same work in weeks, collapsing the price of a book."
     },
     "tags": [
       "History",
@@ -2910,7 +2910,7 @@
       "verb": "Explore",
       "targetName": "The 27 April 1986 evacuation of Pripyat + the fallout map",
       "durationMinutes": 8,
-      "instruction": "Look at the evacuation order's wording: residents were told to leave for 'two or three days' — the buses collected people in under three hours, and the ferris wheel that was scheduled to open for May Day never turned. Then read the dose map of the 1986 fallout and note how far the contamination spread before anyone outside knew."
+      "instruction": "Scan the evacuation order's wording: residents were told to leave for 'two or three days' — the buses collected people in under three hours, and the ferris wheel that was scheduled to open for May Day never turned. Then read the dose map of the 1986 fallout and note how far the contamination spread before anyone outside knew."
     },
     "tags": [
       "Ukraine",
@@ -2930,7 +2930,7 @@
       "verb": "Explore",
       "targetName": "The dragon's blood tree canopies of Socotra",
       "durationMinutes": 11,
-      "instruction": "Look at the dragon's blood trees' umbrella canopies — the shape catches fog, channeling moisture to the roots in an almost rainless climate. Then read why the resin was valuable: 'dragon's blood' was used as a varnish, a dye, and a medicine across the ancient world, and the island was a stop on the incense trade routes."
+      "instruction": "Start with the dragon's blood trees' umbrella canopies — the shape catches fog, channeling moisture to the roots in an almost rainless climate. Then read why the resin was valuable: 'dragon's blood' was used as a varnish, a dye, and a medicine across the ancient world, and the island was a stop on the incense trade routes."
     },
     "tags": [
       "Yemen",
@@ -2990,7 +2990,7 @@
       "verb": "Explore",
       "targetName": "The Great Blue Hole's stalactite evidence + the hydrogen-sulfide layer",
       "durationMinutes": 20,
-      "instruction": "Look at the satellite image and read why it's circular: it was a dry cave system whose roof collapsed, and stalactites found at depth prove it was above water during the last ice age, when the sea was about 120 meters lower. The deep layers below 90 meters hold hydrogen sulfide, so dense that divers report a 'milky river' at the boundary — no diving below that line."
+      "instruction": "Focus on the satellite image and read why it's circular: it was a dry cave system whose roof collapsed, and stalactites found at depth prove it was above water during the last ice age, when the sea was about 120 meters lower. The deep layers below 90 meters hold hydrogen sulfide, so dense that divers report a 'milky river' at the boundary — no diving below that line."
     },
     "tags": [
       "Belize",
@@ -3030,7 +3030,7 @@
       "verb": "Explore",
       "targetName": "The sandstone pillars of Zhangjiajie (the Avatar inspiration)",
       "durationMinutes": 9,
-      "instruction": "Look at the pillar geometry: the quartz-sandstone columns formed because the rock's vertical fractures channeled rainwater erosion, leaving towers behind — the 'stone forest' is a landscape in slow collapse. Then find the glass elevator and the 430-meter glass bridge: the park's engineering is as vertical as its geology."
+      "instruction": "Check the pillar geometry: the quartz-sandstone columns formed because the rock's vertical fractures channeled rainwater erosion, leaving towers behind — the 'stone forest' is a landscape in slow collapse. Then find the glass elevator and the 430-meter glass bridge: the park's engineering is as vertical as its geology."
     },
     "tags": [
       "China",
@@ -3050,7 +3050,7 @@
       "verb": "Explore",
       "targetName": "The midday light beams of Antelope Canyon + the 1997 flood",
       "durationMinutes": 28,
-      "instruction": "Look at the canyon from inside, where the light shafts are most visible around noon — the beams are dust and air, not the rock, which is why guides kick up sand to 'create' them for photos. Then read the 1997 flash-flood disaster: eleven hikers died when a storm miles away sent a wall of water through the narrow canyon with no warning."
+      "instruction": "Pause on the canyon from inside, where the light shafts are most visible around noon — the beams are dust and air, not the rock, which is why guides kick up sand to 'create' them for photos. Then read the 1997 flash-flood disaster: eleven hikers died when a storm miles away sent a wall of water through the narrow canyon with no warning."
     },
     "tags": [
       "USA",

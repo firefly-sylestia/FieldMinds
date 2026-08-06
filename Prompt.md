@@ -330,3 +330,16 @@ corrected category-specific tags, proper subtype (Sculpture/Installation/
 Photograph/Textile/Manuscript overrides where apt). Dup-checked display
 names and ids; validate_topics 0 errors across 2112 topics. Committed &
 pushed per batch.
+
+## v7.49 — kill the repetitive "Look at the…" instruction opener (user: "that's so bad")
+
+User flagged that every artwork-batch instruction opened with "Look at the…" —
+343 entries across artworks/painters/discoveries/wildcard read identically.
+Fix (scripts/vary_lookat_openers.py): rewrote the opener phrase with an 18-
+item pool (Focus on / Start with / Zero in on / Study / Notice / Consider /
+Check / Examine / Fix on / Pause on / Turn to / Single out / Follow / Pick
+out / Peer at / Dwell on / Scan), shuffled per-file and indexed so no two
+consecutive entries share an opener. Only the opening phrase changed; each
+instruction body preserved. Trimmed 3 entries that exceeded the 450-char cap
+under longer openers. Result: 0 "Look at the" openers remain, 1 adjacent
+repeat in 2,262 topics, validate_topics 0 errors.

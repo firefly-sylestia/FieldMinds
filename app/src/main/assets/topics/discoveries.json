@@ -54,7 +54,7 @@
       "verb": "Read",
       "targetName": "LIGO's 2016 detection paper (Phys. Rev. Lett.)",
       "durationMinutes": 30,
-      "instruction": "Look at the data plots on page 2. The signal is visible to your eye — a 0.2-second chirp rising in frequency. Then read the timing: the signal was detected 7 milliseconds before the Louisiana detector and the Washington detector independently confirmed it."
+      "instruction": "Notice the data plots on page 2. The signal is visible to your eye — a 0.2-second chirp rising in frequency. Then read the timing: the signal was detected 7 milliseconds before the Louisiana detector and the Washington detector independently confirmed it."
     },
     "tags": [
       "Physics",
@@ -535,7 +535,7 @@
       "verb": "Explore",
       "targetName": "Vorderasiatisches Museum Berlin (Mesopotamian collection)",
       "durationMinutes": 45,
-      "instruction": "Look at the wheel-shaped clay tokens from the Uruk period (~4000 BCE). They're not transport — they're counters. The first 'wheel' was a step in writing; the second was for transport. The order is what makes this hard to believe."
+      "instruction": "Zero in on the wheel-shaped clay tokens from the Uruk period (~4000 BCE). They're not transport — they're counters. The first 'wheel' was a step in writing; the second was for transport. The order is what makes this hard to believe."
     },
     "tags": [
       "Invention",
@@ -556,7 +556,7 @@
       "verb": "Explore",
       "targetName": "Gutenberg Museum, Mainz",
       "durationMinutes": 60,
-      "instruction": "Look at the two-page Gutenberg Bible on display. Each letter was hand-set, hand-inked, hand-pressed. The shop could produce 250 pages a day. Now try to imagine being a 1455 reader seeing one for the first time — the world had no reference for moving text."
+      "instruction": "Turn to the two-page Gutenberg Bible on display. Each letter was hand-set, hand-inked, hand-pressed. The shop could produce 250 pages a day. Now try to imagine being a 1455 reader seeing one for the first time — the world had no reference for moving text."
     },
     "tags": [
       "Invention",
@@ -892,7 +892,7 @@
       "verb": "Explore",
       "targetName": "The 1971 first CT image vs. a modern head scan",
       "durationMinutes": 10,
-      "instruction": "Look at the first CT image — a cyst in a woman's brain, rendered as a grid of numbers — and compare it with a modern scan: the improvement is in resolution, not principle. Then read how the machine worked: an X-ray source rotated around the head taking slice-by-slice readings, and a computer solved the equations to reconstruct the slice, an idea Hounsfield had while wondering how to map the contents of a box without opening it."
+      "instruction": "Start with the first CT image — a cyst in a woman's brain, rendered as a grid of numbers — and compare it with a modern scan: the improvement is in resolution, not principle. Then read how the machine worked: an X-ray source rotated around the head taking slice-by-slice readings, and a computer solved the equations to reconstruct the slice, an idea Hounsfield had while wondering how to map the contents of a box without opening it."
     },
     "tags": [
       "Medicine",
@@ -1039,7 +1039,7 @@
       "verb": "Explore",
       "targetName": "The 2019 M87* image + the EHT data-combining process",
       "durationMinutes": 14,
-      "instruction": "Look at the image's structure: the bright orange ring is not the black hole itself but the glowing gas falling into it, lensed by gravity into a circle — the 'photon ring.' Then read how the image was made: each observatory recorded petabytes of data, which was physically shipped on hard drives (the internet was too slow) and combined in a computer to synthesize an Earth-sized aperture."
+      "instruction": "Single out the image's structure: the bright orange ring is not the black hole itself but the glowing gas falling into it, lensed by gravity into a circle — the 'photon ring.' Then read how the image was made: each observatory recorded petabytes of data, which was physically shipped on hard drives (the internet was too slow) and combined in a computer to synthesize an Earth-sized aperture."
     },
     "tags": [
       "Astronomy",
@@ -1165,7 +1165,7 @@
       "verb": "Explore",
       "targetName": "The 2000 ribosome structures — the Nobel-winning crystallography",
       "durationMinutes": 14,
-      "instruction": "Look at a ribbon diagram of the ribosome and notice its two halves — the small subunit that reads the genetic code and the large subunit that stitches amino acids together. Then read about Yonath's perseverance: she crystallized ribosomes from heat-loving bacteria that survive in hot springs, because their ribosomes are robust enough to form crystals."
+      "instruction": "Focus on a ribbon diagram of the ribosome and notice its two halves — the small subunit that reads the genetic code and the large subunit that stitches amino acids together. Then read about Yonath's perseverance: she crystallized ribosomes from heat-loving bacteria that survive in hot springs, because their ribosomes are robust enough to form crystals."
     },
     "tags": [
       "Biology",
@@ -1270,7 +1270,7 @@
       "verb": "Explore",
       "targetName": "The full Keeling Curve — the sawtooth and the rising baseline",
       "durationMinutes": 11,
-      "instruction": "Look at the full curve and separate the two signals: the annual sawtooth is the Earth's breathing, and the rising baseline is fossil-fuel emissions accumulating in the atmosphere. Then read why Keeling chose Mauna Loa: at 3,400 meters in the Pacific, the air is well-mixed and far from local sources, making the record a measure of the whole planet, not one country."
+      "instruction": "Start with the full curve and separate the two signals: the annual sawtooth is the Earth's breathing, and the rising baseline is fossil-fuel emissions accumulating in the atmosphere. Then read why Keeling chose Mauna Loa: at 3,400 meters in the Pacific, the air is well-mixed and far from local sources, making the record a measure of the whole planet, not one country."
     },
     "tags": [
       "Climate",
@@ -1373,7 +1373,7 @@
       "verb": "Explore",
       "targetName": "The Gutenberg 42-line Bible + the spread of printing 1450–1500",
       "durationMinutes": 10,
-      "instruction": "Look at a Gutenberg Bible page and notice what printing changed: identical text in identical type, produced in weeks instead of a year per copy. Then read the numbers of the press's spread — printing shops appeared in 255 cities within 50 years, and the price of books collapsed — and consider the argument that the press's real product was not books but standardization: identical texts made shared arguments possible at continental scale."
+      "instruction": "Peer at a Gutenberg Bible page and notice what printing changed: identical text in identical type, produced in weeks instead of a year per copy. Then read the numbers of the press's spread — printing shops appeared in 255 cities within 50 years, and the price of books collapsed — and consider the argument that the press's real product was not books but standardization: identical texts made shared arguments possible at continental scale."
     },
     "tags": [
       "History",
