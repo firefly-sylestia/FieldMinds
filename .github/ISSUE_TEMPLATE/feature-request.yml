@@ -1,59 +1,84 @@
-name: Feature Request
-description: Used for requesting features taking into account the complexity to implement
-title: "[FEATURE]: "
-labels: ["feature request"]
-assignees: ["cromaguy"]
+name: Feature request
+description: Suggest an improvement to Curio's discovery, capture, or library experience
+title: "[Feature]: "
+labels:
+  - enhancement
 body:
-  - type: textarea
-    id: summary
+  - type: markdown
     attributes:
-      label: Feature Summary
-      description: A brief description of the feature you'd like to see.
+      value: |
+        Curio is designed around discovering a topic, exploring it in the real world, and keeping the result in The Cabinet. Explain how your idea improves that loop.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user problem, friction, or unmet need should Curio address?
+      placeholder: When I am trying to…, it is difficult to…
     validations:
       required: true
 
   - type: textarea
-    id: use_case
+    id: proposal
     attributes:
-      label: Problem/Use Case
-      description: What problem does this feature solve? What use case does it address?
-    validations:
-      required: true
-
-  - type: textarea
-    id: solution
-    attributes:
-      label: Proposed Solution
-      description: Describe your proposed solution in detail.
+      label: Proposed experience
+      description: Describe what the user should be able to do and where it belongs in the app.
+      placeholder: |
+        The user opens…
+        They can then…
+        The result appears in…
     validations:
       required: true
 
   - type: dropdown
-    id: complexity
+    id: area
     attributes:
-      label: Estimated Complexity
-      description: Based on your understanding, how complex is this to implement?
+      label: Product area
       options:
-        - Low (Minor UI tweak / Simple logic)
-        - Medium (New UI component / Moderate logic)
-        - High (Major architectural change / Complex logic)
+        - Home and navigation
+        - Spin and discovery
+        - Topic data and categories
+        - Capture and editing
+        - Cabinet and search
+        - Entry detail
+        - Profile, Settings, or Experiments
+        - Backup, restore, or accessibility
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Expected scope
+      description: Your estimate is only a starting point; maintainers will decide the final scope.
+      options:
+        - Small polish or interaction improvement
+        - New screen or capture capability
+        - Topic data or category expansion
+        - Larger architectural change
         - Not sure
+    validations:
+      required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternative Solutions
-      description: Describe any alternative solutions or features you've considered.
+      label: Alternatives considered
+      description: What workarounds or other approaches have you tried?
 
   - type: textarea
-    id: context
+    id: references
     attributes:
-      label: Additional Context
-      description: Add any other context, screenshots, or examples that might help illustrate the feature.
+      label: Examples and references
+      description: Add sketches, screenshots, links, or examples from other apps. Do not include copyrighted material you do not have permission to share.
 
-  - type: textarea
-    id: implementation_notes
+  - type: checkboxes
+    id: checks
     attributes:
-      label: Implementation Notes
-      description: If you have thoughts on how this could be implemented, feel free to share them.
-      render: markdown
+      label: Before submitting
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: This request is about Curio rather than a general Android feature.
+          required: true

@@ -1,96 +1,125 @@
-name: Bug Report
-description: Used for reporting issues faced by users and want them addressed
-title: "[BUG]: "
-labels: ["bug"]
-assignees: ["cromaguy"]
+name: Bug report
+description: Report a reproducible problem in the Curio Android app
+title: "[Bug]: "
+labels:
+  - bug
 body:
   - type: markdown
     attributes:
-      value: "## FAILURE TO COMPLETE THE BUG REPORT WILL RESULT IN YOUR ISSUE BEING DROPPED!"
+      value: |
+        Thanks for helping improve Curio. Please remove private data, account details, API keys, and unrelated personal information from screenshots and logs.
+
   - type: textarea
-    id: description
+    id: summary
     attributes:
-      label: Bug Description
-      description: A clear and concise description of the bug.
+      label: What went wrong?
+      description: Describe the problem and what you were trying to do.
+      placeholder: Curio shows… when I…
     validations:
       required: true
 
   - type: textarea
-    id: reproduction
+    id: steps
     attributes:
-      label: Steps to Reproduce
-      description: Tell us how to see the error.
+      label: Steps to reproduce
+      description: Give the smallest reliable sequence that triggers the problem.
       placeholder: |
-        1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
-        4. See error
+        1. Open…
+        2. Tap…
+        3. Enter…
+        4. Observe…
     validations:
       required: true
 
   - type: textarea
-    id: behavior
+    id: expected
     attributes:
-      label: Expected vs Actual Behavior
-      description: What did you expect to happen, and what happened instead?
-      placeholder: |
-        Expected: ...
-        Actual: ...
+      label: Expected behavior
+      description: What should Curio have done?
     validations:
       required: true
 
-  - type: markdown
+  - type: textarea
+    id: actual
     attributes:
-      value: "---"
+      label: Actual behavior
+      description: What happened instead? Include any visible error message.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of Curio
+      description: Which part of the app is affected?
+      options:
+        - Home
+        - Spin and topic reveal
+        - Capture and editing
+        - Cabinet and search
+        - Entry detail
+        - Profile and Settings
+        - Backup and restore
+        - Audio or voice notes
+        - Other
+    validations:
+      required: true
 
   - type: input
     id: app_version
     attributes:
-      label: App Version
-      placeholder: "e.g., 4.2.334.905-gh"
+      label: Curio version
+      description: Find this in Settings → About, or in the crash report header.
+      placeholder: 1.0.0 (20260804)
     validations:
       required: true
 
   - type: input
     id: android_version
     attributes:
-      label: Android Version
-      placeholder: "e.g., Android 13"
+      label: Android version
+      placeholder: Android 16
+    validations:
+      required: true
 
   - type: input
     id: device
     attributes:
-      label: Device
-      placeholder: "e.g., Samsung Galaxy S23 or FiiO M21"
+      label: Device model
+      placeholder: Samsung Galaxy A56
+    validations:
+      required: true
 
   - type: dropdown
-    id: install_method
+    id: install_source
     attributes:
-      label: Installation Method
+      label: Install source
       options:
-        - GitHub Releases
-        - IzzyOnDroid
-        - F-Droid
-        - Manual Build (Source)
+        - GitHub release APK
+        - Local debug build
         - Other
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional Context
-      description: |
-        - When did this start happening?
-        - Does this happen consistently?
-        - Any recent changes to your device/setup?
+    validations:
+      required: true
 
   - type: textarea
     id: logs
     attributes:
-      label: Logs
-      description: If applicable, include relevant log output or error messages.
+      label: Logs or crash report
+      description: Paste the relevant section only, with private information removed.
       render: shell
 
   - type: textarea
     id: screenshots
     attributes:
-      label: Attach screenshots here if necessary.
+      label: Screenshots or screen recording
+      description: Drag images or a short recording here if they make the problem clearer.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: I removed private or sensitive information from this report.
+          required: true

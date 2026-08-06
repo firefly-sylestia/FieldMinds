@@ -72,3 +72,14 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Removed the old archive-import/history wording and any FieldMind, Rhythm, or legacy product references from the README.
 - Marked Gradle build and schema tasks as CI-only so the README matches the repository's no-local-Gradle rule; retained `python3 scripts/validate_topics.py` as the local content check.
 - Validation: README assertions passed, standalone topic validation passed for 11 files and 2,312 topics with zero errors, and `git diff --check` is clean. No Gradle command run.
+
+## v7.61 — rewrite GitHub templates and workflows for Curio
+
+- Replaced the stale bug form with a Curio-specific Android report covering reproduction, affected area, versions, logs, and sanitized screenshots.
+- Replaced the feature form with a discovery/capture/library-focused request form and removed the old assignee and unrelated install options.
+- Rewrote the pull-request template around Curio experience, UI/data/persistence impact, validation, visual evidence, permissions, and reviewer checks.
+- Replaced branch CI with a focused Curio workflow that runs standalone topic validation, `lintDebug`, Gradle topic validation, and `assembleDebug`, then uploads reports and the debug APK.
+- Replaced release automation with a tag-only signed release workflow; it requires all four signing secrets, rejects debug-signed APKs, and publishes only the tagged release APK.
+- Updated `.github/AGENTS.md` to document the new triggers, checks, artifacts, templates, and signing contract.
+- Added explicit Android platform API 37 and build-tools 35.0.0 installation to both workflows so CI does not depend on runner-image defaults.
+- Validation: all GitHub YAML files parsed successfully, structure assertions passed, no stale product references or tracked signing artifacts remain, and `git diff --check` is clean. No Gradle command run.

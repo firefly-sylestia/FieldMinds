@@ -3,4 +3,5 @@
 • Compact Paper/Style/Color editing controls
 • Redesigned Profile, Settings, and Experiments
 • Smart Density labels compile-proof
-• Removed obsolete legacy Android, web, wiki, docs, assets, and package files; Curio source, topic data, scripts, and archive import support remain intact
+• Rewrote GitHub issue, feature, and pull-request templates for Curio
+• Rebuilt CI and release workflows with focused validation and mandatory release signing

@@ -1,33 +1,52 @@
-## Description
-Brief description of the changes made in this PR.
+## Summary
 
-## Type of Change
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Code style update (formatting, renaming)
-- [ ] Refactoring (no functional changes)
-- [ ] Performance improvement
-- [ ] Testing update
+<!-- What changed, and why? Link the issue with `Fixes #123` or `Related to #123` when applicable. -->
 
-## How Has This Been Tested?
-- [ ] Unit tests
-- [ ] Integration tests
-- [ ] Manual testing on device/emulator
-- [ ] Tested on multiple Android versions
+## Change type
 
-## Checklist
-- [ ] My code follows the project's coding standards
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have tested that my changes work as expected
-- [ ] Any dependent changes have been merged and published
+- [ ] Bug fix
+- [ ] User-facing feature or interaction
+- [ ] UI/visual refinement
+- [ ] Topic data/content change
+- [ ] Persistence, backup, or migration change
+- [ ] Build, CI, or release change
+- [ ] Documentation or repository maintenance
+- [ ] Refactor with no intended behavior change
 
-## Screenshots (if applicable)
-Add screenshots to show visual changes.
+## Curio experience
 
-## Additional Notes
-Any additional information or context about this PR.
+<!-- Which screen, route, capture format, topic catalog, or workflow is affected? -->
+
+## What changed
+
+<!-- List the important implementation details and any intentional behavior changes. -->
+
+## Validation
+
+- [ ] I ran `python3 scripts/validate_topics.py` when topic data was affected.
+- [ ] I ran relevant safe static checks.
+- [ ] I tested the affected flow on an Android device or emulator.
+- [ ] I checked loading, empty, error, and long-content states where relevant.
+- [ ] I verified the change does not remove existing content or user data unexpectedly.
+- [ ] CI will run the required Gradle lint, validation, and debug build checks.
+
+> Local Gradle compile, build, lint, and test commands are intentionally not run in this repository workspace; GitHub Actions is the build source of truth.
+
+## Visual evidence
+
+<!-- Add before/after screenshots or a short recording for UI or interaction changes. Remove this section if not applicable. -->
+
+## Data, permissions, and release notes
+
+- [ ] No new permission, storage, network, analytics, or tracking behavior.
+- [ ] Any new permission or behavior is explained here: <!-- details -->
+- [ ] Backup/restore compatibility was considered where data models changed.
+- [ ] User-visible release notes are updated when needed.
+
+## Reviewer checklist
+
+- [ ] The implementation follows the nearest `AGENTS.md` contract.
+- [ ] I read the diff as a reviewer and removed debug logs or generated files.
+- [ ] The change is scoped to the stated problem.
+- [ ] New settings or experiments are discoverable and follow the project's toggle rules.
+- [ ] No secrets, signing files, or private data are included.

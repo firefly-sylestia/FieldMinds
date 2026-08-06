@@ -1,52 +1,55 @@
-name: Build Release APK
+name: Curio Release
 
 on:
   push:
-    tags: [ 'v*' ]
+    tags: ['v*']
 
 permissions:
   contents: write
 
+concurrency:
+  group: curio-release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  build:
+  release:
+    name: Build and publish signed release APK
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
     steps:
-      - uses: actions/checkout@v5
+      - name: Check out Curio
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - name: set up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
+          distribution: temurin
           java-version: '17'
-          distribution: 'zulu'
-          cache: gradle
 
-      - name: Setup Android SDK
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Android SDK 37 and build-tools
         run: |
-          ANDROID_HOME=/usr/local/lib/android/sdk
-          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
-          # Find sdkmanager (handle versioned cmdline-tools dirs)
-          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name 'sdkmanager' -type f 2>/dev/null | head -1)
-          if [ -n "$SDKMANAGER" ]; then
-            yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+          set -euo pipefail
+          android_home="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          sdkmanager=$(find "$android_home/cmdline-tools" -type f -name sdkmanager 2>/dev/null | sort -V | tail -n 1)
+          if [ -z "$sdkmanager" ]; then
+            echo "::error::Android sdkmanager was not found."
+            exit 1
           fi
+          yes | "$sdkmanager" --sdk_root="$android_home" --licenses >/dev/null 2>&1 || true
+          "$sdkmanager" --sdk_root="$android_home" "platforms;android-37" "build-tools;35.0.0"
+          test -d "$android_home/platforms/android-37"
+          test -x "$android_home/build-tools/35.0.0/apksigner"
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      # Uses the repository's Curio release keystore.
-      # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
-      # app/build.gradle.kts reads these env vars at build time and signs the
-      # release APK with them when all four are present; otherwise falls back
-      # to debug signing.
-      #
-      # Release builds MUST be signed with the official keystore. If any secret
-      # is missing, this workflow FAILS rather than silently falling back to
-      # debug signing (which produces a different signature on every runner).
-
-      - name: Verify signing secrets are configured
+      - name: Require release signing secrets
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -55,96 +58,73 @@ jobs:
         run: |
           set -euo pipefail
           missing=()
-          if [ -z "$KEYSTORE_BASE64" ]; then missing+=("KEYSTORE_BASE64"); fi
-          if [ -z "$KEYSTORE_PASSWORD" ]; then missing+=("KEYSTORE_PASSWORD"); fi
-          if [ -z "$KEY_ALIAS" ]; then missing+=("KEY_ALIAS"); fi
-          if [ -z "$KEY_PASSWORD" ]; then missing+=("KEY_PASSWORD"); fi
+          [ -n "$KEYSTORE_BASE64" ] || missing+=(KEYSTORE_BASE64)
+          [ -n "$KEYSTORE_PASSWORD" ] || missing+=(KEYSTORE_PASSWORD)
+          [ -n "$KEY_ALIAS" ] || missing+=(KEY_ALIAS)
+          [ -n "$KEY_PASSWORD" ] || missing+=(KEY_PASSWORD)
           if [ "${#missing[@]}" -gt 0 ]; then
-            echo "::error::Missing signing secrets: ${missing[*]}"
-            echo ""
-            echo "Release APKs must be signed with the official keystore."
-            echo "Configure all 4 secrets in repo Settings > Secrets and variables > Actions:"
-            echo "  - KEYSTORE_BASE64   (base64-encoded .jks / .keystore file)"
-            echo "  - KEYSTORE_PASSWORD  (keystore password)"
-            echo "  - KEY_ALIAS          (key alias inside the keystore)"
-            echo "  - KEY_PASSWORD       (key password)"
-            echo ""
-            echo "To encode your keystore: base64 -w 0 your-release-key.jks | pbcopy"
+            echo "::error::Missing release signing secrets: ${missing[*]}"
+            echo "Configure KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, and KEY_PASSWORD in repository Actions secrets."
             exit 1
           fi
-          echo "✅ All 4 signing secrets are configured"
 
-      - name: Decode keystore from secrets
+      - name: Decode release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
           set -euo pipefail
-          # Strip whitespace before base64-decode in case the secret was
-          # pasted with line breaks — base64 ignores whitespace but some
-          # implementations refuse mid-pipeline newlines.
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > release.keystore
-          # Verify the decoded file is a valid keystore (non-empty, > 100 bytes)
-          file_size=$(wc -c < release.keystore)
-          if [ "$file_size" -lt 100 ]; then
-            echo "::error::Decoded keystore is only $file_size bytes — likely corrupt or empty. Re-encode your .jks file with: base64 -w 0 your-release-key.jks"
+          printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode > release.keystore
+          size=$(wc -c < release.keystore)
+          if [ "$size" -lt 100 ]; then
+            echo "::error::Decoded release keystore is unexpectedly small (${size} bytes)."
             exit 1
           fi
-          echo "✅ Keystore decoded ($file_size bytes)"
+          echo "Release keystore decoded (${size} bytes)."
 
-      - name: Build release universal APK
+      - name: Build signed release APK
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --stacktrace
+        run: ./gradlew validateTopics assembleRelease --stacktrace
 
-      - name: Verify APK outputs and signature
+      - name: Verify release APK and signature
         run: |
           set -euo pipefail
-          ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
-          echo "=== APK outputs ==="
-          find app/build/outputs/apk -type f -name '*.apk' -print || true
-          release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
-          if [ -z "$release_apk" ]; then
-            unsigned_found=$(find app/build/outputs/apk/release -type f -name '*-unsigned.apk' 2>/dev/null | head -1 || true)
-            if [ -n "$unsigned_found" ]; then
-              echo "::error::Found an unsigned APK at $unsigned_found but no signed APK. Add a signing config to app/build.gradle.kts."
-            else
-              echo "::error::No release APK found at app/build/outputs/apk/release/. Build may have failed."
-            fi
+          apk=$(find app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' ! -name '*-unsigned.apk' | head -n 1)
+          if [ -z "$apk" ]; then
+            echo "::error::No signed release APK was produced."
             exit 1
           fi
-          echo "✅ Release APK: $release_apk"
-          # Verify the APK is signed (apksigner is bundled with Android SDK build-tools)
-          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name 'apksigner' -type f 2>/dev/null | sort -V | tail -1)
-          if [ -n "$APKSIGNER" ]; then
-            echo ""
-            echo "=== APK signature verification ==="
-            "$APKSIGNER" verify --print-certs "$release_apk"
-            # Check it's NOT signed with the Android debug key (CN=Android Debug)
-            if "$APKSIGNER" verify --print-certs "$release_apk" 2>&1 | grep -q "CN=Android Debug"; then
-              echo "::error::APK is signed with the DEBUG key (CN=Android Debug). This means the release keystore was NOT used. Check that all 4 signing secrets are correctly configured."
-              exit 1
-            fi
-            echo ""
-            echo "✅ APK is signed with the release keystore (not debug)"
-          else
-            echo "⚠️  apksigner not found — skipping signature verification"
+          echo "Release APK: $apk"
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          apksigner="$sdk_root/build-tools/35.0.0/apksigner"
+          if [ -z "$apksigner" ]; then
+            echo "::error::Android build-tools apksigner was not found."
+            exit 1
+          fi
+          "$apksigner" verify --print-certs "$apk"
+          if "$apksigner" verify --print-certs "$apk" 2>&1 | grep -q 'CN=Android Debug'; then
+            echo "::error::Release APK is signed with the Android debug key."
+            exit 1
           fi
 
-      - name: Set prerelease flag
+      - name: Determine prerelease status
         id: prerelease
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
-          TAG="${{ github.ref_name }}"
           if [[ "$TAG" == *alpha* || "$TAG" == *beta* || "$TAG" == *rc* ]]; then
-            echo "value=true" >> $GITHUB_OUTPUT
+            echo 'value=true' >> "$GITHUB_OUTPUT"
           else
-            echo "value=false" >> $GITHUB_OUTPUT
+            echo 'value=false' >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Github Release
+      - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
           prerelease: ${{ steps.prerelease.outputs.value }}
           generate_release_notes: true
-          files: |
-            app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/release/*.apk
+          fail_on_unmatched_files: true
