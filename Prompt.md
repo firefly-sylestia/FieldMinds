@@ -212,3 +212,22 @@ content, raised the schema cap everywhere to 450:
 Validation now passes CLEAN: 1962 topics across 11 files, 0 errors (bonus:
 cleared the 486 pre-existing over-280 errors that had been piling up in
 albums/artists/etc. since the earlier rich batches). Committed & pushed.
+
+## (v7.46) fake-teaser cleanup — audit + wildcard batch 1/3 (40 entries)
+Audited all 11 topic files for template-generated entries (boilerplate teasers
+"Often cited but rarely fully understood…", "Hiding in plain sight…", etc.).
+Remaining fake counts: wildcard 118, books 106, discoveries 87, painters 77,
+directors 73, films 67, artists 1 (albums/artworks/authors/scientists CLEAN).
+User wants file-by-file cleanup in batches of 30–40.
+
+Batch 1: scripts/batch_wildcard_1.py — 40 wildcard entries (ids 115–154:
+KonMari, Bullet Journal, Voynich, Nazca, Terracotta, Angkor Wat, Moai,
+Chichén Itzá, Great Wall, Forbidden City, Sagrada, Golden Gate, Northern
+Lights, Victoria Falls, Reef, Sahara, Yosemite, Galápagos, Seed Vault, LHC,
+JWST, Voyager 1, Dead Sea Scrolls, Bayeux, Magna Carta, Constitution, Turing
+Test, Butterfly Effect, Placebo, Lucid Dreaming, Uncanny Valley, Fibonacci,
+Alexandria, Atlantis, Bermuda Triangle, Tunguska, Taos Hum, Roanoke). Each got:
+real teaser (quirky verifiable fact), specific targetName (archive/museum/
+simulation/photograph), quality-bar instruction, real 2–3 tags (was placeholder
+pairs like Oddity|Historical), and a proper subtype (Artifact/Site/Practice/
+Event/… was blanket "Curiosity"). Validation 0 errors; committed per-batch.
