@@ -644,17 +644,18 @@
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
     "name": "Ikebana",
-    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "teaser": "Ikebana — the Japanese art of arranging flowers — is closer to sculpture than decoration: the rules dictate the angles of stems (heaven, earth, and man), and a single branch can be a complete composition. The oldest school, Ikenobō, traces itself back 550 years to a Kyoto temple priest.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Ikebana",
+      "targetName": "Try arranging 3 stems at 0°/40°/75° — heaven, earth, man",
       "durationMinutes": 21,
-      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+      "instruction": "The key difference from Western bouquets: ikebana is about empty space as much as flowers — the stems create lines that the eye travels, and the arrangement is meant to be viewed from the front, like a painting. Try a simple exercise: take three stems and arrange them at 0°, 40°, and 75° from vertical, then photograph the result. The art's philosophy comes from Zen: arranging flowers is a meditation where the goal is restraint, not abundance."
     },
     "tags": [
-      "Tradition",
-      "Cultural"
+      "Practice",
+      "Japanese",
+      "Art"
     ],
     "tier": 2
   },
@@ -663,17 +664,18 @@
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
     "name": "Wabi-Sabi",
-    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "teaser": "Wabi-sabi is the Japanese aesthetic of imperfection — the cracked tea bowl repaired with gold, the faded leaf, the weathered wall — and it's the opposite of the Western ideal of flawless symmetry. The concept is deliberately hard to define: it's a feeling about time, wear, and the beauty of things that have lived.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wabi-Sabi",
+      "targetName": "Find 3 worn objects around you and look at them as wabi-sabi",
       "durationMinutes": 21,
-      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+      "instruction": "The best way to understand wabi-sabi is to find it: look for the chipped cup you still use, the weathered wooden table, the crack in the wall you've stopped noticing. Japanese tea masters prized bowls with flaws and even named their favorite cracks; the repair technique kintsugi uses gold to make the break part of the object's history rather than hide it."
     },
     "tags": [
-      "Mystery",
-      "Global"
+      "Philosophy",
+      "Japanese",
+      "Aesthetic"
     ],
     "tier": 2
   },
@@ -682,17 +684,18 @@
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
     "name": "Lagom",
-    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "teaser": "Lagom is the Swedish word for 'just the right amount' — not too much, not too little — and it's the cultural operating system of a country that prizes moderation. The word may come from the old Norse phrase 'laget om,' meaning 'according to the law,' and Swedes use it for everything from coffee to furniture to work-life balance.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Lagom",
+      "targetName": "Spend a day asking 'what is the lagom amount?' of everything",
       "durationMinutes": 19,
-      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+      "instruction": "Lagom is less a rule than a reflex: the Swedes' famous fika (coffee break with something sweet) is lagom applied to work — a pause that's neither stingy nor excessive. Notice how the concept shows up in design (IKEA's clean functionalism), in law (Sweden's strong workers' rights), and in the national allergy to bragging. The interesting question: does 'just right' become a pressure of its own?"
     },
     "tags": [
-      "Mystery",
-      "Global"
+      "Philosophy",
+      "Swedish",
+      "Culture"
     ],
     "tier": 2
   },
@@ -701,17 +704,18 @@
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
     "name": "Sisu",
-    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "teaser": "Sisu is the Finnish concept of extraordinary perseverance — the ability to keep going when all rational reasons to continue are gone. Finland's national identity is built on it: it's the word used for the winter war against the Soviet Union, for the sauna-then-ice-bath tradition, and for the athlete who collapses at the finish line.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Sisu",
+      "targetName": "The Winter War (1939-40) — Finland's national test of sisu",
       "durationMinutes": 6,
-      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+      "instruction": "The key distinction: sisu is not stubbornness — it's a calm determination that kicks in when resources run out. Finns use it for extreme endurance feats (the 100 km ski, the ice swim) but also for everyday life: it's the quiet national answer to Nordic lagom's moderation. There's even a word for the extra reserve, 'sisukas,' meaning someone with a deep well of it."
     },
     "tags": [
-      "Mystery",
-      "Global"
+      "Philosophy",
+      "Finnish",
+      "Culture"
     ],
     "tier": 2
   },

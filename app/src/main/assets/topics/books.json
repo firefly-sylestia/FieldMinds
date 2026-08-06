@@ -865,18 +865,19 @@
     "categoryId": "BOOKS",
     "subtype": "Book",
     "name": "The Godfather (1969)",
-    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "teaser": "Mario Puzo was 45, broke, and drowning in gambling debt when he wrote it — 'I was 45 years old and tired of being an artist.' He sold the movie rights for $12,500 before the book even hit shelves, and the novel spent 67 weeks on the bestseller list while the film he'd half-joked about became the greatest in Hollywood history.",
     "imageUrl": "",
     "byline": "Mario Puzo",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "The Godfather (1969)",
+      "targetName": "The Godfather (1969) — the opening wedding and the baptism finale",
       "durationMinutes": 40,
-      "instruction": "Notice how the author uses imagery to make you feel nostalgic without saying it directly."
+      "instruction": "Read the opening wedding scene. Puzo's trick is that the violence happens off-screen — you hear about the horse's head and Sonny's beating through dialogue. Notice how the book's first chapter establishes the family's rule ('never go against the family') through ceremony, not shooting."
     },
     "tags": [
       "Classic",
-      "19th Century"
+      "Crime",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -885,18 +886,19 @@
     "categoryId": "BOOKS",
     "subtype": "Book",
     "name": "Fear and Loathing in Las Vegas (1971)",
-    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "teaser": "Hunter S. Thompson wrote it in a rented room in 1971 with a typewriter, a bottle of Chivas, and a note taped to the wall: 'Never again.' It ran in Rolling Stone as a 40,000-word magazine piece — about a drug-fueled trip to Las Vegas that was actually an assignment to cover a motorcycle race — and invented 'gonzo journalism' where the reporter is the story.",
     "imageUrl": "",
     "byline": "Hunter S. Thompson",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "Fear and Loathing in Las Vegas (1971)",
+      "targetName": "Fear and Loathing in Las Vegas (1971) — the opening and the casino scenes",
       "durationMinutes": 32,
-      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+      "instruction": "Read the opening — 'We were somewhere around Barstow on the edge of the desert when the drugs began to take hold.' Thompson builds the whole book on that one sentence's rhythm: a journalist's matter-of-fact tone colliding with the surreal. Notice how he treats Las Vegas as a symbol — the 'American Dream' as a casino that always wins. The book's actual event, the Mint 400 race, barely appears; the story is the hallucination, and that's the point."
     },
     "tags": [
-      "Non-Fiction",
-      "21st Century"
+      "Classic",
+      "Gonzo",
+      "20th Century"
     ],
     "tier": 2
   },

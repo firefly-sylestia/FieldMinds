@@ -866,18 +866,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Singin' in the Rain (1952)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "The most expensive musical of its time and the greatest film about Hollywood ever made — a satire of the painful switch from silent films to talkies, built around the real crisis that wrecked dozens of silent stars whose voices didn't match their faces. Gene Kelly's title dance was shot in one long take with a fever of 103°F.",
     "imageUrl": "",
     "byline": "Gene Kelly & Stanley Donen",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Singin' in the Rain (1952)",
+      "targetName": "Singin' in the Rain (1952) — the title number and 'Make 'em Laugh'",
       "durationMinutes": 165,
-      "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
+      "instruction": "Watch the 'Make 'em Laugh' number — it's a love letter to physical comedy, with Donald O'Connor doing stunts that sent him to the hospital. Then the title song: Kelly dances in the rain for real, on a flooded set, and the joy is earned because the character has just decided to be himself."
     },
     "tags": [
-      "Drama",
-      "1990s",
+      "Musical",
+      "1950s",
       "Hollywood"
     ],
     "tier": 2
@@ -887,18 +887,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Seventh Seal (1957)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Bergman shot it in 35 days on a tiny budget, casting himself as the knight's silent squire, and it became the film that defined existential cinema: a medieval knight plays chess with Death to buy time for one meaningful act. The final dance of death on the hilltop, shot at the edge of the Baltic Sea, was improvised with real actors in a real fog.",
     "imageUrl": "",
     "byline": "Ingmar Bergman",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Seventh Seal (1957)",
+      "targetName": "The Seventh Seal (1957) — the chess opening and the dance of death",
       "durationMinutes": 152,
-      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+      "instruction": "Watch the opening — the knight on the beach, the chess game with the hooded figure — and notice that Bergman doesn't make Death evil: it's calm, patient, and honest. The film is a medieval setting for a modern question — if God is silent, is life meaningless? — and Bergman answers with the small acts the knight performs: sharing a meal with a family of players, letting the girl escape."
     },
     "tags": [
-      "Animation",
-      "2000s"
+      "Classic",
+      "1950s",
+      "Swedish"
     ],
     "tier": 2
   },
@@ -907,18 +908,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Psycho (1960)",
-    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "teaser": "Hitchcock made it on his TV crew's schedule with a $800,000 budget — the first 'slasher' — and rewrote the rules of cinema: he killed his biggest star 45 minutes in, and forced theaters to bar latecomers so no one spoiled it. The 'shower scene' took 7 days to shoot, used 70 camera setups, and contains no visible stab wounds — only editing.",
     "imageUrl": "",
     "byline": "Alfred Hitchcock",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Psycho (1960)",
+      "targetName": "Psycho (1960) — the shower scene and the reveal",
       "durationMinutes": 173,
-      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+      "instruction": "Watch the shower scene frame by frame: there is no shot of the knife entering Marion — Hitchcock builds the violence from quick cuts of knife, body, water, and the famous screeching strings (played by violins mimicking screams)."
     },
     "tags": [
-      "Comedy",
-      "1980s",
+      "Thriller",
+      "1960s",
       "Hollywood"
     ],
     "tier": 2
@@ -928,18 +929,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Lawrence of Arabia (1962)",
-    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "teaser": "David Lean's 227-minute epic was shot in the desert with a 34-year-old stage actor named Peter O'Toole in his first starring role, and its 'sunrise over the desert' cut — from match flame to desert sun — is one of the most famous transitions in film. It won seven Oscars, and its theme by Maurice Jarre is the most recognized film score ever written.",
     "imageUrl": "",
     "byline": "David Lean",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Lawrence of Arabia (1962)",
+      "targetName": "Lawrence of Arabia (1962) — the match cut and the desert crossing",
       "durationMinutes": 70,
-      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+      "instruction": "Watch the first 15 minutes: the map sequence — Lawrence wiping his hand across the desert and declaring 'sweet to ride forth at evening from the wells' — establishes the film's method, where landscape is character. Then the crossing of the Nefud desert, where the film's scale makes the actors tiny specks: Lean shot real dunes in real heat, and the 'mirage' effect was real."
     },
     "tags": [
-      "Horror",
-      "1970s"
+      "Epic",
+      "1960s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -948,18 +950,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "The Good the Bad and the Ugly (1966)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Leone's third and greatest 'spaghetti western' — an 8-month shoot in the Spanish desert with three actors who barely spoke each other's languages, climaxing in the famous three-way standoff that lasts over three minutes of pure silence. Clint Eastwood's poncho and Ennio Morricone's howling score became the genre's visual and sonic signatures.",
     "imageUrl": "",
     "byline": "Sergio Leone",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "The Good the Bad and the Ugly (1966)",
+      "targetName": "The Good, the Bad and the Ugly (1966) — the final standoff",
       "durationMinutes": 117,
-      "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
+      "instruction": "Watch the opening credits: the three title characters each get their own theme — the flute, the ocarina, the coyote howl — and Morricone's score is the film's fourth character. Then watch the ending standoff in the circular cemetery: Leone holds the shot for over three minutes with no dialogue, only the music shifting between the three themes, and the duel's winner is decided by who's willing to wait."
     },
     "tags": [
-      "Animation",
-      "2000s"
+      "Western",
+      "1960s",
+      "Spaghetti"
     ],
     "tier": 2
   },
@@ -968,18 +971,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Once Upon a Time in the West (1968)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Leone called it his most personal film and spent two years on the script, and its 14-minute opening — three gunmen waiting at a train station while a harmonic plays — is the slowest, greatest action scene ever filmed. It flopped in America (studio cut 20 minutes) before being restored to become a masterpiece.",
     "imageUrl": "",
     "byline": "Sergio Leone",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Once Upon a Time in the West (1968)",
+      "targetName": "Once Upon a Time in the West (1968) — the opening sequence",
       "durationMinutes": 91,
-      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+      "instruction": "Watch the entire 14-minute opening: the windmill, the creaking sign, the three hired killers arriving on the train — the film's title doesn't even appear until the station sequence ends. Leone's method is delay: he withholds the violence so completely that when it comes — the massacre of the McBain family — it's shocking."
     },
     "tags": [
-      "Horror",
-      "1970s"
+      "Western",
+      "1960s",
+      "Spaghetti"
     ],
     "tier": 2
   },
@@ -988,18 +992,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "A Clockwork Orange (1971)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Kubrick's adaptation of Anthony Burgess's novel was banned in Britain by Kubrick himself after death threats — he pulled it from distribution for 27 years until after his death. Its infamous 'Ludovico technique' scene, where the violent Alex is conditioned against violence, was filmed with real eye-clamps and a real nausea-inducing setup.",
     "imageUrl": "",
     "byline": "Stanley Kubrick",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "A Clockwork Orange (1971)",
+      "targetName": "A Clockwork Orange (1971) — the Ludovico technique scene",
       "durationMinutes": 171,
-      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+      "instruction": ""
     },
     "tags": [
-      "Sci-Fi",
-      "2000s",
+      "Dystopian",
+      "1970s",
       "Hollywood"
     ],
     "tier": 2
@@ -1009,18 +1013,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Chinatown (1974)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Roman Polanski's neo-noir is famous for its ending — a 'happy ending' would have meant a just world, and screenwriter Robert Towne refused. Jack Nicholson improvised the line that gave the film its name, and the film's plot is a fictionalized retelling of the real California water wars that made Los Angeles possible.",
     "imageUrl": "",
     "byline": "Roman Polanski",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Chinatown (1974)",
+      "targetName": "Chinatown (1974) — the ending",
       "durationMinutes": 141,
-      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+      "instruction": "Watch the opening — the private detective photo session, the case that seems simple — and notice how the film deepens: what starts as a cheating-husband case becomes a story of water, incest, and the city's founding sin. Then the ending, where the truth is spoken and the city looks away: Chinatown, the place where 'you can't always tell what's happening,' is the film's metaphor for the whole world of power."
     },
     "tags": [
-      "Documentary",
-      "2010s",
+      "Noir",
+      "1970s",
       "Hollywood"
     ],
     "tier": 2
@@ -1030,18 +1034,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Oppenheimer (2023)",
-    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "teaser": "Christopher Nolan's three-hour biopic was made from 500 pages of a Pulitzer-winning book and shot with an entirely practical approach — no CGI for the Trinity test, which used real explosions and a 10-mile camera setup. It grossed nearly a billion dollars and became the highest-grossing biopic in history.",
     "imageUrl": "",
     "byline": "Christopher Nolan",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Oppenheimer (2023)",
+      "targetName": "Oppenheimer (2023) — the Trinity test sequence",
       "durationMinutes": 113,
-      "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the rain, the eyes, the hearing room — and notice how Nolan splits the film into two colors: black-and-white for the political hearing (Strauss's perspective) and color for Oppenheimer's subjective experience. The Trinity test sequence is the film's center: shot without digital effects, the silence before the blast and the roar that follows are the film's argument that this was a moment humanity couldn't unsee."
     },
     "tags": [
       "Drama",
-      "1990s",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1051,18 +1055,18 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Killers of the Flower Moon (2023)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Martin Scorsese spent 15 years developing it and filmed on the actual Oklahoma land where the Osage murders happened, with Osage elders and descendants on set as consultants. Its three-and-a-half-hour length is the point: the film refuses to speed through a genocide that took decades.",
     "imageUrl": "",
     "byline": "Martin Scorsese",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Killers of the Flower Moon (2023)",
+      "targetName": "Killers of the Flower Moon (2023) — the ending coda",
       "durationMinutes": 94,
-      "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
+      "instruction": "Watch the opening — the Osage people emerging from the earth, the oil derricks — and notice how Scorsese reframes the genre: this isn't a detective story about who solved the case, but a story about how the Osage were made to doubt themselves."
     },
     "tags": [
-      "Thriller",
-      "2010s",
+      "Drama",
+      "2020s",
       "Hollywood"
     ],
     "tier": 2
@@ -1072,18 +1076,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Poor Things (2023)",
-    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "teaser": "Yorgos Lanthimos's feminist Frankenstein — a woman with a baby's brain in an adult body, played by Emma Stone, who wins the Oscar — was shot largely on location with in-camera effects and hand-built sets, and its black-and-white opening gives way to saturated color as its heroine gains experience.",
     "imageUrl": "",
     "byline": "Yorgos Lanthimos",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Poor Things (2023)",
+      "targetName": "Poor Things (2023) — the opening and Bella's journey",
       "durationMinutes": 106,
-      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening — the blue-tinted Victorian world, Bella's first steps, the childish speech in an adult body — and notice how the film maps knowledge onto color: the world darkens as Bella sees more of it. The film's method is to treat Bella's journey as pure curiosity: she tries sex, philosophy, poverty, and anarchy with the same wide-eyed interest, and the film's argument is that experience, not innocence, is what makes a person free."
     },
     "tags": [
-      "Drama",
-      "1990s"
+      "Comedy",
+      "2020s",
+      "Hollywood"
     ],
     "tier": 2
   },
@@ -1092,18 +1097,19 @@
     "categoryId": "FILMS",
     "subtype": "Film",
     "name": "Anatomy of a Fall (2023)",
-    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "teaser": "Justine Triet's courtroom drama — a woman on trial for her husband's death — won the Palme d'Or and became the most honored French film in years, and its central performance by Sandra Hüller is built on the film's refusal to tell you the truth. The 'fight scene' — a 12-minute audio recording played in court — is the film's entire argument.",
     "imageUrl": "",
     "byline": "Justine Triet",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Anatomy of a Fall (2023)",
+      "targetName": "Anatomy of a Fall (2023) — the courtroom scenes",
       "durationMinutes": 80,
-      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+      "instruction": "Watch the trial scenes with attention to what the film refuses: no flashbacks to the fall, no confession, no truth — only testimony, interpretation, and the couple's own recorded fight, which the court hears as evidence while the audience hears it as a marriage. The film's question is whether a marriage can be judged from the outside at all, and the answer is both yes and no."
     },
     "tags": [
-      "Sci-Fi",
-      "2000s"
+      "Drama",
+      "2020s",
+      "French"
     ],
     "tier": 2
   },

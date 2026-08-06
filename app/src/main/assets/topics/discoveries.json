@@ -738,18 +738,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "The Cosmic Microwave Background (1965)",
-    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "teaser": "In 1964, two Bell Labs engineers pointed a horn antenna at the sky to test satellite communications and heard a hiss that wouldn't go away — even after they cleaned pigeon droppings out of the horn. The hiss was the afterglow of the Big Bang, cooling for 13.8 billion years, and it had been predicted by theory just 16 years earlier.",
     "imageUrl": "",
     "byline": "Arno Penzias & Robert Wilson",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "The Cosmic Microwave Background (1965)",
+      "targetName": "The cosmic microwave background — Penzias & Wilson's 1964 hiss",
       "durationMinutes": 14,
-      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+      "instruction": "Read how the discovery worked: the universe's first light, released 380,000 years after the Big Bang, has stretched from white-hot to microwave wavelengths by the expansion of space — about 3 degrees above absolute zero. Penzias and Wilson had no idea what the hiss was; they spent months eliminating every earthly source, and only learned it was the 'primordial fireball' when a Princeton physicist heard about their problem."
     },
     "tags": [
-      "Mathematics",
-      "18th Century"
+      "Cosmology",
+      "Big Bang",
+      "20th Century"
     ],
     "tier": 2
   },
@@ -758,18 +759,19 @@
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
     "name": "Exoplanets (1995)",
-    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "teaser": "For centuries astronomers assumed other stars had planets, but no one could see one — then in 1995 two Swiss astronomers found a planet orbiting the star 51 Pegasi by watching the star wobble. The planet was a 'hot Jupiter,' a gas giant orbiting closer than Mercury, and it rewrote every theory of how solar systems form.",
     "imageUrl": "",
     "byline": "Michel Mayor & Didier Queloz",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Exoplanets (1995)",
+      "targetName": "51 Pegasi b — the first confirmed exoplanet (1995)",
       "durationMinutes": 5,
-      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+      "instruction": "Understand the method first: a planet's gravity tugs its star, and that wobble shifts the star's light slightly red then blue — the radial velocity method. Mayor and Queloz detected a 4-day wobble in 51 Pegasi, meaning a planet 150 times Earth's mass orbiting far too close to its star to exist by the old rules."
     },
     "tags": [
-      "Biology",
-      "19th Century"
+      "Astronomy",
+      "Exoplanets",
+      "20th Century"
     ],
     "tier": 2
   },
