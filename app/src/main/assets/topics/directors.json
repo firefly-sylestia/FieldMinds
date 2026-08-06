@@ -728,17 +728,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "David Lean",
-    "teaser": "Director Topic #37 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Lean made the biggest pictures of the mid-century — Bridge on the River Kwai, Lawrence of Arabia, Doctor Zhivago — sweeping desert epics shot in 70mm with casts of thousands. He also made Brief Encounter, one of the most intimate love stories ever filmed, which is the part of his career people forget: the man of epic scale began with small, quiet romance.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "David Lean",
+      "targetName": "David Lean — 'Lawrence of Arabia' (1962) opening + 'Brief Encounter' (1945)",
       "durationMinutes": 119,
-      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+      "instruction": "Watch the opening of Lawrence of Arabia and notice how Lean introduces his hero: a motorcyclist crashes and dies, and only then do we learn the film is about him. Then watch Brief Encounter, his 1945 romance set almost entirely in a railway station tea room — the same director, the opposite scale, and the mastery is identical."
     },
     "tags": [
-      "Indie",
-      "20th Century"
+      "Epic",
+      "British",
+      "Classic"
     ],
     "tier": 2
   },
@@ -747,17 +748,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Wim Wenders",
-    "teaser": "Director Topic #38 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Wenders, the road-movie poet of the German New Wave, made Paris, Texas (1984) and Wings of Desire (1987), films about men who can't settle and cities that observe them. He was also a photographer of wide-open American spaces, and his films are as much about light and architecture as about plot.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Wim Wenders",
+      "targetName": "Wim Wenders — 'Paris, Texas' (1984) opening + 'Wings of Desire' (1987)",
       "durationMinutes": 147,
-      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for truth surfaces."
+      "instruction": "Watch the opening of Paris, Texas — a man in a red cap walking out of the desert, a blue sky, no dialogue for minutes — and notice how Wenders lets landscape tell the story before a word is spoken. Then watch Wings of Desire, where angels listen to the thoughts of Berliners: the movie is a documentary of a city's inner life disguised as a fantasy."
     },
     "tags": [
-      "Indie",
-      "20th Century"
+      "German New Wave",
+      "Road Movie",
+      "1980s"
     ],
     "tier": 2
   },
@@ -766,18 +768,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Yorgos Lanthimos",
-    "teaser": "Director Topic #39 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Lanthimos, the founder of the 'Greek Weird Wave,' makes deadpan films where ordinary life is governed by absurd rules — people forced to choose a mate at a hotel in The Lobster, a family that keeps its children imprisoned in Dogtooth. His 2023 Poor Things won four Oscars and made him the most bankable weirdo in cinema.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Yorgos Lanthimos",
+      "targetName": "Yorgos Lanthimos — 'The Lobster' (2015) opening and the Poor Things dance",
       "durationMinutes": 139,
-      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+      "instruction": "Watch the opening of The Lobster and notice the tone immediately: the hotel's rules about singlehood are announced with bureaucratic calm, and the deadpan delivery is the joke and the horror at once. Then watch the famous 'dance scene' in his earlier film Alps or the Emma Stone 'dance' in Poor Things: Lanthimos's actors perform awkward, violent movement the way other directors stage conversations."
     },
     "tags": [
-      "Drama",
-      "20th Century",
-      "Hollywood"
+      "Weird Wave",
+      "Greek",
+      "Satire"
     ],
     "tier": 2
   },
@@ -786,17 +788,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Ruben Östlund",
-    "teaser": "Director Topic #40 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Östlund builds his films around scenes of unbearable social awkwardness stretched to feature length — the avalanche that becomes a morality test in Force Majeure, the dinner-party performance that crumbles in The Square, the cruise-ship class war of Triangle of Sadness. He is the rare filmmaker to win the Palme d'Or twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Ruben Östlund",
+      "targetName": "Ruben Östlund — 'Force Majeure' avalanche scene + 'Triangle of Sadness' (2022)",
       "durationMinutes": 89,
-      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+      "instruction": "Watch the avalanche scene in Force Majeure and stop when the family sits down to dinner afterward: the entire movie is the question of who moved during the avalanche, and Östlund films the accusation scene like a trial. Then watch the monkey scene or the vomiting scene in Triangle of Sadness — the grotesque comedy is his method of making social class visible."
     },
     "tags": [
-      "Comedy",
-      "20th Century"
+      "Satire",
+      "Swedish",
+      "Social"
     ],
     "tier": 2
   },
@@ -805,17 +808,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Andrea Arnold",
-    "teaser": "Director Topic #41 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Arnold — a former dancer and TV presenter — makes gritty handheld films about working-class British youth: Fish Tank (2009) and American Honey (2016). Her camera stays close, in the moment, and her actresses (Katie Jarvis was found on an estate; Sasha Lane was spotted on a beach) were largely first-time performers.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Andrea Arnold",
+      "targetName": "Andrea Arnold — 'Fish Tank' (2009) opening and the audition scene",
       "durationMinutes": 130,
-      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Fish Tank and notice the camerawork: handheld, tight, following Mia through the estate with no establishing shots — you learn the world the way she lives in it. Then watch the dance audition scene: Mia's furious, improvised dance is the film's thesis about who gets to be seen."
     },
     "tags": [
-      "Comedy",
-      "20th Century"
+      "British",
+      "Social Realism",
+      "2010s"
     ],
     "tier": 2
   },
@@ -824,17 +828,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Alice Rohrwacher",
-    "teaser": "Director Topic #42 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Rohrwacher makes magical-realist films set in her native Italian countryside — Happy as Lazzaro (2018), which won the Cannes screenplay prize, follows a saintly farmhand across a time jump that turns a social drama into a fable. Her films feel like folk tales recorded by a documentarian.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Alice Rohrwacher",
+      "targetName": "Alice Rohrwacher — 'Happy as Lazzaro' (2018) opening and the time shift",
       "durationMinutes": 88,
-      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Happy as Lazzaro and notice how Rohrwacher establishes the village: the tobacco fields, the sharecroppers, the patroness — shot with the tenderness of a family album. Then watch the film's mid-film shift, where time itself seems to jump: the moment the film becomes a fable is also the moment its politics become explicit."
     },
     "tags": [
-      "Thriller",
-      "21st Century"
+      "Italian",
+      "Magic Realism",
+      "Fable"
     ],
     "tier": 2
   },
@@ -843,17 +848,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Lulu Wang",
-    "teaser": "Director Topic #43 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Wang made The Farewell (2019) from a true family story — her grandmother was diagnosed with terminal cancer, and the family hid it from her, staging a fake wedding to gather everyone. The film, which she calls 'based on a true lie,' became a breakthrough for Asian-American cinema and made Awkwafina a dramatic actress.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Lulu Wang",
+      "targetName": "Lulu Wang — 'The Farewell' (2019) opening and the wedding scenes",
       "durationMinutes": 122,
-      "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for relief comes."
+      "instruction": "Watch the opening of The Farewell and notice the frame: a young Chinese-American woman in New York learns her grandmother is dying while her family in China already knows. The film's central argument is about which lie is more loving, and Wang stages the wedding scenes so the deception and the joy are the same event."
     },
     "tags": [
-      "Indie",
-      "20th Century"
+      "Drama",
+      "Asian-American",
+      "2010s"
     ],
     "tier": 2
   },
@@ -862,17 +868,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Edward Yang",
-    "teaser": "Director Topic #44 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Yang was the great chronicler of Taipei and one of the towering figures of the Taiwanese New Wave — his Yi Yi (2000) is a three-hour portrait of one family told from the perspectives of three generations, and it is routinely named one of the greatest films ever made. He died at 59, having made only seven features.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Edward Yang",
+      "targetName": "Edward Yang — 'Yi Yi' (2000) opening and the back-of-the-heads motif",
       "durationMinutes": 149,
-      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening of Yi Yi and notice the wedding that starts it — a family gathering where everyone is somewhere else emotionally. Then find the film's signature device: the 8-year-old boy, Yang Yang, photographs the backs of people's heads because 'you can't see what I see.' That sentence is the film's whole philosophy in eight words."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "Taiwanese",
+      "Family",
+      "Masterpiece"
     ],
     "tier": 2
   },
@@ -881,17 +888,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Apichatpong Weerasethakul",
-    "teaser": "Director Topic #45 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Apichatpong — 'Joe' to his friends — makes slow, trance-like Thai films about memory, spirits, and the border between the living and the dead. Uncle Boonmee Who Can Recall His Past Lives won the Palme d'Or in 2010, and his films treat the supernatural as ordinary weather.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Apichatpong Weerasethakul",
+      "targetName": "Apichatpong Weerasethakul — 'Uncle Boonmee' (2010) dinner-table scene",
       "durationMinutes": 76,
-      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+      "instruction": "Watch the opening of Uncle Boonmee and settle into the rhythm: long takes, forest sounds, a man dying among family — and then the dead wife appears at the dinner table as if she'd never left. Apichatpong's radical move is refusing to dramatize the supernatural: the ghost is treated with the same calm as the rain."
     },
     "tags": [
-      "Comedy",
-      "20th Century"
+      "Thai",
+      "Slow Cinema",
+      "Supernatural"
     ],
     "tier": 2
   },
@@ -900,17 +908,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Naoko Ogigami",
-    "teaser": "Director Topic #46 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Ogigami makes quiet, warm films about food, loneliness, and small communities — Kamome Diner (2006) follows three Japanese women who open a café in Helsinki, and her films are so gentle that they became a genre of their own ('iyashikei' cinema, or healing film). She is one of the most beloved cult directors in Japan.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Naoko Ogigami",
+      "targetName": "Naoko Ogigami — 'Kamome Diner' (2006) opening",
       "durationMinutes": 104,
-      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Kamome Diner and notice the lack of conflict: three women, a Finnish town, a café that serves Japanese food to skeptical locals — the film's drama is measured in how many customers come back. Ogigami's method is to trust that small exchanges are enough, and the film's cumulative warmth is the point."
     },
     "tags": [
-      "Foreign",
-      "21st Century"
+      "Japanese",
+      "Iyashikei",
+      "Food"
     ],
     "tier": 2
   },
@@ -919,17 +928,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Na Hong-jin",
-    "teaser": "Director Topic #47 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Na Hong-jin makes Korean thrillers that start as genre films and spiral into something else — The Chaser (2008) is a serial-killer chase; The Wailing (2016) begins as a rural murder mystery and ends as a possession horror about faith. His violence is physical, his ambiguity total.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Na Hong-jin",
+      "targetName": "Na Hong-jin — 'The Wailing' (2016) opening and its ending",
       "durationMinutes": 62,
-      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening of The Wailing and notice the misdirection: a detective, a village, a mysterious stranger — the film keeps promising a straightforward mystery and keeps refusing to deliver one. Then watch the ending and decide who, if anyone, was evil: Na has said the film is about 'the impossibility of certainty,' and it is designed to be rewatched to change your answer."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "Korean",
+      "Horror",
+      "Thriller"
     ],
     "tier": 2
   },
@@ -938,17 +948,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Johnnie To",
-    "teaser": "Director Topic #48 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Johnnie To, the most prolific great director of Hong Kong action cinema, made the Milkyway Image studio the home of the modern gangster film — The Mission (1999) and Election (2005) choreograph gunfights and power struggles with geometric precision. He has made more than 60 films, most of them genre films treated as art.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Johnnie To",
+      "targetName": "Johnnie To — 'The Mission' (1999) corridor gunfight",
       "durationMinutes": 61,
-      "instruction": "Track how the lighting changes from the first half to the finale. It mirrors the protagonist's internal state."
+      "instruction": "Watch the famous corridor gunfight in The Mission — five bodyguards, one long take, guns drawn in a choreographed standoff — and notice the stillness: To's violence is about position and timing, not chaos. Then watch Election's parking-garage election scene, where a triad leadership vote is staged with the gravity of a state funeral."
     },
     "tags": [
-      "Indie",
-      "20th Century"
+      "Hong Kong",
+      "Crime",
+      "Action"
     ],
     "tier": 2
   },
@@ -957,17 +968,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Dario Argento",
-    "teaser": "Director Topic #49 casts non-actors alongside professionals, believing real faces carry stories that trained performers can't fake.",
+    "teaser": "Argento is the godfather of the Italian giallo — lurid murder mysteries in which color, music, and camera movement matter more than motive. His Suspiria (1977), a ballet school run by witches, is a sensory assault of saturated red, and his 1975 Deep Red is the genre's masterpiece. His films are nightmares that look like fashion magazines.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Dario Argento",
+      "targetName": "Dario Argento — 'Suspiria' (1977) opening + 'Deep Red' (1975)",
       "durationMinutes": 99,
-      "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
+      "instruction": "Watch the opening of Suspiria and notice the assault: the color red, the Goblin's prog-rock score, the murder staged in a room of barbed wire and stained glass. Then watch Deep Red and find the famous scene where the camera tilts to reveal a killer who was visible the whole time: Argento's horror is about the eye failing at the exact moment it's needed."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "Giallo",
+      "Italian",
+      "Horror"
     ],
     "tier": 2
   },
@@ -976,17 +988,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Nanni Moretti",
-    "teaser": "Director Topic #50 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Moretti, Italy's most personal auteur, has spent four decades making films that are barely disguised self-portraits — Caro Diario (1993) is literally his diary, and The Son's Room (2001) won the Palme d'Or. He is also famous for his political films and for being the rare director whose on-screen persona is as well-known as his films.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Nanni Moretti",
+      "targetName": "Nanni Moretti — 'Caro Diario' (1993) scooter prologue",
       "durationMinutes": 108,
-      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+      "instruction": "Watch the opening of Caro Diario and notice the format: chapters titled like a diary, a scooter ride through Rome, the director narrating his own life with deadpan self-deprecation. Then watch the final chapter, set on the island of Stromboli, where Moretti's comic voice suddenly goes still: the film's turn from comedy to grief is the reason it's a classic."
     },
     "tags": [
-      "Thriller",
-      "21st Century"
+      "Italian",
+      "Autobiographical",
+      "1990s"
     ],
     "tier": 2
   },
@@ -995,17 +1008,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "F.W. Murnau",
-    "teaser": "Director Topic #51 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Murnau made Nosferatu (1922), the unauthorized Dracula that defined the horror film's visual language, and Sunrise (1927), which critics have called the greatest film ever made. He was the master of German Expressionism who brought the style to Hollywood, and he died in a car accident at 42, a week before Sunrise's Oscar win.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "F.W. Murnau",
+      "targetName": "F.W. Murnau — 'Nosferatu' (1922) shadow scenes + 'Sunrise' (1927)",
       "durationMinutes": 100,
-      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+      "instruction": "Watch the opening of Nosferatu and notice the shadows: Murnau shot the vampire as a walking shadow long before the character appears — the film's horror is built in silhouette. Then watch Sunrise's trolley sequence, where a country couple rides a streetcar into the city and Murnau films a nightmare cityscape that dissolves into joy: expressionism used for both fear and love."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "Expressionism",
+      "Silent",
+      "Classic"
     ],
     "tier": 2
   },
@@ -1014,17 +1028,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Max Ophüls",
-    "teaser": "Director Topic #52 once spent an entire day shooting a single 3-second establishing shot because the light had to be exactly right.",
+    "teaser": "Ophüls was the great stylist of the moving camera — his films glide through ballrooms, casinos, and staircases in tracking shots so elegant they became the standard for romance and melodrama. His Letter from an Unknown Woman (1948) and La Ronde (1950) are masterpieces of longing, and every modern director of elegant cinema owes him a debt.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Max Ophüls",
+      "targetName": "Max Ophüls — 'Madame de...' (1953) ballroom sequence",
       "durationMinutes": 121,
-      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+      "instruction": "Watch the ballroom sequence in Madame de... (1953) and notice the camera: it never stops moving, circling the dancers and the couple at the center of the film's tragedy — the movement is the emotion. Then watch La Ronde, where a narrator introduces a chain of lovers and each story passes to the next like a dance: the structure is the subject."
     },
     "tags": [
-      "Foreign",
-      "21st Century"
+      "Melodrama",
+      "French",
+      "Classic"
     ],
     "tier": 2
   },
@@ -1033,17 +1048,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Rainer Werner Fassbinder",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Fassbinder, the 'German Godard,' made 44 films in 15 years — working so fast he once made three features in a year — before dying at 37. His Marriage of Maria Braun (1979) and Berlin Alexanderplatz (1980) turned German history into domestic melodrama, and his ruthless productivity was itself the point: he treated filmmaking like a race against death.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Rainer Werner Fassbinder",
+      "targetName": "Rainer Werner Fassbinder — 'The Marriage of Maria Braun' (1979) opening and ending",
       "durationMinutes": 90,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening of The Marriage of Maria Braun and notice the speed: the film starts during an air raid, Maria marries in seconds, and her husband is gone within minutes — Fassbinder compresses a life into scenes the way other directors compress a scene into shots. Then watch the ending, the most famous final image in New German Cinema, and read what it does to the whole film."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "New German Cinema",
+      "Melodrama",
+      "1970s"
     ],
     "tier": 2
   },
@@ -1052,17 +1068,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "George Lucas",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Lucas invented the modern blockbuster: Star Wars (1977) not only revived a dying studio and created the sequel model, it founded the effects company ILM, whose technology shaped every big movie since. His first feature, THX 1138 (1971), is a dystopia about surveillance — a long way from the galaxy far, far away, and recognizably by the same mind.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "George Lucas",
+      "targetName": "George Lucas — 'THX 1138' (1971) opening + the 'Star Wars' (1977) opening",
       "durationMinutes": 90,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening of THX 1138 — white corridors, drones, a society that drugs its citizens — and notice the visual signatures Lucas would carry to Star Wars: the wide shots, the industrial scale, the machines that dwarf people. Then watch the first ten minutes of Star Wars and count how fast it establishes the rules of its universe: Lucas's genius was world-building as storytelling."
     },
     "tags": [
-      "Foreign",
-      "21st Century",
+      "Sci-Fi",
+      "Blockbuster",
       "Hollywood"
     ],
     "tier": 2
@@ -1072,17 +1088,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Woody Allen",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Allen made a film a year for five decades — Annie Hall (1977), Manhattan (1979), Hannah and Her Sisters (1986) — turning his neurotic, literate New York voice into a genre. He won the directing Oscar without attending the ceremony, preferring to play clarinet in a New York jazz club.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Woody Allen",
+      "targetName": "Woody Allen — 'Annie Hall' (1977) opening + 'Manhattan' (1979) opening",
       "durationMinutes": 117,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening of Annie Hall, where Allen breaks the fourth wall to tell the audience his jokes are old and his relationship is doomed — and then spends the film showing why. The innovation is the form: Allen interrupts the story with asides, subtitles, and cartoons, treating a romance as an essay about romance."
     },
     "tags": [
-      "Drama",
-      "20th Century",
+      "Comedy",
+      "New York",
       "Hollywood"
     ],
     "tier": 2
@@ -1092,17 +1108,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Ridley Scott",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Scott built worlds — the corporate corridors of Alien (1979), the rain-soaked future of Blade Runner (1982), the desert kingdoms of Gladiator (2000) — and has remained one of the most visually influential directors in cinema for five decades. He is also one of the most prolific, often shooting several films in a decade, most of them about people trapped inside systems they built.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Ridley Scott",
+      "targetName": "Ridley Scott — 'Blade Runner' (1982) opening + 'Alien' (1979) opening",
       "durationMinutes": 88,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening of Blade Runner and notice the world: the city, the fire, the replicant's eye — Scott establishes a fully realized future in the first three minutes without a line of plot. Then watch the opening of Alien, where the camera moves through a spaceship that feels lived-in and industrial: Scott's spaces are the real stars, and his protagonists are usually smaller than their environments."
     },
     "tags": [
-      "Foreign",
-      "21st Century",
+      "Sci-Fi",
+      "World-Building",
       "Hollywood"
     ],
     "tier": 2
@@ -1112,17 +1128,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "John Carpenter",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Carpenter made Halloween (1978) for $300,000 and turned it into the most profitable independent film of its era, inventing the slasher formula; his The Thing (1982) is the paranoia horror masterpiece. He also composed his own scores — the pulsing synth theme to Halloween is as iconic as the film — and worked entirely within genre, which critics only recently began to credit.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "John Carpenter",
+      "targetName": "John Carpenter — 'Halloween' (1978) opening + 'The Thing' (1982) opening",
       "durationMinutes": 99,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening of Halloween — the first-person point-of-view shot of a killer in a suburban house — and notice the mechanics: the long take, the kid's mask, the family's scream. Carpenter's genius is economy: the sequence is one shot doing the work of a hundred."
     },
     "tags": [
-      "Comedy",
-      "20th Century",
+      "Horror",
+      "Cult",
       "Hollywood"
     ],
     "tier": 2
@@ -1132,17 +1148,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Tim Burton",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Burton built a career on the outcast with the scissors, the goth suburb, and the stop-motion afterlife — Beetlejuice (1988), Edward Scissorhands (1990), The Nightmare Before Christmas (1993). His style, a gothic cartoon, made him one of the most distinctive voices in Hollywood, and his films are almost all about gentle freaks surviving small-minded towns.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Tim Burton",
+      "targetName": "Tim Burton — 'Edward Scissorhands' (1990) opening + 'The Nightmare Before Christmas' (1993)",
       "durationMinutes": 130,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening of Edward Scissorhands and notice the mismatch: the pastel suburb with identical houses, and the dark castle on the hill — Burton's whole worldview in one establishing shot. Then watch the opening of The Nightmare Before Christmas, where Jack Skellington sings about being tired of Halloween: the movie is a musical about creative burnout disguised as a holiday fantasy."
     },
     "tags": [
-      "Comedy",
-      "20th Century",
+      "Gothic",
+      "Fantasy",
       "Hollywood"
     ],
     "tier": 2
@@ -1152,17 +1168,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Wes Anderson",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Anderson makes symmetrical, pastel, deadpan comedies — Rushmore, The Royal Tenenbaums, The Grand Budapest Hotel — in a style so imitable it became its own category, but his subject has always been grief disguised as whimsy. His films are dollhouses: perfectly arranged, brightly lit, and about the mess that families make of perfect arrangements.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Wes Anderson",
+      "targetName": "Wes Anderson — 'The Royal Tenenbaums' (2001) opening",
       "durationMinutes": 130,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of The Royal Tenenbaums and notice the narrator's voice and the book-format framing: Anderson treats his characters like exhibits in a museum, introducing them with freeze-frames and captions. Then watch the slow-motion walk into the ocean in the middle of the film — the movie's joke and its heart are the same gesture, and Anderson lets the sadness have the last step."
     },
     "tags": [
       "Comedy",
-      "20th Century",
+      "Symmetry",
       "Hollywood"
     ],
     "tier": 2
@@ -1172,17 +1188,17 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Kathryn Bigelow",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Bigelow became the first woman to win the Best Director Oscar — for The Hurt Locker (2008) — and has spent her career making intense, physical films about men under pressure: the surfer-bank robbers of Point Break, the futuristic LAPD of Strange Days, the SEAL team of Zero Dark Thirty. She has said she makes 'character-driven genre films' and that genre is not a dirty word.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Kathryn Bigelow",
+      "targetName": "Kathryn Bigelow — 'The Hurt Locker' (2008) opening bomb sequence",
       "durationMinutes": 94,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of The Hurt Locker and notice the bomb-disposal sequence: Bigelow films it in handheld close-up, with the camera as anxious as the audience — the war film as a thriller about a single man's compulsion. Then watch the supermarket scene at the end of the film, where the hero, home from war, stands in the cereal aisle unable to choose: that scene is the whole movie."
     },
     "tags": [
-      "Comedy",
-      "20th Century",
+      "Action",
+      "Thriller",
       "Hollywood"
     ],
     "tier": 2
@@ -1192,17 +1208,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Hayao Miyazaki",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Miyazaki, the co-founder of Studio Ghibli, made Spirited Away (2001) — the first anime to win the Oscar for Best Animated Feature — along with My Neighbor Totoro, Princess Mononoke, and Howl's Moving Castle. He has announced his retirement at least four times, and his films are distinguished by flight, food, and a deep distrust of the human damage to nature.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Hayao Miyazaki",
+      "targetName": "Hayao Miyazaki — 'Spirited Away' (2001) opening",
       "durationMinutes": 75,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening of Spirited Away and notice the world-building: Chihiro's family drives to a new house, takes a wrong turn, and enters a spirit world through a tunnel — Miyazaki makes the transition feel inevitable."
     },
     "tags": [
-      "Comedy",
-      "20th Century"
+      "Anime",
+      "Ghibli",
+      "Fantasy"
     ],
     "tier": 2
   },
@@ -1211,17 +1228,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Zhang Yimou",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Zhang Yimou, the most famous living Chinese director, made the Fifth Generation's early classics — Raise the Red Lantern, To Live — and then reinvented himself as the master of martial-arts spectacle with Hero (2002) and House of Flying Daggers. He also directed the 2008 Beijing Olympics opening ceremony, the most-watched television event in history.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Zhang Yimou",
+      "targetName": "Zhang Yimou — 'Hero' (2002) color-coded retellings",
       "durationMinutes": 128,
-      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+      "instruction": "Watch the opening of Hero and notice the color coding: each retelling of the story has its own palette — red, blue, green, white — so the film is watched like a painting that changes color as truth shifts. Then watch the rain-and-swords fight in the teahouse, where Zhang choreographs violence as calligraphy: the film's argument is that heroism is a story, and the king's decision at the end is the real drama."
     },
     "tags": [
-      "Thriller",
-      "21st Century"
+      "Chinese",
+      "Wuxia",
+      "Epic"
     ],
     "tier": 2
   },
@@ -1230,17 +1248,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Chan-wook Park",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Park Chan-wook made Oldboy (2003) — the film with the most famous fight scene of the century, shot in one continuous take down a corridor — and his 'revenge trilogy' announced the Korean New Wave to the world. His later The Handmaiden (2016) turned Sarah Waters's Victorian novel into a Korean erotic thriller, and his films are elegant, violent, and full of dark humor.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Chan-wook Park",
+      "targetName": "Park Chan-wook — 'Oldboy' (2003) corridor fight",
       "durationMinutes": 121,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the corridor fight in Oldboy and notice the technique: one take, a hammer, and the knowledge that the fight is staged for a character being watched — Park films violence as performance. Then watch the reveal at the end of the film and read Park's account of it: he has said the movie is about a question his own country kept asking — what revenge does to the person who takes it."
     },
     "tags": [
-      "Foreign",
-      "21st Century"
+      "Korean",
+      "Revenge",
+      "Thriller"
     ],
     "tier": 2
   },
@@ -1249,17 +1268,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Hirokazu Kore-eda",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Kore-eda is the great contemporary chronicler of the Japanese family — Shoplifters (2018) won the Palme d'Or, and his films (Still Walking, Like Father Like Son, Broker) are built around the families people choose when blood fails. His method is observational: long takes, quiet scenes, and a camera that never tells you what to feel.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Hirokazu Kore-eda",
+      "targetName": "Hirokazu Kore-eda — 'Shoplifters' (2018) opening",
       "durationMinutes": 127,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening of Shoplifters and notice the setup: a family on a shoplifting run, the little girl, the frozen-food packs — and then the moment the family takes in a cold, hungry girl from outside. Kore-eda's films are about the gap between what a family is supposed to be and what it is, and the film's final scenes force you to ask which of the two is real."
     },
     "tags": [
-      "Comedy",
-      "20th Century"
+      "Japanese",
+      "Family",
+      "2010s"
     ],
     "tier": 2
   },
@@ -1268,17 +1288,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Asghar Farhadi",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Farhadi has won two Oscars for Best Foreign Language Film — A Separation (2011) and The Salesman (2016) — making him the most decorated Iranian director in history. His films are moral labyrinths: ordinary people faced with small lies that grow into catastrophes, told with the structure of a detective story where the crime is always a human failure.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Asghar Farhadi",
+      "targetName": "Asghar Farhadi — 'A Separation' (2011) opening",
       "durationMinutes": 84,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of A Separation and notice how fast the stakes are set: a couple in divorce court, a disagreement about emigrating, and within ten minutes a lie has begun that will drive the whole film."
     },
     "tags": [
-      "Thriller",
-      "21st Century"
+      "Iranian",
+      "Moral Drama",
+      "2010s"
     ],
     "tier": 2
   },
@@ -1287,17 +1308,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Mira Nair",
-    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "teaser": "Nair, born in India and based between Delhi and New York, made Salaam Bombay! (1988) — filmed with real street children — and Monsoon Wedding (2001), which won the Golden Lion. Her films are about the collision of her two homes: the arranged-marriage families of Delhi and the immigrant ambitions of the diaspora.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Mira Nair",
+      "targetName": "Mira Nair — 'Monsoon Wedding' (2001) opening",
       "durationMinutes": 82,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Monsoon Wedding and notice the register: a chaotic Punjabi wedding, hundreds of relatives, a bride who may be in love with someone else — and a subplot about abuse that the film refuses to treat as a scandal. Nair's genius is tonal: the film is a comedy that contains real darkness without ever turning cynical. The wedding tent is her recurring image for India itself."
     },
     "tags": [
-      "Drama",
-      "20th Century"
+      "Indian",
+      "Diaspora",
+      "2000s"
     ],
     "tier": 2
   },
@@ -1306,17 +1328,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Pedro Almodóvar",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Almodóvar is Spain's most internationally beloved director — All About My Mother (1999) won the Oscar, Talk to Her (2002) won it again, and his films are a lifelong hymn to women, melodrama, and lurid color. He emerged from Madrid's post-Franco counterculture and turned the telenovela's excess into art.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Pedro Almodóvar",
+      "targetName": "Pedro Almodóvar — 'Women on the Verge' (1988) opening",
       "durationMinutes": 76,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Women on the Verge of a Nervous Breakdown and notice the style: saturated reds, answering machines, a woman who has been dumped — Almodóvar makes hysteria look like glamour. Then watch Talk to Her, which switches from comedy to tragedy without warning: the film's bullfighter prologue and its silent-film insert are the two keys to everything Almodóvar believes about storytelling."
     },
     "tags": [
-      "Drama",
-      "20th Century"
+      "Spanish",
+      "Melodrama",
+      "Color"
     ],
     "tier": 2
   },
@@ -1325,18 +1348,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Alejandro González Iñárritu",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Iñárritu won back-to-back Best Director Oscars — for Birdman (2014), shot to look like one continuous take, and The Revenant (2016), shot entirely in natural light. His early films (Amores Perros, 21 Grams, Babel) built intricate multi-story structures, and he is known for subjecting his actors to extreme conditions — Leonardo DiCaprio's bear attack was real, in the sense that the scene was real.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Alejandro González Iñárritu",
+      "targetName": "Alejandro González Iñárritu — 'Birdman' (2014) opening",
       "durationMinutes": 130,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Birdman and notice the illusion: the film appears to be one unbroken take, and the first scene — a man meditating in his dressing room — establishes both the theatrical setting and the film's anxiety. Then watch the fight scene in the theater lobby, where the 'one take' breaks into chaos: the technical stunt is the movie's argument about the difference between acting and being."
     },
     "tags": [
-      "Foreign",
-      "21st Century",
-      "Hollywood"
+      "Hollywood",
+      "Drama",
+      "2010s"
     ],
     "tier": 2
   },
@@ -1345,17 +1368,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Lucrecia Martel",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Martel is Argentina's great slow-cinema director — La Ciénaga (2001), The Headless Woman (2008), and Zama (2017) — and a rare filmmaker whose every feature is a masterpiece. Her films work on the senses first: heat, sound, water, and the long minutes in which the camera watches a family do nothing very much, and everything is revealed.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Lucrecia Martel",
+      "targetName": "Lucrecia Martel — 'La Ciénaga' (2001) opening",
       "durationMinutes": 141,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening of La Ciénaga and notice the heat: the film opens with a family at a swimming pool that is stagnant, and the camera stays low, watching bodies move in the humidity. Martel's method is anti-narrative: nothing is explained, everything is felt, and the film's accident — a broken glass, a fall — matters more than any plot."
     },
     "tags": [
-      "Drama",
-      "20th Century"
+      "Argentine",
+      "Slow Cinema",
+      "Sensory"
     ],
     "tier": 2
   },
@@ -1364,17 +1388,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Jean-Pierre Jeunet",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Jeunet, with his visual partner Marc Caro, made the surreal Delicatessen (1991) and The City of Lost Children (1995) before his solo masterpiece Amélie (2001), the highest-grossing French-language film ever at its release. His style — sepia Paris, eccentric characters, and a camera that plays tricks — is instantly recognizable and endlessly imitated.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Jean-Pierre Jeunet",
+      "targetName": "Jean-Pierre Jeunet — 'Amélie' (2001) opening",
       "durationMinutes": 133,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Amélie and notice the montage: Jeunet lists Amélie's small pleasures — cracking crème brûlée, skipping stones — in a rapid-fire sequence that establishes the film's tone before the plot begins. Then watch the scene where Amélie leads a blind man through Paris, describing the street life in detail: the movie's whole philosophy is in that scene, the world made visible by attention."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "French",
+      "Whimsy",
+      "2000s"
     ],
     "tier": 2
   },
@@ -1383,17 +1408,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Michael Haneke",
-    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "teaser": "Haneke makes films about the violence in ordinary life — Funny Games (1997) holds the audience responsible for wanting violence, Cache (2005) turns surveillance into a moral horror film, and The White Ribbon (2009) traces fascism to a German village's cruelty. His movies refuse comfort and are among the most rigorous in cinema.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Michael Haneke",
+      "targetName": "Michael Haneke — 'Funny Games' (1997) opening",
       "durationMinutes": 116,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Funny Games and notice the film's first act of aggression: the killers are polite, and the family's destruction is staged with the camera holding steady — Haneke's violence is always filmed without spectacle, which is the point. Then watch the famous rewind scene, where one of the killers reaches into the film to rewind it: Haneke's thesis is that the audience, not the screen, is the subject."
     },
     "tags": [
-      "Thriller",
-      "21st Century"
+      "Austrian",
+      "Provocation",
+      "Thriller"
     ],
     "tier": 2
   },
@@ -1402,18 +1428,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Damien Chazelle",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Chazelle became the youngest Best Director winner in history at 32 — for La La Land (2016) — and his films are about obsession and jazz: Whiplash (2014) dramatizes the cost of greatness, and Babylon (2022) is a three-hour history of Hollywood's silent-to-sound transition. His movies are built around music and the people who sacrifice everything for it.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Damien Chazelle",
+      "targetName": "Damien Chazelle — 'Whiplash' (2014) opening",
       "durationMinutes": 92,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening of Whiplash — the drum solo that starts in darkness and never lets up — and notice what Chazelle does with sound: the film is edited to the music, and the drumming is the plot. Then watch the final sequence of La La Land, the 'what if' montage that rewrites the film's ending in a dream: Chazelle's signature is music as memory, and the last five minutes of La La Land are his best argument."
     },
     "tags": [
-      "Drama",
-      "20th Century",
-      "Hollywood"
+      "Hollywood",
+      "Music",
+      "2010s"
     ],
     "tier": 2
   },
@@ -1422,18 +1448,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Chloé Zhao",
-    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "teaser": "Zhao won the Best Director Oscar for Nomadland (2020) — only the second woman to win — and her films (Songs My Brothers Taught Me, The Rider) are shot with non-actors in the American West, blending documentary and fiction. She is the rare filmmaker who treats the land as a character and the people on it as its voice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Chloé Zhao",
+      "targetName": "Chloé Zhao — 'Nomadland' (2020) opening",
       "durationMinutes": 111,
-      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+      "instruction": "Watch the opening of Nomadland and notice the casting: the film's 'van-dwellers' are largely real people playing themselves, and the film's first scenes establish the economics — a company town closes, a woman packs her van. Then watch the scene where Fern discusses her husband's death with another traveler: Zhao's method is to point the camera at real faces and let the moment carry the movie."
     },
     "tags": [
+      "Hollywood",
       "Drama",
-      "20th Century",
-      "Hollywood"
+      "2020s"
     ],
     "tier": 2
   },
@@ -1442,18 +1468,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Ari Aster",
-    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "teaser": "Aster rebooted horror for the 2010s with Hereditary (2018) — a family tragedy that curdles into demonic ritual — and Midsommar (2019), a folk-horror film set in perpetual daylight. His horror is psychological first and supernatural second, and both films are about grief that the characters refuse to process until it processes them.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Ari Aster",
+      "targetName": "Ari Aster — 'Hereditary' (2018) opening",
       "durationMinutes": 140,
-      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+      "instruction": "Watch the opening of Hereditary and notice the funeral: the film's horror is grounded in the details of family grief — the eulogy, the arguments, the mother's obsessiveness — before anything supernatural appears. Then watch the final sequence of Midsommar, where a smiling ritual crowns a film of screaming: Aster's thesis is that the horror is the release, and his endings are ambiguous between triumph and annihilation."
     },
     "tags": [
-      "Thriller",
-      "21st Century",
-      "Hollywood"
+      "Horror",
+      "Hollywood",
+      "2010s"
     ],
     "tier": 2
   },
@@ -1462,18 +1488,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Sean Baker",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Baker makes films about Americans the movies usually ignore — the sex workers of Tangerine (2015), shot on an iPhone, the motel kids of The Florida Project (2017), and the stripper of Anora (2024), which won the Palme d'Or and the Best Picture Oscar. His films are comedies with open wounds, and his casting is half the method.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Sean Baker",
+      "targetName": "Sean Baker — 'Tangerine' (2015) opening",
       "durationMinutes": 132,
-      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+      "instruction": "Watch the opening of Tangerine and notice the format: the film was shot on three iPhone 5s with a $100 anamorphic adapter, and the color and energy of the opening — two trans sex workers in a donut shop — announce that Hollywood production values aren't the point. Then watch the final scene of The Florida Project, where the movie's fantasy ending suddenly turns real: Baker earns the switch, and the tears are the point."
     },
     "tags": [
-      "Drama",
-      "20th Century",
-      "Hollywood"
+      "Independent",
+      "Hollywood",
+      "2020s"
     ],
     "tier": 2
   },
@@ -1482,17 +1508,18 @@
     "categoryId": "DIRECTORS",
     "subtype": "Director",
     "name": "Paolo Sorrentino",
-    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "teaser": "Sorrentino made The Great Beauty (2013), which won the Oscar for Best Foreign Language Film — a Roman party film that turns out to be about death, narrated by a man who has spent his life at parties. His style is baroque: opulent tracking shots, operatic music, and a worldview borrowed from Fellini, whom he openly reveres.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Paolo Sorrentino",
+      "targetName": "Paolo Sorrentino — 'The Great Beauty' (2013) opening",
       "durationMinutes": 75,
-      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+      "instruction": "Watch the opening of The Great Beauty and notice the contradiction: a rooftop party, a naked woman diving, champagne — and then the film's narrator, Jep, walks away from the party to stare at the ruins of Rome. Sorrentino's method is to stage splendor and then point at what it costs; the film's famous first scene, the party, is the best argument in modern cinema about how beauty and emptiness share an address."
     },
     "tags": [
-      "Sci-Fi",
-      "21st Century"
+      "Italian",
+      "Fellini-esque",
+      "Oscar"
     ],
     "tier": 2
   },
