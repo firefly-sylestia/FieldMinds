@@ -187,3 +187,28 @@ into a Column: primary row = 18dp mic glyph + "Voice note · 12s · 1.2MB"
 (titleMedium SemiBold, category ink, weight(fill=false)) + the encoding
 chip; the title renders below on its own line (bodySmall, muted,
 indented 26dp to align under the label text). Braces BALANCED; pushed.
+
+## (v7.45) authors batch — real bios for all 95 fake authors + cap 280 → 450
+Replaced all 95 template-authored entries in authors.json ("Author Topic #36
+wrote their first published work…", "Often cited but rarely fully
+understood…" etc.) with real, verified literary biography via
+scripts/batch_authors.py: real teasers, real instructions, corrected
+targetName (real works), and corrected tags (was: random genre/century
+pairs like Poetry+19th Century on a contemporary novelist). name / byline /
+verb / durationMinutes / tier preserved.
+
+User pushed back on trimming the 10 longest entries: the 280-char cap in
+validate_topics.py was STALE — the real Gradle validateTopics task (what CI
+runs) enforces instruction <= 450 and doesn't cap teasers at all, and shipped
+data already ran to 417 (teaser) / 399 (instruction). So instead of cutting
+content, raised the schema cap everywhere to 450:
+  - scripts/validate_topics.py: MAX_INSTRUCTION_LEN 280 → 450 (matches
+    app/build.gradle.kts validateTopics; docstring already claimed 450)
+  - app/src/main/assets/topics/SCHEMA.md + app/CURIO_DATA_PLAN.md: 280 → 450
+  - scripts/batch_authors.py: _trim safety net 280 → 450; the 10 previously
+    trimmed entries restored to full text (Jackson's "in one sitting",
+    Vuong's nail-salon detail, Twain's full Huck quote, Díaz's "DJ
+    interruptions", etc.)
+Validation now passes CLEAN: 1962 topics across 11 files, 0 errors (bonus:
+cleared the 486 pre-existing over-280 errors that had been piling up in
+albums/artists/etc. since the earlier rich batches). Committed & pushed.

@@ -69,7 +69,7 @@ data class CurioTopic(
                                    // "Gödel, Escher, Bach", "Meditations"
     val teaser: String,              // 1–2 sentences, the "one quirky fact"
                                    //   referenced by §6 Topic Reveal.
-                                   //   ≤ 280 chars, NOT a full bio.
+                                   //   ≤ 450 chars, NOT a full bio.
     val imageUrl: String,            // remote URL — Wikimedia Commons preferred
                                    //   (see §4.2 image strategy)
     val actionPrompt: ExploreAction, // see §2.1 — the new "what to do" requirement
@@ -102,7 +102,7 @@ data class ExploreAction(
                                    //   "a high-res photo of Frida Kahlo's The Two Fridas"
     val durationMinutes: Int,        // time-boxed; UI shows "⏱ 45m"
     val instruction: String,        // the actual prompt — 1 to 2 sentences.
-                                   //   ≤ 280 chars. Imperative, specific,
+                                   //   ≤ 450 chars. Imperative, specific,
                                    //   curiously-framed. Examples below.
 )
 ```
@@ -246,7 +246,7 @@ Per category ship, the pipeline is:
 
 3. **Lightweight smoke test**
    - The CI runs a `validatetopics` Gradle task (Phase 4 work — not yet built) that parses each JSON file and asserts:
-     - All fields present, all IDs unique within file, all `actionPrompt` instructions ≤ 280 chars.
+     - All fields present, all IDs unique within file, all `actionPrompt` instructions ≤ 450 chars.
      - Every `imageUrl` HEADs with 200 (sanity check; not blocking).
      - `categoryId` matches the filename.
      - All `relatedTopicIds` resolve to actual `id`s (or the ID exists in another category file).
@@ -295,7 +295,7 @@ Hard requirements:
 2. `name` + `subtype` + `categoryId` + `teaser` + `actionPrompt.instruction`
    must each be a unique string per category — no near-duplicates across
    the {N} batch.
-3. `teaser` field is the §6 "One quirky fact" — make it punchy, ≤ 280 chars.
+3. `teaser` field is the §6 "One quirky fact" — make it punchy, ≤ 450 chars.
 4. `actionPrompt.instruction` must follow the §2.1 quality bar:
    ACTIONABLE, SPECIFIC, TIME-BOUNDED, CURIOUSLY FRAMED. Reference the
    actual artifact (album / film / book / painting / paper) by name.
