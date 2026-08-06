@@ -259,3 +259,27 @@ books 106 (3) + discoveries 87 (3) + painters 77 (2) + directors 73 (2) +
 films 67 (2) = **623 template entries replaced with real, verified content**
 (plus the earlier scientists + artworks batches). Scripts kept in scripts/
 batch_*.py; every batch committed & pushed individually.
+
+## (v7.47) final 20 leftover template entries — handcrafted, fun facts
+A deeper audit (never-touched entries + second template family) found 20
+more entries that had slipped through: 12 films with **duplicated template
+teasers** (identical sentences: "The most memorable scene was improvised on
+set...", "This film was made for roughly the cost of a modest house...") and
+scrambled tags (Comedy|1980s on Psycho, Animation|2000s on The Seventh
+Seal), plus 8 entries from a *different* template generator family ("written
+in a 6-week creative burst", "my feet were doing the thinking", "What makes
+this so fascinating is that it shouldn't exist...").
+
+scripts/batch_templates_cleanup.py replaced all 20 with handcrafted
+descriptions: Singin' in the Rain, The Seventh Seal, Psycho, Lawrence of
+Arabia, Good/Bad/Ugly, Once Upon a Time in the West, Clockwork Orange,
+Chinatown, Oppenheimer, Killers of the Flower Moon, Poor Things, Anatomy of
+a Fall, The Godfather, Fear and Loathing in Las Vegas, CMB, Exoplanets,
+Ikebana, Wabi-Sabi, Lagom, Sisu. Real fun facts (Psycho's 70 camera setups,
+Sisu and the Winter War, Puzo's $12,500 movie-rights sale, the Planck sky
+map ripples), proper specific targetNames, and corrected tags. The 7
+"mismatched" scientist/painter ids were checked and are FALSE positives —
+content matches the name field (ids like scientist-gauss-anecdote → Emmy
+Noether are just ugly generator slots). Full template sweep (12 families,
+30+ phrases) now returns **0 across all 1962 topics**; validate 0 errors.
+Committed + pushed.
