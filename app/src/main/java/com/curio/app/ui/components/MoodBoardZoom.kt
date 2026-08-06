@@ -16,9 +16,13 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,6 +45,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -708,7 +713,7 @@ fun MoodBoardFloatingCards(
             boardW = canvasWPx * scale,
             boardH = canvasHPx * scale,
             seed = seed?.let { it + i * 0x1F31 },
-            onEdit = { onEditCard?.invoke(i) },
+            onEdit = onEditCard?.let { edit -> { edit(i) } },
             onMove = onMoveCard?.let { move ->
                 { rx, ry -> move(i, (rx - offsetX) / scale, (ry - offsetY) / scale) }
             }
@@ -744,29 +749,43 @@ private fun MoodBoardFloatingCard(
     val density = LocalDensity.current
     var dragDelta by remember { mutableStateOf(Offset.Zero) }
     var dragging by remember { mutableStateOf(false) }
+    // The editing preview can grow to fit the five allowed visual lines.
+    // Keep drag bounds tied to its measured height rather than the original
+    // compact slot height, so a taller card stays fully on the board.
+    var measuredHeightPx by remember { mutableIntStateOf(0) }
     // pointerInput never restarts, so the gesture coroutine must read the
     // LATEST geometry/callbacks — never the first composition's.
     val currentX by rememberUpdatedState(x)
     val currentY by rememberUpdatedState(y)
     val currentW by rememberUpdatedState(w)
-    val currentH by rememberUpdatedState(h)
+    val currentCardH = measuredHeightPx.takeIf { it > 0 }?.toFloat() ?: h
+    val currentH by rememberUpdatedState(currentCardH)
     val currentBoardW by rememberUpdatedState(boardW)
     val currentBoardH by rememberUpdatedState(boardH)
     val currentOnEdit by rememberUpdatedState(onEdit)
     val currentOnMove by rememberUpdatedState(onMove)
 
     val renderX = (x + dragDelta.x).coerceIn(0f, (boardW - w).coerceAtLeast(0f))
-    val renderY = (y + dragDelta.y).coerceIn(0f, (boardH - h).coerceAtLeast(0f))
+    val renderY = (y + dragDelta.y).coerceIn(0f, (boardH - currentCardH).coerceAtLeast(0f))
 
     Box(
         modifier = Modifier
             .offset { IntOffset(renderX.roundToInt(), renderY.roundToInt()) }
             .zIndex(if (dragging) 55f else 50f)
-            .size(
-                width = with(density) { w.toDp() },
-                height = with(density) { h.toDp() }
+            .width(with(density) { w.toDp() })
+            .then(
+                if (currentOnEdit != null) {
+                    // While editing, let the paper slip grow with its content
+                    // instead of trapping the typed quote in the small board
+                    // preview. Saved/read-only cards retain the stable board
+                    // slot height below.
+                    Modifier.heightIn(min = with(density) { h.toDp() })
+                } else {
+                    Modifier.height(with(density) { h.toDp() })
+                }
             )
             .rotate(rotation)
+            .onSizeChanged { measuredHeightPx = it.height }
             .then(
                 if (currentOnMove != null) Modifier.pointerInput(Unit) {
                     detectDragGestures(
@@ -826,25 +845,20 @@ private fun MoodBoardFloatingCard(
             seed = seed,
             paperColor = color,
             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxWidth()
         ) {
-            var renderedQuote by remember(text) { mutableStateOf(limitQuoteContent(text).first) }
+            // The saved board preview is intentionally compact and bounded;
+            // it must never mutate the source text just because the preview
+            // is smaller than the quote. The editor card uses the expanding
+            // branch above and its RichTextEditor enforces the real 280-char /
+            // five-line input limit.
+            val previewText = limitQuoteContent(text).first
             Text(
-                text = if (renderedQuote.isBlank()) "Quote…" else "“$renderedQuote”",
+                text = if (previewText.isBlank()) "Quote…" else "“$previewText”",
                 style = MaterialTheme.typography.bodySmall.copy(fontFamily = PatrickHandFontFamily),
                 color = notePaperInk(color),
-                onTextLayout = { layout ->
-                    if (layout.lineCount > 5) {
-                        val flowEnd = layout.getLineEnd(4)
-                        // The opening glyph occupies index 0; keep only the
-                        // quote characters that fit before the fifth line.
-                        val contentEnd = (flowEnd - 1)
-                            .coerceIn(0, renderedQuote.length)
-                        if (contentEnd < renderedQuote.length) {
-                            renderedQuote = renderedQuote.take(contentEnd)
-                        }
-                    }
-                }
+                maxLines = if (currentOnEdit != null) Int.MAX_VALUE else 5,
+                overflow = if (currentOnEdit != null) TextOverflow.Clip else TextOverflow.Ellipsis
             )
         }
     }

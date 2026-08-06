@@ -36,3 +36,10 @@ Brace checks are BALANCED for all changed/new Kotlin files and `git diff --check
 - Tightened the detail metadata stack and reclaimed the lifted seam space before the format body, removing the oversized visual gap beneath Quick Facts without removing content.
 - Added a detail-only watermark alpha scale so the background glyphs remain present but sit quietly behind readable text.
 - Validation: brace checks BALANCED for EntryDetailScreen.kt and CurioWatermarkBackdrop.kt; `git diff --check` clean. No Gradle command run per repository rules.
+
+## v7.56 — fix Experiments compilation and mood-board quote expansion
+
+- Restored the missing Smart density labels and summaries in ExperimentsScreen so `densityModeSegmentLabel` and `densityModeSummary` resolve during compilation.
+- Mood-board editor quote cards now grow to fit their typed content instead of destructively shortening the preview during measurement; dynamic measured height is used for drag bounds.
+- Saved/read-only mood-board previews remain compact with ellipsis, while the existing 280-character/five-line editor limits remain unchanged.
+- Validation: brace checks BALANCED for ExperimentsScreen.kt and MoodBoardZoom.kt; `git diff --check` clean. No Gradle command run per repository rules.

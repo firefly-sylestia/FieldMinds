@@ -31,6 +31,18 @@ import com.curio.app.ui.components.CurioSettingsInfoRow
 import com.curio.app.ui.components.CurioSettingsRow
 import com.curio.app.ui.theme.CurioIcons
 
+private fun densityModeSegmentLabel(mode: SmartDensityMode): String = when (mode) {
+    SmartDensityMode.OFF -> "Off"
+    SmartDensityMode.COMPACT -> "Compact"
+    SmartDensityMode.EXTRA_COMPACT -> "2x"
+}
+
+private fun densityModeSummary(mode: SmartDensityMode): String = when (mode) {
+    SmartDensityMode.OFF -> "Density sizing off"
+    SmartDensityMode.COMPACT -> "Smaller on low-density phones · larger on high-density"
+    SmartDensityMode.EXTRA_COMPACT -> "2x — even smaller on very low-density phones"
+}
+
 /**
  * Experimental controls live here instead of inside Appearance. Each switch
  * keeps its existing preference and remains independently reversible.
